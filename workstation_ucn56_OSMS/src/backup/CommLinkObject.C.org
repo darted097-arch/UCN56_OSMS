@@ -1,0 +1,1029 @@
+//
+// **********************************************
+// HBNPP 3&4 PMS DISPLAY SYSTEM
+// 
+// CommLinkObject.C     
+// ver 1.0 -- pms01 2016.06.30.
+// **********************************************
+//
+// ***************************************************************************
+//  This module is the implementation of the CommLink Class defined 
+//  in CommLink.h.
+//
+//  The CommLink task creates a shared segment for the display database 
+//  & fills it with data obtained dynamically from the Concurrent host software.
+//  Typing <ctrl/C> (interrupt) will cause the program to terminate
+//  cleanly by removing the shared segment before exiting.
+//  If the connection to the remote socket times out, the program will
+//  keep trying indefinitely.
+// ***************************************************************************
+//
+// ***************************************************************************
+//
+// System Include Files:
+//
+//#include <fcntl.h>
+#include <netdb.h>
+#include <netinet/in.h>
+
+// corenet ujson 2017.0106
+#include <sys/time.h>
+//#include <time.h>			// time calls
+//#include <sys/uio.h>
+
+#include <stdlib.h>			// exit
+#include <iostream.h>			// io calls
+#include <fstream.h>
+#include <strings.h>
+#include <unistd.h>			// close
+#include <sys/stat.h>			// chmod
+
+#include <sys/socket.h>			// socket info
+#include <signal.h>
+
+#ifdef LINUX_APP
+#include <errno.h>	// for Linux (2012.07.05. CORENET )
+#include <sys/types.h>	// for Linux (2012.07.05. CORENET )
+#include <fcntl.h>	// for Linux (2012.07.05. CORENET )
+#endif
+//
+// User Defined Include Files:
+//
+#include "Typedefs.h"
+#include "interface.h"
+#include "systemParameters.h"		// generic system parameters
+#include "databaseParameters.h"		// database parameters
+#include "database.h"			// database structure
+#include "messageParameters.h"		// message parameters
+#include "messageQueueObject.h"
+#include "sharedMemoryObject.h"
+#include "CommLinkObject.h"
+#include "DatabaseObject.h"
+#include "messageObject.h"
+#include "InterProcSMObject.h"
+
+//#define DEBUG
+//
+// External Variables:
+//
+extern	messageQueueObject	WS_MsgQue;
+
+//
+// Local Constant Definitions:
+//
+//
+// Function Prototypes:
+//
+#include "prototypes.h"
+void terminate(int);
+//
+// ***************************************************************************
+//
+
+_Local CommLinkObject::Local;
+
+int   CommLinkObject::bytes_read;
+int   CommLinkObject::total_bytes_read;
+
+int   CommLinkObject::msgSize;
+int   CommLinkObject::gotMsgSize;
+int   CommLinkObject::bytesToRead;
+
+time_t CommLinkObject::lastMessageTime; 
+int   CommLinkObject::ReadSocket;     
+int   CommLinkObject::WriteSocket;   
+
+int   CommLinkObject::num;          
+char  CommLinkObject::name[MAX_COMMLINK_NAME_LEN]; 
+char  CommLinkObject::hostName[MAX_HOSTNAME_LEN]; 
+int   CommLinkObject::connected;      
+time_t CommLinkObject::timeOfLastRead;  
+
+CommLinkObject::CommLinkObject()
+{
+   cout << "CommLinkObject Constructor:" << endl;
+   initCommLink();
+}
+
+CommLinkObject::~CommLinkObject()
+{
+   cout << "CommLinkObject Destructor:" << endl;
+// close sockets used to read and write data 
+   if (0 == close(ReadSocket))
+     cout << getname()
+	  << " Closed Read Socket OK. " << endl;
+   else
+     cout << getname()
+	  << " Error closing Read Socket" << endl;
+   if (0 == close(WriteSocket))
+     cout << getname()
+	  << " Closed Write Socket OK. " << endl;
+   else
+     cout << getname()
+	  << " Error closing Write Socket" << endl;
+   flush(cout);
+}
+
+void CommLinkObject::initCommLink()
+{
+   // init socket numbers
+   ReadSocket = -1;
+   WriteSocket = -1;
+
+   // ********************************************************************************
+   // Initialize Signals
+   // ********************************************************************************
+   // Set up to terminate on interrupt
+   if(signal(SIGINT,SIG_IGN) != SIG_IGN)  
+      signal(SIGINT,terminate); 
+} //end initCommLink()
+
+
+void CommLinkObject::ws2ccurlink()
+{
+   extern InterProcSMObject	IPO;
+   extern INTERFACE *	 Interface;	// shared memory GUI variables
+
+   // returned message length
+   int	messageLength;
+  
+   // w/s to ccur message
+   unsigned int	ccurMessage[(WS_MESSAGE_LENGTH+sizeof(int)-1)/sizeof(int)];
+  
+//////////////////////////////////////////////////////////////
+// CORENET 2012.07.09
+//////////////////////////////////////////////////////////////
+//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+	short opcode = 0;
+	WSmessageHeader	*msgheader = (WSmessageHeader *)ccurMessage;
+#ifdef LINUX_APP
+#endif
+//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+//   cout << "STEP 1 -----------------------" << endl;
+
+   // only pull messages off the queue if this is the primary CommLink
+   if (1 != IPO.getprimaryStatus(getnum()) )
+   {
+#ifdef DEBUG
+      cout << "   " << getname()
+           << "CommLinkObject::ws2ccur() not pulling messages "
+           << "from WS_MsgQue Object.  This is not the Primary CommLink."
+           << endl;
+#endif
+      return;
+   }
+
+
+//   cout << "STEP 2 -----------------------" << endl;
+
+   // read the message off the unix message queue into a buffer and note
+   //its length.
+   messageLength = WS_MsgQue.receiveMessage(&ccurMessage, NOWAIT, 
+					     WORKSTATION_MSG);
+
+//   cout << "STEP 3 ----------------------- [%d]" << messageLength << endl;
+   if (messageLength != -1)
+   {
+#ifdef DEBUG
+      cout << getname()
+	   << "CommLinkObject::ws2ccur() received " << dec << messageLength 
+	   << " byte message from WS_MsgQue Object\n";
+      cout << "[00]:" << hex << ccurMessage[0] << " "
+	   << "[04]:" << ccurMessage[1] << " "
+	   << "[08]:" << ccurMessage[2] << " "
+	   << "[12]:" << ccurMessage[3] << " "
+	   << "[16]:" << ccurMessage[4] << " " 
+           << "[20]:" << ccurMessage[5] << " " << endl;
+      cout << "[24]:" << ccurMessage[6] << " "
+	   << "[28]:" << ccurMessage[7] << " "
+	   << "[32]:" << ccurMessage[8] << " "
+	   << "[36]:" << ccurMessage[9] << " " << endl;
+      flush(cout);
+
+// yrlee for DEBUG 20061210
+/*
+
+      for (int iii=0; iii < messageLength/4; iii++)
+      {
+	  cout << dec << iii << ":" << hex <<ccurMessage[iii] << endl;
+	  if (iii==5) cout << "------------" << endl;
+	  if (iii==78) cout << "------------" << endl;
+      }
+*/
+
+#endif
+
+  
+//////////////////////////////////////////////////////////////
+// CORENET 2012.07.09
+//////////////////////////////////////////////////////////////
+//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+#ifdef LINUX_APP
+	//cout << "SEND mspb = [" << hex << msgheader->mspbStatus << "]" << endl;
+	msgheader->opcode = htons(msgheader->opcode); 
+	msgheader->numberOfSomething = htons(msgheader->numberOfSomething); 
+	msgheader->mspbStatus = htons(msgheader->mspbStatus); 
+	msgheader->disabilityIndex = htonl(msgheader->disabilityIndex); 
+//msgheader->messageSize = htons(msgheader->messageSize); 
+#endif
+	opcode = msgheader->opcode; 
+//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+//   cout << "STEP 4 ----------------------- " << endl;
+      // Do not send messages if the WS is not ready, i.e., all inits have
+      //been done.
+      if(READY_WS_STATE != (Interface->System.wsState & READY_WS_STATE))
+      {
+	 if (DBDEF_NEW_PB_WS_STATE != Interface->System.wsState)
+	 {
+            cout << "   " << getname()
+	         << "/n***** CommLinkObject::ws2ccur() not sending message "
+                 << "from WS_MsgQue Object.  The WS is not in the READY state."
+	         << endl << endl;
+	    return;
+         }
+      }
+
+//   cout << "STEP 5 ----------------------- " << endl;
+      // put the message into a message object for easier access
+      messageObject	CCCmsg(TO_HOST_MSG_ID, "CCCmsg");
+      int	msgSize;
+      CCCmsg.setMessage(&ccurMessage, messageLength);
+      msgSize = CCCmsg.getMsgSize();
+
+      // check for a size match
+      if(msgSize != messageLength)
+      {
+	 cout << endl << getname()
+	      << "***** CommLinkObject::ws2ccurlink() - WARNING *****\n";
+	 cout << "  Length of message received from the unix message queue "
+	      << "does not match the msgSize stored in the message." << endl
+	      << "    Opcode, msgSize, length received = "
+	      << hex << CCCmsg.getOpcode() << dec << " " << CCCmsg.getMsgSize()
+	      << " " << messageLength << endl
+              << "      The size stored in the message will be used!" << endl;
+      }
+ 
+      if (TO_HOST_MSG_LEN < msgSize)
+      {
+         msgSize = TO_HOST_MSG_LEN;
+	 cout << "\n" << getname() 
+	      << "***** CommLinkObject::ws2ccurlink() - WARNING *****\n";
+         cout << "  Attempting to send a message to the server larger than "
+	      << dec << TO_HOST_MSG_LEN << " bytes\n";
+         cout << "*****  Only " << TO_HOST_MSG_LEN << " bytes will be sent\n";
+      }
+
+//   cout << "STEP 6 ----------------------- " << endl;
+  
+//////////////////////////////////////////////////////////////
+// CORENET 2012.07.09
+//////////////////////////////////////////////////////////////
+//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+#ifdef LINUX_APP
+	msgheader->messageSize = htons(msgheader->messageSize); 
+#endif
+//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+      // send the message out to the host
+      // Only 1K messages can be accepted by the Concurrent server
+      if (write(WriteSocket, ccurMessage, msgSize) < 0)
+         cout << "Error sending message to CCUR" << endl;
+//#ifdef DEBEG
+      else
+         printf(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>> SND(to CCUR)... opcode [%04x]\n", opcode);
+         cout << "Successfully sent " << dec << msgSize 
+             << " message to socket " << hex << WriteSocket 
+	    << " message: " << ccurMessage << endl;
+//#endif
+   }
+   flush(cout);
+}
+
+
+void terminate(int)  
+{
+// Normal termination
+   cout << "terminate()\n";
+   exit(0);
+}
+
+
+void CommLinkObject::mainLoop()
+{
+   while(1)
+   {
+      //  parseHostMessages receives data (messages) from the host and 
+      // passes this data to shared memory/the workstation
+      parseHostMessages();
+
+      //  ws2ccurlink receives data (messages) from the workstation and 
+      // passes this data to shared memory and the host      
+      ws2ccurlink();
+   }
+}
+
+
+// returns on successful connection to a host.
+void CommLinkObject::Connect()
+{
+   extern	InterProcSMObject	IPO;
+   int status;
+
+   IPO.setmasterStatus(getnum(),0);	// unknown master/slave
+   IPO.setconnected(getnum(),FALSE);	// not connected
+   IPO.setfailoverState(getnum(),0);	// No disability index
+   
+   while (0 >= (status = connectWSToHost()) )
+   {
+      cout << getname()
+	   << "CommLinkObject::Connect() ERROR from connectWSToHost = " 
+	   << dec << status << " Retrying to connect.\n";
+   }
+
+   // provide separate sockets for reads and writes.
+   if (0 > (WriteSocket = dup(ReadSocket)) )
+   {
+      cerr << "***** ERROR: " << getname()
+	   << "CommLinkObject::Connect(): Can not dup Socket: "
+	   << "Error = " << dec << errno << endl;
+      cerr << "***** EXITING CommLink *****\n";
+      exit(1);
+   }
+   IPO.setconnected(getnum(), TRUE);
+}
+
+
+// returns a socket number for a completed connection or -1 for failure
+//to complete socket connection.
+int CommLinkObject::connectWSToHost()
+{
+   extern DatabaseObject DBO;
+   extern INTERFACE *	 Interface;	// shared memory GUI variables
+   extern InterProcSMObject	IPO;	// Inter Process shared memory
+   extern CommLinkObject	CommLink;
+   
+   u_port_t	myPort;			// connection port number
+   u_port_t	myPrivatePort;		// individual port number
+   int		error;			// error flag
+   int		retryCount;	// how many times to retry
+   ssize_t	bytesread;		// bytes received from host
+   int		mySocket;		
+   char *	hostName;	// local copy of host this CommLink is 
+				//connected to
+   char         wsname[MAX_HOSTNAME_LEN+1]; // name of this workstation
+   char *       wsname_ptr;
+   int          readCount;
+   time_t	currentTime;
+
+   char		commandStr[MODEM_OPTION_LEN +1 + 10];
+   char		modemStr[MODEM_OPTION_LEN + 1];
+
+   // init some shared memory variables
+   hostName = CommLink.gethostName(); 
+
+   // the well known port number
+   myPort = LISTEN_PORT;
+
+   // initialize to no connection
+   CommLink.resetconnected();
+
+   // initialize to no error
+   error = TRUE;
+
+   while (error)
+   {
+      while (!(CommLink.isconnected()) )
+      {
+         cout << getname() << " CommLinkObject::connectWSToHost() "
+	      << "Trying to connect to " << hostName << endl;
+         // get the modem option string
+         IPO.getMODEMOption(modemStr);
+#ifdef DEBUG
+         cout << getname() << "CommLinkObject::Connect() got modem string = "
+              << modemStr << endl;
+#endif
+	 /*--------------------------------------> MODEM/FDDI ?? -------------- CORENET 2012.07.12
+         // if there is a modem, call the lan rover in the modem option string
+         if( (0 != strcmp("OFF", modemStr))  &&  (0 != strcmp("", modemStr)) )
+         {  
+            int i = 0;
+            int fd = -1;
+
+            // ensure connection status file for pplstat call exists
+            //if(-1 == (fd = open("/var/ppl/ptmp", O_RDWR | O_CREAT | O_EXCL)) )
+            if(-1 == (fd = open("/var/ppl/ptmp", O_RDWR | O_CREAT | O_EXCL, 666)) )	// for Linux (2012.07.05. CORENET )
+            {
+               if(EEXIST != errno)
+               {
+                  cout << "***** " << getname() << "CommLinkObject::initCommLink: "
+                       << "Problem opening  /var/ppl/ptmp. errno = " << dec << errno 
+		       << endl;
+               }
+               else // file exists
+               {
+                  chmod("/var/ppl/ptmp", 0666); // ensure correct protect keys
+               }
+            }
+            else // open was successful
+            {
+               close(fd);
+	       chmod("/var/ppl/ptmp", 0666);
+            }
+
+            cout << getname() << "CommLinkObject::Connect() attempting to dial "
+                 << "modem." << endl;
+            strcpy(commandStr, "ppl -o ");
+            strcat(commandStr, modemStr);
+            cout << getname() << "CommLinkObject::Connect() "
+                 << " Issuing system command = system(" << commandStr << ")"
+                 << endl;
+            i = system(commandStr);
+            cout << getname() << " CommLinkObject::Connect(): system call to " 
+                 << "ppl returned " << hex << i << endl;
+            if(WIFEXITED(i))
+            {
+               cout << getname() << " CommLinkObject::Connect(): " 
+                    << "Status from ppl is " << hex << WEXITSTATUS(i) << endl;
+               system("pplstat -n");
+               if (0 == WEXITSTATUS(i)) 
+               {
+                  cout << getname() << " CommLinkObject::Connect(): " 
+                       << " ppl returned successfully. Return code is 0." << endl;
+               }
+               else
+               {
+                  cout << getname() << " CommLinkObject::Connect(): " 
+                       << "*** Call to ppl returned unsuccessfully. ppl return code = " 
+                       << hex << WEXITSTATUS(i) << endl;
+               }
+            }
+            else
+            {
+               perror("**** CommLinkObject::Connect() System call problem.");
+               cout << getname() << " CommLinkObject::Connect(): system(" 
+                    << commandStr << ") " << "returned " << hex << i << endl;
+            }
+         }
+	 -------------------------------------*/
+
+         for (retryCount = 0; retryCount < HOST_TRY_LIMIT; retryCount++)
+         {
+	    // Try to connect and get a valid file descriptor for the socket
+	    if ( (mySocket = u_connect(myPort, hostName)) < 0)
+	    {
+	       if (retryCount < HOST_TRY_LIMIT-1)
+	       {
+                  cout << getname() 
+		       << "CommLinkObject::connectWSToHost(): Retrying to "
+		       << "connect to " << hostName << endl;
+                  flush(cout);
+	       }
+	       sleep(HOST_RETRY_WAIT);	// wait a little bit
+	    } //endif
+            else
+            {
+               CommLink.setconnected();	// success
+	       cout << getname() 
+		    << "CommLinkObject::connectWSToHost(): Successfully "
+		    << "connected to " << "socket = " << dec << mySocket 
+		    << endl;
+               break;
+            }
+         } //endfor
+         if (!(CommLink.isconnected()) )
+         {
+            cerr << getname() 
+		 << "***** ERROR CommLinkObject::connectWSToHost() "
+                 << "Unable to connect to " << hostName << endl;
+            cerr << "   Waiting " << dec << HOST_CONNECT_WAIT 
+		 << " seconds before trying to connect again" << endl;
+            flush(cerr);
+	    sleep(HOST_CONNECT_WAIT);
+         } //endif
+      } //endwhile !connected
+
+#if 0	// CORENET 2016.07.26
+      for (wsname_ptr = wsname; wsname_ptr <= wsname+MAX_HOSTNAME_LEN ; ++wsname_ptr)
+          *wsname_ptr = ' ';
+      gethostname(wsname,MAX_HOSTNAME_LEN);
+      for (wsname_ptr = wsname; wsname_ptr <= wsname+MAX_HOSTNAME_LEN ; ++wsname_ptr)
+          if (*wsname_ptr == 0 ) *wsname_ptr = ' ';
+      wsname[12] = 0;
+#else
+      int i, setflag = 0;
+      memset(wsname, 0, sizeof(wsname));
+      gethostname(wsname, sizeof(wsname));
+
+      for (i = 0; i < sizeof(wsname); i++) {
+	if (0 == isalnum(wsname[i])) setflag = 1;
+	if (1 == setflag) wsname[i] = ' ';
+      }
+      wsname[12] = 0;
+#endif
+
+      cout << "sending workstation name to host === [" << wsname  << "]" << endl;
+      flush(cout);
+
+      if ((write(mySocket, wsname, MAX_HOSTNAME_LEN)) < 0)
+      {
+         cout << "Error sending workstation name to host\n";
+      }
+
+      /*--------------------
+      for(readCount=0,bytesread=0; readCount < 10 && bytesread == 0; readCount++)
+      {
+         bytesread = u_read(mySocket, &myPrivatePort, sizeof(u_port_t));
+	 cout << "bytesread = " << dec << bytesread << endl;
+	 cout << "myPrivatePort = " << dec << ntohs(myPrivatePort) << endl;
+	 cout << "sizeof(u_port_1) = " << dec << sizeof(u_port_t) << endl;
+         sleep(2);
+      }
+      --------------------*/
+      //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+      bytesread = u_read(mySocket, (char *)&myPrivatePort, sizeof(u_port_t));
+      if (bytesread == 0) {
+	 cout << "u_read() PEER CLOSE !!!!" << endl;
+         sleep(2);
+      }
+      else if (bytesread < 0) {
+	 cout << "u_read() TIME OUT !!!!" << endl;
+	 sleep(2);
+      }
+      else {
+	 cout << "bytesread = " << dec << bytesread << endl;
+#ifdef LINUX_APP
+	 cout << "myPrivatePort = " << dec << ntohs(myPrivatePort) << endl;
+#else
+	 cout << "myPrivatePort = " << dec << myPrivatePort << endl;
+#endif
+	 cout << "sizeof(u_port_t) = " << dec << sizeof(u_port_t) << endl;
+      }
+      //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+      // Connection made. The host should now send a private port number
+      if (sizeof(u_port_t) != bytesread)
+      {
+         cerr << getname()
+	      << " ***** ERROR: CommLinkObject::connectWSToHost() "
+              << "Error reading private port number from host\n";
+         if (0 != close(mySocket)) 
+	 {
+	    cerr << "   ***** ERROR: CommLinkObject::connectWSToHost(): "
+		 << "Error closing the socket.  EXITING!!!\n";
+	    exit(1);
+	 }
+         CommLink.resetconnected();
+      } //endif
+      else if (0 < myPrivatePort)
+      {
+
+//////////////////////////////////////////////////////////////
+// CORENET 2012.07.09
+//////////////////////////////////////////////////////////////
+//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+#ifdef LINUX_APP
+	  myPrivatePort = ntohs(myPrivatePort);
+#endif
+//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+         // the only way out
+         cout << getname() 
+	      << " CommLinkObject::connectWSToHost() Read private port = "
+              << dec << myPrivatePort << endl;
+         flush(cout);
+         error = FALSE;
+         break;		// the only way out of error loop
+      }
+
+      // We are here because the number of bytes read was not correct, or
+      //the port read from the host was 0 or or negative.
+      cout << getname() 
+	   << " CommLinkObject::connectWSToHost(): Problem with private port. "
+           << endl; 
+      cout << "   Waiting " << dec << HOST_CONNECT_WAIT 
+           << " before trying to connect again" << endl;
+      flush(cout);
+   } //endwhile error
+
+   // close the well known port
+   if (0 != close(mySocket))
+   {
+      cerr << getname()
+	   << " CommLinkObject::connectWSToHost(): "
+	   << "Error closing well known port\n";
+      cerr << "***** EXITING " << getname() << " *****\n";
+      exit(1);
+   }
+   resetconnected();
+   myPort = myPrivatePort;
+
+   // Reopen the connection
+   // Reopen the connection on the private port on the responding host.
+   //Do not loop on an error.  Instead return -1 and the caller handle it.
+   cout << getname() 
+	<< " CommLinkObject::connect trying to connect to "
+        << hostName << " on the private port " << myPort << endl;
+   for (retryCount = 0; retryCount < HOSTREAD_TRY_LIMIT; retryCount++)
+   {
+      if (0 > (ReadSocket = u_connect(myPort, hostName)) )
+      {
+         sleep (HOSTREAD_RETRY_WAIT);
+      } //endif
+      else
+      {
+         // SUCCESS!!!
+         cout << getname()
+	      << " CommLinkObject::connectWSToHost(): Connection to host "
+	      << "successfully\n";
+         cout << "   Network Connection Established with socket " << dec 
+	      << ReadSocket << endl;
+	 cout << "   Private port = " << dec << myPort << endl;
+         currentTime = getLocalTime();
+	 IPO.settimeOfLastRead(getnum(), currentTime);
+	 IPO.setNumTicksOfLastRead(getnum(), IPO.getNumTicks());
+         cout << "   Connection has been made to host " << hostName 
+	      << " at " << ctime(&currentTime) << endl;
+         tzset();
+         cout << "   Current Time Zone is " << tzname[0] << endl;
+         flush(cout);
+	 setconnected();
+         break; 
+      } //endelse
+   } //endfor
+
+   return(ReadSocket);
+} //end connectWSToHost
+
+
+int CommLinkObject::u_connect(u_port_t port, char * hostName)
+{
+   struct sockaddr_in	server;
+   struct hostent *	hp;
+   int	mySock;
+   int	retval;
+   int	retryCount;
+
+   // if the sigpipe signal can't be ignored, or if host information
+   //can not be gotten, or if there is an error in getting a 
+   //descriptor for the socket, return an error indication.
+   //NOTE: The socket call specifies the Protocol Family, i.e., PF_INET 
+   //while the Address Family, i.e., AF_INET gets put into the 
+   //sockaddr_in structure.
+   if (0 != u_ignore_sigpipe())
+   {
+      cerr << "***** ERROR: " << getname() 
+	   << "CommLinkObject::u_connect(): trouble ingnoring "
+	   << "SIGPIPE signal" << endl;
+      flush(cerr);
+      return(-1);
+   }
+
+   if (!(hp = gethostbyname(hostName)))
+   {
+      cerr << "***** ERROR: " << getname()
+	   << "CommLinkObject::u_connect(): trouble getting "
+	   << "memory structure for host" << endl;
+      flush(cerr);
+      return(-1);
+   }
+
+   if (0 > (mySock = socket(PF_INET, SOCK_STREAM, 0)) )
+   {
+      cerr << "***** ERROR: " << getname()
+	   << "CommLinkObject::u_connect(): trouble getting "
+	   << "socket\n";
+      flush(cerr);
+      return(-1);
+   }
+
+   // set socket for non-blocking I/O operations
+   //fcntl(mySock, F_SETFL, O_NDELAY);
+   fcntl(mySock, F_SETFL, O_NONBLOCK);
+
+   // copy host information into structure for socket connection 
+   memcpy((char *)&server.sin_addr, hp->h_addr_list[0], hp->h_length);
+
+   // for portability, convert from host to network byte order
+   server.sin_port = htons(port);
+
+   // set address family to be used to interpret addresses in later 
+   //operations to the DARPA Internet addresses.
+   server.sin_family = AF_INET;
+
+   cout << getname()
+	<< "CommLinkObject::u_connect() Trying to connect to host: " 
+        << hostName << " socket = " << dec << mySock << endl;
+   for (retryCount = 0; retryCount < CNCT_TRY_LIMIT; retryCount++)
+   {
+      while ( (-1 == (retval = 
+	           connect(mySock, (struct sockaddr *)&server, sizeof(server)))
+	      ) && (EINTR == errno) 
+	    ) 
+      {
+         // keep trying if the connect was interrupted by a signal before the
+         //connect sequence was complete.
+         cout << getname()
+	      << "CommLinkObject::u_connect() Looping while trying to connect "
+              << "being interrupted by a signal\n";
+      } //endwhile
+#ifdef DEBUG
+      cout << getname()
+	   << " CommLinkObject::u_connect(): connect returned with retval = "
+	   << dec << retval << " and errno = " << errno << endl;
+#endif
+      switch (errno)
+      {
+	 case EINPROGRESS:
+	    cout << getname()
+		 << " CommLinkObject::u_connect(): connect() to " << hostName 
+	         << " in progress" << endl;
+	    sleep(CNCT_RETRY_WAIT);	// wait a little bit
+	    break;
+         case EALREADY:
+#ifdef DEBUG
+	    cout << getname()
+		 << " CommLinkObject::u_connect(): connect() to " << hostName
+	         << " still in progress" << endl;
+#endif
+	    sleep(CNCT_RETRY_WAIT);	// wait a little bit
+            break;
+         case EISCONN:
+	    cout << getname()
+		 << " CommLinkObject::u_connect(): connect() to " << hostName
+		 << " SUCCESSFUL!!!" << endl;
+	    retryCount = CNCT_TRY_LIMIT;
+	    break;
+         default:
+	    cout << getname()
+		 << " CommLinkObject::u_connect(): ERROR with connect() to "
+		 << hostName << " Retrying..." << endl;
+	    sleep(CNCT_RETRY_WAIT);	// wait a little bit
+	    break;
+      }
+   } //endfor
+   if (-1 == retval  &&  !(EISCONN == errno))
+   {
+      cerr << "***** ERROR " << getname()
+	   << " CommLinkObject::u_connect() CAN NOT CONNECT to "
+	   << "host = " << hostName << ". socket = " << dec << mySock << endl;
+      flush(cerr);
+      close(mySock);
+      return (-1);
+   }
+   return (mySock);
+} //end u_connect
+
+
+#ifdef DEBUG
+ #ifndef U_IG_SP_DEBUG
+  #define U_IG_SP_DEBUG
+ #endif
+#endif
+/* return 1 if error, 0 if OK */
+int CommLinkObject::u_ignore_sigpipe()
+{
+   struct sigaction act;
+
+   // A SIGPIPE signal is raised if a process sends on a broken stream.  
+   //This would normally cause a process to exit.  An end-of-file 
+   //condition (zero bytes read)_ is returned if a process tries 
+   //to read on a broken stream.
+
+   // if we can't check the action of the SIGPIPE signal, return error
+   if (sigaction(SIGPIPE, (struct sigaction *)NULL, &act) < 0)
+   {
+#ifdef U_IG_SP_DEBUG
+      cout << getname()
+	   << "CommLinkObject::u_ignore_sigpipe() Can not check the action of "
+	   << "the SIGPIPE signal. Return 1, i.e., error.\n";
+#endif
+      return 1;
+   }
+
+   // if the action associated with writing a pipe with no one to read,
+   //i.e., sending on a broken stream, is the default action, (usually exit)
+   //change it to ignore the signal. if that can not be done, return an error.
+   if (act.sa_handler == SIG_DFL) {
+      act.sa_handler = SIG_IGN;
+      if (sigaction(SIGPIPE, &act, (struct sigaction *)NULL) < 0)
+      {
+#ifdef U_IG_SP_DEBUG
+      cout << getname()
+	   << "CommLinkObject::u_ignore_sigpipe() Can not change the action of "
+	   << "the SIGPIPE signal. Return 1, i.e., error.\n";
+#endif
+         return 1;
+      }
+   }
+#ifdef U_IG_SP_DEBUG
+      cout << getname()
+	   << "CommLinkObject::u_ignore_sigpipe() Success in setting to ignore "
+	   << "the SIGPIPE signal. Return 0\n";
+#endif
+   return 0;
+}
+
+#ifndef U_READ_DEBUG
+#define U_READ_DEBUG
+#endif
+/*---------------------------
+ssize_t CommLinkObject::u_read(int fd, void *buf, size_t size)
+{
+   //ssize_t retval = 0;
+   int retval = 0;
+
+   // retry read if failure due to read being interrupted by a signal
+   while (retval = read(fd, buf, size), retval == -1 && errno == EINTR) {
+#ifdef U_READ_DEBUG
+      cout << getname()
+	   << "CommLinkObject::u_read() looping to complete read" << endl;
+      cout << getname()
+	   << "retval = " << dec << retval
+	   << "errno = " << dec << errno << endl;
+      flush(cout);
+#endif
+      ;
+#ifdef U_READ_DEBUG
+   }
+      cout << getname()
+	   << "CommLinkObject::u_read() returning number of bytes read = "
+	   << dec << retval << " errono = " << dec << errno << endl;
+      cout << getname()
+	   << "retval = " << dec << retval
+	   << "errno = " << dec << errno << endl;
+      if (retval == -1) perror("read error !!!");
+      flush(cout);
+#endif
+   return (retval);
+}
+--------------------------*/
+ssize_t CommLinkObject::u_read(int fd, char *buf, size_t size)
+{
+   
+   int retval = 0;
+   int datacnt = 0;
+   int dataflag = 0;
+   int waitcnt = 0;
+
+   fd_set reads;
+   struct timeval timeout;
+   int result;
+
+   FD_ZERO(&reads);
+   FD_SET(fd, &reads);
+	
+   timeout.tv_sec = 2;
+   timeout.tv_usec = 0;
+	
+   result = select(fd+1, &reads, 0, 0, &timeout);
+   if (result == -1) {
+	cout << getname() << "  select ERROR1" << endl;
+       	flush(cout);
+	return -1;
+   }
+   else if (result == 0) {
+	cout << getname() << "  select TIMEOUT" << endl;
+       	flush(cout);
+	return -1;
+   }
+   else if (!FD_ISSET(fd, &reads)) {
+	cout << getname() << "  select ERROR2" << endl;
+       	flush(cout);
+	return -1;
+   }
+
+
+   while (size > datacnt) {
+	retval = read(fd, (char *)(buf+datacnt), size-datacnt);
+
+        if (retval == -1) {
+	     if (errno == EWOULDBLOCK || errno == EAGAIN) {
+	     	cout << getname() << " u_read() WAIT !!! " << endl;
+	     }
+        }
+	else if (retval == 0) {
+	     cout << getname() << " u_read() PEER CLOSE !!! " << endl;
+	     return 0;
+	}
+	else {
+	     datacnt += retval;
+	     waitcnt = 0;
+	}
+	if (size == datacnt) {
+	     //cout << getname() << " u_read() retval = " << dec << datacnt
+	     //     << ",  u_read() size = " << dec << size << endl;
+ 	     return datacnt;
+	}
+	else {
+	     if (waitcnt > 2) {
+	         cout << getname() << " u_read() TIMEOUT !!!  " << dec << waitcnt << endl;
+	         return -1;
+	     }
+	     usleep(100000);
+	     //usleep(1000000);
+	     waitcnt++;
+        }
+   }
+   cout << getname() << " U-read() unknown ERROR  " << dec << waitcnt << endl;
+   return -1;
+}
+
+// returns result of write to socket
+int CommLinkObject::writeMessageToHost(messageObject & msg)
+{
+   unsigned int	totalMessage[TO_HOST_MSG_LEN/sizeof(int)];
+   int		retval;
+   int		msgSize;
+
+
+   // get the message into the local union
+   msg.getMessage(&totalMessage,sizeof(totalMessage));
+   msgSize = msg.getMsgSize();
+
+   cout << getname()
+        << "CommLinkObject::writeMessageToHost() "
+        << "about to write a " << dec << msg.getMsgSize() 
+	<< " byte message to the host. OPCODE =[0x" << hex << msg.getOpcode() << "]"
+	<< endl;
+
+#ifdef DEBUG
+   cout << "[00]:" << hex << totalMessage[0] << " "
+        << "[04]:" << totalMessage[1] << " "
+        << "[08]:" << totalMessage[2] << " "
+        << "[12]:" << totalMessage[3] << " "
+        << "[16]:" << totalMessage[4] << " "
+        << "[20]:" << totalMessage[5] << " " << endl;
+   cout << "[24]:" << totalMessage[6] << " "
+        << "[28]:" << totalMessage[7] << " "
+        << "[32]:" << totalMessage[8] << " "
+        << "[36]:" << totalMessage[9] << " " << endl;
+#endif
+
+//////////////////////////////////////////////////////////////
+// CORENET 2012.07.09
+//////////////////////////////////////////////////////////////
+//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+#ifdef LINUX_APP
+   WSmessageHeader	*msgheader = (WSmessageHeader *)totalMessage;
+   msgheader->opcode = htons(msgheader->opcode); 
+   msgheader->numberOfSomething = htons(msgheader->numberOfSomething); 
+   msgheader->mspbStatus = htons(msgheader->mspbStatus); 
+   msgheader->disabilityIndex = htonl(msgheader->disabilityIndex); 
+   msgheader->messageSize = htons(msgheader->messageSize); 
+  #endif
+//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+   // send the message to the host directly, without
+   //putting it on the message queue
+   // Only 1K messages can be accepted by the Concurrent server
+   if(TO_HOST_MSG_LEN < msgSize)
+   {
+   msgSize = TO_HOST_MSG_LEN;
+   cout << getname()
+        << "CommLinkObject::writeMessageToHost() "
+        << " processing message larger than " << dec << TO_HOST_MSG_LEN 
+        << endl     
+        << "  Only " << TO_HOST_MSG_LEN << " bytes will be sent to the host."
+        << endl;
+   }
+
+   if ((retval = write(WriteSocket, totalMessage, msgSize)) < 0)
+   {
+      cout << "writeMessageToHost: Error sending message "
+           << "back to host\n";
+   }
+#ifdef DEBUG
+   else
+   {
+       cout << "writeMessageToHost: Sent " << dec << msgSize << " message "
+            << "with opcode = " << hex << msg.getOpcode() << " back to host\n";
+   }
+#endif
+   return retval;
+}
+
+
+
+
+
+//////////////////////////////////////////////////////////////
+// CORENET 2012.07.09
+//////////////////////////////////////////////////////////////
+//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+#ifdef LINUX_APP
+void swap32(char * pval)
+{
+char tmp;
+	tmp = *(pval+3);
+	*(pval+3) = *(pval);
+	*(pval) = tmp;
+	tmp = *(pval+2);
+	*(pval+2) = *(pval+1);
+	*(pval+1) = tmp;
+}
+#endif
+//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+

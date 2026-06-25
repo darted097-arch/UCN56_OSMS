@@ -1,0 +1,2063 @@
+/*
+ * PICASSO-3 CONFIGURATION LANGUAGE FILE
+ *
+ *
+ * Picture name: PicUCN_CSL
+ *
+ *
+ * Documented by  : ucn56
+ * Host           : pcs1
+ * Date           : 02/04-98 at 10:21:18
+ *
+ *
+ * Generate with:
+ *    pcc PicUCN_CSL.Tdoc
+ *
+ */
+
+
+picture PicUCN_CSL
+{
+
+  char PictureNumber[50] = "180";
+  char PictureTitle[50] = "COMPUTER STATUS";
+
+  function `void Initialize()
+   {
+   CFMLevel = 0;
+   Current_Page = 180;
+//
+   execute("{sendMessageToHost(REQUEST_CSL_DISPLAY);}");      
+   displayCSL();
+   }`
+
+
+
+  function `void displayCSL()
+{
+      int lst;
+      for(lst=1;lst<=33;lst++) {
+      execute("{DATIM%d.theText=\\\`Interface->CSL_Template.Csl_datim.Datim%d\\\`;}",lst,lst);
+      execute("{TSKID%d.theText=\\\`Interface->CSL_Template.Csl_tskid.Tskid%d\\\`;}",lst,lst);
+      execute("{CSLMSG%d.theText=\\\`Interface->CSL_Template.Csl_msg.CslMsg%d\\\`;}",lst,lst);
+   }
+      update();
+}
+`
+
+
+
+  function `void ExitCSL()
+   {
+//
+   execute("{sendMessageToHost(EXIT_CSL_DISPLAY);}");      
+   }`
+
+
+
+  text CSLMSG7
+  {
+    x = 390;
+    y = 156;
+    format = "%-64s";
+    theText = `Interface->CSL_Template.Csl_msg.CslMsg7`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 390;
+    yReference = 156;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text CSLMSG6
+  {
+    x = 390;
+    y = 133;
+    format = "%-64s";
+    theText = `Interface->CSL_Template.Csl_msg.CslMsg6`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 390;
+    yReference = 133;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text CSLMSG9
+  {
+    x = 390;
+    y = 202;
+    format = "%-64s";
+    theText = `Interface->CSL_Template.Csl_msg.CslMsg9`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 390;
+    yReference = 202;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text CSLMSG8
+  {
+    x = 390;
+    y = 179;
+    format = "%-64s";
+    theText = `Interface->CSL_Template.Csl_msg.CslMsg8`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 390;
+    yReference = 179;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text CSLMSG15
+  {
+    x = 390;
+    y = 340;
+    format = "%-64s";
+    theText = `Interface->CSL_Template.Csl_msg.CslMsg15`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 390;
+    yReference = 340;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text CSLMSG14
+  {
+    x = 390;
+    y = 317;
+    format = "%-64s";
+    theText = `Interface->CSL_Template.Csl_msg.CslMsg14`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 390;
+    yReference = 317;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text CSLMSG17
+  {
+    x = 390;
+    y = 386;
+    format = "%-64s";
+    theText = `Interface->CSL_Template.Csl_msg.CslMsg17`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 390;
+    yReference = 386;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text CSLMSG16
+  {
+    x = 390;
+    y = 363;
+    format = "%-64s";
+    theText = `Interface->CSL_Template.Csl_msg.CslMsg16`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 390;
+    yReference = 363;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text CSLMSG11
+  {
+    x = 390;
+    y = 248;
+    format = "%-64s";
+    theText = `Interface->CSL_Template.Csl_msg.CslMsg11`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 390;
+    yReference = 248;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text CSLMSG10
+  {
+    x = 390;
+    y = 225;
+    format = "%-64s";
+    theText = `Interface->CSL_Template.Csl_msg.CslMsg10`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 390;
+    yReference = 225;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text CSLMSG13
+  {
+    x = 390;
+    y = 294;
+    format = "%-64s";
+    theText = `Interface->CSL_Template.Csl_msg.CslMsg13`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 390;
+    yReference = 294;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text CSLMSG12
+  {
+    x = 390;
+    y = 271;
+    format = "%-64s";
+    theText = `Interface->CSL_Template.Csl_msg.CslMsg12`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 390;
+    yReference = 271;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text CSLMSG23
+  {
+    x = 390;
+    y = 524;
+    format = "%-64s";
+    theText = `Interface->CSL_Template.Csl_msg.CslMsg23`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 390;
+    yReference = 524;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text CSLMSG22
+  {
+    x = 390;
+    y = 501;
+    format = "%-64s";
+    theText = `Interface->CSL_Template.Csl_msg.CslMsg22`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 390;
+    yReference = 501;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text CSLMSG26
+  {
+    x = 390;
+    y = 593;
+    format = "%-64s";
+    theText = `Interface->CSL_Template.Csl_msg.CslMsg26`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 390;
+    yReference = 593;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text CSLMSG24
+  {
+    x = 390;
+    y = 547;
+    format = "%-64s";
+    theText = `Interface->CSL_Template.Csl_msg.CslMsg24`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 390;
+    yReference = 547;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text CSLMSG18
+  {
+    x = 390;
+    y = 409;
+    format = "%-64s";
+    theText = `Interface->CSL_Template.Csl_msg.CslMsg18`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 390;
+    yReference = 409;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text CSLMSG21
+  {
+    x = 390;
+    y = 478;
+    format = "%-64s";
+    theText = `Interface->CSL_Template.Csl_msg.CslMsg21`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 390;
+    yReference = 478;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text CSLMSG31
+  {
+    x = 390;
+    y = 708;
+    format = "%-64s";
+    theText = `Interface->CSL_Template.Csl_msg.CslMsg31`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 390;
+    yReference = 708;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text CSLMSG32
+  {
+    x = 390;
+    y = 731;
+    format = "%-64s";
+    theText = `Interface->CSL_Template.Csl_msg.CslMsg32`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 390;
+    yReference = 731;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text CSLMSG27
+  {
+    x = 390;
+    y = 616;
+    format = "%-64s";
+    theText = `Interface->CSL_Template.Csl_msg.CslMsg27`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 390;
+    yReference = 616;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text CSLMSG25
+  {
+    x = 390;
+    y = 570;
+    format = "%-64s";
+    theText = `Interface->CSL_Template.Csl_msg.CslMsg25`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 390;
+    yReference = 570;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text CSLMSG28
+  {
+    x = 390;
+    y = 639;
+    format = "%-64s";
+    theText = `Interface->CSL_Template.Csl_msg.CslMsg28`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 390;
+    yReference = 639;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text CSLMSG3
+  {
+    x = 390;
+    y = 64;
+    format = "%-64s";
+    theText = `Interface->CSL_Template.Csl_msg.CslMsg3`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 390;
+    yReference = 64;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text CSLMSG5
+  {
+    x = 390;
+    y = 110;
+    format = "%-64s";
+    theText = `Interface->CSL_Template.Csl_msg.CslMsg5`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 390;
+    yReference = 110;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text CSLMSG4
+  {
+    x = 390;
+    y = 87;
+    format = "%-64s";
+    theText = `Interface->CSL_Template.Csl_msg.CslMsg4`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 390;
+    yReference = 87;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text CSLMSG19
+  {
+    x = 390;
+    y = 432;
+    format = "%-64s";
+    theText = `Interface->CSL_Template.Csl_msg.CslMsg19`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 390;
+    yReference = 432;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text CSLMSG20
+  {
+    x = 390;
+    y = 455;
+    format = "%-64s";
+    theText = `Interface->CSL_Template.Csl_msg.CslMsg20`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 390;
+    yReference = 455;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text CSLMSG30
+  {
+    x = 390;
+    y = 685;
+    format = "%-64s";
+    theText = `Interface->CSL_Template.Csl_msg.CslMsg30`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 390;
+    yReference = 685;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text CSLMSG29
+  {
+    x = 390;
+    y = 662;
+    format = "%-64s";
+    theText = `Interface->CSL_Template.Csl_msg.CslMsg29`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 390;
+    yReference = 662;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text CSLMSG2
+  {
+    x = 390;
+    y = 41;
+    format = "%-64s";
+    theText = `Interface->CSL_Template.Csl_msg.CslMsg2`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 390;
+    yReference = 41;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text CSLMSG33
+  {
+    x = 390;
+    y = 753;
+    format = "%-64s";
+    theText = `Interface->CSL_Template.Csl_msg.CslMsg33`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 390;
+    yReference = 753;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text TSKID27
+  {
+    x = 280;
+    y = 616;
+    format = "%-8s";
+    theText = `Interface->CSL_Template.Csl_tskid.Tskid27`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 280;
+    yReference = 616;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text TSKID2
+  {
+    x = 280;
+    y = 41;
+    format = "%-8s";
+    theText = `Interface->CSL_Template.Csl_tskid.Tskid2`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 280;
+    yReference = 41;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text TSKID3
+  {
+    x = 280;
+    y = 64;
+    format = "%-8s";
+    theText = `Interface->CSL_Template.Csl_tskid.Tskid3`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 280;
+    yReference = 64;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text TSKID4
+  {
+    x = 280;
+    y = 87;
+    format = "%-8s";
+    theText = `Interface->CSL_Template.Csl_tskid.Tskid4`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 280;
+    yReference = 87;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text TSKID5
+  {
+    x = 280;
+    y = 110;
+    format = "%-8s";
+    theText = `Interface->CSL_Template.Csl_tskid.Tskid5`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 280;
+    yReference = 110;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text TSKID6
+  {
+    x = 280;
+    y = 133;
+    format = "%-8s";
+    theText = `Interface->CSL_Template.Csl_tskid.Tskid6`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 280;
+    yReference = 133;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text TSKID7
+  {
+    x = 280;
+    y = 156;
+    format = "%-8s";
+    theText = `Interface->CSL_Template.Csl_tskid.Tskid7`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 280;
+    yReference = 156;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text TSKID8
+  {
+    x = 280;
+    y = 179;
+    format = "%-8s";
+    theText = `Interface->CSL_Template.Csl_tskid.Tskid8`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 280;
+    yReference = 179;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text TSKID9
+  {
+    x = 280;
+    y = 202;
+    format = "%-8s";
+    theText = `Interface->CSL_Template.Csl_tskid.Tskid9`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 280;
+    yReference = 202;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text TSKID10
+  {
+    x = 280;
+    y = 225;
+    format = "%-8s";
+    theText = `Interface->CSL_Template.Csl_tskid.Tskid10`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 280;
+    yReference = 225;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text TSKID11
+  {
+    x = 280;
+    y = 248;
+    format = "%-8s";
+    theText = `Interface->CSL_Template.Csl_tskid.Tskid11`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 280;
+    yReference = 248;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text TSKID12
+  {
+    x = 280;
+    y = 271;
+    format = "%-8s";
+    theText = `Interface->CSL_Template.Csl_tskid.Tskid12`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 280;
+    yReference = 271;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text TSKID13
+  {
+    x = 280;
+    y = 294;
+    format = "%-8s";
+    theText = `Interface->CSL_Template.Csl_tskid.Tskid13`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 280;
+    yReference = 294;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text TSKID14
+  {
+    x = 280;
+    y = 317;
+    format = "%-8s";
+    theText = `Interface->CSL_Template.Csl_tskid.Tskid14`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 280;
+    yReference = 317;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text TSKID15
+  {
+    x = 280;
+    y = 340;
+    format = "%-8s";
+    theText = `Interface->CSL_Template.Csl_tskid.Tskid15`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 280;
+    yReference = 340;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text TSKID16
+  {
+    x = 280;
+    y = 363;
+    format = "%-8s";
+    theText = `Interface->CSL_Template.Csl_tskid.Tskid16`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 280;
+    yReference = 363;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text TSKID17
+  {
+    x = 280;
+    y = 386;
+    format = "%-8s";
+    theText = `Interface->CSL_Template.Csl_tskid.Tskid17`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 280;
+    yReference = 386;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text TSKID18
+  {
+    x = 280;
+    y = 409;
+    format = "%-8s";
+    theText = `Interface->CSL_Template.Csl_tskid.Tskid18`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 280;
+    yReference = 409;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text TSKID19
+  {
+    x = 280;
+    y = 432;
+    format = "%-8s";
+    theText = `Interface->CSL_Template.Csl_tskid.Tskid19`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 280;
+    yReference = 432;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text TSKID20
+  {
+    x = 280;
+    y = 455;
+    format = "%-8s";
+    theText = `Interface->CSL_Template.Csl_tskid.Tskid20`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 280;
+    yReference = 455;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text TSKID21
+  {
+    x = 280;
+    y = 478;
+    format = "%-8s";
+    theText = `Interface->CSL_Template.Csl_tskid.Tskid21`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 280;
+    yReference = 478;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text TSKID22
+  {
+    x = 280;
+    y = 501;
+    format = "%-8s";
+    theText = `Interface->CSL_Template.Csl_tskid.Tskid22`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 280;
+    yReference = 501;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text TSKID23
+  {
+    x = 280;
+    y = 524;
+    format = "%-8s";
+    theText = `Interface->CSL_Template.Csl_tskid.Tskid23`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 280;
+    yReference = 524;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text TSKID24
+  {
+    x = 280;
+    y = 547;
+    format = "%-8s";
+    theText = `Interface->CSL_Template.Csl_tskid.Tskid24`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 280;
+    yReference = 547;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text TSKID25
+  {
+    x = 280;
+    y = 570;
+    format = "%-8s";
+    theText = `Interface->CSL_Template.Csl_tskid.Tskid25`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 280;
+    yReference = 570;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text TSKID26
+  {
+    x = 280;
+    y = 593;
+    format = "%-8s";
+    theText = `Interface->CSL_Template.Csl_tskid.Tskid26`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 280;
+    yReference = 593;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text TSKID28
+  {
+    x = 280;
+    y = 639;
+    format = "%-8s";
+    theText = `Interface->CSL_Template.Csl_tskid.Tskid28`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 280;
+    yReference = 639;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text TSKID29
+  {
+    x = 280;
+    y = 662;
+    format = "%-8s";
+    theText = `Interface->CSL_Template.Csl_tskid.Tskid29`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 280;
+    yReference = 662;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text TSKID30
+  {
+    x = 280;
+    y = 685;
+    format = "%-8s";
+    theText = `Interface->CSL_Template.Csl_tskid.Tskid30`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 280;
+    yReference = 685;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text TSKID31
+  {
+    x = 280;
+    y = 708;
+    format = "%-8s";
+    theText = `Interface->CSL_Template.Csl_tskid.Tskid31`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 280;
+    yReference = 708;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text TSKID32
+  {
+    x = 280;
+    y = 731;
+    format = "%-8s";
+    theText = `Interface->CSL_Template.Csl_tskid.Tskid32`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 280;
+    yReference = 731;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text TSKID33
+  {
+    x = 280;
+    y = 753;
+    format = "%-8s";
+    theText = `Interface->CSL_Template.Csl_tskid.Tskid33`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 280;
+    yReference = 753;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text CSLMSG1
+  {
+    x = 390;
+    y = 18;
+    format = "%-72s";
+    theText = `Interface->CSL_Template.Csl_msg.CslMsg1`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 390;
+    yReference = 18;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text DATIM1
+  {
+    x = 102;
+    y = 18;
+    format = "%-20s";
+    theText = `Interface->CSL_Template.Csl_datim.Datim1`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 102;
+    yReference = 18;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text DATIM4
+  {
+    x = 102;
+    y = 87;
+    format = "%-20s";
+    theText = `Interface->CSL_Template.Csl_datim.Datim4`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 102;
+    yReference = 87;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text DATIM5
+  {
+    x = 102;
+    y = 110;
+    format = "%-20s";
+    theText = `Interface->CSL_Template.Csl_datim.Datim5`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 102;
+    yReference = 110;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text DATIM6
+  {
+    x = 102;
+    y = 133;
+    format = "%-20s";
+    theText = `Interface->CSL_Template.Csl_datim.Datim6`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 102;
+    yReference = 133;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text DATIM9
+  {
+    x = 102;
+    y = 202;
+    format = "%-20s";
+    theText = `Interface->CSL_Template.Csl_datim.Datim9`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 102;
+    yReference = 202;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text DATIM10
+  {
+    x = 102;
+    y = 225;
+    format = "%-20s";	
+    theText = `Interface->CSL_Template.Csl_datim.Datim10`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 102;
+    yReference = 225;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text DATIM11
+  {
+    x = 102;
+    y = 248;
+    format = "%-20s";	
+    theText = `Interface->CSL_Template.Csl_datim.Datim11`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 102;
+    yReference = 248;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text DATIM13
+  {
+    x = 102;
+    y = 294;
+    format = "%-20s";
+    theText = `Interface->CSL_Template.Csl_datim.Datim13`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 102;
+    yReference = 294;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text DATIM14
+  {
+    x = 102;
+    y = 317;
+    format = "%-20s";
+    theText = `Interface->CSL_Template.Csl_datim.Datim14`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 102;
+    yReference = 317;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text DATIM15
+  {
+    x = 102;
+    y = 340;
+    format = "%-20s";
+    theText = `Interface->CSL_Template.Csl_datim.Datim15`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 102;
+    yReference = 340;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text DATIM16
+  {
+    x = 102;
+    y = 363;
+    format = "%-20s";
+    theText = `Interface->CSL_Template.Csl_datim.Datim16`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 102;
+    yReference = 363;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text DATIM19
+  {
+    x = 102;
+    y = 432;
+    format = "%-20s";
+    theText = `Interface->CSL_Template.Csl_datim.Datim19`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 102;
+    yReference = 432;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text DATIM20
+  {
+    x = 102;
+    y = 455;
+    format = "%-20s";
+    theText = `Interface->CSL_Template.Csl_datim.Datim20`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 102;
+    yReference = 455;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text DATIM21
+  {
+    x = 102;
+    y = 478;
+    format = "%-20s";
+    theText = `Interface->CSL_Template.Csl_datim.Datim21`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 102;
+    yReference = 478;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text DATIM24
+  {
+    x = 102;
+    y = 547;
+    format = "%-20s";
+    theText = `Interface->CSL_Template.Csl_datim.Datim24`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 102;
+    yReference = 547;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text DATIM25
+  {
+    x = 102;
+    y = 570;
+    format = "%-20s";
+    theText = `Interface->CSL_Template.Csl_datim.Datim25`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 102;
+    yReference = 570;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text DATIM26
+  {
+    x = 102;
+    y = 593;
+    format = "%-20s";
+    theText = `Interface->CSL_Template.Csl_datim.Datim26`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 102;
+    yReference = 593;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text DATIM28
+  {
+    x = 102;
+    y = 639;
+    format = "%-20s";
+    theText = `Interface->CSL_Template.Csl_datim.Datim28`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 102;
+    yReference = 639;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text DATIM29
+  {
+    x = 102;
+    y = 662;
+    format = "%-20s";
+    theText = `Interface->CSL_Template.Csl_datim.Datim29`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 102;
+    yReference = 662;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text DATIM30
+  {
+    x = 102;
+    y = 685;
+    format = "%-20s";
+    theText = `Interface->CSL_Template.Csl_datim.Datim30`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 102;
+    yReference = 685;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text DATIM31
+  {
+    x = 102;
+    y = 708;
+    format = "%-20s";
+    theText = `Interface->CSL_Template.Csl_datim.Datim31`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 102;
+    yReference = 708;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text DATIM33
+  {
+    x = 102;
+    y = 753;
+    format = "%-20s";
+    theText = `Interface->CSL_Template.Csl_datim.Datim33`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 102;
+    yReference = 753;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text DATIM2
+  {
+    x = 102;
+    y = 41;
+    format = "%-20s";
+    theText = `Interface->CSL_Template.Csl_datim.Datim2`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 102;
+    yReference = 41;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text DATIM3
+  {
+    x = 102;
+    y = 64;
+    format = "%-20s";
+    theText = `Interface->CSL_Template.Csl_datim.Datim3`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 102;
+    yReference = 64;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text DATIM7
+  {
+    x = 102;
+    y = 156;
+    format = "%-20s";
+    theText = `Interface->CSL_Template.Csl_datim.Datim7`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 102;
+    yReference = 156;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text DATIM8
+  {
+    x = 102;
+    y = 179;
+    format = "%-20s";
+    theText = `Interface->CSL_Template.Csl_datim.Datim8`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 102;
+    yReference = 179;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text DATIM12
+  {
+    x = 102;
+    y = 271;
+    format = "%-20s";
+    theText = `Interface->CSL_Template.Csl_datim.Datim12`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 102;
+    yReference = 271;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text DATIM17
+  {
+    x = 102;
+    y = 386;
+    format = "%-20s";
+    theText = `Interface->CSL_Template.Csl_datim.Datim17`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 102;
+    yReference = 386;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text DATIM18
+  {
+    x = 102;
+    y = 409;
+    format = "%-20s";
+    theText = `Interface->CSL_Template.Csl_datim.Datim18`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 102;
+    yReference = 409;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text DATIM22
+  {
+    x = 102;
+    y = 501;
+    format = "%-20s";
+    theText = `Interface->CSL_Template.Csl_datim.Datim22`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 102;
+    yReference = 501;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text DATIM23
+  {
+    x = 102;
+    y = 524;
+    format = "%-20s";
+    theText = `Interface->CSL_Template.Csl_datim.Datim23`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 102;
+    yReference = 524;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text DATIM27
+  {
+    x = 102;	
+    y = 616;
+    format = "%-20s";	
+    theText = `Interface->CSL_Template.Csl_datim.Datim27`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 102;
+    yReference = 616;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text DATIM32
+  {
+    x = 102;	
+    y = 731;
+    format = "%-20s";
+    theText = `Interface->CSL_Template.Csl_datim.Datim32`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 102;
+    yReference = 731;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text TSKID1
+  {
+    x = 280;
+    y = 18;
+    format = "%-8s";
+    theText = `Interface->CSL_Template.Csl_tskid.Tskid1`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 280;
+    yReference = 18;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+// The picture's other attributes:
+
+  backgroundColour    = 0;
+  xSnap               = 5;
+  ySnap               = 5;
+  angleSnap           = 0;
+  radiusSnap          = 0;
+  worldX              = 0;
+  worldY              = 0;
+  worldWidth          = 1280;
+  worldHeight         = 789;
+  oneToOne            = 1;
+  resizeMode          = 0;
+  updateMode          = 2;
+  crosshairStyle      = 1;
+  crosshairLength     = 0;
+  crosshairFollowSnap = `isInEditMode()`;
+  crosshairVisibility = `isInEditMode()`;
+  xReference = 500;
+  yReference = 500;
+  xScaleFactor = 1;
+  yScaleFactor = 1;
+  rotationAngle = 0;
+
+
+}  // end of picture PicUCN_CSL

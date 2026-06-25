@@ -1,0 +1,51 @@
+#!/bin/sh
+
+#namekill()
+#{
+#   case $ARCH in
+#     sun4)
+#        psArg=aux;;
+#     sgi)
+#        psArg=aef;;
+#     hp*)
+#        psArg=ef;;
+#   esac
+#   for name in $* ; do
+#      echo "Killing $name ..."
+#      processNr=`ps -$psArg | grep " $name"|fgrep -v 'grep' | awk '{print $2}'`
+#      [ -z "$processNr" ] || kill -9 $processNr > /dev/null 2>&1
+#   done
+#}
+
+
+sleepAndStart()
+{
+   sleep $1
+   shift
+   echo "Starting $* ..."
+   $*
+}
+
+LOGINID=`whoami`
+CONTROL=`ps -ef | grep control | awk 'match($8,"control") == 1 {print $8}'`
+if [ ! "$CONTROL" ]; then
+   rm -f /usr/local/picasso3/recovery/*
+   sleepAndStart  0 control &
+fi
+sleepAndStart  1 rtm &
+sleepAndStart 10 ged
+
+#namekill ged rtm control Timer
+#namekill ged rtm
+if [ ! "$CONTROL" ]; then
+   CTRLPID=`ps -fu $LOGINID | grep control | awk 'match($8,"control") == 1 {print $2}'`
+else
+   CTRLPID=""
+fi
+RTMPID=`ps -fu $LOGINID | grep rtm | awk 'match($8,"rtm") == 1 {print $2}'`
+BLINKPID=`ps -fu $LOGINID | grep blink | awk 'match($8,"blink") == 1 {print $2}'`
+TIMERPID=`ps -fu $LOGINID | grep Timer | awk 'match($8,"Timer") == 1 {print $2}'`
+for pid in $BLINKPID $TIMERPID $RTMPID $CTRLPID
+do
+kill $pid
+done

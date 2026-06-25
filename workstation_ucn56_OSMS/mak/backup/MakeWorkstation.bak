@@ -1,0 +1,570 @@
+MAINDIR	=	..
+SRCDIR	=	$(MAINDIR)/src
+OBJDIR	=	$(MAINDIR)/obj
+EXEDIR	=	$(MAINDIR)/bin
+INCDIR	=	$(MAINDIR)/include
+PICDIR	=	$(MAINDIR)/pictures/pdat
+#
+CC	=	CC +O2 
+
+MACHINE	=	-Dhprischpux9
+
+TPATH	=	$(PICASSOPATH)
+IPATH	=	$(TPATH)/include
+LPATH	=	$(TPATH)/lib/$(ARCH)
+
+CFLAGS	=	-I. \
+		-I/usr/include/Motif1.2 \
+		-I/usr/include/X11R5 \
+		-I$(PICASSOPATH) \
+		-I$(INCDIR) \
+		-I$(PICDIR)
+
+LFLAGS	=	
+
+LINK	=	-L$(PICASSOPATH)/lib 
+LIBS	=	-lp3 -lm -lc -lPW -ldld
+
+WSPCSOBJECTS =	$(OBJDIR)/mainWSPCS.o \
+		$(OBJDIR)/DatabaseObject.o \
+		$(OBJDIR)/InterProcSMObject.o \
+		$(OBJDIR)/setPBstatuses.o \
+		$(OBJDIR)/setWSPCSinfo.o \
+		$(OBJDIR)/WSPCSObject.o \
+		$(OBJDIR)/getLocalTime.o \
+		$(OBJDIR)/sharedMemoryObject.o
+
+
+GLUEOBJECTS =	$(OBJDIR)/mainInterfaceToGUI.o \
+		$(OBJDIR)/messageObject.o \
+		$(OBJDIR)/DataQueueObject.o \
+		$(OBJDIR)/DatabaseObject.o \
+		$(OBJDIR)/InterProcSMObject.o \
+		$(OBJDIR)/IntListObject.o \
+		$(OBJDIR)/PermShoppingListObject.o \
+		$(OBJDIR)/PidListItemObject.o \
+		$(OBJDIR)/PictureListItemObject.o \
+		$(OBJDIR)/PicPidListObject.o \
+		$(OBJDIR)/createPicturePidLists.o \
+		$(OBJDIR)/buildPermanentShoppingList.o \
+		$(OBJDIR)/initInterfaceToGUI.o \
+		$(OBJDIR)/cyclicProcessing.o \
+		$(OBJDIR)/connectToGUI.o \
+		$(OBJDIR)/defineDatabase.o \
+		$(OBJDIR)/defineMessages.o \
+		$(OBJDIR)/defineInterface.o \
+		$(OBJDIR)/defineFunctions.o \
+		$(OBJDIR)/manageTempShopList.o \
+		$(OBJDIR)/parseSinglePointMessages.o \
+		$(OBJDIR)/parsePenMessages.o \
+		$(OBJDIR)/parseBarMessages.o \
+		$(OBJDIR)/parseCALMessages.o \
+		$(OBJDIR)/parseCPCSMessages.o \
+		$(OBJDIR)/parseBDLMessages.o \
+		$(OBJDIR)/parseORLMessages.o \
+		$(OBJDIR)/parseCslMessages.o \
+		$(OBJDIR)/parseCecorMessages.o \
+		$(OBJDIR)/parseColssMessages.o \
+		$(OBJDIR)/parseDTrendMessages.o \
+		$(OBJDIR)/parseDspmMessages.o \
+		$(OBJDIR)/parseDBC_Messages.o \
+		$(OBJDIR)/parseGroupMessages.o \
+		$(OBJDIR)/parseBOPDMDMessages.o \
+		$(OBJDIR)/parseIncoreMessages.o \
+		$(OBJDIR)/parseLinkMessages.o \
+		$(OBJDIR)/parsePRTSUMMessages.o \
+		$(OBJDIR)/parsePrreptMessages.o \
+		$(OBJDIR)/parseRPCCEAMessages.o \
+		$(OBJDIR)/parseSecureMessages.o \
+		$(OBJDIR)/parseUTDVMessages.o \
+		$(OBJDIR)/parseHDSRMessages.o \
+		$(OBJDIR)/parseVTRENDMessages.o \
+		$(OBJDIR)/parseXRBPMessages.o \
+		$(OBJDIR)/parseXRBPAMessages.o \
+		$(OBJDIR)/findPidForGUI.o \
+		$(OBJDIR)/sendPictureNameToInterfaceToGUI.o \
+		$(OBJDIR)/sendMessageToHost.o \
+		$(OBJDIR)/disconnectFromGUI.o \
+		$(OBJDIR)/find_pid.o \
+		$(OBJDIR)/messageQueueObject.o \
+		$(OBJDIR)/parsePictureMessages.o \
+		$(OBJDIR)/sharedMemoryObject.o \
+		$(OBJDIR)/TempShoppingListObject.o
+
+LINKOBJECTS =	$(OBJDIR)/mainCommLink.o \
+		$(OBJDIR)/setPBstatuses.o \
+		$(OBJDIR)/messageObject.o \
+		$(OBJDIR)/InterProcSMObject.o \
+		$(OBJDIR)/DatabaseObject.o \
+		$(OBJDIR)/CommLinkObject.o \
+		$(OBJDIR)/parseHostMessages.o \
+		$(OBJDIR)/parseAckResetMessages.o \
+		$(OBJDIR)/parseBOPDMDMessages.o \
+		$(OBJDIR)/parseDBC_Messages.o \
+		$(OBJDIR)/parseDBLoadMessages.o \
+		$(OBJDIR)/parseDBUpdateMessages.o \
+		$(OBJDIR)/parseDTrendMessages.o \
+		$(OBJDIR)/parsePRTSUMMessages.o \
+		$(OBJDIR)/parseRPCCEAMessages.o \
+		$(OBJDIR)/parseBarMessages.o \
+		$(OBJDIR)/parseCALMessages.o \
+		$(OBJDIR)/parseCPCSMessages.o \
+		$(OBJDIR)/parseBDLMessages.o \
+		$(OBJDIR)/parseORLMessages.o \
+		$(OBJDIR)/parseCecorMessages.o \
+		$(OBJDIR)/parseCslMessages.o \
+		$(OBJDIR)/parseColssMessages.o \
+		$(OBJDIR)/parseDspmMessages.o \
+		$(OBJDIR)/parseGroupMessages.o \
+		$(OBJDIR)/parsePenMessages.o \
+		$(OBJDIR)/parseIncoreMessages.o \
+		$(OBJDIR)/parseLinkMessages.o \
+		$(OBJDIR)/parsePrreptMessages.o \
+		$(OBJDIR)/parseSecureMessages.o \
+		$(OBJDIR)/parseSinglePointMessages.o \
+		$(OBJDIR)/parseUTDVMessages.o \
+		$(OBJDIR)/parseVTRENDMessages.o \
+		$(OBJDIR)/parseXRBPMessages.o \
+		$(OBJDIR)/parseXRBPAMessages.o \
+		$(OBJDIR)/getLocalTime.o \
+		$(OBJDIR)/find_pid.o \
+		$(OBJDIR)/messageQueueObject.o \
+		$(OBJDIR)/sharedMemoryObject.o
+
+PAGEROBJECTS =	$(OBJDIR)/pager.o \
+		$(OBJDIR)/chg_file.o
+
+FDDIOBJECTS =	$(OBJDIR)/FDDIparse.o \
+		$(OBJDIR)/sharedMemoryObject.o
+
+TICKEROBJECTS =	$(OBJDIR)/Ticker.o \
+		$(OBJDIR)/sharedMemoryObject.o \
+		$(OBJDIR)/InterProcSMObject.o \
+		$(OBJDIR)/getLocalTime.o
+
+# Be on the safe side.  If any include files change, re-compile
+INCLUDES =	$(INCDIR)/CommLinkObject.h \
+		$(INCDIR)/Typedefs.h \
+		$(INCDIR)/messageObject.h \
+		$(INCDIR)/interProcSM.h \
+		$(INCDIR)/InterProcSMObject.h \
+		$(INCDIR)/DataQueueObject.h \
+		$(INCDIR)/DatabaseObject.h \
+		$(INCDIR)/database.h \
+		$(INCDIR)/databaseParameters.h \
+		$(PICDIR)/databaseStructure.pdat \
+		$(INCDIR)/interface.h \
+		$(PICDIR)/interfaceStructure.pdat \
+		$(INCDIR)/messageParameters.h \
+		$(INCDIR)/messageQueueObject.h \
+		$(INCDIR)/messages.h \
+		$(PICDIR)/messageStructure.pdat \
+		$(INCDIR)/parseHDSRMessages.h \
+		$(INCDIR)/prototypes.h \
+		$(INCDIR)/sharedMemoryObject.h \
+		$(INCDIR)/systemParameters.h \
+		$(INCDIR)/IntListObject.h \
+		$(INCDIR)/PermShoppingListObject.h \
+		$(INCDIR)/TempShoppingListObject.h \
+		$(PICDIR)/BOPDMDStructure.pdat \
+		$(PICDIR)/BarChartStructure.pdat \
+		$(PICDIR)/HDSRStructure.pdat \
+		$(PICDIR)/RPCCEAStructure.pdat \
+		$(PICDIR)/pointSummaryStructure.pdat \
+		$(PICDIR)/VideoTrendStructure.pdat \
+		$(PICDIR)/XRBPAUTO.pdat \
+		$(PICDIR)/XRBPStructure.pdat \
+		$(PICDIR)/cecorStructure.pdat \
+		$(PICDIR)/colssParameters.pdat \
+		$(PICDIR)/colssStructure.pdat \
+		$(PICDIR)/cslStructure.pdat \
+		$(PICDIR)/LinkStructure.pdat \
+		$(PICDIR)/incoreStructure.pdat \
+		$(PICDIR)/UTDVStructure.pdat \
+		$(PICDIR)/printReportsStructure.pdat \
+		$(PICDIR)/groupDisplayStructure.pdat \
+		$(PICDIR)/secureStructure.pdat \
+		$(PICDIR)/incoreStructure.pdat \
+		$(INCDIR)/PidListItemObject.h \
+		$(INCDIR)/PicPidListObject.h \
+		$(INCDIR)/PictureListItemObject.h \
+		$(INCDIR)/WSPCSObject.h
+
+all :		InterfaceToGUI CommLink WSPCS sysLog FDDIparse Ticker
+
+# ********************	Executables
+
+InterfaceToGUI:			$(GLUEOBJECTS)
+				$(CC) $(LFLAGS) $(LINK) \
+				-L $(LPATH) $(GLUEOBJECTS) $(LIBS) \
+				-o $(EXEDIR)/InterfaceToGUI
+
+CommLink:			$(LINKOBJECTS)
+				$(CC) $(LFLAGS) \
+				$(LINKOBJECTS) \
+				-o $(EXEDIR)/CommLink
+
+WSPCS:				$(WSPCSOBJECTS) WSPCS_cfg
+				$(CC) $(LFLAGS) \
+				$(WSPCSOBJECTS) \
+				-o $(EXEDIR)/WSPCS
+
+WSPCS_cfg:			$(EXEDIR)/WSPCS.cfg
+
+settime:			$(SRCDIR)/settime.C
+				$(CC) $(SRCDIR)/settime.C \
+				-o $(EXEDIR)/settime
+
+sysLog:			        $(SRCDIR)/sysLog.C
+				$(CC) $(SRCDIR)/sysLog.C \
+				-o $(EXEDIR)/sysLog
+		
+pager:				$(PAGEROBJECTS)
+				$(CC) $(LFLAGS) \
+				$(PAGEROBJECTS) \
+				-o $(EXEDIR)/pager
+
+FDDIparse:			$(FDDIOBJECTS)
+				$(CC) $(LFLAGS) \
+				$(FDDIOBJECTS) \
+				-o $(EXEDIR)/FDDIparse
+
+Ticker:				$(TICKEROBJECTS)
+				$(CC) $(LFLAGS) \
+				$(TICKEROBJECTS) \
+				-o $(EXEDIR)/Ticker
+
+# ********************  Ticker Objects
+$(OBJDIR)/Ticker.o:		$(INCLUDES) $(SRCDIR)/Ticker.C
+				$(CC) -c  +a1 $(CFLAGS) -I $(IPATH) $(MACHINE) \
+				$(SRCDIR)/Ticker.C -o $(OBJDIR)/Ticker.o
+
+		
+# ********************	WSPCS Objects
+$(OBJDIR)/mainWSPCS.o:		$(INCLUDES) $(SRCDIR)/mainWSPCS.C
+				$(CC) -c  +a1 $(CFLAGS) -I $(IPATH) $(MACHINE) \
+				$(SRCDIR)/mainWSPCS.C -o $(OBJDIR)/mainWSPCS.o
+
+$(EXEDIR)/WSPCS.cfg:		$(SRCDIR)/WSPCS.cfg
+				/bin/cp -f $(SRCDIR)/WSPCS.cfg $(EXEDIR)/WSPCS.cfg
+
+$(OBJDIR)/WSPCSObject.o:	$(INCLUDES) $(SRCDIR)/WSPCSObject.C
+				$(CC) -c $(CFLAGS) $(SRCDIR)/WSPCSObject.C \
+				      -o $(OBJDIR)/WSPCSObject.o
+
+$(OBJDIR)/setWSPCSinfo.o:	$(INCLUDES) $(SRCDIR)/setWSPCSinfo.C
+				$(CC) -c $(CFLAGS) $(SRCDIR)/setWSPCSinfo.C \
+				      -o $(OBJDIR)/setWSPCSinfo.o
+
+# ********************	InterfaceToGUI Objects
+$(OBJDIR)/mainInterfaceToGUI.o:	$(INCLUDES) $(SRCDIR)/mainInterfaceToGUI.C
+				$(CC) -c $(CFLAGS) -I $(IPATH) $(MACHINE) \
+				$(SRCDIR)/mainInterfaceToGUI.C -o $(OBJDIR)/mainInterfaceToGUI.o
+
+$(OBJDIR)/initInterfaceToGUI.o:	$(INCLUDES) $(SRCDIR)/initInterfaceToGUI.C
+				$(CC) -c $(CFLAGS) -I $(IPATH) $(MACHINE) \
+				$(SRCDIR)/initInterfaceToGUI.C -o $(OBJDIR)/initInterfaceToGUI.o
+
+$(OBJDIR)/connectToGUI.o:	$(INCLUDES) $(SRCDIR)/connectToGUI.C
+				$(CC) -c $(CFLAGS) -I $(IPATH) $(MACHINE) \
+				$(SRCDIR)/connectToGUI.C -o $(OBJDIR)/connectToGUI.o
+
+$(OBJDIR)/defineDatabase.o:	$(INCLUDES) $(SRCDIR)/defineDatabase.C
+				$(CC) -c $(CFLAGS) -I $(IPATH) $(MACHINE) \
+				$(SRCDIR)/defineDatabase.C -o $(OBJDIR)/defineDatabase.o
+
+$(OBJDIR)/defineInterface.o:	$(INCLUDES) $(SRCDIR)/defineInterface.C
+				$(CC) -c $(CFLAGS) -I $(IPATH) $(MACHINE) \
+				$(SRCDIR)/defineInterface.C -o $(OBJDIR)/defineInterface.o
+
+$(OBJDIR)/defineMessages.o:	$(INCLUDES) $(SRCDIR)/defineMessages.C
+				$(CC) -c $(CFLAGS) -I $(IPATH) $(MACHINE) \
+				$(SRCDIR)/defineMessages.C -o $(OBJDIR)/defineMessages.o
+
+$(OBJDIR)/defineFunctions.o:	$(INCLUDES) $(SRCDIR)/defineFunctions.C
+				$(CC) -c $(CFLAGS) -I $(IPATH) $(MACHINE) \
+				$(SRCDIR)/defineFunctions.C -o $(OBJDIR)/defineFunctions.o
+
+$(OBJDIR)/findPidForGUI.o:	$(INCLUDES) $(SRCDIR)/findPidForGUI.C
+				$(CC) -c $(CFLAGS) -I $(IPATH) $(MACHINE) \
+				$(SRCDIR)/findPidForGUI.C -o $(OBJDIR)/findPidForGUI.o
+
+$(OBJDIR)/sendPictureNameToInterfaceToGUI.o:	$(INCLUDES) $(SRCDIR)/sendPictureNameToInterfaceToGUI.C
+				$(CC) -c $(CFLAGS) -I $(IPATH) $(MACHINE) \
+				$(SRCDIR)/sendPictureNameToInterfaceToGUI.C \
+				-o $(OBJDIR)/sendPictureNameToInterfaceToGUI.o
+
+$(OBJDIR)/sendMessageToHost.o:	$(INCLUDES) $(SRCDIR)/sendMessageToHost.C
+				$(CC) -c $(CFLAGS) -I $(IPATH) $(MACHINE) \
+				$(SRCDIR)/sendMessageToHost.C -o $(OBJDIR)/sendMessageToHost.o
+																							
+$(OBJDIR)/disconnectFromGUI.o:	$(INCLUDES) $(SRCDIR)/disconnectFromGUI.C
+				$(CC) -c $(CFLAGS) -I $(IPATH) $(MACHINE) \
+				$(SRCDIR)/disconnectFromGUI.C -o $(OBJDIR)/disconnectFromGUI.o
+
+$(OBJDIR)/cyclicProcessing.o:	$(INCLUDES) $(SRCDIR)/cyclicProcessing.C
+				$(CC) -c $(CFLAGS) -I $(IPATH) $(MACHINE) \
+				$(SRCDIR)/cyclicProcessing.C -o $(OBJDIR)/cyclicProcessing.o
+				
+$(OBJDIR)/manageTempShopList.o:	$(INCLUDES) $(SRCDIR)/manageTempShopList.C
+				$(CC) -c $(CFLAGS) -I $(IPATH) $(MACHINE) \
+				$(SRCDIR)/manageTempShopList.C -o $(OBJDIR)/manageTempShopList.o
+								 
+$(OBJDIR)/DataQueueObject.o:	$(INCLUDES) $(SRCDIR)/DataQueueObject.C
+				$(CC) -c $(CFLAGS) -I $(IPATH) $(MACHINE) \
+				$(SRCDIR)/DataQueueObject.C -o $(OBJDIR)/DataQueueObject.o
+
+$(OBJDIR)/parsePictureMessages.o:	$(INCLUDES) $(SRCDIR)/parsePictureMessages.C
+					$(CC) -c $(CFLAGS) -I $(IPATH) $(MACHINE) \
+					$(SRCDIR)/parsePictureMessages.C \
+					 -o $(OBJDIR)/parsePictureMessages.o
+
+$(OBJDIR)/TempShoppingListObject.o:	$(INCLUDES) $(SRCDIR)/TempShoppingListObject.C
+					$(CC) -c $(CFLAGS) -I $(IPATH) $(MACHINE) \
+					$(SRCDIR)/TempShoppingListObject.C \
+					 -o $(OBJDIR)/TempShoppingListObject.o
+
+$(OBJDIR)/IntListObject.o:		$(INCLUDES) $(SRCDIR)/IntListObject.C
+					$(CC) -c $(CFLAGS) -I $(IPATH) $(MACHINE) \
+					$(SRCDIR)/IntListObject.C \
+					 -o $(OBJDIR)/IntListObject.o
+
+$(OBJDIR)/PermShoppingListObject.o:	$(INCLUDES) $(SRCDIR)/PermShoppingListObject.C
+					$(CC) -c $(CFLAGS) -I $(IPATH) $(MACHINE) \
+					$(SRCDIR)/PermShoppingListObject.C \
+					 -o $(OBJDIR)/PermShoppingListObject.o
+
+$(OBJDIR)/buildPermanentShoppingList.o:	$(INCLUDES) $(SRCDIR)/buildPermanentShoppingList.C
+					$(CC) -c $(CFLAGS) -I $(IPATH) $(MACHINE) \
+					$(SRCDIR)/buildPermanentShoppingList.C \
+					 -o $(OBJDIR)/buildPermanentShoppingList.o
+
+$(OBJDIR)/createPicturePidLists.o:	$(INCLUDES) $(SRCDIR)/createPicturePidLists.C
+					$(CC) -c $(CFLAGS) -I $(IPATH) $(MACHINE) \
+					$(SRCDIR)/createPicturePidLists.C \
+					 -o $(OBJDIR)/createPicturePidLists.o
+
+$(OBJDIR)/PictureListItemObject.o:	$(INCLUDES) $(SRCDIR)/PictureListItemObject.C
+					$(CC) -c $(CFLAGS) -I $(IPATH) $(MACHINE) \
+					$(SRCDIR)/PictureListItemObject.C \
+					 -o $(OBJDIR)/PictureListItemObject.o
+
+$(OBJDIR)/PidListItemObject.o:	$(INCLUDES) $(SRCDIR)/PidListItemObject.C
+					$(CC) -c $(CFLAGS) -I $(IPATH) $(MACHINE) \
+					$(SRCDIR)/PidListItemObject.C \
+					 -o $(OBJDIR)/PidListItemObject.o
+
+$(OBJDIR)/PicPidListObject.o:	$(INCLUDES) $(SRCDIR)/PicPidListObject.C
+					$(CC) -c $(CFLAGS) -I $(IPATH) $(MACHINE) \
+					$(SRCDIR)/PicPidListObject.C \
+					 -o $(OBJDIR)/PicPidListObject.o
+
+# ********************	CommLink Objects
+
+$(OBJDIR)/mainCommLink.o:	$(INCLUDES) $(SRCDIR)/mainCommLink.C
+				$(CC) -c $(CFLAGS) $(SRCDIR)/mainCommLink.C \
+				      -o $(OBJDIR)/mainCommLink.o
+
+$(OBJDIR)/parseHostMessages.o:	$(INCLUDES) $(SRCDIR)/parseHostMessages.C
+				$(CC) -c $(CFLAGS) $(SRCDIR)/parseHostMessages.C \
+				-o $(OBJDIR)/parseHostMessages.o
+
+$(OBJDIR)/parseAckResetMessages.o:	$(INCLUDES) $(SRCDIR)/parseAckResetMessages.C
+					$(CC) -c $(CFLAGS) $(SRCDIR)/parseAckResetMessages.C \
+				      	      -o $(OBJDIR)/parseAckResetMessages.o
+
+$(OBJDIR)/parseDBLoadMessages.o:	$(INCLUDES) $(SRCDIR)/parseDBLoadMessages.C
+					$(CC) -c $(CFLAGS) $(SRCDIR)/parseDBLoadMessages.C \
+				              -o $(OBJDIR)/parseDBLoadMessages.o
+
+$(OBJDIR)/getLocalTime.o:	$(INCLUDES) $(SRCDIR)/getLocalTime.C
+				$(CC) -c $(CFLAGS) $(SRCDIR)/getLocalTime.C \
+				      -o $(OBJDIR)/getLocalTime.o
+
+$(OBJDIR)/CommLinkObject.o:	$(INCLUDES) $(SRCDIR)/CommLinkObject.C
+				$(CC) -c $(CFLAGS) $(SRCDIR)/CommLinkObject.C \
+				      -o $(OBJDIR)/CommLinkObject.o
+				      				      
+# ********************	Common Objects	
+$(OBJDIR)/DatabaseObject.o:	$(INCLUDES) $(SRCDIR)/DatabaseObject.C
+				$(CC) -c $(CFLAGS) -I $(IPATH) $(MACHINE) \
+				$(SRCDIR)/DatabaseObject.C -o $(OBJDIR)/DatabaseObject.o
+
+$(OBJDIR)/sharedMemoryObject.o:	$(INCLUDES) $(SRCDIR)/sharedMemoryObject.C
+				$(CC) -c $(CFLAGS) -I $(IPATH) $(MACHINE) \
+				$(SRCDIR)/sharedMemoryObject.C -o $(OBJDIR)/sharedMemoryObject.o
+
+$(OBJDIR)/InterProcSMObject.o:	$(INCLUDES) $(SRCDIR)/InterProcSMObject.C
+				$(CC) -c $(CFLAGS) -I $(IPATH) $(MACHINE) \
+				$(SRCDIR)/InterProcSMObject.C -o $(OBJDIR)/InterProcSMObject.o
+
+$(OBJDIR)/find_pid.o:		$(INCLUDES) $(SRCDIR)/find_pid.C
+				$(CC) -c $(CFLAGS) -I $(IPATH) $(MACHINE) \
+				$(SRCDIR)/find_pid.C \
+				 -o $(OBJDIR)/find_pid.o
+
+$(OBJDIR)/parseSinglePointMessages.o:	$(INCLUDES) $(SRCDIR)/parseSinglePointMessages.C
+					$(CC) -c $(CFLAGS) -I $(IPATH) $(MACHINE) \
+					$(SRCDIR)/parseSinglePointMessages.C \
+				 	-o $(OBJDIR)/parseSinglePointMessages.o
+					
+$(OBJDIR)/parseDspmMessages.o:	$(INCLUDES) $(SRCDIR)/parseDspmMessages.C
+				$(CC) -c $(CFLAGS) -I $(IPATH) $(MACHINE) \
+				$(SRCDIR)/parseDspmMessages.C \
+				 -o $(OBJDIR)/parseDspmMessages.o
+
+$(OBJDIR)/parseXRBPAMessages.o:	$(INCLUDES) $(SRCDIR)/parseXRBPAMessages.C
+				$(CC) -c $(CFLAGS) -I $(IPATH) $(MACHINE) \
+				$(SRCDIR)/parseXRBPAMessages.C \
+				 -o $(OBJDIR)/parseXRBPAMessages.o
+
+$(OBJDIR)/parseXRBPMessages.o:	$(INCLUDES) $(SRCDIR)/parseXRBPMessages.C
+				$(CC) -c $(CFLAGS) -I $(IPATH) $(MACHINE) \
+				$(SRCDIR)/parseXRBPMessages.C \
+				 -o $(OBJDIR)/parseXRBPMessages.o
+
+$(OBJDIR)/parseCALMessages.o:	$(INCLUDES) $(SRCDIR)/parseCALMessages.C
+				$(CC) -c $(CFLAGS) -I $(IPATH) $(MACHINE) \
+				$(SRCDIR)/parseCALMessages.C \
+				 -o $(OBJDIR)/parseCALMessages.o
+				 
+$(OBJDIR)/parseCPCSMessages.o:	$(INCLUDES) $(SRCDIR)/parseCPCSMessages.C
+				$(CC) -c $(CFLAGS) -I $(IPATH) $(MACHINE) \
+				$(SRCDIR)/parseCPCSMessages.C \
+				 -o $(OBJDIR)/parseCPCSMessages.o
+				 
+$(OBJDIR)/parseBDLMessages.o:	$(INCLUDES) $(SRCDIR)/parseBDLMessages.C
+				$(CC) -c $(CFLAGS) -I $(IPATH) $(MACHINE) \
+				$(SRCDIR)/parseBDLMessages.C \
+				 -o $(OBJDIR)/parseBDLMessages.o
+				 
+
+$(OBJDIR)/parseORLMessages.o:	$(INCLUDES) $(SRCDIR)/parseORLMessages.C
+				$(CC) -c $(CFLAGS) -I $(IPATH) $(MACHINE) \
+				$(SRCDIR)/parseORLMessages.C \
+				 -o $(OBJDIR)/parseORLMessages.o
+				 
+$(OBJDIR)/parseLinkMessages.o:	$(INCLUDES) $(SRCDIR)/parseLinkMessages.C
+				$(CC) -c $(CFLAGS) -I $(IPATH) $(MACHINE) \
+				$(SRCDIR)/parseLinkMessages.C \
+				 -o $(OBJDIR)/parseLinkMessages.o
+				 
+$(OBJDIR)/parseCecorMessages.o:	$(INCLUDES) $(SRCDIR)/parseCecorMessages.C
+				$(CC) -c $(CFLAGS) -I $(IPATH) $(MACHINE) \
+				$(SRCDIR)/parseCecorMessages.C \
+				 -o $(OBJDIR)/parseCecorMessages.o
+
+$(OBJDIR)/parseCslMessages.o:	$(INCLUDES) $(SRCDIR)/parseCslMessages.C
+				$(CC) -c $(CFLAGS) -I $(IPATH) $(MACHINE) \
+				$(SRCDIR)/parseCslMessages.C \
+				 -o $(OBJDIR)/parseCslMessages.o
+
+$(OBJDIR)/parseColssMessages.o:	$(INCLUDES) $(SRCDIR)/parseColssMessages.C
+				$(CC) -c $(CFLAGS) -I $(IPATH) $(MACHINE) \
+				$(SRCDIR)/parseColssMessages.C \
+				 -o $(OBJDIR)/parseColssMessages.o
+
+$(OBJDIR)/parseUTDVMessages.o:	$(INCLUDES) $(SRCDIR)/parseUTDVMessages.C
+				$(CC) -c $(CFLAGS) -I $(IPATH) $(MACHINE) \
+				$(SRCDIR)/parseUTDVMessages.C \
+				 -o $(OBJDIR)/parseUTDVMessages.o
+
+$(OBJDIR)/parseHDSRMessages.o:	$(INCLUDES) $(SRCDIR)/parseHDSRMessages.C
+				$(CC) +a1 -c $(CFLAGS) -I $(IPATH) $(MACHINE) \
+				$(SRCDIR)/parseHDSRMessages.C \
+				 -o $(OBJDIR)/parseHDSRMessages.o
+
+$(OBJDIR)/parseVTRENDMessages.o:	$(INCLUDES) $(SRCDIR)/parseVTRENDMessages.C
+				$(CC) -c $(CFLAGS) -I $(IPATH) $(MACHINE) \
+				$(SRCDIR)/parseVTRENDMessages.C \
+				 -o $(OBJDIR)/parseVTRENDMessages.o
+
+$(OBJDIR)/parseDTrendMessages.o:	$(INCLUDES) $(SRCDIR)/parseDTrendMessages.C
+				$(CC) -c $(CFLAGS) -I $(IPATH) $(MACHINE) \
+				$(SRCDIR)/parseDTrendMessages.C \
+				 -o $(OBJDIR)/parseDTrendMessages.o
+
+$(OBJDIR)/parsePenMessages.o:	$(INCLUDES) $(SRCDIR)/parsePenMessages.C
+				$(CC) -c $(CFLAGS) -I $(IPATH) $(MACHINE) \
+				$(SRCDIR)/parsePenMessages.C \
+				 -o $(OBJDIR)/parsePenMessages.o
+
+$(OBJDIR)/parseBarMessages.o:	$(INCLUDES) $(SRCDIR)/parseBarMessages.C
+				$(CC) -c $(CFLAGS) -I $(IPATH) $(MACHINE) \
+				$(SRCDIR)/parseBarMessages.C \
+				 -o $(OBJDIR)/parseBarMessages.o
+
+$(OBJDIR)/parseGroupMessages.o:	$(INCLUDES) $(SRCDIR)/parseGroupMessages.C
+				$(CC) -c $(CFLAGS) -I $(IPATH) $(MACHINE) \
+				$(SRCDIR)/parseGroupMessages.C \
+				 -o $(OBJDIR)/parseGroupMessages.o
+
+$(OBJDIR)/parseBOPDMDMessages.o:	$(INCLUDES) $(SRCDIR)/parseBOPDMDMessages.C
+					$(CC) -c $(CFLAGS) -I $(IPATH) $(MACHINE) \
+					$(SRCDIR)/parseBOPDMDMessages.C \
+				 	-o $(OBJDIR)/parseBOPDMDMessages.o
+
+$(OBJDIR)/parseIncoreMessages.o:	$(INCLUDES) $(SRCDIR)/parseIncoreMessages.C
+					$(CC) -c $(CFLAGS) -I $(IPATH) $(MACHINE) \
+					$(SRCDIR)/parseIncoreMessages.C \
+				 	-o $(OBJDIR)/parseIncoreMessages.o
+
+$(OBJDIR)/parsePRTSUMMessages.o:	$(INCLUDES) $(SRCDIR)/parsePRTSUMMessages.C
+					$(CC) -c $(CFLAGS) -I $(IPATH) $(MACHINE) \
+					$(SRCDIR)/parsePRTSUMMessages.C \
+				 	-o $(OBJDIR)/parsePRTSUMMessages.o
+
+$(OBJDIR)/parsePrreptMessages.o:	$(INCLUDES) $(SRCDIR)/parsePrreptMessages.C
+					$(CC) -c $(CFLAGS) -I $(IPATH) $(MACHINE) \
+					$(SRCDIR)/parsePrreptMessages.C \
+				 	-o $(OBJDIR)/parsePrreptMessages.o
+
+$(OBJDIR)/parseRPCCEAMessages.o:	$(INCLUDES) $(SRCDIR)/parseRPCCEAMessages.C
+					$(CC) -c $(CFLAGS) -I $(IPATH) $(MACHINE) \
+					$(SRCDIR)/parseRPCCEAMessages.C \
+				 	-o $(OBJDIR)/parseRPCCEAMessages.o
+
+$(OBJDIR)/parseSecureMessages.o:	$(INCLUDES) $(SRCDIR)/parseSecureMessages.C
+					$(CC) -c $(CFLAGS) -I $(IPATH) $(MACHINE) \
+					$(SRCDIR)/parseSecureMessages.C \
+				 	-o $(OBJDIR)/parseSecureMessages.o
+
+$(OBJDIR)/parseDBUpdateMessages.o:	$(INCLUDES) $(SRCDIR)/parseDBUpdateMessages.C
+					$(CC) -c $(CFLAGS) $(SRCDIR)/parseDBUpdateMessages.C \
+				              -o $(OBJDIR)/parseDBUpdateMessages.o
+
+$(OBJDIR)/parseDBC_Messages.o:	$(INCLUDES) $(SRCDIR)/parseDBC_Messages.C
+				$(CC) -c $(CFLAGS) -I $(IPATH) $(MACHINE) \
+				$(SRCDIR)/parseDBC_Messages.C \
+				 -o $(OBJDIR)/parseDBC_Messages.o
+
+$(OBJDIR)/messageQueueObject.o:	$(INCLUDES) $(SRCDIR)/messageQueueObject.C
+				$(CC) -c $(CFLAGS) -I $(IPATH) $(MACHINE) \
+				$(SRCDIR)/messageQueueObject.C \
+				 -o $(OBJDIR)/messageQueueObject.o
+
+$(OBJDIR)/messageObject.o:	$(INCLUDES) $(SRCDIR)/messageObject.C
+				$(CC) -c $(CFLAGS) -I $(IPATH) $(MACHINE) \
+				$(SRCDIR)/messageObject.C \
+				 -o $(OBJDIR)/messageObject.o
+
+$(OBJDIR)/setPBstatuses.o:	$(INCLUDES) $(SRCDIR)/setPBstatuses.C
+				$(CC) -c $(CFLAGS) -I $(IPATH) $(MACHINE) \
+				$(SRCDIR)/setPBstatuses.C \
+				 -o $(OBJDIR)/setPBstatuses.o
+
+# ********************	 pager Objects
+
+$(OBJDIR)/pager.o:		$(INCLUDES) $(SRCDIR)/pager.C
+				$(CC) -c $(CFLAGS) -I $(IPATH) $(MACHINE) \
+				$(SRCDIR)/pager.C -o $(OBJDIR)/pager.o
+
+$(OBJDIR)/chg_file.o:		$(INCLUDES) $(SRCDIR)/chg_file.C
+				$(CC) -c $(CFLAGS) -I $(IPATH) $(MACHINE) \
+				$(SRCDIR)/chg_file.C -o $(OBJDIR)/chg_file.o
+
+# ********************	 FDDIparse Objects
+
+$(OBJDIR)/FDDIparse.o:		$(INCLUDES) $(SRCDIR)/FDDIparse.C
+				$(CC) -c $(CFLAGS) -I $(IPATH) $(MACHINE) \
+				$(SRCDIR)/FDDIparse.C -o $(OBJDIR)/FDDIparse.o

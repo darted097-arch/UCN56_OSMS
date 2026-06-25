@@ -1,0 +1,71 @@
+#
+# This makefile generates the binary versions of the 
+# trend examples.
+#
+PICDIR	= ./Tdoc
+RUNDIR	= ./Runtime
+
+.SUFFIXES: .Tdoc .plib .pctx .ppic .ptrv
+
+.Tdoc.plib:
+	pcc $<
+	mv *.plib $(RUNDIR)
+.Tdoc.ptrv:
+	pcc $<
+	mv *.ptrv $(RUNDIR)
+.Tdoc.pctx:
+	pcc $<
+	mv *.pctx $(RUNDIR)
+.Tdoc.ppic:
+	pcc $<
+	mv *.ppic $(RUNDIR)
+
+all: 	$(PICDIR)/YGN3and4.pctx \
+	$(PICDIR)/DialogueSymbols.plib \
+	$(PICDIR)/HDSRLib.plib \
+	$(PICDIR)/StaticSymbols.plib \
+	$(PICDIR)/TrendLibrary.plib \
+	$(PICDIR)/cfmsSymbols.plib \
+	$(PICDIR)/YGN3and4TrendVars.ptrv \
+	$(PICDIR)/Art.ppic \
+	$(PICDIR)/MyTest.ppic \
+	$(PICDIR)/Pic111_CFM_Directory.ppic \
+	$(PICDIR)/Pic210_CoreReactivity.ppic \
+	$(PICDIR)/Pic220_CoreHeatRemoval.ppic \
+	$(PICDIR)/Pic230_Primary.ppic \
+	$(PICDIR)/Pic240_Secondary.ppic \
+	$(PICDIR)/Pic250_Containment.ppic \
+	$(PICDIR)/Pic260_Environment.ppic \
+	$(PICDIR)/Pic270_VitalAuxiliaries.ppic \
+	$(PICDIR)/Pic321_SaturationMargin.ppic \
+	$(PICDIR)/Pic322_ReactorVesselLevel.ppic \
+	$(PICDIR)/Pic323_CoreExitTemperature.ppic \
+	$(PICDIR)/Pic324_CoreExitTempCh1A.ppic \
+	$(PICDIR)/Pic325_CoreExitTempCh1B.ppic \
+	$(PICDIR)/Pic331_siPumps.ppic \
+	$(PICDIR)/Pic332_siTanks.ppic \
+	$(PICDIR)/Pic333_letdownCharging.ppic \
+	$(PICDIR)/Pic334_BorationDilution.ppic \
+	$(PICDIR)/Pic335_Pressurizer.ppic \
+	$(PICDIR)/Pic336_ShutdownCooling.ppic \
+	$(PICDIR)/Pic341_MainSteamSystem.ppic \
+	$(PICDIR)/Pic342_MainFeedwaterSystem.ppic \
+	$(PICDIR)/Pic343_AuxiliaryFeedwater.ppic \
+	$(PICDIR)/Pic351_CntmtSprayCooling.ppic \
+	$(PICDIR)/Pic352_CntmtPurgeGasCtrl.ppic \
+	$(PICDIR)/Pic353_CntmtIsolation1.ppic \
+	$(PICDIR)/Pic354_CntmtIsolation2.ppic \
+	$(PICDIR)/Pic355_CntmtIsolation3.ppic \
+	$(PICDIR)/Pic356_CntmtIsolation4.ppic \
+	$(PICDIR)/Pic361_FuelBuildingHVAC.ppic \
+	$(PICDIR)/Pic362_ControlRoomHVAC.ppic \
+	$(PICDIR)/Pic371_ESFpowerA.ppic \
+	$(PICDIR)/Pic372_ESFpowerB.ppic \
+	$(PICDIR)/Pic373_AlternateAC_Power.ppic \
+	$(PICDIR)/Pic374_CompCoolingWtrTrnA.ppic \
+	$(PICDIR)/Pic375_CompCoolingWtrTrnB.ppic \
+	$(PICDIR)/PicYGN_WarmStart.ppic \
+	$(PICDIR)/PicYGN_footer.ppic \
+	$(PICDIR)/PicYGN_header.ppic \
+	$(PICDIR)/PicYGN_wait.ppic 
+

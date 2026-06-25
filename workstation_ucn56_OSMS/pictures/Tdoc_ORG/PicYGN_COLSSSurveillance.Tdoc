@@ -1,0 +1,241 @@
+/*
+ * PICASSO-3 CONFIGURATION LANGUAGE FILE
+ *
+ *
+ * Picture name: PicYGN_COLSSSurveillance
+ *
+ *
+ * Documented by  : runtime
+ * Host           : y6tsc1
+ * Date           : 21/10-98 at 16:55:10
+ *
+ *
+ * Generate with:
+ *    pcc PicYGN_COLSSSurveillance.Tdoc
+ *
+ */
+
+
+picture PicYGN_COLSSSurveillance
+{
+
+  int test_status = 0;
+  int TheTextFont = `font4`;
+  int TheFontColor = 4;
+  char PictureTitle[50] = "COLSS   SURVEILLANCE   TEST";
+  char PictureNumber[50] = "124";
+
+  function `void Initialize()
+{
+   CFMLevel = 0;
+   Current_Page = 124;
+   test_status = 0; // ready to run the test
+                     // to be modified : get test status
+   // and set test_status; when initialize, test_status
+   // should not be set to 0  : important !!
+
+//   ProcessCancelText.Initialize();
+   update();
+
+}`
+
+
+
+  function `void setReverseMode(int value)
+{
+    
+   switch(value)
+   {
+      case 1:
+       text1.TheFontColor= COLOR_DATA_NORMAL;
+       text1.TheTextFont = \`font7\`; 
+       break;
+      case 2:
+       text2.TheFontColor= COLOR_DATA_NORMAL;
+       text2.TheTextFont = \`font7\`; 
+       break;
+      case 3:
+       text3.TheFontColor= COLOR_DATA_NORMAL;
+       text3.TheTextFont = \`font7\`; 
+       break;
+      case 4:
+       text4.TheFontColor= COLOR_DATA_NORMAL;
+       text4.TheTextFont = \`font7\`; 
+       break;
+      case 5:
+       text5.TheFontColor= COLOR_DATA_NORMAL;
+       text5.TheTextFont = \`font7\`; 
+       break;
+   }
+   update();
+}`
+
+
+
+  function `void selectOption(int selectedValue)
+{
+   Option = selectedValue;
+   displayOptionSelected(selectedValue);
+   SetupReadInputValue(selectedValue);
+   update();
+}`
+
+
+
+  function `void ProcessingConfirmed()
+{
+   //ProcessCancelText.Initialize();
+   test_status = 0;
+}`
+
+
+
+  function `void Exit(){;}`
+
+
+
+  function `void DoSurveillance()
+{
+   if(test_status == 0) // ready to run 
+    {
+      Interface->ColssData->message_type = REQUEST_COLSS_SURV_TEST; 
+      DisplayAdvisoryMessage3("SURVEILLANCE TEST STARTED");
+      execute("{sendMessageToHost(REQUEST_COLSS_PROCESSING);}");
+      test_status = 1;
+      return;
+   }  
+    DisplayAdvisoryMessage3("SURVEILLANCE TEST ALREADY IN PROGRESS");
+//    ProcessCancelText.Initialize();
+    update();
+}`
+
+
+
+  rectangle 
+  {
+    x = 130;
+    y = 0;
+    width = 0;
+    height = 0;
+
+    visibility = 1;
+    foregroundFillColour = 0;
+    backgroundFillColour = -1;
+    foregroundColour = 1;
+    backgroundColour = 0;
+    lineWidth = 0;
+    linePattern = `SolidPattern`;
+    fillPattern = `NoPattern`;
+    xReference = 130;
+    yReference = 0;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  instance DialogueSymbols.PushButton processfiles
+  {
+    attribute ExecuteString = "DoSurveillance()";
+    attribute isInside = 1;
+    attribute isDown = 0;
+    attribute Height = 30;
+    attribute Width = 128;
+    attribute ButtonState = 0;
+    attribute SelectColour = `COLOR_BUTTON_SELECTED`;
+    attribute BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    attribute BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    attribute TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    attribute TextX = 17;
+    attribute TextY = 22;
+    attribute Label = "PROCESS";
+    attribute TextColour = `COLOR_PICTURE_BACKGROUND`;
+    attribute TextFont = 4;
+    attribute TextXStatic = 17;
+    attribute TextXDynamic = 15;
+    attribute TextYStatic = 22;
+    attribute TextYDynamic = 21;
+    attribute DynamicLabel = "PROCESSING";
+    attribute StaticLabel = "PROCESS";
+    attribute TextFontStatic = `font4`;
+    attribute TextFontDynamic = `font2`;
+    attribute Scope = "PicYGN_COLSSSurveillance";
+    x = 441;
+    y = 352;
+    visibility = 1;
+    xReference = 441;
+    yReference = 352;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance processfiles
+
+
+
+  text 
+  {
+    x = 360;
+    y = 375;
+    format = "%s";
+    theText = "PRESS                                 TO  START  SURVEILLANCE TEST";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 360;
+    yReference = 375;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 358;
+    y = 332;
+    format = "%s";
+    theText = "IF IT IS READY, ";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 358;
+    yReference = 332;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+// The picture's other attributes:
+
+  backgroundColour    = 0;
+  xSnap               = 5;
+  ySnap               = 5;
+  angleSnap           = 0;
+  radiusSnap          = 0;
+  worldX              = 0;
+  worldY              = 0;
+  worldWidth          = 1280;
+  worldHeight         = 824;
+  oneToOne            = 1;
+  resizeMode          = 0;
+  updateMode          = 2;
+  crosshairStyle      = 1;
+  crosshairLength     = 0;
+  crosshairFollowSnap = `isInEditMode()`;
+  crosshairVisibility = `isInEditMode()`;
+  xReference = 500;
+  yReference = 500;
+  xScaleFactor = 1;
+  yScaleFactor = 1;
+  rotationAngle = 0;
+
+
+}  // end of picture PicYGN_COLSSSurveillance

@@ -1,0 +1,3133 @@
+/*
+ * PICASSO-3 CONFIGURATION LANGUAGE FILE
+ *
+ *
+ * Picture name: Pic507_AuxiliaryFeedwater
+ *
+ *
+ * Documented by  : runtime
+ * Host           : y5maint1
+ * Date           : 15/05-01 at 13:36:40
+ *
+ *
+ * Generate with:
+ *    pcc Pic507_AuxiliaryFeedwater.Tdoc
+ *
+ */
+
+
+picture Pic507_AuxiliaryFeedwater
+{
+
+  char *PictureTitle = "AUXILIARY FEEDWATER";
+  char *PictureNumber = "507";
+  char *PageForward = "Page341";
+  char *PageBack = "Page342";
+
+  function `void Initialize()
+{
+CFMLevel = 3;
+SectoringPage = 4;
+Current_Page = 507;
+}`
+
+
+
+  dialogue
+  {
+    event = `keyPressed(0x1000FF72)`;
+    action = statement `{ DisplayPage(Page341); }`;
+  }
+
+  dialogue
+  {
+    event = `keyPressed(0x1000FF70)`;
+    action = statement `{ DisplayPage(Page342); }`;
+  }
+
+  dialogue
+  {
+    event = `keyPressed(0x1000FF73)`;
+    action = statement `{ 
+DisplayPopUpMenu(); 
+update();
+//printf("Display: DisplayPagePopUp");
+}`;
+  }
+
+  dialogue
+  {
+    event = `keyPressed(0x1000FF71)`;
+    action = statement `{ 
+DisplaySectorPopUpMenu(); 
+update();
+//printf("Display: DisplayPagePopUp");
+}`;
+  }
+
+  dialogue
+  {
+    event = `buttonPressed(3)`;
+    action = statement `{
+   DisplayPage(Page503);
+}`;
+  }
+
+  line 
+  {
+    numberOfPoints = 3;
+
+    point[0] = (50, 558);
+    point[1] = (515, 558);
+    point[2] = (515, 653);
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineWidth = 0;
+    lineStyle = `SolidPattern`;
+    xReference = 50;
+    yReference = 558;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  line 
+  {
+    numberOfPoints = 3;
+
+    point[0] = (965, 591);
+    point[1] = (965, 661);
+    point[2] = (1090, 661);
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineWidth = 0;
+    lineStyle = `SolidPattern`;
+    xReference = 965;
+    yReference = 596;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  line 
+  {
+    numberOfPoints = 3;
+
+    point[0] = (860, 451);
+    point[1] = (860, 521);
+    point[2] = (985, 521);
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineWidth = 0;
+    lineStyle = `SolidPattern`;
+    xReference = 860;
+    yReference = 456;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  instance cfmsSymbols.Valve4StateVertical 
+  {
+    attribute FLOW_DOWN = 1;
+    attribute Valve_H = `&MSZ107H`;
+    attribute Valve_L = `&MSZ107L`;
+    x = 835;
+    y = 457;
+    visibility = 1;
+    xReference = 835;
+    yReference = 457;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.Valve4StateHorizontal 
+  {
+    attribute FLOW_RIGHT = 1;
+    attribute Valve_H = `&MSZQ173H`;
+    attribute Valve_L = `&MSZQ173L`;
+    x = 860;
+    y = 506;
+    visibility = 1;
+    xReference = 848;
+    yReference = 486;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.flowdart 
+  {
+    x = 967;
+    y = 509;
+    visibility = 1;
+    xReference = 966;
+    yReference = 494;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  text 
+  {
+    x = 993;
+    y = 527;
+    format = "%s";
+    theText = "ATM";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 993;
+    yReference = 527;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  line 
+  {
+    numberOfPoints = 3;
+
+    point[0] = (50, 513);
+    point[1] = (50, 658);
+    point[2] = (760, 658);
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineWidth = 0;
+    lineStyle = `SolidPattern`;
+    xReference = 50;
+    yReference = 553;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  line 
+  {
+    numberOfPoints = 4;
+
+    point[0] = (50, 206);
+    point[1] = (50, 371);
+    point[2] = (515, 371);
+    point[3] = (515, 271);
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineWidth = 0;
+    lineStyle = `SolidPattern`;
+    xReference = 50;
+    yReference = 166;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  line 
+  {
+    numberOfPoints = 3;
+
+    point[0] = (50, 206);
+    point[1] = (50, 271);
+    point[2] = (760, 271);
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineWidth = 0;
+    lineStyle = `SolidPattern`;
+    xReference = 50;
+    yReference = 166;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  instance cfmsSymbols.SteamGenerator 
+  {
+    attribute GeneratorNumber = "2";
+    x = 764;
+    y = 611;
+    visibility = 1;
+    xReference = 760;
+    yReference = 626;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.flowdart 
+  {
+    x = 749;
+    y = 646;
+    visibility = 1;
+    xReference = 745;
+    yReference = 656;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.SteamGenerator 
+  {
+    attribute GeneratorNumber = "1";
+    x = 763;
+    y = 239;
+    visibility = 1;
+    xReference = 760;
+    yReference = 238;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.flowdart 
+  {
+    x = 749;
+    y = 261;
+    visibility = 1;
+    xReference = 749;
+    yReference = 261;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.ValueAndState 
+  {
+    attribute PointId = `&MSFQ1022`;
+    attribute DisplayUnits = 1;
+    x = 826;
+    y = 564;
+    visibility = 1;
+    xReference = 826;
+    yReference = 564;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  line 
+  {
+    numberOfPoints = 4;
+
+    point[0] = (800, 616);
+    point[1] = (800, 451);
+    point[2] = (1240, 451);
+    point[3] = (1240, 486);
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineWidth = 0;
+    lineStyle = `SolidPattern`;
+    xReference = 745;
+    yReference = 596;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  line 
+  {
+    numberOfPoints = 4;
+
+    point[0] = (820, 616);
+    point[1] = (820, 591);
+    point[2] = (1240, 591);
+    point[3] = (1240, 566);
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineWidth = 0;
+    lineStyle = `SolidPattern`;
+    xReference = 765;
+    yReference = 621;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 1218;
+    y = 520;
+    format = "%s";
+    theText = "MAIN";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 1218;
+    yReference = 520;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 1210;
+    y = 544;
+    format = "%s";
+    theText = "STEAM";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 1210;
+    yReference = 544;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  instance cfmsSymbols.ValueAndState 
+  {
+    attribute PointId = `&MSFQ1021`;
+    attribute DisplayUnits = 1;
+    x = 826;
+    y = 420;
+    visibility = 1;
+    xReference = 826;
+    yReference = 420;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  text 
+  {
+    x = 809;
+    y = 442;
+    format = "%s";
+    theText = "F:";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 809;
+    yReference = 442;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  instance cfmsSymbols.flowdart 
+  {
+    x = 1252;
+    y = 477;
+    visibility = 1;
+    xReference = 1252;
+    yReference = 477;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 270;
+  }  // end of instance 
+
+
+
+  text 
+  {
+    x = 809;
+    y = 586;
+    format = "%s";
+    theText = "F:";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 809;
+    yReference = 586;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  instance cfmsSymbols.Valve4StateHorizontal 
+  {
+    attribute FLOW_RIGHT = 1;
+    attribute Valve_H = `&MSZQ153H`;
+    attribute Valve_L = `&MSZQ153L`;
+    x = 1063;
+    y = 436;
+    visibility = 1;
+    xReference = 1063;
+    yReference = 436;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.Valve4StateHorizontal 
+  {
+    attribute FLOW_RIGHT = 1;
+    attribute Valve_H = `&MSZQ163H`;
+    attribute Valve_L = `&MSZQ163L`;
+    x = 1063;
+    y = 494;
+    visibility = 1;
+    xReference = 1063;
+    yReference = 494;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.Valve4StateHorizontal 
+  {
+    attribute FLOW_RIGHT = 1;
+    attribute Valve_H = `&MSZQ154H`;
+    attribute Valve_L = `&MSZQ154L`;
+    x = 1112;
+    y = 576;
+    visibility = 1;
+    xReference = 1112;
+    yReference = 576;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.flowdart 
+  {
+    x = 1228;
+    y = 573;
+    visibility = 1;
+    xReference = 1228;
+    yReference = 573;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 90;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.ValueAndState 
+  {
+    attribute PointId = `&MSP1023A`;
+    attribute DisplayUnits = 1;
+    x = 926;
+    y = 684;
+    visibility = 1;
+    xReference = 926;
+    yReference = 684;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  text 
+  {
+    x = 855;
+    y = 706;
+    format = "%s";
+    theText = "P:";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 855;
+    yReference = 706;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  line 
+  {
+    numberOfPoints = 4;
+
+    point[0] = (800, 243);
+    point[1] = (800, 76);
+    point[2] = (1240, 76);
+    point[3] = (1240, 116);
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineWidth = 0;
+    lineStyle = `SolidPattern`;
+    xReference = 745;
+    yReference = 223;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  instance cfmsSymbols.ValueAndState 
+  {
+    attribute PointId = `&MSFQ1011`;
+    attribute DisplayUnits = 1;
+    x = 826;
+    y = 42;
+    visibility = 1;
+    xReference = 826;
+    yReference = 42;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  text 
+  {
+    x = 809;
+    y = 64;
+    format = "%s";
+    theText = "F:";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 809;
+    yReference = 64;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  instance cfmsSymbols.flowdart 
+  {
+    x = 1251;
+    y = 105;
+    visibility = 1;
+    xReference = 1251;
+    yReference = 105;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 270;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.ValueAndState 
+  {
+    attribute PointId = `&MSFQ1012`;
+    attribute DisplayUnits = 1;
+    x = 826;
+    y = 192;
+    visibility = 1;
+    xReference = 826;
+    yReference = 192;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  text 
+  {
+    x = 809;
+    y = 214;
+    format = "%s";
+    theText = "F:";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 809;
+    yReference = 214;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  line 
+  {
+    numberOfPoints = 4;
+
+    point[0] = (820, 243);
+    point[1] = (820, 223);
+    point[2] = (1240, 223);
+    point[3] = (1240, 193);
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineWidth = 0;
+    lineStyle = `SolidPattern`;
+    xReference = 765;
+    yReference = 248;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  instance cfmsSymbols.Valve4StateHorizontal 
+  {
+    attribute FLOW_RIGHT = 1;
+    attribute Valve_H = `&MSZQ152H`;
+    attribute Valve_L = `&MSZQ152L`;
+    x = 1064;
+    y = 61;
+    visibility = 1;
+    xReference = 1064;
+    yReference = 61;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.Valve4StateHorizontal 
+  {
+    attribute FLOW_RIGHT = 1;
+    attribute Valve_H = `&MSZQ162H`;
+    attribute Valve_L = `&MSZQ162L`;
+    x = 1065;
+    y = 121;
+    visibility = 1;
+    xReference = 1065;
+    yReference = 121;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.Valve4StateHorizontal 
+  {
+    attribute FLOW_RIGHT = 1;
+    attribute Valve_H = `&MSZQ151H`;
+    attribute Valve_L = `&MSZQ151L`;
+    x = 1111;
+    y = 208;
+    visibility = 1;
+    xReference = 1111;
+    yReference = 208;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.ValueAndState 
+  {
+    attribute PointId = `&MSP1013A`;
+    attribute DisplayUnits = 1;
+    x = 915;
+    y = 316;
+    visibility = 1;
+    xReference = 915;
+    yReference = 316;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  text 
+  {
+    x = 845;
+    y = 338;
+    format = "%s";
+    theText = "P:";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 845;
+    yReference = 338;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  instance cfmsSymbols.flowdart 
+  {
+    x = 527;
+    y = 637;
+    visibility = 1;
+    xReference = 527;
+    yReference = 637;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = -90;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.ValueAndState 
+  {
+    attribute PointId = `&AFP0023`;
+    attribute DisplayUnits = 1;
+    x = 126;
+    y = 224;
+    visibility = 1;
+    xReference = 126;
+    yReference = 224;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.ValueAndState 
+  {
+    attribute PointId = `&AFF0049`;
+    attribute DisplayUnits = 1;
+    x = 501;
+    y = 659;
+    visibility = 1;
+    xReference = 501;
+    yReference = 659;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.PumpCentrifugal 
+  {
+    attribute Temp2 = "OFF ";
+    attribute Temp1 = "STAT";
+    attribute LeftPump = 0;
+    attribute PointId = `&AFYS0012`;
+    x = 100;
+    y = 531;
+    visibility = 1;
+    xReference = 100;
+    yReference = 531;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.ValueAndState 
+  {
+    attribute PointId = `&CTL0005`;
+    attribute DisplayUnits = 1;
+    x = 125;
+    y = 462;
+    visibility = 1;
+    xReference = 125;
+    yReference = 462;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  text 
+  {
+    x = 112;
+    y = 483;
+    format = "%s";
+    theText = "L:";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 112;
+    yReference = 483;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  instance cfmsSymbols.tankAtmospheric 
+  {
+    x = 0;
+    y = 418;
+    visibility = 1;
+    xReference = 0;
+    yReference = 418;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  text 
+  {
+    x = 25;
+    y = 483;
+    format = "%s";
+    theText = "TK02";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 25;
+    yReference = 483;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  instance cfmsSymbols.PumpCentrifugal 
+  {
+    attribute Temp2 = "OFF ";
+    attribute Temp1 = "STAT";
+    attribute LeftPump = 0;
+    attribute PointId = `&AFYS0011`;
+    x = 50;
+    y = 631;
+    visibility = 1;
+    xReference = 50;
+    yReference = 631;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  text 
+  {
+    x = 112;
+    y = 246;
+    format = "%s";
+    theText = "P:";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 112;
+    yReference = 246;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 303;
+    y = 448;
+    format = "%s";
+    theText = "AUX FW PMPS";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 303;
+    yReference = 448;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  instance cfmsSymbols.PumpCentrifugal 
+  {
+    attribute Temp2 = "OFF ";
+    attribute Temp1 = "STAT";
+    attribute LeftPump = 0;
+    attribute PointId = `&AFYS0010`;
+    x = 50;
+    y = 244;
+    visibility = 1;
+    xReference = 50;
+    yReference = 244;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.ValueAndState 
+  {
+    attribute PointId = `&CTL0006`;
+    attribute DisplayUnits = 1;
+    x = 124;
+    y = 154;
+    visibility = 1;
+    xReference = 124;
+    yReference = 154;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.tankAtmospheric 
+  {
+    x = 0;
+    y = 111;
+    visibility = 1;
+    xReference = 0;
+    yReference = 111;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  text 
+  {
+    x = 25;
+    y = 176;
+    format = "%s";
+    theText = "TK01";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 25;
+    yReference = 176;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 112;
+    y = 176;
+    format = "%s";
+    theText = "L:";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 112;
+    yReference = 176;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  instance cfmsSymbols.PumpCentrifugal 
+  {
+    attribute Temp2 = "OFF ";
+    attribute Temp1 = "STAT";
+    attribute LeftPump = 0;
+    attribute PointId = `&AFYS0009`;
+    x = 100;
+    y = 344;
+    visibility = 1;
+    xReference = 100;
+    yReference = 344;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.flowdart 
+  {
+    x = 503;
+    y = 292;
+    visibility = 1;
+    xReference = 503;
+    yReference = 292;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 90;
+  }  // end of instance 
+
+
+
+  text 
+  {
+    x = 111;
+    y = 346;
+    format = "%s";
+    theText = "P:";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 111;
+    yReference = 346;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  instance cfmsSymbols.ValueAndState 
+  {
+    attribute PointId = `&AFP0024`;
+    attribute DisplayUnits = 1;
+    x = 126;
+    y = 324;
+    visibility = 1;
+    xReference = 126;
+    yReference = 324;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  text 
+  {
+    x = 483;
+    y = 263;
+    format = "%s";
+    theText = "F:";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 483;
+    yReference = 263;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  instance cfmsSymbols.ValueAndState 
+  {
+    attribute PointId = `&AFF0047`;
+    attribute DisplayUnits = 1;
+    x = 500;
+    y = 241;
+    visibility = 1;
+    xReference = 500;
+    yReference = 241;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.Valve4StateHorizontal 
+  {
+    attribute FLOW_RIGHT = 1;
+    attribute Valve_H = `&AFZS036H`;
+    attribute Valve_L = `&AFZS036L`;
+    x = 173;
+    y = 256;
+    visibility = 1;
+    xReference = 168;
+    yReference = 256;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.Valve4StateHorizontal 
+  {
+    attribute FLOW_RIGHT = 1;
+    attribute Valve_H = `&AFZS044H`;
+    attribute Valve_L = `&AFZS044L`;
+    x = 280;
+    y = 256;
+    visibility = 1;
+    xReference = 280;
+    yReference = 256;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.Valve4StateHorizontal 
+  {
+    attribute FLOW_RIGHT = 1;
+    attribute Valve_H = `&AFZS035H`;
+    attribute Valve_L = `&AFZS035L`;
+    x = 216;
+    y = 356;
+    visibility = 1;
+    xReference = 211;
+    yReference = 356;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.Valve4StateHorizontal 
+  {
+    attribute FLOW_RIGHT = 1;
+    attribute Valve_H = `&AFZS043H`;
+    attribute Valve_L = `&AFZS043L`;
+    x = 326;
+    y = 356;
+    visibility = 1;
+    xReference = 326;
+    yReference = 356;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  text 
+  {
+    x = 112;
+    y = 533;
+    format = "%s";
+    theText = "P:";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 112;
+    yReference = 533;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  instance cfmsSymbols.ValueAndState 
+  {
+    attribute PointId = `&AFP0025`;
+    attribute DisplayUnits = 1;
+    x = 126;
+    y = 511;
+    visibility = 1;
+    xReference = 126;
+    yReference = 511;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.Valve4StateHorizontal 
+  {
+    attribute FLOW_RIGHT = 1;
+    attribute Valve_H = `&AFZS038H`;
+    attribute Valve_L = `&AFZS038L`;
+    x = 216;
+    y = 543;
+    visibility = 1;
+    xReference = 211;
+    yReference = 543;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.Valve4StateHorizontal 
+  {
+    attribute FLOW_RIGHT = 1;
+    attribute Valve_H = `&AFZS046H`;
+    attribute Valve_L = `&AFZS046L`;
+    x = 321;
+    y = 543;
+    visibility = 1;
+    xReference = 321;
+    yReference = 543;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.ValueAndState 
+  {
+    attribute PointId = `&AFP0026`;
+    attribute DisplayUnits = 1;
+    x = 127;
+    y = 611;
+    visibility = 1;
+    xReference = 127;
+    yReference = 611;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  text 
+  {
+    x = 111;
+    y = 633;
+    format = "%s";
+    theText = "P:";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 111;
+    yReference = 633;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  instance cfmsSymbols.Valve4StateHorizontal 
+  {
+    attribute FLOW_RIGHT = 1;
+    attribute Valve_H = `&AFZS037H`;
+    attribute Valve_L = `&AFZS037L`;
+    x = 173;
+    y = 643;
+    visibility = 1;
+    xReference = 168;
+    yReference = 643;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.Valve4StateHorizontal 
+  {
+    attribute FLOW_RIGHT = 1;
+    attribute Valve_H = `&AFZS045H`;
+    attribute Valve_L = `&AFZS045L`;
+    x = 280;
+    y = 643;
+    visibility = 1;
+    xReference = 280;
+    yReference = 643;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  text 
+  {
+    x = 484;
+    y = 681;
+    format = "%s";
+    theText = "F:";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 484;
+    yReference = 681;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  instance cfmsSymbols.Valve4StateVertical 
+  {
+    attribute FLOW_DOWN = 1;
+    attribute Valve_H = `&MSZ108H`;
+    attribute Valve_L = `&MSZ108L`;
+    x = 940;
+    y = 602;
+    visibility = 1;
+    xReference = 940;
+    yReference = 602;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.Valve4StateHorizontal 
+  {
+    attribute FLOW_RIGHT = 1;
+    attribute Valve_H = `&MSZQ174H`;
+    attribute Valve_L = `&MSZQ174L`;
+    x = 965;
+    y = 646;
+    visibility = 1;
+    xReference = 953;
+    yReference = 626;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.flowdart 
+  {
+    x = 1077;
+    y = 649;
+    visibility = 1;
+    xReference = 1076;
+    yReference = 634;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  text 
+  {
+    x = 1110;
+    y = 667;
+    format = "%s";
+    theText = "ATM";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 1110;
+    yReference = 667;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  line 
+  {
+    numberOfPoints = 3;
+
+    point[0] = (965, 223);
+    point[1] = (965, 293);
+    point[2] = (1090, 293);
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineWidth = 0;
+    lineStyle = `SolidPattern`;
+    xReference = 965;
+    yReference = 228;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  instance cfmsSymbols.Valve4StateVertical 
+  {
+    attribute FLOW_DOWN = 1;
+    attribute Valve_H = `&MSZ105H`;
+    attribute Valve_L = `&MSZ105L`;
+    x = 940;
+    y = 234;
+    visibility = 1;
+    xReference = 940;
+    yReference = 234;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.Valve4StateHorizontal 
+  {
+    attribute FLOW_RIGHT = 1;
+    attribute Valve_H = `&MSZQ171H`;
+    attribute Valve_L = `&MSZQ171L`;
+    x = 965;
+    y = 278;
+    visibility = 1;
+    xReference = 953;
+    yReference = 258;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.flowdart 
+  {
+    x = 1077;
+    y = 281;
+    visibility = 1;
+    xReference = 1076;
+    yReference = 266;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  text 
+  {
+    x = 1110;
+    y = 299;
+    format = "%s";
+    theText = "ATM";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 1110;
+    yReference = 299;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  line 
+  {
+    numberOfPoints = 3;
+
+    point[0] = (861, 77);
+    point[1] = (861, 147);
+    point[2] = (986, 147);
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineWidth = 0;
+    lineStyle = `SolidPattern`;
+    xReference = 861;
+    yReference = 82;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  instance cfmsSymbols.Valve4StateVertical 
+  {
+    attribute FLOW_DOWN = 1;
+    attribute Valve_H = `&MSZ106H`;
+    attribute Valve_L = `&MSZ106L`;
+    x = 836;
+    y = 85;
+    visibility = 1;
+    xReference = 836;
+    yReference = 85;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.Valve4StateHorizontal 
+  {
+    attribute FLOW_RIGHT = 1;
+    attribute Valve_H = `&MSZQ172H`;
+    attribute Valve_L = `&MSZQ172L`;
+    x = 861;
+    y = 132;
+    visibility = 1;
+    xReference = 849;
+    yReference = 112;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.flowdart 
+  {
+    x = 968;
+    y = 135;
+    visibility = 1;
+    xReference = 967;
+    yReference = 120;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  text 
+  {
+    x = 993;
+    y = 153;
+    format = "%s";
+    theText = "ATM";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 993;
+    yReference = 153;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 871;
+    y = 121;
+    format = "%s";
+    theText = "MS-106";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 871;
+    yReference = 121;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 916;
+    y = 179;
+    format = "%s";
+    theText = "MS-172";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 916;
+    yReference = 179;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  group
+  {
+    text 
+    {
+      x = 400;
+      y = 108;
+      format = "%s";
+      theText = "avg:";
+
+      visibility = 1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font4`;
+      xReference = 400;
+      yReference = 108;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+    text 
+    {
+      x = 387;
+      y = 107;
+      format = "%s";
+      theText = "T";
+
+      visibility = 1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font7`;
+      xReference = 387;
+      yReference = 107;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+    visibility = 1;
+    xReference = 386;
+    yReference = 83;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of group 
+
+
+
+  text 
+  {
+    x = 384;
+    y = 134;
+    format = "%s";
+    theText = "HEATUP  RATE:";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 384;
+    yReference = 134;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 385;
+    y = 168;
+    format = "%s";
+    theText = "PZR  P:";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 385;
+    yReference = 168;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  instance cfmsSymbols.ValueAndState 
+  {
+    attribute PointId = `&RCTQAVG`;
+    attribute DisplayUnits = 1;
+    x = 515;
+    y = 86;
+    visibility = 1;
+    xReference = 515;
+    yReference = 86;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.ValueAndState 
+  {
+    attribute PointId = `&RCTQDTUP`;
+    attribute DisplayUnits = 1;
+    x = 515;
+    y = 112;
+    visibility = 1;
+    xReference = 515;
+    yReference = 112;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.ValueAndState 
+  {
+    attribute PointId = `&RCPQBEWR`;
+    attribute DisplayUnits = 1;
+    x = 515;
+    y = 146;
+    visibility = 1;
+    xReference = 515;
+    yReference = 146;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  text 
+  {
+    x = 461;
+    y = 71;
+    format = "%s";
+    theText = "RCS  CONDITIONS";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 461;
+    yReference = 71;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 385;
+    y = 193;
+    format = "%s";
+    theText = "PZR  T:";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 385;
+    yReference = 193;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  instance cfmsSymbols.ValueAndState 
+  {
+    attribute PointId = `&RCT101`;
+    attribute DisplayUnits = 1;
+    x = 515;
+    y = 171;
+    visibility = 1;
+    xReference = 515;
+    yReference = 171;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  text 
+  {
+    x = 1218;
+    y = 149;
+    format = "%s";
+    theText = "MAIN";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 1218;
+    yReference = 149;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 1208;
+    y = 173;
+    format = "%s";
+    theText = "STEAM";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 1208;
+    yReference = 173;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 85;
+    y = 301;
+    format = "%s";
+    theText = "PP01B";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 85;
+    yReference = 301;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 80;
+    y = 321;
+    format = "%s";
+    theText = "(TURB)";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 80;
+    yReference = 321;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 135;
+    y = 401;
+    format = "%s";
+    theText = "PP01A";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 135;
+    yReference = 401;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 115;
+    y = 421;
+    format = "%s";
+    theText = "(MOTOR)";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 115;
+    yReference = 421;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 90;
+    y = 588;
+    format = "%s";
+    theText = "PP02B (MOTOR)";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 90;
+    yReference = 588;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 50;
+    y = 688;
+    format = "%s";
+    theText = "PP02A (TURB)";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 50;
+    yReference = 688;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 205;
+    y = 301;
+    format = "%s";
+    theText = "AF-036";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 205;
+    yReference = 301;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 315;
+    y = 301;
+    format = "%s";
+    theText = "AF-044";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 315;
+    yReference = 301;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 250;
+    y = 401;
+    format = "%s";
+    theText = "AF-035";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 250;
+    yReference = 401;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 360;
+    y = 401;
+    format = "%s";
+    theText = "AF-043";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 360;
+    yReference = 401;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 250;
+    y = 588;
+    format = "%s";
+    theText = "AF-038";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 250;
+    yReference = 588;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 355;
+    y = 588;
+    format = "%s";
+    theText = "AF-046";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 355;
+    yReference = 588;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 205;
+    y = 688;
+    format = "%s";
+    theText = "AF-037";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 205;
+    yReference = 688;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 315;
+    y = 688;
+    format = "%s";
+    theText = "AF-045";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 315;
+    yReference = 688;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 1094;
+    y = 106;
+    format = "%s";
+    theText = "MS-152";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 1094;
+    yReference = 106;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 1095;
+    y = 166;
+    format = "%s";
+    theText = "MS-162";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 1095;
+    yReference = 166;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 885;
+    y = 271;
+    format = "%s";
+    theText = "MS-105";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 885;
+    yReference = 271;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 995;
+    y = 319;
+    format = "%s";
+    theText = "MS-171";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 995;
+    yReference = 319;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 1140;
+    y = 251;
+    format = "%s";
+    theText = "MS-151";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 1140;
+    yReference = 251;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 870;
+    y = 491;
+    format = "%s";
+    theText = "MS-107";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 870;
+    yReference = 491;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 890;
+    y = 551;
+    format = "%s";
+    theText = "MS-173";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 890;
+    yReference = 551;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 885;
+    y = 636;
+    format = "%s";
+    theText = "MS-108";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 885;
+    yReference = 636;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 995;
+    y = 687;
+    format = "%s";
+    theText = "MS-174";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 995;
+    yReference = 687;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 1140;
+    y = 621;
+    format = "%s";
+    theText = "MS-154";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 1140;
+    yReference = 621;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 1094;
+    y = 538;
+    format = "%s";
+    theText = "MS-163";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 1094;
+    yReference = 538;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 1093;
+    y = 481;
+    format = "%s";
+    theText = "MS-153";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 1093;
+    yReference = 481;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  rectangle 
+  {
+    x = 345;
+    y = 51;
+    width = 405;
+    height = 155;
+
+    visibility = 1;
+    foregroundFillColour = -1;
+    backgroundFillColour = -1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineWidth = 1;
+    linePattern = `SolidPattern`;
+    fillPattern = `NoPattern`;
+    xReference = 345;
+    yReference = 51;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  line 
+  {
+    numberOfPoints = 2;
+
+    point[0] = (345, 76);
+    point[1] = (750, 76);
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineWidth = 2;
+    lineStyle = `SolidPattern`;
+    xReference = 345;
+    yReference = 76;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 110;
+    y = 153;
+    format = "%s";
+    theText = "CD  STOR  TK  01";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 110;
+    yReference = 153;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 111;
+    y = 460;
+    format = "%s";
+    theText = "CD  STOR  TK  02";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 111;
+    yReference = 460;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  line 
+  {
+    numberOfPoints = 2;
+
+    point[0] = (1065, 136);
+    point[1] = (1065, 76);
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineWidth = 0;
+    lineStyle = `SolidPattern`;
+    xReference = 1065;
+    yReference = 136;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  line 
+  {
+    numberOfPoints = 2;
+
+    point[0] = (1191, 136);
+    point[1] = (1191, 76);
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineWidth = 0;
+    lineStyle = `SolidPattern`;
+    xReference = 1191;
+    yReference = 136;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  line 
+  {
+    numberOfPoints = 2;
+
+    point[0] = (1064, 510);
+    point[1] = (1064, 450);
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineWidth = 0;
+    lineStyle = `SolidPattern`;
+    xReference = 1064;
+    yReference = 510;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  line 
+  {
+    numberOfPoints = 2;
+
+    point[0] = (1190, 510);
+    point[1] = (1190, 450);
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineWidth = 0;
+    lineStyle = `SolidPattern`;
+    xReference = 1190;
+    yReference = 510;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  instance cfmsSymbols.Valve4StateHorizontal 
+  {
+    attribute FLOW_RIGHT = 1;
+    attribute Valve_H = `&MSZS109H`;
+    attribute Valve_L = `&MSZS109L`;
+    x = 1005;
+    y = 387;
+    visibility = 1;
+    xReference = 1005;
+    yReference = 387;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.Valve4StateHorizontal 
+  {
+    attribute FLOW_RIGHT = 1;
+    attribute Valve_H = `&ATZS009H`;
+    attribute Valve_L = `&ATZS009L`;
+    x = 1085;
+    y = 387;
+    visibility = 1;
+    xReference = 1085;
+    yReference = 387;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.Valve4StateHorizontal 
+  {
+    attribute FLOW_RIGHT = 1;
+    attribute Valve_H = `&MSZS110H`;
+    attribute Valve_L = `&MSZS110L`;
+    x = 1006;
+    y = 10;
+    visibility = 1;
+    xReference = 1006;
+    yReference = 10;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.Valve4StateHorizontal 
+  {
+    attribute FLOW_RIGHT = 1;
+    attribute Valve_H = `&ATZS010H`;
+    attribute Valve_L = `&ATZS010L`;
+    x = 1089;
+    y = 10;
+    visibility = 1;
+    xReference = 1089;
+    yReference = 10;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  text 
+  {
+    x = 1035;
+    y = 53;
+    format = "%s";
+    theText = "MS-110";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 1035;
+    yReference = 53;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 1123;
+    y = 53;
+    format = "%s";
+    theText = "AT-010";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 1123;
+    yReference = 53;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 1217;
+    y = 31;
+    format = "%s";
+    theText = "AFPTB";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 1217;
+    yReference = 31;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 1214;
+    y = 410;
+    format = "%s";
+    theText = "AFPTA";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 1214;
+    yReference = 410;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 1035;
+    y = 430;
+    format = "%s";
+    theText = "MS-109";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 1035;
+    yReference = 430;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 1120;
+    y = 430;
+    format = "%s";
+    theText = "AT-009";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 1120;
+    yReference = 430;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  instance cfmsSymbols.flowdart 
+  {
+    x = 1228;
+    y = 201;
+    visibility = 1;
+    xReference = 1228;
+    yReference = 201;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 90;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.flowdart 
+  {
+    x = 1195;
+    y = 13;
+    visibility = 1;
+    xReference = 1195;
+    yReference = 13;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.flowdart 
+  {
+    x = 1191;
+    y = 390;
+    visibility = 1;
+    xReference = 1191;
+    yReference = 390;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  line 
+  {
+    numberOfPoints = 2;
+
+    point[0] = (1006, 25);
+    point[1] = (1006, 75);
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineWidth = 0;
+    lineStyle = `SolidPattern`;
+    xReference = 1006;
+    yReference = 25;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  instance cfmsSymbols.ValueAndState 
+  {
+    attribute PointId = `&FWL1113A`;
+    attribute DisplayUnits = 1;
+    x = 915;
+    y = 340;
+    visibility = 1;
+    xReference = 914;
+    yReference = 336;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  text 
+  {
+    x = 845;
+    y = 362;
+    format = "%s";
+    theText = "L(CH A):";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 845;
+    yReference = 362;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  instance cfmsSymbols.ValueAndState 
+  {
+    attribute PointId = `&FWL1113B`;
+    attribute DisplayUnits = 1;
+    x = 915;
+    y = 364;
+    visibility = 1;
+    xReference = 914;
+    yReference = 360;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  text 
+  {
+    x = 845;
+    y = 386;
+    format = "%s";
+    theText = "L(CH B):";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 845;
+    yReference = 386;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  instance cfmsSymbols.ValueAndState 
+  {
+    attribute PointId = `&FWL1123A`;
+    attribute DisplayUnits = 1;
+    x = 926;
+    y = 708;
+    visibility = 1;
+    xReference = 925;
+    yReference = 704;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  text 
+  {
+    x = 855;
+    y = 730;
+    format = "%s";
+    theText = "L(CH A):";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 855;
+    yReference = 730;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  instance cfmsSymbols.ValueAndState 
+  {
+    attribute PointId = `&FWL1123B`;
+    attribute DisplayUnits = 1;
+    x = 926;
+    y = 732;
+    visibility = 1;
+    xReference = 925;
+    yReference = 728;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  text 
+  {
+    x = 855;
+    y = 754;
+    format = "%s";
+    theText = "L(CH B):";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 855;
+    yReference = 754;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  line 
+  {
+    numberOfPoints = 2;
+
+    point[0] = (1005, 402);
+    point[1] = (1005, 452);
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineWidth = 0;
+    lineStyle = `SolidPattern`;
+    xReference = 1005;
+    yReference = 402;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  instance DialogueSymbols.LargeMenuSelection 
+  {
+    attribute CascadeY = 400;
+    attribute CascadeX = 400;
+    attribute Cascade = 0;
+    attribute TheTextFont = `font6`;
+    attribute TheDisplayPage = "Pic503_Secondarymenu.ppic";
+    attribute TheTitle = "SECONDARY MENU";
+    attribute TheFontColor = 2;
+    attribute TheOption = "2.";
+    x = 251;
+    y = 706;
+    visibility = 1;
+    xReference = 251;
+    yReference = 706;
+    xScaleFactor = 0.5;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance DialogueSymbols.LargeMenuSelection 
+  {
+    attribute CascadeY = 400;
+    attribute CascadeX = 400;
+    attribute Cascade = 0;
+    attribute TheTextFont = `font6`;
+    attribute TheDisplayPage = "Pic500_HFTMainmenu.ppic";
+    attribute TheTitle = "HFT MAIN MENU";
+    attribute TheFontColor = 2;
+    attribute TheOption = "1.";
+    x = 21;
+    y = 705;
+    visibility = 1;
+    xReference = 21;
+    yReference = 705;
+    xScaleFactor = 0.5;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+// The picture's other attributes:
+
+  backgroundColour    = 0;
+  xSnap               = 5;
+  ySnap               = 5;
+  angleSnap           = 0;
+  radiusSnap          = 0;
+  worldX              = 15;
+  worldY              = 0;
+  worldWidth          = 1280;
+  worldHeight         = 824;
+  oneToOne            = 1;
+  resizeMode          = 0;
+  updateMode          = 2;
+  crosshairStyle      = 1;
+  crosshairLength     = 0;
+  crosshairFollowSnap = `isInEditMode()`;
+  crosshairVisibility = `isInEditMode()`;
+  xReference = 500;
+  yReference = 500;
+  xScaleFactor = 1;
+  yScaleFactor = 1;
+  rotationAngle = 0;
+
+
+}  // end of picture Pic507_AuxiliaryFeedwater

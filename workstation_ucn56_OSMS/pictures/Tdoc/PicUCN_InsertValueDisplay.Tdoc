@@ -1,0 +1,629 @@
+/*
+ * PICASSO-3 CONFIGURATION LANGUAGE FILE
+ *
+ *
+ * Picture name: PicUCN_InsertValueDisplay
+ *
+ *
+ * Documented by  : runtime
+ * Host           : y6tsc1
+ * Date           : 28/04-99 at 11:05:32
+ *
+ *
+ * Generate with:
+ *    pcc PicUCN_InsertValueDisplay.Tdoc
+ *
+ */
+
+
+picture PicUCN_InsertValueDisplay
+{
+
+  int ZERO_OR_ONE_TYPE_CHECK = 2;
+  int FULL_TYPE_CHECK = 1;
+  int NO_RANGE_TYPE_CHECK = 3;
+  RECORD *PictureHighAlarmPID = 0;
+  RECORD *PictureLowAlarmPID = 0;
+  float Range_lo = `EngRangeLo(PicturePointId)`;
+  float Range_hi = `EngRangeHi(PicturePointId)`;
+  char TheDisplayPage[50] = "PicUCN_DBChangeMenu";
+  DB_CHANGE_DATA *pDBC_DATA = `&::UCN5and6.InterfaceToGUI.Interface.DatabaseDisplaysData`;
+  char *PictureTitle = "INSERT VALUE";
+  char *PictureNumber = "531";
+  char *PageForward = "";
+  char *PageBack = "";
+  RECORD *PicturePointId = `&CDYK0076`;
+  int Analog = `(PicturePointId->sig_type<MinimumDigitalType)`;
+
+  function `void Initialize()
+{
+   Current_Page = 531;
+   CFMLevel = 0;
+
+   DisplayAdvisoryMessage(" ");
+   DisplayAdvisoryMessage1(" ");
+   DisplayAdvisoryMessage2(" ");
+   DisplayAdvisoryMessage3(" ");
+
+// Shut off all the error messages
+
+   ProcessingMsg.visibility = 0;
+   ProcessingErrorMsg.visibility = 0;
+  
+   DBCinfo.pPID = PicturePointId;
+   strcpy(pDBC_DATA->PID,PicturePointId->pid);
+
+   sprintf(ValueEntry.TheOriginalText,"%-8.2f",ValueEntry.TheOriginalNumber) ;
+   ValueEntry.TheNewNumber = \`ValueEntry.TheOriginalNumber\` ;
+   strcpy(ValueEntry.TheNewText,ValueEntry.TheOriginalText) ;
+   ValueEntry.ERROR = 0 ;
+
+   if((PicturePointId->sig_type==QA)||(PicturePointId->sig_type==XA)||
+      (PicturePointId->sig_type==QD)||(PicturePointId->sig_type==XD))	// Composed or Calculated AI/DI
+   {
+      ValueEntry.visibility = 0 ;
+      ValueLabel.visibility = 0 ;
+  
+      ProcessBtn.visibility = 0 ;
+      CurPointInfo.visibility = 0 ;      
+
+      ChangeProtected.visibility = 0 ;
+      ComposedAI.visibility = 1 ;
+   }
+   else if((PicturePointId->pipbitmap&bCHGPROT)||(PicturePointId->sig_type==SOE))
+   {
+      ValueEntry.visibility = 0 ;
+      ValueLabel.visibility = 0 ;
+  
+      ProcessBtn.visibility = 0 ;
+      CurPointInfo.visibility = 0 ;      
+
+      ComposedAI.visibility = 0 ;
+      ChangeProtected.visibility = 1 ;
+   }
+   else 
+   {
+      ChangeProtected.visibility = 0 ;
+      ComposedAI.visibility = 0 ;
+
+      ValueLabel.visibility = 1;
+      ValueEntry.visibility = 1;
+      ProcessBtn.visibility = 1 ;
+      CurPointInfo.visibility = 1 ;      
+   }
+
+   if(IsAnalog(PicturePointId))
+   {
+      if(0 != PicturePointId->lIPN)
+      {
+         execute ("{PictureLowAlarmPID = \`&::UCN5and6.InterfaceToGUI.%s\`;}",PicturePointId->message1);
+      }
+      else
+      {
+         PictureLowAlarmPID = 0;
+      }
+
+      if(0 != PicturePointId->hIPN)
+      {
+         execute ("{PictureHighAlarmPID = \`&::UCN5and6.InterfaceToGUI.%s\`;}",PicturePointId->message2);
+      }
+      else
+      {
+         PictureHighAlarmPID = 0;
+      }
+   }
+
+   if(Analog) ValueEntry.TheNumberFormat = PicturePointId->disfmt;
+   else ValueEntry.TheNumberFormat = "%d";
+
+   update();
+}`
+
+
+
+  function `void Process1()
+{
+   if (0 == ValueEntry.ERROR)
+   {
+      ProcessingMsg.visibility = 1;
+      ProcessingErrorMsg.visibility = 0;
+
+      // If PID status is in-scan, set the status to out-of-scan first. 
+      if((PicturePointId->sig_type!=KO)&&(!(PicturePointId->pisabitmap&bOOSCAN)))		      // yrlee 981112 
+      {
+         pDBC_DATA->ChgScnStatus = 1;
+         execute("{sendMessageToHost(PROCESS_CHGSCN_DATA);}");
+      }
+
+      if(PicturePointId->sig_type >= MinimumDigitalType)      // FOR DIGITAL
+      {             
+         pDBC_DATA->InsValue = ValueEntry.TheNewNumber ;
+      }
+      else                                                    // FOR ANALOG
+      {
+         //if(!strcmp(PicturePointId.pid,"CXYKMETD"))
+         if(!strcmp(PicturePointId.pid,"METDISP"))	// for Y34 (CORENET 2013.10.30)
+            pDBC_DATA->InsValue = ValueEntry.TheNewNumber ;
+         else
+         {
+            pDBC_DATA->InsValue = (Interface->System.displayedUnits)? ValueEntry.TheNewNumber :
+            ValueEntry.TheNewNumber * PicturePointId->mfactor + PicturePointId->moffset ;
+         }
+      }
+      execute("{sendMessageToHost(PROCESS_INSVAL_DATA);}");
+  }
+  else
+  {
+    ProcessingErrorMsg.visibility = 1;
+  }
+
+//  printf("InsValue = %f",pDBC_DATA->InsValue) ;
+//  printf("mfactor : %f,   moffset : %f\\n",PicturePointId->mfactor,PicturePointId->moffset) ;
+
+  update();
+
+}`
+
+
+
+  function `void ProcessingConfirmed()
+{
+  printf("InsValue Processing Confirmed");
+  ProcessingMsg.visibility = 0;
+  update();
+}`
+
+
+
+  function `void VerifyLimits()
+{
+   int check_type;
+
+   check_type = Range_CheckType(PicturePointId);
+
+   switch(check_type)
+   {
+      case NO_RANGE_TYPE_CHECK:
+         ValueEntry.ERROR = 0;
+         ProcessingErrorMsg.visibility=0 ;
+         break;
+
+      case ZERO_OR_ONE_TYPE_CHECK:
+         if((0<=ValueEntry.TheNewNumber) && (ValueEntry.TheNewNumber<=1))
+              ValueEntry.ERROR = 0;
+         else
+              ValueEntry.ERROR = 1;
+         break;
+
+    case FULL_TYPE_CHECK:
+    default:
+         if ((ValueEntry.TheNewNumber >= Range_lo) && (ValueEntry.TheNewNumber <= Range_hi) )
+         {
+             ValueEntry.ERROR = 0;
+             ProcessingErrorMsg.visibility=0 ;
+         }
+         else
+             ValueEntry.ERROR = 1;
+         break;
+  }//endswitch
+
+
+
+/*
+   if (PicturePointId->sig_type<MinimumDigitalType)      // For Analog Point
+   {
+         if (PicturePointId->sig_type==KO)
+         {
+             ValueEntry.ERROR = 0;
+             ProcessingErrorMsg.visibility=0 ;
+         }
+         else
+         {
+            if ((ValueEntry.TheNewNumber >= Range_lo) &&
+               (ValueEntry.TheNewNumber <= Range_hi) )
+            {
+                ValueEntry.ERROR = 0;
+                ProcessingErrorMsg.visibility=0 ;
+            }
+            else
+            {
+                ValueEntry.ERROR = 1;
+            }
+         }
+   }
+   else                                                 // For Digital Point
+   {
+         if((0<=ValueEntry.TheNewNumber) && (ValueEntry.TheNewNumber<=1))
+         {
+              ValueEntry.ERROR = 0;
+         }
+         else
+         {
+              ValueEntry.ERROR = 1;
+         }
+  
+    }
+*/
+}`
+
+
+
+  function `int Range_CheckType(RECORD *PID)
+{
+  int point_type;
+  int retval = FULL_TYPE_CHECK;
+
+  point_type = PID->sig_type;
+
+  switch (point_type)
+  {
+    case AI:
+    case PI:
+    case FI:
+    case ROD:
+      retval = FULL_TYPE_CHECK;
+      break;
+
+    case CI:
+    case DI:
+    case SOE:
+    case BCI:
+    case DL:
+    case QD:
+    case XD:
+    case CO:
+    case BCO:
+      retval = ZERO_OR_ONE_TYPE_CHECK;
+      break;
+
+    case XA:
+    case QA:
+      retval = NO_RANGE_TYPE_CHECK;
+      break;
+
+    case AO:
+    case KO:
+      if ((0.0 == PID->erange_hi)  &&  (0.0 == PID->erange_lo)) 
+        retval = NO_RANGE_TYPE_CHECK;
+      else
+        retval = FULL_TYPE_CHECK;
+      break;
+
+    default:
+      //printf("%s GetPID_CheckType() ERROR: Point type not found", PictureTitle);
+      retval = FULL_TYPE_CHECK;
+      break;
+  }
+  return(retval);
+}`
+
+
+
+  dialogue
+  {
+    event = `buttonPressed(Right)`;
+    action = statement `{
+  Initialize();
+}`;
+  }
+
+  instance DialogueSymbols.PushButton ProcessBtn
+  {
+    attribute ExecuteString = "{Process1();}";
+    attribute isInside = 1;
+    attribute isDown = 0;
+    attribute Height = 30;
+    attribute Width = 110;
+    attribute ButtonState = 0;
+    attribute SelectColour = `COLOR_BUTTON_SELECTED`;
+    attribute BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    attribute BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    attribute TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    attribute TextX = 7;
+    attribute TextY = 22;
+    attribute Label = "PROCESS";
+    attribute TextColour = `COLOR_PICTURE_BACKGROUND`;
+    attribute TextFont = 4;
+    attribute TextXStatic = 7;
+    attribute TextXDynamic = 5;
+    attribute TextYStatic = 22;
+    attribute TextYDynamic = 21;
+    attribute DynamicLabel = "PROCESSING";
+    attribute StaticLabel = "PROCESS";
+    attribute TextFontStatic = `font4`;
+    attribute TextFontDynamic = `font2`;
+    attribute Scope = "PicUCN_InsertValueDisplay";
+    x = 105;
+    y = 719;
+    visibility = 1;
+    xReference = 105;
+    yReference = 719;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance ProcessBtn
+
+
+
+  instance DialogueSymbols.PushButton 
+  {
+    attribute ExecuteString = "{CascadeEnterActive=1;DisplayCascadeEnter(\"PicUCN_InsertValueCascade.ppic\",550,400,200,220);}";
+    attribute isInside = 1;
+    attribute isDown = 0;
+    attribute Height = 30;
+    attribute Width = 110;
+    attribute ButtonState = 0;
+    attribute SelectColour = `COLOR_BUTTON_SELECTED`;
+    attribute BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    attribute BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    attribute TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    attribute TextX = 18;
+    attribute TextY = 22;
+    attribute Label = "SELECT";
+    attribute TextColour = `COLOR_PICTURE_BACKGROUND`;
+    attribute TextFont = 4;
+    attribute TextXStatic = 18;
+    attribute TextXDynamic = 15;
+    attribute TextYStatic = 22;
+    attribute TextYDynamic = 21;
+    attribute DynamicLabel = "SELECTING";
+    attribute StaticLabel = "SELECT";
+    attribute TextFontStatic = `font4`;
+    attribute TextFontDynamic = `font2`;
+    attribute Scope = "PicUCN_InsertValueDisplay";
+    x = 652;
+    y = 719;
+    visibility = 1;
+    xReference = 862;
+    yReference = 719;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  text CurPointInfo
+  {
+    x = 230;
+    y = 741;
+    format = "%s";
+    theText = "CURRENT POINT INFORMATION";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 230;
+    yReference = 741;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 777;
+    y = 741;
+    format = "%s";
+    theText = "A NEW POINT ID";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 197;
+    yReference = 741;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text ValueLabel
+  {
+    x = 105;
+    y = 399;
+    format = "%s";
+    theText = "ENTER A VALUE";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 105;
+    yReference = 399;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text ProcessingMsg
+  {
+    x = 560;
+    y = 694;
+    format = "%s";
+    theText = "PROCESSING...  WAIT";
+
+    visibility = 0;
+    foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 560;
+    yReference = 694;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text ValueErrorMsg
+  {
+    x = 290;
+    y = 424;
+    format = "%s";
+    theText = "INVALID VALUE";
+
+    visibility = `ValueEntry.ERROR`;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 290;
+    yReference = 424;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text ProcessingErrorMsg
+  {
+    x = 105;
+    y = 709;
+    format = "%s";
+    theText = "CORRECT ALL ERRORS BEFORE PROSSING";
+
+    visibility = 0;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 105;
+    yReference = 709;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  instance DialogueSymbols.DatabaseDisplayInfo_Ins DBCinfo
+  {
+    attribute pPID = `&::UCN5and6.InterfaceToGUI.CDYK0076`;
+    attribute pHiAlmPID = `PictureHighAlarmPID`;
+    attribute pLoAlmPID = `PictureLowAlarmPID`;
+    x = -4;
+    y = 0;
+    visibility = 1;
+    xReference = -4;
+    yReference = 0;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance DBCinfo
+
+
+
+  text ChangeProtected
+  {
+    x = 105;
+    y = 446;
+    format = "%s";
+    theText = "DATABASE CHANGES NOT ALLOWED";
+
+    visibility = 0;
+    foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 105;
+    yReference = 446;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text ComposedAI
+  {
+    x = 105;
+    y = 462;
+    format = "%s";
+    theText = "IT IS NOT AN INPUT OR A CONSTANT";
+
+    visibility = 0;
+    foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 105;
+    yReference = 462;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  instance DialogueSymbols.InputDialogueNumber ValueEntry
+  {
+    attribute isInside = 1;
+    attribute isDown = 0;
+    attribute Height = 30;
+    attribute Width = 150;
+    attribute SelectColour = `COLOR_BUTTON_SELECTED`;
+    attribute BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    attribute BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    attribute TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    attribute TextX = 10;
+    attribute TextY = 21;
+    attribute TextColour = `COLOR_PICTURE_BACKGROUND`;
+    attribute TextFont = 4;
+    attribute ExecuteSelect = "";
+    attribute ExecuteUnSelect = "";
+    attribute TheNewText = "0.00    ";
+    attribute TheOriginalText = "0.00    ";
+    attribute ERROR = 0;
+    attribute TheNumberFormat = "%d";
+    attribute Selected = 0;
+    attribute ReturnAction = "{PicUCN_InsertValueDisplay.VerifyLimits();}";
+    attribute TheOriginalNumber = `PicturePointId->value`;
+    attribute MaxDigits = 8;
+    attribute TheNewNumber = `ValueEntry.TheOriginalNumber`;
+    attribute Scope = "::UCN5and6.PicUCN_InsertValueDisplay";
+    attribute Active = 1;
+    attribute vis = `visibility`;
+    x = 292;
+    y = 375;
+    visibility = 1;
+    xReference = 292;
+    yReference = 375;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance ValueEntry
+
+
+
+// The picture's other attributes:
+
+  backgroundColour    = 0;
+  xSnap               = 5;
+  ySnap               = 5;
+  angleSnap           = 0;
+  radiusSnap          = 0;
+  worldX              = 0;
+  worldY              = 0;
+  worldWidth          = 1280;
+  worldHeight         = 824;
+  oneToOne            = 1;
+  resizeMode          = 0;
+  updateMode          = 2
+  ;
+  crosshairStyle      = 1;
+  crosshairLength     = 0;
+  crosshairFollowSnap = `isInEditMode()`;
+  crosshairVisibility = `isInEditMode()`;
+  xReference = 500;
+  yReference = 500;
+  xScaleFactor = 1;
+  yScaleFactor = 1;
+  rotationAngle = 0;
+
+
+}  // end of picture PicUCN_InsertValueDisplay

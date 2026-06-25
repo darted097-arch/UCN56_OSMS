@@ -1,0 +1,666 @@
+/*
+ * ProcSee CONFIGURATION LANGUAGE FILE
+ *
+ *
+ * User : ygn34
+ * Host : y4cr01
+ * Date : 2017-05-31
+ * Time : 14:56:08
+ *
+ * ProcSee version : ProcSee 3.10.1 (June 2016)
+ * File version    : 1.26
+ *
+ *
+ */
+
+
+picture PicYGN_INCOREUpdate
+{
+  worldX = 0;
+  worldY = 0;
+  worldWidth = 1280;
+  worldHeight = 824;
+  oneToOne = 1;
+  backgroundColour = 0;
+  updateMode = 2;
+  resizeMode = 0;
+  xSnap = 5;
+  ySnap = 5;
+  radiusSnap = 0;
+  angleSnap = 0;
+  crosshairStyle = 1;
+  crosshairLength = 0;
+  crosshairFollowSnap = `isInEditMode()`;
+  crosshairVisibility = `isInEditMode()`;
+  xReference = 500;
+  yReference = 500;
+  xScaleFactor = 1;
+  yScaleFactor = 1;
+  rotationAngle = 0;
+
+  char CurrentPid[40] = "ICR223";
+
+  float NewChargeValue = 0;
+
+  char NewPid[12] = "ICR013     ";
+
+  char NewValue[40] = "         ";
+
+  int Option = 1;
+
+  char PictureNumber[50] = "612";
+
+  char PictureTitle[50] = "UPDATE INCORE DETECTOR CHARGE";
+
+  RECORD* PointID = `&ICR223`;
+
+  char Temp[40] = "ICR223";
+
+  char tempdn[3] = "22";
+
+  char tempicr[4] = "ICR";
+
+  char templ[2] = "3";
+
+  char YesnoInput[8] = "N";
+
+  function `void escape()
+  {
+     displayPicture("Main","PicYGN_INCOREMenu.ppic");
+     update();
+  }`
+
+  function `void initConfirmMessages()
+  {
+     //Initialize Confirm Messages in Interface Shared Memory
+     strcpy(Interface->GenericConfirmMessage.data.message1," ");
+     strcpy(Interface->GenericConfirmMessage.data.message2," ");
+     strcpy(Interface->GenericConfirmMessage.data.message3," ");
+  }`
+
+  function `void Initialize()
+  {
+     Current_Page = 612;
+     CFMLevel = 0;
+     initConfirmMessages();
+  //   strcpy(CurrentPid,"              ");
+  //   strcpy(YesnoInput,"N");
+     Interface->IncoreData.yesno = 0;
+  //   PidInfo.visibility = 0;
+  
+  //   EscapeButton.UnSelect();
+     NewText.visibility = 0;
+     Group1Select.UnSelect();
+     strcpy(IncorePID.TheNewText," ");
+     strcpy(IncorePID.TheOriginalText," ");
+     PidDesc.visibility=0;
+     update();
+  }`
+
+// ***CORENET 20170601 by Philkyu Kwon ************
+  function `void DummyProcess()
+  {
+      //printf("Button Select OR Button Unselected");
+  }`
+// ***************************************************
+
+
+  function `void keepShape()
+  {
+     switch(Option){
+        case 1: {
+         text1_box.foregroundFillColour=1;
+         text1.foregroundColour=0;
+         text2_box.foregroundFillColour=0;
+         text2.foregroundColour=1;
+         text2_1.foregroundColour=1;
+         text3_box.foregroundFillColour=0;
+         text3.foregroundColour=1;
+         text3_1.foregroundColour=1;
+         update();
+         break;
+       }
+        case 2: {
+         text1_box.foregroundFillColour=0;
+         text1.foregroundColour=1;
+         text2_box.foregroundFillColour=1;
+         text2.foregroundColour=0;
+         text2_1.foregroundColour=0;
+         text3_box.foregroundFillColour=0;
+         text3.foregroundColour=1;
+         text3_1.foregroundColour=1;
+         update();
+         break;
+        }
+        case 3: {
+         text1_box.foregroundFillColour=0;
+         text1.foregroundColour=1;
+         text2_box.foregroundFillColour=0;
+         text2.foregroundColour=1;
+         text2_1.foregroundColour=1;
+         text3_box.foregroundFillColour=1;
+         text3.foregroundColour=0;
+         text3_1.foregroundColour=0;
+         update();
+         break;
+        }
+     }
+  }`
+
+  function `void Process1()
+  {
+     int status;
+     int DetectorNo, DetectorLevel;
+     initConfirmMessages();
+     // ClearFeedbackMessage();
+     // check if PID is valid
+     DetectorNo = atoi(tempdn);
+     DetectorLevel = atoi(templ);
+     if (strcmp(tempicr,"ICR") != 0 || DetectorNo < 1 || DetectorNo > 45 || DetectorLevel < 1 || DetectorLevel > 5)
+         DisplayAdvisoryMessage("INVALID POINT ID");
+     // CHECK IF "Y" OR "N" IS VALID
+     else
+        {
+         if ((strcmp(YesNo.TheNewText,"Y\\0") == 0))
+           {
+               Interface->IncoreData.yesno = 1;
+               Interface->IncoreData.newCharge =0;
+           }
+         if ((strcmp(YesNo.TheNewText,"N\\0") == 0)) Interface->IncoreData.yesno = 0;
+     // CHECK IF NEW CHARGE VALUE IS VALID
+         if (NewChargeValue < 0.0)
+             DisplayAdvisoryMessage("INVALID CHARGE VALEU: ENTER POSITIVE OR ZERO CHARGE VALUE");
+             else
+               {
+                DisplayAdvisoryMessage("SENDING UPDATED DATA TO THE HOST");
+     // Send data request message to the host
+                execute("{sendMessageToHost(INCORE_CHARGE_UPDATE);}");
+               }
+        }
+  }`
+
+  function `void ProcessOption()
+  {
+  //   strncpy (YesnoInput,buffer(),1);
+  //   YesnoInput[0] = Toupper(YesnoInput[0]);
+  //   edit(OFF);
+  //   update();
+  //   YesnoInput[1]='\\0';
+     if ((strcmp(YesNo.TheNewText,"Y\\0") == 0))
+        Interface->IncoreData.yesno = 1;
+     else if ((strcmp(YesNo.TheNewText,"N\\0") == 0))
+        Interface->IncoreData.yesno = 0;
+     else {
+        DisplayAdvisoryMessage("Invalid Input: Must be \\"Y\\" or \\"N\\"");
+  //      strcpy(YesNo.TheNewText,"?");
+     }
+  }`
+
+  function `void ProcessPID()
+  {
+     int  i, DetectorNo, DetectorLevel;
+  
+     // strncpy (CurrentPid,buffer(),8);
+     // Convert to the Pid to upper case
+     strncpy(Temp,IncorePID.TheNewText,8);
+  //   i = 0;
+  //   while ( (Temp[i] != '\\0') && (i<9))
+  //   {
+  //      Temp[i] = Toupper(Temp[i]);
+  //      i++;
+  //   }
+     // Return the converted Pid to the display field
+     strncpy(CurrentPid,Temp,8);
+     strncpy(tempicr,CurrentPid,3);
+     tempdn[0] = CurrentPid[3];
+     tempdn[1] = CurrentPid[4];
+     tempdn[2] = '\\0';
+     templ[0]  = CurrentPid[5];
+     templ[1]  = '\\0';
+     DetectorNo = atoi(tempdn);
+     DetectorLevel = atoi(templ);
+  
+         printf("header = %s", tempicr);
+         printf("midder = %s", tempdn);
+         printf("tail   = %s", templ);
+  
+  
+  
+     if (strcmp(tempicr,"ICR") != 0 ||
+         DetectorNo < 1 || DetectorNo > 45 ||
+         DetectorLevel < 1 || DetectorLevel > 5)
+     {
+         printf("Invalid Point ID");
+         DisplayAdvisoryMessage("INVALID POINT ID");
+         PidDesc.visibility=0;
+     }
+     else
+     {
+         strcpy (NewValue,"         ");
+         strcpy(NewInput.TheNewText,"        ");
+         strcpy(YesNo.TheNewText,"N\\0");
+         NewInput.TheNewNumber = 0;
+         NewChargeValue = 0.0;
+         strcpy (Interface->IncoreData.pid, CurrentPid);
+         execute("{PointID = \\\`&%6s\\\`;}",CurrentPid);
+  //       PidInfo.visibility = 1;
+  //     Send data request message to the host
+         execute("{sendMessageToHost(INCORE_CHARGE_REQUEST);}");
+         printf("INCORE_CHARGE_REQUEST is already sent...");
+         PidDesc.visibility=1;
+     }
+  //       edit(OFF);
+         update();
+  }`
+
+  function `void ProcessValue()
+  {
+  //   int length;
+  
+  //   length = strlen(buffer());
+  //   strncpy (NewValue,buffer(),length);
+  //   NewChargeValue = atof(NewValue);
+  //   if (NewInput.TheNewNumber < 0.0)
+     if (atof(NewInput.TheNewText) < 0.0)
+     {
+        DisplayAdvisoryMessage("INVALID CHARGE VALUE: ENTER POSITIVE OR ZERO CHARGE VALUE");
+        strcpy(NewInput.TheNewText,"????");
+     }
+     else
+     {
+        Interface->IncoreData.newCharge = atof(NewInput.TheNewText);
+     }
+  //   edit(OFF);
+     update();
+  // pidInfo.visibility = 1;
+  }`
+
+  function `void ProcessVisibility()
+  {
+     if ((strcmp(YesNo.TheNewText,"Y\\0") == 0))
+     {
+        NewText.visibility = 1;
+        NewInput.visibility = 0;
+     }
+     else
+     {
+        NewText.visibility = 0;
+        NewInput.visibility = 1;
+     }
+  
+  
+  }`
+
+  function `int verifyFields()
+  {
+       if (DetectorNo <1 || DetectorNo > 45) {
+           DisplayAdvisoryMessage("Invalid Detector Number: Must be 1-45");
+           strcpy(Field1.theText,"?");
+           return(-1);
+       }
+       else if (DetectorLevel <1 || DetectorLevel > 5)
+        {
+           DisplayAdvisoryMessage("Invalid Detector Level: Must be 1-5");
+           strcpy(Field2.theText,"?");
+           return(-1);
+        }
+       else if (MaxTime <1 || MaxTime > 300)
+        {
+           DisplayAdvisoryMessage("Invalid Maximum Time: Must be 1-300");
+           strcpy(Field3.theText,"?");
+           return(-1);
+        }
+       else
+        return(0);
+  }`
+
+  rectangle
+  {
+    x = 226;
+    y = 162;
+    width = 847;
+    height = 305;
+    visibility = 1;
+    foregroundColour = `COLOR_LINE_BOUNDARY_6`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 3;
+    foregroundFillColour = `COLOR_PICTURE_BACKGROUND`;
+    backgroundFillColour = -1;
+    fillPattern = `SolidPattern`;
+    xReference = 270;
+    yReference = 150;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 289;
+    y = 205;
+    format = "%s";
+    theText = "INCORE DETECTOR POINT ID :";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 289;
+    yReference = 205;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 656;
+    y = 348;
+    format = "%s";
+    theText = "(Y/N)";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 656;
+    yReference = 348;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 430;
+    y = 240;
+    format = "%s";
+    theText = "DESCRIPTION :";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 430;
+    yReference = 240;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 299;
+    y = 348;
+    format = "%s";
+    theText = "NEW DETECTOR INSTALLED :";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 299;
+    yReference = 348;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 317;
+    y = 392;
+    format = "%s";
+    theText = "CURRENT CHARGE VALUE :";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 317;
+    yReference = 392;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 448;
+    y = 433;
+    format = "%s";
+    theText = "NEW VALUE :";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 448;
+    yReference = 433;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text PidDesc
+  {
+    x = 602;
+    y = 241;
+    format = "%s";
+    theText = `PointID->desc`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 605;
+    yReference = 240;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text CurrentCharge
+  {
+    x = 603;
+    y = 390;
+    format = "%-8.2g";
+    theText = `Interface->IncoreData.oldCharge`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 606;
+    yReference = 389;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  instance DialogueSymbols.InputDialogueNumber NewInput
+  {
+    x = 600;
+    y = 411;
+    visibility = 1;
+    xReference = 600;
+    yReference = 411;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Active = 1;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    ExecuteUnSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxDigits = 8;
+    ReturnAction = "ProcessValue()";
+    Scope = "::YGN3and4.PicYGN_INCOREUpdate";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewNumber = 0;
+    TheNewText = "3";
+    TheNumberFormat = "%-8.2f";
+    TheOriginalNumber = 34.5;
+    TheOriginalText = "3";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 150;
+  }
+
+  instance DialogueSymbols.PushButton Group1Select
+  {
+    x = 602;
+    y = 504;
+    visibility = 1;
+    xReference = 602;
+    yReference = 504;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ButtonState = 0;
+    DynamicLabel = "PROCESS";
+    ExecuteString = "Process1()";
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    Label = "PROCESS";
+    Scope = "PicYGN_INCOREUpdate";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    StaticLabel = "PROCESS";
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextFontDynamic = `font2`;
+    TextFontStatic = `font4`;
+    TextX = 17;
+    TextXDynamic = 15;
+    TextXStatic = 17;
+    TextY = 22;
+    TextYDynamic = 21;
+    TextYStatic = 22;
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    Width = 125;
+  }
+
+  instance DialogueSymbols.PidInputButton IncorePID
+  {
+    x = 600;
+    y = 191;
+    visibility = 1;
+    xReference = 600;
+    yReference = 191;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    ExecuteUnSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    FindPidScope = "::YGN3and4.PicYGN_INCOREUpdate.IncorePID.InputArea";
+    Found = "ProcessVisibility()";
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxCharacters = 8;
+    NotFound = "";
+    ReturnAction = "ProcessPID()";
+    Scope = "::YGN3and4.PicYGN_INCOREUpdate";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewText = "ICR223";
+    TheOriginalText = "ICR223";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 200;
+  }
+
+  instance DialogueSymbols.ToggleButton_YN YesNo
+  {
+    x = 599;
+    y = 324;
+    visibility = 1;
+    xReference = 599;
+    yReference = 324;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = `ProcessVisibility()`;
+    ExecuteUnSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    Flag = 2;
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxCharacters = 3;
+    ReturnAction = "";
+    Scope = "";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 10;
+    TheNewText = "N";
+    TheOriginalText = "Y";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 200;
+  }
+
+  rectangle
+  {
+    x = 268;
+    y = 250;
+    width = 763;
+    height = 2;
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 1;
+    foregroundFillColour = `COLOR_NON_ESSENTIAL`;
+    backgroundFillColour = -1;
+    fillPattern = `SolidPattern`;
+    xReference = 268;
+    yReference = 252;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text NewText
+  {
+    x = 603;
+    y = 432;
+    format = "%s";
+    theText = "0";
+    alignment = 0;
+    visibility = 0;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 603;
+    yReference = 432;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+}

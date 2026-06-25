@@ -1,0 +1,66 @@
+// ***************************************************************************
+// *									     *
+// *	Copyright (C) 1997, KOPEC(N), All rights reserved.		     *
+// *	Proprietary information, KOPEC(N)        			     *
+// *									     *
+// ***************************************************************************
+//
+// ***** HIGH LEVEL DESCRIPTION **********************************************
+//
+// This pdat file contains the variables used by Secure Tasks.
+//
+// **** REVISION HISTORY *****************************************************
+//
+//
+// Revision 1.1  1997/2/24 12:26:43  dyk
+// Author: dykim
+// Initial revision
+//
+//
+// ***************************************************************************
+// System Include Files: NONE
+//
+//
+// User Defined Include Files: NONE
+//
+//
+// External Variables: NONE
+//
+//
+// Local Constant Definitions: NONE
+//
+//
+// Function Prototypes: NONE
+//
+//
+// ***************************************************************************
+//
+//
+// secure data structures
+// 
+// 
+struct SECURE_DATA {
+   int          signonoff;              // signon or signoff requests
+   char		password[8];		// entered passwd from security page
+   char      	theWorkstation[12];     // workstation host name
+};						 	
+//
+//  >>>>>>>>>>>>>>>>>>>	Workstation secure Message Template
+
+struct WSSecureDataMessage {
+   WSmessageHeader	header;		// message information		
+   SECURE_DATA		data;		// data portion			
+};
+
+// secure confirm data
+struct SECURE_PROCESSING {
+   int		accesslevel;		// 
+   int		accessstatus;		// 
+   int	 	utdvflag;		// 
+};
+
+struct WSSecureProcessingMessage {
+   WSmessageHeader	header;			// 
+   SECURE_PROCESSING	data;		// 
+};
+

@@ -1,0 +1,129 @@
+#!/bin/ksh
+#
+# ***************************************************************************
+# *									     *
+# *	Copyright (C) 1996, ABB-CE Inc., All rights reserved.		     *
+# *	Proprietary information, ABB-CE Incorporated			     *
+# *									     *
+# ***************************************************************************
+#
+# ***** HIGH LEVEL DESCRIPTION **********************************************
+#
+# This command file calls functions within rtm to load and save all Picasso
+# displays.  When displays are saved by rtm, they are compiled, making
+# rtm operation more efficient.
+#
+# **** REVISION HISTORY *****************************************************
+#
+# $Header: /PMSArchive/ygn56/workstation/pictures/cmds/compileDisplays 1.10 1999/02/06 02:39:45 jws Exp $
+# $Log: compileDisplays,v $
+# Revision 1.10  1999/02/06 02:39:45  jws
+# Author: jws@y6maint1 (John Soisson)
+# Added sleep to allow control process time
+# to start up before starting rtm.
+#
+# Revision 1.9  1999/02/04 06:13:35  jws
+# Author: jws@y6maint1 (John Soisson)
+# Modified to kill processes with paths.
+# Added functions to simplify process lookup.
+#
+# Revision 1.8  1998/10/22 19:50:00  jws
+# Author: jws@y6maint1 (John Soisson)
+# Changed delay after rtm startup to 45 sec.
+#
+# Revision 1.7  1998/10/22 19:28:01  jws
+# Author: jws@y6maint1 (John Soisson)
+# Modified to remove sleepAndStart function.
+#
+# Revision 1.6  1998/08/14 22:10:41  jws
+# Author: jws@y6maint1 (John Soisson)
+# Added comments.
+#
+# Revision 1.5  1998/07/29 22:30:20  jws
+# Author: jws@y6maint1 (John Soisson)
+# Corrected bug with line that determines if control
+# is running.
+#
+# Revision 1.4  1998/06/24 19:37:04  jws
+# Author: jws@y6maint1 (John Soisson)
+# Changed to do process kills one at a time to improve
+# reliability.
+#
+# Revision 1.3  1998/06/24 18:52:24  jws
+# Author: jws@y6maint1 (John Soisson)
+# Modified to start control only if it is not already running.
+# Modified to kill only the processes which are started by
+# compileDisplays.
+#
+# Revision 1.2  1998/06/15 22:45:51  jws
+# Author: jws@y6maint1 (John Soisson)
+# Modified so that the rtm name will be unique
+# for each login name.
+#
+# Revision 1.1  1998/06/11 01:02:01  jnl
+# Author: jnl@y6maint1 (Jim Lanzalotta)
+# Initial revision
+#
+
+#
+# Define function for starting process after a delay
+#
+
+#
+# Look up username of invoking user
+#
+LOGINID=`whoami`
+
+function pidget {
+	ps -fu $LOGINID|grep -E $1|awk '{(match($8,P))?T=$8:T=$9
+	(length(T)==length(P))?N=T:(substr(T,match(T,P)-1,1)=="/")?N=substr(T,length(T)-length(P)+1,length(P)):N=""
+	if (N) {print $2}}' P=$1
+}
+#
+# Lookup process id of control process if one is running
+# If no control process is running then start one
+#
+CONTROL=$(pidget control)
+
+if [ ! "$CONTROL" ]; then
+   rm -f /usr/local/picasso3/recovery/*
+   control &
+fi
+sleep 3
+
+#
+# Start rtm process
+# After 30 seconds start the three picture compile processes
+#
+rtm -r YGN5and6.pctx -n compile`whoami` &
+sleep 45
+Execute -a YGN5and6 -r compile`whoami` -c "{CompileAll1();}"
+Execute -a YGN5and6 -r compile`whoami` -c "{CompileAll2();}"
+Execute -a YGN5and6 -r compile`whoami` -c "{CompileAll3();}"
+echo Done with compileDisplays
+sleep 3
+
+#
+# If control process was started by this script then lookup
+# its process id so it can be killed
+#
+if [ ! "$CONTROL" ]; then
+   CTRLPID=$(pidget control)
+else
+   CTRLPID=""
+fi
+
+#
+# Look up process ids of other processes
+#
+RTMPID=$(pidget rtm)
+BLINKPID=$(pidget blink)
+TIMERPID=$(pidget Timer)
+
+#
+# Kill all processes started by this script
+#
+for pid in $BLINKPID $TIMERPID $RTMPID $CTRLPID
+do
+kill $pid
+done

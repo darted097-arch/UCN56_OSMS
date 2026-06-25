@@ -1,0 +1,4818 @@
+/*
+ * ProcSee CONFIGURATION LANGUAGE FILE
+ *
+ *
+ * User : ucn56
+ * Host : y6cr02
+ * Date : 2017-05-25
+ * Time : 14:49:41
+ *
+ * ProcSee version : ProcSee 3.10.1 (June 2016)
+ * File version    : 1.26
+ *
+ *
+ */
+
+
+picture PicUCN_DigitalTrendView
+{
+  worldX = 0;
+  worldY = 0;
+  worldWidth = 1280;
+  worldHeight = 789;
+  oneToOne = 1;
+  backgroundColour = 0;
+  updateMode = 2;
+  resizeMode = 0;
+  xSnap = 5;
+  ySnap = 5;
+  radiusSnap = 0;
+  angleSnap = 0;
+  crosshairStyle = 1;
+  crosshairLength = 0;
+  crosshairFollowSnap = `isInEditMode()`;
+  crosshairVisibility = `isInEditMode()`;
+  xReference = 500;
+  yReference = 500;
+  xScaleFactor = 1;
+  yScaleFactor = 1;
+  rotationAngle = 0;
+
+  int Blank[6] = { 1074563216, 0, 0, 1, 1, 1 };
+
+  char currtime[12] = "09:42:18";
+
+  char currtime1[12] = "19:32:56";
+
+  char currtime2[12] = "19:32:36";
+
+  char currtime3[12] = "19:32:36";
+
+  char currtime4[12] = "19:32:36";
+
+  char currtime5[12] = "19:32:45";
+
+  char currtime6[12] = "19:32:45";
+
+  char currtime7[12] = "19:32:47";
+
+  char currtime8[12] = "19:32:47";
+
+  char currtime9[12] = "19:32:49";
+
+  char currtime10[12] = "19:32:50";
+
+  char currtime11[12] = "19:32:51";
+
+  char currtime12[12] = "19:32:52";
+
+  char currtime13[12] = "19:32:53";
+
+  char currtime14[12] = "19:32:54";
+
+  char currtime15[12] = "19:32:55";
+
+  char currtime16[12] = "19:31:41";
+
+  char currtime17[12] = "19:31:42";
+
+  char currtime18[12] = "19:31:43";
+
+  char currtime19[12] = "19:31:44";
+
+  char currtime20[12] = "19:31:45";
+
+  char dtime[4] = "1";
+
+  int DTrendCounter = 1;
+
+  int DTrendCounter_Active = 0;
+
+  int DTrendRate = 1;
+
+  int nextView_Active = 0;
+
+  int NUM_DTREND_PER_SET = 5;
+
+  int NUM_DTREND_SETS = 2;
+
+  DTREND_DATA* pDigitalTrendData = `Interface.DigitalTrendData`;
+
+  char* PicNumber1 = "821";
+
+  char* PicNumber2 = "822";
+
+  char* PictureNumber = "821";
+
+  char PictureTitle[50] = "DIGITAL  TREND  1";
+
+  DialogueSymbols.PidInputButton* poPID = `&::UCN5and6.PicUCN_DigitalTrendView.Set1Trd5PidNo`;
+
+  RECORD* pRECORD = `&CXKQSEC `;
+
+  char TempPid[9] = "CXKQSEC";
+
+  char TheDisplayPage[50] = "PicUCN_DigitalTrendMenu.ppic";
+
+  int Value_idx = 2;
+
+  int Value_invis = 2;
+
+  int DT_Rate = 1;		//CORENET 20170629
+
+  function `void escape()
+  {
+     int i;
+     DTrendTimer_Active = 0;
+     DTrendCounter_Active = 0;
+     Value_idx = 1;
+     nextView_Active = 0;
+     execute("{DisplayPage(\\"%s\\");}",TheDisplayPage);
+  }`
+
+  function `PidInputButton * GetpoPID(int Set, int Trd)
+  {
+    // Returns a pointer to the object that holds the PID
+    // for Set #, Trd #
+  
+    execute("{poPID = &Set%dTrd%dPidNo;}", Set, Trd);
+    return(poPID);
+  
+  }`
+
+  function `char * GetstrPID(int Set, int Trd)
+  {
+  // Returns the string of the PID for Set #, Trd #
+    PidInputButton * idt = 0;
+  
+    idt = GetpoPID(Set, Trd);
+    return(idt->TheNewText);
+  }`
+
+  function `void Initialize()
+  {
+  
+     DisplayAdvisoryMessage(" ");
+     DisplayAdvisoryMessage1(" ");
+     DisplayAdvisoryMessage2(" ");
+     DisplayAdvisoryMessage3(" ");
+  
+     if(nextView_Active == 0)
+     {
+       PrintProcessMsg.visibility = 0;
+  /*   if(!DTrendInUse)
+         ProcessReqMsg.visibility = 1;
+       else
+         ProcessReqMsg.visibility = 0;
+  */
+     }
+  
+     int i,j,k,m;      // loop variables
+  
+     m =   DTrendSet;
+  
+     printf("Initialize DTrendSet : %d",DTrendSet);	//CORENET 2017 by Philky Kwon
+  
+     i = 1;
+  
+     CFMLevel = 0;
+  
+     if (DTrendSet == 1)
+     {
+        Current_Page = 821;
+        ::UCN5and6.PicUCN_header.PictureNumber.theText= PicNumber1;
+        ::UCN5and6.PicUCN_header.PictureTitle.theText= "DIGITAL TREND 1";	//CORENET 201705 by Philkyu Kwon
+        DT_Rate = DT_ScanRate;	//CORENET 0704
+        //strcpy(PictureTitle, "DIGITAL  TREND  1");
+        update();
+        //execute("{strcpy(PictureTitle,\\"DIGITAL  TREND  1\\");}");
+     }
+     else
+     {
+        Current_Page = 822;
+        ::UCN5and6.PicUCN_header.PictureNumber.theText= PicNumber2;;
+        ::UCN5and6.PicUCN_header.PictureTitle.theText= "DIGITAL TREND 2";	//CORENET 201705 by Philkyu Kwon
+        DT_Rate = DT_ScanRate;		//CORENET 0704
+        //strcpy(PictureTitle, "DIGITAL  TREND  2");
+        update();
+       // execute("{strcpy(PictureTitle,\\"DIGITAL  TREND  2\\");}");
+     }
+  
+     sprintf(dtime,"%d",pDigitalTrendData->displayRate);
+     //strcpy(tbase.theText,dtime);	//CORENET 20170629
+     DTrendRate = pDigitalTrendData->displayRate;
+  
+  //   execute("{strcpy(PictureTitle,\\"DIGITAL  TREND  %d\\");}",m);
+  //   printf("%s Initialize()",PictureTitle);
+  
+     for (j=1;j<=NUM_DTREND_PER_SET;j++)
+     {
+       for (k=1;k<=20;k++)
+       {
+        execute("{Set%dTrd%dValue%d.visibility = 0;}",i,j,k);
+        execute("{Time%d.visibility = 0;}",k);
+  
+        if (IsAllBlank(GetstrPID(i, j)))
+        {
+           execute("{Set%dTrd%dValue%d.visibility = 0;}",i,j,k);
+        }
+  
+        }//end of k++
+  
+        execute("{Set%dTrd%dDesc.visibility = 1;}",i,j);
+        execute("{Set%dTrd%dPidNo.visibility = 1;}",i,j);
+  
+  //   Get the PID stuff
+  
+        execute("{strcpy(Set%dTrd%dPidNo.TheOriginalText,pDigitalTrendData->Set%dPoint%d);}",i,j,m,j);
+        execute("{strcpy(Set%dTrd%dPidNo.TheNewText,Set%dTrd%dPidNo.TheOriginalText);}",i,j,i,j);
+        execute("{strcpy(Set%dTrd%dPidNo.TheNewText,pDigitalTrendData->Set%dPoint%d);}",i,j,m,j);
+  
+       Blank[j] = IsAllBlank(GetstrPID(i, j)) ;
+       if (Blank[j])
+       {
+        execute("{Set%dTrd%dDesc.visibility = 0;}",i,j);
+        execute("{Set%dTrd%dPidNo.visibility = 0;}",i,j);
+        continue;
+       }
+        execute("{ strcpy(TempPid,Set%dTrd%dPidNo.TheNewText);}" ,i,j);
+        execute("{pRECORD = \\\`&%-8s\\\`;}" , TempPid);
+        execute("{Set%dTrd%dDesc.ThePointId = pRECORD;}",i,j);
+        execute("{Set%dTrd%dCurrent.PointId = pRECORD;}",i,j);
+  //      printf("ProcessDTrendInfo(1) PID:%s",TempPid);
+     }//end of j++
+  
+     update();
+  
+     DTrendTimer_Active = 1;
+     DTrendCounter_Active = 0;
+     Value_idx = 1;
+  }`
+
+  function `int IsAllBlank(char * cptr)
+  {
+    // Return 0 if one non-blank character is found, 1 otherwise
+    int blank = 1;
+    int i;
+  
+    for (i=0; i<strlen(cptr); i++, cptr++)
+    {
+      if (*cptr != ' ')
+      {
+        blank = 0;
+        break;
+      }//endif
+    }//endfor
+    return (blank);
+  }`
+
+  function `void MAINescape()
+  {
+     int i;
+     DTrendTimer_Active = 0;
+     DTrendCounter_Active = 0;
+     Value_idx = 1;
+     nextView_Active = 0;
+  // Request dtrend reset to the host
+     execute("{sendMessageToHost(RESET_DTREND_REQUEST);}");
+  }`
+
+  function `void nextView()
+  {
+     DTrendTimer_Active = 0;
+     DTrendCounter_Active = 0;
+     Value_idx = 1;
+     nextView_Active = 1;
+  
+     int m;
+  //   m = Interface->GenericRequestMessage.data.requestOption;
+     m =   DTrendSet;
+     printf("nextView DTrendSet : %d",DTrendSet);	//CORENET 2017 by Philky Kwon
+  
+     if ( 1 == m)
+  //   Interface->GenericRequestMessage.data.requestOption = 2;
+       {
+        DTrendSet  = 2;
+        Current_Page = 822;
+       }
+     else
+  //   Interface->GenericRequestMessage.data.requestOption = 1;
+        {
+        DTrendSet  = 1;
+        Current_Page = 821;
+        }
+     Initialize();
+  }`
+
+  function `void ProcessDTrendInfo()
+  {
+     printf("ProcessDTrendInfo(): ...........................................");
+  
+       int i, j, m;
+       i = 1;
+  
+       m =   DTrendSet;
+       Value_invis = Value_idx+1;
+  
+  //     execute("{strcpy(Time%d.theText, Interface->System.timeString);}",Value_idx);	// CORENET 2012.07.18
+       execute("{strncpy(currtime%d, Interface->System.timeString, 8);}",Value_idx);
+       execute("{Time%d.visibility = 1;}",Value_idx);
+  
+      for (j=1; j<=NUM_DTREND_PER_SET; j++)
+      {
+  
+         if (!Blank[j])
+         {
+  
+  // by yrlee
+  
+            execute("{Set%dTrd%dValue%d.value = Set%dTrd%dCurrent.PointId->value;}",i,j,Value_idx,i,j);
+            execute("{strcpy(Set%dTrd%dValue%d.disfmt, Set%dTrd%dCurrent.PointId->disfmt);}",i,j,Value_idx,i,j);
+  
+            execute("{Set%dTrd%dValue%d.BlinkBox_foregroundFillColour = Set%dTrd%dCurrent.BlinkBox_foregroundFillColour;}",i,j,Value_idx,i,j);
+  //          execute("{Set%dTrd%dValue%d.BlinkBox_foregroundColour = Set%dTrd%dCurrent.BlinkBox_foregroundColour;}",i,j,Value_idx,i,j);
+            execute("{Set%dTrd%dValue%d.OOR_High_visibility = Set%dTrd%dCurrent.OOR_High_visibility;}",i,j,Value_idx,i,j);
+            execute("{Set%dTrd%dValue%d.Bad_Text_visibility = Set%dTrd%dCurrent.Bad_Text_visibility;}",i,j,Value_idx,i,j);
+            execute("{Set%dTrd%dValue%d.OOR_Low_visibility = Set%dTrd%dCurrent.OOR_Low_visibility;}",i,j,Value_idx,i,j);
+  
+            execute("{Set%dTrd%dValue%d.NumericValue_visibility = Set%dTrd%dCurrent.NumericValue_visibility;}",i,j,Value_idx,i,j);
+            execute("{Set%dTrd%dValue%d.NumericValue_foregroundColour = Set%dTrd%dCurrent.NumericValue_foregroundColour;}",i,j,Value_idx,i,j);
+  //          execute("{Set%dTrd%dValue%d.NumericValue_backgroundColour = Set%dTrd%dCurrent.NumericValue_backgroundColour;}",i,j,Value_idx,i,j);
+  
+            execute("{Set%dTrd%dValue%d.OOS_Text_visibility = Set%dTrd%dCurrent.OOS_Text_visibility;}",i,j,Value_idx,i,j);
+  //          execute("{Set%dTrd%dValue%d.OOS_Text_foregroundColour = Set%dTrd%dCurrent.OOS_Text_foregroundColour;}",i,j,Value_idx,i,j);
+  
+            execute("{Set%dTrd%dValue%d.Inserted_visibility = Set%dTrd%dCurrent.Inserted_visibility;}",i,j,Value_idx,i,j);
+  
+            execute("{Set%dTrd%dValue%d.Dashes_visibility = Set%dTrd%dCurrent.Dashes_visibility;}",i,j,Value_idx,i,j);
+            execute("{Set%dTrd%dValue%d.Dashes_foregroundColour = Set%dTrd%dCurrent.Dashes_foregroundColour;}",i,j,Value_idx,i,j);
+  
+  
+            execute("{Set%dTrd%dValue%d.StatePhrase_visibility = Set%dTrd%dCurrent.StatePhrase_visibility;}",i,j,Value_idx,i,j);
+  
+  //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+  /*--------------------------
+            execute("{
+     	     if(Set%dTrd%dValue%d.StatePhrase.visibility==1)
+  	     {
+                  Set%dTrd%dValue%d.StatePhrase_foregroundColour = Set%dTrd%dCurrent.StatePhrase_foregroundColour;
+  //                Set%dTrd%dValue%d.StatePhrase_backgroundColour = Set%dTrd%dCurrent.StatePhrase_backgroundColour;
+  
+                  strcpy(Set%dTrd%dValue%d.message1, Set%dTrd%dCurrent.PointId->message1);
+                  strcpy(Set%dTrd%dValue%d.message2, Set%dTrd%dCurrent.PointId->message2);
+  	     };
+  	  }",i,j,Value_idx, i,j,Value_idx,i,j, i,j,Value_idx,i,j, i,j,Value_idx,i,j, i,j,Value_idx,i,j);
+  --------------------------*/
+            execute("{ if(Set%dTrd%dValue%d.StatePhrase.visibility==1) { Set%dTrd%dValue%d.StatePhrase_foregroundColour = Set%dTrd%dCurrent.StatePhrase_foregroundColour; strcpy(Set%dTrd%dValue%d.message1, Set%dTrd%dCurrent.PointId->message1); strcpy(Set%dTrd%dValue%d.message2, Set%dTrd%dCurrent.PointId->message2); }; }",i,j,Value_idx, i,j,Value_idx,i,j, i,j,Value_idx,i,j, i,j,Value_idx,i,j, i,j,Value_idx,i,j);
+  //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+  
+            execute("{Set%dTrd%dValue%d.ErrorText_visibility = Set%dTrd%dCurrent.ErrorText_visibility;}",i,j,Value_idx,i,j);
+            execute("{Set%dTrd%dValue%d.ErrorText_foregroundColour = Set%dTrd%dCurrent.ErrorText_foregroundColour;}",i,j,Value_idx,i,j);
+            execute("{Set%dTrd%dValue%d.visibility = 1;}",i,j,Value_idx);
+        }
+  
+  //      printf("%s",Set1Trd1Current.StatePhrase_theText) ;
+  
+        if (Value_idx < 20)
+        {
+           execute("{Set%dTrd%dValue%d.visibility = 0;}",i,j,Value_invis);
+  //         execute("{Set%dTrd%dValue%d.MakInvisible();}",i,j,Value_invis);
+           execute("{Time%d.visibility = 0;}",Value_invis);
+        }
+     }   //end-for
+  
+     if (Value_idx == 20) Value_idx = 0;
+     Value_idx++;
+  }`
+
+  function `void ProcessDTrendTimer()
+  {
+  // This function is called by the OneSecondTimer() in every second and then make a time
+  // interval based on the DTrendRate provided by Operator.
+  // At the time interval this function calls the function of ProcessDTrendInfo()
+  // in PicUCN_DigitalTrendView.ppic.
+  
+  // Decrement the DTrendRate timer
+  //   printf(" 1-ProcessDTrendTimer()--DTrendCounter %d",DTrendCounter);
+  
+   if (DTrendRate == 1) // Only when the DTrendRate input is 1
+      {
+  //    printf("Processing the Set-1 Information..........");
+        ProcessDTrendInfo();
+        DTrendCounter = DTrendRate; // From PicUCN_DigitalTrendManu.ppic
+      }
+  
+   else
+   {
+      if (DTrendCounter_Active == 0) // Initially do this statements
+        {
+          DTrendCounter = DTrendRate;
+          DTrendCounter_Active = 1;
+          DTrendCounter--;
+  //      printf(" 2-ProcessDTrendTimer()--DTrendCounter %d",DTrendCounter);
+        }
+  
+      else // After the if statement done, execute this else statements
+        {
+          DTrendCounter--;
+  //      printf(" 3-ProcessDTrendTimer()--DTrendCounter %d",DTrendCounter);
+  
+  //      If the timer has expired, execute ProcessDTrendInfo()
+  
+          if (DTrendCounter == 0)
+            {
+  //         printf("UCN5and6- Processing the Set-1 Information..........");
+             ProcessDTrendInfo();
+             DTrendCounter = DTrendRate;
+             }
+  
+        }// end of else (DTrendCounter_Active == 0)
+  
+    }
+  
+  //  update();
+  //  return;
+  }`
+
+  function `void UpdateLocalsFromInterface()
+  {
+     int k ;
+  // Set visibility for Print Processing
+  
+  //   ProcessReqMsg.visibility = 0;
+  //   PrintProcessMsg.visibility = 1;
+  
+     int i,j,m;      // loop variables
+  
+     m =   DTrendSet;
+  
+     i = 1 ;
+  
+     for (j=1;j<=NUM_DTREND_PER_SET;j++)
+     {
+        execute("{strcpy(Set%dTrd%dPidNo.TheNewText,pDigitalTrendData->Set%dPoint%d);}",i,j,m,j);
+  
+       for (k=1;k<=20;k++)
+       {
+        execute("{strcpy(Set%dTrd%dValue%d.disfmt, Set%dTrd%dCurrent.PointId->disfmt);}",i,j,k,i,j);
+  
+       }//end of k++
+  
+      }
+  
+     update();
+  }`
+
+  function `void UpdateLocalsFromInterfacePrint()
+  {
+  // Set visibility for Print Processing
+  // ProcessReqMsg.visibility = 0;
+     if (PrintProcessMsg.visibility)
+     PrintProcessMsg.visibility = 0;
+     else
+     PrintProcessMsg.visibility = 1;
+     update();
+  }`
+
+  polygon
+  {
+    numberOfPoints = 4;
+    point[0] = ( 100, 20 );
+    point[1] = ( 100, 170 );
+    point[2] = ( 1170, 170 );
+    point[3] = ( 1170, 20 );
+    visibility = 1;
+    foregroundColour = `COLOR_LINE_BOUNDARY_6`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 2;
+    foregroundFillColour = -1;
+    backgroundFillColour = -1;
+    fillPattern = `NoPattern`;
+    xReference = 100;
+    yReference = 20;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 134;
+    y = 196;
+    format = "%s";
+    theText = "\024\t\015";
+    alignment = 0;
+    visibility = 0;
+    foregroundColour = `COLOR_STATIC_TEXT`;
+    backgroundColour = -1;
+    theFont = `font0`;
+    xReference = 134;
+    yReference = 196;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 139;
+    y = 201;
+    format = "%s";
+    theText = "TIME";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_STATIC_TEXT`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 139;
+    yReference = 201;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text TimeBase
+  {
+    x = 524;
+    y = 14;
+    format = "%s";
+    theText = "TIMEBASE :";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 524;
+    yReference = 14;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 692;
+    y = 15;
+    format = "%s";
+    theText = "SECONDS";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 692;
+    yReference = 15;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 147;
+    y = 40;
+    format = "%s";
+    theText = "POINT  ID";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 147;
+    yReference = 40;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 313;
+    y = 40;
+    format = "%s";
+    theText = "ENGLISH  DESCRIPTION";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 313;
+    yReference = 40;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 769;
+    y = 40;
+    format = "%s";
+    theText = "STATUS";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 769;
+    yReference = 40;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 902;
+    y = 41;
+    format = "%s";
+    theText = "UNITS";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 902;
+    yReference = 41;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 1076;
+    y = 41;
+    format = "%s";
+    theText = "TYPE";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 1076;
+    yReference = 41;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  instance cfmsSymbols.DTrendDesc Set1Trd1Desc
+  {
+    x = 73;
+    y = 48;
+    visibility = 1;
+    xReference = 73;
+    yReference = 48;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    DisplayUnits = 1;
+    //ThePointId = `&::UCN5and6.InterfaceToGUI.CIYKASIL`;	
+    ThePointId = `&CIYKASIL`;		//CORENET 20170602 by Philkyu Kwon
+  }
+
+  instance cfmsSymbols.DTrendDesc Set1Trd2Desc
+  {
+    x = 73;
+    y = 71;
+    visibility = 1;
+    xReference = 73;
+    yReference = 71;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    DisplayUnits = 1;
+    //ThePointId = `&::UCN5and6.InterfaceToGUI.CXKQSEC`;
+    ThePointId = `&CXKQSEC`;		//CORENET 20170602 by Philkyu Kwon
+  }
+
+  instance cfmsSymbols.DTrendDesc Set1Trd3Desc
+  {
+    x = 73;
+    y = 94;
+    visibility = 0;
+    xReference = 73;
+    yReference = 94;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    DisplayUnits = 1;
+    //ThePointId = `&::UCN5and6.InterfaceToGUI.CIYKASIL`;
+    ThePointId = `&CIYKASIL`;		//CORENET 20170602 by Philkyu Kwon
+  }
+
+  instance cfmsSymbols.DTrendDesc Set1Trd4Desc
+  {
+    x = 73;
+    y = 117;
+    visibility = 0;
+    xReference = 73;
+    yReference = 117;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    DisplayUnits = 1;
+    //ThePointId = `&::UCN5and6.InterfaceToGUI.SIZ699H`;
+    ThePointId = `&SIZ699H`;		//CORENET 20170602 by Philkyu Kwon
+  }
+
+  instance cfmsSymbols.DTrendDesc Set1Trd5Desc
+  {
+    x = 73;
+    y = 140;
+    visibility = 0;
+    xReference = 73;
+    yReference = 140;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    DisplayUnits = 1;
+    //ThePointId = `&::UCN5and6.InterfaceToGUI.RCT111X`;
+    ThePointId = `&RCT111X`;		//CORENET 20170602 by Philkyu Kwon
+  }
+
+  text tbase
+  {
+    x = 653;
+    y = 15;
+    //format = "%s";		
+    //theText = `&::UCN5and6.PicUCN_DigitalTrendView.dtime[0]`;	
+    format = "%d";		//CORENET 20170629
+    theText = `DT_Rate`;	//CORENET 20170629
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 653;
+    yReference = 15;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  instance cfmsSymbols.DTrendValue Set1Trd1Value12
+  {
+    x = 284;
+    y = 502;
+    visibility = 1;
+    xReference = 284;
+    yReference = 502;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Bad_Text_foregroundColour = 1;
+    Bad_Text_visibility = 0;
+    BlinkBox_foregroundFillColour = 0;
+    Dashes_foregroundColour = 0;
+    Dashes_visibility = 0;
+    disfmt = "%8.2e";
+    ErrorText_foregroundColour = 16;
+    ErrorText_visibility = 0;
+    Inserted_visibility = 0;
+    message1 = "";
+    message2 = "";
+    NumericValue_foregroundColour = 3;
+    NumericValue_visibility = 1;
+    OOR_High_visibility = 0;
+    OOR_Low_visibility = 0;
+    OOS_Text_backgroundColour = 1;
+    OOS_Text_foregroundColour = 18;
+    OOS_Text_visibility = 0;
+    StatePhrase_foregroundColour = 3;
+    StatePhrase_visibility = 0;
+    value = -0.28;
+  }
+
+  instance cfmsSymbols.DTrendValue Set1Trd2Value12
+  {
+    x = 474;
+    y = 502;
+    visibility = 1;
+    xReference = 474;
+    yReference = 502;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Bad_Text_foregroundColour = 1;
+    Bad_Text_visibility = 0;
+    BlinkBox_foregroundFillColour = 0;
+    Dashes_foregroundColour = 0;
+    Dashes_visibility = 0;
+    disfmt = "%6.0f";
+    ErrorText_foregroundColour = 16;
+    ErrorText_visibility = 0;
+    Inserted_visibility = 0;
+    message1 = "";
+    message2 = "";
+    NumericValue_foregroundColour = 3;
+    NumericValue_visibility = 1;
+    OOR_High_visibility = 0;
+    OOR_Low_visibility = 0;
+    OOS_Text_backgroundColour = 1;
+    OOS_Text_foregroundColour = 18;
+    OOS_Text_visibility = 0;
+    StatePhrase_foregroundColour = 3;
+    StatePhrase_visibility = 0;
+    value = 51;
+  }
+
+  instance cfmsSymbols.DTrendValue Set1Trd3Value12
+  {
+    x = 664;
+    y = 502;
+    visibility = 0;
+    xReference = 664;
+    yReference = 502;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Bad_Text_foregroundColour = 1;
+    Bad_Text_visibility = 0;
+    BlinkBox_foregroundFillColour = 0;
+    Dashes_foregroundColour = 0;
+    Dashes_visibility = 0;
+    disfmt = "%8.2e";
+    ErrorText_foregroundColour = 16;
+    ErrorText_visibility = 0;
+    Inserted_visibility = 0;
+    message1 = "";
+    message2 = "";
+    NumericValue_foregroundColour = 3;
+    NumericValue_visibility = 1;
+    OOR_High_visibility = 0;
+    OOR_Low_visibility = 0;
+    OOS_Text_backgroundColour = 1;
+    OOS_Text_foregroundColour = 18;
+    OOS_Text_visibility = 0;
+    StatePhrase_foregroundColour = 3;
+    StatePhrase_visibility = 0;
+    value = -0.28;
+  }
+
+  instance cfmsSymbols.DTrendValue Set1Trd4Value12
+  {
+    x = 854;
+    y = 502;
+    visibility = 0;
+    xReference = 854;
+    yReference = 502;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Bad_Text_foregroundColour = 1;
+    Bad_Text_visibility = 0;
+    BlinkBox_foregroundFillColour = 0;
+    Dashes_foregroundColour = 0;
+    Dashes_visibility = 0;
+    disfmt = "";
+    ErrorText_foregroundColour = 16;
+    ErrorText_visibility = 0;
+    Inserted_visibility = 0;
+    message1 = "OPEN    ";
+    message2 = "NOT FOPN";
+    NumericValue_foregroundColour = 3;
+    NumericValue_visibility = 0;
+    OOR_High_visibility = 0;
+    OOR_Low_visibility = 0;
+    OOS_Text_backgroundColour = 1;
+    OOS_Text_foregroundColour = 0;
+    OOS_Text_visibility = 0;
+    StatePhrase_foregroundColour = 3;
+    StatePhrase_visibility = 1;
+    value = 1;
+  }
+
+  instance cfmsSymbols.DTrendValue Set1Trd5Value12
+  {
+    x = 1039;
+    y = 502;
+    visibility = 0;
+    xReference = 1039;
+    yReference = 502;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Bad_Text_foregroundColour = 1;
+    Bad_Text_visibility = 1;
+    BlinkBox_foregroundFillColour = 1;
+    Dashes_foregroundColour = 1;
+    Dashes_visibility = 1;
+    disfmt = "%6.1f";
+    ErrorText_foregroundColour = 1;
+    ErrorText_visibility = 1;
+    Inserted_visibility = 0;
+    message1 = "";
+    message2 = "";
+    NumericValue_foregroundColour = 1;
+    NumericValue_visibility = 1;
+    OOR_High_visibility = 1;
+    OOR_Low_visibility = 1;
+    OOS_Text_backgroundColour = 1;
+    OOS_Text_foregroundColour = 1;
+    OOS_Text_visibility = 1;
+    StatePhrase_foregroundColour = 1;
+    StatePhrase_visibility = 1;
+    value = 310.55;
+  }
+
+  instance cfmsSymbols.DTrendValue Set1Trd5Value11
+  {
+    x = 1039;
+    y = 476;
+    visibility = 0;
+    xReference = 1039;
+    yReference = 476;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Bad_Text_foregroundColour = 1;
+    Bad_Text_visibility = 1;
+    BlinkBox_foregroundFillColour = 1;
+    Dashes_foregroundColour = 1;
+    Dashes_visibility = 1;
+    disfmt = "%6.1f";
+    ErrorText_foregroundColour = 1;
+    ErrorText_visibility = 1;
+    Inserted_visibility = 0;
+    message1 = "";
+    message2 = "";
+    NumericValue_foregroundColour = 1;
+    NumericValue_visibility = 1;
+    OOR_High_visibility = 1;
+    OOR_Low_visibility = 1;
+    OOS_Text_backgroundColour = 1;
+    OOS_Text_foregroundColour = 1;
+    OOS_Text_visibility = 1;
+    StatePhrase_foregroundColour = 1;
+    StatePhrase_visibility = 1;
+    value = 310.55;
+  }
+
+  instance cfmsSymbols.DTrendValue Set1Trd5Value19
+  {
+    x = 1039;
+    y = 684;
+    visibility = 0;
+    xReference = 1039;
+    yReference = 684;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Bad_Text_foregroundColour = 1;
+    Bad_Text_visibility = 1;
+    BlinkBox_foregroundFillColour = 1;
+    Dashes_foregroundColour = 1;
+    Dashes_visibility = 1;
+    disfmt = "%6.1f";
+    ErrorText_foregroundColour = 1;
+    ErrorText_visibility = 1;
+    Inserted_visibility = 0;
+    message1 = "";
+    message2 = "";
+    NumericValue_foregroundColour = 1;
+    NumericValue_visibility = 1;
+    OOR_High_visibility = 1;
+    OOR_Low_visibility = 1;
+    OOS_Text_backgroundColour = 1;
+    OOS_Text_foregroundColour = 1;
+    OOS_Text_visibility = 1;
+    StatePhrase_foregroundColour = 1;
+    StatePhrase_visibility = 1;
+    value = 310.55;
+  }
+
+  instance cfmsSymbols.DTrendValue Set1Trd5Value18
+  {
+    x = 1039;
+    y = 658;
+    visibility = 0;
+    xReference = 1039;
+    yReference = 658;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Bad_Text_foregroundColour = 1;
+    Bad_Text_visibility = 1;
+    BlinkBox_foregroundFillColour = 1;
+    Dashes_foregroundColour = 1;
+    Dashes_visibility = 1;
+    disfmt = "%6.1f";
+    ErrorText_foregroundColour = 1;
+    ErrorText_visibility = 1;
+    Inserted_visibility = 0;
+    message1 = "";
+    message2 = "";
+    NumericValue_foregroundColour = 1;
+    NumericValue_visibility = 1;
+    OOR_High_visibility = 1;
+    OOR_Low_visibility = 1;
+    OOS_Text_backgroundColour = 1;
+    OOS_Text_foregroundColour = 1;
+    OOS_Text_visibility = 1;
+    StatePhrase_foregroundColour = 1;
+    StatePhrase_visibility = 1;
+    value = 310.55;
+  }
+
+  instance cfmsSymbols.DTrendValue Set1Trd5Value17
+  {
+    x = 1039;
+    y = 632;
+    visibility = 0;
+    xReference = 1039;
+    yReference = 632;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Bad_Text_foregroundColour = 1;
+    Bad_Text_visibility = 1;
+    BlinkBox_foregroundFillColour = 1;
+    Dashes_foregroundColour = 1;
+    Dashes_visibility = 1;
+    disfmt = "%6.1f";
+    ErrorText_foregroundColour = 1;
+    ErrorText_visibility = 1;
+    Inserted_visibility = 0;
+    message1 = "";
+    message2 = "";
+    NumericValue_foregroundColour = 1;
+    NumericValue_visibility = 1;
+    OOR_High_visibility = 1;
+    OOR_Low_visibility = 1;
+    OOS_Text_backgroundColour = 1;
+    OOS_Text_foregroundColour = 1;
+    OOS_Text_visibility = 1;
+    StatePhrase_foregroundColour = 1;
+    StatePhrase_visibility = 1;
+    value = 310.55;
+  }
+
+  instance cfmsSymbols.DTrendValue Set1Trd5Value16
+  {
+    x = 1039;
+    y = 606;
+    visibility = 0;
+    xReference = 1039;
+    yReference = 606;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Bad_Text_foregroundColour = 1;
+    Bad_Text_visibility = 1;
+    BlinkBox_foregroundFillColour = 1;
+    Dashes_foregroundColour = 1;
+    Dashes_visibility = 1;
+    disfmt = "%6.1f";
+    ErrorText_foregroundColour = 1;
+    ErrorText_visibility = 1;
+    Inserted_visibility = 0;
+    message1 = "";
+    message2 = "";
+    NumericValue_foregroundColour = 1;
+    NumericValue_visibility = 1;
+    OOR_High_visibility = 1;
+    OOR_Low_visibility = 1;
+    OOS_Text_backgroundColour = 1;
+    OOS_Text_foregroundColour = 1;
+    OOS_Text_visibility = 1;
+    StatePhrase_foregroundColour = 1;
+    StatePhrase_visibility = 1;
+    value = 310.55;
+  }
+
+  instance cfmsSymbols.DTrendValue Set1Trd5Value15
+  {
+    x = 1039;
+    y = 580;
+    visibility = 0;
+    xReference = 1039;
+    yReference = 580;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Bad_Text_foregroundColour = 1;
+    Bad_Text_visibility = 1;
+    BlinkBox_foregroundFillColour = 1;
+    Dashes_foregroundColour = 1;
+    Dashes_visibility = 1;
+    disfmt = "%6.1f";
+    ErrorText_foregroundColour = 1;
+    ErrorText_visibility = 1;
+    Inserted_visibility = 0;
+    message1 = "";
+    message2 = "";
+    NumericValue_foregroundColour = 1;
+    NumericValue_visibility = 1;
+    OOR_High_visibility = 1;
+    OOR_Low_visibility = 1;
+    OOS_Text_backgroundColour = 1;
+    OOS_Text_foregroundColour = 1;
+    OOS_Text_visibility = 1;
+    StatePhrase_foregroundColour = 1;
+    StatePhrase_visibility = 1;
+    value = 310.55;
+  }
+
+  instance cfmsSymbols.DTrendValue Set1Trd5Value14
+  {
+    x = 1039;
+    y = 554;
+    visibility = 0;
+    xReference = 1039;
+    yReference = 554;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Bad_Text_foregroundColour = 1;
+    Bad_Text_visibility = 1;
+    BlinkBox_foregroundFillColour = 1;
+    Dashes_foregroundColour = 1;
+    Dashes_visibility = 1;
+    disfmt = "%6.1f";
+    ErrorText_foregroundColour = 1;
+    ErrorText_visibility = 1;
+    Inserted_visibility = 0;
+    message1 = "";
+    message2 = "";
+    NumericValue_foregroundColour = 1;
+    NumericValue_visibility = 1;
+    OOR_High_visibility = 1;
+    OOR_Low_visibility = 1;
+    OOS_Text_backgroundColour = 1;
+    OOS_Text_foregroundColour = 1;
+    OOS_Text_visibility = 1;
+    StatePhrase_foregroundColour = 1;
+    StatePhrase_visibility = 1;
+    value = 310.55;
+  }
+
+  instance cfmsSymbols.DTrendValue Set1Trd5Value13
+  {
+    x = 1039;
+    y = 528;
+    visibility = 0;
+    xReference = 1039;
+    yReference = 528;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Bad_Text_foregroundColour = 1;
+    Bad_Text_visibility = 1;
+    BlinkBox_foregroundFillColour = 1;
+    Dashes_foregroundColour = 1;
+    Dashes_visibility = 1;
+    disfmt = "%6.1f";
+    ErrorText_foregroundColour = 1;
+    ErrorText_visibility = 1;
+    Inserted_visibility = 0;
+    message1 = "";
+    message2 = "";
+    NumericValue_foregroundColour = 1;
+    NumericValue_visibility = 1;
+    OOR_High_visibility = 1;
+    OOR_Low_visibility = 1;
+    OOS_Text_backgroundColour = 1;
+    OOS_Text_foregroundColour = 1;
+    OOS_Text_visibility = 1;
+    StatePhrase_foregroundColour = 1;
+    StatePhrase_visibility = 1;
+    value = 310.55;
+  }
+
+  instance cfmsSymbols.DTrendValue Set1Trd5Value10
+  {
+    x = 1039;
+    y = 450;
+    visibility = 0;
+    xReference = 1039;
+    yReference = 450;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Bad_Text_foregroundColour = 1;
+    Bad_Text_visibility = 1;
+    BlinkBox_foregroundFillColour = 1;
+    Dashes_foregroundColour = 1;
+    Dashes_visibility = 1;
+    disfmt = "%6.1f";
+    ErrorText_foregroundColour = 1;
+    ErrorText_visibility = 1;
+    Inserted_visibility = 0;
+    message1 = "";
+    message2 = "";
+    NumericValue_foregroundColour = 1;
+    NumericValue_visibility = 1;
+    OOR_High_visibility = 1;
+    OOR_Low_visibility = 1;
+    OOS_Text_backgroundColour = 1;
+    OOS_Text_foregroundColour = 1;
+    OOS_Text_visibility = 1;
+    StatePhrase_foregroundColour = 1;
+    StatePhrase_visibility = 1;
+    value = 310.55;
+  }
+
+  instance cfmsSymbols.DTrendValue Set1Trd5Value8
+  {
+    x = 1039;
+    y = 398;
+    visibility = 0;
+    xReference = 1039;
+    yReference = 398;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Bad_Text_foregroundColour = 1;
+    Bad_Text_visibility = 1;
+    BlinkBox_foregroundFillColour = 1;
+    Dashes_foregroundColour = 1;
+    Dashes_visibility = 1;
+    disfmt = "%6.1f";
+    ErrorText_foregroundColour = 1;
+    ErrorText_visibility = 1;
+    Inserted_visibility = 0;
+    message1 = "";
+    message2 = "";
+    NumericValue_foregroundColour = 1;
+    NumericValue_visibility = 1;
+    OOR_High_visibility = 1;
+    OOR_Low_visibility = 1;
+    OOS_Text_backgroundColour = 1;
+    OOS_Text_foregroundColour = 1;
+    OOS_Text_visibility = 1;
+    StatePhrase_foregroundColour = 1;
+    StatePhrase_visibility = 1;
+    value = 310.55;
+  }
+
+  instance cfmsSymbols.DTrendValue Set1Trd5Value6
+  {
+    x = 1039;
+    y = 346;
+    visibility = 0;
+    xReference = 1039;
+    yReference = 346;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Bad_Text_foregroundColour = 1;
+    Bad_Text_visibility = 1;
+    BlinkBox_foregroundFillColour = 1;
+    Dashes_foregroundColour = 1;
+    Dashes_visibility = 1;
+    disfmt = "%6.1f";
+    ErrorText_foregroundColour = 1;
+    ErrorText_visibility = 1;
+    Inserted_visibility = 0;
+    message1 = "";
+    message2 = "";
+    NumericValue_foregroundColour = 1;
+    NumericValue_visibility = 1;
+    OOR_High_visibility = 1;
+    OOR_Low_visibility = 1;
+    OOS_Text_backgroundColour = 1;
+    OOS_Text_foregroundColour = 1;
+    OOS_Text_visibility = 1;
+    StatePhrase_foregroundColour = 1;
+    StatePhrase_visibility = 1;
+    value = 310.55;
+  }
+
+  instance cfmsSymbols.DTrendValue Set1Trd5Value4
+  {
+    x = 1039;
+    y = 294;
+    visibility = 0;
+    xReference = 1039;
+    yReference = 294;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Bad_Text_foregroundColour = 1;
+    Bad_Text_visibility = 1;
+    BlinkBox_foregroundFillColour = 1;
+    Dashes_foregroundColour = 1;
+    Dashes_visibility = 1;
+    disfmt = "%6.1f";
+    ErrorText_foregroundColour = 1;
+    ErrorText_visibility = 1;
+    Inserted_visibility = 0;
+    message1 = "";
+    message2 = "";
+    NumericValue_foregroundColour = 1;
+    NumericValue_visibility = 1;
+    OOR_High_visibility = 1;
+    OOR_Low_visibility = 1;
+    OOS_Text_backgroundColour = 1;
+    OOS_Text_foregroundColour = 1;
+    OOS_Text_visibility = 1;
+    StatePhrase_foregroundColour = 1;
+    StatePhrase_visibility = 1;
+    value = 310.55;
+  }
+
+  instance cfmsSymbols.DTrendValue Set1Trd5Value1
+  {
+    x = 1039;
+    y = 216;
+    visibility = 0;
+    xReference = 1039;
+    yReference = 216;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Bad_Text_foregroundColour = 1;
+    Bad_Text_visibility = 1;
+    BlinkBox_foregroundFillColour = 1;
+    Dashes_foregroundColour = 1;
+    Dashes_visibility = 1;
+    disfmt = "%6.1f";
+    ErrorText_foregroundColour = 1;
+    ErrorText_visibility = 1;
+    Inserted_visibility = 0;
+    message1 = "";
+    message2 = "";
+    NumericValue_foregroundColour = 1;
+    NumericValue_visibility = 1;
+    OOR_High_visibility = 1;
+    OOR_Low_visibility = 1;
+    OOS_Text_backgroundColour = 1;
+    OOS_Text_foregroundColour = 1;
+    OOS_Text_visibility = 1;
+    StatePhrase_foregroundColour = 1;
+    StatePhrase_visibility = 1;
+    value = 310.55;
+  }
+
+  instance cfmsSymbols.DTrendValue Set1Trd5Value9
+  {
+    x = 1039;
+    y = 424;
+    visibility = 0;
+    xReference = 1039;
+    yReference = 424;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Bad_Text_foregroundColour = 1;
+    Bad_Text_visibility = 1;
+    BlinkBox_foregroundFillColour = 1;
+    Dashes_foregroundColour = 1;
+    Dashes_visibility = 1;
+    disfmt = "%6.1f";
+    ErrorText_foregroundColour = 1;
+    ErrorText_visibility = 1;
+    Inserted_visibility = 0;
+    message1 = "";
+    message2 = "";
+    NumericValue_foregroundColour = 1;
+    NumericValue_visibility = 1;
+    OOR_High_visibility = 1;
+    OOR_Low_visibility = 1;
+    OOS_Text_backgroundColour = 1;
+    OOS_Text_foregroundColour = 1;
+    OOS_Text_visibility = 1;
+    StatePhrase_foregroundColour = 1;
+    StatePhrase_visibility = 1;
+    value = 310.55;
+  }
+
+  instance cfmsSymbols.DTrendValue Set1Trd5Value7
+  {
+    x = 1039;
+    y = 372;
+    visibility = 0;
+    xReference = 1039;
+    yReference = 372;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Bad_Text_foregroundColour = 1;
+    Bad_Text_visibility = 1;
+    BlinkBox_foregroundFillColour = 1;
+    Dashes_foregroundColour = 1;
+    Dashes_visibility = 1;
+    disfmt = "%6.1f";
+    ErrorText_foregroundColour = 1;
+    ErrorText_visibility = 1;
+    Inserted_visibility = 0;
+    message1 = "";
+    message2 = "";
+    NumericValue_foregroundColour = 1;
+    NumericValue_visibility = 1;
+    OOR_High_visibility = 1;
+    OOR_Low_visibility = 1;
+    OOS_Text_backgroundColour = 1;
+    OOS_Text_foregroundColour = 1;
+    OOS_Text_visibility = 1;
+    StatePhrase_foregroundColour = 1;
+    StatePhrase_visibility = 1;
+    value = 310.55;
+  }
+
+  instance cfmsSymbols.DTrendValue Set1Trd5Value5
+  {
+    x = 1039;
+    y = 320;
+    visibility = 0;
+    xReference = 1039;
+    yReference = 320;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Bad_Text_foregroundColour = 1;
+    Bad_Text_visibility = 1;
+    BlinkBox_foregroundFillColour = 1;
+    Dashes_foregroundColour = 1;
+    Dashes_visibility = 1;
+    disfmt = "%6.1f";
+    ErrorText_foregroundColour = 1;
+    ErrorText_visibility = 1;
+    Inserted_visibility = 0;
+    message1 = "";
+    message2 = "";
+    NumericValue_foregroundColour = 1;
+    NumericValue_visibility = 1;
+    OOR_High_visibility = 1;
+    OOR_Low_visibility = 1;
+    OOS_Text_backgroundColour = 1;
+    OOS_Text_foregroundColour = 1;
+    OOS_Text_visibility = 1;
+    StatePhrase_foregroundColour = 1;
+    StatePhrase_visibility = 1;
+    value = 310.55;
+  }
+
+  instance cfmsSymbols.DTrendValue Set1Trd5Value3
+  {
+    x = 1039;
+    y = 268;
+    visibility = 0;
+    xReference = 1039;
+    yReference = 268;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Bad_Text_foregroundColour = 1;
+    Bad_Text_visibility = 1;
+    BlinkBox_foregroundFillColour = 1;
+    Dashes_foregroundColour = 1;
+    Dashes_visibility = 1;
+    disfmt = "%6.1f";
+    ErrorText_foregroundColour = 1;
+    ErrorText_visibility = 1;
+    Inserted_visibility = 0;
+    message1 = "";
+    message2 = "";
+    NumericValue_foregroundColour = 1;
+    NumericValue_visibility = 1;
+    OOR_High_visibility = 1;
+    OOR_Low_visibility = 1;
+    OOS_Text_backgroundColour = 1;
+    OOS_Text_foregroundColour = 1;
+    OOS_Text_visibility = 1;
+    StatePhrase_foregroundColour = 1;
+    StatePhrase_visibility = 1;
+    value = 310.55;
+  }
+
+  instance cfmsSymbols.DTrendValue Set1Trd5Value2
+  {
+    x = 1039;
+    y = 242;
+    visibility = 0;
+    xReference = 1039;
+    yReference = 242;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Bad_Text_foregroundColour = 1;
+    Bad_Text_visibility = 1;
+    BlinkBox_foregroundFillColour = 1;
+    Dashes_foregroundColour = 1;
+    Dashes_visibility = 1;
+    disfmt = "%6.1f";
+    ErrorText_foregroundColour = 1;
+    ErrorText_visibility = 1;
+    Inserted_visibility = 0;
+    message1 = "";
+    message2 = "";
+    NumericValue_foregroundColour = 1;
+    NumericValue_visibility = 1;
+    OOR_High_visibility = 1;
+    OOR_Low_visibility = 1;
+    OOS_Text_backgroundColour = 1;
+    OOS_Text_foregroundColour = 1;
+    OOS_Text_visibility = 1;
+    StatePhrase_foregroundColour = 1;
+    StatePhrase_visibility = 1;
+    value = 310.55;
+  }
+
+  instance cfmsSymbols.DTrendValue Set1Trd5Value20
+  {
+    x = 1039;
+    y = 710;
+    visibility = 0;
+    xReference = 1039;
+    yReference = 710;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Bad_Text_foregroundColour = 1;
+    Bad_Text_visibility = 1;
+    BlinkBox_foregroundFillColour = 1;
+    Dashes_foregroundColour = 1;
+    Dashes_visibility = 1;
+    disfmt = "%6.1f";
+    ErrorText_foregroundColour = 1;
+    ErrorText_visibility = 1;
+    Inserted_visibility = 0;
+    message1 = "";
+    message2 = "";
+    NumericValue_foregroundColour = 1;
+    NumericValue_visibility = 1;
+    OOR_High_visibility = 1;
+    OOR_Low_visibility = 1;
+    OOS_Text_backgroundColour = 1;
+    OOS_Text_foregroundColour = 1;
+    OOS_Text_visibility = 1;
+    StatePhrase_foregroundColour = 1;
+    StatePhrase_visibility = 1;
+    value = 310.55;
+  }
+
+  instance cfmsSymbols.DTrendValue20 Set1Trd5Current
+  {
+    x = 1046;
+    y = 760;
+    visibility = 0;
+    xReference = 1046;
+    yReference = 760;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Bad_Text_foregroundColour = `Bad_Text.foregroundColour`;
+    Bad_Text_visibility = `Bad_Text.visibility`;
+    BlinkBox_foregroundFillColour = `BlinkBox.foregroundFillColour`;
+    Dashes_foregroundColour = `Dashes.foregroundColour`;
+    Dashes_visibility = `Dashes.visibility`;
+    disfmt_temp = "%6.1f";
+    DisplayUnits = 1;
+    ErrorText_foregroundColour = `ErrorText.foregroundColour`;
+    ErrorText_visibility = `ErrorText.visibility`;
+    Inserted_visibility = `Inserted.visibility`;
+    message1_temp = "";
+    newsta_temp = 0;
+    NumericValue_foregroundColour = `NumericValue.foregroundColour`;
+    NumericValue_visibility = `NumericValue.visibility`;
+    OOR_High_visibility = `OOR_High.visibility`;
+    OOR_Low_visibility = `OOR_Low.visibility`;
+    OOS_Text_backgroundColour = `OOS_Text.backgroundColour`;
+    OOS_Text_foregroundColour = `OOS_Text.foregroundColour`;
+    OOS_Text_visibility = `OOS_Text.visibility`;
+    pid_temp = "CET05";
+    pisabitmap_temp = 0;
+    //PointId = `&::UCN5and6.InterfaceToGUI.RCT111X`;
+    PointId = `&RCT111X`;		//CORENET 20170602 by Philkyu Kwon
+    sig_type_temp = 6;
+    StatePhrase_foregroundColour = `StatePhrase.foregroundColour`;
+    StatePhrase_visibility = `StatePhrase.visibility`;
+    value_temp = 0.226585;
+  }
+
+  instance cfmsSymbols.DTrendValue Set1Trd1Value11
+  {
+    x = 284;
+    y = 476;
+    visibility = 1;
+    xReference = 284;
+    yReference = 476;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Bad_Text_foregroundColour = 1;
+    Bad_Text_visibility = 0;
+    BlinkBox_foregroundFillColour = 0;
+    Dashes_foregroundColour = 0;
+    Dashes_visibility = 0;
+    disfmt = "%8.2e";
+    ErrorText_foregroundColour = 16;
+    ErrorText_visibility = 0;
+    Inserted_visibility = 0;
+    message1 = "";
+    message2 = "";
+    NumericValue_foregroundColour = 3;
+    NumericValue_visibility = 1;
+    OOR_High_visibility = 0;
+    OOR_Low_visibility = 0;
+    OOS_Text_backgroundColour = 1;
+    OOS_Text_foregroundColour = 18;
+    OOS_Text_visibility = 0;
+    StatePhrase_foregroundColour = 3;
+    StatePhrase_visibility = 0;
+    value = -0.28;
+  }
+
+  instance cfmsSymbols.DTrendValue Set1Trd2Value11
+  {
+    x = 474;
+    y = 476;
+    visibility = 1;
+    xReference = 474;
+    yReference = 476;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Bad_Text_foregroundColour = 1;
+    Bad_Text_visibility = 0;
+    BlinkBox_foregroundFillColour = 0;
+    Dashes_foregroundColour = 0;
+    Dashes_visibility = 0;
+    disfmt = "%6.0f";
+    ErrorText_foregroundColour = 16;
+    ErrorText_visibility = 0;
+    Inserted_visibility = 0;
+    message1 = "";
+    message2 = "";
+    NumericValue_foregroundColour = 3;
+    NumericValue_visibility = 1;
+    OOR_High_visibility = 0;
+    OOR_Low_visibility = 0;
+    OOS_Text_backgroundColour = 1;
+    OOS_Text_foregroundColour = 18;
+    OOS_Text_visibility = 0;
+    StatePhrase_foregroundColour = 3;
+    StatePhrase_visibility = 0;
+    value = 50;
+  }
+
+  instance cfmsSymbols.DTrendValue Set1Trd3Value11
+  {
+    x = 664;
+    y = 476;
+    visibility = 0;
+    xReference = 664;
+    yReference = 476;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Bad_Text_foregroundColour = 1;
+    Bad_Text_visibility = 0;
+    BlinkBox_foregroundFillColour = 0;
+    Dashes_foregroundColour = 0;
+    Dashes_visibility = 0;
+    disfmt = "%8.2e";
+    ErrorText_foregroundColour = 16;
+    ErrorText_visibility = 0;
+    Inserted_visibility = 0;
+    message1 = "";
+    message2 = "";
+    NumericValue_foregroundColour = 3;
+    NumericValue_visibility = 1;
+    OOR_High_visibility = 0;
+    OOR_Low_visibility = 0;
+    OOS_Text_backgroundColour = 1;
+    OOS_Text_foregroundColour = 18;
+    OOS_Text_visibility = 0;
+    StatePhrase_foregroundColour = 3;
+    StatePhrase_visibility = 0;
+    value = -0.28;
+  }
+
+  instance cfmsSymbols.DTrendValue Set1Trd4Value11
+  {
+    x = 854;
+    y = 476;
+    visibility = 0;
+    xReference = 854;
+    yReference = 476;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Bad_Text_foregroundColour = 1;
+    Bad_Text_visibility = 0;
+    BlinkBox_foregroundFillColour = 0;
+    Dashes_foregroundColour = 0;
+    Dashes_visibility = 0;
+    disfmt = "";
+    ErrorText_foregroundColour = 16;
+    ErrorText_visibility = 0;
+    Inserted_visibility = 0;
+    message1 = "OPEN    ";
+    message2 = "NOT FOPN";
+    NumericValue_foregroundColour = 3;
+    NumericValue_visibility = 0;
+    OOR_High_visibility = 0;
+    OOR_Low_visibility = 0;
+    OOS_Text_backgroundColour = 1;
+    OOS_Text_foregroundColour = 0;
+    OOS_Text_visibility = 0;
+    StatePhrase_foregroundColour = 3;
+    StatePhrase_visibility = 1;
+    value = 1;
+  }
+
+  text Time2
+  {
+    x = 126;
+    y = 263;
+    format = "%s";
+    theText = `&::UCN5and6.PicUCN_DigitalTrendView.currtime2[0]`;
+    alignment = 0;
+    visibility = 0;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 126;
+    yReference = 263;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text Time3
+  {
+    x = 126;
+    y = 289;
+    format = "%s";
+    theText = `&::UCN5and6.PicUCN_DigitalTrendView.currtime3[0]`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 126;
+    yReference = 289;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text Time4
+  {
+    x = 126;
+    y = 315;
+    format = "%s";
+    theText = `&::UCN5and6.PicUCN_DigitalTrendView.currtime4[0]`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 126;
+    yReference = 315;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text Time5
+  {
+    x = 126;
+    y = 341;
+    format = "%s";
+    theText = `&::UCN5and6.PicUCN_DigitalTrendView.currtime5[0]`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 126;
+    yReference = 341;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text Time6
+  {
+    x = 126;
+    y = 367;
+    format = "%s";
+    theText = `&::UCN5and6.PicUCN_DigitalTrendView.currtime6[0]`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 126;
+    yReference = 367;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text Time7
+  {
+    x = 126;
+    y = 393;
+    format = "%s";
+    theText = `&::UCN5and6.PicUCN_DigitalTrendView.currtime7[0]`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 126;
+    yReference = 393;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text Time8
+  {
+    x = 126;
+    y = 419;
+    format = "%s";
+    theText = `&::UCN5and6.PicUCN_DigitalTrendView.currtime8[0]`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 126;
+    yReference = 419;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text Time9
+  {
+    x = 126;
+    y = 445;
+    format = "%s";
+    theText = `&::UCN5and6.PicUCN_DigitalTrendView.currtime9[0]`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 126;
+    yReference = 445;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text Time10
+  {
+    x = 126;
+    y = 471;
+    format = "%s";
+    theText = `&::UCN5and6.PicUCN_DigitalTrendView.currtime10[0]`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 126;
+    yReference = 471;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text Time11
+  {
+    x = 126;
+    y = 497;
+    format = "%s";
+    theText = `&::UCN5and6.PicUCN_DigitalTrendView.currtime11[0]`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 126;
+    yReference = 497;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text Time12
+  {
+    x = 126;
+    y = 523;
+    format = "%s";
+    theText = `&::UCN5and6.PicUCN_DigitalTrendView.currtime12[0]`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 126;
+    yReference = 523;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text Time13
+  {
+    x = 126;
+    y = 549;
+    format = "%s";
+    theText = `&::UCN5and6.PicUCN_DigitalTrendView.currtime13[0]`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 126;
+    yReference = 549;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text Time14
+  {
+    x = 126;
+    y = 575;
+    format = "%s";
+    theText = `&::UCN5and6.PicUCN_DigitalTrendView.currtime14[0]`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 126;
+    yReference = 575;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text Time15
+  {
+    x = 126;
+    y = 601;
+    format = "%s";
+    theText = `&::UCN5and6.PicUCN_DigitalTrendView.currtime15[0]`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 126;
+    yReference = 601;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text Time16
+  {
+    x = 126;
+    y = 627;
+    format = "%s";
+    theText = `&::UCN5and6.PicUCN_DigitalTrendView.currtime16[0]`;
+    alignment = 0;
+    visibility = 0;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 126;
+    yReference = 627;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text Time17
+  {
+    x = 126;
+    y = 653;
+    format = "%s";
+    theText = `&::UCN5and6.PicUCN_DigitalTrendView.currtime17[0]`;
+    alignment = 0;
+    visibility = 0;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 126;
+    yReference = 653;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text Time18
+  {
+    x = 126;
+    y = 679;
+    format = "%s";
+    theText = `&::UCN5and6.PicUCN_DigitalTrendView.currtime18[0]`;
+    alignment = 0;
+    visibility = 0;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 126;
+    yReference = 679;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text Time1
+  {
+    x = 126;
+    y = 237;
+    format = "%s";
+    theText = `&::UCN5and6.PicUCN_DigitalTrendView.currtime1[0]`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 126;
+    yReference = 237;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text Time19
+  {
+    x = 126;
+    y = 705;
+    format = "%s";
+    theText = `&::UCN5and6.PicUCN_DigitalTrendView.currtime19[0]`;
+    alignment = 0;
+    visibility = 0;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 126;
+    yReference = 705;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text Time20
+  {
+    x = 126;
+    y = 731;
+    format = "%s";
+    theText = `&::UCN5and6.PicUCN_DigitalTrendView.currtime20[0]`;
+    alignment = 0;
+    visibility = 0;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 126;
+    yReference = 731;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  instance cfmsSymbols.DTrendValue Set1Trd1Value19
+  {
+    x = 284;
+    y = 684;
+    visibility = 0;
+    xReference = 284;
+    yReference = 684;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Bad_Text_foregroundColour = 1;
+    Bad_Text_visibility = 0;
+    BlinkBox_foregroundFillColour = 0;
+    Dashes_foregroundColour = 0;
+    Dashes_visibility = 0;
+    disfmt = "%8.2e";
+    ErrorText_foregroundColour = 16;
+    ErrorText_visibility = 0;
+    Inserted_visibility = 0;
+    message1 = "";
+    message2 = "";
+    NumericValue_foregroundColour = 3;
+    NumericValue_visibility = 1;
+    OOR_High_visibility = 0;
+    OOR_Low_visibility = 0;
+    OOS_Text_backgroundColour = 1;
+    OOS_Text_foregroundColour = 18;
+    OOS_Text_visibility = 0;
+    StatePhrase_foregroundColour = 3;
+    StatePhrase_visibility = 0;
+    value = -0.28;
+  }
+
+  instance cfmsSymbols.DTrendValue Set1Trd2Value19
+  {
+    x = 474;
+    y = 684;
+    visibility = 0;
+    xReference = 474;
+    yReference = 684;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Bad_Text_foregroundColour = 1;
+    Bad_Text_visibility = 0;
+    BlinkBox_foregroundFillColour = 0;
+    Dashes_foregroundColour = 0;
+    Dashes_visibility = 0;
+    disfmt = "%6.0f";
+    ErrorText_foregroundColour = 16;
+    ErrorText_visibility = 0;
+    Inserted_visibility = 0;
+    message1 = "";
+    message2 = "";
+    NumericValue_foregroundColour = 3;
+    NumericValue_visibility = 1;
+    OOR_High_visibility = 0;
+    OOR_Low_visibility = 0;
+    OOS_Text_backgroundColour = 1;
+    OOS_Text_foregroundColour = 18;
+    OOS_Text_visibility = 0;
+    StatePhrase_foregroundColour = 3;
+    StatePhrase_visibility = 0;
+    value = 43;
+  }
+
+  instance cfmsSymbols.DTrendValue Set1Trd3Value19
+  {
+    x = 664;
+    y = 684;
+    visibility = 0;
+    xReference = 664;
+    yReference = 684;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Bad_Text_foregroundColour = 1;
+    Bad_Text_visibility = 0;
+    BlinkBox_foregroundFillColour = 0;
+    Dashes_foregroundColour = 0;
+    Dashes_visibility = 0;
+    disfmt = "%8.2e";
+    ErrorText_foregroundColour = 16;
+    ErrorText_visibility = 0;
+    Inserted_visibility = 0;
+    message1 = "";
+    message2 = "";
+    NumericValue_foregroundColour = 3;
+    NumericValue_visibility = 1;
+    OOR_High_visibility = 1;
+    OOR_Low_visibility = 0;
+    OOS_Text_backgroundColour = 1;
+    OOS_Text_foregroundColour = 0;
+    OOS_Text_visibility = 0;
+    StatePhrase_foregroundColour = 3;
+    StatePhrase_visibility = 0;
+    value = 600;
+  }
+
+  instance cfmsSymbols.DTrendValue Set1Trd4Value19
+  {
+    x = 854;
+    y = 684;
+    visibility = 0;
+    xReference = 854;
+    yReference = 684;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Bad_Text_foregroundColour = 1;
+    Bad_Text_visibility = 1;
+    BlinkBox_foregroundFillColour = 1;
+    Dashes_foregroundColour = 1;
+    Dashes_visibility = 1;
+    disfmt = "";
+    ErrorText_foregroundColour = 1;
+    ErrorText_visibility = 1;
+    Inserted_visibility = 0;
+    message1 = "";
+    message2 = "";
+    NumericValue_foregroundColour = 1;
+    NumericValue_visibility = 1;
+    OOR_High_visibility = 1;
+    OOR_Low_visibility = 1;
+    OOS_Text_backgroundColour = 1;
+    OOS_Text_foregroundColour = 1;
+    OOS_Text_visibility = 1;
+    StatePhrase_foregroundColour = 1;
+    StatePhrase_visibility = 1;
+    value = 312.701;
+  }
+
+  instance cfmsSymbols.DTrendValue Set1Trd1Value18
+  {
+    x = 284;
+    y = 658;
+    visibility = 0;
+    xReference = 284;
+    yReference = 658;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Bad_Text_foregroundColour = 1;
+    Bad_Text_visibility = 0;
+    BlinkBox_foregroundFillColour = 0;
+    Dashes_foregroundColour = 0;
+    Dashes_visibility = 0;
+    disfmt = "%8.2e";
+    ErrorText_foregroundColour = 16;
+    ErrorText_visibility = 0;
+    Inserted_visibility = 0;
+    message1 = "";
+    message2 = "";
+    NumericValue_foregroundColour = 3;
+    NumericValue_visibility = 1;
+    OOR_High_visibility = 0;
+    OOR_Low_visibility = 0;
+    OOS_Text_backgroundColour = 1;
+    OOS_Text_foregroundColour = 18;
+    OOS_Text_visibility = 0;
+    StatePhrase_foregroundColour = 3;
+    StatePhrase_visibility = 0;
+    value = -0.28;
+  }
+
+  instance cfmsSymbols.DTrendValue Set1Trd2Value18
+  {
+    x = 474;
+    y = 658;
+    visibility = 0;
+    xReference = 474;
+    yReference = 658;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Bad_Text_foregroundColour = 1;
+    Bad_Text_visibility = 0;
+    BlinkBox_foregroundFillColour = 0;
+    Dashes_foregroundColour = 0;
+    Dashes_visibility = 0;
+    disfmt = "%6.0f";
+    ErrorText_foregroundColour = 16;
+    ErrorText_visibility = 0;
+    Inserted_visibility = 0;
+    message1 = "";
+    message2 = "";
+    NumericValue_foregroundColour = 3;
+    NumericValue_visibility = 1;
+    OOR_High_visibility = 0;
+    OOR_Low_visibility = 0;
+    OOS_Text_backgroundColour = 1;
+    OOS_Text_foregroundColour = 18;
+    OOS_Text_visibility = 0;
+    StatePhrase_foregroundColour = 3;
+    StatePhrase_visibility = 0;
+    value = 42;
+  }
+
+  instance cfmsSymbols.DTrendValue Set1Trd3Value18
+  {
+    x = 664;
+    y = 658;
+    visibility = 0;
+    xReference = 664;
+    yReference = 658;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Bad_Text_foregroundColour = 1;
+    Bad_Text_visibility = 0;
+    BlinkBox_foregroundFillColour = 0;
+    Dashes_foregroundColour = 0;
+    Dashes_visibility = 0;
+    disfmt = "%8.2e";
+    ErrorText_foregroundColour = 16;
+    ErrorText_visibility = 0;
+    Inserted_visibility = 0;
+    message1 = "";
+    message2 = "";
+    NumericValue_foregroundColour = 3;
+    NumericValue_visibility = 1;
+    OOR_High_visibility = 1;
+    OOR_Low_visibility = 0;
+    OOS_Text_backgroundColour = 1;
+    OOS_Text_foregroundColour = 0;
+    OOS_Text_visibility = 0;
+    StatePhrase_foregroundColour = 3;
+    StatePhrase_visibility = 0;
+    value = 600;
+  }
+
+  instance cfmsSymbols.DTrendValue Set1Trd4Value18
+  {
+    x = 854;
+    y = 658;
+    visibility = 0;
+    xReference = 854;
+    yReference = 658;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Bad_Text_foregroundColour = 1;
+    Bad_Text_visibility = 0;
+    BlinkBox_foregroundFillColour = 0;
+    Dashes_foregroundColour = 0;
+    Dashes_visibility = 0;
+    disfmt = "";
+    ErrorText_foregroundColour = 16;
+    ErrorText_visibility = 0;
+    Inserted_visibility = 0;
+    message1 = "OPEN    ";
+    message2 = "NOT FOPN";
+    NumericValue_foregroundColour = 3;
+    NumericValue_visibility = 0;
+    OOR_High_visibility = 0;
+    OOR_Low_visibility = 0;
+    OOS_Text_backgroundColour = 1;
+    OOS_Text_foregroundColour = 0;
+    OOS_Text_visibility = 0;
+    StatePhrase_foregroundColour = 3;
+    StatePhrase_visibility = 1;
+    value = 1;
+  }
+
+  instance cfmsSymbols.DTrendValue Set1Trd1Value17
+  {
+    x = 284;
+    y = 632;
+    visibility = 0;
+    xReference = 284;
+    yReference = 632;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Bad_Text_foregroundColour = 1;
+    Bad_Text_visibility = 0;
+    BlinkBox_foregroundFillColour = 0;
+    Dashes_foregroundColour = 0;
+    Dashes_visibility = 0;
+    disfmt = "%8.2e";
+    ErrorText_foregroundColour = 16;
+    ErrorText_visibility = 0;
+    Inserted_visibility = 0;
+    message1 = "";
+    message2 = "";
+    NumericValue_foregroundColour = 3;
+    NumericValue_visibility = 1;
+    OOR_High_visibility = 0;
+    OOR_Low_visibility = 0;
+    OOS_Text_backgroundColour = 1;
+    OOS_Text_foregroundColour = 18;
+    OOS_Text_visibility = 0;
+    StatePhrase_foregroundColour = 3;
+    StatePhrase_visibility = 0;
+    value = -0.28;
+  }
+
+  instance cfmsSymbols.DTrendValue Set1Trd2Value17
+  {
+    x = 474;
+    y = 632;
+    visibility = 0;
+    xReference = 474;
+    yReference = 632;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Bad_Text_foregroundColour = 1;
+    Bad_Text_visibility = 0;
+    BlinkBox_foregroundFillColour = 0;
+    Dashes_foregroundColour = 0;
+    Dashes_visibility = 0;
+    disfmt = "%6.0f";
+    ErrorText_foregroundColour = 16;
+    ErrorText_visibility = 0;
+    Inserted_visibility = 0;
+    message1 = "";
+    message2 = "";
+    NumericValue_foregroundColour = 3;
+    NumericValue_visibility = 1;
+    OOR_High_visibility = 0;
+    OOR_Low_visibility = 0;
+    OOS_Text_backgroundColour = 1;
+    OOS_Text_foregroundColour = 18;
+    OOS_Text_visibility = 0;
+    StatePhrase_foregroundColour = 3;
+    StatePhrase_visibility = 0;
+    value = 41;
+  }
+
+  instance cfmsSymbols.DTrendValue Set1Trd3Value17
+  {
+    x = 664;
+    y = 632;
+    visibility = 0;
+    xReference = 664;
+    yReference = 632;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Bad_Text_foregroundColour = 1;
+    Bad_Text_visibility = 0;
+    BlinkBox_foregroundFillColour = 0;
+    Dashes_foregroundColour = 0;
+    Dashes_visibility = 0;
+    disfmt = "%8.2e";
+    ErrorText_foregroundColour = 16;
+    ErrorText_visibility = 0;
+    Inserted_visibility = 0;
+    message1 = "";
+    message2 = "";
+    NumericValue_foregroundColour = 3;
+    NumericValue_visibility = 1;
+    OOR_High_visibility = 1;
+    OOR_Low_visibility = 0;
+    OOS_Text_backgroundColour = 1;
+    OOS_Text_foregroundColour = 0;
+    OOS_Text_visibility = 0;
+    StatePhrase_foregroundColour = 3;
+    StatePhrase_visibility = 0;
+    value = 600;
+  }
+
+  instance cfmsSymbols.DTrendValue Set1Trd4Value17
+  {
+    x = 854;
+    y = 632;
+    visibility = 0;
+    xReference = 854;
+    yReference = 632;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Bad_Text_foregroundColour = 1;
+    Bad_Text_visibility = 0;
+    BlinkBox_foregroundFillColour = 0;
+    Dashes_foregroundColour = 0;
+    Dashes_visibility = 0;
+    disfmt = "";
+    ErrorText_foregroundColour = 16;
+    ErrorText_visibility = 0;
+    Inserted_visibility = 0;
+    message1 = "OPEN    ";
+    message2 = "NOT FOPN";
+    NumericValue_foregroundColour = 3;
+    NumericValue_visibility = 0;
+    OOR_High_visibility = 0;
+    OOR_Low_visibility = 0;
+    OOS_Text_backgroundColour = 1;
+    OOS_Text_foregroundColour = 0;
+    OOS_Text_visibility = 0;
+    StatePhrase_foregroundColour = 3;
+    StatePhrase_visibility = 1;
+    value = 1;
+  }
+
+  instance cfmsSymbols.DTrendValue Set1Trd1Value16
+  {
+    x = 284;
+    y = 606;
+    visibility = 0;
+    xReference = 284;
+    yReference = 606;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Bad_Text_foregroundColour = 1;
+    Bad_Text_visibility = 0;
+    BlinkBox_foregroundFillColour = 0;
+    Dashes_foregroundColour = 0;
+    Dashes_visibility = 0;
+    disfmt = "%8.2e";
+    ErrorText_foregroundColour = 16;
+    ErrorText_visibility = 0;
+    Inserted_visibility = 0;
+    message1 = "";
+    message2 = "";
+    NumericValue_foregroundColour = 3;
+    NumericValue_visibility = 1;
+    OOR_High_visibility = 0;
+    OOR_Low_visibility = 0;
+    OOS_Text_backgroundColour = 1;
+    OOS_Text_foregroundColour = 18;
+    OOS_Text_visibility = 0;
+    StatePhrase_foregroundColour = 3;
+    StatePhrase_visibility = 0;
+    value = -0.28;
+  }
+
+  instance cfmsSymbols.DTrendValue Set1Trd2Value16
+  {
+    x = 474;
+    y = 606;
+    visibility = 0;
+    xReference = 474;
+    yReference = 606;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Bad_Text_foregroundColour = 1;
+    Bad_Text_visibility = 0;
+    BlinkBox_foregroundFillColour = 0;
+    Dashes_foregroundColour = 0;
+    Dashes_visibility = 0;
+    disfmt = "%6.0f";
+    ErrorText_foregroundColour = 16;
+    ErrorText_visibility = 0;
+    Inserted_visibility = 0;
+    message1 = "";
+    message2 = "";
+    NumericValue_foregroundColour = 3;
+    NumericValue_visibility = 1;
+    OOR_High_visibility = 0;
+    OOR_Low_visibility = 0;
+    OOS_Text_backgroundColour = 1;
+    OOS_Text_foregroundColour = 18;
+    OOS_Text_visibility = 0;
+    StatePhrase_foregroundColour = 3;
+    StatePhrase_visibility = 0;
+    value = 40;
+  }
+
+  instance cfmsSymbols.DTrendValue Set1Trd3Value16
+  {
+    x = 664;
+    y = 606;
+    visibility = 0;
+    xReference = 664;
+    yReference = 606;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Bad_Text_foregroundColour = 1;
+    Bad_Text_visibility = 0;
+    BlinkBox_foregroundFillColour = 0;
+    Dashes_foregroundColour = 0;
+    Dashes_visibility = 0;
+    disfmt = "%8.2e";
+    ErrorText_foregroundColour = 16;
+    ErrorText_visibility = 0;
+    Inserted_visibility = 0;
+    message1 = "";
+    message2 = "";
+    NumericValue_foregroundColour = 3;
+    NumericValue_visibility = 1;
+    OOR_High_visibility = 1;
+    OOR_Low_visibility = 0;
+    OOS_Text_backgroundColour = 1;
+    OOS_Text_foregroundColour = 0;
+    OOS_Text_visibility = 0;
+    StatePhrase_foregroundColour = 3;
+    StatePhrase_visibility = 0;
+    value = 600;
+  }
+
+  instance cfmsSymbols.DTrendValue Set1Trd4Value16
+  {
+    x = 854;
+    y = 606;
+    visibility = 0;
+    xReference = 854;
+    yReference = 606;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Bad_Text_foregroundColour = 1;
+    Bad_Text_visibility = 0;
+    BlinkBox_foregroundFillColour = 0;
+    Dashes_foregroundColour = 0;
+    Dashes_visibility = 0;
+    disfmt = "";
+    ErrorText_foregroundColour = 16;
+    ErrorText_visibility = 0;
+    Inserted_visibility = 0;
+    message1 = "OPEN    ";
+    message2 = "NOT FOPN";
+    NumericValue_foregroundColour = 3;
+    NumericValue_visibility = 0;
+    OOR_High_visibility = 0;
+    OOR_Low_visibility = 0;
+    OOS_Text_backgroundColour = 1;
+    OOS_Text_foregroundColour = 0;
+    OOS_Text_visibility = 0;
+    StatePhrase_foregroundColour = 3;
+    StatePhrase_visibility = 1;
+    value = 1;
+  }
+
+  instance cfmsSymbols.DTrendValue Set1Trd1Value15
+  {
+    x = 284;
+    y = 580;
+    visibility = 1;
+    xReference = 284;
+    yReference = 580;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Bad_Text_foregroundColour = 1;
+    Bad_Text_visibility = 0;
+    BlinkBox_foregroundFillColour = 0;
+    Dashes_foregroundColour = 0;
+    Dashes_visibility = 0;
+    disfmt = "%8.2e";
+    ErrorText_foregroundColour = 16;
+    ErrorText_visibility = 0;
+    Inserted_visibility = 0;
+    message1 = "";
+    message2 = "";
+    NumericValue_foregroundColour = 3;
+    NumericValue_visibility = 1;
+    OOR_High_visibility = 0;
+    OOR_Low_visibility = 0;
+    OOS_Text_backgroundColour = 1;
+    OOS_Text_foregroundColour = 18;
+    OOS_Text_visibility = 0;
+    StatePhrase_foregroundColour = 3;
+    StatePhrase_visibility = 0;
+    value = -0.28;
+  }
+
+  instance cfmsSymbols.DTrendValue Set1Trd2Value15
+  {
+    x = 474;
+    y = 580;
+    visibility = 1;
+    xReference = 474;
+    yReference = 580;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Bad_Text_foregroundColour = 1;
+    Bad_Text_visibility = 0;
+    BlinkBox_foregroundFillColour = 0;
+    Dashes_foregroundColour = 0;
+    Dashes_visibility = 0;
+    disfmt = "%6.0f";
+    ErrorText_foregroundColour = 16;
+    ErrorText_visibility = 0;
+    Inserted_visibility = 0;
+    message1 = "";
+    message2 = "";
+    NumericValue_foregroundColour = 3;
+    NumericValue_visibility = 1;
+    OOR_High_visibility = 0;
+    OOR_Low_visibility = 0;
+    OOS_Text_backgroundColour = 1;
+    OOS_Text_foregroundColour = 18;
+    OOS_Text_visibility = 0;
+    StatePhrase_foregroundColour = 3;
+    StatePhrase_visibility = 0;
+    value = 54;
+  }
+
+  instance cfmsSymbols.DTrendValue Set1Trd3Value15
+  {
+    x = 664;
+    y = 580;
+    visibility = 0;
+    xReference = 664;
+    yReference = 580;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Bad_Text_foregroundColour = 1;
+    Bad_Text_visibility = 0;
+    BlinkBox_foregroundFillColour = 0;
+    Dashes_foregroundColour = 0;
+    Dashes_visibility = 0;
+    disfmt = "%8.2e";
+    ErrorText_foregroundColour = 16;
+    ErrorText_visibility = 0;
+    Inserted_visibility = 0;
+    message1 = "";
+    message2 = "";
+    NumericValue_foregroundColour = 3;
+    NumericValue_visibility = 1;
+    OOR_High_visibility = 0;
+    OOR_Low_visibility = 0;
+    OOS_Text_backgroundColour = 1;
+    OOS_Text_foregroundColour = 18;
+    OOS_Text_visibility = 0;
+    StatePhrase_foregroundColour = 3;
+    StatePhrase_visibility = 0;
+    value = -0.28;
+  }
+
+  instance cfmsSymbols.DTrendValue Set1Trd4Value15
+  {
+    x = 854;
+    y = 580;
+    visibility = 0;
+    xReference = 854;
+    yReference = 580;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Bad_Text_foregroundColour = 1;
+    Bad_Text_visibility = 0;
+    BlinkBox_foregroundFillColour = 0;
+    Dashes_foregroundColour = 0;
+    Dashes_visibility = 0;
+    disfmt = "";
+    ErrorText_foregroundColour = 16;
+    ErrorText_visibility = 0;
+    Inserted_visibility = 0;
+    message1 = "OPEN    ";
+    message2 = "NOT FOPN";
+    NumericValue_foregroundColour = 3;
+    NumericValue_visibility = 0;
+    OOR_High_visibility = 0;
+    OOR_Low_visibility = 0;
+    OOS_Text_backgroundColour = 1;
+    OOS_Text_foregroundColour = 0;
+    OOS_Text_visibility = 0;
+    StatePhrase_foregroundColour = 3;
+    StatePhrase_visibility = 1;
+    value = 1;
+  }
+
+  instance cfmsSymbols.DTrendValue Set1Trd1Value14
+  {
+    x = 284;
+    y = 554;
+    visibility = 1;
+    xReference = 284;
+    yReference = 554;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Bad_Text_foregroundColour = 1;
+    Bad_Text_visibility = 0;
+    BlinkBox_foregroundFillColour = 0;
+    Dashes_foregroundColour = 0;
+    Dashes_visibility = 0;
+    disfmt = "%8.2e";
+    ErrorText_foregroundColour = 16;
+    ErrorText_visibility = 0;
+    Inserted_visibility = 0;
+    message1 = "";
+    message2 = "";
+    NumericValue_foregroundColour = 3;
+    NumericValue_visibility = 1;
+    OOR_High_visibility = 0;
+    OOR_Low_visibility = 0;
+    OOS_Text_backgroundColour = 1;
+    OOS_Text_foregroundColour = 18;
+    OOS_Text_visibility = 0;
+    StatePhrase_foregroundColour = 3;
+    StatePhrase_visibility = 0;
+    value = -0.28;
+  }
+
+  instance cfmsSymbols.DTrendValue Set1Trd2Value14
+  {
+    x = 474;
+    y = 554;
+    visibility = 1;
+    xReference = 474;
+    yReference = 554;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Bad_Text_foregroundColour = 1;
+    Bad_Text_visibility = 0;
+    BlinkBox_foregroundFillColour = 0;
+    Dashes_foregroundColour = 0;
+    Dashes_visibility = 0;
+    disfmt = "%6.0f";
+    ErrorText_foregroundColour = 16;
+    ErrorText_visibility = 0;
+    Inserted_visibility = 0;
+    message1 = "";
+    message2 = "";
+    NumericValue_foregroundColour = 3;
+    NumericValue_visibility = 1;
+    OOR_High_visibility = 0;
+    OOR_Low_visibility = 0;
+    OOS_Text_backgroundColour = 1;
+    OOS_Text_foregroundColour = 18;
+    OOS_Text_visibility = 0;
+    StatePhrase_foregroundColour = 3;
+    StatePhrase_visibility = 0;
+    value = 53;
+  }
+
+  instance cfmsSymbols.DTrendValue Set1Trd3Value14
+  {
+    x = 664;
+    y = 554;
+    visibility = 0;
+    xReference = 664;
+    yReference = 554;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Bad_Text_foregroundColour = 1;
+    Bad_Text_visibility = 0;
+    BlinkBox_foregroundFillColour = 0;
+    Dashes_foregroundColour = 0;
+    Dashes_visibility = 0;
+    disfmt = "%8.2e";
+    ErrorText_foregroundColour = 16;
+    ErrorText_visibility = 0;
+    Inserted_visibility = 0;
+    message1 = "";
+    message2 = "";
+    NumericValue_foregroundColour = 3;
+    NumericValue_visibility = 1;
+    OOR_High_visibility = 0;
+    OOR_Low_visibility = 0;
+    OOS_Text_backgroundColour = 1;
+    OOS_Text_foregroundColour = 18;
+    OOS_Text_visibility = 0;
+    StatePhrase_foregroundColour = 3;
+    StatePhrase_visibility = 0;
+    value = -0.28;
+  }
+
+  instance cfmsSymbols.DTrendValue Set1Trd4Value14
+  {
+    x = 854;
+    y = 554;
+    visibility = 0;
+    xReference = 854;
+    yReference = 554;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Bad_Text_foregroundColour = 1;
+    Bad_Text_visibility = 0;
+    BlinkBox_foregroundFillColour = 0;
+    Dashes_foregroundColour = 0;
+    Dashes_visibility = 0;
+    disfmt = "";
+    ErrorText_foregroundColour = 16;
+    ErrorText_visibility = 0;
+    Inserted_visibility = 0;
+    message1 = "OPEN    ";
+    message2 = "NOT FOPN";
+    NumericValue_foregroundColour = 3;
+    NumericValue_visibility = 0;
+    OOR_High_visibility = 0;
+    OOR_Low_visibility = 0;
+    OOS_Text_backgroundColour = 1;
+    OOS_Text_foregroundColour = 0;
+    OOS_Text_visibility = 0;
+    StatePhrase_foregroundColour = 3;
+    StatePhrase_visibility = 1;
+    value = 1;
+  }
+
+  instance cfmsSymbols.DTrendValue Set1Trd1Value13
+  {
+    x = 284;
+    y = 528;
+    visibility = 1;
+    xReference = 284;
+    yReference = 528;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Bad_Text_foregroundColour = 1;
+    Bad_Text_visibility = 0;
+    BlinkBox_foregroundFillColour = 0;
+    Dashes_foregroundColour = 0;
+    Dashes_visibility = 0;
+    disfmt = "%8.2e";
+    ErrorText_foregroundColour = 16;
+    ErrorText_visibility = 0;
+    Inserted_visibility = 0;
+    message1 = "";
+    message2 = "";
+    NumericValue_foregroundColour = 3;
+    NumericValue_visibility = 1;
+    OOR_High_visibility = 0;
+    OOR_Low_visibility = 0;
+    OOS_Text_backgroundColour = 1;
+    OOS_Text_foregroundColour = 18;
+    OOS_Text_visibility = 0;
+    StatePhrase_foregroundColour = 3;
+    StatePhrase_visibility = 0;
+    value = -0.28;
+  }
+
+  instance cfmsSymbols.DTrendValue Set1Trd2Value13
+  {
+    x = 474;
+    y = 528;
+    visibility = 1;
+    xReference = 474;
+    yReference = 528;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Bad_Text_foregroundColour = 1;
+    Bad_Text_visibility = 0;
+    BlinkBox_foregroundFillColour = 0;
+    Dashes_foregroundColour = 0;
+    Dashes_visibility = 0;
+    disfmt = "%6.0f";
+    ErrorText_foregroundColour = 16;
+    ErrorText_visibility = 0;
+    Inserted_visibility = 0;
+    message1 = "";
+    message2 = "";
+    NumericValue_foregroundColour = 3;
+    NumericValue_visibility = 1;
+    OOR_High_visibility = 0;
+    OOR_Low_visibility = 0;
+    OOS_Text_backgroundColour = 1;
+    OOS_Text_foregroundColour = 18;
+    OOS_Text_visibility = 0;
+    StatePhrase_foregroundColour = 3;
+    StatePhrase_visibility = 0;
+    value = 52;
+  }
+
+  instance cfmsSymbols.DTrendValue Set1Trd3Value13
+  {
+    x = 664;
+    y = 528;
+    visibility = 0;
+    xReference = 664;
+    yReference = 528;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Bad_Text_foregroundColour = 1;
+    Bad_Text_visibility = 0;
+    BlinkBox_foregroundFillColour = 0;
+    Dashes_foregroundColour = 0;
+    Dashes_visibility = 0;
+    disfmt = "%8.2e";
+    ErrorText_foregroundColour = 16;
+    ErrorText_visibility = 0;
+    Inserted_visibility = 0;
+    message1 = "";
+    message2 = "";
+    NumericValue_foregroundColour = 3;
+    NumericValue_visibility = 1;
+    OOR_High_visibility = 0;
+    OOR_Low_visibility = 0;
+    OOS_Text_backgroundColour = 1;
+    OOS_Text_foregroundColour = 18;
+    OOS_Text_visibility = 0;
+    StatePhrase_foregroundColour = 3;
+    StatePhrase_visibility = 0;
+    value = -0.28;
+  }
+
+  instance cfmsSymbols.DTrendValue Set1Trd4Value13
+  {
+    x = 854;
+    y = 528;
+    visibility = 0;
+    xReference = 854;
+    yReference = 528;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Bad_Text_foregroundColour = 1;
+    Bad_Text_visibility = 0;
+    BlinkBox_foregroundFillColour = 0;
+    Dashes_foregroundColour = 0;
+    Dashes_visibility = 0;
+    disfmt = "";
+    ErrorText_foregroundColour = 16;
+    ErrorText_visibility = 0;
+    Inserted_visibility = 0;
+    message1 = "OPEN    ";
+    message2 = "NOT FOPN";
+    NumericValue_foregroundColour = 3;
+    NumericValue_visibility = 0;
+    OOR_High_visibility = 0;
+    OOR_Low_visibility = 0;
+    OOS_Text_backgroundColour = 1;
+    OOS_Text_foregroundColour = 0;
+    OOS_Text_visibility = 0;
+    StatePhrase_foregroundColour = 3;
+    StatePhrase_visibility = 1;
+    value = 1;
+  }
+
+  instance cfmsSymbols.DTrendValue Set1Trd1Value10
+  {
+    x = 284;
+    y = 450;
+    visibility = 1;
+    xReference = 284;
+    yReference = 450;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Bad_Text_foregroundColour = 1;
+    Bad_Text_visibility = 0;
+    BlinkBox_foregroundFillColour = 0;
+    Dashes_foregroundColour = 0;
+    Dashes_visibility = 0;
+    disfmt = "%8.2e";
+    ErrorText_foregroundColour = 16;
+    ErrorText_visibility = 0;
+    Inserted_visibility = 0;
+    message1 = "";
+    message2 = "";
+    NumericValue_foregroundColour = 3;
+    NumericValue_visibility = 1;
+    OOR_High_visibility = 0;
+    OOR_Low_visibility = 0;
+    OOS_Text_backgroundColour = 1;
+    OOS_Text_foregroundColour = 18;
+    OOS_Text_visibility = 0;
+    StatePhrase_foregroundColour = 3;
+    StatePhrase_visibility = 0;
+    value = -0.28;
+  }
+
+  instance cfmsSymbols.DTrendValue Set1Trd2Value10
+  {
+    x = 474;
+    y = 450;
+    visibility = 1;
+    xReference = 474;
+    yReference = 450;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Bad_Text_foregroundColour = 1;
+    Bad_Text_visibility = 0;
+    BlinkBox_foregroundFillColour = 0;
+    Dashes_foregroundColour = 0;
+    Dashes_visibility = 0;
+    disfmt = "%6.0f";
+    ErrorText_foregroundColour = 16;
+    ErrorText_visibility = 0;
+    Inserted_visibility = 0;
+    message1 = "";
+    message2 = "";
+    NumericValue_foregroundColour = 3;
+    NumericValue_visibility = 1;
+    OOR_High_visibility = 0;
+    OOR_Low_visibility = 0;
+    OOS_Text_backgroundColour = 1;
+    OOS_Text_foregroundColour = 18;
+    OOS_Text_visibility = 0;
+    StatePhrase_foregroundColour = 3;
+    StatePhrase_visibility = 0;
+    value = 49;
+  }
+
+  instance cfmsSymbols.DTrendValue Set1Trd3Value10
+  {
+    x = 664;
+    y = 450;
+    visibility = 0;
+    xReference = 664;
+    yReference = 450;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Bad_Text_foregroundColour = 1;
+    Bad_Text_visibility = 0;
+    BlinkBox_foregroundFillColour = 0;
+    Dashes_foregroundColour = 0;
+    Dashes_visibility = 0;
+    disfmt = "%8.2e";
+    ErrorText_foregroundColour = 16;
+    ErrorText_visibility = 0;
+    Inserted_visibility = 0;
+    message1 = "";
+    message2 = "";
+    NumericValue_foregroundColour = 3;
+    NumericValue_visibility = 1;
+    OOR_High_visibility = 0;
+    OOR_Low_visibility = 0;
+    OOS_Text_backgroundColour = 1;
+    OOS_Text_foregroundColour = 18;
+    OOS_Text_visibility = 0;
+    StatePhrase_foregroundColour = 3;
+    StatePhrase_visibility = 0;
+    value = -0.28;
+  }
+
+  instance cfmsSymbols.DTrendValue Set1Trd4Value10
+  {
+    x = 854;
+    y = 450;
+    visibility = 0;
+    xReference = 854;
+    yReference = 450;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Bad_Text_foregroundColour = 1;
+    Bad_Text_visibility = 0;
+    BlinkBox_foregroundFillColour = 0;
+    Dashes_foregroundColour = 0;
+    Dashes_visibility = 0;
+    disfmt = "";
+    ErrorText_foregroundColour = 16;
+    ErrorText_visibility = 0;
+    Inserted_visibility = 0;
+    message1 = "OPEN    ";
+    message2 = "NOT FOPN";
+    NumericValue_foregroundColour = 3;
+    NumericValue_visibility = 0;
+    OOR_High_visibility = 0;
+    OOR_Low_visibility = 0;
+    OOS_Text_backgroundColour = 1;
+    OOS_Text_foregroundColour = 0;
+    OOS_Text_visibility = 0;
+    StatePhrase_foregroundColour = 3;
+    StatePhrase_visibility = 1;
+    value = 1;
+  }
+
+  instance cfmsSymbols.DTrendValue Set1Trd1Value8
+  {
+    x = 284;
+    y = 398;
+    visibility = 1;
+    xReference = 284;
+    yReference = 398;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Bad_Text_foregroundColour = 1;
+    Bad_Text_visibility = 0;
+    BlinkBox_foregroundFillColour = 0;
+    Dashes_foregroundColour = 0;
+    Dashes_visibility = 0;
+    disfmt = "%8.2e";
+    ErrorText_foregroundColour = 16;
+    ErrorText_visibility = 0;
+    Inserted_visibility = 0;
+    message1 = "";
+    message2 = "";
+    NumericValue_foregroundColour = 3;
+    NumericValue_visibility = 1;
+    OOR_High_visibility = 0;
+    OOR_Low_visibility = 0;
+    OOS_Text_backgroundColour = 1;
+    OOS_Text_foregroundColour = 18;
+    OOS_Text_visibility = 0;
+    StatePhrase_foregroundColour = 3;
+    StatePhrase_visibility = 0;
+    value = -0.28;
+  }
+
+  instance cfmsSymbols.DTrendValue Set1Trd2Value8
+  {
+    x = 474;
+    y = 398;
+    visibility = 1;
+    xReference = 474;
+    yReference = 398;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Bad_Text_foregroundColour = 1;
+    Bad_Text_visibility = 0;
+    BlinkBox_foregroundFillColour = 0;
+    Dashes_foregroundColour = 0;
+    Dashes_visibility = 0;
+    disfmt = "%6.0f";
+    ErrorText_foregroundColour = 16;
+    ErrorText_visibility = 0;
+    Inserted_visibility = 0;
+    message1 = "";
+    message2 = "";
+    NumericValue_foregroundColour = 3;
+    NumericValue_visibility = 1;
+    OOR_High_visibility = 0;
+    OOR_Low_visibility = 0;
+    OOS_Text_backgroundColour = 1;
+    OOS_Text_foregroundColour = 18;
+    OOS_Text_visibility = 0;
+    StatePhrase_foregroundColour = 3;
+    StatePhrase_visibility = 0;
+    value = 46;
+  }
+
+  instance cfmsSymbols.DTrendValue Set1Trd3Value8
+  {
+    x = 664;
+    y = 398;
+    visibility = 0;
+    xReference = 664;
+    yReference = 398;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Bad_Text_foregroundColour = 1;
+    Bad_Text_visibility = 0;
+    BlinkBox_foregroundFillColour = 0;
+    Dashes_foregroundColour = 0;
+    Dashes_visibility = 0;
+    disfmt = "%8.2e";
+    ErrorText_foregroundColour = 16;
+    ErrorText_visibility = 0;
+    Inserted_visibility = 0;
+    message1 = "";
+    message2 = "";
+    NumericValue_foregroundColour = 3;
+    NumericValue_visibility = 1;
+    OOR_High_visibility = 0;
+    OOR_Low_visibility = 0;
+    OOS_Text_backgroundColour = 1;
+    OOS_Text_foregroundColour = 18;
+    OOS_Text_visibility = 0;
+    StatePhrase_foregroundColour = 3;
+    StatePhrase_visibility = 0;
+    value = -0.28;
+  }
+
+  instance cfmsSymbols.DTrendValue Set1Trd4Value8
+  {
+    x = 854;
+    y = 398;
+    visibility = 0;
+    xReference = 854;
+    yReference = 398;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Bad_Text_foregroundColour = 1;
+    Bad_Text_visibility = 0;
+    BlinkBox_foregroundFillColour = 0;
+    Dashes_foregroundColour = 0;
+    Dashes_visibility = 0;
+    disfmt = "";
+    ErrorText_foregroundColour = 16;
+    ErrorText_visibility = 0;
+    Inserted_visibility = 0;
+    message1 = "OPEN    ";
+    message2 = "NOT FOPN";
+    NumericValue_foregroundColour = 3;
+    NumericValue_visibility = 0;
+    OOR_High_visibility = 0;
+    OOR_Low_visibility = 0;
+    OOS_Text_backgroundColour = 1;
+    OOS_Text_foregroundColour = 0;
+    OOS_Text_visibility = 0;
+    StatePhrase_foregroundColour = 3;
+    StatePhrase_visibility = 1;
+    value = 1;
+  }
+
+  instance cfmsSymbols.DTrendValue Set1Trd1Value6
+  {
+    x = 284;
+    y = 346;
+    visibility = 1;
+    xReference = 284;
+    yReference = 346;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Bad_Text_foregroundColour = 1;
+    Bad_Text_visibility = 0;
+    BlinkBox_foregroundFillColour = 0;
+    Dashes_foregroundColour = 0;
+    Dashes_visibility = 0;
+    disfmt = "%8.2e";
+    ErrorText_foregroundColour = 16;
+    ErrorText_visibility = 0;
+    Inserted_visibility = 0;
+    message1 = "";
+    message2 = "";
+    NumericValue_foregroundColour = 3;
+    NumericValue_visibility = 1;
+    OOR_High_visibility = 0;
+    OOR_Low_visibility = 0;
+    OOS_Text_backgroundColour = 1;
+    OOS_Text_foregroundColour = 18;
+    OOS_Text_visibility = 0;
+    StatePhrase_foregroundColour = 3;
+    StatePhrase_visibility = 0;
+    value = -0.28;
+  }
+
+  instance cfmsSymbols.DTrendValue Set1Trd2Value6
+  {
+    x = 474;
+    y = 346;
+    visibility = 1;
+    xReference = 474;
+    yReference = 346;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Bad_Text_foregroundColour = 1;
+    Bad_Text_visibility = 0;
+    BlinkBox_foregroundFillColour = 0;
+    Dashes_foregroundColour = 0;
+    Dashes_visibility = 0;
+    disfmt = "%6.0f";
+    ErrorText_foregroundColour = 16;
+    ErrorText_visibility = 0;
+    Inserted_visibility = 0;
+    message1 = "";
+    message2 = "";
+    NumericValue_foregroundColour = 3;
+    NumericValue_visibility = 1;
+    OOR_High_visibility = 0;
+    OOR_Low_visibility = 0;
+    OOS_Text_backgroundColour = 1;
+    OOS_Text_foregroundColour = 18;
+    OOS_Text_visibility = 0;
+    StatePhrase_foregroundColour = 3;
+    StatePhrase_visibility = 0;
+    value = 44;
+  }
+
+  instance cfmsSymbols.DTrendValue Set1Trd3Value6
+  {
+    x = 664;
+    y = 346;
+    visibility = 0;
+    xReference = 664;
+    yReference = 346;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Bad_Text_foregroundColour = 1;
+    Bad_Text_visibility = 0;
+    BlinkBox_foregroundFillColour = 0;
+    Dashes_foregroundColour = 0;
+    Dashes_visibility = 0;
+    disfmt = "%8.2e";
+    ErrorText_foregroundColour = 16;
+    ErrorText_visibility = 0;
+    Inserted_visibility = 0;
+    message1 = "";
+    message2 = "";
+    NumericValue_foregroundColour = 3;
+    NumericValue_visibility = 1;
+    OOR_High_visibility = 0;
+    OOR_Low_visibility = 0;
+    OOS_Text_backgroundColour = 1;
+    OOS_Text_foregroundColour = 18;
+    OOS_Text_visibility = 0;
+    StatePhrase_foregroundColour = 3;
+    StatePhrase_visibility = 0;
+    value = -0.28;
+  }
+
+  instance cfmsSymbols.DTrendValue Set1Trd4Value6
+  {
+    x = 854;
+    y = 346;
+    visibility = 0;
+    xReference = 854;
+    yReference = 346;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Bad_Text_foregroundColour = 1;
+    Bad_Text_visibility = 0;
+    BlinkBox_foregroundFillColour = 0;
+    Dashes_foregroundColour = 0;
+    Dashes_visibility = 0;
+    disfmt = "";
+    ErrorText_foregroundColour = 16;
+    ErrorText_visibility = 0;
+    Inserted_visibility = 0;
+    message1 = "OPEN    ";
+    message2 = "NOT FOPN";
+    NumericValue_foregroundColour = 3;
+    NumericValue_visibility = 0;
+    OOR_High_visibility = 0;
+    OOR_Low_visibility = 0;
+    OOS_Text_backgroundColour = 1;
+    OOS_Text_foregroundColour = 0;
+    OOS_Text_visibility = 0;
+    StatePhrase_foregroundColour = 3;
+    StatePhrase_visibility = 1;
+    value = 1;
+  }
+
+  instance cfmsSymbols.DTrendValue Set1Trd1Value4
+  {
+    x = 284;
+    y = 294;
+    visibility = 1;
+    xReference = 284;
+    yReference = 294;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Bad_Text_foregroundColour = 1;
+    Bad_Text_visibility = 0;
+    BlinkBox_foregroundFillColour = 0;
+    Dashes_foregroundColour = 0;
+    Dashes_visibility = 0;
+    disfmt = "%8.2e";
+    ErrorText_foregroundColour = 16;
+    ErrorText_visibility = 0;
+    Inserted_visibility = 0;
+    message1 = "";
+    message2 = "";
+    NumericValue_foregroundColour = 3;
+    NumericValue_visibility = 1;
+    OOR_High_visibility = 0;
+    OOR_Low_visibility = 0;
+    OOS_Text_backgroundColour = 1;
+    OOS_Text_foregroundColour = 18;
+    OOS_Text_visibility = 0;
+    StatePhrase_foregroundColour = 3;
+    StatePhrase_visibility = 0;
+    value = -0.28;
+  }
+
+  instance cfmsSymbols.DTrendValue Set1Trd2Value4
+  {
+    x = 474;
+    y = 294;
+    visibility = 1;
+    xReference = 474;
+    yReference = 294;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Bad_Text_foregroundColour = 1;
+    Bad_Text_visibility = 0;
+    BlinkBox_foregroundFillColour = 0;
+    Dashes_foregroundColour = 0;
+    Dashes_visibility = 0;
+    disfmt = "%6.0f";
+    ErrorText_foregroundColour = 16;
+    ErrorText_visibility = 0;
+    Inserted_visibility = 0;
+    message1 = "";
+    message2 = "";
+    NumericValue_foregroundColour = 3;
+    NumericValue_visibility = 1;
+    OOR_High_visibility = 0;
+    OOR_Low_visibility = 0;
+    OOS_Text_backgroundColour = 1;
+    OOS_Text_foregroundColour = 18;
+    OOS_Text_visibility = 0;
+    StatePhrase_foregroundColour = 3;
+    StatePhrase_visibility = 0;
+    value = 35;
+  }
+
+  instance cfmsSymbols.DTrendValue Set1Trd3Value4
+  {
+    x = 664;
+    y = 294;
+    visibility = 0;
+    xReference = 664;
+    yReference = 294;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Bad_Text_foregroundColour = 1;
+    Bad_Text_visibility = 0;
+    BlinkBox_foregroundFillColour = 0;
+    Dashes_foregroundColour = 0;
+    Dashes_visibility = 0;
+    disfmt = "%8.2e";
+    ErrorText_foregroundColour = 16;
+    ErrorText_visibility = 0;
+    Inserted_visibility = 0;
+    message1 = "";
+    message2 = "";
+    NumericValue_foregroundColour = 3;
+    NumericValue_visibility = 1;
+    OOR_High_visibility = 0;
+    OOR_Low_visibility = 0;
+    OOS_Text_backgroundColour = 1;
+    OOS_Text_foregroundColour = 18;
+    OOS_Text_visibility = 0;
+    StatePhrase_foregroundColour = 3;
+    StatePhrase_visibility = 0;
+    value = -0.28;
+  }
+
+  instance cfmsSymbols.DTrendValue Set1Trd4Value4
+  {
+    x = 854;
+    y = 294;
+    visibility = 0;
+    xReference = 854;
+    yReference = 294;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Bad_Text_foregroundColour = 1;
+    Bad_Text_visibility = 0;
+    BlinkBox_foregroundFillColour = 0;
+    Dashes_foregroundColour = 0;
+    Dashes_visibility = 0;
+    disfmt = "";
+    ErrorText_foregroundColour = 16;
+    ErrorText_visibility = 0;
+    Inserted_visibility = 0;
+    message1 = "OPEN    ";
+    message2 = "NOT FOPN";
+    NumericValue_foregroundColour = 3;
+    NumericValue_visibility = 0;
+    OOR_High_visibility = 0;
+    OOR_Low_visibility = 0;
+    OOS_Text_backgroundColour = 1;
+    OOS_Text_foregroundColour = 0;
+    OOS_Text_visibility = 0;
+    StatePhrase_foregroundColour = 3;
+    StatePhrase_visibility = 1;
+    value = 1;
+  }
+
+  instance cfmsSymbols.DTrendValue Set1Trd1Value1
+  {
+    x = 284;
+    y = 216;
+    visibility = 1;
+    xReference = 284;
+    yReference = 216;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Bad_Text_foregroundColour = 1;
+    Bad_Text_visibility = 0;
+    BlinkBox_foregroundFillColour = 0;
+    Dashes_foregroundColour = 0;
+    Dashes_visibility = 0;
+    disfmt = "%8.2e";
+    ErrorText_foregroundColour = 16;
+    ErrorText_visibility = 0;
+    Inserted_visibility = 0;
+    message1 = "";
+    message2 = "";
+    NumericValue_foregroundColour = 3;
+    NumericValue_visibility = 1;
+    OOR_High_visibility = 0;
+    OOR_Low_visibility = 0;
+    OOS_Text_backgroundColour = 1;
+    OOS_Text_foregroundColour = 18;
+    OOS_Text_visibility = 0;
+    StatePhrase_foregroundColour = 3;
+    StatePhrase_visibility = 0;
+    value = -0.28;
+  }
+
+  instance cfmsSymbols.DTrendValue Set1Trd2Value1
+  {
+    x = 474;
+    y = 216;
+    visibility = 1;
+    xReference = 474;
+    yReference = 216;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Bad_Text_foregroundColour = 1;
+    Bad_Text_visibility = 0;
+    BlinkBox_foregroundFillColour = 0;
+    Dashes_foregroundColour = 0;
+    Dashes_visibility = 0;
+    disfmt = "%6.0f";
+    ErrorText_foregroundColour = 16;
+    ErrorText_visibility = 0;
+    Inserted_visibility = 0;
+    message1 = "";
+    message2 = "";
+    NumericValue_foregroundColour = 3;
+    NumericValue_visibility = 1;
+    OOR_High_visibility = 0;
+    OOR_Low_visibility = 0;
+    OOS_Text_backgroundColour = 1;
+    OOS_Text_foregroundColour = 18;
+    OOS_Text_visibility = 0;
+    StatePhrase_foregroundColour = 3;
+    StatePhrase_visibility = 0;
+    value = 55;
+  }
+
+  instance cfmsSymbols.DTrendValue Set1Trd3Value1
+  {
+    x = 664;
+    y = 216;
+    visibility = 0;
+    xReference = 664;
+    yReference = 216;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Bad_Text_foregroundColour = 1;
+    Bad_Text_visibility = 0;
+    BlinkBox_foregroundFillColour = 0;
+    Dashes_foregroundColour = 0;
+    Dashes_visibility = 0;
+    disfmt = "%8.2e";
+    ErrorText_foregroundColour = 16;
+    ErrorText_visibility = 0;
+    Inserted_visibility = 0;
+    message1 = "";
+    message2 = "";
+    NumericValue_foregroundColour = 3;
+    NumericValue_visibility = 1;
+    OOR_High_visibility = 0;
+    OOR_Low_visibility = 0;
+    OOS_Text_backgroundColour = 1;
+    OOS_Text_foregroundColour = 18;
+    OOS_Text_visibility = 0;
+    StatePhrase_foregroundColour = 3;
+    StatePhrase_visibility = 0;
+    value = -0.28;
+  }
+
+  instance cfmsSymbols.DTrendValue Set1Trd4Value1
+  {
+    x = 854;
+    y = 216;
+    visibility = 0;
+    xReference = 854;
+    yReference = 216;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Bad_Text_foregroundColour = 1;
+    Bad_Text_visibility = 0;
+    BlinkBox_foregroundFillColour = 0;
+    Dashes_foregroundColour = 0;
+    Dashes_visibility = 0;
+    disfmt = "";
+    ErrorText_foregroundColour = 16;
+    ErrorText_visibility = 0;
+    Inserted_visibility = 0;
+    message1 = "OPEN    ";
+    message2 = "NOT FOPN";
+    NumericValue_foregroundColour = 3;
+    NumericValue_visibility = 0;
+    OOR_High_visibility = 0;
+    OOR_Low_visibility = 0;
+    OOS_Text_backgroundColour = 1;
+    OOS_Text_foregroundColour = 0;
+    OOS_Text_visibility = 0;
+    StatePhrase_foregroundColour = 3;
+    StatePhrase_visibility = 1;
+    value = 1;
+  }
+
+  instance cfmsSymbols.DTrendValue Set1Trd1Value9
+  {
+    x = 284;
+    y = 424;
+    visibility = 1;
+    xReference = 284;
+    yReference = 424;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Bad_Text_foregroundColour = 1;
+    Bad_Text_visibility = 0;
+    BlinkBox_foregroundFillColour = 0;
+    Dashes_foregroundColour = 0;
+    Dashes_visibility = 0;
+    disfmt = "%8.2e";
+    ErrorText_foregroundColour = 16;
+    ErrorText_visibility = 0;
+    Inserted_visibility = 0;
+    message1 = "";
+    message2 = "";
+    NumericValue_foregroundColour = 3;
+    NumericValue_visibility = 1;
+    OOR_High_visibility = 0;
+    OOR_Low_visibility = 0;
+    OOS_Text_backgroundColour = 1;
+    OOS_Text_foregroundColour = 18;
+    OOS_Text_visibility = 0;
+    StatePhrase_foregroundColour = 3;
+    StatePhrase_visibility = 0;
+    value = -0.28;
+  }
+
+  instance cfmsSymbols.DTrendValue Set1Trd2Value9
+  {
+    x = 474;
+    y = 424;
+    visibility = 1;
+    xReference = 474;
+    yReference = 424;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Bad_Text_foregroundColour = 1;
+    Bad_Text_visibility = 0;
+    BlinkBox_foregroundFillColour = 0;
+    Dashes_foregroundColour = 0;
+    Dashes_visibility = 0;
+    disfmt = "%6.0f";
+    ErrorText_foregroundColour = 16;
+    ErrorText_visibility = 0;
+    Inserted_visibility = 0;
+    message1 = "";
+    message2 = "";
+    NumericValue_foregroundColour = 3;
+    NumericValue_visibility = 1;
+    OOR_High_visibility = 0;
+    OOR_Low_visibility = 0;
+    OOS_Text_backgroundColour = 1;
+    OOS_Text_foregroundColour = 18;
+    OOS_Text_visibility = 0;
+    StatePhrase_foregroundColour = 3;
+    StatePhrase_visibility = 0;
+    value = 48;
+  }
+
+  instance cfmsSymbols.DTrendValue Set1Trd3Value9
+  {
+    x = 664;
+    y = 424;
+    visibility = 0;
+    xReference = 664;
+    yReference = 424;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Bad_Text_foregroundColour = 1;
+    Bad_Text_visibility = 0;
+    BlinkBox_foregroundFillColour = 0;
+    Dashes_foregroundColour = 0;
+    Dashes_visibility = 0;
+    disfmt = "%8.2e";
+    ErrorText_foregroundColour = 16;
+    ErrorText_visibility = 0;
+    Inserted_visibility = 0;
+    message1 = "";
+    message2 = "";
+    NumericValue_foregroundColour = 3;
+    NumericValue_visibility = 1;
+    OOR_High_visibility = 0;
+    OOR_Low_visibility = 0;
+    OOS_Text_backgroundColour = 1;
+    OOS_Text_foregroundColour = 18;
+    OOS_Text_visibility = 0;
+    StatePhrase_foregroundColour = 3;
+    StatePhrase_visibility = 0;
+    value = -0.28;
+  }
+
+  instance cfmsSymbols.DTrendValue Set1Trd4Value9
+  {
+    x = 854;
+    y = 424;
+    visibility = 0;
+    xReference = 854;
+    yReference = 424;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Bad_Text_foregroundColour = 1;
+    Bad_Text_visibility = 0;
+    BlinkBox_foregroundFillColour = 0;
+    Dashes_foregroundColour = 0;
+    Dashes_visibility = 0;
+    disfmt = "";
+    ErrorText_foregroundColour = 16;
+    ErrorText_visibility = 0;
+    Inserted_visibility = 0;
+    message1 = "OPEN    ";
+    message2 = "NOT FOPN";
+    NumericValue_foregroundColour = 3;
+    NumericValue_visibility = 0;
+    OOR_High_visibility = 0;
+    OOR_Low_visibility = 0;
+    OOS_Text_backgroundColour = 1;
+    OOS_Text_foregroundColour = 0;
+    OOS_Text_visibility = 0;
+    StatePhrase_foregroundColour = 3;
+    StatePhrase_visibility = 1;
+    value = 1;
+  }
+
+  instance cfmsSymbols.DTrendValue Set1Trd1Value7
+  {
+    x = 284;
+    y = 372;
+    visibility = 1;
+    xReference = 284;
+    yReference = 372;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Bad_Text_foregroundColour = 1;
+    Bad_Text_visibility = 0;
+    BlinkBox_foregroundFillColour = 0;
+    Dashes_foregroundColour = 0;
+    Dashes_visibility = 0;
+    disfmt = "%8.2e";
+    ErrorText_foregroundColour = 16;
+    ErrorText_visibility = 0;
+    Inserted_visibility = 0;
+    message1 = "";
+    message2 = "";
+    NumericValue_foregroundColour = 3;
+    NumericValue_visibility = 1;
+    OOR_High_visibility = 0;
+    OOR_Low_visibility = 0;
+    OOS_Text_backgroundColour = 1;
+    OOS_Text_foregroundColour = 18;
+    OOS_Text_visibility = 0;
+    StatePhrase_foregroundColour = 3;
+    StatePhrase_visibility = 0;
+    value = -0.28;
+  }
+
+  instance cfmsSymbols.DTrendValue Set1Trd2Value7
+  {
+    x = 474;
+    y = 372;
+    visibility = 1;
+    xReference = 474;
+    yReference = 372;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Bad_Text_foregroundColour = 1;
+    Bad_Text_visibility = 0;
+    BlinkBox_foregroundFillColour = 0;
+    Dashes_foregroundColour = 0;
+    Dashes_visibility = 0;
+    disfmt = "%6.0f";
+    ErrorText_foregroundColour = 16;
+    ErrorText_visibility = 0;
+    Inserted_visibility = 0;
+    message1 = "";
+    message2 = "";
+    NumericValue_foregroundColour = 3;
+    NumericValue_visibility = 1;
+    OOR_High_visibility = 0;
+    OOR_Low_visibility = 0;
+    OOS_Text_backgroundColour = 1;
+    OOS_Text_foregroundColour = 18;
+    OOS_Text_visibility = 0;
+    StatePhrase_foregroundColour = 3;
+    StatePhrase_visibility = 0;
+    value = 46;
+  }
+
+  instance cfmsSymbols.DTrendValue Set1Trd3Value7
+  {
+    x = 664;
+    y = 372;
+    visibility = 0;
+    xReference = 664;
+    yReference = 372;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Bad_Text_foregroundColour = 1;
+    Bad_Text_visibility = 0;
+    BlinkBox_foregroundFillColour = 0;
+    Dashes_foregroundColour = 0;
+    Dashes_visibility = 0;
+    disfmt = "%8.2e";
+    ErrorText_foregroundColour = 16;
+    ErrorText_visibility = 0;
+    Inserted_visibility = 0;
+    message1 = "";
+    message2 = "";
+    NumericValue_foregroundColour = 3;
+    NumericValue_visibility = 1;
+    OOR_High_visibility = 0;
+    OOR_Low_visibility = 0;
+    OOS_Text_backgroundColour = 1;
+    OOS_Text_foregroundColour = 18;
+    OOS_Text_visibility = 0;
+    StatePhrase_foregroundColour = 3;
+    StatePhrase_visibility = 0;
+    value = -0.28;
+  }
+
+  instance cfmsSymbols.DTrendValue Set1Trd4Value7
+  {
+    x = 854;
+    y = 372;
+    visibility = 0;
+    xReference = 854;
+    yReference = 372;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Bad_Text_foregroundColour = 1;
+    Bad_Text_visibility = 0;
+    BlinkBox_foregroundFillColour = 0;
+    Dashes_foregroundColour = 0;
+    Dashes_visibility = 0;
+    disfmt = "";
+    ErrorText_foregroundColour = 16;
+    ErrorText_visibility = 0;
+    Inserted_visibility = 0;
+    message1 = "OPEN    ";
+    message2 = "NOT FOPN";
+    NumericValue_foregroundColour = 3;
+    NumericValue_visibility = 0;
+    OOR_High_visibility = 0;
+    OOR_Low_visibility = 0;
+    OOS_Text_backgroundColour = 1;
+    OOS_Text_foregroundColour = 0;
+    OOS_Text_visibility = 0;
+    StatePhrase_foregroundColour = 3;
+    StatePhrase_visibility = 1;
+    value = 1;
+  }
+
+  instance cfmsSymbols.DTrendValue Set1Trd1Value5
+  {
+    x = 284;
+    y = 320;
+    visibility = 1;
+    xReference = 284;
+    yReference = 320;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Bad_Text_foregroundColour = 1;
+    Bad_Text_visibility = 0;
+    BlinkBox_foregroundFillColour = 0;
+    Dashes_foregroundColour = 0;
+    Dashes_visibility = 0;
+    disfmt = "%8.2e";
+    ErrorText_foregroundColour = 16;
+    ErrorText_visibility = 0;
+    Inserted_visibility = 0;
+    message1 = "";
+    message2 = "";
+    NumericValue_foregroundColour = 3;
+    NumericValue_visibility = 1;
+    OOR_High_visibility = 0;
+    OOR_Low_visibility = 0;
+    OOS_Text_backgroundColour = 1;
+    OOS_Text_foregroundColour = 18;
+    OOS_Text_visibility = 0;
+    StatePhrase_foregroundColour = 3;
+    StatePhrase_visibility = 0;
+    value = -0.28;
+  }
+
+  instance cfmsSymbols.DTrendValue Set1Trd2Value5
+  {
+    x = 474;
+    y = 320;
+    visibility = 1;
+    xReference = 474;
+    yReference = 320;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Bad_Text_foregroundColour = 1;
+    Bad_Text_visibility = 0;
+    BlinkBox_foregroundFillColour = 0;
+    Dashes_foregroundColour = 0;
+    Dashes_visibility = 0;
+    disfmt = "%6.0f";
+    ErrorText_foregroundColour = 16;
+    ErrorText_visibility = 0;
+    Inserted_visibility = 0;
+    message1 = "";
+    message2 = "";
+    NumericValue_foregroundColour = 3;
+    NumericValue_visibility = 1;
+    OOR_High_visibility = 0;
+    OOR_Low_visibility = 0;
+    OOS_Text_backgroundColour = 1;
+    OOS_Text_foregroundColour = 18;
+    OOS_Text_visibility = 0;
+    StatePhrase_foregroundColour = 3;
+    StatePhrase_visibility = 0;
+    value = 44;
+  }
+
+  instance cfmsSymbols.DTrendValue Set1Trd3Value5
+  {
+    x = 664;
+    y = 320;
+    visibility = 0;
+    xReference = 664;
+    yReference = 320;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Bad_Text_foregroundColour = 1;
+    Bad_Text_visibility = 0;
+    BlinkBox_foregroundFillColour = 0;
+    Dashes_foregroundColour = 0;
+    Dashes_visibility = 0;
+    disfmt = "%8.2e";
+    ErrorText_foregroundColour = 16;
+    ErrorText_visibility = 0;
+    Inserted_visibility = 0;
+    message1 = "";
+    message2 = "";
+    NumericValue_foregroundColour = 3;
+    NumericValue_visibility = 1;
+    OOR_High_visibility = 0;
+    OOR_Low_visibility = 0;
+    OOS_Text_backgroundColour = 1;
+    OOS_Text_foregroundColour = 18;
+    OOS_Text_visibility = 0;
+    StatePhrase_foregroundColour = 3;
+    StatePhrase_visibility = 0;
+    value = -0.28;
+  }
+
+  instance cfmsSymbols.DTrendValue Set1Trd4Value5
+  {
+    x = 854;
+    y = 320;
+    visibility = 0;
+    xReference = 854;
+    yReference = 320;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Bad_Text_foregroundColour = 1;
+    Bad_Text_visibility = 0;
+    BlinkBox_foregroundFillColour = 0;
+    Dashes_foregroundColour = 0;
+    Dashes_visibility = 0;
+    disfmt = "";
+    ErrorText_foregroundColour = 16;
+    ErrorText_visibility = 0;
+    Inserted_visibility = 0;
+    message1 = "OPEN    ";
+    message2 = "NOT FOPN";
+    NumericValue_foregroundColour = 3;
+    NumericValue_visibility = 0;
+    OOR_High_visibility = 0;
+    OOR_Low_visibility = 0;
+    OOS_Text_backgroundColour = 1;
+    OOS_Text_foregroundColour = 0;
+    OOS_Text_visibility = 0;
+    StatePhrase_foregroundColour = 3;
+    StatePhrase_visibility = 1;
+    value = 1;
+  }
+
+  instance cfmsSymbols.DTrendValue Set1Trd1Value3
+  {
+    x = 284;
+    y = 268;
+    visibility = 1;
+    xReference = 284;
+    yReference = 268;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Bad_Text_foregroundColour = 1;
+    Bad_Text_visibility = 0;
+    BlinkBox_foregroundFillColour = 0;
+    Dashes_foregroundColour = 0;
+    Dashes_visibility = 0;
+    disfmt = "%8.2e";
+    ErrorText_foregroundColour = 16;
+    ErrorText_visibility = 0;
+    Inserted_visibility = 0;
+    message1 = "";
+    message2 = "";
+    NumericValue_foregroundColour = 3;
+    NumericValue_visibility = 1;
+    OOR_High_visibility = 0;
+    OOR_Low_visibility = 0;
+    OOS_Text_backgroundColour = 1;
+    OOS_Text_foregroundColour = 18;
+    OOS_Text_visibility = 0;
+    StatePhrase_foregroundColour = 3;
+    StatePhrase_visibility = 0;
+    value = -0.28;
+  }
+
+  instance cfmsSymbols.DTrendValue Set1Trd2Value3
+  {
+    x = 474;
+    y = 268;
+    visibility = 1;
+    xReference = 474;
+    yReference = 268;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Bad_Text_foregroundColour = 1;
+    Bad_Text_visibility = 0;
+    BlinkBox_foregroundFillColour = 0;
+    Dashes_foregroundColour = 0;
+    Dashes_visibility = 0;
+    disfmt = "%6.0f";
+    ErrorText_foregroundColour = 16;
+    ErrorText_visibility = 0;
+    Inserted_visibility = 0;
+    message1 = "";
+    message2 = "";
+    NumericValue_foregroundColour = 3;
+    NumericValue_visibility = 1;
+    OOR_High_visibility = 0;
+    OOR_Low_visibility = 0;
+    OOS_Text_backgroundColour = 1;
+    OOS_Text_foregroundColour = 18;
+    OOS_Text_visibility = 0;
+    StatePhrase_foregroundColour = 3;
+    StatePhrase_visibility = 0;
+    value = 35;
+  }
+
+  instance cfmsSymbols.DTrendValue Set1Trd3Value3
+  {
+    x = 664;
+    y = 268;
+    visibility = 0;
+    xReference = 664;
+    yReference = 268;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Bad_Text_foregroundColour = 1;
+    Bad_Text_visibility = 0;
+    BlinkBox_foregroundFillColour = 0;
+    Dashes_foregroundColour = 0;
+    Dashes_visibility = 0;
+    disfmt = "%8.2e";
+    ErrorText_foregroundColour = 16;
+    ErrorText_visibility = 0;
+    Inserted_visibility = 0;
+    message1 = "";
+    message2 = "";
+    NumericValue_foregroundColour = 3;
+    NumericValue_visibility = 1;
+    OOR_High_visibility = 0;
+    OOR_Low_visibility = 0;
+    OOS_Text_backgroundColour = 1;
+    OOS_Text_foregroundColour = 18;
+    OOS_Text_visibility = 0;
+    StatePhrase_foregroundColour = 3;
+    StatePhrase_visibility = 0;
+    value = -0.28;
+  }
+
+  instance cfmsSymbols.DTrendValue Set1Trd4Value3
+  {
+    x = 854;
+    y = 268;
+    visibility = 0;
+    xReference = 854;
+    yReference = 268;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Bad_Text_foregroundColour = 1;
+    Bad_Text_visibility = 0;
+    BlinkBox_foregroundFillColour = 0;
+    Dashes_foregroundColour = 0;
+    Dashes_visibility = 0;
+    disfmt = "";
+    ErrorText_foregroundColour = 16;
+    ErrorText_visibility = 0;
+    Inserted_visibility = 0;
+    message1 = "OPEN    ";
+    message2 = "NOT FOPN";
+    NumericValue_foregroundColour = 3;
+    NumericValue_visibility = 0;
+    OOR_High_visibility = 0;
+    OOR_Low_visibility = 0;
+    OOS_Text_backgroundColour = 1;
+    OOS_Text_foregroundColour = 0;
+    OOS_Text_visibility = 0;
+    StatePhrase_foregroundColour = 3;
+    StatePhrase_visibility = 1;
+    value = 1;
+  }
+
+  instance cfmsSymbols.DTrendValue Set1Trd1Value2
+  {
+    x = 284;
+    y = 242;
+    visibility = 0;
+    xReference = 284;
+    yReference = 242;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Bad_Text_foregroundColour = 1;
+    Bad_Text_visibility = 0;
+    BlinkBox_foregroundFillColour = 0;
+    Dashes_foregroundColour = 0;
+    Dashes_visibility = 0;
+    disfmt = "%8.2e";
+    ErrorText_foregroundColour = 16;
+    ErrorText_visibility = 0;
+    Inserted_visibility = 0;
+    message1 = "";
+    message2 = "";
+    NumericValue_foregroundColour = 3;
+    NumericValue_visibility = 1;
+    OOR_High_visibility = 0;
+    OOR_Low_visibility = 0;
+    OOS_Text_backgroundColour = 1;
+    OOS_Text_foregroundColour = 18;
+    OOS_Text_visibility = 0;
+    StatePhrase_foregroundColour = 3;
+    StatePhrase_visibility = 0;
+    value = -0.28;
+  }
+
+  instance cfmsSymbols.DTrendValue Set1Trd2Value2
+  {
+    x = 474;
+    y = 242;
+    visibility = 0;
+    xReference = 474;
+    yReference = 242;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Bad_Text_foregroundColour = 1;
+    Bad_Text_visibility = 0;
+    BlinkBox_foregroundFillColour = 0;
+    Dashes_foregroundColour = 0;
+    Dashes_visibility = 0;
+    disfmt = "%6.0f";
+    ErrorText_foregroundColour = 16;
+    ErrorText_visibility = 0;
+    Inserted_visibility = 0;
+    message1 = "";
+    message2 = "";
+    NumericValue_foregroundColour = 3;
+    NumericValue_visibility = 1;
+    OOR_High_visibility = 0;
+    OOR_Low_visibility = 0;
+    OOS_Text_backgroundColour = 1;
+    OOS_Text_foregroundColour = 18;
+    OOS_Text_visibility = 0;
+    StatePhrase_foregroundColour = 3;
+    StatePhrase_visibility = 0;
+    value = 35;
+  }
+
+  instance cfmsSymbols.DTrendValue Set1Trd3Value2
+  {
+    x = 664;
+    y = 242;
+    visibility = 0;
+    xReference = 664;
+    yReference = 242;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Bad_Text_foregroundColour = 1;
+    Bad_Text_visibility = 0;
+    BlinkBox_foregroundFillColour = 0;
+    Dashes_foregroundColour = 0;
+    Dashes_visibility = 0;
+    disfmt = "%8.2e";
+    ErrorText_foregroundColour = 16;
+    ErrorText_visibility = 0;
+    Inserted_visibility = 0;
+    message1 = "";
+    message2 = "";
+    NumericValue_foregroundColour = 3;
+    NumericValue_visibility = 1;
+    OOR_High_visibility = 0;
+    OOR_Low_visibility = 0;
+    OOS_Text_backgroundColour = 1;
+    OOS_Text_foregroundColour = 18;
+    OOS_Text_visibility = 0;
+    StatePhrase_foregroundColour = 3;
+    StatePhrase_visibility = 0;
+    value = -0.28;
+  }
+
+  instance cfmsSymbols.DTrendValue Set1Trd4Value2
+  {
+    x = 854;
+    y = 242;
+    visibility = 0;
+    xReference = 854;
+    yReference = 242;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Bad_Text_foregroundColour = 1;
+    Bad_Text_visibility = 0;
+    BlinkBox_foregroundFillColour = 0;
+    Dashes_foregroundColour = 0;
+    Dashes_visibility = 0;
+    disfmt = "";
+    ErrorText_foregroundColour = 16;
+    ErrorText_visibility = 0;
+    Inserted_visibility = 0;
+    message1 = "OPEN    ";
+    message2 = "NOT FOPN";
+    NumericValue_foregroundColour = 3;
+    NumericValue_visibility = 0;
+    OOR_High_visibility = 0;
+    OOR_Low_visibility = 0;
+    OOS_Text_backgroundColour = 1;
+    OOS_Text_foregroundColour = 0;
+    OOS_Text_visibility = 0;
+    StatePhrase_foregroundColour = 3;
+    StatePhrase_visibility = 1;
+    value = 1;
+  }
+
+  instance cfmsSymbols.DTrendPID Set1Trd1PidNo
+  {
+    x = 276;
+    y = 181;
+    visibility = 1;
+    xReference = 276;
+    yReference = 181;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    TheNewText = "CIYKASIL";
+    TheOriginalText = "CIYKASIL";
+  }
+
+  instance cfmsSymbols.DTrendPID Set1Trd2PidNo
+  {
+    x = 468;
+    y = 181;
+    visibility = 1;
+    xReference = 468;
+    yReference = 181;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    TheNewText = "CXKQSEC";
+    TheOriginalText = "CXKQSEC";
+  }
+
+  instance cfmsSymbols.DTrendPID Set1Trd3PidNo
+  {
+    x = 655;
+    y = 181;
+    visibility = 0;
+    xReference = 655;
+    yReference = 181;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    TheNewText = "";
+    TheOriginalText = "";
+  }
+
+  instance cfmsSymbols.DTrendPID Set1Trd4PidNo
+  {
+    x = 845;
+    y = 181;
+    visibility = 0;
+    xReference = 845;
+    yReference = 181;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    TheNewText = "";
+    TheOriginalText = "";
+  }
+
+  instance cfmsSymbols.DTrendPID Set1Trd5PidNo
+  {
+    x = 1033;
+    y = 181;
+    visibility = 0;
+    xReference = 1033;
+    yReference = 181;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    TheNewText = "";
+    TheOriginalText = "";
+  }
+
+  instance cfmsSymbols.DTrendValue Set1Trd1Value20
+  {
+    x = 284;
+    y = 710;
+    visibility = 0;
+    xReference = 284;
+    yReference = 710;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Bad_Text_foregroundColour = 1;
+    Bad_Text_visibility = 0;
+    BlinkBox_foregroundFillColour = 0;
+    Dashes_foregroundColour = 0;
+    Dashes_visibility = 0;
+    disfmt = "%8.2e";
+    ErrorText_foregroundColour = 16;
+    ErrorText_visibility = 0;
+    Inserted_visibility = 0;
+    message1 = "";
+    message2 = "";
+    NumericValue_foregroundColour = 3;
+    NumericValue_visibility = 1;
+    OOR_High_visibility = 0;
+    OOR_Low_visibility = 0;
+    OOS_Text_backgroundColour = 1;
+    OOS_Text_foregroundColour = 18;
+    OOS_Text_visibility = 0;
+    StatePhrase_foregroundColour = 3;
+    StatePhrase_visibility = 0;
+    value = -0.28;
+  }
+
+  instance cfmsSymbols.DTrendValue Set1Trd2Value20
+  {
+    x = 474;
+    y = 710;
+    visibility = 0;
+    xReference = 474;
+    yReference = 710;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Bad_Text_foregroundColour = 1;
+    Bad_Text_visibility = 0;
+    BlinkBox_foregroundFillColour = 0;
+    Dashes_foregroundColour = 0;
+    Dashes_visibility = 0;
+    disfmt = "%6.0f";
+    ErrorText_foregroundColour = 16;
+    ErrorText_visibility = 0;
+    Inserted_visibility = 0;
+    message1 = "";
+    message2 = "";
+    NumericValue_foregroundColour = 3;
+    NumericValue_visibility = 1;
+    OOR_High_visibility = 0;
+    OOR_Low_visibility = 0;
+    OOS_Text_backgroundColour = 1;
+    OOS_Text_foregroundColour = 18;
+    OOS_Text_visibility = 0;
+    StatePhrase_foregroundColour = 3;
+    StatePhrase_visibility = 0;
+    value = 44;
+  }
+
+  instance cfmsSymbols.DTrendValue Set1Trd3Value20
+  {
+    x = 664;
+    y = 710;
+    visibility = 0;
+    xReference = 664;
+    yReference = 710;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Bad_Text_foregroundColour = 1;
+    Bad_Text_visibility = 0;
+    BlinkBox_foregroundFillColour = 0;
+    Dashes_foregroundColour = 0;
+    Dashes_visibility = 0;
+    disfmt = "%8.2e";
+    ErrorText_foregroundColour = 16;
+    ErrorText_visibility = 0;
+    Inserted_visibility = 0;
+    message1 = "";
+    message2 = "";
+    NumericValue_foregroundColour = 3;
+    NumericValue_visibility = 1;
+    OOR_High_visibility = 1;
+    OOR_Low_visibility = 0;
+    OOS_Text_backgroundColour = 1;
+    OOS_Text_foregroundColour = 0;
+    OOS_Text_visibility = 0;
+    StatePhrase_foregroundColour = 3;
+    StatePhrase_visibility = 0;
+    value = 600;
+  }
+
+  instance cfmsSymbols.DTrendValue Set1Trd4Value20
+  {
+    x = 854;
+    y = 710;
+    visibility = 0;
+    xReference = 854;
+    yReference = 710;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Bad_Text_foregroundColour = 1;
+    Bad_Text_visibility = 1;
+    BlinkBox_foregroundFillColour = 1;
+    Dashes_foregroundColour = 1;
+    Dashes_visibility = 1;
+    disfmt = "";
+    ErrorText_foregroundColour = 1;
+    ErrorText_visibility = 1;
+    Inserted_visibility = 0;
+    message1 = "";
+    message2 = "";
+    NumericValue_foregroundColour = 1;
+    NumericValue_visibility = 1;
+    OOR_High_visibility = 1;
+    OOR_Low_visibility = 1;
+    OOS_Text_backgroundColour = 1;
+    OOS_Text_foregroundColour = 1;
+    OOS_Text_visibility = 1;
+    StatePhrase_foregroundColour = 1;
+    StatePhrase_visibility = 1;
+    value = 312.701;
+  }
+
+  instance cfmsSymbols.DTrendValue20 Set1Trd1Current
+  {
+    x = 289;
+    y = 759;
+    visibility = 0;
+    xReference = 289;
+    yReference = 759;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Bad_Text_foregroundColour = `Bad_Text.foregroundColour`;
+    Bad_Text_visibility = `Bad_Text.visibility`;
+    BlinkBox_foregroundFillColour = `BlinkBox.foregroundFillColour`;
+    Dashes_foregroundColour = `Dashes.foregroundColour`;
+    Dashes_visibility = `Dashes.visibility`;
+    disfmt_temp = "%6.2f";
+    DisplayUnits = 1;
+    ErrorText_foregroundColour = `ErrorText.foregroundColour`;
+    ErrorText_visibility = `ErrorText.visibility`;
+    Inserted_visibility = `Inserted.visibility`;
+    message1_temp = "";
+    newsta_temp = 5;
+    NumericValue_foregroundColour = `NumericValue.foregroundColour`;
+    NumericValue_visibility = `NumericValue.visibility`;
+    OOR_High_visibility = `OOR_High.visibility`;
+    OOR_Low_visibility = `OOR_Low.visibility`;
+    OOS_Text_backgroundColour = `OOS_Text.backgroundColour`;
+    OOS_Text_foregroundColour = `OOS_Text.foregroundColour`;
+    OOS_Text_visibility = `OOS_Text.visibility`;
+    pid_temp = "AFF0047";
+    pisabitmap_temp = 5;
+    //PointId = `&::UCN5and6.InterfaceToGUI.CIYKASIL`;
+    PointId = `&CIYKASIL`;		//CORENET 20170602 by Philkyu Kwon
+    sig_type_temp = 5;
+    StatePhrase_foregroundColour = `StatePhrase.foregroundColour`;
+    StatePhrase_visibility = `StatePhrase.visibility`;
+    value_temp = 74.4025;
+  }
+
+  instance cfmsSymbols.DTrendValue20 Set1Trd3Current
+  {
+    x = 670;
+    y = 759;
+    visibility = 0;
+    xReference = 670;
+    yReference = 759;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Bad_Text_foregroundColour = `Bad_Text.foregroundColour`;
+    Bad_Text_visibility = `Bad_Text.visibility`;
+    BlinkBox_foregroundFillColour = `BlinkBox.foregroundFillColour`;
+    Dashes_foregroundColour = `Dashes.foregroundColour`;
+    Dashes_visibility = `Dashes.visibility`;
+    disfmt_temp = "%6.1f";
+    DisplayUnits = 1;
+    ErrorText_foregroundColour = `ErrorText.foregroundColour`;
+    ErrorText_visibility = `ErrorText.visibility`;
+    Inserted_visibility = `Inserted.visibility`;
+    message1_temp = "";
+    newsta_temp = 0;
+    NumericValue_foregroundColour = `NumericValue.foregroundColour`;
+    NumericValue_visibility = `NumericValue.visibility`;
+    OOR_High_visibility = `OOR_High.visibility`;
+    OOR_Low_visibility = `OOR_Low.visibility`;
+    OOS_Text_backgroundColour = `OOS_Text.backgroundColour`;
+    OOS_Text_foregroundColour = `OOS_Text.foregroundColour`;
+    OOS_Text_visibility = `OOS_Text.visibility`;
+    pid_temp = "CET01";
+    pisabitmap_temp = 0;
+    //PointId = `&::UCN5and6.InterfaceToGUI.CIYKASIL`;
+    PointId = `&CIYKASIL`;		//CORENET 20170602 by Philkyu Kwon
+    sig_type_temp = 6;
+    StatePhrase_foregroundColour = `StatePhrase.foregroundColour`;
+    StatePhrase_visibility = `StatePhrase.visibility`;
+    value_temp = 23.8781;
+  }
+
+  instance cfmsSymbols.DTrendValue20 Set1Trd2Current
+  {
+    x = 480;
+    y = 759;
+    visibility = 0;
+    xReference = 480;
+    yReference = 759;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Bad_Text_foregroundColour = `Bad_Text.foregroundColour`;
+    Bad_Text_visibility = `Bad_Text.visibility`;
+    BlinkBox_foregroundFillColour = `BlinkBox.foregroundFillColour`;
+    Dashes_foregroundColour = `Dashes.foregroundColour`;
+    Dashes_visibility = `Dashes.visibility`;
+    disfmt_temp = "%6.2f";
+    DisplayUnits = 1;
+    ErrorText_foregroundColour = `ErrorText.foregroundColour`;
+    ErrorText_visibility = `ErrorText.visibility`;
+    Inserted_visibility = `Inserted.visibility`;
+    message1_temp = "";
+    newsta_temp = 5;
+    NumericValue_foregroundColour = `NumericValue.foregroundColour`;
+    NumericValue_visibility = `NumericValue.visibility`;
+    OOR_High_visibility = `OOR_High.visibility`;
+    OOR_Low_visibility = `OOR_Low.visibility`;
+    OOS_Text_backgroundColour = `OOS_Text.backgroundColour`;
+    OOS_Text_foregroundColour = `OOS_Text.foregroundColour`;
+    OOS_Text_visibility = `OOS_Text.visibility`;
+    pid_temp = "AFF0048";
+    pisabitmap_temp = 5;
+    //PointId = `&::UCN5and6.InterfaceToGUI.CXKQSEC`;
+    PointId = `&CXKQSEC`;		//CORENET 20170602 by Philkyu Kwon
+    sig_type_temp = 5;
+    StatePhrase_foregroundColour = `StatePhrase.foregroundColour`;
+    StatePhrase_visibility = `StatePhrase.visibility`;
+    value_temp = 63.9969;
+  }
+
+  instance cfmsSymbols.DTrendValue20 Set1Trd4Current
+  {
+    x = 871;
+    y = 756;
+    visibility = 0;
+    xReference = 871;
+    yReference = 756;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Bad_Text_foregroundColour = `Bad_Text.foregroundColour`;
+    Bad_Text_visibility = `Bad_Text.visibility`;
+    BlinkBox_foregroundFillColour = `BlinkBox.foregroundFillColour`;
+    Dashes_foregroundColour = `Dashes.foregroundColour`;
+    Dashes_visibility = `Dashes.visibility`;
+    disfmt_temp = "%6.1f";
+    DisplayUnits = 1;
+    ErrorText_foregroundColour = `ErrorText.foregroundColour`;
+    ErrorText_visibility = `ErrorText.visibility`;
+    Inserted_visibility = `Inserted.visibility`;
+    message1_temp = "";
+    newsta_temp = 0;
+    NumericValue_foregroundColour = `NumericValue.foregroundColour`;
+    NumericValue_visibility = `NumericValue.visibility`;
+    OOR_High_visibility = `OOR_High.visibility`;
+    OOR_Low_visibility = `OOR_Low.visibility`;
+    OOS_Text_backgroundColour = `OOS_Text.backgroundColour`;
+    OOS_Text_foregroundColour = `OOS_Text.foregroundColour`;
+    OOS_Text_visibility = `OOS_Text.visibility`;
+    pid_temp = "CET02";
+    pisabitmap_temp = 0;
+    //PointId = `&::UCN5and6.InterfaceToGUI.SIZ699H`;
+    PointId = `&SIZ699H`;		//CORENET 20170602 by Philkyu Kwon
+    sig_type_temp = 6;
+    StatePhrase_foregroundColour = `StatePhrase.foregroundColour`;
+    StatePhrase_visibility = `StatePhrase.visibility`;
+    value_temp = 0.226585;
+  }
+
+  line
+  {
+    numberOfPoints = 2;
+    point[0] = ( 100, 47 );
+    point[1] = ( 1170, 47 );
+    visibility = 1;
+    foregroundColour = `COLOR_LINE_BOUNDARY_6`;
+    backgroundColour = -1;
+    lineStyle = `SolidPattern`;
+    lineWidth = 2;
+    xReference = 100;
+    yReference = 47;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  line
+  {
+    numberOfPoints = 2;
+    point[0] = ( 270, 20 );
+    point[1] = ( 270, 170 );
+    visibility = 1;
+    foregroundColour = `COLOR_LINE_BOUNDARY_6`;
+    backgroundColour = -1;
+    lineStyle = `SolidPattern`;
+    lineWidth = 2;
+    xReference = 270;
+    yReference = 20;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  line
+  {
+    numberOfPoints = 2;
+    point[0] = ( 720, 20 );
+    point[1] = ( 720, 170 );
+    visibility = 1;
+    foregroundColour = `COLOR_LINE_BOUNDARY_6`;
+    backgroundColour = -1;
+    lineStyle = `SolidPattern`;
+    lineWidth = 2;
+    xReference = 720;
+    yReference = 20;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  line
+  {
+    numberOfPoints = 2;
+    point[0] = ( 1025, 20 );
+    point[1] = ( 1025, 170 );
+    visibility = 1;
+    foregroundColour = `COLOR_LINE_BOUNDARY_6`;
+    backgroundColour = -1;
+    lineStyle = `SolidPattern`;
+    lineWidth = 2;
+    xReference = 1025;
+    yReference = 20;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text PrintProcessMsg
+  {
+    x = 523;
+    y = 759;
+    format = "%s";
+    theText = "PRINT PROCESSING";
+    alignment = 0;
+    visibility = 0;
+    foregroundColour = `COLOR_POPUP_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 523;
+    yReference = 759;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  line
+  {
+    numberOfPoints = 2;
+    point[0] = ( 105, 205 );
+    point[1] = ( 105, 205 );
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineStyle = `SolidPattern`;
+    lineWidth = 0;
+    xReference = 105;
+    yReference = 205;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  line
+  {
+    numberOfPoints = 2;
+    point[0] = ( 100, 205 );
+    point[1] = ( 220, 205 );
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineStyle = `SolidPattern`;
+    lineWidth = 2;
+    xReference = 100;
+    yReference = 205;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 943;
+    y = 754;
+    format = "%s";
+    theText = "(BEING USED BY OTHERS)";
+    alignment = 0;
+    visibility = `DTrendInUse`;
+    foregroundColour = `COLOR_POPUP_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 943;
+    yReference = 754;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+}

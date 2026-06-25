@@ -1,0 +1,364 @@
+/*
+ * PICASSO-3 CONFIGURATION LANGUAGE FILE
+ *
+ *
+ * Picture name: PicYGN_LSFCascade
+ *
+ *
+ * Documented by  : ygn56
+ * Host           : ucn5
+ * Date           : 25/01-00 at 13:28:33
+ *
+ *
+ * Generate with:
+ *    pcc PicYGN_LSFCascade.Tdoc
+ *
+ */
+
+
+picture PicYGN_LSFCascade
+{
+
+  char *PictureTitle = "LSF MENU";
+  char *PictureNumber = "MENU";
+  char *PageForward = "PicYGN_LSFDisplay";
+  char *PageBack = "";
+  char *ThePointId = "ERRORPID";
+  int ERROR = 0;
+
+  function `void ValidPid()
+{
+//CORENET 20170620************************************
+// Add point to temporary shopping list
+/*
+   if( Interface->System.slaveUpdating!=0)
+   {
+        DisplayAdvisoryMessage("CHANGE FROM MASTER CPU ONLY") ;
+	return;
+   }
+   else
+   {
+*/
+   	execute ("{ manageTempShopList(TEMP_SHOP_INIT_ADD,InputArea.TheOriginalText); }");
+        execute ("{load(\\"%s.ppic\\");}",PageForward);	//CORENET 0706
+   	execute ("{%s.PicturePointId = \`&%s\`;}",PageForward,InputArea.TheOriginalText);
+   	execute ("{displayPicture(\\"Main\\",\\"%s.ppic\\");}",PageForward);
+//   }
+}`
+
+
+
+  function `void Initialize()
+{
+   ERROR = 0;
+   CascadeEnterActive = 1 ;
+   strcpy(InputArea.TheNewText,InputArea.TheOriginalText);
+}`
+
+
+
+  function `void ValidDegree()
+{
+//CORENET 20170620***********************************
+/*
+   if( Interface->System.slaveUpdating!=0)
+   {
+  	DisplayAdvisoryMessage("CHANGE FROM MASTER CPU ONLY") ;
+ 	return;
+   }
+   else
+   {
+*/
+   	//printf ("ValidDegree");
+   	//printf("Starting picture load\\n");
+	//   execute ("{load(\\"PicYGN_LSFPrint.ppic\\");}");
+   	execute ("{displayPicture(\\"Main\\",\\"PicYGN_LSFPrint.ppic\\");}");
+   	//printf("Picture load complete\\n");
+//   }
+}`
+
+
+
+  rectangle 
+  {
+    x = 3;
+    y = 2;
+    width = 410;
+    height = 300;
+
+    visibility = 1;
+    foregroundFillColour = `COLOR_PICTURE_BACKGROUND`;
+    backgroundFillColour = -1;
+    foregroundColour = `(CascadeEnterActive)?COLOR_DATA_NORMAL:COLOR_STATIC_TEXT`;
+    backgroundColour = -1;
+    lineWidth = 7;
+    linePattern = `SolidPattern`;
+    fillPattern = `SolidPattern`;
+    xReference = 10;
+    yReference = 9;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 110;
+    y = 29;
+    format = "%s";
+    theText = "LEAST SQUARES FIT";
+
+    visibility = 1;
+    foregroundColour = `(CascadeEnterActive)?COLOR_DATA_NORMAL:COLOR_STATIC_TEXT`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 110;
+    yReference = 29;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  line 
+  {
+    dialogue
+    {
+      event = `buttonPressed(Right) || keyPressed(ESC)`;
+      action = statement `{
+   CascadeEnterActive = 0;
+   CascadeEnter.unmap();
+   update();
+}`;
+    }
+    numberOfPoints = 2;
+
+    point[0] = (10, 46);
+    point[1] = (408, 46);
+
+    visibility = 1;
+    foregroundColour = `(CascadeEnterActive)?COLOR_DATA_NORMAL:COLOR_STATIC_TEXT`;
+    backgroundColour = -1;
+    lineWidth = 4;
+    lineStyle = `SolidPattern`;
+    xReference = 10;
+    yReference = 46;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 25;
+    y = 86;
+    format = "%s";
+    theText = "The Least Squares Fit Display computes a polynomial";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font2`;
+    xReference = 25;
+    yReference = 91;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 25;
+    y = 111;
+    format = "%s";
+    theText = "curve fit to a set of data points using a least squares";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font2`;
+    xReference = 25;
+    yReference = 121;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 25;
+    y = 161;
+    format = "%s";
+    theText = "from this computation.";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font2`;
+    xReference = 25;
+    yReference = 178;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 25;
+    y = 201;
+    format = "%s";
+    theText = "Note: Proper Security Level is Required.";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font2`;
+    xReference = 20;
+    yReference = 220;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 27;
+    y = 242;
+    format = "%s";
+    theText = "ENTER THE POINT ID:";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font2`;
+    xReference = 17;
+    yReference = 212;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text ErrorText
+  {
+    x = 115;
+    y = 281;
+    format = "%s";
+    theText = "INVALID PID OR POLYNOMIAL DEGREE";
+
+    visibility = `ERROR`;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font2`;
+    xReference = 115;
+    yReference = 276;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 25;
+    y = 136;
+    format = "%s";
+    theText = "fit technique.  A printed report will be generated";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font2`;
+    xReference = 25;
+    yReference = 121;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  instance DialogueSymbols.EnterSmallLSFPointId InputArea
+  {
+    attribute Selected = 0;
+    attribute TheOriginalText = "RCT111X";
+    attribute TheNewText = "RCT111X";
+    attribute FoundAction = "{ValidPid();}";
+    attribute NotFoundAction = "{ERROR=1;}";
+    attribute Scope = "PicYGN_LSFCascade";
+    attribute ERROR = 0;
+    attribute FindPidScope = "::YGN3and4.PicYGN_LSFCascade.InputArea";
+    attribute PolyAction = "{ValidDegree();}";
+    x = 192;
+    y = 218;
+    visibility = 1;
+    xReference = 192;
+    yReference = 185;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance InputArea
+
+
+
+  text 
+  {
+    x = 25;
+    y = 263;
+    format = "%s";
+    theText = "(OR 1-5 FOR POLYNOMIAL DEGREE)";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font2`;
+    xReference = 15;
+    yReference = 233;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+// The picture's other attributes:
+
+  backgroundColour    = 0;
+  xSnap               = 5;
+  ySnap               = 5;
+  angleSnap           = 0;
+  radiusSnap          = 0;
+  worldX              = 0;
+  worldY              = 0;
+  worldWidth          = 417;
+  worldHeight         = 305;
+  oneToOne            = 1;
+  resizeMode          = 0;
+  updateMode          = 2;
+  crosshairStyle      = 1;
+  crosshairLength     = 0;
+  crosshairFollowSnap = `isInEditMode()`;
+  crosshairVisibility = `isInEditMode()`;
+  xReference = 500;
+  yReference = 500;
+  xScaleFactor = 1;
+  yScaleFactor = 1;
+  rotationAngle = 0;
+
+
+}  // end of picture PicYGN_LSFCascade

@@ -1,0 +1,47 @@
+#
+# Remove files which will be regenerated
+#
+
+echo Removing all files in Runtime
+rm -f ./Runtime/*
+
+echo
+echo Removing files which will be regenerated
+rm -f ./undefpids.out
+#rm -f ./pdat/theDatabase.pdat
+
+#
+# Rebuild theDatabase.pdat
+#
+echo
+echo Building theDatabase.pdat
+#./pidlist
+
+#
+# Build new displays
+#
+echo
+echo Building Picasso displays
+make -f MakePictures
+
+#
+# Copy source files to Runtime
+#
+echo
+echo Copying cmds directory to Runtime
+(cd Runtime; (cd ../cmds; tar cf - *) | tar xvf -)
+
+echo
+echo Copying pdat directory to Runtime
+(cd Runtime; (cd ../pdat; tar cf - *) | tar xvf -)
+
+echo
+echo Copying Tdoc directory to Runtime
+(cd Runtime; (cd ../Tdoc; tar cf - *) | tar xvf -)
+
+#
+# Optimize new displays
+#
+echo
+echo Optimizing Picasso Displays
+(cd Runtime;compileDisplays)

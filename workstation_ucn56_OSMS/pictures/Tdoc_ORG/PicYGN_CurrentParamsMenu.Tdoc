@@ -1,0 +1,380 @@
+/*
+ * PICASSO-3 CONFIGURATION LANGUAGE FILE
+ *
+ *
+ * Picture name: PicYGN_CurrentParamsMenu
+ *
+ *
+ * Documented by  : ygn56
+ * Host           : ucn5
+ * Date           : 24/02-99 at 16:40:29
+ *
+ *
+ * Generate with:
+ *    pcc PicYGN_CurrentParamsMenu.Tdoc
+ *
+ */
+
+
+picture PicYGN_CurrentParamsMenu
+{
+
+  char *PictureTitle = "CURRENT PARAMETERS  MENUS";
+  char *PictureNumber = "150";
+
+  function `void Initialize()
+{
+   CFMLevel = 0;
+   Current_Page = 150;
+//
+   //SetupViewData.Active = 0;
+   //ModifyDatabase.Active = 0;
+   update();
+}`
+
+
+
+  dialogue
+  {
+    event = `keyReleased(0x31) || keyReleased(0xFFB1)`;
+    action = statement `{
+SetupViewData.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+SetupViewData.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+
+SetupViewData.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+SetupViewData.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+SetupViewData.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+SetupViewData.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+
+SetupViewData.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+SetupViewData.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+SetupViewData.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+SetupViewData.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+
+   execute("{DisplayPage(\\"%s\\");}",SetupViewData.TheDisplayPage);
+}`;
+  }
+
+  dialogue
+  {
+    event = `keyReleased(0x32) || keyReleased(0xFFB2)`;
+    action = statement `{
+ModifyDatabase.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+ModifyDatabase.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+
+ModifyDatabase.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+ModifyDatabase.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+ModifyDatabase.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+ModifyDatabase.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+
+ModifyDatabase.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+ModifyDatabase.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+ModifyDatabase.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+ModifyDatabase.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+
+   execute("{DisplayPage(\\"%s\\");}",ModifyDatabase.TheDisplayPage);
+}`;
+  }
+
+  dialogue
+  {
+    event = `keyReleased(0x33) || keyReleased(0xFFB3)`;
+    action = statement `{
+Psum.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+Psum.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+
+Psum.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+Psum.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+Psum.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+Psum.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+
+Psum.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+Psum.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+Psum.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+Psum.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+
+   execute("{DisplayPage(\\"%s\\");}",Psum.TheDisplayPage);
+}`;
+  }
+
+  dialogue
+  {
+    event = `keyReleased(0x34) || keyReleased(0xFFB4)`;
+    action = statement `{
+Prept.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+Prept.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+
+Prept.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+Prept.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+Prept.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+Prept.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+
+Prept.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+Prept.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+Prept.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+Prept.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+
+   execute("{DisplayPage(\\"%s\\");}",Prept.TheDisplayPage);
+}`;
+  }
+
+  dialogue
+  {
+    event = `keyReleased(0x35) || keyReleased(0xFFB5)`;
+    action = statement `{
+Bdl.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+Bdl.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+
+Bdl.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+Bdl.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+Bdl.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+Bdl.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+
+Bdl.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+Bdl.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+Bdl.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+Bdl.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+
+   execute("{DisplayPage(\\"%s\\");}",Bdl.TheDisplayPage);
+}`;
+  }
+
+  dialogue
+  {
+    event = `keyReleased(0x36) || keyReleased(0xFFB6)`;
+    action = statement `{
+Orl.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+Orl.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+
+Orl.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+Orl.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+Orl.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+Orl.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+
+Orl.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+Orl.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+Orl.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+Orl.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+
+   execute("{DisplayPage(\\"%s\\");}",Orl.TheDisplayPage);
+}`;
+  }
+
+  instance DialogueSymbols.LargeMenuSelection SetupViewData
+  {
+    attribute CascadeY = 275;
+    attribute CascadeX = 200;
+    attribute Cascade = 0;
+    attribute TheTextFont = `font6`;
+    attribute TheDisplayPage = "PicYGN_SetupViewMenu.ppic";
+    attribute TheTitle = "SETUP/VIEW  DATA  MENU";
+    attribute TheFontColor = 2;
+    attribute TheOption = "1";
+    x = 278;
+    y = 152;
+    visibility = 1;
+    xReference = 278;
+    yReference = 142;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance SetupViewData
+
+
+
+  instance DialogueSymbols.LargeMenuSelection ModifyDatabase
+  {
+    attribute CascadeY = 320;
+    attribute CascadeX = 200;
+    attribute Cascade = 0;
+    attribute TheTextFont = `font6`;
+    attribute TheDisplayPage = "PicYGN_DBChangeMenu.ppic";
+    attribute TheTitle = "MODIFY  DATABASE  MENU";
+    attribute TheFontColor = 2;
+    attribute TheOption = "2";
+    x = 278;
+    y = 188;
+    visibility = 1;
+    xReference = 278;
+    yReference = 183;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance ModifyDatabase
+
+
+
+  instance DialogueSymbols.LargeMenuSelection Psum
+  {
+    attribute CascadeY = 400;
+    attribute CascadeX = 400;
+    attribute Cascade = 0;
+    attribute TheTextFont = `font6`;
+    attribute TheDisplayPage = "PicYGN_PointSummaries.ppic";
+    attribute TheTitle = "POINT  SUMMARIES";
+    attribute TheFontColor = 2;
+    attribute TheOption = "3";
+    x = 278;
+    y = 257;
+    visibility = 1;
+    xReference = 283;
+    yReference = 447;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance Psum
+
+
+
+  instance DialogueSymbols.LargeMenuSelection Prept
+  {
+    attribute CascadeY = 400;
+    attribute CascadeX = 400;
+    attribute Cascade = 0;
+    attribute TheTextFont = `font6`;
+    attribute TheDisplayPage = "PicYGN_PrintReports.ppic";
+    attribute TheTitle = "PRINT  REPORTS";
+    attribute TheFontColor = 2;
+    attribute TheOption = "4";
+    x = 278;
+    y = 293;
+    visibility = 1;
+    xReference = 283;
+    yReference = 488;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance Prept
+
+
+
+  instance DialogueSymbols.LargeMenuSelection Bdl
+  {
+    attribute CascadeY = 400;
+    attribute CascadeX = 400;
+    attribute Cascade = 0;
+    attribute TheTextFont = `font6`;
+    attribute TheDisplayPage = "PicYGN_BDL.ppic";
+    attribute TheTitle = "BAD  DATA  LIST";
+    attribute TheFontColor = 2;
+    attribute TheOption = "5";
+    x = 278;
+    y = 362;
+    visibility = 1;
+    xReference = 283;
+    yReference = 497;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance Bdl
+
+
+
+  instance DialogueSymbols.LargeMenuSelection Orl
+  {
+    attribute CascadeY = 400;
+    attribute CascadeX = 400;
+    attribute Cascade = 0;
+    attribute TheTextFont = `font6`;
+    attribute TheDisplayPage = "PicYGN_ORL.ppic";
+    attribute TheTitle = "OUT-OF-RANGE  LIST";
+    attribute TheFontColor = 2;
+    attribute TheOption = "6";
+    x = 278;
+    y = 398;
+    visibility = 1;
+    xReference = 283;
+    yReference = 553;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance Orl
+
+
+
+  text 
+  {
+    x = 790;
+    y = 201;
+    format = "%s";
+    theText = "MORE MENUS";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 800;
+    yReference = 206;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 790;
+    y = 303;
+    format = "%s";
+    theText = "PRINTED REPORTS";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 795;
+    yReference = 108;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 790;
+    y = 405;
+    format = "%s";
+    theText = "CRT DISPLAYS";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 795;
+    yReference = 10;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+// The picture's other attributes:
+
+  backgroundColour    = 46;
+  xSnap               = 5;
+  ySnap               = 5;
+  angleSnap           = 0;
+  radiusSnap          = 0;
+  worldX              = 0;
+  worldY              = 0;
+  worldWidth          = 1280;
+  worldHeight         = 824;
+  oneToOne            = 1;
+  resizeMode          = 0;
+  updateMode          = 2;
+  crosshairStyle      = 1;
+  crosshairLength     = 0;
+  crosshairFollowSnap = `isInEditMode()`;
+  crosshairVisibility = `isInEditMode()`;
+  xReference = 500;
+  yReference = 500;
+  xScaleFactor = 1;
+  yScaleFactor = 1;
+  rotationAngle = 0;
+
+
+}  // end of picture PicYGN_CurrentParamsMenu

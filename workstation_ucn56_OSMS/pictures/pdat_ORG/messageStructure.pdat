@@ -1,0 +1,168 @@
+// ***************************************************************************
+// *									     *
+// *	Copyright (C) 1996, ABB-CE Inc., All rights reserved.		     *
+// *	Proprietary information, ABB-CE Incorporated			     *
+// *									     *
+// ***************************************************************************
+//
+// ***** HIGH LEVEL DESCRIPTION **********************************************
+//
+// Definitions for CCUR to workstation messages and workstation to CCUR messages. 
+//
+// **** REVISION HISTORY *****************************************************
+//
+// $Header: /PMSArchive/ygn56/workstation/pictures/pdat/messageStructure.pdat 1.11 1998/05/14 21:47:43 kn2 Exp $
+// $Log: messageStructure.pdat,v $
+// Revision 1.11  1998/05/14 21:47:43  kn2
+// Author: kn2@y6maint1 (Kopec NSSS 2)
+// Kopec NSSS Phase 3 Status 1. Variable length messages. Removed padding for
+// Generic Confirm message.
+//
+// Revision 1.10  1998/05/13 19:39:17  kn2
+// Author: kn2@y6maint1 (Kopec NSSS 2)
+// Kopec NSSS Phase 3 Status 1.  Variable message length. Initial implementation.
+// Removed use of GenericRequestMessage.data.requestMessage.
+//
+// Revision 1.9  1998/05/13 18:20:57  kn2
+// Author: kn2@y6maint1 (Kopec NSSS 2)
+// Kopec NSSS Phase 3 Status 1.  Variable message length. Initial implementation.
+// Reduced the data portion of the WSresponseMessage structure from 4068 to 4
+// bytes.
+//
+// Revision 1.8  1998/04/23 20:50:28  leo
+// Author: leo@y6maint1 (Leo Olbrych)
+// Variable Message Length: Initial implementation. Changed wscommName from 8 chars
+// to 2. In that space, added 4 char reserved array and short messageSize.
+//
+// Revision 1.7  1997/10/23 12:40:53  leo
+// Author: leo@y6maint1.usnus.abb.com (Leo Olbrych)
+// Added master/slave status and disability index to message header.  This info
+// comes from the host.  This the master/slave index, mspbStatus, also is used for
+// the primary/backup status of the workstation, who sends it to the host.
+//
+// Revision 1.6  1997/09/24 18:22:42  kn1
+// Author: kn1@y6maint1.usnus.abb.com (Kopec NSSS 1)
+// Kopec NSSS Phase 3 Status 2. Modified WSConfirmMessage structure.
+//
+// Revision 1.5  1997/05/21 19:38:51  kn1
+// Author: kn1@y6maint1.usnus.abb.com (Kopec NSSS 1)
+// Made size of Generic Request message 1K because it is sent to the host, which
+// only accepts 1K messages.  Added comments.
+//
+// Revision 1.4  1997/05/21 15:58:38  kn1
+// Author: kn1@y6maint1.usnus.abb.com (Kopec NSSS 1)
+// Fixed header structure to indicate that the last 2 words are used by the host
+// to hold WSCOMMxx name, 8 characters.  They were indicated as spare.  They are
+// not.
+//
+// Revision 1.3  1997/04/08 21:10:56  kn1
+// Author: kn1@y6maint1.usnus.abb.com (Kopec NSSS 1)
+// KN Phase 1 Status 2 Delivery.  Added new structures for messages after
+// correcting for new message size.
+//
+// Revision 1.2  1997/03/12 15:50:16  jnl
+// Author: jnl@y6maint1.usnus.abb.com (Jim Lanzalotta)
+// Message buffers made 4k to increase efficiency of receiveing data from host.
+//
+// Revision 1.1  1996/11/23 12:15:54  asn
+// Author: asn@y6maint1.usnus.abb.com (Arthur Nowell)
+// Initial revision
+//
+//
+// ***************************************************************************
+// System Include Files: NONE
+//
+//
+// User Defined Include Files: NONE
+//
+//
+// External Variables: NONE
+//
+//
+// Local Constant Definitions: NONE
+//
+//
+// Function Prototypes: NONE
+//
+//
+// ***************************************************************************
+//
+// Generic workstation message header:
+// This header is part of all messages sent from or to the workstation
+struct WSmessageHeader {  
+   short 	opcode;		// message number 			( 2)
+   short 	numberOfSomething; // #bytes, #points, etc		( 2)
+   char		dateAndTime[6];	// yy,mm,dd,hh,mm,ss			( 6)
+   short	mspbStatus;	// master/slave, primary/backup status  ( 2)
+   int		disabilityIndex;// failover status			( 4)
+   char		reserved[4];	// for future use			( 4)
+   short	messageSize;	// size of entire message in bytes	( 2)
+   char		wscommName[2];	// used by host to hold WSCOMMxx name   ( 2)
+};
+//
+// Generic workstation response data
+// This data is for responses from the host.
+struct WSresponseMessageData {
+   int				returnStatus;		// returned status code 	(   4)
+};
+//
+// Generic workstation response message
+struct WSresponseMessage {
+   WSmessageHeader		header;			// message information		(  24)
+   WSresponseMessageData	data;			// returned code and data	(   4)
+};
+//
+// Generic workstation request data
+// This data is for messages from the client to the host.
+struct WSrequestMessageData {
+   int				requestOption;		// requested option	 	(   4)
+   char                         theWorkstation[12];     // Workstation name		(  12)
+};
+//
+// Generic workstation request message
+// This message is for messages from the client to the host / server
+struct WSrequestMessage {
+   WSmessageHeader		header;			// message information		(  24)
+   WSrequestMessageData		data;			// requested option and data	(1000)
+};
+//
+// Generic Workstation Confirm data
+// This confirmation data comes from the server (host) to the client.
+struct WSconfirmMessageData{
+   int                  status;                         // return status                (   4)
+   char                 message1[40];                   // return message1              (  40)
+   char                 message2[40];                   // return message2              (  40)
+   char                 message3[40];                   // return message3              (  40)
+   char                 message4[40];                   // return message3              (  40)
+   char                 message5[40];                   // return message3              (  40)
+};
+//
+// Generic Workstation Confirm message
+// This message is for messages from the server (host) to the client.
+struct WSconfirmMessage{
+   WSmessageHeader      header;                         // message information          (  24)
+   WSconfirmMessageData data;                           // message information          (4072)
+};
+
+//
+// Generic Workstation Message Template
+// This messaage is for data from the server to the client.
+struct WSmessageTemplate {
+   WSmessageHeader	header;				// message information		(  24)
+   char			data[4072];			// data portion			(4072)
+};
+
+// ------------------------------------------
+// 210118_jhp
+struct WSDBmessageHeader {
+   char                 szType[2];                      // message type                 (   2)
+   int                  nTotCnt;        // entire packet count in 1-message buffer      (   4)
+   int                  nCurCnt;        // current packet index in 1-meesage buffer     (   4) 
+};
+
+struct WSDBmessageTemplate {
+   WSDBmessageHeader    header;                         // DB Down message information  (  10)
+   char                 data[4072];                     // DB Down data portion         (4072)
+};
+// ------------------------------------------
+

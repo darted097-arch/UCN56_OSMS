@@ -1,0 +1,61 @@
+// **************************************************************************************
+// *											*
+// *	      Copyright (C) 1997, KOPEC(N), All rights reserved.		        *
+// *          Proprietary information, KOPEC(N)          	                        *
+// *											*
+// **************************************************************************************
+//
+// ***** HIGH LEVEL DESCRIPTION **********************************************
+//
+// This pdat file contains the variables used by the cecor displays.
+//
+// **** REVISION HISTORY *****************************************************
+//
+// Author: JKY
+//
+// $Header: /PMSArchive/ucn56/workstation/pictures/pdat/cecorStructure.pdat 1.3 1999/04/13 19:10:25 kn1 Exp $
+// $Log: cecorStructure.pdat,v $
+// Revision 1.3  1999/04/13 19:10:25  kn1
+// Author: kn1@y6maint1 (Kopec NSSS 1)
+// KOPEC FAT Support April 99
+//
+// Revision 1.2  1998/02/11 20:56:59  kn1
+// Author: kn1@y6maint1.usnus.abb.com (Kopec NSSS 1)
+// Kopec NSSS Phase 2 Status 1
+//
+// Revision 1.1  1997/05/13 15:24:43  kn1
+// Author: kn1@y6maint1.usnus.abb.com (Kopec NSSS 1)
+// Initial revision
+//
+//
+//
+// ***************************************************************************
+// System Include Files: NONE
+//
+//
+// User Defined Include Files: NONE
+//
+//
+// External Variables: NONE
+//
+//
+// Local Constant Definitions: NONE
+//
+//
+// Function Prototypes: NONE
+//
+//
+// ***************************************************************************
+//
+struct CECOR_DATA{
+   int     cecorOption;
+   char    cecorFilename[12];
+   char    cecorComments[20];
+};
+//
+//  >>>>>>>>>>>>>>>>>>>	Workstation CECOR Message Template
+
+struct WSCecorMessage {
+   WSmessageHeader	header;				// message information		(  24)
+   CECOR_DATA    	data;				// data portion			
+};

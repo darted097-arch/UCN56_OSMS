@@ -1,0 +1,67 @@
+/*
+ * PICASSO-3 CONFIGURATION LANGUAGE FILE
+ *
+ *
+ * Picture name: PicUCN_wait
+ *
+ *
+ * Documented by  : asn
+ * Host           : y5maint1
+ * Date           : 16/12-96 at 06:50:26
+ *
+ *
+ * Generate with:
+ *    pcc PicUCN_wait.Tdoc
+ *
+ */
+
+
+picture PicUCN_wait
+{
+
+  text 
+  {
+    x = 450;
+    y = 352;
+    format = "%s";
+    theText = "Please wait...";
+
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    theFont = 7;
+    xReference = 450;
+    yReference = 352;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+// The picture's other attributes:
+
+  backgroundColour    = 0;
+  xSnap               = 0;
+  ySnap               = 0;
+  angleSnap           = 0;
+  radiusSnap          = 0;
+  worldX              = 0;
+  worldY              = 0;
+  worldWidth          = 1280;
+  worldHeight         = 1024;
+  oneToOne            = 1;
+  resizeMode          = 0;
+  updateMode          = 2;
+  crosshairStyle      = 1;
+  crosshairLength     = 0;
+  crosshairFollowSnap = `isInEditMode()`;
+  crosshairVisibility = `isInEditMode()`;
+  xReference = 0;
+  yReference = 0;
+  xScaleFactor = 1;
+  yScaleFactor = 1;
+  rotationAngle = 0;
+
+
+}  // end of picture PicUCN_wait

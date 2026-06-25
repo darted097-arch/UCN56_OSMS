@@ -1,0 +1,334 @@
+/*
+ * ProcSee CONFIGURATION LANGUAGE FILE
+ *
+ *
+ * User : ucn56
+ * Host : y6cr02
+ * Date : 2017-05-25
+ * Time : 15:38:49
+ *
+ * ProcSee version : ProcSee 3.10.1 (June 2016)
+ * File version    : 1.26
+ *
+ *
+ */
+
+
+picture PicUCN_HDSR740
+{
+  worldX = 0;
+  worldY = 0;
+  worldWidth = 1280;
+  worldHeight = 824;
+  oneToOne = 1;
+  backgroundColour = 0;
+  updateMode = 2;
+  resizeMode = 0;
+  xSnap = 5;
+  ySnap = 5;
+  radiusSnap = 0;
+  angleSnap = 0;
+  crosshairStyle = 1;
+  crosshairLength = 0;
+  crosshairFollowSnap = `isInEditMode()`;
+  crosshairVisibility = `isInEditMode()`;
+  xReference = 500;
+  yReference = 500;
+  xScaleFactor = 1;
+  yScaleFactor = 1;
+  rotationAngle = 0;
+
+  char PictureNumber[50] = "174";
+
+  char PictureTitle[50] = "SETUP/VIEW HDSR GRAPH";
+
+  int validInput = 0;
+
+  int what = 5;
+
+  function `int Checkup( int position)
+  {
+     int num;
+  
+     switch( position ) {
+        case 1:      // t_graphSet
+  // check up spells
+           num = atoi( gPage740.graphSet );
+           if( num <= 0 || num > 8 ) {
+              DisplayAdvisoryMessage1("GRAPH SET MUST BE (1 - 8)");
+              return -1;
+           }
+           break;
+  
+        case 2:      // t_option
+  // check spells
+           num = atoi( gPage740.option );
+           if( num != 1 && num != 2 ) {
+              DisplayAdvisoryMessage1("OPTION MUST BE (1 - 2)");
+              return -1;
+           }
+           break;
+     }
+     return 0;
+  }`
+
+  function `void Initialize()
+  {
+     int i;
+  
+     CFMLevel = 0;
+     Current_Page = 174;
+  // Reset current graph using status
+     for( i = 0; i < 8; i++ ) {
+        gPage740.setupDone[i] = 0;
+        gPage740.useView[i] = 0;
+     }
+  
+     bProcess.UnSelect();
+  //   bExit.UnSelect();
+  
+  //   sendMessageToHost(HDSR_PAGE_740);
+  //   DisplayAdvisoryMessage1("On process. Please wait...");
+  
+     strcpy( bGraphSet.TheNewText, gPage740.graphSet );
+     strcpy( bGraphSet.TheOriginalText, gPage740.graphSet );
+     strcpy( bOption.TheNewText, gPage740.option );
+     strcpy( bOption.TheOriginalText, gPage740.option );
+  }
+  `
+
+// ***CORENET 20170601 by Philkyu Kwon ************
+  function `void DummyProcess()
+  {
+      //printf("Button Select OR Button Unselected");
+  }`
+// ***************************************************
+
+  function `int Process1()
+  {
+     int numSet, numOpt, i;
+  
+     if( Checkup(1) == 0 && Checkup(2) == 0 ) {
+        numSet = atoi( gPage740.graphSet);
+        numOpt = atoi( gPage740.option);
+  
+  
+        if( numOpt == 1 ) {         // setup HDSR74x
+            sendMessageToHost(HDSR_GRAPH_SETUP);
+            sendMessageToHost(HDSR_PAGE_740);
+  
+            gPage74x.graphSet = numSet;
+            DisplayAdvisoryMessage1("REQUEST SENT TO HOST");
+  //          execute( "{ displayPicture(\\"Main\\", \\"./PicUCN_HDSR74Xsetup.ppic\\"); }");
+        }
+        else if( numOpt == 2 ) {      // view HDSR741view
+               gView_x.whichView = numSet;
+  //             sendMessageToHost(HDSR_GRAPH_VIEW);
+  
+  //             gView_x.whichView = numSet;
+               execute( "{ displayPicture(\\"Main\\", \\"./PicUCN_HDSR74Xview.ppic\\"); }");
+        }
+     }
+  
+     TheTimer.atTimeDo(50,0,0,1,0, "::UCN5and6.PicUCN_HDSR740", "{bProcess.UnSelect();}");
+     return -1;
+  }`
+
+  text Text_1
+  {
+    x = 420;
+    y = 345;
+    format = "%s";
+    theText = "OPTION (1 OR 2) :";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font14`;
+    xReference = 420;
+    yReference = 345;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 800;
+    y = 340;
+    format = "%s";
+    theText = "1 = SETUP";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font14`;
+    xReference = 800;
+    yReference = 340;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle
+  {
+    x = 645;
+    y = 230;
+    width = 105;
+    height = 180;
+    visibility = 1;
+    foregroundColour = `COLOR_LINE_BOUNDARY_6`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 3;
+    foregroundFillColour = `COLOR_NON_ESSENTIAL`;
+    backgroundFillColour = -1;
+    fillPattern = `NoPattern`;
+    xReference = 625;
+    yReference = 330;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 405;
+    y = 295;
+    format = "%s";
+    theText = "HDSR GRAPH SET (1-8) :";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 405;
+    yReference = 295;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 800;
+    y = 365;
+    format = "%s";
+    theText = "2 = VIEW";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font14`;
+    xReference = 800;
+    yReference = 365;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  instance DialogueSymbols.ProcessButton bProcess
+  {
+    x = 100;
+    y = 665;
+    visibility = 1;
+    xReference = 100;
+    yReference = 665;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ButtonState = 0;
+    DisplayText = 1;
+    DynamicLabel = "PROCESS";
+    ExecuteSelect = "{ Process1(); }";
+    ExecuteUnSelect = "DummyProcess()";		//CORENET 0705
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    Label = "PROCESS";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    StaticLabel = "PROCESS";
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextFontDynamic = `font4`;
+    TextFontStatic = `font4`;
+    TextX = 17;
+    TextXDynamic = 15;
+    TextXStatic = 17;
+    TextY = 22;
+    TextYDynamic = `TextY`;
+    TextYStatic = `TextY`;
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    Width = 100;
+  }
+
+  instance DialogueSymbols.InputDialogueText50 bGraphSet
+  {
+    x = 670;
+    y = 275;
+    visibility = 1;
+    xReference = 670;
+    yReference = 275;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "DummyProcess()";         //CORENET 0705
+    ExecuteUnSelect = "DummyProcess()";         //CORENET 0705
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxCharacters = 3;
+    ReturnAction = "{ strcpy(gPage740.graphSet,bGraphSet.TheOriginalText); Checkup(1); }";
+    Scope = "::UCN5and6.PicUCN_HDSR740";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewText = "1";
+    TheOriginalText = "1";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 200;
+  }
+
+  instance DialogueSymbols.InputDialogueText50 bOption
+  {
+    x = 670;
+    y = 325;
+    visibility = 1;
+    xReference = 670;
+    yReference = 325;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "DummyProcess()";         //CORENET 0705
+    ExecuteUnSelect = "DummyProcess()";         //CORENET 0705
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxCharacters = 3;
+    ReturnAction = "{ strcpy(gPage740.option,bOption.TheOriginalText); Checkup(2); }";
+    Scope = "::UCN5and6.PicUCN_HDSR740";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewText = "2";
+    TheOriginalText = "2";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 200;
+  }
+}

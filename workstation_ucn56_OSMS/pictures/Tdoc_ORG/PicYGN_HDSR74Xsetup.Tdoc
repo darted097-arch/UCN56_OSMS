@@ -1,0 +1,2005 @@
+/*
+ * ProcSee CONFIGURATION LANGUAGE FILE
+ *
+ *
+ * User : ygn34
+ * Host : y6cr02
+ * Date : 2017-05-25
+ * Time : 15:39:27
+ *
+ * ProcSee version : ProcSee 3.10.1 (June 2016)
+ * File version    : 1.26
+ *
+ *
+ */
+
+
+picture PicYGN_HDSR74Xsetup
+{
+  worldX = 0;
+  worldY = 0;
+  worldWidth = 1280;
+  worldHeight = 824;
+  oneToOne = 1;
+  backgroundColour = 0;
+  updateMode = 2;
+  resizeMode = 0;
+  xSnap = 5;
+  ySnap = 5;
+  radiusSnap = 0;
+  angleSnap = 0;
+  crosshairStyle = 1;
+  crosshairLength = 0;
+  crosshairFollowSnap = `isInEditMode()`;
+  crosshairVisibility = `isInEditMode()`;
+  xReference = 500;
+  yReference = 500;
+  xScaleFactor = 1;
+  yScaleFactor = 1;
+  rotationAngle = 0;
+
+  char PictureNumber[50] = "175";
+
+  char PictureTitle[50] = "                   ";	//CORENET 201705 by Philkyu Kwon
+
+  int PidError = 1;
+
+  char SigType = 10;
+
+  float TempBase = 630;
+
+  float TempMax = 1260;
+
+  float TempMin = 0;
+
+  char TempPid[10] = "RCYS01AH";
+
+  char TempString[50] = "RCYS01AH";
+
+  int validInput = 0;
+
+  int what = 4;
+
+  char TempTitle[50] = "";			// CORENET 201705 by Philkyu Kwon 
+
+  function `void BaselineReturnAction(int no)
+  {
+     int i;
+  
+     execute("{ strcpy(TempString, gPage74x.point_%d); }", no);
+  
+           for( i=0; i< 8; i++ ) {
+             if( TempString[i] == ' ' )
+                break;
+  
+                 TempPid[i] = TempString[i];
+           }
+          TempPid[i] =  '\\0';
+  
+     if( strcmp(TempPid,"") == 0 ) {
+             execute("{ strcpy(gPage74x.baseline_%d, \\"0.0\\"); }", no);
+             execute("{ strcpy(bBaseline_%d.TheOriginalText, \\"0.0\\"); }", no);
+             execute("{ strcpy(bBaseline_%d.TheNewText, \\"0.0\\"); }", no);
+          return;
+     }
+  
+     execute("{ strcpy(TempString, bBaseline_%d.TheOriginalText); }", no);
+  
+           for( i=0; i< 8; i++ ) {
+             if( TempString[i] == ' ' )
+                break;
+  
+                 TempPid[i] = TempString[i];
+           }
+          TempPid[i] =  '\\0';
+  
+     if( strcmp(TempPid,"") == 0 ) {
+             execute("{ strcpy(gPage74x.baseline_%d, \\"0.0\\"); }", no);
+             execute("{ strcpy(bBaseline_%d.TheOriginalText, \\"0.0\\"); }", no);
+             execute("{ strcpy(bBaseline_%d.TheNewText, \\"0.0\\"); }", no);
+     }
+     else
+             execute("{ strcpy(gPage74x.baseline_%d, bBaseline_%d.TheOriginalText); }", no, no);
+  
+     update();
+  }`
+
+  function `int Checkup()
+  {
+           if( strcmp( gPage74x.dataSource, "D") != 0 && strcmp( gPage74x.dataSource, "T") != 0 ) {
+              DisplayAdvisoryMessage1("DATA SOURCE CHOICES: (D,T)");
+              return -1;
+           }
+  
+           if( strcmp( gPage74x.resolution, "L") != 0 &&
+               strcmp( gPage74x.resolution, "H") != 0 &&
+               strcmp( gPage74x.resolution, "R") != 0 &&
+               strcmp( gPage74x.resolution, "H1") != 0 &&
+               strcmp( gPage74x.resolution, "H2") != 0 ) {
+              DisplayAdvisoryMessage1("RESOLUTION CHOICES: (L, H, H1, H2, R)");
+  //            return -1;
+           }
+  
+           else if( strcmp(gPage74x.dataSource, "T") == 0 && strcmp(gPage74x.resolution, "H") == 0 ) {
+              DisplayAdvisoryMessage1("RESOLUTION CHOICES: (L, H1, H2, R)");
+  //            return -1;
+           }
+  
+           else if( strcmp(gPage74x.dataSource, "D") == 0 && ( strcmp(gPage74x.resolution, "H1") == 0 ||
+               strcmp(gPage74x.resolution, "H2") == 0 || strcmp(gPage74x.resolution, "R") == 0) ) {
+              DisplayAdvisoryMessage1("RESOLUTION CHOICES: (L, H)");
+  //            return -1;
+           }
+  
+        // Display valid Hi/Lo disk start/end date/time
+           if( strcmp(gPage74x.dataSource, "D") == 0 && strcmp(gPage74x.resolution, "H") == 0 ) {
+              strcpy( gPage74x.validStartDate, gPage74x.highDiskDate_1);
+              strcpy( gPage74x.validEndDate, gPage74x.highDiskDate_2);
+              strcpy( gPage74x.validStartTime, gPage74x.highDiskTime_1);
+              strcpy( gPage74x.validEndTime, gPage74x.highDiskTime_2);
+           }
+           else if( strcmp(gPage74x.dataSource, "D") == 0 && strcmp(gPage74x.resolution, "L") == 0 ) {
+              strcpy( gPage74x.validStartDate, gPage74x.lowDiskDate_1);
+              strcpy( gPage74x.validEndDate, gPage74x.lowDiskDate_2);
+              strcpy( gPage74x.validStartTime, gPage74x.lowDiskTime_1);
+              strcpy( gPage74x.validEndTime, gPage74x.lowDiskTime_2);
+           }
+           else if( strcmp(gPage74x.dataSource, "T") == 0 ) {
+                if( strcmp(gPage74x.resolution, "R") == 0 ) {
+  //            if( ((strcmp(gPage74x.resolution, "H1") == 0 || strcmp(gPage74x.resolution, "H2") == 0 ) &&
+  //                gPage750.iResolution == 1) || ( strcmp(gPage74x.resolution, "L") == 0 &&
+  //                gPage750.iResolution == 2) ){
+  //               strcpy( gPage74x.validStartDate, gPage750.startDate);
+  //               strcpy( gPage74x.validEndDate, gPage750.endDate);
+  //               strcpy( gPage74x.validStartTime, gPage750.startTime);
+  //               strcpy( gPage74x.validEndTime, gPage750.endTime);
+  //            }
+  //            else {
+                 strcpy( gPage750.startDate, "--/--/--");
+                 strcpy( gPage750.endDate, "--/--/--");
+                 strcpy( gPage750.startTime, "--:--:--");
+                 strcpy( gPage750.endTime, "--:--:--");
+              }
+                 strcpy( gPage74x.validStartDate, gPage750.startDate);
+                 strcpy( gPage74x.validEndDate, gPage750.endDate);
+                 strcpy( gPage74x.validStartTime, gPage750.startTime);
+                 strcpy( gPage74x.validEndTime, gPage750.endTime);
+                 UpdateDataRange();
+           }
+           update();
+  }`
+
+  function `int CheckupBlank( char * pointName )
+  {
+     if( strcmp( pointName,"" ) == 0 )
+        return -1;
+     else
+        return 0;
+  }`
+
+  function `int EvaluateRange(char *pid)
+  {
+       TempMin = EngRangeLo(pid);
+       TempMax = EngRangeHi(pid);
+  
+       TempBase = (TempMin + TempMax) /2;
+        return 0;
+  }`
+
+  function `void Finished()
+  {
+     TheTimer.cancel(200);
+  }`
+
+  function `int Init74x( int num )
+  {
+  //   execute("{ gPage74x.graphSet = %d; }", num);
+     executeAsync( "::YGN3and4.PicYGN_HDSR74Xsetup", "{ strcpy( gPage74x.dataSource, gPage74%d.dataSource); }", num);
+     executeAsync( "::YGN3and4.PicYGN_HDSR74Xsetup", "{ strcpy( gPage74x.resolution, gPage74%d.resolution); }", num);
+     executeAsync( "::YGN3and4.PicYGN_HDSR74Xsetup", "{ strcpy( gPage74x.startDate, gPage74%d.startDate); }", num);
+     executeAsync( "::YGN3and4.PicYGN_HDSR74Xsetup", "{ strcpy( gPage74x.startTime, gPage74%d.startTime); }", num);
+     executeAsync( "::YGN3and4.PicYGN_HDSR74Xsetup", "{ strcpy( gPage74x.endDate, gPage74%d.endDate); }", num);
+     executeAsync( "::YGN3and4.PicYGN_HDSR74Xsetup", "{ strcpy( gPage74x.endTime, gPage74%d.endTime); }", num);
+  //   executeAsync( "::YGN3and4.PicYGN_HDSR74Xsetup", "{ strcpy( gPage74x.validStartDate, gPage74%d.validStartDate); }", num);
+  //   executeAsync( "::YGN3and4.PicYGN_HDSR74Xsetup", "{ strcpy( gPage74x.validStartTime, gPage74%d.validStartTime); }", num);
+  //   executeAsync( "::YGN3and4.PicYGN_HDSR74Xsetup", "{ strcpy( gPage74x.validEndDate, gPage74%d.validEndDate); }", num);
+  //   executeAsync( "::YGN3and4.PicYGN_HDSR74Xsetup", "{ strcpy( gPage74x.validEndTime, gPage74%d.validEndTime); }", num);
+     executeAsync( "::YGN3and4.PicYGN_HDSR74Xsetup", "{ strcpy( gPage74x.point_1, gPage74%d.point_1); }", num);
+     executeAsync( "::YGN3and4.PicYGN_HDSR74Xsetup", "{ strcpy( gPage74x.point_2, gPage74%d.point_2); }", num);
+     executeAsync( "::YGN3and4.PicYGN_HDSR74Xsetup", "{ strcpy( gPage74x.point_3, gPage74%d.point_3); }", num);
+     executeAsync( "::YGN3and4.PicYGN_HDSR74Xsetup", "{ strcpy( gPage74x.point_4, gPage74%d.point_4); }", num);
+     executeAsync( "::YGN3and4.PicYGN_HDSR74Xsetup", "{ strcpy( gPage74x.baseline_1, gPage74%d.baseline_1); }", num);
+     executeAsync( "::YGN3and4.PicYGN_HDSR74Xsetup", "{ strcpy( gPage74x.baseline_2, gPage74%d.baseline_2); }", num);
+     executeAsync( "::YGN3and4.PicYGN_HDSR74Xsetup", "{ strcpy( gPage74x.baseline_3, gPage74%d.baseline_3); }", num);
+     executeAsync( "::YGN3and4.PicYGN_HDSR74Xsetup", "{ strcpy( gPage74x.baseline_4, gPage74%d.baseline_4); }", num);
+     executeAsync( "::YGN3and4.PicYGN_HDSR74Xsetup", "{ strcpy( gPage74x.maxValue_1, gPage74%d.maxValue_1); }", num);
+     executeAsync( "::YGN3and4.PicYGN_HDSR74Xsetup", "{ strcpy( gPage74x.maxValue_2, gPage74%d.maxValue_2); }", num);
+     executeAsync( "::YGN3and4.PicYGN_HDSR74Xsetup", "{ strcpy( gPage74x.maxValue_3, gPage74%d.maxValue_3); }", num);
+     executeAsync( "::YGN3and4.PicYGN_HDSR74Xsetup", "{ strcpy( gPage74x.maxValue_4, gPage74%d.maxValue_4); }", num);
+  //   executeAsync( "::YGN3and4.PicYGN_HDSR74Xsetup", "{ strcpy( gPage74x.enablePage, gPage74%d.enablePage); }", num);
+  //   executeAsync( "::YGN3and4.PicYGN_HDSR74Xsetup", "{ strcpy( gPage74x.tapeUse, gPage74%d.tapeUse); }", num);
+  }`
+
+  function `void Initialize()
+  {
+     int num;
+     num = gPage74x.graphSet;
+     CFMLevel = 0;
+     Current_Page = 175;
+  
+     ClearAdvisoryMessage();
+     MakeTitle(num);
+     InitializeInput();
+     executeAsync ("::YGN3and4.PicYGN_HDSR750","{InitializeInput();}");
+  
+     bProcess.UnSelect();
+     TheTimer.atIntervalDo(200,0,0,5,0, "::YGN3and4.PicYGN_HDSR74Xsetup", "{ sendMessageToHost(HDSR_GRAPH_SETUP); UpdateDataRange();}");
+  
+  // reset bPoint.ERROR
+     if( FindPointId(gPage74x.point_1) == 0 )
+          if( IsDigital(gPage74x.point_1) == 1 )
+              bPoint_1.ERROR = 0;
+           else
+              bPoint_1.ERROR = 1;
+     else
+        bPoint_1.ERROR = 0;
+  
+     if( FindPointId(gPage74x.point_2) == 0 )
+          if( IsDigital(gPage74x.point_2) == 1 )
+              bPoint_2.ERROR = 0;
+           else
+        bPoint_2.ERROR = 1;
+     else
+        bPoint_2.ERROR = 0;
+  
+     if( FindPointId(gPage74x.point_3) == 0 )
+          if( IsDigital(gPage74x.point_3) == 1 )
+              bPoint_3.ERROR = 0;
+           else
+        bPoint_3.ERROR = 1;
+     else
+        bPoint_3.ERROR = 0;
+  
+     if( FindPointId(gPage74x.point_4) == 0 )
+          if( IsDigital(gPage74x.point_4) == 1 )
+              bPoint_4.ERROR = 0;
+           else
+        bPoint_4.ERROR = 1;
+     else
+        bPoint_4.ERROR = 0;
+  }
+  `
+
+// ***CORENET 20170601 by Philkyu Kwon ************
+  function `void DummyProcess()
+  {
+     //printf("Button Select OR Button Unselected");
+  }`
+// ***************************************************
+
+  function `void InitializeInput()
+  {
+  //   strcpy( gPage74x.dataSource, "D");
+  //   strcpy( gPage74x.resolution, "H");
+  
+     strcpy( gPage74x.validStartDate, gPage74x.highDiskDate_1);
+     strcpy( gPage74x.validEndDate, gPage74x.highDiskDate_2);
+     strcpy( gPage74x.validStartTime, gPage74x.highDiskTime_1);
+     strcpy( gPage74x.validEndTime, gPage74x.highDiskTime_2);
+  
+     strcpy( bDataSource.TheNewText, gPage74x.dataSource);
+     strcpy( bDataSource.TheOriginalText, gPage74x.dataSource);
+     bDataSource.UnSelectButton();
+     strcpy( bResolution.TheNewText, gPage74x.resolution);
+     strcpy( bResolution.TheOriginalText, gPage74x.resolution);
+     bResolution.UnSelectButton();
+     strcpy( bStartDate.TheNewText, gPage74x.startDate);
+     strcpy( bStartDate.TheOriginalText, gPage74x.startDate);
+     bStartDate.UnSelectButton();
+     strcpy( bStartTime.TheNewText, gPage74x.startTime);
+     strcpy( bStartTime.TheOriginalText, gPage74x.startTime);
+     bStartTime.UnSelectButton();
+  
+     strcpy( bPoint_1.TheNewText, gPage74x.point_1);
+     strcpy( bPoint_1.TheOriginalText, gPage74x.point_1);
+     bPoint_1.UnSelectButton();
+     strcpy( bPoint_2.TheNewText, gPage74x.point_2);
+     strcpy( bPoint_2.TheOriginalText, gPage74x.point_2);
+     bPoint_2.UnSelectButton();
+     strcpy( bPoint_3.TheNewText, gPage74x.point_3);
+     strcpy( bPoint_3.TheOriginalText, gPage74x.point_3);
+     bPoint_3.UnSelectButton();
+     strcpy( bPoint_4.TheNewText, gPage74x.point_4);
+     strcpy( bPoint_4.TheOriginalText, gPage74x.point_4);
+     bPoint_4.UnSelectButton();
+  
+     strcpy( bMinValue_1.TheNewText, gPage74x.minValue_1);
+     strcpy( bMinValue_1.TheOriginalText, gPage74x.minValue_1);
+     bMinValue_1.UnSelectButton();
+     strcpy( bMinValue_2.TheNewText, gPage74x.minValue_2);
+     strcpy( bMinValue_2.TheOriginalText, gPage74x.minValue_2);
+     bMinValue_2.UnSelectButton();
+     strcpy( bMinValue_3.TheNewText, gPage74x.minValue_3);
+     strcpy( bMinValue_3.TheOriginalText, gPage74x.minValue_3);
+     bMinValue_3.UnSelectButton();
+     strcpy( bMinValue_4.TheNewText, gPage74x.minValue_4);
+     strcpy( bMinValue_4.TheOriginalText, gPage74x.minValue_4);
+     bMinValue_4.UnSelectButton();
+  
+     strcpy( bBaseline_1.TheNewText, gPage74x.baseline_1);
+     strcpy( bBaseline_1.TheOriginalText, gPage74x.baseline_1);
+     bBaseline_1.UnSelectButton();
+     strcpy( bBaseline_2.TheNewText, gPage74x.baseline_2);
+     strcpy( bBaseline_2.TheOriginalText, gPage74x.baseline_2);
+     bBaseline_2.UnSelectButton();
+     strcpy( bBaseline_3.TheNewText, gPage74x.baseline_3);
+     strcpy( bBaseline_3.TheOriginalText, gPage74x.baseline_3);
+     bBaseline_3.UnSelectButton();
+     strcpy( bBaseline_4.TheNewText, gPage74x.baseline_4);
+     strcpy( bBaseline_4.TheOriginalText, gPage74x.baseline_4);
+     bBaseline_4.UnSelectButton();
+  
+     strcpy( bMaxValue_1.TheNewText, gPage74x.maxValue_1);
+     strcpy( bMaxValue_1.TheOriginalText, gPage74x.maxValue_1);
+     bMaxValue_1.UnSelectButton();
+     strcpy( bMaxValue_2.TheNewText, gPage74x.maxValue_2);
+     strcpy( bMaxValue_2.TheOriginalText, gPage74x.maxValue_2);
+     bMaxValue_2.UnSelectButton();
+     strcpy( bMaxValue_3.TheNewText, gPage74x.maxValue_3);
+     strcpy( bMaxValue_3.TheOriginalText, gPage74x.maxValue_3);
+     bMaxValue_3.UnSelectButton();
+     strcpy( bMaxValue_4.TheNewText, gPage74x.maxValue_4);
+     strcpy( bMaxValue_4.TheOriginalText, gPage74x.maxValue_4);
+     bMaxValue_4.UnSelectButton();
+  }`
+
+  function `int IsDigital(char* pid)
+  {
+     execute("{ SigType = %s->sig_type; }", pid);
+  
+     if( SigType == CI || SigType == DL)
+        return 1;
+     else
+        return 0;
+  }`
+
+  function `void MakeTitle(int num)
+  {
+     // ****CORENET 201705 by Philkyu Kwon **************************************
+     sprintf( TempTitle,"SETUP HDSR GRAPH %d", num);
+     strcpy(::YGN3and4.PicYGN_header.PictureTitle.theText, TempTitle);  
+     //sprintf( PictureTitle,"SETUP HDSR GRAPH %d", num);
+     // *************************************************************************
+  }
+  `
+
+  function `void MaxReturnAction(int no)
+  {
+     int i;
+  
+     execute("{ strcpy(TempString, gPage74x.point_%d); }", no);
+  
+           for( i=0; i< 8; i++ ) {
+             if( TempString[i] == ' ' )
+                break;
+  
+                 TempPid[i] = TempString[i];
+           }
+          TempPid[i] =  '\\0';
+  
+     if( strcmp(TempPid,"") == 0 ) {
+             execute("{ strcpy(gPage74x.maxValue_%d, \\"0.0\\"); }", no);
+             execute("{ strcpy(bMaxValue_%d.TheOriginalText, \\"0.0\\"); }", no);
+             execute("{ strcpy(bMaxValue_%d.TheNewText, \\"0.0\\"); }", no);
+          return;
+     }
+  
+     execute("{ strcpy(TempString, bMaxValue_%d.TheOriginalText); }", no);
+  
+           for( i=0; i< 8; i++ ) {
+             if( TempString[i] == ' ' )
+                break;
+  
+                 TempPid[i] = TempString[i];
+           }
+          TempPid[i] =  '\\0';
+  
+     if( strcmp(TempPid,"") == 0 ) {
+             execute("{ strcpy(gPage74x.maxValue_%d, \\"0.0\\"); }", no);
+             execute("{ strcpy(bMaxValue_%d.TheOriginalText, \\"0.0\\"); }", no);
+             execute("{ strcpy(bMaxValue_%d.TheNewText, \\"0.0\\"); }", no);
+     }
+     else
+             execute("{ strcpy(gPage74x.maxValue_%d, bMaxValue_%d.TheOriginalText); }", no, no);
+  
+     update();
+  }`
+
+  function `void MinReturnAction(int no)
+  {
+     int i;
+     float min;
+  
+     execute("{ strcpy(TempString, gPage74x.point_%d); }", no);
+  
+           for( i=0; i< 8; i++ ) {
+             if( TempString[i] == ' ' )
+                break;
+  
+                 TempPid[i] = TempString[i];
+           }
+          TempPid[i] =  '\\0';
+  
+     if( strcmp(TempPid,"") == 0 ) {
+             execute("{ strcpy(gPage74x.minValue_%d, \\"0.0\\"); }", no);
+             execute("{ strcpy(bMinValue_%d.TheOriginalText, \\"0.0\\"); }", no);
+             execute("{ strcpy(bMinValue_%d.TheNewText, \\"0.0\\"); }", no);
+          return;
+     }
+  
+     execute("{ strcpy(TempString, bMinValue_%d.TheOriginalText); }", no);
+  
+           for( i=0; i< 8; i++ ) {
+             if( TempString[i] == ' ' )
+                break;
+  
+                 TempPid[i] = TempString[i];
+           }
+          TempPid[i] =  '\\0';
+  
+     if( strcmp(TempPid,"") == 0 ) {
+             execute("{ strcpy(gPage74x.minValue_%d, \\"0.0\\"); }", no);
+             execute("{ strcpy(bMinValue_%d.TheOriginalText, \\"0.0\\"); }", no);
+             execute("{ strcpy(bMinValue_%d.TheNewText, \\"0.0\\"); }", no);
+     }
+     else {
+  //           EveluateRange(TempPid);
+  //           execute("min = atof(
+             execute("{ strcpy(gPage74x.minValue_%d, bMinValue_%d.TheOriginalText); }", no, no);
+     }
+     update();
+  }`
+
+  function `int Process_test()
+  {
+     Checkup();
+  
+     if( strcmp( gPage74x.dataSource, "T") == 0 && strcmp( gPage74x.resolution, "R") == 0  )
+          sendMessageToHost(TAPE_HEADER_74X);
+     else
+        sendMessageToHost(GRAPH_SETUP_74X);
+  
+     TheTimer.atTimeDo(50,0,0,1,0, "::YGN3and4.PicYGN_HDSR74Xsetup", "{bProcess.UnSelect();}");
+  
+     return 0;
+  }`
+
+  function `int Process1()
+  {
+     Checkup();
+  
+     //***************** CORENET 201705 by Philkyu Kwon *****************************
+     int x = -1;
+  
+     x = ValidateDateTime();
+  
+     //if( ValidateDateTime() == -1 && strcmp(gPage74x.resolution, "L") == 0 ) {
+     if( x == -1 && strcmp(gPage74x.resolution, "L") == 0 ) {
+           DisplayAdvisoryMessage1("INVALID FORMAT FOR START DATE OR TIME");
+     TheTimer.atTimeDo(50,0,0,1,0, "::YGN3and4.PicYGN_HDSR74Xsetup", "{bProcess.UnSelect();}");
+        return -1;
+     }
+     // ***************************************************************************
+  
+     if( strcmp( gPage74x.dataSource, "T") == 0 && strcmp( gPage74x.resolution, "R") == 0  )
+          sendMessageToHost(TAPE_HEADER_74X);
+     else
+        sendMessageToHost(GRAPH_SETUP_74X);
+  
+     TheTimer.atTimeDo(50,0,0,1,0, "::YGN3and4.PicYGN_HDSR74Xsetup", "{bProcess.UnSelect();}");
+  
+     return 0;
+  }`
+
+  function `void ReturnAction(int no)
+  {
+     int i;
+  
+     execute("{ strcpy(TempString, bPoint_%d.TheOriginalText); }", no);
+  
+           for( i=0; i< 8; i++ ) {
+             if( TempString[i] == ' ' )
+                break;
+  
+                 TempPid[i] = TempString[i];
+           }
+          TempPid[i] =  '\\0';
+  
+     if( strcmp(TempPid,"") == 0 ) {
+             execute("{ strcpy(gPage74x.point_%d, \\"\\"); }", no);
+             execute("{ strcpy(bPoint_%d.TheOriginalText, \\"\\"); }", no);
+             execute("{ strcpy(bPoint_%d.TheOriginalText, \\"\\"); }", no);
+  
+             execute("{ strcpy(gPage74x.minValue_%d, \\"0.0\\"); }", no);
+             execute("{ strcpy(bMinValue_%d.TheOriginalText, \\"0.0\\"); }", no);
+             execute("{ strcpy(bMinValue_%d.TheNewText, \\"0.0\\"); }", no);
+  
+             execute("{ strcpy(gPage74x.baseline_%d, \\"0.0\\"); }", no);
+             execute("{ strcpy(bBaseline_%d.TheOriginalText, \\"0.0\\"); }", no);
+             execute("{ strcpy(bBaseline_%d.TheNewText, \\"0.0\\"); }", no);
+  
+             execute("{ strcpy(gPage74x.maxValue_%d, \\"0.0\\"); }", no);
+             execute("{ strcpy(bMaxValue_%d.TheOriginalText, \\"0.0\\"); }", no);
+             execute("{ strcpy(bMaxValue_%d.TheNewText, \\"0.0\\"); }", no);
+  
+              execute("{ bPoint_%d.ERROR = 0; }", no);
+               update();
+              return;
+     }
+  
+     if( FindPointId(TempString) == 0 ) {
+          execute("{ SigType = %s->sig_type; }", TempPid);
+  
+           if( SigType == AI || SigType == PI ||SigType == FI ||SigType == AL ) {
+             execute("{ TempMin = EngRangeLo(%s); }", TempPid);
+             execute("{ TempMax = EngRangeHi(%s); }", TempPid);
+  
+              TempBase = (TempMin + TempMax) /2;
+              execute("{ strcpy(gPage74x.point_%d, bPoint_%d.TheOriginalText); }", no, no);
+  
+              sprintf(TempString, "%8.2f", TempMin);
+              execute("{ strcpy(gPage74x.minValue_%d, TempString); }", no);
+              execute("{ strcpy(bMinValue_%d.TheNewText, TempString); }", no);
+              execute("{ strcpy(bMinValue_%d.TheOriginalText, TempString); }", no);
+  
+              sprintf(TempString, "%8.2f", TempBase);
+              execute("{ strcpy(gPage74x.baseline_%d, TempString); }", no);
+              execute("{ strcpy(bBaseline_%d.TheNewText, TempString); }", no);
+              execute("{ strcpy(bBaseline_%d.TheOriginalText, TempString); }", no);
+  
+              sprintf(TempString, "%8.2f", TempMax);
+              execute("{ strcpy(gPage74x.maxValue_%d, TempString); }", no);
+              execute("{ strcpy(bMaxValue_%d.TheNewText, TempString); }", no);
+              execute("{ strcpy(bMaxValue_%d.TheOriginalText, TempString); }", no);
+                 execute("{ bPoint_%d.ERROR = 1; }", no);
+           }
+           else if( SigType == CI || SigType == DL || SigType == SOE) {
+              execute("{ strcpy(gPage74x.point_%d, bPoint_%d.TheOriginalText); }", no, no);
+             execute("{ strcpy(gPage74x.minValue_%d, \\"0.0\\"); }", no);
+             execute("{ strcpy(bMinValue_%d.TheOriginalText, \\"0.0\\"); }", no);
+             execute("{ strcpy(bMinValue_%d.TheNewText, \\"0.0\\"); }", no);
+  
+             execute("{ strcpy(gPage74x.baseline_%d, \\"0.0\\"); }", no);
+             execute("{ strcpy(bBaseline_%d.TheOriginalText, \\"0.0\\"); }", no);
+             execute("{ strcpy(bBaseline_%d.TheNewText, \\"0.0\\"); }", no);
+  
+             execute("{ strcpy(gPage74x.maxValue_%d, \\"0.0\\"); }", no);
+             execute("{ strcpy(bMaxValue_%d.TheOriginalText, \\"0.0\\"); }", no);
+             execute("{ strcpy(bMaxValue_%d.TheNewText, \\"0.0\\"); }", no);
+  
+              execute("{ bPoint_%d.ERROR = 0; }", no);
+           }
+           else {
+              sprintf( TempString, "INVALID PID TYPE: %s", TempPid);
+              DisplayAdvisoryMessage1(TempString);
+              execute("{ bPoint_%d.ERROR = 0; }", no);
+           }
+     }
+     else {
+              execute("{ strcpy(bPoint_%d.TheOriginalText, \\"\\"); }", no);
+              execute("{ strcpy(bPoint_%d.TheNewText, \\"\\"); }", no);
+  //            execute("{ strcpy(bPoint_%d.TheOriginalText, gPage74x.point_%d); }", no, no);
+  //            execute("{ strcpy(bPoint_%d.TheNewText, gPage74x.point_%d); }", no, no);
+              execute("{ bPoint_%d.ERROR = 0; }", no);
+  
+              sprintf( TempString, "INVALID PID: %s", TempPid);
+              DisplayAdvisoryMessage1(TempString);
+     }
+     update();
+     return;
+  }
+  `
+
+  function `void ReturnActionForStartDate()
+  {
+     int i;
+  
+     strcpy(TempString, bStartDate.TheOriginalText);
+           for( i=0; i< 8; i++ ) {
+             if( TempString[i] == ' ' )
+                break;
+  
+                 TempPid[i] = TempString[i];
+           }
+          TempPid[i] =  '\\0';
+  
+     if( TempPid[2] == '/' && TempPid[5] == '/' && strcmp(TempPid,"") != 0 )
+        strcpy(gPage74x.startDate, bStartDate.TheOriginalText);
+     else {
+              strcpy(gPage74x.startDate, "");
+              strcpy(bStartDate.TheOriginalText, "");
+              strcpy(bStartDate.TheNewText, "");
+            DisplayAdvisoryMessage1("INVALID FORMAT FOR START DATE");
+             update();
+     }
+     return;
+  }`
+
+  function `void ReturnActionForStartTime()
+  {
+     int i;
+  
+     strcpy(TempString, bStartTime.TheOriginalText);
+           for( i=0; i< 8; i++ ) {
+             if( TempString[i] == ' ' )
+                break;
+  
+                 TempPid[i] = TempString[i];
+           }
+          TempPid[i] =  '\\0';
+  
+     if( TempPid[2] == ':' && TempPid[5] == ':' && strcmp(TempPid,"") != 0 )
+        strcpy(gPage74x.startTime, bStartTime.TheOriginalText);
+     else {
+              strcpy(gPage74x.startTime, "");
+              strcpy(bStartTime.TheOriginalText, "");
+              strcpy(bStartTime.TheNewText, "");
+            DisplayAdvisoryMessage1("INVALID FORMAT FOR START TIME");
+             update();
+     }
+     return;
+  }`
+
+  function `int SavePage74x( int num )
+  {
+     execute("{ gPage74%d.graphSet = gPage74x.graphSet; }", num);
+     executeAsync( "::YGN3and4.PicYGN_HDSR74Xsetup", "{ strcpy( gPage74%d.dataSource, gPage74x.dataSource); }", num);
+     executeAsync( "::YGN3and4.PicYGN_HDSR74Xsetup", "{ strcpy( gPage74%d.resolution, gPage74x.resolution); }", num);
+     executeAsync( "::YGN3and4.PicYGN_HDSR74Xsetup", "{ strcpy( gPage74%d.startDate, gPage74x.startDate); }", num);
+     executeAsync( "::YGN3and4.PicYGN_HDSR74Xsetup", "{ strcpy( gPage74%d.startTime, gPage74x.startTime); }", num);
+     executeAsync( "::YGN3and4.PicYGN_HDSR74Xsetup", "{ strcpy( gPage74%d.endDate, gPage74x.endDate); }", num);
+     executeAsync( "::YGN3and4.PicYGN_HDSR74Xsetup", "{ strcpy( gPage74%d.endTime, gPage74x.endTime); }", num);
+     executeAsync( "::YGN3and4.PicYGN_HDSR74Xsetup", "{ strcpy( gPage74%d.validStartDate, gPage74x.validStartDate); }", num);
+     executeAsync( "::YGN3and4.PicYGN_HDSR74Xsetup", "{ strcpy( gPage74%d.validStartTime, gPage74x.validStartTime); }", num);
+     executeAsync( "::YGN3and4.PicYGN_HDSR74Xsetup", "{ strcpy( gPage74%d.validEndDate, gPage74x.validEndDate); }", num);
+     executeAsync( "::YGN3and4.PicYGN_HDSR74Xsetup", "{ strcpy( gPage74%d.validEndTime, gPage74x.validEndTime); }", num);
+     executeAsync( "::YGN3and4.PicYGN_HDSR74Xsetup", "{ strcpy( gPage74%d.point_1, gPage74x.point_1); }", num);
+     executeAsync( "::YGN3and4.PicYGN_HDSR74Xsetup", "{ strcpy( gPage74%d.point_2, gPage74x.point_2); }", num);
+     executeAsync( "::YGN3and4.PicYGN_HDSR74Xsetup", "{ strcpy( gPage74%d.point_3, gPage74x.point_3); }", num);
+     executeAsync( "::YGN3and4.PicYGN_HDSR74Xsetup", "{ strcpy( gPage74%d.point_4, gPage74x.point_4); }", num);
+     executeAsync( "::YGN3and4.PicYGN_HDSR74Xsetup", "{ strcpy( gPage74%d.baseline_1, gPage74x.baseline_1); }", num);
+     executeAsync( "::YGN3and4.PicYGN_HDSR74Xsetup", "{ strcpy( gPage74%d.baseline_2, gPage74x.baseline_2); }", num);
+     executeAsync( "::YGN3and4.PicYGN_HDSR74Xsetup", "{ strcpy( gPage74%d.baseline_3, gPage74x.baseline_3); }", num);
+     executeAsync( "::YGN3and4.PicYGN_HDSR74Xsetup", "{ strcpy( gPage74%d.baseline_4, gPage74x.baseline_4); }", num);
+     executeAsync( "::YGN3and4.PicYGN_HDSR74Xsetup", "{ strcpy( gPage74%d.maxValue_1, gPage74x.maxValue_1); }", num);
+     executeAsync( "::YGN3and4.PicYGN_HDSR74Xsetup", "{ strcpy( gPage74%d.maxValue_2, gPage74x.maxValue_2); }", num);
+     executeAsync( "::YGN3and4.PicYGN_HDSR74Xsetup", "{ strcpy( gPage74%d.maxValue_3, gPage74x.maxValue_3); }", num);
+     executeAsync( "::YGN3and4.PicYGN_HDSR74Xsetup", "{ strcpy( gPage74%d.maxValue_4, gPage74x.maxValue_4); }", num);
+  //   executeAsync( "::YGN3and4.PicYGN_HDSR74Xsetup", "{ strcpy( gPage74x.enablePage, gPage74%d.enablePage); }", num);
+  //   executeAsync( "::YGN3and4.PicYGN_HDSR74Xsetup", "{ strcpy( gPage74x.tapeUse, gPage74%d.tapeUse); }", num);
+  }`
+
+  function `void UpdateDataRange()
+  {
+           if( strcmp(gPage74x.dataSource, "D") == 0 && strcmp(gPage74x.resolution, "H") == 0 ) {
+              strcpy( gPage74x.validStartDate, gPage74x.highDiskDate_1);
+              strcpy( gPage74x.validEndDate, gPage74x.highDiskDate_2);
+              strcpy( gPage74x.validStartTime, gPage74x.highDiskTime_1);
+              strcpy( gPage74x.validEndTime, gPage74x.highDiskTime_2);
+           }
+           else if( strcmp(gPage74x.dataSource, "D") == 0 && strcmp(gPage74x.resolution, "L") == 0 ) {
+              strcpy( gPage74x.validStartDate, gPage74x.lowDiskDate_1);
+              strcpy( gPage74x.validEndDate, gPage74x.lowDiskDate_2);
+              strcpy( gPage74x.validStartTime, gPage74x.lowDiskTime_1);
+              strcpy( gPage74x.validEndTime, gPage74x.lowDiskTime_2);
+           }
+           else if( strcmp(gPage74x.dataSource, "T") == 0 ) {
+              if( ((strcmp(gPage74x.resolution, "H1") == 0 || strcmp(gPage74x.resolution, "H2") == 0 ) &&
+                  gPage750.iResolution == 1) || ( strcmp(gPage74x.resolution, "L") == 0 &&
+                  gPage750.iResolution == 2) || strcmp(gPage74x.resolution, "R") == 0){
+                 strcpy( gPage74x.validStartDate, gPage750.startDate);
+                 strcpy( gPage74x.validEndDate, gPage750.endDate);
+                 strcpy( gPage74x.validStartTime, gPage750.startTime);
+                 strcpy( gPage74x.validEndTime, gPage750.endTime);
+              }
+              else {
+                 strcpy( gPage74x.validStartDate, "--/--/--");
+                 strcpy( gPage74x.validEndDate, "--/--/--");
+                 strcpy( gPage74x.validStartTime, "--:--:--");
+                 strcpy( gPage74x.validEndTime, "--:--:--");
+              }
+           }
+  }`
+
+  function `int ValidateDateTime()
+  {
+     int i = 0;
+  
+        if( gPage74x.startTime[2] == ':' && gPage74x.startTime[5] == ':' && strcmp(gPage74x.startTime,"") != 0 )
+           i = 1;
+        else
+           i = -1;
+  
+        if( gPage74x.startDate[2] == '/' && gPage74x.startDate[5] == '/' && strcmp(gPage74x.startDate,"") != 0 )
+           i = 1;
+        else
+           i = -1;
+  
+        if( i == -1 )
+           return -1;
+        else
+           return 1;
+  }`
+
+  text Text_4
+  {
+    x = 100;
+    y = 330;
+    format = "%s";
+    theText = "GRAPH START (LO RES ONLY):";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font14`;
+    xReference = 100;
+    yReference = 330;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle
+  {
+    x = 406;
+    y = 437;
+    width = 747;
+    height = 234;
+    visibility = 1;
+    foregroundColour = `COLOR_LINE_BOUNDARY_6`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 3;
+    foregroundFillColour = `COLOR_NON_ESSENTIAL`;
+    backgroundFillColour = -1;
+    fillPattern = `NoPattern`;
+    xReference = 570;
+    yReference = 437;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text Text_1
+  {
+    x = 195;
+    y = 180;
+    format = "%s";
+    theText = "RESOLUTION :";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font14`;
+    xReference = 195;
+    yReference = 180;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 575;
+    y = 140;
+    format = "%s";
+    theText = "L   = LO - DISK OR TAPE";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font14`;
+    xReference = 575;
+    yReference = 140;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 575;
+    y = 180;
+    format = "%s";
+    theText = "H1 = HI - TAPE - HOURS 0-16";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font14`;
+    xReference = 575;
+    yReference = 180;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle
+  {
+    x = 405;
+    y = 40;
+    width = 125;
+    height = 180;
+    visibility = 1;
+    foregroundColour = `COLOR_LINE_BOUNDARY_6`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 3;
+    foregroundFillColour = `COLOR_NON_ESSENTIAL`;
+    backgroundFillColour = -1;
+    fillPattern = `NoPattern`;
+    xReference = 405;
+    yReference = 140;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 515;
+    y = 270;
+    format = "%s";
+    theText = "MM/DD/YY";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font14`;
+    xReference = 515;
+    yReference = 270;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 645;
+    y = 270;
+    format = "%s";
+    theText = "HH:MM:SS";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font14`;
+    xReference = 645;
+    yReference = 270;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle
+  {
+    x = 403;
+    y = 290;
+    width = 346;
+    height = 64;
+    visibility = 1;
+    foregroundColour = `COLOR_LINE_BOUNDARY_6`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 3;
+    foregroundFillColour = `COLOR_NON_ESSENTIAL`;
+    backgroundFillColour = -1;
+    fillPattern = `NoPattern`;
+    xReference = 450;
+    yReference = 290;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 185;
+    y = 85;
+    format = "%s";
+    theText = "DATA SOURCE :";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font14`;
+    xReference = 185;
+    yReference = 85;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 580;
+    y = 90;
+    format = "%s";
+    theText = "T = TAPE (SCSI TAPE)";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font14`;
+    xReference = 580;
+    yReference = 90;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 580;
+    y = 60;
+    format = "%s";
+    theText = "D = DISK";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font14`;
+    xReference = 580;
+    yReference = 60;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 575;
+    y = 160;
+    format = "%s";
+    theText = "H   = HI - DISK";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font14`;
+    xReference = 575;
+    yReference = 160;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 575;
+    y = 205;
+    format = "%s";
+    theText = "H2 = HI - TAPE - HOURS 8-24";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font14`;
+    xReference = 575;
+    yReference = 205;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text t_validStartDate
+  {
+    x = 880;
+    y = 315;
+    format = "%s";
+    theText = `gPage74x.validStartDate`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font14`;
+    xReference = 880;
+    yReference = 315;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text t_validStartTime
+  {
+    x = 1000;
+    y = 315;
+    format = "%s";
+    theText = `gPage74x.validStartTime`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font14`;
+    xReference = 1000;
+    yReference = 315;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 880;
+    y = 250;
+    format = "%s";
+    theText = "VALID DATA RANGE";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font14`;
+    xReference = 880;
+    yReference = 250;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text t_validEndDate
+  {
+    x = 880;
+    y = 360;
+    format = "%s";
+    theText = `gPage74x.validEndDate`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font14`;
+    xReference = 880;
+    yReference = 360;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text t_validEndTime
+  {
+    x = 1000;
+    y = 360;
+    format = "%s";
+    theText = `gPage74x.validEndTime`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font14`;
+    xReference = 1000;
+    yReference = 360;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle
+  {
+    x = 799;
+    y = 275;
+    width = 345;
+    height = 107;
+    visibility = 1;
+    foregroundColour = `COLOR_LINE_BOUNDARY_6`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 3;
+    foregroundFillColour = `COLOR_NON_ESSENTIAL`;
+    backgroundFillColour = -1;
+    fillPattern = `NoPattern`;
+    xReference = 845;
+    yReference = 270;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 250;
+    y = 482;
+    format = "%s";
+    theText = "TRACK  #1:";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font14`;
+    xReference = 250;
+    yReference = 482;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 445;
+    y = 422;
+    format = "%s";
+    theText = "POINT ID";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font14`;
+    xReference = 445;
+    yReference = 422;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 995;
+    y = 417;
+    format = "%s";
+    theText = "MAX. VALUE";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font14`;
+    xReference = 995;
+    yReference = 417;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 820;
+    y = 422;
+    format = "%s";
+    theText = "BASELINE";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font14`;
+    xReference = 820;
+    yReference = 422;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 645;
+    y = 422;
+    format = "%s";
+    theText = "MIN. VALUE";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 645;
+    yReference = 422;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 575;
+    y = 225;
+    format = "%s";
+    theText = "R   = READ TAPE START/END DATES";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font14`;
+    xReference = 575;
+    yReference = 225;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 255;
+    y = 577;
+    format = "%s";
+    theText = "TRACK  #3:";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font14`;
+    xReference = 255;
+    yReference = 577;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 255;
+    y = 627;
+    format = "%s";
+    theText = "TRACK  #4:";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font14`;
+    xReference = 255;
+    yReference = 627;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 250;
+    y = 527;
+    format = "%s";
+    theText = "TRACK  #2:";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font14`;
+    xReference = 250;
+    yReference = 527;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  instance DialogueSymbols.InputDialogueText50 bDataSource
+  {
+    x = 445;
+    y = 65;
+    visibility = 1;
+    xReference = 445;
+    yReference = 65;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "DummyProcess()";	//CORENET 0705
+    ExecuteUnSelect = "DummyProcess()";	//CORENET 0705
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxCharacters = 3;
+    ReturnAction = "{ strcpy(gPage74x.dataSource, bDataSource.TheOriginalText); Checkup(); }";
+    Scope = "::YGN3and4.PicYGN_HDSR74Xsetup";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewText = "D";
+    TheOriginalText = "D";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 200;
+  }
+
+  instance DialogueSymbols.InputDialogueText100 bStartDate
+  {
+    x = 435;
+    y = 310;
+    visibility = 1;
+    xReference = 435;
+    yReference = 310;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "DummyProcess()";   //CORENET 0705
+    ExecuteUnSelect = "DummyProcess()";   //CORENET 0705
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxCharacters = 8;
+    ReturnAction = "{ ReturnActionForStartDate(); }";
+    Scope = "::YGN3and4.PicYGN_HDSR74Xsetup";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewText = "";
+    TheOriginalText = "";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 200;
+  }
+
+  instance DialogueSymbols.InputDialogueText50 bResolution
+  {
+    x = 445;
+    y = 150;
+    visibility = 1;
+    xReference = 445;
+    yReference = 150;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "DummyProcess()";   //CORENET 0705
+    ExecuteUnSelect = "DummyProcess()";   //CORENET 0705
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxCharacters = 4;
+    ReturnAction = "{ strcpy(gPage74x.resolution, bResolution.TheOriginalText); Checkup(); }";
+    Scope = "::YGN3and4.PicYGN_HDSR74Xsetup";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewText = "H";
+    TheOriginalText = "H";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 200;
+  }
+
+  instance DialogueSymbols.ProcessButton bProcess
+  {
+    x = 100;
+    y = 710;
+    visibility = 1;
+    xReference = 100;
+    yReference = 710;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ButtonState = 0;
+    DisplayText = 1;
+    DynamicLabel = "PROCESS";
+    ExecuteSelect = "{ Process1(); }";
+    ExecuteUnSelect = "{ DummyProcess(); }";	//CORENET 0705
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    Label = "PROCESS";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    StaticLabel = "PROCESS";
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextFontDynamic = `font4`;
+    TextFontStatic = `font4`;
+    TextX = 17;
+    TextXDynamic = 15;
+    TextXStatic = 17;
+    TextY = 22;
+    TextYDynamic = `TextY`;
+    TextYStatic = `TextY`;
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    Width = 100;
+  }
+
+  instance DialogueSymbols.InputDialogueText100 bStartTime
+  {
+    x = 590;
+    y = 310;
+    visibility = 1;
+    xReference = 590;
+    yReference = 310;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "DummyProcess()";   //CORENET 0705
+    ExecuteUnSelect = "DummyProcess()";   //CORENET 0705
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxCharacters = 8;
+    ReturnAction = "{ ReturnActionForStartTime(); }";
+    Scope = "::YGN3and4.PicYGN_HDSR74Xsetup";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewText = "";
+    TheOriginalText = "";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 200;
+  }
+
+  instance DialogueSymbols.InputDialogueText100 bPoint_1
+  {
+    x = 440;
+    y = 470;
+    visibility = 1;
+    xReference = 440;
+    yReference = 470;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "DummyProcess()";   //CORENET 0705
+    ExecuteUnSelect = "DummyProcess()";   //CORENET 0705
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxCharacters = 8;
+    ReturnAction = "{ ReturnAction(1); }";
+    Scope = "::YGN3and4.PicYGN_HDSR74Xsetup";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewText = "RCYS01AL";
+    TheOriginalText = "RCYS01AL";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 200;
+  }
+
+  instance DialogueSymbols.InputDialogueText100 bPoint_2
+  {
+    x = 440;
+    y = 520;
+    visibility = 1;
+    xReference = 440;
+    yReference = 520;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "DummyProcess()";   //CORENET 0705
+    ExecuteUnSelect = "DummyProcess()";   //CORENET 0705
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxCharacters = 8;
+    ReturnAction = "{ ReturnAction(2); }";
+    Scope = "::YGN3and4.PicYGN_HDSR74Xsetup";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewText = "RCYS01AH";
+    TheOriginalText = "RCYS01AH";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 200;
+  }
+
+  instance DialogueSymbols.InputDialogueText100 bPoint_3
+  {
+    x = 440;
+    y = 570;
+    visibility = 1;
+    xReference = 440;
+    yReference = 570;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 1;
+    ExecuteSelect = "DummyProcess()";   //CORENET 0705
+    ExecuteUnSelect = "DummyProcess()";   //CORENET 0705
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxCharacters = 8;
+    ReturnAction = "{ ReturnAction(3); }";
+    Scope = "::YGN3and4.PicYGN_HDSR74Xsetup";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewText = "CET03   ";
+    TheOriginalText = "CET03   ";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 200;
+  }
+
+  instance DialogueSymbols.InputDialogueText100 bPoint_4
+  {
+    x = 440;
+    y = 620;
+    visibility = 1;
+    xReference = 440;
+    yReference = 620;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 1;
+    ExecuteSelect = "DummyProcess()";   //CORENET 0705
+    ExecuteUnSelect = "DummyProcess()";   //CORENET 0705
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxCharacters = 8;
+    ReturnAction = "{ ReturnAction(4); }";
+    Scope = "::YGN3and4.PicYGN_HDSR74Xsetup";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewText = "CET04   ";
+    TheOriginalText = "CET04   ";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 200;
+  }
+
+  instance DialogueSymbols.InputDialogueText100 bMinValue_1
+  {
+    x = 645;
+    y = 470;
+    visibility = `bPoint_1.ERROR`;
+    xReference = 645;
+    yReference = 470;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "DummyProcess()";   //CORENET 0705
+    ExecuteUnSelect = "DummyProcess()";   //CORENET 0705
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxCharacters = 8;
+    ReturnAction = "{ MinReturnAction(1); }";
+    Scope = "::YGN3and4.PicYGN_HDSR74Xsetup";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewText = "    0.00";
+    TheOriginalText = "    0.00";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 200;
+  }
+
+  instance DialogueSymbols.InputDialogueText100 bMinValue_2
+  {
+    x = 645;
+    y = 520;
+    visibility = `bPoint_2.ERROR`;
+    xReference = 645;
+    yReference = 520;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "DummyProcess()";   //CORENET 0705
+    ExecuteUnSelect = "DummyProcess()";   //CORENET 0705
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxCharacters = 8;
+    ReturnAction = "{ MinReturnAction(2); }";
+    Scope = "::YGN3and4.PicYGN_HDSR74Xsetup";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewText = "0.0";
+    TheOriginalText = "0.0";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 200;
+  }
+
+  instance DialogueSymbols.InputDialogueText100 bMinValue_3
+  {
+    x = 645;
+    y = 570;
+    visibility = `bPoint_3.ERROR`;
+    xReference = 645;
+    yReference = 570;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "DummyProcess()";   //CORENET 0705
+    ExecuteUnSelect = "DummyProcess()";   //CORENET 0705
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxCharacters = 8;
+    ReturnAction = "{ MinReturnAction(3); }";
+    Scope = "::YGN3and4.PicYGN_HDSR74Xsetup";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewText = "    0.0";
+    TheOriginalText = "    0.0";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 200;
+  }
+
+  instance DialogueSymbols.InputDialogueText100 bMinValue_4
+  {
+    x = 645;
+    y = 620;
+    visibility = `bPoint_4.ERROR`;
+    xReference = 645;
+    yReference = 620;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "DummyProcess()";   //CORENET 0705
+    ExecuteUnSelect = "DummyProcess()";   //CORENET 0705
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxCharacters = 8;
+    ReturnAction = "{ MinReturnAction(4); }";
+    Scope = "::YGN3and4.PicYGN_HDSR74Xsetup";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewText = "    0.0";
+    TheOriginalText = "    0.0";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 200;
+  }
+
+  instance DialogueSymbols.InputDialogueText100 bBaseline_1
+  {
+    x = 815;
+    y = 470;
+    visibility = `bPoint_1.ERROR`;
+    xReference = 815;
+    yReference = 470;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "DummyProcess()";   //CORENET 0705
+    ExecuteUnSelect = "DummyProcess()";   //CORENET 0705
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxCharacters = 8;
+    ReturnAction = "{ BaselineReturnAction(1); }";
+    Scope = "::YGN3and4.PicYGN_HDSR74Xsetup";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewText = "  630.00";
+    TheOriginalText = "  630.00";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 200;
+  }
+
+  instance DialogueSymbols.InputDialogueText100 bBaseline_2
+  {
+    x = 815;
+    y = 520;
+    visibility = `bPoint_2.ERROR`;
+    xReference = 815;
+    yReference = 520;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "DummyProcess()";   //CORENET 0705
+    ExecuteUnSelect = "DummyProcess()";   //CORENET 0705
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxCharacters = 8;
+    ReturnAction = "{ BaselineReturnAction(2); }";
+    Scope = "::YGN3and4.PicYGN_HDSR74Xsetup";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewText = "0.0";
+    TheOriginalText = "0.0";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 200;
+  }
+
+  instance DialogueSymbols.InputDialogueText100 bBaseline_3
+  {
+    x = 815;
+    y = 570;
+    visibility = `bPoint_3.ERROR`;
+    xReference = 815;
+    yReference = 570;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "DummyProcess()";   //CORENET 0705
+    ExecuteUnSelect = "DummyProcess()";   //CORENET 0705
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxCharacters = 8;
+    ReturnAction = "{ BaselineReturnAction(3); }";
+    Scope = "::YGN3and4.PicYGN_HDSR74Xsetup";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewText = "  630.0";
+    TheOriginalText = "  630.0";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 200;
+  }
+
+  instance DialogueSymbols.InputDialogueText100 bBaseline_4
+  {
+    x = 815;
+    y = 620;
+    visibility = `bPoint_4.ERROR`;
+    xReference = 815;
+    yReference = 620;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "DummyProcess()";   //CORENET 0705
+    ExecuteUnSelect = "DummyProcess()";   //CORENET 0705
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxCharacters = 8;
+    ReturnAction = "{ BaselineReturnAction(4); }";
+    Scope = "::YGN3and4.PicYGN_HDSR74Xsetup";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewText = "  630.0";
+    TheOriginalText = "  630.0";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 200;
+  }
+
+  instance DialogueSymbols.InputDialogueText100 bMaxValue_1
+  {
+    x = 995;
+    y = 465;
+    visibility = `bPoint_1.ERROR`;
+    xReference = 995;
+    yReference = 465;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "DummyProcess()";   //CORENET 0705
+    ExecuteUnSelect = "DummyProcess()";   //CORENET 0705
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxCharacters = 8;
+    ReturnAction = "{ MaxReturnAction(1); }";
+    Scope = "::YGN3and4.PicYGN_HDSR74Xsetup";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewText = " 1260.00";
+    TheOriginalText = " 1260.00";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 200;
+  }
+
+  instance DialogueSymbols.InputDialogueText100 bMaxValue_2
+  {
+    x = 995;
+    y = 520;
+    visibility = `bPoint_2.ERROR`;
+    xReference = 995;
+    yReference = 520;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "DummyProcess()";   //CORENET 0705
+    ExecuteUnSelect = "DummyProcess()";   //CORENET 0705
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxCharacters = 8;
+    ReturnAction = "{ MaxReturnAction(2); }";
+    Scope = "::YGN3and4.PicYGN_HDSR74Xsetup";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewText = "0.0";
+    TheOriginalText = "0.0";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 200;
+  }
+
+  instance DialogueSymbols.InputDialogueText100 bMaxValue_3
+  {
+    x = 995;
+    y = 570;
+    visibility = `bPoint_3.ERROR`;
+    xReference = 995;
+    yReference = 570;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "DummyProcess()";   //CORENET 0705
+    ExecuteUnSelect = "DummyProcess()";   //CORENET 0705
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxCharacters = 8;
+    ReturnAction = "{ MaxReturnAction(3); }";
+    Scope = "::YGN3and4.PicYGN_HDSR74Xsetup";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewText = " 1260.0";
+    TheOriginalText = " 1260.0";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 200;
+  }
+
+  instance DialogueSymbols.InputDialogueText100 bMaxValue_4
+  {
+    x = 995;
+    y = 620;
+    visibility = `bPoint_4.ERROR`;
+    xReference = 995;
+    yReference = 620;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "DummyProcess()";   //CORENET 0705
+    ExecuteUnSelect = "DummyProcess()";   //CORENET 0705
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxCharacters = 8;
+    ReturnAction = "{ MaxReturnAction(4); }";
+    Scope = "::YGN3and4.PicYGN_HDSR74Xsetup";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewText = " 1260.0";
+    TheOriginalText = " 1260.0";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 200;
+  }
+
+  rectangle
+  {
+    x = 605;
+    y = 440;
+    width = 0;
+    height = 230;
+    visibility = 1;
+    foregroundColour = `COLOR_LINE_BOUNDARY_6`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 3;
+    foregroundFillColour = `COLOR_NON_ESSENTIAL`;
+    backgroundFillColour = -1;
+    fillPattern = `SolidPattern`;
+    xReference = 605;
+    yReference = 440;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+}

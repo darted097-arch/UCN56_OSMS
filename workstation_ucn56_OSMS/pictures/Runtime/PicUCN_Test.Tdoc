@@ -1,0 +1,303 @@
+/*
+ * PICASSO-3 CONFIGURATION LANGUAGE FILE
+ *
+ *
+ * Picture name: PicUCN_Test
+ *
+ *
+ * Documented by  : leo
+ * Host           : y6maint1
+ * Date           : 07/03-97 at 15:19:42
+ *
+ *
+ * Generate with:
+ *    pcc PicUCN_Test.Tdoc
+ *
+ */
+
+
+picture PicUCN_Test
+{
+
+  char PictureNumber[50] = "TEST DISPLAY";
+  char PictureTitle[50] = "UCN 5 AND 6";
+  RECORD *Second = `&CET06`;
+  RECORD *Minute = `&CET05`;
+  RECORD *Hour = `&CET04`;
+  RECORD *Day = `&CET03`;
+  RECORD *Year = `&CET02`;
+  RECORD *Month = `&CET01`;
+  char TestPoint[40] = "CVL203A";
+  RECORD *TESTPid = `&SIP308`;
+  float High[5] = {95, 20, 0, 69, 95};
+  float Trend1Low = 0;
+  float Trend1High = 20;
+  int TimeSpan = 3000;
+  int Frequency = 5;
+  float T1Low = 0;
+  float T1High = 20;
+  char Set[2] = "2";
+  char Pid1[20] = "&CVL203A";
+
+  function `void Initialize()
+{
+   printf("Into Initialize");
+   //TimeSpan = 600 * Frequency;
+   //execute("{Trend1.TrendPres1.variable = \\"AnalogSet2Trend%s\\";}",Set);
+   //execute("{Trend1.TrendPres1.upperLimit = T1High;}");
+   //execute("{Trend1.TrendPres1.lowerLimit = T1Low;}");
+   //execute("{Trend1.TrendPres1.logFrequency = Frequency;}");
+   //execute("{Trend1.TimeTag2.interval = 60*Frequency;}");
+   //execute("{Trend1.TrendGrid1.timeInterval = 60*Frequency;}");
+   //execute("{Trend1.timespan = TimeSpan;}");
+   //High[1] = T1High;
+   //High[2] = T1Low;
+   //High[3] = 69;
+   //High[4] = 95;
+   //printf("1: %f, 2: %f, 3: %f, 4: %f", High[1],High[2], High[3], High[4]);
+}`
+
+
+
+  text 
+  {
+    x = 155;
+    y = 200;
+    format = "%s";
+    theText = "HOUR";
+
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    theFont = 7;
+    xReference = 155;
+    yReference = 200;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 290;
+    y = 200;
+    format = "%s";
+    theText = "MINUTE";
+
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    theFont = 7;
+    xReference = 290;
+    yReference = 200;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 445;
+    y = 200;
+    format = "%s";
+    theText = "SECOND";
+
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    theFont = 7;
+    xReference = 445;
+    yReference = 200;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 435;
+    y = 340;
+    format = "%s";
+    theText = "YEAR";
+
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    theFont = 7;
+    xReference = 435;
+    yReference = 340;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 155;
+    y = 345;
+    format = "%s";
+    theText = "MONTH";
+
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    theFont = 7;
+    xReference = 155;
+    yReference = 345;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 295;
+    y = 345;
+    format = "%s";
+    theText = "DAY";
+
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    theFont = 7;
+    xReference = 295;
+    yReference = 345;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  instance cfmsSymbols.ValueAndState 
+  {
+    attribute PointId = `&CET01`;
+    attribute DisplayUnits = 1;
+    x = 120;
+    y = 220;
+    visibility = 1;
+    xReference = 120;
+    yReference = 220;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.ValueAndState 
+  {
+    attribute PointId = `&CET02`;
+    attribute DisplayUnits = 1;
+    x = 270;
+    y = 220;
+    visibility = 1;
+    xReference = 270;
+    yReference = 220;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.ValueAndState 
+  {
+    attribute PointId = `&CET03`;
+    attribute DisplayUnits = 1;
+    x = 435;
+    y = 220;
+    visibility = 1;
+    xReference = 435;
+    yReference = 220;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.ValueAndState 
+  {
+    attribute PointId = `&CET04`;
+    attribute DisplayUnits = 1;
+    x = 420;
+    y = 355;
+    visibility = 1;
+    xReference = 420;
+    yReference = 355;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.ValueAndState 
+  {
+    attribute PointId = `&CET05`;
+    attribute DisplayUnits = 1;
+    x = 130;
+    y = 355;
+    visibility = 1;
+    xReference = 130;
+    yReference = 355;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.ValueAndState 
+  {
+    attribute PointId = `&CET06`;
+    attribute DisplayUnits = 1;
+    x = 260;
+    y = 355;
+    visibility = 1;
+    xReference = 260;
+    yReference = 355;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+// The picture's other attributes:
+
+  backgroundColour    = 0;
+  xSnap               = 5;
+  ySnap               = 5;
+  angleSnap           = 0;
+  radiusSnap          = 0;
+  worldX              = 0;
+  worldY              = 0;
+  worldWidth          = 1280;
+  worldHeight         = 824;
+  oneToOne            = 1;
+  resizeMode          = 0;
+  updateMode          = 2;
+  crosshairStyle      = 1;
+  crosshairLength     = 0;
+  crosshairFollowSnap = `isInEditMode()`;
+  crosshairVisibility = `isInEditMode()`;
+  xReference = 500;
+  yReference = 500;
+  xScaleFactor = 1;
+  yScaleFactor = 1;
+  rotationAngle = 0;
+
+
+}  // end of picture PicUCN_Test

@@ -1,0 +1,1949 @@
+/*
+ * ProcSee CONFIGURATION LANGUAGE FILE
+ *
+ *
+ * User : ygn34
+ * Host : y4cr01
+ * Date : 2017-07-07
+ * Time : 09:26:48
+ *
+ * ProcSee version : ProcSee 3.10.1 (June 2016)
+ * File version    : 1.26
+ *
+ *
+ */
+
+
+picture Pic375_CompCoolingWtrTrnB
+{
+  worldX = 0;
+  worldY = 0;
+  worldWidth = 1280;
+  worldHeight = 824;
+  oneToOne = 1;
+  backgroundColour = 0;
+  updateMode = 2;
+  resizeMode = 0;
+  xSnap = 5;
+  ySnap = 5;
+  radiusSnap = 0;
+  angleSnap = 0;
+  crosshairStyle = 1;
+  crosshairLength = 0;
+  crosshairFollowSnap = `isInEditMode()`;
+  crosshairVisibility = `isInEditMode()`;
+  xReference = 500;
+  yReference = 500;
+  xScaleFactor = 1;
+  yScaleFactor = 1;
+  rotationAngle = 0;
+
+  char* PageBack = "Page374";
+
+  char* PageForward = "Page371";
+
+  char* PictureNumber = "375";
+
+  char* PictureTitle = "COMPONENT COOLING WATER (TRAIN B)";
+
+  function `void Initialize()
+  {
+  CFMLevel = 3;
+  SectoringPage = 7;
+  Current_Page = 375;
+  }`
+
+  dialogue
+  {
+    event = `keyPressed(0x1000FF72)`;
+    action = `{ DisplayPage(Page371); }`;
+  }
+
+  dialogue
+  {
+    event = `keyPressed(0x1000FF70)`;
+    action = `{ DisplayPage(Page374); }`;
+  }
+
+  dialogue
+  {
+    event = `keyPressed(0x1000FF71)`;
+    action = `{
+    DisplaySectorPopUpMenu();
+    update();
+    //printf("Display: DisplayPagePopUp");
+    }`;
+  }
+
+  dialogue
+  {
+    event = `keyPressed(0x1000FF73)`;
+    action = `{
+    DisplayPopUpMenu();
+    update();
+    //printf("Display: DisplayPagePopUp");
+    }`;
+  }
+
+  instance cfmsSymbols.Valve2StateHorizontal
+  {
+    x = 1064.44;
+    y = 168.889;
+    visibility = 1;
+    xReference = 1064.44;
+    yReference = 168.889;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    FLOW_RIGHT = 1;
+    Temp1 = "";
+    Valve_H = `&CCZS0152`;
+  }
+
+  instance cfmsSymbols.Valve2StateHorizontal
+  {
+    x = 690;
+    y = 170;
+    visibility = 1;
+    xReference = 691.111;
+    yReference = 170;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    FLOW_RIGHT = 1;
+    Temp1 = "";
+    Valve_H = `&CCZS0150`;
+  }
+
+  line
+  {
+    numberOfPoints = 4;
+    point[0] = ( 690, 614.13 );
+    point[1] = ( 690, 673.739 );
+    point[2] = ( 1240, 673.739 );
+    point[3] = ( 1240, 624.13 );
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineStyle = `SolidStyle`;
+    lineWidth = 0;
+    xReference = 690.217;
+    yReference = 614.13;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  line
+  {
+    numberOfPoints = 2;
+    point[0] = ( 1065, 532.739 );
+    point[1] = ( 1190, 532.739 );
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineStyle = `SolidPattern`;
+    lineWidth = 0;
+    xReference = 1050;
+    yReference = 532.609;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  line
+  {
+    numberOfPoints = 2;
+    point[0] = ( 1113, 464.739 );
+    point[1] = ( 1190, 464.739 );
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineStyle = `SolidPattern`;
+    lineWidth = 0;
+    xReference = 994.565;
+    yReference = 465.217;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  line
+  {
+    numberOfPoints = 2;
+    point[0] = ( 995, 396.913 );
+    point[1] = ( 1190, 396.913 );
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineStyle = `SolidPattern`;
+    lineWidth = 0;
+    xReference = 994.565;
+    yReference = 396.739;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  line
+  {
+    numberOfPoints = 2;
+    point[0] = ( 145, 396.739 );
+    point[1] = ( 690, 396.739 );
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineStyle = `SolidPattern`;
+    lineWidth = 0;
+    xReference = 169.565;
+    yReference = 396.739;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  line
+  {
+    numberOfPoints = 4;
+    point[0] = ( 690, 627.739 );
+    point[1] = ( 690, 102.739 );
+    point[2] = ( 1190, 102.739 );
+    point[3] = ( 1190, 532.739 );
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineStyle = `SolidPattern`;
+    lineWidth = 0;
+    xReference = 590.217;
+    yReference = 628.261;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 839;
+    y = 260.739;
+    format = "%s";
+    theText = "  ESSEN CHLR 1B  ";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = `COLOR_PICTURE_BACKGROUND`;
+    theFont = `font4`;
+    xReference = 839.13;
+    yReference = 260.87;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 824;
+    y = 401.913;
+    format = "%s";
+    theText = "  DIESEL GENERATOR  B  HX  ";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = `COLOR_PICTURE_BACKGROUND`;
+    theFont = `font4`;
+    xReference = 823.913;
+    yReference = 402.174;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 831.087;
+    y = 537.739;
+    format = "%s";
+    theText = "SECD AUX BLDG LOADS";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = `COLOR_PICTURE_BACKGROUND`;
+    theFont = `font4`;
+    xReference = 831.522;
+    yReference = 538.043;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  instance cfmsSymbols.PumpCentrifugal
+  {
+    x = 191;
+    y = 124.739;
+    visibility = 1;
+    xReference = 191.304;
+    yReference = 125;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    LeftPump = 0;
+    PointId = `&SXYS0002`;
+    Temp1 = "STAT";
+    Temp2 = "";
+  }
+
+  text
+  {
+    x = 206;
+    y = 313.739;
+    format = "%s";
+    theText = "ESW PUMPS";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 206.522;
+    yReference = 314.13;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  instance cfmsSymbols.PumpCentrifugal
+  {
+    x = 191;
+    y = 209.739;
+    visibility = 1;
+    xReference = 191.304;
+    yReference = 209.783;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    LeftPump = 0;
+    PointId = `&SXYS0004`;
+    Temp1 = "STAT";
+    Temp2 = "";
+  }
+
+  line
+  {
+    numberOfPoints = 5;
+    point[0] = ( 321, 151.739 );
+    point[1] = ( 321, 366.739 );
+    point[2] = ( 366, 366.739 );
+    point[3] = ( 366, 191.739 );
+    point[4] = ( 406, 191.739 );
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineStyle = `SolidPattern`;
+    lineWidth = 0;
+    xReference = 321.739;
+    yReference = 131.522;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  group
+  {
+    visibility = 1;
+    xReference = 393.478;
+    yReference = 169.565;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+
+    instance cfmsSymbols.flowdart
+    {
+      x = 394;
+      y = 179.739;
+      visibility = 1;
+      xReference = 393.478;
+      yReference = 179.348;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+    text
+    {
+      x = 426;
+      y = 186.739;
+      format = "%s";
+      theText = "YELLOW";
+      alignment = 0;
+      visibility = 1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font4`;
+      xReference = 426.087;
+      yReference = 186.957;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+    text
+    {
+      x = 426;
+      y = 211.739;
+      format = "%s";
+      theText = "SEA";
+      alignment = 0;
+      visibility = 1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font4`;
+      xReference = 426.087;
+      yReference = 211.957;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+  }
+
+  line
+  {
+    numberOfPoints = 2;
+    point[0] = ( 190, 151.739 );
+    point[1] = ( 245, 151.739 );
+    visibility = 1;
+    foregroundColour = `COLOR_PICTURE_BACKGROUND`;
+    backgroundColour = -1;
+    lineStyle = `SolidPattern`;
+    lineWidth = 3;
+    xReference = 190.217;
+    yReference = 152.174;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  line
+  {
+    numberOfPoints = 2;
+    point[0] = ( 190, 236.739 );
+    point[1] = ( 245, 236.739 );
+    visibility = 1;
+    foregroundColour = `COLOR_PICTURE_BACKGROUND`;
+    backgroundColour = -1;
+    lineStyle = `SolidPattern`;
+    lineWidth = 3;
+    xReference = 190.217;
+    yReference = 236.957;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  instance cfmsSymbols.PumpCentrifugal
+  {
+    x = 15;
+    y = 549.739;
+    visibility = 1;
+    xReference = 18.4783;
+    yReference = 541.304;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    LeftPump = 0;
+    PointId = `&CCYS0026`;
+    Temp1 = "STAT";
+    Temp2 = "";
+  }
+
+  instance cfmsSymbols.PumpCentrifugal
+  {
+    x = 15;
+    y = 629.739;
+    visibility = 1;
+    xReference = 18.4783;
+    yReference = 621.739;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    LeftPump = 0;
+    PointId = `&CCYS0028`;
+    Temp1 = "STAT";
+    Temp2 = "";
+  }
+
+  text
+  {
+    x = 30;
+    y = 713.739;
+    format = "%s";
+    theText = "CCW PMPS";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 30.4348;
+    yReference = 714.13;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  group
+  {
+    visibility = 1;
+    xReference = 1189.13;
+    yReference = 384.783;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+
+    instance cfmsSymbols.flowdart
+    {
+      x = 1205;
+      y = 384.739;
+      visibility = 1;
+      xReference = 1205.43;
+      yReference = 384.783;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+    line
+    {
+      numberOfPoints = 2;
+      point[0] = ( 1190, 396.739 );
+      point[1] = ( 1240, 396.739 );
+      visibility = 1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      lineStyle = `SolidPattern`;
+      lineWidth = 0;
+      xReference = 1180.43;
+      yReference = 396.739;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+  }
+
+  instance cfmsSymbols.flowdart
+  {
+    x = 1228.7;
+    y = 251.913;
+    visibility = 1;
+    xReference = 1228.26;
+    yReference = 252.174;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 90;
+  }
+
+  instance cfmsSymbols.flowdart
+  {
+    x = 1228.26;
+    y = 546.478;
+    visibility = 1;
+    xReference = 1228.26;
+    yReference = 546.739;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 90;
+  }
+
+  instance cfmsSymbols.flowdart
+  {
+    x = 1228.7;
+    y = 251.913;
+    visibility = 1;
+    xReference = 1228.26;
+    yReference = 252.174;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 90;
+  }
+
+  instance cfmsSymbols.flowdart
+  {
+    x = 1228.7;
+    y = 251.913;
+    visibility = 1;
+    xReference = 1228.26;
+    yReference = 252.174;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 90;
+  }
+
+  instance cfmsSymbols.ValueAndState
+  {
+    x = 107.217;
+    y = 363.826;
+    visibility = 1;
+    xReference = 108;
+    yReference = 364;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    DisplayUnits = 1;
+    isGPD = 0;
+    PointId = `&CCP0054`;
+  }
+
+  text
+  {
+    x = 89.2174;
+    y = 384.826;
+    format = "%s";
+    theText = "P:";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 90;
+    yReference = 385;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 296;
+    y = 453.739;
+    format = "%s";
+    theText = "CCW HX'S";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 295.652;
+    yReference = 453.261;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  instance cfmsSymbols.heatExchanger
+  {
+    x = 285;
+    y = 346.739;
+    visibility = 1;
+    xReference = 284.783;
+    yReference = 346.739;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  instance cfmsSymbols.ValueAndState
+  {
+    x = 431;
+    y = 349.739;
+    visibility = 1;
+    xReference = 431.522;
+    yReference = 350;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    DisplayUnits = 1;
+    isGPD = 0;
+    PointId = `&CCT0070`;
+  }
+
+  text
+  {
+    x = 405;
+    y = 371.739;
+    format = "%s";
+    theText = "T:";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 405.435;
+    yReference = 371.739;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  instance cfmsSymbols.ValueAndState
+  {
+    x = 431;
+    y = 323.739;
+    visibility = 1;
+    xReference = 431.522;
+    yReference = 323.913;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    DisplayUnits = 1;
+    isGPD = 0;
+    PointId = `&CCF0072`;
+  }
+
+  text
+  {
+    x = 405.087;
+    y = 346.739;
+    format = "%s";
+    theText = "F:";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 405.435;
+    yReference = 346.739;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  instance cfmsSymbols.flowdart
+  {
+    x = 27.5652;
+    y = 379.522;
+    visibility = 1;
+    xReference = 27.1739;
+    yReference = 379.348;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 270;
+  }
+
+  text
+  {
+    x = 60;
+    y = 606.739;
+    format = "%s";
+    theText = "02PB";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 59.7826;
+    yReference = 606.522;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 60;
+    y = 686.739;
+    format = "%s";
+    theText = "03PB";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 59.7826;
+    yReference = 686.957;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 235;
+    y = 181.739;
+    format = "%s";
+    theText = "01PB";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 234.783;
+    yReference = 181.522;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 235;
+    y = 266.739;
+    format = "%s";
+    theText = "02PB";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 234.783;
+    yReference = 266.304;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 720;
+    y = 132.739;
+    format = "%s";
+    theText = "CC-074";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 719.565;
+    yReference = 132.609;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 718.889;
+    y = 217.072;
+    format = "%s";
+    theText = "CC-150";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 718.889;
+    yReference = 217.778;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 718.889;
+    y = 428.29;
+    format = "%s";
+    theText = "CC-106";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 718.889;
+    yReference = 428.889;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 718.889;
+    y = 563.85;
+    format = "%s";
+    theText = "CC-082";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 718.889;
+    yReference = 564.444;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 718.889;
+    y = 634.961;
+    format = "%s";
+    theText = "CC-134";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 718.889;
+    yReference = 634.444;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 1092.78;
+    y = 215.763;
+    format = "%s";
+    theText = "CC-152";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 1092.22;
+    yReference = 215.556;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 1091.67;
+    y = 286.85;
+    format = "%s";
+    theText = "CC-086";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 1091.11;
+    yReference = 286.667;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 1092.78;
+    y = 355.044;
+    format = "%s";
+    theText = "CC-096";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 1092.22;
+    yReference = 355.556;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  instance cfmsSymbols.flowdart
+  {
+    x = 603.522;
+    y = 68.2174;
+    visibility = 1;
+    xReference = 603.261;
+    yReference = 68.4783;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 180;
+  }
+
+  instance cfmsSymbols.flowdart
+  {
+    x = 670;
+    y = 384.739;
+    visibility = 1;
+    xReference = 669.565;
+    yReference = 384.783;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle
+  {
+    x = 824.5;
+    y = 237.739;
+    width = 201;
+    height = 30;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 0;
+    foregroundFillColour = `COLOR_NON_ESSENTIAL`;
+    backgroundFillColour = -1;
+    fillPattern = `NoPattern`;
+    xReference = 825;
+    yReference = 238.043;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle
+  {
+    x = 824.5;
+    y = 307.739;
+    width = 200;
+    height = 30;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 0;
+    foregroundFillColour = `COLOR_NON_ESSENTIAL`;
+    backgroundFillColour = -1;
+    fillPattern = `NoPattern`;
+    xReference = 825;
+    yReference = 307.609;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle
+  {
+    x = 824;
+    y = 379.913;
+    width = 266;
+    height = 30;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 0;
+    foregroundFillColour = `COLOR_NON_ESSENTIAL`;
+    backgroundFillColour = -1;
+    fillPattern = `NoPattern`;
+    xReference = 823.913;
+    yReference = 380.435;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle
+  {
+    x = 825.087;
+    y = 516.739;
+    width = 239;
+    height = 30;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 0;
+    foregroundFillColour = `COLOR_NON_ESSENTIAL`;
+    backgroundFillColour = -1;
+    fillPattern = `NoPattern`;
+    xReference = 825;
+    yReference = 516.304;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle
+  {
+    x = 829.435;
+    y = 88.7391;
+    width = 107;
+    height = 30;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 0;
+    foregroundFillColour = `COLOR_NON_ESSENTIAL`;
+    backgroundFillColour = -1;
+    fillPattern = `NoPattern`;
+    xReference = 829.348;
+    yReference = 89.1304;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  line
+  {
+    numberOfPoints = 2;
+    point[0] = ( 1047.22, 184.652 );
+    point[1] = ( 1052.22, 184.652 );
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineStyle = `SolidPattern`;
+    lineWidth = 0;
+    xReference = 1047;
+    yReference = 185;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  line
+  {
+    numberOfPoints = 2;
+    point[0] = ( 800.217, 183.739 );
+    point[1] = ( 810.217, 183.739 );
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineStyle = `SolidPattern`;
+    lineWidth = 0;
+    xReference = 800;
+    yReference = 184;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  line
+  {
+    numberOfPoints = 2;
+    point[0] = ( 824.935, 102.739 );
+    point[1] = ( 829.935, 102.739 );
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineStyle = `SolidPattern`;
+    lineWidth = 0;
+    xReference = 825;
+    yReference = 103.261;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  line
+  {
+    numberOfPoints = 2;
+    point[0] = ( 690, 255.739 );
+    point[1] = ( 825, 255.739 );
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineStyle = `SolidPattern`;
+    lineWidth = 0;
+    xReference = 690.217;
+    yReference = 255.435;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  line
+  {
+    numberOfPoints = 2;
+    point[0] = ( 690, 323.739 );
+    point[1] = ( 825, 323.739 );
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineStyle = `SolidPattern`;
+    lineWidth = 0;
+    xReference = 690.217;
+    yReference = 323.913;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  line
+  {
+    numberOfPoints = 3;
+    point[0] = ( 1025, 323.739 );
+    point[1] = ( 1065, 323.739 );
+    point[2] = ( 1085, 323.739 );
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineStyle = `SolidPattern`;
+    lineWidth = 0;
+    xReference = 1025;
+    yReference = 323.913;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  line
+  {
+    numberOfPoints = 2;
+    point[0] = ( 815, 396.913 );
+    point[1] = ( 825, 396.913 );
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineStyle = `SolidPattern`;
+    lineWidth = 0;
+    xReference = 815.217;
+    yReference = 396.739;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  line
+  {
+    numberOfPoints = 2;
+    point[0] = ( 815, 532.739 );
+    point[1] = ( 825, 532.739 );
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineStyle = `SolidPattern`;
+    lineWidth = 0;
+    xReference = 815.217;
+    yReference = 532.609;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  line
+  {
+    numberOfPoints = 2;
+    point[0] = ( 815, 602.739 );
+    point[1] = ( 825, 602.739 );
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineStyle = `SolidPattern`;
+    lineWidth = 0;
+    xReference = 815.217;
+    yReference = 603.261;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  line
+  {
+    numberOfPoints = 4;
+    point[0] = ( 1240, 656.739 );
+    point[1] = ( 1240, 56.7391 );
+    point[2] = ( 15, 56.7391 );
+    point[3] = ( 15, 656.739 );
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineStyle = `SolidPattern`;
+    lineWidth = 0;
+    xReference = 1240.22;
+    yReference = 656.522;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  line
+  {
+    numberOfPoints = 2;
+    point[0] = ( 145, 396.739 );
+    point[1] = ( 145, 656.739 );
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineStyle = `SolidPattern`;
+    lineWidth = 0;
+    xReference = 144.565;
+    yReference = 396.739;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  line
+  {
+    numberOfPoints = 2;
+    point[0] = ( 1065, 255.739 );
+    point[1] = ( 1025, 255.739 );
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineStyle = `SolidPattern`;
+    lineWidth = 0;
+    xReference = 1065.22;
+    yReference = 255.435;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  instance cfmsSymbols.tankAtmospheric
+  {
+    x = 20;
+    y = 231.739;
+    visibility = 1;
+    xReference = 19.5652;
+    yReference = 231.522;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  instance cfmsSymbols.PumpCentrifugal
+  {
+    x = 15;
+    y = 465.739;
+    visibility = 1;
+    xReference = 18.4783;
+    yReference = 457.609;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    LeftPump = 0;
+    PointId = `&CCYS0024`;
+    Temp1 = "STAT";
+    Temp2 = "";
+  }
+
+  text
+  {
+    x = 60;
+    y = 522.739;
+    format = "%s";
+    theText = "01PB";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 59.7826;
+    yReference = 522.826;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  line
+  {
+    numberOfPoints = 2;
+    point[0] = ( 15, 291.739 );
+    point[1] = ( 40, 291.739 );
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineStyle = `SolidStyle`;
+    lineWidth = 0;
+    xReference = 15.2174;
+    yReference = 291.304;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 39;
+    y = 167.739;
+    format = "%s";
+    theText = "CCW";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 39.1304;
+    yReference = 167.391;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 39;
+    y = 187.739;
+    format = "%s";
+    theText = "SURGE";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 39.1304;
+    yReference = 188.043;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 39;
+    y = 206.739;
+    format = "%s";
+    theText = "TANK";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 39.1304;
+    yReference = 206.522;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 41;
+    y = 225.739;
+    format = "%s";
+    theText = "01TB";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 41.3043;
+    yReference = 226.087;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  instance cfmsSymbols.ValueAndState
+  {
+    x = 93;
+    y = 328.739;
+    visibility = 1;
+    xReference = 93.4783;
+    yReference = 328.261;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    DisplayUnits = 1;
+    isGPD = 0;
+    PointId = `&CCL0012`;
+  }
+
+  text
+  {
+    x = 67;
+    y = 349.739;
+    format = "%s";
+    theText = "L:";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 67.3913;
+    yReference = 350;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 717.778;
+    y = 494.739;
+    format = "%s";
+    theText = "CC-116";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 717.778;
+    yReference = 494.444;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  line
+  {
+    numberOfPoints = 2;
+    point[0] = ( 809, 464.739 );
+    point[1] = ( 819, 464.739 );
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineStyle = `SolidPattern`;
+    lineWidth = 0;
+    xReference = 809;
+    yReference = 465;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 1094;
+    y = 495.739;
+    format = "%s";
+    theText = "CC-130";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 1093.48;
+    yReference = 495.652;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  instance cfmsSymbols.heatExchanger
+  {
+    x = 857;
+    y = 622.913;
+    visibility = 1;
+    xReference = 856.522;
+    yReference = 622.826;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  instance cfmsSymbols.heatExchanger
+  {
+    x = 1035;
+    y = 623;
+    visibility = 1;
+    xReference = 1034.78;
+    yReference = 622.826;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 847;
+    y = 724.913;
+    format = "%s";
+    theText = "DIESEL DRIVEN";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 846.739;
+    yReference = 725;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 847;
+    y = 745.913;
+    format = "%s";
+    theText = "AF PUMP";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 846.739;
+    yReference = 745.652;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 847;
+    y = 765.913;
+    format = "%s";
+    theText = "ROOM COOLER B";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 846.739;
+    yReference = 766.304;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 1028;
+    y = 724.913;
+    format = "%s";
+    theText = "DIESEL DRIVEN";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 1028.26;
+    yReference = 725;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 1028;
+    y = 745.913;
+    format = "%s";
+    theText = "AF PUMP";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 1028.26;
+    yReference = 745.652;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 1028;
+    y = 765.913;
+    format = "%s";
+    theText = "ENGINE COOLER B";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 1028.26;
+    yReference = 766.304;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 1092.89;
+    y = 564.85;
+    format = "%s";
+    theText = "CC-084";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 1092.22;
+    yReference = 565.556;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 824.913;
+    y = 607.739;
+    format = "%s";
+    theText = "  SPENT FUEL POOL HX B ";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = `COLOR_PICTURE_BACKGROUND`;
+    theFont = `font4`;
+    xReference = 825;
+    yReference = 607.609;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle
+  {
+    x = 825.913;
+    y = 586.739;
+    width = 239;
+    height = 30;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 0;
+    foregroundFillColour = `COLOR_NON_ESSENTIAL`;
+    backgroundFillColour = -1;
+    fillPattern = `NoPattern`;
+    xReference = 826.087;
+    yReference = 586.957;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  line
+  {
+    numberOfPoints = 2;
+    point[0] = ( 1065, 601.739 );
+    point[1] = ( 1240, 601.739 );
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineStyle = `SolidStyle`;
+    lineWidth = 0;
+    xReference = 1065.22;
+    yReference = 602.174;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 839;
+    y = 329.826;
+    format = "%s";
+    theText = "  ESSEN CHLR 2B  ";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = `COLOR_PICTURE_BACKGROUND`;
+    theFont = `font4`;
+    xReference = 839.13;
+    yReference = 329.348;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 788.043;
+    y = 190.739;
+    format = "%s";
+    theText = " RADWASTE LRS EVAPORATORS ";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = `COLOR_PICTURE_BACKGROUND`;
+    theFont = `font4`;
+    xReference = 788;
+    yReference = 190;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 829.783;
+    y = 109.739;
+    format = "%s";
+    theText = " SDC HX  B ";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = `COLOR_PICTURE_BACKGROUND`;
+    theFont = `font4`;
+    xReference = 829;
+    yReference = 110;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  instance cfmsSymbols.Valve2StateHorizontal
+  {
+    x = 1063.33;
+    y = 241;
+    visibility = 1;
+    xReference = 1063;
+    yReference = 241;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    FLOW_RIGHT = 1;
+    Temp1 = "";
+    Valve_H = `&CCZS0086`;
+  }
+
+  instance cfmsSymbols.Valve2StateHorizontal
+  {
+    x = 1064.44;
+    y = 308.889;
+    visibility = 1;
+    xReference = 1064.44;
+    yReference = 308.889;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    FLOW_RIGHT = 1;
+    Temp1 = "";
+    Valve_H = `&CCZS0096`;
+  }
+
+  instance cfmsSymbols.Valve2StateHorizontal
+  {
+    x = 1064.44;
+    y = 517.778;
+    visibility = 1;
+    xReference = 1065.56;
+    yReference = 517.778;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    FLOW_RIGHT = 1;
+    Temp1 = "";
+    Valve_H = `&CCZS0084`;
+  }
+
+  instance cfmsSymbols.Valve2StateHorizontal
+  {
+    x = 690;
+    y = 381.111;
+    visibility = 1;
+    xReference = 690;
+    yReference = 381.111;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    FLOW_RIGHT = 1;
+    Temp1 = "";
+    Valve_H = `&CCZS0106`;
+  }
+
+  instance cfmsSymbols.Valve2StateHorizontal
+  {
+    x = 688.889;
+    y = 447.778;
+    visibility = 1;
+    xReference = 688.889;
+    yReference = 447.778;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    FLOW_RIGHT = 1;
+    Temp1 = "";
+    Valve_H = `&CCZS0116`;
+  }
+
+  instance cfmsSymbols.Valve2StateHorizontal
+  {
+    x = 690;
+    y = 517.778;
+    visibility = 1;
+    xReference = 690;
+    yReference = 517.778;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    FLOW_RIGHT = 1;
+    Temp1 = "";
+    Valve_H = `&CCZS0082`;
+  }
+
+  instance cfmsSymbols.Valve2StateHorizontal
+  {
+    x = 690;
+    y = 587.778;
+    visibility = 1;
+    xReference = 690;
+    yReference = 587.778;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    FLOW_RIGHT = 1;
+    Temp1 = "";
+    Valve_H = `&CCZS0134`;
+  }
+
+  rectangle
+  {
+    x = 787.217;
+    y = 167.739;
+    width = 307;
+    height = 30;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 0;
+    foregroundFillColour = `COLOR_NON_ESSENTIAL`;
+    backgroundFillColour = -1;
+    fillPattern = `NoPattern`;
+    xReference = 810;
+    yReference = 167;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  instance cfmsSymbols.Valve4StateHorizontal
+  {
+    x = 692;
+    y = 88;
+    visibility = 1;
+    xReference = 692;
+    yReference = 88;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    FLOW_RIGHT = 1;
+    Temp1 = "";
+    Temp2 = "";
+    Valve_H = `&CCZS074A`;
+    Valve_L = `&CCZS074B`;
+  }
+
+  instance cfmsSymbols.Valve4StateHorizontal
+  {
+    x = 1065;
+    y = 450;
+    visibility = 1;
+    xReference = 1065;
+    yReference = 450;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    FLOW_RIGHT = 1;
+    Temp1 = "";
+    Temp2 = "";
+    Valve_H = `&CCZS130A`;
+    Valve_L = `&CCZS130B`;
+  }
+
+  text
+  {
+    x = 794.826;
+    y = 469.739;
+    format = "%s";
+    theText = "  RX CNMT FAN COOLER TRN B ";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = `COLOR_PICTURE_BACKGROUND`;
+    theFont = `font4`;
+    xReference = 795;
+    yReference = 470;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle
+  {
+    x = 794;
+    y = 447.739;
+    width = 294;
+    height = 30;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 0;
+    foregroundFillColour = `COLOR_NON_ESSENTIAL`;
+    backgroundFillColour = -1;
+    fillPattern = `NoPattern`;
+    xReference = 798;
+    yReference = 448;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+}

@@ -1,0 +1,684 @@
+/*
+ * PICASSO-3 CONFIGURATION LANGUAGE FILE
+ *
+ *
+ * Picture name: PicYGN_CAL
+ *
+ *
+ * Documented by  : gcs
+ * Host           : y6maint1
+ * Date           : 14/01-98 at 10:40:18
+ *
+ *
+ * Generate with:
+ *    pcc PicYGN_CAL.Tdoc
+ *
+ */
+
+
+picture PicYGN_CAL
+{
+
+  char *dummy_arg = " ";
+  char *PictureTitle = "CURRENT ALARM LIST";
+  char PictureNumber[50] = "140";
+
+  function `void Initialize()
+{
+   CFMLevel = 0;
+   Current_Page = 140;
+   CalPageOn = TRUE;
+   execute("{sendMessageToHost(REQUEST_CAL_DATA);}");
+}`
+
+
+
+  function `int SetpRECORDs()
+{
+// If the string compare is not equal to 8 blanks and the string length is 8 characters long
+// then set pRECORD equal to the PID sent from the CCUR
+   if ( (0 != strcmp (Interface->CAL_Data.CALine1.Time,"        ")) && 
+        (8 == strlen(Interface->CAL_Data.CALine1.Time)) )
+      {
+        execute ("{Line1.pRECORD = \\\`&%s\\\`;}", Interface->CAL_Data.CALine1.AlarmPid);
+      }
+   else
+        {Line1.pRECORD = 0;}
+
+   if ( (0 != strcmp (Interface->CAL_Data.CALine2.Time,"        ")) && 
+        (8 == strlen(Interface->CAL_Data.CALine2.Time)) )
+      {
+       execute ("{Line2.pRECORD = \\\`&%s\\\`;}", Interface->CAL_Data.CALine2.AlarmPid);
+      }
+   else
+        {Line2.pRECORD = 0;}
+
+   if ( (0 != strcmp (Interface->CAL_Data.CALine3.Time,"        ")) && 
+        (8 == strlen(Interface->CAL_Data.CALine3.Time)) )
+     {
+      execute ("{Line3.pRECORD = \\\`&%s\\\`;}", Interface->CAL_Data.CALine3.AlarmPid);
+     }
+   else
+        {Line3.pRECORD = 0;}
+
+   if ( (0 != strcmp (Interface->CAL_Data.CALine4.Time,"        ")) && 
+        (8 == strlen(Interface->CAL_Data.CALine4.Time)) )
+      {
+       execute ("{Line4.pRECORD = \\\`&%s\\\`;}", Interface->CAL_Data.CALine4.AlarmPid);
+      }
+   else
+       {Line4.pRECORD = 0;}
+
+   if ( (0 != strcmp (Interface->CAL_Data.CALine5.Time,"        ")) && 
+        (8 == strlen(Interface->CAL_Data.CALine5.Time)) )
+      {
+       execute ("{Line5.pRECORD = \\\`&%s\\\`;}", Interface->CAL_Data.CALine5.AlarmPid);
+      }
+   else
+       {Line5.pRECORD = 0;}
+
+   if ( (0 != strcmp (Interface->CAL_Data.CALine6.Time,"        ")) && 
+        (8 == strlen(Interface->CAL_Data.CALine6.Time)) )
+      {
+       execute ("{Line6.pRECORD = \\\`&%s\\\`;}", Interface->CAL_Data.CALine6.AlarmPid);
+      }
+   else
+       {Line6.pRECORD = 0;}
+
+   if ( (0 != strcmp (Interface->CAL_Data.CALine7.Time,"        ")) && 
+        (8 == strlen(Interface->CAL_Data.CALine7.Time)) )
+      {
+       execute ("{Line7.pRECORD = \\\`&%s\\\`;}", Interface->CAL_Data.CALine7.AlarmPid);
+      }
+   else
+       {Line7.pRECORD = 0;}
+
+   if ( (0 != strcmp (Interface->CAL_Data.CALine8.Time,"        ")) && 
+        (8 == strlen(Interface->CAL_Data.CALine8.Time)) )
+      { 
+       execute ("{Line8.pRECORD = \\\`&%s\\\`;}", Interface->CAL_Data.CALine8.AlarmPid);
+      }
+   else
+       {Line8.pRECORD = 0;}
+
+   if ( (0 != strcmp (Interface->CAL_Data.CALine9.Time,"        ")) && 
+        (8 == strlen(Interface->CAL_Data.CALine9.Time)) )
+      {
+       execute ("{Line9.pRECORD = \\\`&%s\\\`;}", Interface->CAL_Data.CALine9.AlarmPid);
+      }
+   else
+       {Line9.pRECORD = 0;}
+
+   if ( (0 != strcmp (Interface->CAL_Data.CALine10.Time,"        ")) && 
+        (8 == strlen(Interface->CAL_Data.CALine10.Time)) )
+      {
+      execute ("{Line10.pRECORD = \\\`&%s\\\`;}", Interface->CAL_Data.CALine10.AlarmPid);
+      }
+   else
+       {Line10.pRECORD = 0;}
+
+   if ( (0 != strcmp (Interface->CAL_Data.CALine11.Time,"        ")) && 
+        (8 == strlen(Interface->CAL_Data.CALine11.Time)) )
+      {
+      execute ("{Line11.pRECORD = \\\`&%s\\\`;}", Interface->CAL_Data.CALine11.AlarmPid); 
+      }
+   else
+       {Line11.pRECORD = 0;}
+
+   if ( (0 != strcmp (Interface->CAL_Data.CALine12.Time,"        ")) && 
+        (8 == strlen(Interface->CAL_Data.CALine12.Time)) )
+      {
+      execute ("{Line12.pRECORD = \\\`&%s\\\`;}", Interface->CAL_Data.CALine12.AlarmPid);
+      }
+   else
+       {Line12.pRECORD = 0;}
+
+   if ( (0 != strcmp (Interface->CAL_Data.CALine13.Time,"        ")) && 
+        (8 == strlen(Interface->CAL_Data.CALine13.Time)) )
+      {
+        execute ("{Line13.pRECORD = \\\`&%s\\\`;}", Interface->CAL_Data.CALine13.AlarmPid);
+       }
+   else
+       {Line13.pRECORD = 0;}
+
+   if ( (0 != strcmp (Interface->CAL_Data.CALine14.Time,"        ")) && 
+        (8 == strlen(Interface->CAL_Data.CALine14.Time)) )
+      {
+       execute ("{Line14.pRECORD = \\\`&%s\\\`;}", Interface->CAL_Data.CALine14.AlarmPid);
+      }
+   else
+       {Line14.pRECORD = 0;}
+
+   if ( (0 != strcmp (Interface->CAL_Data.CALine15.Time,"        ")) && 
+        (8 == strlen(Interface->CAL_Data.CALine15.Time)) )
+      {
+       execute ("{Line15.pRECORD = \\\`&%s\\\`;}", Interface->CAL_Data.CALine15.AlarmPid);
+      }
+   else
+       {Line15.pRECORD = 0;}
+   return(1);
+}`
+
+
+
+  line 
+  {
+    numberOfPoints = 2;
+
+    point[0] = (85, 266);
+    point[1] = (85, 266);
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineWidth = 0;
+    lineStyle = `SolidPattern`;
+    xReference = 85;
+    yReference = 266;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  line 
+  {
+    numberOfPoints = 2;
+
+    point[0] = (74, 451);
+    point[1] = (74, 451);
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineWidth = 0;
+    lineStyle = `SolidPattern`;
+    xReference = 74;
+    yReference = 451;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  rectangle 
+  {
+    x = 485;
+    y = 51;
+    width = 0;
+    height = 0;
+
+    visibility = 1;
+    foregroundFillColour = `COLOR_NON_ESSENTIAL`;
+    backgroundFillColour = -1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineWidth = 0;
+    linePattern = `SolidPattern`;
+    fillPattern = `SolidPattern`;
+    xReference = 485;
+    yReference = 51;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 662;
+    y = 26;
+    format = "%d";
+
+    //theText = `&Interface->CAL_Data.CalPage`;
+    theText = `Interface->CAL_Data.CalPage`;	// CORENET
+
+    visibility = `SetpRECORDs()`;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font15`;
+    xReference = 662;
+    yReference = 26;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 564;
+    y = 26;
+    format = "%s";
+    theText = "PAGE";
+
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font15`;
+    xReference = 564;
+    yReference = 26;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  instance DialogueSymbols.CalLine Line2
+  {
+    attribute Format = `pRECORD == 0 ? "%s" : pRECORD->disfmt`;
+    attribute ProblemText = `pRECORD == 0 ? " " : 
+                              Interface->CAL_Data.CALine2.AlarmProb`;
+    attribute TimeText = `pRECORD == 0 ? " " : 
+                          Interface->CAL_Data.CALine2.Time`;
+    attribute LineNumber = 2;
+    attribute pRECORD = 0;
+    attribute value.PointId = `pRECORD`;
+    attribute value.DisplayUnits = 1;
+    x = 10;
+    y = 120;
+    visibility = 1;
+    xReference = 89;
+    yReference = 123;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance Line2
+
+
+
+  instance DialogueSymbols.CalLine Line3
+  {
+    attribute Format = `pRECORD == 0 ? "%s" : pRECORD->disfmt`;
+    attribute ProblemText = `pRECORD == 0 ? "       " :
+                             Interface->CAL_Data.CALine3.AlarmProb`;
+    attribute TimeText = `pRECORD == 0 ? "        " : 
+                  Interface->CAL_Data.CALine3.Time`;
+    attribute LineNumber = 3;
+    attribute pRECORD = 0;
+    attribute value.PointId = `pRECORD`;
+    attribute value.DisplayUnits = 1;
+    x = 10;
+    y = 160;
+    visibility = 1;
+    xReference = 84;
+    yReference = 160;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance Line3
+
+
+
+  instance DialogueSymbols.CalLine Line4
+  {
+    attribute Format = `pRECORD == 0 ? "%s" : pRECORD->disfmt`;
+    attribute ProblemText = `pRECORD == 0 ? "        " : 
+                             Interface->CAL_Data.CALine4.AlarmProb`;
+    attribute TimeText = `pRECORD == 0 ? "        " : 
+                           Interface->CAL_Data.CALine4.Time`;
+    attribute LineNumber = 4;
+    attribute pRECORD = 0;
+    attribute value.PointId = `pRECORD`;
+    attribute value.DisplayUnits = 1;
+    x = 10;
+    y = 200;
+    visibility = 1;
+    xReference = 30;
+    yReference = 200;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance Line4
+
+
+
+  instance DialogueSymbols.CalLine Line5
+  {
+    attribute Format = `pRECORD == 0 ? "%s" : pRECORD->disfmt`;
+    attribute ProblemText = `pRECORD == 0 ? "        " : 
+                              Interface->CAL_Data.CALine5.AlarmProb`;
+    attribute TimeText = `pRECORD == 0 ? "        " : 
+                          Interface->CAL_Data.CALine5.Time`;
+    attribute LineNumber = 5;
+    attribute pRECORD = 0;
+    attribute value.PointId = `pRECORD`;
+    attribute value.DisplayUnits = 1;
+    x = 10;
+    y = 240;
+    visibility = 1;
+    xReference = 124;
+    yReference = 246;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance Line5
+
+
+
+  instance DialogueSymbols.CalLine Line1
+  {
+    attribute Format = `pRECORD == 0 ? "%s" : pRECORD->disfmt`;
+    attribute ProblemText = `pRECORD == 0 ? "        " : 
+                            Interface->CAL_Data.CALine1.AlarmProb`;
+    attribute TimeText = `pRECORD == 0 ? "        " : 
+                          Interface->CAL_Data.CALine1.Time`;
+    attribute LineNumber = 1;
+    attribute pRECORD = 0;
+    attribute value.PointId = `pRECORD`;
+    attribute value.DisplayUnits = 1;
+    x = 10;
+    y = 80;
+    visibility = 1;
+    xReference = 106;
+    yReference = 88;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance Line1
+
+
+
+  instance DialogueSymbols.CalLine Line6
+  {
+    attribute Format = `pRECORD == 0 ? "%s" : pRECORD->disfmt`;
+    attribute ProblemText = `pRECORD == 0 ? "        " : 
+                              Interface->CAL_Data.CALine6.AlarmProb`;
+    attribute TimeText = `pRECORD == 0 ? "        " : 
+                          Interface->CAL_Data.CALine6.Time`;
+    attribute LineNumber = 6;
+    attribute pRECORD = 0;
+    attribute value.PointId = `pRECORD`;
+    attribute value.DisplayUnits = 1;
+    x = 10;
+    y = 300;
+    visibility = 1;
+    xReference = 61;
+    yReference = 313;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance Line6
+
+
+
+  instance DialogueSymbols.CalLine Line7
+  {
+    attribute Format = `pRECORD == 0 ? "%s" : pRECORD->disfmt`;
+    attribute ProblemText = `pRECORD == 0 ? "        " : 
+                              Interface->CAL_Data.CALine7.AlarmProb`;
+    attribute TimeText = `pRECORD == 0 ? "        " : 
+                          Interface->CAL_Data.CALine7.Time`;
+    attribute LineNumber = 7;
+    attribute pRECORD = 0;
+    attribute value.PointId = `pRECORD`;
+    attribute value.DisplayUnits = 1;
+    x = 10;
+    y = 340;
+    visibility = 1;
+    xReference = 53;
+    yReference = 354;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance Line7
+
+
+
+  instance DialogueSymbols.CalLine Line8
+  {
+    attribute Format = `pRECORD == 0 ? "%s" : pRECORD->disfmt`;
+    attribute ProblemText = `pRECORD == 0 ? "        " : 
+                             Interface->CAL_Data.CALine8.AlarmProb`;
+    attribute TimeText = `pRECORD == 0 ? "        " : 
+                          Interface->CAL_Data.CALine8.Time`;
+    attribute LineNumber = 8;
+    attribute pRECORD = 0;
+    attribute value.PointId = `pRECORD`;
+    attribute value.DisplayUnits = 1;
+    x = 10;
+    y = 380;
+    visibility = 1;
+    xReference = 57;
+    yReference = 399;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance Line8
+
+
+
+  instance DialogueSymbols.CalLine Line9
+  {
+    attribute Format = `pRECORD == 0 ? "%s" : pRECORD->disfmt`;
+    attribute ProblemText = `pRECORD == 0 ? "        " : 
+                             Interface->CAL_Data.CALine9.AlarmProb`;
+    attribute TimeText = `pRECORD == 0 ? "        " : 
+                           Interface->CAL_Data.CALine9.Time`;
+    attribute LineNumber = 9;
+    attribute pRECORD = 0;
+    attribute value.PointId = `pRECORD`;
+    attribute value.DisplayUnits = 1;
+    x = 10;
+    y = 420;
+    visibility = 1;
+    xReference = 99;
+    yReference = 459;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance Line9
+
+
+
+  instance DialogueSymbols.CalLine Line10
+  {
+    attribute Format = `pRECORD == 0 ? "%s" : pRECORD->disfmt`;
+    attribute ProblemText = `pRECORD == 0 ? "        " : 
+                             Interface->CAL_Data.CALine10.AlarmProb`;
+    attribute TimeText = `pRECORD == 0 ? "        " : 
+                          Interface->CAL_Data.CALine10.Time`;
+    attribute LineNumber = 10;
+    attribute pRECORD = 0;
+    attribute value.PointId = `pRECORD`;
+    attribute value.DisplayUnits = 1;
+    x = 10;
+    y = 460;
+    visibility = 1;
+    xReference = 133;
+    yReference = 514;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance Line10
+
+
+
+  line 
+  {
+    numberOfPoints = 2;
+
+    point[0] = (58, 281);
+    point[1] = (1125, 281);
+
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    lineWidth = 5;
+    lineStyle = `SolidPattern`;
+    xReference = 41;
+    yReference = 285;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  line bar2
+  {
+    numberOfPoints = 2;
+
+    point[0] = (53, 502);
+    point[1] = (1120, 502);
+
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    lineWidth = 5;
+    lineStyle = `SolidPattern`;
+    xReference = 53;
+    yReference = 479;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  instance DialogueSymbols.CalLine Line11
+  {
+    attribute Format = `pRECORD == 0 ? "%s" : pRECORD->disfmt`;
+    attribute ProblemText = `pRECORD == 0 ? "        " : 
+                             Interface->CAL_Data.CALine11.AlarmProb`;
+    attribute TimeText = `pRECORD == 0 ? "        " : 
+                          Interface->CAL_Data.CALine11.Time`;
+    attribute LineNumber = 11;
+    attribute pRECORD = 0;
+    attribute value.PointId = `pRECORD`;
+    attribute value.DisplayUnits = 1;
+    x = 10;
+    y = 520;
+    visibility = 1;
+    xReference = 52;
+    yReference = 555;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance Line11
+
+
+
+  instance DialogueSymbols.CalLine Line12
+  {
+    attribute Format = `pRECORD == 0 ? "%s" : pRECORD->disfmt`;
+    attribute ProblemText = `pRECORD == 0 ? "        " : 
+                             Interface->CAL_Data.CALine12.AlarmProb`;
+    attribute TimeText = `pRECORD == 0 ? "        " : 
+                           Interface->CAL_Data.CALine12.Time`;
+    attribute LineNumber = 13;
+    attribute pRECORD = 0;
+    attribute value.PointId = `pRECORD`;
+    attribute value.DisplayUnits = 1;
+    x = 10;
+    y = 560;
+    visibility = 1;
+    xReference = 61;
+    yReference = 592;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance Line12
+
+
+
+  instance DialogueSymbols.CalLine Line13
+  {
+    attribute Format = `pRECORD == 0 ? "%s" : pRECORD->disfmt`;
+    attribute ProblemText = `pRECORD == 0 ? "        " : 
+                              Interface->CAL_Data.CALine13.AlarmProb`;
+    attribute TimeText = `pRECORD == 0 ? "        " : 
+                          Interface->CAL_Data.CALine13.Time`;
+    attribute LineNumber = 13;
+    attribute pRECORD = 0;
+    attribute value.PointId = `pRECORD`;
+    attribute value.DisplayUnits = 1;
+    x = 10;
+    y = 600;
+    visibility = 1;
+    xReference = 67;
+    yReference = 633;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance Line13
+
+
+
+  instance DialogueSymbols.CalLine Line15
+  {
+    attribute Format = `pRECORD == 0 ? "%s" : pRECORD->disfmt`;
+    attribute ProblemText = `pRECORD == 0 ? "        " : 
+                              Interface->CAL_Data.CALine15.AlarmProb`;
+    attribute TimeText = `pRECORD == 0 ? "        " : 
+                          Interface->CAL_Data.CALine15.Time`;
+    attribute LineNumber = 15;
+    attribute pRECORD = 0;
+    attribute value.PointId = `pRECORD`;
+    attribute value.DisplayUnits = 1;
+    x = 10;
+    y = 680;
+    visibility = 1;
+    xReference = 127;
+    yReference = 712;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance Line15
+
+
+
+  instance DialogueSymbols.CalLine Line14
+  {
+    attribute Format = `pRECORD == 0 ? "%s" : pRECORD->disfmt`;
+    attribute ProblemText = `pRECORD == 0 ? "        " :  
+                             Interface->CAL_Data.CALine14.AlarmProb`;
+    attribute TimeText = `pRECORD == 0 ? "        " : 
+                          Interface->CAL_Data.CALine14.Time`;
+    attribute LineNumber = 14;
+    attribute pRECORD = 0;
+    attribute value.PointId = `pRECORD`;
+    attribute value.DisplayUnits = 1;
+    x = 10;
+    y = 640;
+    visibility = 1;
+    xReference = 118;
+    yReference = 683;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance Line14
+
+
+
+// The picture's other attributes:
+
+  backgroundColour    = 0;
+  xSnap               = 0;
+  ySnap               = 0;
+  angleSnap           = 0;
+  radiusSnap          = 0;
+  worldX              = 0;
+  worldY              = 0;
+  worldWidth          = 1280;
+  worldHeight         = 1024;
+  oneToOne            = 1;
+  resizeMode          = 0;
+  updateMode          = 2;
+  crosshairStyle      = 1;
+  crosshairLength     = 0;
+  crosshairFollowSnap = `isInEditMode()`;
+  crosshairVisibility = `isInEditMode()`;
+  xReference = 500;
+  yReference = 500;
+  xScaleFactor = 1;
+  yScaleFactor = 1;
+  rotationAngle = 0;
+
+
+}  // end of picture PicYGN_CAL

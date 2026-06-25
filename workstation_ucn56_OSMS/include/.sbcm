@@ -1,0 +1,26 @@
+/01 SoftBench CM file info cache -- do not edit.
+CommLinkObject.h/1.16 370b5b7c 15814 3796513c 7446 0 0 *
+DataQueueObject.h/1.1 3509c4f1 4107 3796513c 4111 0 0 *
+DatabaseObject.h/1.7 373309b2 8504 3796513c 5712 0 0 *
+IntListObject.h/1.1 3328543a 2172 3796513c 2172 0 0 *
+InterProcSMObject.h/1.9 37616b6d 10710 3796513d 6360 0 0 *
+PermShoppingListObject.h/1.4 34f2fb43 3488 3796513d 2194 0 0 *
+PicPidListObject.h/1.3 34db87bf 4059 3796513d 3394 0 0 *
+PictureListItemObject.h/1.2 34ce5327 3529 3796513d 3226 0 0 *
+PidListItemObject.h/1.1 34c5268f 1774 3796513d 1782 0 0 *
+TempShoppingListObject.h/1.3 3496e3bb 3320 3796513e 2151 0 0 *
+Typedefs.h/1.1 33f359d1 1166 3796513e 1156 0 0 *
+WSPCSObject.h/1.5 37616bca 5918 3796513e 4595 0 0 *
+colssParameters.h/1.4 3725c9f8 6895 3796513e 3633 0 0 *
+database.h/1.1 3294bed4 1132 3796513e 1122 0 0 *
+databaseParameters.h/1.4 36e83307 8497 3796513f 6761 0 0 *
+interProcSM.h/1.10 37616cec 7803 3796513f 4190 0 0 *
+interface.h/1.5 338f4446 5291 3796513f 2685 0 0 *
+messageObject.h/1.4 353fa3c7 5303 3796513f 3898 0 0 *
+messageParameters.h/1.39 3714ddaf 55799 37965140 33734 0 0 *
+messageQueueObject.h/1.5 350ec168 4083 37965140 2818 0 0 *
+messages.h/1.19 360b8d50 26549 37965140 16306 0 0 *
+parseHDSRMessages.h/1.2 34e1b32b 3203 37965140 2568 0 0 *
+prototypes.h/1.23 36cdd614 18444 37965140 8044 0 0 *
+sharedMemoryObject.h/1.3 3592b72b 3387 37965141 2752 0 0 *
+systemParameters.h/1.23 37668d6e 13834 37965141 5375 0 0 *

@@ -1,0 +1,62 @@
+#
+# Define function for starting process after a delay
+#
+
+#
+# Look up username of invoking user
+#
+LOGINID=`whoami`
+
+function pidget {
+	ps -fu $LOGINID|grep -E $1|awk '{(match($8,P))?T=$8:T=$9
+	(length(T)==length(P))?N=T:(substr(T,match(T,P)-1,1)=="/")?N=substr(T,length(T)-length(P)+1,length(P)):N=""
+	if (N) {print $2}}' P=$1
+}
+#
+# Lookup process id of control process if one is running
+# If no control process is running then start one
+#
+CONTROL=$(pidget control)
+
+if [ ! "$CONTROL" ]; then
+   rm -f /usr/local/procsee/recovery/*
+   control &
+fi
+sleep 3
+
+#
+# Start rtm process
+# After 30 seconds start the three picture compile processes
+#
+rtm -r UCN5and6.pctx -n compile`whoami` &
+sleep 45
+Execute -a UCN5and6 -r compile`whoami` -c "{CompileAll1();}"
+Execute -a UCN5and6 -r compile`whoami` -c "{CompileAll2();}"
+Execute -a UCN5and6 -r compile`whoami` -c "{CompileAll3();}"
+echo Done with compileDisplays
+sleep 3
+
+#
+# If control process was started by this script then lookup
+# its process id so it can be killed
+#
+if [ ! "$CONTROL" ]; then
+   CTRLPID=$(pidget control)
+else
+   CTRLPID=""
+fi
+
+#
+# Look up process ids of other processes
+#
+RTMPID=$(pidget rtm)
+BLINKPID=$(pidget blink)
+TIMERPID=$(pidget Timer)
+
+#
+# Kill all processes started by this script
+#
+for pid in $BLINKPID $TIMERPID $RTMPID $CTRLPID
+do
+kill $pid
+done

@@ -1,0 +1,798 @@
+/*
+ * ProcSee CONFIGURATION LANGUAGE FILE
+ *
+ *
+ * User : ygn34
+ * Host : y6cr02
+ * Date : 2017-05-25
+ * Time : 14:32:45
+ *
+ * ProcSee version : ProcSee 3.10.1 (June 2016)
+ * File version    : 1.26
+ *
+ *
+ */
+
+
+picture PicYGN_COLSSInit7
+{
+  worldX = 0;
+  worldY = 0;
+  worldWidth = 1280;
+  worldHeight = 824;
+  oneToOne = 1;
+  backgroundColour = 0;
+  updateMode = 2;
+  resizeMode = 0;
+  xSnap = 5;
+  ySnap = 5;
+  radiusSnap = 0;
+  angleSnap = 0;
+  crosshairStyle = 1;
+  crosshairLength = 0;
+  crosshairFollowSnap = `isInEditMode()`;
+  crosshairVisibility = `isInEditMode()`;
+  xReference = 500;
+  yReference = 500;
+  xScaleFactor = 1;
+  yScaleFactor = 1;
+  rotationAngle = 0;
+
+  char* ctext1 = "STATISTICAL REPORTS";
+
+  char ctext2[30] = "SAMPLE NUMBER";
+
+  char format[10] = "%d";
+
+  int input_status = 0;
+
+  int MaxTime = 0;
+
+  int Option = 0;
+
+  char PictureNumber[50] = "123";
+
+  char PictureTitle[50] = "COLSS   INITIALIZATIONS";
+
+  RECORD* pid_cdfp = `&CIJKDFPI`;
+
+  RECORD* pid_cdp = `&CIJKCDPI`;
+
+  RECORD* pid_ctfp = `&CIJKTFPI`;
+
+  RECORD* pid_ctp = `&CIJKCTPI`;
+
+  int selected_option = 3;
+
+  int SelectObject = 0;
+
+  int TheFontColor = 4;
+
+  int TheTextFont = `font7`;
+
+  function `void displayOptionSelected(int option)
+  {
+  
+      text1_box.foregroundFillColour=0;
+      text1.foregroundColour=1;
+   update();
+      text2_box.foregroundFillColour=0;
+      text2.foregroundColour=1;
+   update();
+      text3_box.foregroundFillColour=0;
+      text3.foregroundColour=1;
+   update();
+      text4_box.foregroundFillColour=0;
+      text4.foregroundColour=1;
+   update();
+      text5_box.foregroundFillColour=0;
+      text5.foregroundColour=1;
+  update();
+     switch(option)
+     {
+        case 1:
+         strcpy(COption, "1");
+         text1_box.foregroundFillColour=1;
+         text1.foregroundColour=0; update();
+         break;
+        case 2:
+         strcpy(COption, "2");
+         text2_box.foregroundFillColour=1;
+         text2.foregroundColour=0;update();
+          break;
+        case 3:
+         strcpy(COption, "3");
+         text3_box.foregroundFillColour=1;
+         text3.foregroundColour=0;update();
+          break;
+        case 4:
+         strcpy(COption, "4");
+         text4_box.foregroundFillColour=1;
+         text4.foregroundColour=0;update();
+         break;
+        case 5:
+         strcpy(COption, "5");
+         text5_box.foregroundFillColour=1;
+         text5.foregroundColour=0;update();
+         break;
+        default:
+         Option=0;
+         break;
+     }
+    update();
+  }`
+
+  function `void Exit(){;}`
+
+  function `void initConfirmMessages()
+  {
+     //Initialize Confirm Messages in Interface Shared Memory
+     strcpy(Interface->GenericConfirmMessage.data.message1," ");
+     strcpy(Interface->GenericConfirmMessage.data.message2," ");
+     strcpy(Interface->GenericConfirmMessage.data.message3," ");
+  }`
+
+// ***CORENET 20170629 ******************************
+  function `void KeepSelected()
+  {
+	if (selected_option==1)
+     	{
+		t1.mbox.foregroundColour = COLOR_BUTTON_SELECTED;
+	     	t1.mbox.foregroundFillColour = COLOR_BUTTON_SELECTED;
+	      
+	   	t1.upleft.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+		t1.upleft.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+	     	t1.up.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+	  	t1.up.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+		t1.downright.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+	     	t1.downright.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+	  	t1.down.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+	       	t1.down.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+	    	t1.TheFontColor = COLOR_DATA_NORMAL;
+
+		t2.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+	        t2.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+
+  		t2.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+		t2.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+		t2.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+		t2.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+
+	  	t2.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+		t2.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+		t2.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+	 	t2.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+		t2.TheFontColor = COLOR_STATIC_TEXT;
+
+
+		t3.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+		t3.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+
+		t3.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+		t3.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+		t3.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+		t3.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+
+		t3.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+		t3.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+		t3.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+		t3.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+		t3.TheFontColor = COLOR_STATIC_TEXT;
+     	}
+	if (selected_option==2)
+     	{
+		t3.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+	        t3.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+
+  		t3.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+		t3.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+		t3.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+		t3.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+
+	  	t3.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+		t3.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+		t3.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+	 	t3.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+		t3.TheFontColor = COLOR_STATIC_TEXT;
+
+		t2.mbox.foregroundColour = COLOR_BUTTON_SELECTED;
+	     	t2.mbox.foregroundFillColour = COLOR_BUTTON_SELECTED;
+	      
+	   	t2.upleft.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+		t2.upleft.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+	     	t2.up.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+	  	t2.up.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+		t2.downright.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+	     	t2.downright.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+	  	t2.down.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+	       	t2.down.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+	    	t2.TheFontColor = COLOR_DATA_NORMAL;
+
+		t1.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+		t1.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+
+		t1.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+		t1.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+		t1.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+		t1.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+
+		t1.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+		t1.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+		t1.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+		t1.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+		t1.TheFontColor = COLOR_STATIC_TEXT;
+     	}
+	if (selected_option==3)
+     	{
+		t3.mbox.foregroundColour = COLOR_BUTTON_SELECTED;
+	     	t3.mbox.foregroundFillColour = COLOR_BUTTON_SELECTED;
+	      
+	   	t3.upleft.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+		t3.upleft.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+	     	t3.up.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+	  	t3.up.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+		t3.downright.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+	     	t3.downright.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+	  	t3.down.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+	       	t3.down.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+	    	t3.TheFontColor = COLOR_DATA_NORMAL;
+
+
+		t2.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+	        t2.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+
+  		t2.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+		t2.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+		t2.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+		t2.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+
+	  	t2.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+		t2.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+		t2.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+	 	t2.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+		t2.TheFontColor = COLOR_STATIC_TEXT;
+
+
+		t1.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+		t1.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+
+		t1.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+		t1.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+		t1.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+		t1.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+
+		t1.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+		t1.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+		t1.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+		t1.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+		t1.TheFontColor = COLOR_STATIC_TEXT;
+     	}
+  }`
+// **************************************************
+
+  function `void Initialize()
+  {
+     CFMLevel = 0;
+     Current_Page = 123;
+   InputArea.Active = 0;
+  // ProcessCancelText.Initialize();
+   input_status = 0;
+   selected_option = 3;
+   KeepSelected();	//CORENET 20170629
+   update();
+  
+  }`
+
+// ***CORENET 20170601 by Philkyu Kwon ************
+  function `void DummyProcess()
+  {
+      printf("Button Select OR Button Unselected");
+  }`
+// ***************************************************
+
+
+  function `void InputVerify()
+  {
+     if(input_status)
+     {
+        InputArea.Active = 0;
+        Interface->ColssData->message_type = REQUEST_COLSS_INITIALIZATION;
+        if(selected_option != 3)   //CORENET 2017 : 5 -> 3
+        {
+             Interface->ColssData->InitData->value_initialized = InputArea.TheNewNumber;
+             printf("Input value: %f\\n", Interface->ColssData->InitData->value_initialized);
+        }
+        else
+            Interface->ColssData->InitData->sample_value = InputArea.TheNewNumber;
+  
+        Interface->ColssData->InitData->selected_option = selected_option;
+        DisplayAdvisoryMessage3("REQUESTING COLSS INITIALIZATION");
+        execute("{sendMessageToHost(REQUEST_COLSS_PROCESSING);}");
+        input_status =0;
+     }
+      else
+      {
+        DisplayAdvisoryMessage("ENTER A VALID INITIALIZATION VALUE");
+      }
+  }`
+
+  function `void ProcessingConfirmed()
+  {
+  //   ProcessCancelText.Initialize();
+     update();
+  }`
+
+  function `void selectOption(int selectedValue)
+  {
+     Option = selectedValue;
+     displayOptionSelected(selectedValue);
+     SetupReadInputValue(selectedValue);
+     update();
+  }`
+
+  function `void setReverseMode(int value)
+  {
+  
+     switch(value)
+     {
+        case 1:
+         text1.TheFontColor= COLOR_DATA_NORMAL;
+         text1.TheTextFont = \`font7\`;
+         break;
+        case 2:
+         text2.TheFontColor= COLOR_DATA_NORMAL;
+         text2.TheTextFont = \`font7\`;
+         break;
+        case 3:
+         text3.TheFontColor= COLOR_DATA_NORMAL;
+         text3.TheTextFont = \`font7\`;
+         break;
+        case 4:
+         text4.TheFontColor= COLOR_DATA_NORMAL;
+         text4.TheTextFont = \`font7\`;
+         break;
+        case 5:
+         text5.TheFontColor= COLOR_DATA_NORMAL;
+         text5.TheTextFont = \`font7\`;
+         break;
+     }
+     update();
+  }`
+
+  function `void setSelection(int opt)
+  {
+     InputArea.Active = 1;
+     strcpy(format, "%8.2f");
+     switch(opt)
+     {
+        case 1:
+           selected_option = 1;
+           ctext1 = t1.TheTitle;
+            strcpy(ctext2, "VALUE OF CDP");
+           InputArea.TheNewNumber = \`pid_cdp->value\`;
+           sprintf(InputArea.TheOriginalText,"%-8.2f",  pid_cdp->value );
+	   KeepSelected();	//CORENET 20170629
+           break;
+        case 2:
+           selected_option = 2;
+           ctext1 = t2.TheTitle;
+           strcpy(ctext2, "VALUE OF CTP");
+           InputArea.TheNewNumber = \`pid_ctp->value\`;
+           sprintf(InputArea.TheOriginalText,"%-8.2f",  pid_ctp->value );
+	   KeepSelected();	//CORENET 20170629
+           break;
+        case 3:
+           selected_option = 3;
+           ctext1 = t3.TheTitle;
+           strcpy(format, "%d");
+           strcpy(ctext2, "SAMPLE NUMBER");
+           InputArea.TheNewNumber = 0;
+           sprintf(InputArea.TheOriginalText,"%-8d",  InputArea.TheNewNumber);
+	   KeepSelected();	//CORENET 20170629
+           break;
+  //CORENET 2017 for DELETE 3 or 4 OPTIONS
+  //    case 3:
+  //         selected_option = 3;
+  //         ctext1 = t3.TheTitle;
+  //         strcpy(ctext2, "VALUE OF CDFP");
+  //         InputArea.TheNewNumber = \`pid_cdfp->value\`;
+  //         sprintf(InputArea.TheOriginalText,"%-8.2f",  pid_cdfp->value );
+  //         break;
+  //      case 4:
+  //         selected_option = 4;
+  //         ctext1 = t4.TheTitle;
+  //         strcpy(ctext2, "VALUE OF CTFP");
+  //         InputArea.TheNewNumber = \`pid_ctfp->value\`;
+  //        sprintf(InputArea.TheOriginalText,"%-8.2f",  pid_ctfp->value );
+  //         break;
+  //         break;
+  //     case 5:
+  //         selected_option = 5;
+  //         ctext1 = t5.TheTitle;
+  //         strcpy(format, "%d");
+  //         strcpy(ctext2, "SAMPLE NUMBER");
+  //        InputArea.TheNewNumber = 0;
+  //         sprintf(InputArea.TheOriginalText,"%-8d",  InputArea.TheNewNumber);
+  //
+  //         break;
+     }
+     update();
+  }
+  `
+
+  function `void SetupReadInputValue(int option)
+  {
+    MenuSelectionBox0.NumericValue=option;
+    InputValue.inputTrigger=option;
+    MenuSelectionBox0.DisplaySelectedValue();
+    InputValue.ReadInputValue();
+    update();
+  }`
+
+  function `void Verifyinput()
+  {
+       input_status = 1;
+       if(selected_option == 3) // sample value, CORENET 2017: 5 -> 3
+       {
+       //CORENET 20170629 by Philkyu Kwon
+          if(InputArea.TheNewNumber == 0 ) {
+              DisplayAdvisoryMessage("STATISTICAL REPORT NOT PERFORMED FOR ZERO ITERATIONS");
+              DisplayAdvisoryMessage2(" ");
+              DisplayAdvisoryMessage3(" ");
+              input_status = 0;
+	  }
+          else if(InputArea.TheNewNumber < 0 || InputArea.TheNewNumber > 2000) 
+	  {
+              DisplayAdvisoryMessage("VALID CHOICE 0 <  X <= 2000");
+              DisplayAdvisoryMessage2(" ");
+              DisplayAdvisoryMessage3(" ");
+              input_status = 0;
+          } 
+       }
+  }`
+
+  dialogue
+  {
+    event = `(keyReleased(0x31) || keyReleased(0xFFB1)) && !InputArea.Selected`;
+    action = `{
+    t1.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+    t1.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+    
+    t1.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+    t1.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+    t1.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+    t1.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+    
+    t1.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    t1.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    t1.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    t1.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    
+       setSelection(1);
+    
+    //   execute("{DisplayPage(\\"%s\\");}",t1.TheDisplayPage);
+    
+    }
+    `;
+  }
+
+  dialogue
+  {
+    event = `(keyReleased(0x32) || keyReleased(0xFFB2)) && !InputArea.Selected`;
+    action = `{
+    t2.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+    t2.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+    
+    t2.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+    t2.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+    t2.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+    t2.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+    
+    t2.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    t2.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    t2.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    t2.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    
+       setSelection(2);
+    
+    //   execute("{DisplayPage(\\"%s\\");}",t2.TheDisplayPage);
+    
+    }
+    `;
+  }
+
+  dialogue
+  {
+    event = `(keyReleased(0x33) || keyReleased(0xFFB3)) && !InputArea.Selected`;
+    action = `{
+    t3.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+    t3.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+    
+    t3.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+    t3.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+    t3.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+    t3.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+    
+    t3.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    t3.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    t3.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    t3.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    
+       setSelection(3);
+    //   execute("{DisplayPage(\\"%s\\");}",t5.TheDisplayPage);
+    //
+    /* ****************************************************************
+       InputArea.SelectButton();
+       strcpy(InputArea.TheNewText,"");
+       InputArea.InputArea.theText = \`TheNewText\`;
+       InputArea.InputArea.edit(ON);
+       InputArea.InputArea.edit(OFF);
+       InputArea.InputArea.edit(ON);
+       InputArea.InputArea.moveToHome();
+       update();
+    **************************************************************   */
+    //CORENET 2017 by Philkyu Kwon
+    }
+    `;
+  }
+
+  rectangle
+  {
+    x = 130;
+    y = 0;
+    width = 0;
+    height = 0;
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = 0;
+    linePattern = `SolidPattern`;
+    lineWidth = 0;
+    foregroundFillColour = 0;
+    backgroundFillColour = -1;
+    fillPattern = `NoPattern`;
+    xReference = 130;
+    yReference = 0;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle
+  {
+    x = 423;
+    y = 335;
+    width = 412;
+    height = 306;
+    visibility = 1;
+    foregroundColour = `COLOR_LINE_BOUNDARY_6`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 3;
+    foregroundFillColour = `COLOR_PICTURE_BACKGROUND`;
+    backgroundFillColour = -1;
+    fillPattern = `SolidPattern`;
+    xReference = 430;
+    yReference = 348;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text cascadeText1
+  {
+    x = 485;
+    y = 388;
+    format = "%s";
+    theText = `ctext1`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `(CascadeEnterActive)?COLOR_DATA_NORMAL:COLOR_STATIC_TEXT`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 485;
+    yReference = 388;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  line
+  {
+    numberOfPoints = 2;
+    point[0] = ( 425, 420 );
+    point[1] = ( 835, 420 );
+    visibility = 1;
+    foregroundColour = `COLOR_LINE_BOUNDARY_6`;
+    backgroundColour = -1;
+    lineStyle = `SolidPattern`;
+    lineWidth = 3;
+    xReference = 425;
+    yReference = 420;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+
+    dialogue
+    {
+      event = `buttonPressed(Right) || keyPressed(ESC)`;
+      action = `{
+         CascadeEnterActive = 0;
+         CascadeEnter.unmap();
+         update();
+      }`;
+    }
+  }
+
+  instance DialogueSymbols.InputDialogueNumber InputArea
+  {
+    x = 550;
+    y = 540;
+    visibility = 1;
+    xReference = 550;
+    yReference = 540;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Active = 1;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "DummyProcess()";	//CORENET 0628
+    ExecuteUnSelect = "DummyProcess()";	//CORENET 0628
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxDigits = 8;
+    ReturnAction = "{Verifyinput();}";
+    Scope = "PicYGN_COLSSInit7";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewNumber = 0;
+    TheNewText = "0       ";
+    TheNumberFormat = `format`;
+    TheOriginalNumber = 34.5;
+    TheOriginalText = "0       ";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 150;
+  }
+
+  text
+  {
+    x = 501;
+    y = 486;
+    format = "%s";
+    theText = "ENTER ";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 491;
+    yReference = 456;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text cascadeText2
+  {
+    x = 613;
+    y = 486;
+    format = "%s";
+    theText = `ctext2`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 603;
+    yReference = 456;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  instance DialogueSymbols.LargeMenuSelect2 t1
+  {
+    x = 400;
+    y = 105;
+    visibility = 1;
+    xReference = 400;
+    yReference = 105;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Cascade = 0;
+    CascadeX = 400;
+    CascadeY = 400;
+    ExecuteString = "{setSelection(1);}";
+    TheDisplayPage = "";
+    TheFontColor = 2;
+    TheOption = "1.";
+    TheTextFont = `font6`;
+    TheTitle = "CDP INITIALIZATION (BLOCK E)";
+  }
+
+  instance DialogueSymbols.LargeMenuSelect2 t2
+  {
+    x = 400;
+    y = 143;
+    visibility = 1;
+    xReference = 400;
+    yReference = 143;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Cascade = 0;
+    CascadeX = 400;
+    CascadeY = 400;
+    ExecuteString = "{setSelection(2);}";
+    TheDisplayPage = "";
+    TheFontColor = 2;
+    TheOption = "2.";
+    TheTextFont = `font6`;
+    TheTitle = "CTP INITIALIZATION (BLOCK G)";
+  }
+
+  instance DialogueSymbols.LargeMenuSelect2 t3
+  {
+    x = 400;
+    y = 181;
+    visibility = 1;
+    xReference = 400;
+    yReference = 181;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Cascade = 0;
+    CascadeX = 400;
+    CascadeY = 400;
+    ExecuteString = "{setSelection(3);}";
+    TheDisplayPage = "";
+    TheFontColor = 2;
+    TheOption = "3.";
+    TheTextFont = `font6`;
+    TheTitle = "STATISTICAL REPORTS";
+  }
+
+  instance DialogueSymbols.PushButton processfiles
+  {
+    x = 886;
+    y = 692;
+    visibility = 1;
+    xReference = 886;
+    yReference = 692;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ButtonState = 0;
+    DynamicLabel = "PROCESSING";
+    ExecuteString = "InputVerify()";
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    Label = "PROCESS";
+    Scope = "PicYGN_COLSSInit7";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    StaticLabel = "PROCESS";
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextFontDynamic = `font2`;
+    TextFontStatic = `font4`;
+    TextX = 17;
+    TextXDynamic = 15;
+    TextXStatic = 17;
+    TextY = 22;
+    TextYDynamic = 21;
+    TextYStatic = 22;
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    Width = 128;
+  }
+}

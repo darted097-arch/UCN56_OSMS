@@ -1,0 +1,113 @@
+// ***************************************************************************
+// *									     *
+// *	Copyright (C) 1996, ABB-CE Inc., All rights reserved.		     *
+// *	Proprietary information, ABB-CE Incorporated			     *
+// *									     *
+// ***************************************************************************
+//
+// ***** HIGH LEVEL DESCRIPTION **********************************************
+//
+//  Description: database record description UCN5&6
+//
+// **** REVISION HISTORY *****************************************************
+//
+// $Header: /PMSArchive/ucn56/workstation/pictures/pdat/databaseStructure.pdat 1.4 1998/09/25 12:34:17 leo Exp $
+// $Log: databaseStructure.pdat,v $
+// Revision 1.4  1998/09/25 12:34:17  leo
+// Author: leo@y6maint1 (Leo Olbrych)
+// Removed dispid, acon, bcon, coeff[0..5] from database structure.
+//
+// Revision 1.3  1998/06/19 21:00:57  leo
+// Author: leo@y6maint1 (Leo Olbrych)
+// Commented use of digital message pair char arrays for analog variable alarm
+// setpoint Point IDs.
+//
+// Revision 1.2  1998/06/17 20:07:58  leo
+// Author: leo@y6maint1 (Leo Olbrych)
+// Added support for high and low variable alarm setpoints.
+//
+// Revision 1.1  1996/11/23 12:15:49  asn
+// Author: asn@y6maint1.usnus.abb.com (Arthur Nowell)
+// Initial revision
+//
+//
+// ***************************************************************************
+// System Include Files: NONE
+//
+//
+// User Defined Include Files: NONE
+//
+//
+// External Variables: NONE
+//
+//
+// Local Constant Definitions: NONE
+//
+//
+// Function Prototypes: NONE
+//
+//
+// ***************************************************************************
+// ______________________________________________________________________
+//|                                                                      |
+//|          Definition of the Database point structure                  |
+//|______________________________________________________________________|
+//
+
+struct RECORD {
+
+//      Common analogue and digital Plant Input Parameter (PIP) fields   
+
+	int 	iPicassoId;			// rtm id set by Picasso glue code 
+	char  	pid[12];			// process ID name                         
+	char  	desc[36];			// process description
+	char  	tagid[12];			// tag id from Dbase file 
+
+	int  	pipbitmap;	        	// see databaseParameters.h
+	int   	sig_type;                	// signal type 
+
+//	      Analogue Only Plant Input Parameter (PIP) fields                
+
+	char	disfmt[8];			// display format
+	
+	char  	eng_units[16];		   	// English units
+	char  	met_units[16];		   	// Metric units
+	           
+	float 	erange_lo;                   	// Engineering range lo limit      
+	float 	erange_hi;                   	// Engineering range hi limit
+	float	mfactor;			// Met->Eng conversion factor
+	float	moffset;			// Met->Eng conversion offset
+	
+	float 	hhval;                       	// hi hi limit English value       
+	float 	hval;                        	// hi limit English value          
+	float 	lval;                        	// lo limit English value          
+	float 	llval;                       	// lo lo limit English value       
+	
+	float 	hhmet;                       	// hi hi limit Metric value        
+	float 	hmet;                        	// hi limit Metric value           
+	float 	lmet;                        	// lo limit Metric value           
+	float 	llmet;                       	// lo lo limit Metric value 
+	
+	short	lIPN;				// non-zero = ipn of variable setpoint, zero otherwise
+	short	hIPN;				// non-zero = ipn of variable setpoint, zero otherwise
+
+	//      Digital Only Plant Input Parameter (PIP) fields               
+
+	//	message1 is also used for the PID of the variable low alarm setpoint for analogs
+	//	message2 is also used for the PID of the variable high alarm setpoint for analogs
+	char 	message1[12];		 // message pairs for digitals, analog low alarm PID, if any
+	char 	message2[12];		 // message pairs for digitals, analog high alarm PID, if any
+	
+	//      Common Plant Input Scratch Area (PISA) fields                 
+
+	int 	pisabitmap;                 	// see databaseParameters.h
+	int   	newsta;                     	// new alarm state                            
+
+	//      Analogue Only Plant Input Scratch Area (PISA) fields          
+
+	float 	value;                       	// value of analog variable        
+
+	//      Digital Only Plant Input Scratch Area (PISA) fields          
+
+	//    NONE
+};

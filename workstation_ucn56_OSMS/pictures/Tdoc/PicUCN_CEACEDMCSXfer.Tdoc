@@ -1,0 +1,297 @@
+/*
+ * PICASSO-3 CONFIGURATION LANGUAGE FILE
+ *
+ *
+ * Picture name: PicUCN_CEACEDMCSXfer
+ *
+ *
+ * Documented by  : ucn56
+ * Host           : ucn5
+ * Date           : 24/02-99 at 16:31:33
+ *
+ *
+ * Generate with:
+ *    pcc PicUCN_CEACEDMCSXfer.Tdoc
+ *
+ */
+
+
+picture PicUCN_CEACEDMCSXfer
+{
+
+  char CurrentOption[4] = "2\\0";
+  int Option = 2;
+  char PictureNumber[50] = "132";
+  char PictureTitle[50] = "CEDMCS DATA TRANSFER";
+
+  function `void ProcessOption()
+{
+   initConfirmMessages();
+   // ClearFeedbackMessage();
+   // set option number to "1"
+   // printf("the option= %d",Option);
+   Interface->GenericRequestMessage.data.requestOption = Option;
+   // Send data request message to the host
+   execute("{sendMessageToHost(CEDMCS_DATAXFER_MODE);}");
+}
+`
+
+
+
+  function `void Initialize()
+{
+   CFMLevel = 0;
+   Current_Page = 132;
+//  
+//  
+// assign blank to message fields
+   initConfirmMessages();
+// Default Selected Item = 1
+// text1_box.foregroundFillColour=1;
+//   text1.backgroundColour=0;
+//   text1.foregroundColour=1;
+//   text2.backgroundColour=0;
+//   text2.foregroundColour=1;
+//   strcpy(CurrentOption,"1\\\\0");
+   update();
+// Send data request message to the host
+// execute("{sendMessageToHost(RPCCEA_MODE_REQUEST);}");
+//   EscapeButton.UnSelect();
+}`
+
+
+
+  function `void initConfirmMessages()
+{
+strcpy(Interface->GenericConfirmMessage.data.message1," ");
+strcpy(Interface->GenericConfirmMessage.data.message2," ");
+strcpy(Interface->GenericConfirmMessage.data.message3," ");
+}`
+
+
+
+  function `void keepShape(){
+   switch(Option){
+      case 1: {
+       text1.backgroundColour=0;
+       text1.foregroundColour=1;
+       text2.backgroundColour=0;
+       text2.foregroundColour=1;
+       update();
+       break;
+     }
+      case 2: {
+       text1.backgroundColour=0;
+       text1.foregroundColour=1;
+       text2.backgroundColour=0;
+       text2.foregroundColour=1;
+       update();
+       break;
+      }
+//      case 3: {
+//       text1.backgroundColour=0;
+//       text1.foregroundColour=1;
+//       text2.backgroundColour=0;
+//       text2.foregroundColour=1;
+//       text3_box.foregroundFillColour=1;
+//       text3.foregroundColour=0;
+//       update();
+//       break;
+//      }
+   }
+}`
+
+
+
+  function `void selectedShape(int selectedNo)
+{
+   switch(selectedNo){
+      case 1: {
+       text1.backgroundColour=1;
+       text1.foregroundColour=0;
+       text2.backgroundColour=0;
+       text2.foregroundColour=1;
+//       text3_box.foregroundFillColour=0;
+//       text3.foregroundColour=1;
+       update();
+       break;
+     }
+      case 2: {
+       text1.backgroundColour=0;
+       text1.foregroundColour=1;
+       text2.backgroundColour=1;
+       text2.foregroundColour=0;
+//       text3_box.foregroundFillColour=0;
+//       text3.foregroundColour=1;
+       update();
+       break;
+      }
+      case 3: {
+       text1.backgroundColour=0;
+       text1.foregroundColour=1;
+       text2.backgroundColour=0;
+       text2.foregroundColour=1;
+//       text3_box.foregroundFillColour=1;
+//       text3.foregroundColour=0;
+       update();
+       break;
+      }
+      default: {
+//       text1_box.foregroundFillColour=0;
+       text1.foregroundColour=1;
+//       text2_box.foregroundFillColour=0;
+       text2.foregroundColour=1;
+//       text3_box.foregroundFillColour=0;
+//       text3.foregroundColour=1;
+       update();
+       break;
+      }
+
+
+   }
+}`
+
+
+
+  function `void escape() 
+{
+   displayPicture("Main","PicUCN_CEAMenu.ppic");
+   update(); 
+}`
+
+
+
+  function `void Option_1()
+{
+   strcpy(CurrentOption,"1\\\\0");
+   Option=1;
+   ProcessOption();
+   update();
+}`
+
+
+
+  function `void Option_2()
+{
+   strcpy(CurrentOption,"2\\\\0");
+   Option=2;
+   ProcessOption();
+   update();
+}`
+
+
+
+  dialogue
+  {
+    event = `keyReleased(0x31) || keyReleased(0xFFB1)`;
+    action = statement `{
+m1.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+m1.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+
+m1.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+m1.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+m1.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+m1.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+
+m1.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+m1.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+m1.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+m1.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+
+   Option_1();
+}
+`;
+  }
+
+  dialogue
+  {
+    event = `keyReleased(0x32) || keyReleased(0xFFB2)`;
+    action = statement `{
+m2.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+m2.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+
+m2.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+m2.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+m2.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+m2.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+
+m2.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+m2.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+m2.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+m2.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+
+   Option_2();
+}
+`;
+  }
+
+  instance DialogueSymbols.LargeMenuSelectMid m1
+  {
+    attribute TheOption = "1.";
+    attribute TheFontColor = 2;
+    attribute TheTitle = "CEA TOTALIZED COUNT UPLOAD TO PCS AND REPORTS";
+    attribute TheTextFont = `font6`;
+    attribute Cascade = 0;
+    attribute CascadeX = 400;
+    attribute CascadeY = 400;
+    attribute ExecuteString = "Option_1()";
+    x = 393;
+    y = 234;
+    visibility = 1;
+    xReference = 393;
+    yReference = 234;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance m1
+
+
+
+  instance DialogueSymbols.LargeMenuSelectMid m2
+  {
+    attribute TheOption = "2.";
+    attribute TheFontColor = 2;
+    attribute TheTitle = "CEA CONSTANT UPLOAD TO PCS";
+    attribute TheTextFont = `font6`;
+    attribute Cascade = 0;
+    attribute CascadeX = 400;
+    attribute CascadeY = 400;
+    attribute ExecuteString = "Option_2()";
+    x = 393;
+    y = 272;
+    visibility = 1;
+    xReference = 393;
+    yReference = 272;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance m2
+
+
+
+// The picture's other attributes:
+
+  backgroundColour    = 0;
+  xSnap               = 1;
+  ySnap               = 1;
+  angleSnap           = -1;
+  radiusSnap          = 0;
+  worldX              = 0;
+  worldY              = 0;
+  worldWidth          = 1280;
+  worldHeight         = 824;
+  oneToOne            = 1;
+  resizeMode          = 0;
+  updateMode          = 2;
+  crosshairStyle      = 1;
+  crosshairLength     = 0;
+  crosshairFollowSnap = `isInEditMode()`;
+  crosshairVisibility = `isInEditMode()`;
+  xReference = 500;
+  yReference = 500;
+  xScaleFactor = 1;
+  yScaleFactor = 1;
+  rotationAngle = 0;
+
+
+}  // end of picture PicUCN_CEACEDMCSXfer

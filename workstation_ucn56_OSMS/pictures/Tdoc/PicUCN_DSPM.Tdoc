@@ -1,0 +1,496 @@
+/*
+ * PICASSO-3 CONFIGURATION LANGUAGE FILE
+ *
+ *
+ * Picture name: PicUCN_DSPM
+ *
+ *
+ * Documented by  : ucn56
+ * Host           : ice2
+ * Date           : 05/03-99 at 14:52:42
+ *
+ *
+ * Generate with:
+ *    pcc PicUCN_DSPM.Tdoc
+ *
+ */
+
+
+picture PicUCN_DSPM
+{
+
+  int option = 1;
+  char PictureNumber[50] = "630";
+  char PictureTitle[50] = "DEVIATION / SETPOINT MONITORING";
+
+  function `void Initialize()
+{
+   CFMLevel = 0;
+   Current_Page = 630;
+//
+   DisplayAdvisoryMessage("");
+   DisplayAdvisoryMessage1("");
+   DisplayAdvisoryMessage2("");
+   DisplayAdvisoryMessage3("");
+   ReqMsg.visibility=0;
+   update();
+}`
+
+
+
+  function `void DspmErrMsg(){
+DisplayAdvisoryMessage(Interface->GenericConfirmMessage.data.message1);
+//CORENET 20170621 *********************************************************
+DisplayAdvisoryMessage1(Interface->GenericConfirmMessage.data.message2);
+DisplayAdvisoryMessage2(Interface->GenericConfirmMessage.data.message3);
+}`
+
+
+
+  function `void ProcessThis()
+{
+   switch(option) {
+      case 1:
+       	 Interface->GenericRequestMessage.data.requestOption=1;
+       	 execute("{sendMessageToHost(REQUEST_DSPM_REPORT);}");
+       	 DisplayAdvisoryMessage("");
+       	 DisplayAdvisoryMessage1("");
+       	 break;
+      case 2:
+         Interface->GenericRequestMessage.data.requestOption=2;
+         execute("{sendMessageToHost(REQUEST_DSPM_REPORT);}");
+         DisplayAdvisoryMessage("");
+         DisplayAdvisoryMessage1("");
+         break;
+      case 3:
+         Interface->GenericRequestMessage.data.requestOption=3;
+         execute("{sendMessageToHost(REQUEST_DSPM_REPORT);}");
+         DisplayAdvisoryMessage("");
+         DisplayAdvisoryMessage1("");
+         break;
+      case 4:
+         Interface->GenericRequestMessage.data.requestOption=4;
+         execute("{sendMessageToHost(REQUEST_DSPM_REPORT);}");
+         DisplayAdvisoryMessage("");
+         DisplayAdvisoryMessage1("");
+         break;
+      case 5:
+         Interface->GenericRequestMessage.data.requestOption=5;
+         execute("{sendMessageToHost(REQUEST_DSPM_REPORT);}");
+         DisplayAdvisoryMessage("");
+         DisplayAdvisoryMessage1("");
+         break;
+   }
+}
+`
+
+
+
+  function `void escape()
+{
+   displayPicture("Main","PicUCN_NSSSBOPApplication.ppic");
+   update();
+}`
+
+
+
+  function `void ClearWait()
+{
+   ReqMsg.visibility=0;
+   update();
+}`
+
+
+
+  function `void ProcessOpt1()
+{
+      //CORENET 0704
+ 	if( Interface->System.slaveUpdating!=0 )
+	{
+	        DisplayAdvisoryMessage("CHANGE FROM MASTER CPU ONLY") ;
+	        return;
+        }
+	else
+	{
+		option=1;
+		ProcessThis();
+		ReqMsg.visibility=1;
+		update();
+       	}
+}`
+
+
+
+  function `void ProcessOpt2()
+{
+      //CORENET 0704
+ 	if( Interface->System.slaveUpdating!=0 )
+	{
+	        DisplayAdvisoryMessage("CHANGE FROM MASTER CPU ONLY") ;
+	        return;
+        }
+	else
+	{
+		option=2;
+		ProcessThis();
+		ReqMsg.visibility=1;
+		update();
+ 	}
+}`
+
+
+
+  function `void ProcessOpt3()
+{	
+	option=3;
+	ProcessThis();
+	ReqMsg.visibility=1;
+	update();
+}`
+
+
+
+  function `void ProcessOpt4()
+{
+      //CORENET 0704
+ 	if( Interface->System.slaveUpdating!=0 )
+	{
+	        DisplayAdvisoryMessage("CHANGE FROM MASTER CPU ONLY") ;
+	        return;
+        }
+	else
+	{
+		option=4;
+		ProcessThis();
+		ReqMsg.visibility=1;
+		update();
+	}
+}`
+
+
+
+  function `void ProcessOpt5()
+{
+      //CORENET 0704
+ 	if( Interface->System.slaveUpdating!=0 )
+	{
+	        DisplayAdvisoryMessage("CHANGE FROM MASTER CPU ONLY") ;
+	        return;
+        }
+	else
+	{
+		option=5;
+		ProcessThis();
+		ReqMsg.visibility=1;
+		update();
+	}
+}`
+
+
+
+  dialogue
+  {
+    event = `keyReleased(0x31) || keyReleased(0xFFB1)`;
+    action = statement `{
+m1.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+m1.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+
+m1.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+m1.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+m1.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+m1.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+
+m1.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+m1.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+m1.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+m1.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+
+   if ( strlen(m1.ExecuteString) > 0)
+       execute(m1.ExecuteString);
+}`;
+  }
+
+  dialogue
+  {
+    event = `keyReleased(0x32) || keyReleased(0xFFB2)`;
+    action = statement `{
+m2.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+m2.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+
+m2.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+m2.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+m2.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+m2.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+
+m2.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+m2.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+m2.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+m2.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+
+   if ( strlen(m2.ExecuteString) > 0)
+       execute(m2.ExecuteString);
+}`;
+  }
+
+  dialogue
+  {
+    event = `keyReleased(0x33) || keyReleased(0xFFB3)`;
+    action = statement `{
+m3.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+m3.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+
+m3.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+m3.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+m3.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+m3.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+
+m3.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+m3.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+m3.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+m3.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+
+   if ( strlen(m3.ExecuteString) > 0)
+       execute(m3.ExecuteString);
+}`;
+  }
+
+  dialogue
+  {
+    event = `keyReleased(0x34) || keyReleased(0xFFB4)`;
+    action = statement `{
+m4.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+m4.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+
+m4.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+m4.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+m4.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+m4.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+
+m4.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+m4.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+m4.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+m4.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+
+   if ( strlen(m4.ExecuteString) > 0)
+       execute(m4.ExecuteString);
+}`;
+  }
+
+  dialogue
+  {
+    event = `keyReleased(0x35) || keyReleased(0xFFB5)`;
+    action = statement `{
+m5.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+m5.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+
+m5.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+m5.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+m5.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+m5.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+
+m5.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+m5.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+m5.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+m5.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+
+   if ( strlen(m5.ExecuteString) > 0)
+       execute(m5.ExecuteString);
+}`;
+  }
+
+  text 
+  {
+    x = 221;
+    y = 171;
+    format = "%s";
+    theText = "SELECT (1-5)  ";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 221;
+    yReference = 171;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text ReqMsg
+  {
+    x = 527;
+    y = 528;
+    format = "%s";
+    theText = "PROCESSING... WAIT";
+
+    visibility = 0;
+    foregroundColour = `COLOR_POPUP_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 527;
+    yReference = 528;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 356;
+    y = 171;
+    format = "%s";
+    theText = "FOR DSPM REPORT";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 356;
+    yReference = 171;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  instance DialogueSymbols.LargeMenuSelectMid m1
+  {
+    attribute ExecuteString = "ProcessOpt1()";
+    attribute CascadeY = 400;
+    attribute CascadeX = 400;
+    attribute Cascade = 0;
+    attribute TheTextFont = `font6`;
+    attribute TheTitle = "CPC CROSS CHANNEL COMPARISON REPORT";
+    attribute TheFontColor = 2;
+    attribute TheOption = "1.";
+    x = 343;
+    y = 201;
+    visibility = 1;
+    xReference = 343;
+    yReference = 201;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance m1
+
+
+
+  instance DialogueSymbols.LargeMenuSelectMid m2
+  {
+    attribute ExecuteString = "ProcessOpt2()";
+    attribute CascadeY = 400;
+    attribute CascadeX = 400;
+    attribute Cascade = 0;
+    attribute TheTextFont = `font6`;
+    attribute TheTitle = "CEAC CROSS CHANNEL COMPARISON REPORT";
+    attribute TheFontColor = 2;
+    attribute TheOption = "2.";
+    x = 343;
+    y = 238;
+    visibility = 1;
+    xReference = 343;
+    yReference = 238;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance m2
+
+
+
+  instance DialogueSymbols.LargeMenuSelectMid m3
+  {
+    attribute ExecuteString = "ProcessOpt3()";
+    attribute CascadeY = 400;
+    attribute CascadeX = 400;
+    attribute Cascade = 0;
+    attribute TheTextFont = `font6`;
+    attribute TheTitle = "PPS DEVIATION AND SETPOINT MONITORING REPORT";
+    attribute TheFontColor = 2;
+    attribute TheOption = "3.";
+    x = 343;
+    y = 275;
+    visibility = 1;
+    xReference = 343;
+    yReference = 275;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance m3
+
+
+
+  instance DialogueSymbols.LargeMenuSelectMid m5
+  {
+    attribute ExecuteString = "ProcessOpt5()";
+    attribute CascadeY = 400;
+    attribute CascadeX = 400;
+    attribute Cascade = 0;
+    attribute TheTextFont = `font6`;
+    attribute TheTitle = "CEAC TRIP BUFFER REPORT";
+    attribute TheFontColor = 2;
+    attribute TheOption = "5.";
+    x = 342;
+    y = 398;
+    visibility = 1;
+    xReference = 342;
+    yReference = 398;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance m5
+
+
+
+  instance DialogueSymbols.LargeMenuSelectMid m4
+  {
+    attribute ExecuteString = "ProcessOpt4()";
+    attribute CascadeY = 400;
+    attribute CascadeX = 400;
+    attribute Cascade = 0;
+    attribute TheTextFont = `font6`;
+    attribute TheTitle = "CPC TRIP BUFFER REPORT";
+    attribute TheFontColor = 2;
+    attribute TheOption = "4.";
+    x = 342;
+    y = 361;
+    visibility = 1;
+    xReference = 342;
+    yReference = 361;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance m4
+
+
+
+// The picture's other attributes:
+
+  backgroundColour    = 0;
+  xSnap               = 5;
+  ySnap               = 5;
+  angleSnap           = 0;
+  radiusSnap          = 0;
+  worldX              = 0;
+  worldY              = 0;
+  worldWidth          = 1280;
+  worldHeight         = 789;
+  oneToOne            = 1;
+  resizeMode          = 0;
+  updateMode          = 2;
+  crosshairStyle      = 1;
+  crosshairLength     = 0;
+  crosshairFollowSnap = `isInEditMode()`;
+  crosshairVisibility = `isInEditMode()`;
+  xReference = 500;
+  yReference = 500;
+  xScaleFactor = 1;
+  yScaleFactor = 1;
+  rotationAngle = 0;
+
+
+}  // end of picture PicUCN_DSPM

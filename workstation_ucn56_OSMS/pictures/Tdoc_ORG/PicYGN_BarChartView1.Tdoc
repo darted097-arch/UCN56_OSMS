@@ -1,0 +1,320 @@
+/*
+ * PICASSO-3 CONFIGURATION LANGUAGE FILE
+ *
+ *
+ * Picture name: PicYGN_BarChartView1
+ *
+ *
+ * Documented by  : ygn56
+ * Host           : ucn5
+ * Date           : 17/12-98 at 15:18:32
+ *
+ *
+ * Generate with:
+ *    pcc PicYGN_BarChartView1.Tdoc
+ *
+ */
+
+
+picture PicYGN_BarChartView1
+{
+
+  int ErrorPid = 0;
+  char TempPid1[9] = "ERRORPID";
+  char TheDisplayPage[50] = "PicYGN_BarChartMenu.ppic";
+  char *PictureTitle = "BAR  CHART  1";
+  char *PictureNumber = "851";
+  char *PageForward = "";
+  char *PageBack = "";
+  BAR_DATA *pBarChartData = `Interface.BarChartData`;
+  int NUM_BAR_SETS = 2;
+  int NUM_BAR_PER_SET = 4;
+  RECORD *pRECORD = `&ERRORPID`;
+  char TEMP_DESC[36] = "REFUELING WATER TANK LEVEL CH B ";
+  char TEMP_DESC1[18] = "REFUELING WATER T";
+  char TEMP_DESC2[18] = "ANK LEVEL CH B ";
+  int Sel = 1;
+
+  function `void Initialize() 
+{
+// "i" value should be changed to 2 in View-2 page
+   int i,j,k;      // loop variables
+
+   i = 1;
+
+   CFMLevel = 0;
+   Current_Page = 851;
+
+   DisplayAdvisoryMessage(" ");
+   DisplayAdvisoryMessage1(" ");
+   DisplayAdvisoryMessage2(" ");
+   DisplayAdvisoryMessage3(" ");
+
+   for (j=1;j<=4;j++)
+   {
+
+//   For copying PID name to top of the text
+     execute("{CHART%d.pointId.theText = pBarChartData->Group%dPoint%d.BarChartId;}",j,i,j);
+
+//   Manipulating PID string to fit into pRECORD
+     execute("{ strcpy(TempPid1, CHART%d.pointId.theText);}",j);
+                                                                                          // yrlee
+     for(k=0 ; k<9 ; k++)    
+        if(TempPid1[k]==' ') TempPid1[k]='\\0';
+
+     if(strlen(TempPid1) == 0) 
+        execute("{ strcpy(TempPid1, \\"ERRORPID\\");}");
+
+//   printf(".........Initialize() pPID:%s",TempPid1);
+     execute("{ pRECORD = \\\`&%s\\\`;}", TempPid1);          // yrlee
+
+//   For ValueAndState Library
+     execute("{ CHART%d.pidCurval.PointId = \\\`&%s\\\`;}",j,TempPid1);          // yrlee
+     execute("{ CHART%d.pPID = \\\`&%s\\\`;}",j,TempPid1);                       // yrlee
+
+//   printf("---- %f %f %f  %f",CHART1.pPID->llmet,CHART1.pPID->lmet, CHART1.pPID->hmet,CHART1.pPID->hhmet);
+
+     if(strcmp(TempPid1,"ERRORPID"))                          // yrlee
+     {
+        if (IsDigital(pRECORD))
+        {
+              execute("{CHART%d.MAX = pBarChartData->Group%dPoint%d.Maximum ;}",j,i,j);
+              execute("{CHART%d.MIN = pBarChartData->Group%dPoint%d.Minimum ;}",j,i,j);
+              execute("{CHART%d.BASE  = pBarChartData->Group%dPoint%d.Baseline ;}",j,i,j); 
+        }
+        else
+        {
+           if  ( (Interface->System.displayedUnits) && (!(pRECORD->pipbitmap & bMETUNIT)) )
+           {
+              execute("{ CHART%d.MAX = pBarChartData->Group%dPoint%d.Maximum * pRECORD->mfactor + pRECORD->moffset;}",j,i,j);
+              execute("{ CHART%d.MIN = pBarChartData->Group%dPoint%d.Minimum * pRECORD->mfactor + pRECORD->moffset;}",j,i,j);
+              execute("{ CHART%d.BASE = pBarChartData->Group%dPoint%d.Baseline * pRECORD->mfactor + pRECORD->moffset;}",j,i,j);
+//            printf("****METRIC**** %f ",pBarChartData->Group1Point1.Maximum);
+           }
+           else if ( (!Interface->System.displayedUnits) && (pRECORD->pipbitmap & bMETUNIT) )
+           {
+              execute("{ CHART%d.MAX = (pBarChartData->Group%dPoint%d.Maximum - pRECORD->moffset) / pRECORD->mfactor;}",j,i,j);
+              execute("{ CHART%d.MIN = (pBarChartData->Group%dPoint%d.Minimum - pRECORD->moffset) / pRECORD->mfactor;}",j,i,j);
+              execute("{ CHART%d.BASE = (pBarChartData->Group%dPoint%d.Baseline - pRECORD->moffset) / pRECORD->mfactor;}",j,i,j);
+//            printf("****ENGLISH**** %f ",EngRangeHi(CHART1.pidCurval.PointId));
+           }
+           else 
+           {
+              execute("{CHART%d.MAX = pBarChartData->Group%dPoint%d.Maximum ;}",j,i,j);
+              execute("{CHART%d.MIN = pBarChartData->Group%dPoint%d.Minimum ;}",j,i,j);
+              execute("{CHART%d.BASE  = pBarChartData->Group%dPoint%d.Baseline ;}",j,i,j); 
+           }
+        }
+     }
+   }
+}`
+
+
+
+  function `int IsDigital(RECORD *pRECORD)
+{
+  int retval, sigtype;
+
+// get a pointer to the record for the PID
+//  execute("{pRECORD = &%s;}",PID);
+
+
+  sigtype = pRECORD->sig_type;
+  switch(sigtype)
+  {
+    case CI:
+    case DI:
+    case SOE:
+    case BCI:
+    case DL:
+    case QD:
+    case XD:
+    case CO:
+    case BCO:
+      retval = 1;
+      break;
+    default:
+      retval = 0;
+      break;
+  }//endswitch
+  return(retval);
+}
+
+`
+
+
+
+  instance DialogueSymbols.BarUpdate CHART1
+  {
+    attribute TEMP_STRING = "Symbol!";
+    attribute TEMP_HEIGHT_OLD = `TEMP_HEIGHT`;
+    attribute TEMP_HEIGHT = 0;
+    attribute TEMP_POS = 382;
+    attribute pBAR_DATA = `&pBarChartData`;
+    attribute CHART_NUM = -1;
+    attribute BAR_SET_NUM = 1;
+    attribute pPID = `&ERRORPID`;
+    attribute MAX = 350;
+    attribute MIN = 250;
+    attribute BASE = 300;
+    attribute H_TEMP_POS = 638;
+    attribute LL_TEMP_POS = 638;
+    attribute L_TEMP_POS = 638;
+    attribute HH_TEMP_POS = 638;
+    attribute pidCurval.DisplayUnits = 1;
+    attribute pidCurval.PointId = `&ERRORPID`;
+    attribute maximum.VALUE = `MAX`;
+    attribute maximum.Format = `pPID->disfmt`;
+    attribute minimum.VALUE = `MIN`;
+    attribute minimum.Format = `pPID->disfmt`;
+    attribute baseval.VALUE = `BASE`;
+    attribute baseval.Format = "%7.2f";
+    x = 11;
+    y = 10;
+    visibility = `strcmp(pPID->pid,"ERRORPID")`;
+    xReference = 11;
+    yReference = 10;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance CHART1
+
+
+
+  instance DialogueSymbols.BarUpdate CHART2
+  {
+    attribute TEMP_STRING = "NTROL          ";
+    attribute TEMP_HEIGHT_OLD = `TEMP_HEIGHT`;
+    attribute TEMP_HEIGHT = -314.86;
+    attribute TEMP_POS = 382;
+    attribute pBAR_DATA = `Interface.BarChartData`;
+    attribute CHART_NUM = 1;
+    attribute BAR_SET_NUM = 1;
+    attribute pPID = `&RCT111X`;
+    attribute MAX = 350;
+    attribute MIN = 250;
+    attribute BASE = 300;
+    attribute H_TEMP_POS = 215.848;
+    attribute LL_TEMP_POS = 638;
+    attribute L_TEMP_POS = 638;
+    attribute HH_TEMP_POS = 638;
+    attribute pidCurval.DisplayUnits = 1;
+    attribute pidCurval.PointId = `&RCT111X`;
+    attribute maximum.VALUE = `MAX`;
+    attribute maximum.Format = `pPID->disfmt`;
+    attribute minimum.VALUE = `MIN`;
+    attribute minimum.Format = `pPID->disfmt`;
+    attribute baseval.VALUE = `BASE`;
+    attribute baseval.Format = "%7.2f";
+    x = 337;
+    y = 10;
+    visibility = `strcmp(pPID->pid,"ERRORPID")`;
+    xReference = 337;
+    yReference = 10;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance CHART2
+
+
+
+  instance DialogueSymbols.BarUpdate CHART3
+  {
+    attribute TEMP_STRING = "Symbol!";
+    attribute TEMP_HEIGHT_OLD = `TEMP_HEIGHT`;
+    attribute TEMP_HEIGHT = 0;
+    attribute TEMP_POS = 382;
+    attribute pBAR_DATA = `Interface.BarChartData`;
+    attribute CHART_NUM = 1;
+    attribute BAR_SET_NUM = 1;
+    attribute pPID = `&ERRORPID`;
+    attribute MAX = 100;
+    attribute MIN = 0;
+    attribute BASE = 50;
+    attribute H_TEMP_POS = 640;
+    attribute LL_TEMP_POS = 638;
+    attribute L_TEMP_POS = 638;
+    attribute HH_TEMP_POS = 638;
+    attribute pidCurval.DisplayUnits = 1;
+    attribute pidCurval.PointId = `&ERRORPID`;
+    attribute maximum.VALUE = `MAX`;
+    attribute maximum.Format = `pPID->disfmt`;
+    attribute minimum.VALUE = `MIN`;
+    attribute minimum.Format = `pPID->disfmt`;
+    attribute baseval.VALUE = `BASE`;
+    attribute baseval.Format = "%7.2f";
+    x = 663;
+    y = 10;
+    visibility = `strcmp(pPID->pid,"ERRORPID")`;
+    xReference = 663;
+    yReference = 10;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance CHART3
+
+
+
+  instance DialogueSymbols.BarUpdate CHART4
+  {
+    attribute TEMP_STRING = "Symbol!";
+    attribute TEMP_HEIGHT_OLD = `TEMP_HEIGHT`;
+    attribute TEMP_HEIGHT = 0;
+    attribute TEMP_POS = 382;
+    attribute pBAR_DATA = `Interface.BarChartData`;
+    attribute CHART_NUM = 1;
+    attribute BAR_SET_NUM = 1;
+    attribute pPID = `&ERRORPID`;
+    attribute MAX = 100;
+    attribute MIN = 0;
+    attribute BASE = 50;
+    attribute H_TEMP_POS = 640;
+    attribute LL_TEMP_POS = 638;
+    attribute L_TEMP_POS = 638;
+    attribute HH_TEMP_POS = 638;
+    attribute pidCurval.DisplayUnits = 1;
+    attribute pidCurval.PointId = `&ERRORPID`;
+    attribute maximum.VALUE = `MAX`;
+    attribute maximum.Format = `pPID->disfmt`;
+    attribute minimum.VALUE = `MIN`;
+    attribute minimum.Format = `pPID->disfmt`;
+    attribute baseval.VALUE = `BASE`;
+    attribute baseval.Format = "%7.2f";
+    x = 989;
+    y = 10;
+    visibility = `strcmp(pPID->pid,"ERRORPID")`;
+    xReference = 989;
+    yReference = 10;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance CHART4
+
+
+
+// The picture's other attributes:
+
+  backgroundColour    = 0;
+  xSnap               = 5;
+  ySnap               = 5;
+  angleSnap           = 0;
+  radiusSnap          = 0;
+  worldX              = 0;
+  worldY              = 0;
+  worldWidth          = 1280;
+  worldHeight         = 824;
+  oneToOne            = 1;
+  resizeMode          = 0;
+  updateMode          = 2;
+  crosshairStyle      = 1;
+  crosshairLength     = 0;
+  crosshairFollowSnap = `isInEditMode()`;
+  crosshairVisibility = `isInEditMode()`;
+  xReference = 500;
+  yReference = 500;
+  xScaleFactor = 1;
+  yScaleFactor = 1;
+  rotationAngle = 0;
+
+
+}  // end of picture PicYGN_BarChartView1

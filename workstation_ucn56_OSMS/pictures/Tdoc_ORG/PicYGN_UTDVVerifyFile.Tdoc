@@ -1,0 +1,2009 @@
+/*
+ * ProcSee CONFIGURATION LANGUAGE FILE
+ *
+ *
+ * User : ygn34
+ * Host : y6cr02
+ * Date : 2017-05-25
+ * Time : 16:54:40
+ *
+ * ProcSee version : ProcSee 3.10.1 (June 2016)
+ * File version    : 1.26
+ *
+ *
+ */
+
+
+picture PicYGN_UTDVVerifyFile
+{
+  worldX = 0;
+  worldY = 0;
+  worldWidth = 1280;
+  worldHeight = 824;
+  oneToOne = 1;
+  backgroundColour = 0;
+  updateMode = 2;
+  resizeMode = 0;
+  xSnap = 5;
+  ySnap = 5;
+  radiusSnap = 0;
+  angleSnap = 0;
+  crosshairStyle = 1;
+  crosshairLength = 0;
+  crosshairFollowSnap = `isInEditMode()`;
+  crosshairVisibility = `isInEditMode()`;
+  xReference = 500;
+  yReference = 500;
+  xScaleFactor = 1;
+  yScaleFactor = 1;
+  rotationAngle = 0;
+
+  int Current_page = 682;
+
+  char PictureNumber[50] = "682";
+
+  char PictureTitle[50] = "UTDV  :  VERIFY  FILE (S)";
+
+  int receivedCheck = 0;
+
+  char TheNText[80] = "N";
+
+  char TheYText[80] = "Y";
+
+  function `void CorrectClr() // JHC 990419
+  {
+   if (strcmp(Correct.TheNewText, "N") == 0) {
+     nText.foregroundColour = \`COLOR_DATA_NORMAL\`;
+     yText.foregroundColour = \`COLOR_NON_ESSENTIAL\`;
+     }
+   else {
+     yText.foregroundColour = \`COLOR_DATA_NORMAL\`;
+     nText.foregroundColour = \`COLOR_NON_ESSENTIAL\`;
+     }
+  }`
+
+  function `void DisplayUTDVData()
+  {
+     //printf("DisplayUTDVData(): copying shared memory data into local ...");
+  
+     //printf(" Filename: %s", filename2.TheNewText);
+     //printf(" Date: %d", Interface->UtdvData.nextToLastMidnight.efphFile);
+     //printf(" Date: %s", Interface->UtdvData.nextToLastMidnight.dateFile);
+  //
+  // -- Last Midnight Data ----------------------------------------------------------------------
+     execute ("{strcpy(filename2.TheNewText, utlmid652);}");
+     execute ("{efph21.TheNewNumber = Interface->UtdvData.lastMidnight.efphFile;}");
+     execute ("{efph22.TheNewNumber = Interface->UtdvData.lastMidnight.efphRpcb;}");
+     execute ("{efph23.TheNewNumber = Interface->UtdvData.lastMidnight.efphColss;}");
+     execute ("{efph24.TheNewNumber = Interface->UtdvData.lastMidnight.efphIncore;}");
+     execute ("{efph25.TheNewNumber = Interface->UtdvData.lastMidnight.efphCeaExposure;}");
+  
+     execute ("{strcpy(date21.TheNewText, Interface->UtdvData.lastMidnight.dateFile);}");
+     execute ("{strcpy(date22.TheNewText, Interface->UtdvData.lastMidnight.dateRpcb);}");
+     execute ("{strcpy(date23.TheNewText, Interface->UtdvData.lastMidnight.dateColss);}");
+     execute ("{strcpy(date24.TheNewText, Interface->UtdvData.lastMidnight.dateIncore);}");
+     execute ("{strcpy(date25.TheNewText, Interface->UtdvData.lastMidnight.dateCeaExposure);}");
+     execute ("{strcpy(date26.TheNewText, Interface->UtdvData.lastMidnight.dateCeaPosition);}");
+  
+     execute ("{strcpy(time21.TheNewText, Interface->UtdvData.lastMidnight.timeFile);}");
+     execute ("{strcpy(time22.TheNewText, Interface->UtdvData.lastMidnight.timeRpcb);}");
+     execute ("{strcpy(time23.TheNewText, Interface->UtdvData.lastMidnight.timeColss);}");
+     execute ("{strcpy(time24.TheNewText, Interface->UtdvData.lastMidnight.timeIncore);}");
+     execute ("{strcpy(time25.TheNewText, Interface->UtdvData.lastMidnight.timeCeaExposure);}");
+     execute ("{strcpy(time26.TheNewText, Interface->UtdvData.lastMidnight.timeCeaPosition);}");
+  //
+  // -- Latest Hourly Data ----------------------------------------------------------------------
+     execute ("{strcpy(filename3.TheNewText, utlhcea652);}");
+     execute ("{efph31.TheNewNumber = Interface->UtdvData.latestHourly.efphFile;}");
+     execute ("{efph32.TheNewNumber = Interface->UtdvData.latestHourly.efphRpcb;}");
+     execute ("{efph33.TheNewNumber = Interface->UtdvData.latestHourly.efphCeaExposure;}");
+  
+     execute ("{strcpy(date31.TheNewText, Interface->UtdvData.latestHourly.dateFile);}");
+     execute ("{strcpy(date32.TheNewText, Interface->UtdvData.latestHourly.dateRpcb);}");
+     execute ("{strcpy(date33.TheNewText, Interface->UtdvData.latestHourly.dateCeaExposure);}");
+     execute ("{strcpy(date34.TheNewText, Interface->UtdvData.latestHourly.dateCeaPosition);}");
+  
+     execute ("{strcpy(time31.TheNewText, Interface->UtdvData.latestHourly.timeFile);}");
+     execute ("{strcpy(time32.TheNewText, Interface->UtdvData.latestHourly.timeRpcb);}");
+     execute ("{strcpy(time33.TheNewText, Interface->UtdvData.latestHourly.timeCeaExposure);}");
+     execute ("{strcpy(time34.TheNewText, Interface->UtdvData.latestHourly.timeCeaPosition);}");
+  //
+  // -- Delta Data ----------------------------------------------------------------------
+      execute ("{efph41.TheNewNumber = Interface->UtdvData.present.mostRecentEfphFile;}");
+     TextProcessing.visibility = 0;
+  }`
+
+  function `void escape()
+  {
+  DisplayPage(Page681);
+  }`
+
+  function `int get_Vis_Hour()
+  {
+    if ( (UTDV681_option == 1) || (UTDV681_option == 3))
+       return(1);
+    else
+       return(0);
+  }`
+
+  function `int get_Vis_Mid()
+  {
+    if ( (UTDV681_option == 1) || (UTDV681_option == 2))
+       return(1);
+    else
+       return(0);
+  }`
+
+  function `void GettingData()
+  {
+     if (0 == UTDVDataWaitingTime)
+     {
+        TextProcessing.visibility = 0;
+        WaitingUTDVData682 = 0;
+        DisplayUTDVData();
+     }
+     else
+     {
+        UTDVDataWaitingTime = UTDVDataWaitingTime - 1;
+     }
+  }`
+
+  function `void Initialize()
+  {
+     Current_Page = 682;
+     CFMLevel =0;
+  //
+     Current_page =682;
+     strcpy(Correct.TheNewText, "Y");
+     yText.foregroundColour = \`COLOR_DATA_NORMAL\`;    //JHC 990419
+     nText.foregroundColour = \`COLOR_NON_ESSENTIAL\`;  //JHC 990419
+  
+     int j;
+  
+     for(j=1 ; j<=6 ; j++)               // yrlee 990426
+     {
+        execute ("{strcpy(date2%d.TheNewText,\\" \\\\0\\");}",j);
+        execute ("{strcpy(time2%d.TheNewText,\\" \\\\0\\");}",j);
+     }
+     for(j=1 ; j<=4 ; j++)
+     {
+        execute ("{strcpy(date3%d.TheNewText,\\" \\\\0\\");}",j);
+        execute ("{strcpy(time3%d.TheNewText,\\" \\\\0\\");}",j);
+     }
+  
+     Correct.Flag =2;
+     Vis();
+  //
+  // For Dynamic Description (JHC 990419)
+     Mid.visibility = get_Vis_Mid();
+     Hour.visibility = get_Vis_Hour();
+  
+  //   strcpy(WhichFile.TheNewText, "1");
+  //   WhichFile.Flag =2;
+  //
+     Interface->UtdvDialogue.option = 9;
+     Interface->UtdvDialogue.current_page = Current_page;
+  
+     execute("{sendMessageToHost(PROCESS_UTDV_SEND);}");
+  
+     TextProcessing.visibility = 1;
+     UTDVDataWaitingTime = 5;
+     WaitingUTDVData682 = 1;
+     processfiles.UnSelect(); //jsk
+  }`
+
+  function `void Process1()
+  {
+     if (strcmp(Correct.TheNewText, "N") == 0)
+     {
+     Interface->UtdvDialogue.option = 1;
+  
+     execute("{strcpy(Interface->UtdvDialogue.password, Correct.TheNewText);}");
+     //printf("dATA is Wrong %s ", Interface->UtdvDialogue.password);
+     execute("{sendMessageToHost(PROCESS_UTDV_SEND);}");
+     }
+     else
+     {
+     execute("{strcpy(Interface->UtdvDialogue.password, Correct.TheNewText);}");
+  
+     Interface->UtdvDialogue.option = atoi(WhichFile.TheNewText);
+     //printf("dATA is Wrong %d ", Interface->UtdvDialogue.option);
+     execute("{sendMessageToHost(PROCESS_UTDV_SEND);}");
+  
+     }
+  
+  }`
+
+  function `void ProcessingConfirmed()
+  {
+  }`
+
+  function `void Vis()
+  {
+     if (UTDV681_option == 1)
+     {
+     strcpy(WhichFile.TheNewText, "1");
+     WhichFile.Flag =2;
+     WhichFile.visibility =1;
+     SelFileTxt.visibility =1;
+     SelText.visibility = 1;
+     File1Text.visibility =0;
+     File2Text.visibility =0;
+     TextFile1.visibility =1;
+     TextFile2.visibility =1;
+     SelFileTxt.Text1.foregroundColour = \`COLOR_DATA_NORMAL\`;    //JHC 990419
+     SelFileTxt.Text2.foregroundColour = \`COLOR_NON_ESSENTIAL\`;  //JHC 990419
+     }
+     else if (UTDV681_option == 2)
+     {
+     strcpy(WhichFile.TheNewText, "1");
+     WhichFile.Flag =2;
+     WhichFile.visibility =0;
+     SelFileTxt.visibility =0;
+     SelText.visibility = 0;
+     File1Text.visibility =1;
+     File2Text.visibility =0;
+     TextFile1.visibility =1;
+     TextFile2.visibility =1;
+     SelFileTxt.Text1.foregroundColour = \`COLOR_DATA_NORMAL\`;    //JHC 990419
+     SelFileTxt.Text2.foregroundColour = \`COLOR_NON_ESSENTIAL\`;  //JHC 990419
+     }
+     else
+     {
+     strcpy(WhichFile.TheNewText, "2");
+     WhichFile.Flag =1;
+     WhichFile.visibility =0;
+     SelFileTxt.visibility =0;
+     SelText.visibility = 0;
+     File1Text.visibility =0;
+     File2Text.visibility =1;
+     TextFile1.visibility =0;
+     TextFile2.visibility =0;
+     SelFileTxt.Text2.foregroundColour = \`COLOR_DATA_NORMAL\`;    //JHC 990419
+     SelFileTxt.Text1.foregroundColour = \`COLOR_NON_ESSENTIAL\`;  //JHC 990419
+  
+     }
+  }`
+
+  function `void WFcolor()
+  {
+     //int clr;
+     //clr = atoi(WhichFile.TheNewText);
+     if(0 == strcmp(WhichFile.TheNewText, "2")){
+                SelFileTxt.Text2.foregroundColour = \`COLOR_DATA_NORMAL\`;
+                SelFileTxt.Text1.foregroundColour = \`COLOR_NON_ESSENTIAL\`;
+                }
+     if(0 == strcmp(WhichFile.TheNewText, "1")){
+                SelFileTxt.Text1.foregroundColour = \`COLOR_DATA_NORMAL\`;
+                SelFileTxt.Text2.foregroundColour = \`COLOR_NON_ESSENTIAL\`;
+                }
+  }
+  `
+
+  rectangle
+  {
+    x = 227;
+    y = 49;
+    width = 805;
+    height = 260;
+    visibility = 1;
+    foregroundColour = `COLOR_LINE_BOUNDARY_6`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 3;
+    foregroundFillColour = `COLOR_NON_ESSENTIAL`;
+    backgroundFillColour = -1;
+    fillPattern = `NoPattern`;
+    xReference = 328;
+    yReference = 77;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  ellipseArc
+  {
+    x = 506;
+    y = 563;
+    xRadius = 0;
+    yRadius = 0;
+    startAngle = `font4`;
+    openingAngle = 90;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 0;
+    foregroundFillColour = `COLOR_NON_ESSENTIAL`;
+    backgroundFillColour = -1;
+    fillPattern = `SolidPattern`;
+    xReference = 506;
+    yReference = 563;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  ellipseArc
+  {
+    x = 506;
+    y = 563;
+    xRadius = 0;
+    yRadius = 0;
+    startAngle = 0;
+    openingAngle = 90;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = `4`;
+    foregroundFillColour = `COLOR_NON_ESSENTIAL`;
+    backgroundFillColour = -1;
+    fillPattern = `NoPattern`;
+    xReference = 506;
+    yReference = 563;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  circleArc
+  {
+    x = 491;
+    y = 568;
+    radius = 0;
+    startAngle = `font4`;
+    openingAngle = 90;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 0;
+    foregroundFillColour = `COLOR_NON_ESSENTIAL`;
+    backgroundFillColour = -1;
+    fillPattern = `SolidPattern`;
+    xReference = 491;
+    yReference = 568;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  ellipseArc
+  {
+    x = 223;
+    y = 200;
+    xRadius = 0;
+    yRadius = 0;
+    startAngle = `font4`;
+    openingAngle = 90;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 0;
+    foregroundFillColour = `COLOR_NON_ESSENTIAL`;
+    backgroundFillColour = -1;
+    fillPattern = `SolidPattern`;
+    xReference = 228;
+    yReference = 200;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  line
+  {
+    numberOfPoints = 2;
+    point[0] = ( 228, 200 );
+    point[1] = ( 228, 200 );
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineStyle = `SolidPattern`;
+    lineWidth = 0;
+    xReference = 228;
+    yReference = 200;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  line
+  {
+    numberOfPoints = 2;
+    point[0] = ( 228, 199 );
+    point[1] = ( 1033, 199 );
+    visibility = 1;
+    foregroundColour = `COLOR_LINE_BOUNDARY_6`;
+    backgroundColour = -1;
+    lineStyle = `SolidPattern`;
+    lineWidth = 3;
+    xReference = 228;
+    yReference = 199;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  line
+  {
+    numberOfPoints = 2;
+    point[0] = ( 433, 90 );
+    point[1] = ( 433, 90 );
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineStyle = `SolidPattern`;
+    lineWidth = 0;
+    xReference = 433;
+    yReference = 90;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  group Mid
+  {
+    visibility = 1;
+    xReference = 1074;
+    yReference = 60;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+
+    text
+    {
+      x = 1075;
+      y = 77;
+      format = "%s";
+      theText = "FILE";
+      alignment = 0;
+      visibility = 1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font4`;
+      xReference = 1075;
+      yReference = 77;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+    text
+    {
+      x = 1075;
+      y = 99;
+      format = "%s";
+      theText = "RPCB  DATA";
+      alignment = 0;
+      visibility = 1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font4`;
+      xReference = 1075;
+      yReference = 99;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+    text
+    {
+      x = 1075;
+      y = 122;
+      format = "%s";
+      theText = "COLSS  DATA";
+      alignment = 0;
+      visibility = 1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font4`;
+      xReference = 1075;
+      yReference = 122;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+    text
+    {
+      x = 1075;
+      y = 143;
+      format = "%s";
+      theText = "INCORE  DATA";
+      alignment = 0;
+      visibility = 1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font4`;
+      xReference = 1075;
+      yReference = 143;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+    text
+    {
+      x = 1075;
+      y = 164;
+      format = "%s";
+      theText = "CEA  EXP  DATA";
+      alignment = 0;
+      visibility = 1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font4`;
+      xReference = 1075;
+      yReference = 164;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+    text
+    {
+      x = 1075;
+      y = 186;
+      format = "%s";
+      theText = "CEA  POS  DATA";
+      alignment = 0;
+      visibility = 1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font4`;
+      xReference = 1075;
+      yReference = 186;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+  }
+
+  group Hour
+  {
+    visibility = 1;
+    xReference = 1074;
+    yReference = 212;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+
+    text
+    {
+      x = 1075;
+      y = 229;
+      format = "%s";
+      theText = "FILE";
+      alignment = 0;
+      visibility = 1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font4`;
+      xReference = 1075;
+      yReference = 229;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+    text
+    {
+      x = 1075;
+      y = 251;
+      format = "%s";
+      theText = "RPCB  DATA";
+      alignment = 0;
+      visibility = 1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font4`;
+      xReference = 1075;
+      yReference = 251;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+    text
+    {
+      x = 1075;
+      y = 272;
+      format = "%s";
+      theText = "CEA  EXP  DATA";
+      alignment = 0;
+      visibility = 1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font4`;
+      xReference = 1075;
+      yReference = 272;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+    text
+    {
+      x = 1075;
+      y = 294;
+      format = "%s";
+      theText = "CEA  POS  DATA";
+      alignment = 0;
+      visibility = 1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font4`;
+      xReference = 1075;
+      yReference = 294;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+  }
+
+  text
+  {
+    x = 551;
+    y = 183;
+    format = "%s";
+    theText = "--------------";
+    alignment = 0;
+    visibility = `get_Vis_Mid()`;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 551;
+    yReference = 183;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 552;
+    y = 293;
+    format = "%s";
+    theText = "--------------";
+    alignment = 0;
+    visibility = `get_Vis_Hour()`;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 552;
+    yReference = 293;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  line
+  {
+    numberOfPoints = 2;
+    point[0] = ( 470, 50 );
+    point[1] = ( 470, 360 );
+    visibility = 1;
+    foregroundColour = `COLOR_LINE_BOUNDARY_6`;
+    backgroundColour = -1;
+    lineStyle = `SolidPattern`;
+    lineWidth = 3;
+    xReference = 470;
+    yReference = 50;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 110;
+    y = 343;
+    format = "%s";
+    theText = "MOST  RECENT  EFPHS  FROM  FILE :";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 110;
+    yReference = 343;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 50;
+    y = 64;
+    format = "%s";
+    theText = "LAST";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 50;
+    yReference = 64;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 50;
+    y = 85;
+    format = "%s";
+    theText = "MIDNIGHT  FILE";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 50;
+    yReference = 85;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 50;
+    y = 214;
+    format = "%s";
+    theText = "LATEST  HOURLY";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 50;
+    yReference = 214;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 50;
+    y = 235;
+    format = "%s";
+    theText = "CEA  FILE";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 50;
+    yReference = 235;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 369;
+    y = 574;
+    format = "%s";
+    theText = "IS  THE  ABOVE  DATA  CORRECT  ?";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 369;
+    yReference = 574;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 308;
+    y = 34;
+    format = "%s";
+    theText = "NAME";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 308;
+    yReference = 34;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 547;
+    y = 35;
+    format = "%s";
+    theText = "EFPHS";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 547;
+    yReference = 35;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 768;
+    y = 35;
+    format = "%s";
+    theText = "DATE";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 768;
+    yReference = 35;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 914;
+    y = 36;
+    format = "%s";
+    theText = "TIME";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 914;
+    yReference = 36;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  line
+  {
+    numberOfPoints = 2;
+    point[0] = ( 470, 359 );
+    point[1] = ( 725, 359 );
+    visibility = 1;
+    foregroundColour = `COLOR_LINE_BOUNDARY_6`;
+    backgroundColour = -1;
+    lineStyle = `SolidPattern`;
+    lineWidth = 3;
+    xReference = 470;
+    yReference = 359;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  line
+  {
+    numberOfPoints = 2;
+    point[0] = ( 725, 360 );
+    point[1] = ( 725, 310 );
+    visibility = 1;
+    foregroundColour = `COLOR_LINE_BOUNDARY_6`;
+    backgroundColour = -1;
+    lineStyle = `SolidPattern`;
+    lineWidth = 3;
+    xReference = 725;
+    yReference = 360;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 50;
+    y = 106;
+    format = "%s";
+    theText = "( FILE  1 )";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 50;
+    yReference = 106;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 50;
+    y = 256;
+    format = "%s";
+    theText = "( FILE  2 )";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 50;
+    yReference = 256;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle
+  {
+    x = 115;
+    y = 389;
+    width = 1032;
+    height = 138;
+    visibility = 1;
+    foregroundColour = `COLOR_LINE_BOUNDARY_6`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 3;
+    foregroundFillColour = `COLOR_NON_ESSENTIAL`;
+    backgroundFillColour = -1;
+    fillPattern = `NoPattern`;
+    xReference = 163;
+    yReference = 389;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 147;
+    y = 424;
+    format = "%s";
+    theText = "THE  FOLLOWING  DATA  WILL  BE";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 147;
+    yReference = 424;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 147;
+    y = 453;
+    format = "%s";
+    theText = "USED  FOR  INITIALIZATION  :";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 147;
+    yReference = 453;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text TextFile2
+  {
+    x = 523;
+    y = 424;
+    format = "%s";
+    theText = "COLSS  BURNUP  DATA  -  -  -  -  -  -  -  -  -  -  FROM  FILE  1";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 523;
+    yReference = 424;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text TextFile1
+  {
+    x = 525;
+    y = 464;
+    format = "%s";
+    theText = "INCORE  DETECTOR  CHARGE  DATA  -  -  -  -  FROM  FILE  1";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 525;
+    yReference = 464;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 523;
+    y = 504;
+    format = "%s";
+    theText = "CEA  EXPOSURE  DATA  -  -  -  -  -  -  -  -  -  -  ";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 523;
+    yReference = 504;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  group SelFileTxt
+  {
+    visibility = 1;
+    xReference = 268;
+    yReference = 611;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+
+    text
+    {
+      x = 269;
+      y = 628;
+      format = "%s";
+      theText = "WHEN  BOTH  FILES  1  AND  2  ARE  PRESENT,";
+      alignment = 0;
+      visibility = 1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font4`;
+      xReference = 269;
+      yReference = 628;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+    text
+    {
+      x = 269;
+      y = 655;
+      format = "%s";
+      theText = "INITIALIZATION  WILL  USE  CEA  EXPOSURE";
+      alignment = 0;
+      visibility = 1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font4`;
+      xReference = 269;
+      yReference = 655;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+    text
+    {
+      x = 269;
+      y = 682;
+      format = "%s";
+      theText = "DATA  FROM  WHICH  FILE  ?  ( 1 - 2 )";
+      alignment = 0;
+      visibility = 1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font4`;
+      xReference = 269;
+      yReference = 682;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+    text Text1
+    {
+      x = 794;
+      y = 675;
+      format = "%s";
+      theText = "1   . . . .      FROM  FILE  1";
+      alignment = 0;
+      visibility = 1;
+      foregroundColour = `COLOR_DATA_NORMAL`;
+      backgroundColour = -1;
+      theFont = `font4`;
+      xReference = 794;
+      yReference = 675;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+    text Text2
+    {
+      x = 794;
+      y = 698;
+      format = "%s";
+      theText = "2   . . . .      FROM  FILE  2";
+      alignment = 0;
+      visibility = 1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font4`;
+      xReference = 794;
+      yReference = 698;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+  }
+
+  instance DialogueSymbols.UTDVDataDisp efph21
+  {
+    x = 535;
+    y = 55;
+    visibility = `get_Vis_Mid()`;
+    xReference = 535;
+    yReference = 55;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Active = 1;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "";
+    ExecuteUnSelect = "";
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxDigits = 8;
+    ReturnAction = "";
+    Scope = "";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewNumber = 31.6429;
+    TheNewText = "";
+    TheNumberFormat = "%-8.2f";
+    TheOriginalNumber = 34.5;
+    TheOriginalText = "45";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    Width = 150;
+  }
+
+  instance DialogueSymbols.UTDVDataDisp efph22
+  {
+    x = 535;
+    y = 78;
+    visibility = `get_Vis_Mid()`;
+    xReference = 535;
+    yReference = 78;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Active = 1;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "";
+    ExecuteUnSelect = "";
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxDigits = 8;
+    ReturnAction = "";
+    Scope = "";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewNumber = 31.6429;
+    TheNewText = "";
+    TheNumberFormat = "%-8.2f";
+    TheOriginalNumber = 34.5;
+    TheOriginalText = "45";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    Width = 150;
+  }
+
+  instance DialogueSymbols.UTDVDataDisp efph23
+  {
+    x = 535;
+    y = 101;
+    visibility = `get_Vis_Mid()`;
+    xReference = 535;
+    yReference = 101;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Active = 1;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "";
+    ExecuteUnSelect = "";
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxDigits = 8;
+    ReturnAction = "";
+    Scope = "";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewNumber = 0;
+    TheNewText = "";
+    TheNumberFormat = "%-8.2f";
+    TheOriginalNumber = 34.5;
+    TheOriginalText = "45";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    Width = 150;
+  }
+
+  instance DialogueSymbols.UTDVDataDisp efph24
+  {
+    x = 535;
+    y = 124;
+    visibility = `get_Vis_Mid()`;
+    xReference = 535;
+    yReference = 124;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Active = 1;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "";
+    ExecuteUnSelect = "";
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxDigits = 8;
+    ReturnAction = "";
+    Scope = "";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewNumber = 31.6429;
+    TheNewText = "";
+    TheNumberFormat = "%-8.2f";
+    TheOriginalNumber = 34.5;
+    TheOriginalText = "45";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    Width = 150;
+  }
+
+  instance DialogueSymbols.UTDVDataDisp efph25
+  {
+    x = 535;
+    y = 147;
+    visibility = `get_Vis_Mid()`;
+    xReference = 535;
+    yReference = 147;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Active = 1;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "";
+    ExecuteUnSelect = "";
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxDigits = 8;
+    ReturnAction = "";
+    Scope = "";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewNumber = 31.6429;
+    TheNewText = "";
+    TheNumberFormat = "%-8.2f";
+    TheOriginalNumber = 34.5;
+    TheOriginalText = "45";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    Width = 150;
+  }
+
+  instance DialogueSymbols.UTDVDataDisp efph31
+  {
+    x = 535;
+    y = 206;
+    visibility = `get_Vis_Hour()`;
+    xReference = 535;
+    yReference = 206;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Active = 1;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "";
+    ExecuteUnSelect = "";
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxDigits = 8;
+    ReturnAction = "";
+    Scope = "";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewNumber = 0;
+    TheNewText = "";
+    TheNumberFormat = "%-8.2f";
+    TheOriginalNumber = 34.5;
+    TheOriginalText = "45";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    Width = 150;
+  }
+
+  instance DialogueSymbols.UTDVDataDisp efph32
+  {
+    x = 535;
+    y = 229;
+    visibility = `get_Vis_Hour()`;
+    xReference = 535;
+    yReference = 229;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Active = 1;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "";
+    ExecuteUnSelect = "";
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxDigits = 8;
+    ReturnAction = "";
+    Scope = "";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewNumber = 0;
+    TheNewText = "";
+    TheNumberFormat = "%-8.2f";
+    TheOriginalNumber = 34.5;
+    TheOriginalText = "45";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    Width = 150;
+  }
+
+  instance DialogueSymbols.UTDVDataDisp efph33
+  {
+    x = 535;
+    y = 252;
+    visibility = `get_Vis_Hour()`;
+    xReference = 535;
+    yReference = 252;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Active = 1;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "";
+    ExecuteUnSelect = "";
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxDigits = 8;
+    ReturnAction = "";
+    Scope = "";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewNumber = 0;
+    TheNewText = "";
+    TheNumberFormat = "%-8.2f";
+    TheOriginalNumber = 34.5;
+    TheOriginalText = "45";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    Width = 150;
+  }
+
+  instance DialogueSymbols.UTDVDataDisp efph41
+  {
+    x = 535;
+    y = 315;
+    visibility = 1;
+    xReference = 535;
+    yReference = 315;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Active = 1;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "";
+    ExecuteUnSelect = "";
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxDigits = 8;
+    ReturnAction = "";
+    Scope = "";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewNumber = 31.6429;
+    TheNewText = "";
+    TheNumberFormat = "%-8.2f";
+    TheOriginalNumber = 34.5;
+    TheOriginalText = "45";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    Width = 150;
+  }
+
+  instance cfmsSymbols.UTDVText filename2
+  {
+    x = 245;
+    y = 60;
+    visibility = `get_Vis_Mid()`;
+    xReference = 245;
+    yReference = 60;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    TheNewText = "LOG2:UTLMID.DAT";
+  }
+
+  instance cfmsSymbols.UTDVText filename3
+  {
+    x = 245;
+    y = 210;
+    visibility = `get_Vis_Hour()`;
+    xReference = 245;
+    yReference = 210;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    TheNewText = "LOG2:UTLHCEA.DAT";
+  }
+
+  instance cfmsSymbols.YesNo date21
+  {
+    x = 765;
+    y = 55;
+    visibility = `get_Vis_Mid()`;
+    xReference = 765;
+    yReference = 55;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    TheNewText = "01/17/98";
+  }
+
+  instance cfmsSymbols.YesNo date22
+  {
+    x = 765;
+    y = 77;
+    visibility = `get_Vis_Mid()`;
+    xReference = 765;
+    yReference = 77;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    TheNewText = "01/17/98";
+  }
+
+  instance cfmsSymbols.YesNo date23
+  {
+    x = 765;
+    y = 99;
+    visibility = `get_Vis_Mid()`;
+    xReference = 765;
+    yReference = 99;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    TheNewText = "08/31/95";
+  }
+
+  instance cfmsSymbols.YesNo date24
+  {
+    x = 765;
+    y = 121;
+    visibility = `get_Vis_Mid()`;
+    xReference = 765;
+    yReference = 121;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    TheNewText = "01/17/98";
+  }
+
+  instance cfmsSymbols.YesNo date25
+  {
+    x = 765;
+    y = 143;
+    visibility = `get_Vis_Mid()`;
+    xReference = 765;
+    yReference = 143;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    TheNewText = "01/17/98";
+  }
+
+  instance cfmsSymbols.YesNo date26
+  {
+    x = 765;
+    y = 165;
+    visibility = `get_Vis_Mid()`;
+    xReference = 765;
+    yReference = 165;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    TheNewText = "01/17/98";
+  }
+
+  instance cfmsSymbols.YesNo time21
+  {
+    x = 905;
+    y = 55;
+    visibility = `get_Vis_Mid()`;
+    xReference = 905;
+    yReference = 55;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    TheNewText = "00:11:16";
+  }
+
+  instance cfmsSymbols.YesNo time22
+  {
+    x = 905;
+    y = 77;
+    visibility = `get_Vis_Mid()`;
+    xReference = 905;
+    yReference = 77;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    TheNewText = "00:11:16";
+  }
+
+  instance cfmsSymbols.YesNo time23
+  {
+    x = 905;
+    y = 99;
+    visibility = `get_Vis_Mid()`;
+    xReference = 905;
+    yReference = 99;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    TheNewText = "09:41:40";
+  }
+
+  instance cfmsSymbols.YesNo time24
+  {
+    x = 905;
+    y = 121;
+    visibility = `get_Vis_Mid()`;
+    xReference = 905;
+    yReference = 121;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    TheNewText = "00:11:17";
+  }
+
+  instance cfmsSymbols.YesNo time25
+  {
+    x = 905;
+    y = 143;
+    visibility = `get_Vis_Mid()`;
+    xReference = 905;
+    yReference = 143;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    TheNewText = "00:11:16";
+  }
+
+  instance cfmsSymbols.YesNo time26
+  {
+    x = 905;
+    y = 165;
+    visibility = `get_Vis_Mid()`;
+    xReference = 905;
+    yReference = 165;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    TheNewText = "00:11:18";
+  }
+
+  instance cfmsSymbols.YesNo date31
+  {
+    x = 765;
+    y = 209;
+    visibility = `get_Vis_Hour()`;
+    xReference = 765;
+    yReference = 209;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    TheNewText = "01/18/98";
+  }
+
+  instance cfmsSymbols.YesNo date32
+  {
+    x = 765;
+    y = 231;
+    visibility = `get_Vis_Hour()`;
+    xReference = 765;
+    yReference = 231;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    TheNewText = "01/18/98";
+  }
+
+  instance cfmsSymbols.YesNo date33
+  {
+    x = 765;
+    y = 253;
+    visibility = `get_Vis_Hour()`;
+    xReference = 765;
+    yReference = 253;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    TheNewText = "01/18/98";
+  }
+
+  instance cfmsSymbols.YesNo date34
+  {
+    x = 765;
+    y = 275;
+    visibility = `get_Vis_Hour()`;
+    xReference = 765;
+    yReference = 275;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    TheNewText = "01/18/98";
+  }
+
+  instance cfmsSymbols.YesNo time31
+  {
+    x = 904;
+    y = 209;
+    visibility = `get_Vis_Hour()`;
+    xReference = 904;
+    yReference = 209;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    TheNewText = "19:00:28";
+  }
+
+  instance cfmsSymbols.YesNo time32
+  {
+    x = 904;
+    y = 231;
+    visibility = `get_Vis_Hour()`;
+    xReference = 904;
+    yReference = 231;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    TheNewText = "19:00:28";
+  }
+
+  instance cfmsSymbols.YesNo time33
+  {
+    x = 904;
+    y = 253;
+    visibility = `get_Vis_Hour()`;
+    xReference = 904;
+    yReference = 253;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    TheNewText = "19:00:28";
+  }
+
+  instance cfmsSymbols.YesNo time34
+  {
+    x = 904;
+    y = 275;
+    visibility = `get_Vis_Hour()`;
+    xReference = 904;
+    yReference = 275;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    TheNewText = "19:00:28";
+  }
+
+  text TextProcessing
+  {
+    x = 541;
+    y = 715;
+    format = "%s";
+    theText = "PROCESSING... WAIT";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 541;
+    yReference = 715;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text yText
+  {
+    x = 794;
+    y = 573;
+    format = "%s";
+    theText = "Y  . . . .     YES,  DATA  CORRECT";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 794;
+    yReference = 573;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text nText
+  {
+    x = 794;
+    y = 597;
+    format = "%s";
+    theText = "N  . . . .      NO,  RESELECT FILES";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 794;
+    yReference = 597;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  line
+  {
+    numberOfPoints = 2;
+    point[0] = ( 470, 391 );
+    point[1] = ( 470, 526 );
+    visibility = 1;
+    foregroundColour = `COLOR_LINE_BOUNDARY_6`;
+    backgroundColour = -1;
+    lineStyle = `SolidPattern`;
+    lineWidth = 3;
+    xReference = 470;
+    yReference = 391;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  instance DialogueSymbols.ToggleButton_YN Correct
+  {
+    x = 720;
+    y = 552;
+    visibility = 1;
+    xReference = 720;
+    yReference = 552;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "::YGN3and4.PicYGN_UTDVVerifyFile.CorrectClr()";
+    ExecuteUnSelect = "";
+    Flag = 2;
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxCharacters = 3;
+    ReturnAction = "";
+    Scope = "";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 10;
+    TheNewText = "Y";
+    TheOriginalText = "Y";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 200;
+  }
+
+  instance DialogueSymbols.ToggleButton_12 WhichFile
+  {
+    x = 720;
+    y = 665;
+    visibility = 1;
+    xReference = 720;
+    yReference = 665;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "::YGN3and4.PicYGN_UTDVVerifyFile.WFcolor()";
+    ExecuteUnSelect = "";
+    Flag = 2;
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxCharacters = 3;
+    ReturnAction = "";
+    Scope = "";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 10;
+    TheNewText = "1";
+    TheOriginalText = "2";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 200;
+  }
+
+  instance DialogueSymbols.PushButton processfiles
+  {
+    x = 122;
+    y = 715;
+    visibility = 1;
+    xReference = 115;
+    yReference = 691;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ButtonState = 0;
+    DynamicLabel = "PROCESSING";
+    ExecuteString = "Process1()";
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    Label = "PROCESS";
+    Scope = "PicYGN_UTDVVerifyFile";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    StaticLabel = "PROCESS";
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextFontDynamic = `font2`;
+    TextFontStatic = `font4`;
+    TextX = 17;
+    TextXDynamic = 15;
+    TextXStatic = 17;
+    TextY = 22;
+    TextYDynamic = 21;
+    TextYStatic = 22;
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    Width = 128;
+  }
+
+  text File1Text
+  {
+    x = 956;
+    y = 504;
+    format = "%s";
+    theText = "FROM  FILE  1";
+    alignment = 0;
+    visibility = 0;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 956;
+    yReference = 504;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text SelText
+  {
+    x = 956;
+    y = 504;
+    format = "%s";
+    theText = "SELECT FILE";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 956;
+    yReference = 504;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text File2Text
+  {
+    x = 956;
+    y = 504;
+    format = "%s";
+    theText = "FROM  FILE  2";
+    alignment = 0;
+    visibility = 0;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 956;
+    yReference = 504;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+}

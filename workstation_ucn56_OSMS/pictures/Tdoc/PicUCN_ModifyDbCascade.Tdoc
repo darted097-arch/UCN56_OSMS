@@ -1,0 +1,353 @@
+/*
+ * PICASSO-3 CONFIGURATION LANGUAGE FILE
+ *
+ *
+ * Picture name: PicUCN_ModifyDbCascade
+ *
+ *
+ * Documented by  : asn
+ * Host           : y5maint1
+ * Date           : 16/12-96 at 06:48:58
+ *
+ *
+ * Generate with:
+ *    pcc PicUCN_ModifyDbCascade.Tdoc
+ *
+ */
+
+
+picture PicUCN_ModifyDbCascade
+{
+
+  int TheCascadeX = 550;
+  int TheCascadeY = 400;
+  float TheCursorX = 240;
+  float TheCursorY = 260;
+
+  function `void Initialize()
+{
+// if the user escapes from the widow without making a 
+// selection, the objetc remains "selected";
+// Reset all active colors
+   ChgScan.TheFontColor = \`COLOR_STATIC_TEXT\`;
+   ChgAlmStat.TheFontColor = \`COLOR_STATIC_TEXT\`;
+   InsVal.TheFontColor = \`COLOR_STATIC_TEXT\`;
+   ChgLim.TheFontColor = \`COLOR_STATIC_TEXT\`;
+   SensCal.TheFontColor = \`COLOR_STATIC_TEXT\`;
+   LSF.TheFontColor = \`COLOR_STATIC_TEXT\`;
+   update();
+}`
+
+
+
+  rectangle 
+  {
+    x = 3;
+    y = 8;
+    width = 312;
+    height = 395;
+
+    visibility = 1;
+    foregroundFillColour = `COLOR_PICTURE_BACKGROUND`;
+    backgroundFillColour = -1;
+    foregroundColour = `(CascadeMenuActive && !CascadeEnterActive)?COLOR_DATA_NORMAL:COLOR_STATIC_TEXT`;
+    backgroundColour = -1;
+    lineWidth = 7;
+    linePattern = 1;
+    fillPattern = 1;
+    xReference = 9;
+    yReference = 15;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 49;
+    y = 35;
+    format = "%s";
+    theText = "Modify Database Menu";
+
+    visibility = 1;
+    foregroundColour = `(CascadeMenuActive && !CascadeEnterActive)?COLOR_DATA_NORMAL:COLOR_STATIC_TEXT`;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 49;
+    yReference = 35;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  instance DialogueSymbols.SmallMenuSelection ChgScan
+  {
+    attribute TheOption = "1";
+    attribute TheFontColor = `COLOR_STATIC_TEXT`;
+    attribute TheTitle = "CHANGE SCAN STATUS";
+    attribute TheDisplayPage = "PicUCN_ChgScanCascade.ppic";
+    attribute Cascade = 1;
+    attribute CascadeX = `TheCascadeX`;
+    attribute CascadeY = `TheCascadeY`;
+    attribute CursorX = `TheCursorX`;
+    attribute CursorY = `TheCursorY`;
+    x = 11;
+    y = 95;
+    visibility = 1;
+    xReference = 21;
+    yReference = 95;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance ChgScan
+
+
+
+  line 
+  {
+    numberOfPoints = 2;
+
+    point[0] = (9, 45);
+    point[1] = (304, 45);
+
+    visibility = 1;
+    foregroundColour = `(CascadeMenuActive && !CascadeEnterActive)?COLOR_DATA_NORMAL:COLOR_STATIC_TEXT`;
+    backgroundColour = -1;
+    lineWidth = 3;
+    lineStyle = `SolidPattern`;
+    xReference = 9;
+    yReference = 45;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  instance DialogueSymbols.SmallMenuSelection ChgAlmStat
+  {
+    attribute TheOption = "2";
+    attribute TheFontColor = `COLOR_STATIC_TEXT`;
+    attribute TheTitle = "CHANGE ALARM STATUS";
+    attribute TheDisplayPage = "PicUCN_ChgAlmStatusCascade.ppic";
+    attribute Cascade = 1;
+    attribute CascadeX = `TheCascadeX`;
+    attribute CascadeY = `TheCascadeY`;
+    attribute CursorX = `TheCursorX`;
+    attribute CursorY = `TheCursorY`;
+    x = 11;
+    y = 130;
+    visibility = 1;
+    xReference = 26;
+    yReference = 135;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance ChgAlmStat
+
+
+
+  instance DialogueSymbols.SmallMenuSelection InsVal
+  {
+    attribute TheOption = "3";
+    attribute TheFontColor = `COLOR_STATIC_TEXT`;
+    attribute TheTitle = "INSERT VALUE";
+    attribute TheDisplayPage = "PicUCN_InsertValueCascade.ppic";
+    attribute Cascade = 1;
+    attribute CascadeX = `TheCascadeX`;
+    attribute CascadeY = `TheCascadeY`;
+    attribute CursorX = `TheCursorX`;
+    attribute CursorY = `TheCursorY`;
+    x = 11;
+    y = 165;
+    visibility = 1;
+    xReference = 26;
+    yReference = 190;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance InsVal
+
+
+
+  instance DialogueSymbols.SmallMenuSelection ChgLim
+  {
+    attribute TheOption = "4";
+    attribute TheFontColor = `COLOR_STATIC_TEXT`;
+    attribute TheTitle = "CHANGE ALARM LIMITS";
+    attribute TheDisplayPage = "PicUCN_ChgAlmLimitsCascade.ppic";
+    attribute Cascade = 1;
+    attribute CascadeX = `TheCascadeX`;
+    attribute CascadeY = `TheCascadeY`;
+    attribute CursorX = `TheCursorX`;
+    attribute CursorY = `TheCursorY`;
+    x = 11;
+    y = 200;
+    visibility = 1;
+    xReference = 11;
+    yReference = 245;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance ChgLim
+
+
+
+  instance DialogueSymbols.SmallMenuSelection SensCal
+  {
+    attribute TheOption = "5";
+    attribute TheFontColor = `COLOR_STATIC_TEXT`;
+    attribute TheTitle = "SENSOR CALIBRATION";
+    attribute TheDisplayPage = "PicUCN_SensorCalibCascade.ppic";
+    attribute Cascade = 1;
+    attribute CascadeX = `TheCascadeX`;
+    attribute CascadeY = `TheCascadeY`;
+    attribute CursorX = `TheCursorX`;
+    attribute CursorY = `TheCursorY`;
+    x = 11;
+    y = 295;
+    visibility = 1;
+    xReference = 21;
+    yReference = 305;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance SensCal
+
+
+
+  instance DialogueSymbols.SmallMenuSelection LSF
+  {
+    attribute TheOption = "6";
+    attribute TheFontColor = `COLOR_STATIC_TEXT`;
+    attribute TheTitle = "LEAST SQUARES FIT";
+    attribute TheDisplayPage = "PicUCN_LSFCascade.ppic";
+    attribute Cascade = 1;
+    attribute CascadeX = `TheCascadeX`;
+    attribute CascadeY = `TheCascadeY`;
+    attribute CursorX = `TheCursorX`;
+    attribute CursorY = `TheCursorY`;
+    x = 11;
+    y = 330;
+    visibility = 1;
+    xReference = 26;
+    yReference = 340;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance LSF
+
+
+
+  text 
+  {
+    x = 16;
+    y = 75;
+    format = "%s";
+    theText = "VALUE/STAUS:";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 16;
+    yReference = 75;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  line 
+  {
+    numberOfPoints = 2;
+
+    point[0] = (16, 80);
+    point[1] = (152, 80);
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineWidth = 0;
+    lineStyle = `SolidPattern`;
+    xReference = 16;
+    yReference = 80;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 16;
+    y = 270;
+    format = "%s";
+    theText = "CONVERSION DATA:";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 16;
+    yReference = 85;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  line 
+  {
+    numberOfPoints = 2;
+
+    point[0] = (16, 275);
+    point[1] = (205, 275);
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineWidth = 0;
+    lineStyle = `SolidPattern`;
+    xReference = 16;
+    yReference = 275;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+// The picture's other attributes:
+
+  backgroundColour    = 0;
+  xSnap               = 5;
+  ySnap               = 5;
+  angleSnap           = 0;
+  radiusSnap          = 0;
+  worldX              = 0;
+  worldY              = 0;
+  worldWidth          = 320;
+  worldHeight         = 420;
+  oneToOne            = 1;
+  resizeMode          = 0;
+  updateMode          = 2;
+  crosshairStyle      = 1;
+  crosshairLength     = 0;
+  crosshairFollowSnap = `isInEditMode()`;
+  crosshairVisibility = `isInEditMode()`;
+  xReference = 500;
+  yReference = 500;
+  xScaleFactor = 1;
+  yScaleFactor = 1;
+  rotationAngle = 0;
+
+
+}  // end of picture PicUCN_ModifyDbCascade

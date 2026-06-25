@@ -1,0 +1,136 @@
+#ifndef	_COMMLINKOBJECT_H
+#define	_COMMLINKOBJECT_H
+//
+// **********************************************
+// HBNPP 3&4 PMS DISPLAY SYSTEM
+// 
+// CommLinkObject.h
+// ver 1.0 -- pms01 2016.06.30.
+// **********************************************
+//
+// ***************************************************************************
+// This file defines the CommLinkObject class.
+// ***************************************************************************
+//
+// System Include Files:
+//
+#include <netinet/in.h>
+#include <iostream.h>
+//
+// User Defined Include Files:
+//
+#include "Typedefs.h"
+#include "systemParameters.h"
+#include "messageObject.h"
+//
+// External Variables:
+//
+//
+//
+// Local Constant Definitions:
+//
+#define COMMLINK_ERROR_FILE	"CommLink.err"	// name of error file
+
+// hostName[] in interfaceStructure.pdat must be dimensioned with the same 
+//value as NUM_HOSTS, i.e., 2.
+const int	NUM_HOSTS	= 2;		// number of hosts
+#define HOST_NAME_A "ygn6c1"                // Primary host name
+#define HOST_NAME_B "ygn6c2"                // Secondary host name
+
+const u_port_t	LISTEN_PORT	= 50;	// Well known port on CCUR
+const time_t	PACKET_TIMEOUT	= 30;	// seconds before datalink timeout
+const time_t	FAILOVER_TIMEOUT= -60;	// on Failover, host time difference
+                                        // that will restart workstation S/W
+
+const long	SLEEPTIME	= 20000;// microseconds to wait between reads
+const int	HOST_TRY_LIMIT	= 1;	// # of tries before switching hosts
+const int       HOST_RETRY_WAIT	= 5;	// seconds to wait before retrying host
+const int	HOST_CONNECT_WAIT = 60; // seconds to wait after retrys exhausted
+					//before trying to connect again.
+const int	HOSTREAD_TRY_LIMIT	= 1;	// # tries for reads from host
+          //seconds to wait before retrying read
+const int	HOSTREAD_RETRY_WAIT	= 2;	
+
+const int	CNCT_TRY_LIMIT	= 10;	// # of tries to connect()
+const int	CNCT_RETRY_WAIT	= 3;	// seconds to wait between connect tries
+
+const int	MAX_COMMLINK_NAME_LEN = 20;	// Len of CommLink Process name
+
+const int	PRIMARY_COMMLINK = 1;
+const int	BACKUP_COMMLINK = -1;
+const int	UNKNOWN_COMMLINK = 0;
+
+const int	SLAVE_CPU = 0x00FF;
+const int	MASTER_CPU = 1;
+const int	UNKNOWN_CPU = 0;
+
+   // Buffers for local processing
+typedef union _Local {
+    WSmessageHeader		header;
+    WSmessageTemplate		message;   
+    WSresponseMessage		response;
+    char			char_buf[WS_MESSAGE_LENGTH];
+    unsigned int 		totalMessage[WS_MESSAGE_LENGTH/sizeof(int)];
+};
+
+//
+// Function Prototypes:
+//
+class CommLinkObject
+{
+public:
+	 CommLinkObject();		// constructor
+	~CommLinkObject();		// destructor
+   static void	Connect();		// high level connect, no return until connected
+   static void	mainLoop();		
+
+// Access methods
+
+   static void 	setnum(int v){num = v;};
+   static void	setname(char * n){strncpy(name, n, MAX_COMMLINK_NAME_LEN);};
+   static void	sethostName(char * n){strncpy(hostName, n, MAX_HOSTNAME_LEN);};
+   static void  setconnected(){connected = TRUE;};
+   static void  resetconnected(){connected = FALSE;};
+
+   static int	getnum(){return num;};
+   static char *getname(){return name;};
+   static char *gethostName(){return hostName;};
+   static int	isconnected(){return connected;};
+
+private:
+   static int		connectWSToHost();	// connect to host
+   static void		initCommLink();
+   static void		parseHostMessages();	// parse messages from host
+   static void		ws2ccurlink();		// process messages to host
+   static void		closeAndReconnect();	// close sockets, init vars,
+						// reconnect.
+
+   static int	writeMessageToHost(messageObject & msg); // directly to host
+   
+   // connect to host, low level
+   static int		u_connect(u_port_t port, char * hostName);
+   static int		u_ignore_sigpipe();	// ignore pipe write errors
+
+   // enhanced read function 
+   static ssize_t	u_read(int fd, char *buf, size_t size);
+
+   static _Local Local;
+
+   static int   bytes_read;
+   static int   total_bytes_read;
+   
+   static int	msgSize;
+   static int	gotMsgSize;
+   static int	bytesToRead;
+
+   static time_t lastMessageTime; // time of the last host message
+   static int 	ReadSocket;	// TCP/IP socket for reading
+   static int	WriteSocket;	// TCP/IP socket for writing
+   
+   static int	num;		// Which CommLink this is, 1 or 2
+   static char	name[MAX_COMMLINK_NAME_LEN]; // Process name of this CommLink
+   static char	hostName[MAX_HOSTNAME_LEN]; // Name of host connected to
+   static int	connected;	// TRUE means connected to host
+   static time_t	timeOfLastRead;		// time datawas last read form host
+};
+#endif

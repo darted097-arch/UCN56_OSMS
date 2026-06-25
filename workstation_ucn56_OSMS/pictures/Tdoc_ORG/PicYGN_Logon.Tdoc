@@ -1,0 +1,199 @@
+/*
+ * PICASSO-3 CONFIGURATION LANGUAGE FILE
+ *
+ *
+ * Picture name: PicYGN_Logon
+ *
+ *
+ * Documented by  : asn
+ * Host           : y5maint1
+ * Date           : 16/12-96 at 06:48:50
+ *
+ *
+ * Generate with:
+ *    pcc PicYGN_Logon.Tdoc
+ *
+ */
+
+
+picture PicYGN_Logon
+{
+
+  char *PictureTitle = " ";
+  char *PictureNumber = " ";
+
+  text 
+  {
+    x = 295;
+    y = 120;
+    format = "%s";
+    theText = "WELCOME TO THE YGN 5&6 PLANT COMPUTER SYSTEM";
+
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font7`;
+    xReference = 295;
+    yReference = 120;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    dialogue
+    {
+      event = `buttonPressed(1)`;
+      action = statement `{
+   if (!TimersRunning)
+   {
+      StartInternalTimers();
+      TimersRunning = 1;
+   }
+   DisplayPage(Page111);
+}`;
+    }
+    x = 200;
+    y = 290;
+    format = "%s";
+    theText = "CLICK HERE OR PRESS <F1> TO ACCESS THE CFM DISPLAY DIRECTORY";
+
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font7`;
+    xReference = 200;
+    yReference = 290;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    dialogue
+    {
+      event = `buttonPressed(1)`;
+      action = statement `{
+   if (!TimersRunning)
+   {
+      StartInternalTimers();
+      TimersRunning = 1;
+   }
+   executeAsync( "::YGN3and4", "{ displayPicture( \\"Main\\", \\"./PicYGN_DigitalTrends.ppic\\" ); }");
+}`;
+    }
+    x = 200;
+    y = 390;
+    format = "%s";
+    theText = "CLICK HERE OR PRESS <F2> TO ACCESS THE DIGITAL TRENDS DISPLAY";
+
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font7`;
+    xReference = 200;
+    yReference = 390;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    dialogue
+    {
+      event = `buttonPressed(1)`;
+      action = statement `{ 
+   if (!TimersRunning)
+   {
+      StartInternalTimers();
+      TimersRunning = 1;
+   }  
+   executeAsync( "::YGN3and4", "{ displayPicture( \\"Main\\", \\"./PicYGN_Logon.ppic\\" ); }");
+}`;
+    }
+    x = 200;
+    y = 490;
+    format = "%s";
+    theText = "CLICK HERE OR PRESS <F3> TO ACCESS THE SECURITY/LOGON DISPLAY";
+
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font7`;
+    xReference = 200;
+    yReference = 490;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    dialogue
+    {
+      event = `buttonPressed(1)`;
+      action = statement `{
+//    displayPicture("Main", "./PicYGN_wait.ppic");
+   if (!TimersRunning)
+   {
+      StartInternalTimers();
+      TimersRunning = 1;
+   }
+    executeAsync( "::YGN3and4", "{ displayPicture( \\"Main\\", \\"./PicYGN_CFMmatrix.ppic\\" ); }");
+}`;
+    }
+    x = 200;
+    y = 589;
+    format = "%s";
+    theText = "CLICK HERE OR PRESS <F4> TO ACCESS THE CFM MATRIX DISPLAY";
+
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font7`;
+    xReference = 200;
+    yReference = 589;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+// The picture's other attributes:
+
+  backgroundColour    = 0;
+  xSnap               = 5;
+  ySnap               = 5;
+  angleSnap           = 0;
+  radiusSnap          = 0;
+  worldX              = 0;
+  worldY              = 0;
+  worldWidth          = 1280;
+  worldHeight         = 824;
+  oneToOne            = 1;
+  resizeMode          = 0;
+  updateMode          = 2;
+  crosshairStyle      = 1;
+  crosshairLength     = 0;
+  crosshairFollowSnap = `isInEditMode()`;
+  crosshairVisibility = `isInEditMode()`;
+  xReference = 500;
+  yReference = 500;
+  xScaleFactor = 1;
+  yScaleFactor = 1;
+  rotationAngle = 0;
+
+
+}  // end of picture PicYGN_Logon

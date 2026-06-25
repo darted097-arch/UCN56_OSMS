@@ -1,0 +1,426 @@
+/*
+ * PICASSO-3 CONFIGURATION LANGUAGE FILE
+ *
+ *
+ * Picture name: PicUCN_COLSSMenu
+ *
+ *
+ * Documented by  : ucn56
+ * Host           : ucn5
+ * Date           : 24/02-99 at 16:37:09
+ *
+ *
+ * Generate with:
+ *    pcc PicUCN_COLSSMenu.Tdoc
+ *
+ */
+
+
+picture PicUCN_COLSSMenu
+{
+
+  char PictureNumber[50] = "120";
+  char PictureTitle[50] = "COLSS   MENU";
+  int SelectObject = 0;
+  int MaxTime = 0;
+  int TheFontColor = 4;
+  int TheTextFont = `font7`;
+  Colss_Data *pColssData = `&::UCN5and6.InterfaceToGUI.Interface.ColssData`;
+  char TheDisplayPage[50] = "PicUCN_COLSSReports.ppic";
+
+  function `void ProcessThis(int SelectedOption)
+{
+    switch(SelectedOption)
+    {
+      case REQUEST_COLSS_CURRENT_MODE :
+          if(accesslevel != 3) {
+            DisplayAdvisoryMessage("ACCESS LEVEL 3 REQUIRED");
+            break;
+          }
+          strcpy(TheDisplayPage, ModeSelection.TheDisplayPage);
+          execute("{DisplayPage(\\"%s\\");}",TheDisplayPage);
+          break;
+
+      case REQUEST_COLSS_INITIALIZATION :
+          if(accesslevel != 3) {
+            DisplayAdvisoryMessage("ACCESS LEVEL 3 REQUIRED");
+            break;
+          }
+          strcpy(TheDisplayPage, Initializations.TheDisplayPage);
+          execute("{DisplayPage(\\"%s\\");}",TheDisplayPage);
+          break;
+
+      case REQUEST_COLSS_REPORTS :
+//          if(accesslevel > 4) {
+//            DisplayAdvisoryMessage("ACCESS LEVEL 4 OR 3 REQUIRED");
+//            break;
+//          }
+          strcpy(TheDisplayPage, Reports.TheDisplayPage);
+          execute("{DisplayPage(\\"%s\\");}",TheDisplayPage);
+          break;
+
+      case REQUEST_COLSS_SURV_TEST :
+          if(accesslevel != 3) {
+            DisplayAdvisoryMessage("ACCESS LEVEL 3 REQUIRED");
+            break;
+          }
+          strcpy(TheDisplayPage, SurvTest.TheDisplayPage);
+          execute("{DisplayPage(\\"%s\\");}",TheDisplayPage);
+          break;
+     }
+     update();
+}`
+
+
+
+  function `void Initialize()
+{
+   Current_Page = 120;
+   CFMLevel = 0;
+ //ProcessText.Initialize();
+// CancelText.Initialize();
+ //initConfirmMessages();
+ //execute("{pColssData->message_type = 99;}");
+ update();
+
+}`
+
+
+
+  function `void displayOptionSelected(int option)
+{
+
+    text1_box.foregroundFillColour=0;
+    text1.foregroundColour=1; 
+ update();
+    text2_box.foregroundFillColour=0;
+    text2.foregroundColour=1;
+ update();
+    text3_box.foregroundFillColour=0;
+    text3.foregroundColour=1;
+ update();
+    text4_box.foregroundFillColour=0;
+    text4.foregroundColour=1;
+ update();
+    text5_box.foregroundFillColour=0;
+    text5.foregroundColour=1;
+update();
+   switch(option)
+   {
+      case 1:	
+       strcpy(COption, "1");
+       text1_box.foregroundFillColour=1;
+       text1.foregroundColour=0; update();
+       break; 
+      case 2:
+       strcpy(COption, "2");
+       text2_box.foregroundFillColour=1;
+       text2.foregroundColour=0;update();
+        break;
+      case 3:
+       strcpy(COption, "3");
+       text3_box.foregroundFillColour=1;
+       text3.foregroundColour=0;update();
+        break;
+      case 4:
+       strcpy(COption, "4");
+       text4_box.foregroundFillColour=1;
+       text4.foregroundColour=0;update();
+       break;
+      case 5:
+       strcpy(COption, "5");
+       text5_box.foregroundFillColour=1;
+       text5.foregroundColour=0;update();
+       break;
+      default:
+       Option=0;
+       break;
+   }
+  update();
+}`
+
+
+
+  function `void setReverseMode(int value)
+{
+    
+   switch(value)
+   {
+      case 1:
+       text1.TheFontColor= COLOR_DATA_NORMAL;
+       text1.TheTextFont = \`font7\`; 
+       break;
+      case 2:
+       text2.TheFontColor= COLOR_DATA_NORMAL;
+       text2.TheTextFont = \`font7\`; 
+       break;
+      case 3:
+       text3.TheFontColor= COLOR_DATA_NORMAL;
+       text3.TheTextFont = \`font7\`; 
+       break;
+      case 4:
+       text4.TheFontColor= COLOR_DATA_NORMAL;
+       text4.TheTextFont = \`font7\`; 
+       break;
+      case 5:
+       text5.TheFontColor= COLOR_DATA_NORMAL;
+       text5.TheTextFont = \`font7\`; 
+       break;
+   }
+   update();
+}`
+
+
+
+  function `void selectOption(int selectedValue)
+{
+   Option = selectedValue;
+   displayOptionSelected(selectedValue);
+   SetupReadInputValue(selectedValue);
+   update();
+}`
+
+
+
+  function `void InputVerify()
+{;}`
+
+
+
+  dialogue
+  {
+    event = `keyReleased(0x31) || keyReleased(0xFFB1)`;
+    action = statement `{
+//   displayPicture("header","PicUCN_header.ppic");
+//   displayPicture("footer","PicUCN_footer.ppic");
+//   displayPicture("Main","PicUCN_CurrentParamsMenu.ppic");
+ModeSelection.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+ModeSelection.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+
+ModeSelection.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+ModeSelection.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+ModeSelection.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+ModeSelection.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+
+ModeSelection.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+ModeSelection.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+ModeSelection.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+ModeSelection.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+
+   execute("{DisplayPage(\\"%s\\");}",ModeSelection.TheDisplayPage);
+
+}
+`;
+  }
+
+  dialogue
+  {
+    event = `keyReleased(0x32) || keyReleased(0xFFB2)`;
+    action = statement `{
+Reports.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+Reports.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+
+Reports.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+Reports.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+Reports.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+Reports.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+
+Reports.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+Reports.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+Reports.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+Reports.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+
+   execute("{DisplayPage(\\"%s\\");}",Reports.TheDisplayPage);
+
+}
+`;
+  }
+
+  dialogue
+  {
+    event = `keyReleased(0x33) || keyReleased(0xFFB3)`;
+    action = statement `{
+Initializations.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+Initializations.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+
+Initializations.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+Initializations.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+Initializations.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+Initializations.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+
+Initializations.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+Initializations.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+Initializations.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+Initializations.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+
+   execute("{DisplayPage(\\"%s\\");}",Initializations.TheDisplayPage);
+
+}
+`;
+  }
+
+  dialogue
+  {
+    event = `keyReleased(0x34) || keyReleased(0xFFB4)`;
+    action = statement `{
+SurvTest.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+SurvTest.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+
+SurvTest.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+SurvTest.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+SurvTest.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+SurvTest.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+
+SurvTest.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+SurvTest.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+SurvTest.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+SurvTest.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+
+   execute("{DisplayPage(\\"%s\\");}",SurvTest.TheDisplayPage);
+
+}
+`;
+  }
+
+  rectangle 
+  {
+    x = 130;
+    y = 0;
+    width = 0;
+    height = 0;
+
+    visibility = 1;
+    foregroundFillColour = 0;
+    backgroundFillColour = -1;
+    foregroundColour = 1;
+    backgroundColour = 0;
+    lineWidth = 0;
+    linePattern = `SolidPattern`;
+    fillPattern = `NoPattern`;
+    xReference = 130;
+    yReference = 0;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  instance DialogueSymbols.LargeMenuSelect2 SurvTest
+  {
+    attribute TheDisplayPage = "PicUCN_COLSSSurveillance.ppic";
+    attribute TheOption = "4.";
+    attribute TheFontColor = 2;
+    attribute TheTitle = "SURVEILLANCE TEST";
+    attribute TheTextFont = `font6`;
+    attribute Cascade = 0;
+    attribute CascadeX = 400;
+    attribute CascadeY = 400;
+    attribute ExecuteString = "{ProcessThis( REQUEST_COLSS_SURV_TEST );}";
+    x = 430;
+    y = 406;
+    visibility = 1;
+    xReference = 430;
+    yReference = 406;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance SurvTest
+
+
+
+  instance DialogueSymbols.LargeMenuSelect2 Initializations
+  {
+    attribute TheDisplayPage = "PicUCN_COLSSInit7.ppic";
+    attribute TheOption = "3.";
+    attribute TheFontColor = 2;
+    attribute TheTitle = "INITIALIZATIONS";
+    attribute TheTextFont = `font6`;
+    attribute Cascade = 0;
+    attribute CascadeX = 400;
+    attribute CascadeY = 400;
+    attribute ExecuteString = "{ ProcessThis(REQUEST_COLSS_INITIALIZATION );}";
+    x = 430;
+    y = 369;
+    visibility = 1;
+    xReference = 430;
+    yReference = 369;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance Initializations
+
+
+
+  instance DialogueSymbols.LargeMenuSelect2 Reports
+  {
+    attribute TheDisplayPage = "PicUCN_COLSSReports.ppic";
+    attribute TheOption = "2.";
+    attribute TheFontColor = 2;
+    attribute TheTitle = "REPORT";
+    attribute TheTextFont = `font6`;
+    attribute Cascade = 0;
+    attribute CascadeX = 400;
+    attribute CascadeY = 400;
+    attribute ExecuteString = "{ProcessThis( REQUEST_COLSS_REPORTS );}";
+    x = 430;
+    y = 332;
+    visibility = 1;
+    xReference = 430;
+    yReference = 332;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance Reports
+
+
+
+  instance DialogueSymbols.LargeMenuSelect2 ModeSelection
+  {
+    attribute TheDisplayPage = "PicUCN_COLSSModeSelection.ppic";
+    attribute TheOption = "1.";
+    attribute TheFontColor = 2;
+    attribute TheTitle = "MODE SELECTION";
+    attribute TheTextFont = `font6`;
+    attribute Cascade = 0;
+    attribute CascadeX = 400;
+    attribute CascadeY = 400;
+    attribute ExecuteString = "{ProcessThis( REQUEST_COLSS_CURRENT_MODE );}";
+    x = 430;
+    y = 295;
+    visibility = 1;
+    xReference = 430;
+    yReference = 295;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance ModeSelection
+
+
+
+// The picture's other attributes:
+
+  backgroundColour    = 0;
+  xSnap               = 5;
+  ySnap               = 5;
+  angleSnap           = 0;
+  radiusSnap          = 0;
+  worldX              = 0;
+  worldY              = 0;
+  worldWidth          = 1280;
+  worldHeight         = 824;
+  oneToOne            = 1;
+  resizeMode          = 0;
+  updateMode          = 2;
+  crosshairStyle      = 1;
+  crosshairLength     = 0;
+  crosshairFollowSnap = `isInEditMode()`;
+  crosshairVisibility = `isInEditMode()`;
+  xReference = 500;
+  yReference = 500;
+  xScaleFactor = 1;
+  yScaleFactor = 1;
+  rotationAngle = 0;
+
+
+}  // end of picture PicUCN_COLSSMenu

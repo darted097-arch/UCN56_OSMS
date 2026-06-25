@@ -1,0 +1,336 @@
+/*
+ * ProcSee CONFIGURATION LANGUAGE FILE
+ *
+ *
+ * User : ucn56
+ * Host : y6cr02
+ * Date : 2017-02-20
+ * Time : 17:46:30
+ *
+ * ProcSee version : ProcSee 3.10.1 (June 2016)
+ * File version    : 1.26
+ *
+ *
+ */
+
+
+picture PicUCN_BOPCalculation
+{
+  worldX = 0;
+  worldY = 0;
+  worldWidth = 1280;
+  worldHeight = 824;
+  oneToOne = 1;
+  backgroundColour = 0;
+  updateMode = 2;
+  resizeMode = 0;
+  xSnap = 5;
+  ySnap = 5;
+  radiusSnap = 0;
+  angleSnap = 0;
+  crosshairStyle = 1;
+  crosshairLength = 0;
+  crosshairFollowSnap = `isInEditMode()`;
+  crosshairVisibility = `isInEditMode()`;
+  xReference = 500;
+  yReference = 500;
+  xScaleFactor = 1;
+  yScaleFactor = 1;
+  rotationAngle = 0;
+
+  int option = 2;
+
+  char PictureNumber[50] = "640";
+
+  char PictureTitle[50] = "BOP PERFORMANCE CALCULATIONS";
+
+  int request_flag = 0;
+
+  function `void AbortDemand()
+  {
+     DisplayPage(Page160);
+  
+      //     option = 2;
+      //     Interface->BOPDMD_REQUEST_MESSAGE.data.Option = option;
+      //     KeepSelected();
+      //     if(1 == request_flag)
+      //     {
+      //     request_flag = 0;
+      //     // Abort message to the host
+      //     execute("{sendMessageToHost(REQUEST_BOP_PRINT);}");
+      //     DisplayAdvisoryMessage("BOP DEMAND ABORTED");
+      //     }
+      //     else
+      //     // Response to WS
+      //     DisplayAdvisoryMessage("THERE WAS NO PRINT REQUEST");
+  }`
+
+//*********CORENET 20170623 **************************
+  function `void ProcessConfirmed()
+  {
+     DisplayAdvisoryMessage(Interface->BOPDMD_CONFIRM_MESSAGE.data.message1);
+     DisplayAdvisoryMessage1(Interface->BOPDMD_CONFIRM_MESSAGE.data.message2);
+     DisplayAdvisoryMessage2(Interface->BOPDMD_CONFIRM_MESSAGE.data.message3);
+  }`
+  // ************************************************************
+
+  function `void initConfirmMessages()
+  {
+     //Initialize Confirm Messages in Interface Shared Memory
+     strcpy(Interface->BOPDMD_CONFIRM_MESSAGE.data.message1,"");
+     strcpy(Interface->BOPDMD_CONFIRM_MESSAGE.data.message2,"");
+     strcpy(Interface->BOPDMD_CONFIRM_MESSAGE.data.message3,"");
+  }`
+
+  function `void Initialize()
+  {
+     Current_Page = 640;
+     CFMLevel = 0;
+     initConfirmMessages();
+  //
+     OP1.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+     OP1.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+  
+     OP1.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+     OP1.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+     OP1.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+     OP1.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+  
+     OP1.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     OP1.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     OP1.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     OP1.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     OP1.TheFontColor = COLOR_STATIC_TEXT;
+  
+     OP2.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+     OP2.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+  
+     OP2.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+     OP2.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+     OP2.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+     OP2.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+  
+     OP2.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     OP2.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     OP2.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     OP2.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     OP2.TheFontColor = COLOR_STATIC_TEXT;
+  
+  //
+     option = 0;
+     Interface->BOPDMD_REQUEST_MESSAGE.data.Option = option;
+     execute("{sendMessageToHost(REQUEST_BOP_PRINT);}");
+  
+     update();
+  }`
+
+  function `void KeepSelected()
+  {
+     if (1 == option)
+     {
+     OP2.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+     OP2.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+  
+     OP2.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+     OP2.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+     OP2.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+     OP2.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+  
+     OP2.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     OP2.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     OP2.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     OP2.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     OP2.TheFontColor = COLOR_STATIC_TEXT;
+     }
+     if (2 == option)
+     {
+     OP1.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+     OP1.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+  
+     OP1.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+     OP1.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+     OP1.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+     OP1.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+  
+     OP1.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     OP1.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     OP1.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     OP1.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     OP1.TheFontColor = COLOR_STATIC_TEXT;
+  
+     }
+  }`
+
+  function `void ProcessDemand()
+  {
+     option = 1;
+     Interface->BOPDMD_REQUEST_MESSAGE.data.Option = option;
+     KeepSelected();
+     initConfirmMessages();
+     //request_flag = 1;
+     // Send print request message to the host
+     execute("{sendMessageToHost(REQUEST_BOP_PRINT);}");
+     DisplayAdvisoryMessage("BOP DEMAND SENT TO HOST");
+  }`
+
+// CORENET 20170330 by Philkyu Kwon.
+  function `void ProcessDemand2H()
+  {
+     option = 2; 
+     Interface->BOPDMD_REQUEST_MESSAGE.data.Option = option;
+     KeepSelected();
+     initConfirmMessages();
+    //request_flag = 2;
+     // Send print request message to the host
+     execute("{sendMessageToHost(REQUEST_BOP_PRINT);}");
+     DisplayAdvisoryMessage("BOP DEMAND 2HOUR SENT TO HOST");
+  }`
+// 
+/*
+  dialogue
+  {
+    event = `keyPressed(0xFF0D)`;
+    action = `{
+      initConfirmMessages();
+       // Send data request message to the host
+      execute("{sendMessageToHost(REQUEST_BOP_PRINT);}");
+    }`;
+  }
+*/
+/*
+  dialogue
+  {
+    event = `buttonPressed(3)`;
+    action = `{
+       DisplayPage(Page160);
+    }`;
+  }
+*/
+  dialogue
+  {
+    event = `keyReleased(0x32) || keyReleased(0xFFB2)`;
+    action = `{
+    OP2.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+    OP2.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+    
+    OP2.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+    OP2.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+    OP2.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+    OP2.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+    
+    OP2.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    OP2.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    OP2.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    OP2.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    
+       if ( strlen(OP2.ExecuteString) > 0)
+           execute(OP2.ExecuteString);
+    }`;
+  }
+
+  dialogue
+  {
+    event = `keyReleased(0x31) || keyReleased(0xFFB1)`;
+    action = `{
+    OP1.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+    OP1.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+    
+    OP1.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+    OP1.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+    OP1.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+    OP1.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+    
+    OP1.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    OP1.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    OP1.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    OP1.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    
+       if ( strlen(OP1.ExecuteString) > 0)
+           execute(OP1.ExecuteString);
+    }`;
+  }
+
+  dialogue
+  {
+    event = `keyPressed(0xFF1B)`;
+    action = `{
+       AbortDemand();
+    }`;
+  }
+
+  text
+  {
+    x = 455;
+    y = 368;
+    format = "%s";
+    theText = "";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font0`;
+    xReference = 455;
+    yReference = 368;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  instance DialogueSymbols.LargeMenuSelectTest OP2
+  {
+    x = 355;
+    y = 335;
+    visibility = 1;
+    xReference = 355;
+    yReference = 335;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Cascade = 0;
+    CascadeX = 400;
+    CascadeY = 400;
+    ExecuteString = "ProcessDemand2H()";
+    TheFontColor = 3;
+    TheOption = "2.";
+    TheTextFont = `font6`;
+    TheTitle = "RUN BOP PERFORMANCE TEST / REPORT";
+  }
+
+  instance DialogueSymbols.LargeMenuSelectTest OP1
+  {
+    x = 355;
+    y = 298;
+    visibility = 1;
+    xReference = 355;
+    yReference = 298;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Cascade = 0;
+    CascadeX = 400;
+    CascadeY = 400;
+    ExecuteString = "ProcessDemand()";
+    TheFontColor = 2;
+    TheOption = "1.";
+    TheTextFont = `font6`;
+    TheTitle = "RUN 1 CYCLE OF BOP DEMAND / REPORT";
+  }
+
+  text
+  {
+    x = 823;
+    y = 366;
+    format = "%s";
+    theText = "2  HOUR";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 823;
+    yReference = 366;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+}

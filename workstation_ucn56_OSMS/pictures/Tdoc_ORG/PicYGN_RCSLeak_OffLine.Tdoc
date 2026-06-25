@@ -1,0 +1,2184 @@
+/*
+ * ProcSee CONFIGURATION LANGUAGE FILE
+ *
+ *
+ * User : ygn34
+ * Host : y4cr01
+ * Date : 2017-06-22
+ * Time : 13:27:02
+ *
+ * ProcSee version : ProcSee 3.10.1 (June 2016)
+ * File version    : 1.26
+ *
+ *
+ */
+
+
+picture PicYGN_RCSLeak_OffLine
+{
+  worldX = 0;
+  worldY = 0;
+  worldWidth = 1280;
+  worldHeight = 824;
+  oneToOne = 1;
+  backgroundColour = 0;
+  updateMode = 2;
+  resizeMode = 0;
+  xSnap = 2;
+  ySnap = 5;
+  radiusSnap = 0;
+  angleSnap = 0;
+  crosshairStyle = 1;
+  crosshairLength = 0;
+  crosshairFollowSnap = `isInEditMode()`;
+  crosshairVisibility = `isInEditMode()`;
+  xReference = 500;
+  yReference = 500;
+  xScaleFactor = 1;
+  yScaleFactor = 1;
+  rotationAngle = 0;
+
+  char* dummy_arg = " ";
+
+  int error = 0;
+
+  int init = 0;
+
+  char NULL_STRING[8] = " ";
+
+  char* PageBack = "";
+
+  char* PictureNumber = "643";
+
+  char* PictureTitle = "RCS LEAK OFF-LINE CALCULATION RESULT";
+
+  int ProcessERROR = 0;
+
+  int SETUP = 0;
+
+  char TEMP[10] = "";
+
+  char temp[12] = " 300.0";
+
+  int TEMP_ERROR = 0;
+
+  int TEMPINT = 5;
+
+  char TheDisplayPage[50] = "PicYGN_RCSLeak_OffLine.ppic";
+
+  float xx = 0;
+
+  float yy = 0.3;
+
+  float z = 1250;
+
+  float zz = 0.7;
+
+  function `void escape()
+  {
+     if(SETUP)
+        Reset() ;
+     else
+        execute("{DisplayPage(\\"%s\\");}",TheDisplayPage);
+  
+  //   displayPicture("Main","PicYGN_SetupViewMenu.ppic");
+  //   update();
+  }`
+
+  function `void Initialize()
+  {
+     CFMLevel = 0;
+     Current_Page = 643;
+     //init = 1 ;
+  
+     //procMsg.visibility = 0;
+  
+     DisplayAdvisoryMessage(" ");
+     DisplayAdvisoryMessage1(" ");
+     DisplayAdvisoryMessage2(" ");
+     DisplayAdvisoryMessage3(" ");
+     UpdateLocalsFromInterface();
+     update();
+  }`
+
+  function `int IsAllBlank(char * cptr)
+  {
+    // Return 0 if one non-blank character is found, 1 otherwise
+    int blank = 1;
+    int i;
+  
+    for (i=0; i<strlen(cptr); i++, cptr++)
+    {
+      if (*cptr != ' ')
+      {
+        blank = 0;
+        break;
+      }//endif
+    }//endfor
+    return (blank);
+  }`
+
+  function `void RequestPrint()
+  {
+     Interface->WSPrnData.PAGENUM = Current_Page;
+     DisplayAdvisoryMessage("REQUEST PRINT TO HOST.");
+      execute("{sendMessageToHost(REQUEST_LEAKPRN);}");
+  }`
+
+  function `void SetupNcancel()
+  {
+     if (!SETUP)         // For SETUP
+     {
+        if (accesslevel<5)
+           SETUP = 1 ;
+        else
+           DisplayAdvisoryMessage("ACCESS LEVEL 3 OR 4 REQUIRED");
+     }
+     else                     // For CANCEL
+     {
+        SETUP = 0 ;
+        procMsg.visibility = 1 ;
+        Reset() ;
+     }
+  
+     update() ;
+  }`
+
+  function `void UpdateLocalsFromInterface()
+  {
+  
+  //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> CORENET
+  /*----------------------
+    OFUNLEAK.theText = &Interface->HostOffData.OFUNLEAK;
+    VCTDIFF.theText = &Interface->HostOffData.VCTDIFF;
+    PZRDIFF.theText = &Interface->HostOffData.PZRDIFF;
+    RCSDIFF.theText = &Interface->HostOffData.RCSDIFF;
+    RDTDIFF.theText = &Interface->HostOffData.RDTDIFF;
+    EDTDIFF.theText = &Interface->HostOffData.EDTDIFF;
+    DIFFSIT.theText = &Interface->HostOffData.DIFFSIT;
+    OFDVOL.theText = &Interface->HostOffData.OFDVOL;
+    OFLEAK.theText = &Interface->HostOffData.OFLEAK;
+    OFIDVOL.theText = &Interface->HostOffData.OFIDVOL;
+    OFIDLEAK.theText = &Interface->HostOffData.OFIDLEAK;
+  
+    RXPWRI.theText = &Interface->HostOffData.RXPWRI;
+    RXPWRF.theText = &Interface->HostOffData.RXPWRF;
+  
+    CMTAVGI.theText = &Interface->HostOffData.CMTAVGI;
+    CMTAVGF.theText = &Interface->HostOffData.CMTAVGF;
+  
+    RCSCLD1I.theText = &Interface->HostOffData.RCSCLD1I;
+    RCSCLD1F.theText = &Interface->HostOffData.RCSCLD1F;
+  
+    PZRPRI.theText = &Interface->HostOffData.PZRPRI;
+    PZRPRF.theText = &Interface->HostOffData.PZRPRF;
+  
+    PZRTEMPI.theText = &Interface->HostOffData.PZRTEMPI;
+    PZRTEMPF.theText = &Interface->HostOffData.PZRTEMPF;
+  
+    PZRLVLI.theText = &Interface->HostOffData.PZRLVLI;
+    PZRLVLF.theText = &Interface->HostOffData.PZRLVLF;
+  
+    VCTTEMPI.theText = &Interface->HostOffData.VCTTEMPI;
+    VCTTEMPF.theText = &Interface->HostOffData.VCTTEMPF;
+  
+    VCTLVLI.theText = &Interface->HostOffData.VCTLVLI;
+    VCTLVLF.theText = &Interface->HostOffData.VCTLVLF;
+  
+    RDTTEMPI.theText = &Interface->HostOffData.RDTTEMPI;
+    RDTTEMPF.theText = &Interface->HostOffData.RDTTEMPF;
+  
+    RDTLVLI.theText = &Interface->HostOffData.RDTLVLI;
+    RDTLVLF.theText = &Interface->HostOffData.RDTLVLF;
+  
+    EDTTEMPI.theText = &Interface->HostOffData.EDTTEMPI;
+    EDTTEMPF.theText = &Interface->HostOffData.EDTTEMPF;
+  
+    EDTLVLI.theText = &Interface->HostOffData.EDTLVLI;
+    EDTLVLF.theText = &Interface->HostOffData.EDTLVLF;
+  
+    SI1ALVLI.theText = &Interface->HostOffData.SI1ALVLI;
+    SI1ALVLF.theText = &Interface->HostOffData.SI1ALVLF;
+  
+    SI1APRI.theText = &Interface->HostOffData.SI1APRI;
+    SI1APRF.theText = &Interface->HostOffData.SI1APRF;
+  
+    SI1BLVLI.theText = &Interface->HostOffData.SI1BLVLI;
+    SI1BLVLF.theText = &Interface->HostOffData.SI1BLVLF;
+  
+    SI1BPRI.theText = &Interface->HostOffData.SI1BPRI;
+    SI1BPRF.theText = &Interface->HostOffData.SI1BPRF;
+  
+    SI2ALVLI.theText = &Interface->HostOffData.SI2ALVLI;
+    SI2ALVLF.theText = &Interface->HostOffData.SI2ALVLF;
+  
+    SI2APRI.theText = &Interface->HostOffData.SI2APRI;
+    SI2APRF.theText = &Interface->HostOffData.SI2APRF;
+  
+    SI2BLVLI.theText = &Interface->HostOffData.SI2BLVLI;
+    SI2BLVLF.theText = &Interface->HostOffData.SI2BLVLF;
+  
+    SI2BPRI.theText = &Interface->HostOffData.SI2BPRI;
+    SI2BPRF.theText = &Interface->HostOffData.SI2BPRF;
+  
+  
+    INITIME.theText = &Interface->HostOffData.INITIME;
+    INITIME1.theText = &Interface->HostOffData.INITIME;
+    FINTIME.theText = &Interface->HostOffData.FINTIME;
+    FINTIME1.theText = &Interface->HostOffData.FINTIME;
+  
+  --------------------------------*/
+  
+    OFUNLEAK.theText = Interface->HostOffData.OFUNLEAK;
+    VCTDIFF.theText = Interface->HostOffData.VCTDIFF;
+    PZRDIFF.theText = Interface->HostOffData.PZRDIFF;
+    RCSDIFF.theText = Interface->HostOffData.RCSDIFF;
+    RDTDIFF.theText = Interface->HostOffData.RDTDIFF;
+    EDTDIFF.theText = Interface->HostOffData.EDTDIFF;
+    DIFFSIT.theText = Interface->HostOffData.DIFFSIT;
+    OFDVOL.theText = Interface->HostOffData.OFDVOL;
+    OFLEAK.theText = Interface->HostOffData.OFLEAK;
+    OFIDVOL.theText = Interface->HostOffData.OFIDVOL;
+    OFIDLEAK.theText = Interface->HostOffData.OFIDLEAK;
+  
+    RXPWRI.theText = Interface->HostOffData.RXPWRI;
+    RXPWRF.theText = Interface->HostOffData.RXPWRF;
+  
+    CMTAVGI.theText = Interface->HostOffData.CMTAVGI;
+    CMTAVGF.theText = Interface->HostOffData.CMTAVGF;
+  
+    RCSCLD1I.theText = Interface->HostOffData.RCSCLD1I;
+    RCSCLD1F.theText = Interface->HostOffData.RCSCLD1F;
+  
+    PZRPRI.theText = Interface->HostOffData.PZRPRI;
+    PZRPRF.theText = Interface->HostOffData.PZRPRF;
+  
+    PZRTEMPI.theText = Interface->HostOffData.PZRTEMPI;
+    PZRTEMPF.theText = Interface->HostOffData.PZRTEMPF;
+  
+    PZRLVLI.theText = Interface->HostOffData.PZRLVLI;
+    PZRLVLF.theText = Interface->HostOffData.PZRLVLF;
+  
+    VCTTEMPI.theText = Interface->HostOffData.VCTTEMPI;
+    VCTTEMPF.theText = Interface->HostOffData.VCTTEMPF;
+  
+    VCTLVLI.theText = Interface->HostOffData.VCTLVLI;
+    VCTLVLF.theText = Interface->HostOffData.VCTLVLF;
+  
+    RDTTEMPI.theText = Interface->HostOffData.RDTTEMPI;
+    RDTTEMPF.theText = Interface->HostOffData.RDTTEMPF;
+  
+    RDTLVLI.theText = Interface->HostOffData.RDTLVLI;
+    RDTLVLF.theText = Interface->HostOffData.RDTLVLF;
+  
+    EDTTEMPI.theText = Interface->HostOffData.EDTTEMPI;
+    EDTTEMPF.theText = Interface->HostOffData.EDTTEMPF;
+  
+    EDTLVLI.theText = Interface->HostOffData.EDTLVLI;
+    EDTLVLF.theText = Interface->HostOffData.EDTLVLF;
+  
+    SI1ALVLI.theText = Interface->HostOffData.SI1ALVLI;
+    SI1ALVLF.theText = Interface->HostOffData.SI1ALVLF;
+  
+    SI1APRI.theText = Interface->HostOffData.SI1APRI;
+    SI1APRF.theText = Interface->HostOffData.SI1APRF;
+  
+    SI1BLVLI.theText = Interface->HostOffData.SI1BLVLI;
+    SI1BLVLF.theText = Interface->HostOffData.SI1BLVLF;
+  
+    SI1BPRI.theText = Interface->HostOffData.SI1BPRI;
+    SI1BPRF.theText = Interface->HostOffData.SI1BPRF;
+  
+    SI2ALVLI.theText = Interface->HostOffData.SI2ALVLI;
+    SI2ALVLF.theText = Interface->HostOffData.SI2ALVLF;
+  
+    SI2APRI.theText = Interface->HostOffData.SI2APRI;
+    SI2APRF.theText = Interface->HostOffData.SI2APRF;
+  
+    SI2BLVLI.theText = Interface->HostOffData.SI2BLVLI;
+    SI2BLVLF.theText = Interface->HostOffData.SI2BLVLF;
+  
+    SI2BPRI.theText = Interface->HostOffData.SI2BPRI;
+    SI2BPRF.theText = Interface->HostOffData.SI2BPRF;
+  
+    INITIME.theText = &Interface->HostOffData.INITIME[0];
+    INITIME1.theText = &Interface->HostOffData.INITIME[0];
+    FINTIME.theText = &Interface->HostOffData.FINTIME[0];
+    FINTIME1.theText = &Interface->HostOffData.FINTIME[0];
+  //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+  
+  
+  
+    update();
+  }`
+
+  text UidLeak
+  {
+    x = 372;
+    y = 38;
+    format = "%s";
+    theText = "UNIDENTIFIED LEAK (GPM) : ";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font7`;
+    xReference = 372;
+    yReference = 38;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  instance DialogueSymbols.PushButton prnButton
+  {
+    x = 1064;
+    y = 679;
+    visibility = 1;
+    xReference = 1064;
+    yReference = 679;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ButtonState = 0;
+    DynamicLabel = "PRINT ";
+    ExecuteString = "{RequestPrint();}";
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    Label = " PRINT ";
+    Scope = "PicYGN_RCSLeak_OffLine";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    StaticLabel = "PRINT ";
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextFontDynamic = `font2`;
+    TextFontStatic = `font4`;
+    TextX = 17;
+    TextXDynamic = 15;
+    TextXStatic = 17;
+    TextY = 22;
+    TextYDynamic = 21;
+    TextYStatic = 22;
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    Width = 100;
+  }
+
+  text
+  {
+    x = 154;
+    y = 177;
+    format = "%s";
+    theText = "TOTAL VCT CHANGE(GAL)";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 144;
+    yReference = 177;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 154;
+    y = 209;
+    format = "%s";
+    theText = "TOTAL PZR CHANGE(GAL) ";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 154;
+    yReference = 209;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 90;
+  }
+
+  text
+  {
+    x = 154;
+    y = 240;
+    format = "%s";
+    theText = "TOTAL RCS CHANGE(GAL)";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 154;
+    yReference = 240;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 154;
+    y = 129;
+    format = "%s";
+    theText = "TOTAL SYSTEM CHANGE(GAL)";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 154;
+    yReference = 129;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 154;
+    y = 98;
+    format = "%s";
+    theText = "TOTAL IDENTI. LEAK(GAL)";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 154;
+    yReference = 98;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 694;
+    y = 177;
+    format = "%s";
+    theText = "TOTAL RDT CHANGE(GAL)";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 694;
+    yReference = 177;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 694;
+    y = 209;
+    format = "%s";
+    theText = "TOTAL EDT CHANGE(GAL)";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 694;
+    yReference = 209;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 694;
+    y = 240;
+    format = "%s";
+    theText = "TOTAL SIT CHANGE(GAL)";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 694;
+    yReference = 240;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 694;
+    y = 129;
+    format = "%s";
+    theText = "TOTAL SYSTEM LEAK(GPM)";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 694;
+    yReference = 129;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 694;
+    y = 98;
+    format = "%s";
+    theText = "TOTAL IDENTI. LEAK(GPM)";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 694;
+    yReference = 98;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 154;
+    y = 326;
+    format = "%s";
+    theText = "TIME";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 154;
+    yReference = 326;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 154;
+    y = 361;
+    format = "%s";
+    theText = "REACTOR POWER (%)";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 154;
+    yReference = 361;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 154;
+    y = 453;
+    format = "%s";
+    theText = "PZR TEMPERATURE (DEG C)";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 154;
+    yReference = 453;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 154;
+    y = 521;
+    format = "%s";
+    theText = "PZR PRESS. (KG/CM2A)";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 154;
+    yReference = 521;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 154;
+    y = 485;
+    format = "%s";
+    theText = "PZR LEVEL (%)";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 154;
+    yReference = 485;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 154;
+    y = 393;
+    format = "%s";
+    theText = "VCT TEMPERATURE (DEG C)";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 154;
+    yReference = 393;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 154;
+    y = 588;
+    format = "%s";
+    theText = "RCS COLD LEG TEMP. (DEG C)";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 154;
+    yReference = 588;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 154;
+    y = 423;
+    format = "%s";
+    theText = "VCT LEVEL (%)";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 154;
+    yReference = 423;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 154;
+    y = 619;
+    format = "%s";
+    theText = "RDT TEMPERATURE (DEG C)";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 154;
+    yReference = 619;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 154;
+    y = 649;
+    format = "%s";
+    theText = "RDT LEVEL (%)";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 154;
+    yReference = 649;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text RDTTEMPI
+  {
+    x = 461;
+    y = 619;
+    format = "%8.2f";
+    theText = `::YGN3and4.InterfaceToGUI.Interface.HostOffData.RDTTEMPI`;
+    alignment = 0;
+    visibility = `!SETUP`;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 461;
+    yReference = 619;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text RDTTEMPF
+  {
+    x = 549;
+    y = 619;
+    format = "%8.2f";
+    theText = `::YGN3and4.InterfaceToGUI.Interface.HostOffData.RDTTEMPF`;
+    alignment = 0;
+    visibility = `!SETUP`;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 549;
+    yReference = 619;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text RDTLVLI
+  {
+    x = 461;
+    y = 650;
+    format = "%8.2f";
+    theText = `::YGN3and4.InterfaceToGUI.Interface.HostOffData.RDTLVLI`;
+    alignment = 0;
+    visibility = `!SETUP`;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 461;
+    yReference = 650;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text RDTLVLF
+  {
+    x = 549;
+    y = 650;
+    format = "%8.2f";
+    theText = `::YGN3and4.InterfaceToGUI.Interface.HostOffData.RDTLVLF`;
+    alignment = 0;
+    visibility = `!SETUP`;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 549;
+    yReference = 650;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 675;
+    y = 327;
+    format = "%s";
+    theText = "TIME";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 675;
+    yReference = 327;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 675;
+    y = 619;
+    format = "%s";
+    theText = "CNMT. TEMPERATURE (DEG C)";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 675;
+    yReference = 619;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text CMTAVGI
+  {
+    x = 991;
+    y = 619;
+    format = "%8.2f";
+    theText = `::YGN3and4.InterfaceToGUI.Interface.HostOffData.CMTAVGI`;
+    alignment = 0;
+    visibility = `!SETUP`;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 991;
+    yReference = 619;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text CMTAVGF
+  {
+    x = 1079;
+    y = 619;
+    format = "%8.2f";
+    theText = `::YGN3and4.InterfaceToGUI.Interface.HostOffData.CMTAVGF`;
+    alignment = 0;
+    visibility = `!SETUP`;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 1079;
+    yReference = 619;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 154;
+    y = 710;
+    format = "%s";
+    theText = "EDT LEVEL (%)";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 154;
+    yReference = 710;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text EDTLVLI
+  {
+    x = 461;
+    y = 711;
+    format = "%8.2f";
+    theText = `::YGN3and4.InterfaceToGUI.Interface.HostOffData.EDTLVLI`;
+    alignment = 0;
+    visibility = `!SETUP`;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 461;
+    yReference = 711;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text EDTLVLF
+  {
+    x = 549;
+    y = 711;
+    format = "%8.2f";
+    theText = `::YGN3and4.InterfaceToGUI.Interface.HostOffData.EDTLVLF`;
+    alignment = 0;
+    visibility = `!SETUP`;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 549;
+    yReference = 711;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 675;
+    y = 363;
+    format = "%s";
+    theText = "SIT1A LEVEL (%)";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 675;
+    yReference = 363;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 154;
+    y = 678;
+    format = "%s";
+    theText = "EDT TEMPERATURE (DEG C)";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 154;
+    yReference = 678;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text EDTTEMPI
+  {
+    x = 461;
+    y = 679;
+    format = "%8.2f";
+    theText = `::YGN3and4.InterfaceToGUI.Interface.HostOffData.EDTTEMPI`;
+    alignment = 0;
+    visibility = `!SETUP`;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 461;
+    yReference = 679;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text EDTTEMPF
+  {
+    x = 549;
+    y = 679;
+    format = "%8.2f";
+    theText = `::YGN3and4.InterfaceToGUI.Interface.HostOffData.EDTTEMPF`;
+    alignment = 0;
+    visibility = `!SETUP`;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 549;
+    yReference = 679;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 675;
+    y = 423;
+    format = "%s";
+    theText = "SIT1B LEVEL (%)";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 675;
+    yReference = 423;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 675;
+    y = 493;
+    format = "%s";
+    theText = "SIT2A LEVEL (%)";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 675;
+    yReference = 493;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 675;
+    y = 559;
+    format = "%s";
+    theText = "SIT2B LEVEL (%)";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 675;
+    yReference = 559;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 466;
+    y = 296;
+    format = "%s";
+    theText = "INITIAL";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 466;
+    yReference = 296;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 558;
+    y = 295;
+    format = "%s";
+    theText = "FINAL";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 558;
+    yReference = 295;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text INITIME
+  {
+    x = 475;
+    y = 326;
+    format = "%s";
+    theText = `&::YGN3and4.InterfaceToGUI.Interface.HostOffData.INITIME[0]`;
+    alignment = 0;
+    visibility = `!SETUP`;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 475;
+    yReference = 326;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text FINTIME
+  {
+    x = 563;
+    y = 326;
+    format = "%s";
+    theText = `&::YGN3and4.InterfaceToGUI.Interface.HostOffData.FINTIME[0]`;
+    alignment = 0;
+    visibility = `!SETUP`;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 563;
+    yReference = 326;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text RXPWRI
+  {
+    x = 461;
+    y = 361;
+    format = "%8.2f";
+    theText = `::YGN3and4.InterfaceToGUI.Interface.HostOffData.RXPWRI`;
+    alignment = 0;
+    visibility = `!SETUP`;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 461;
+    yReference = 361;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text RXPWRF
+  {
+    x = 549;
+    y = 361;
+    format = "%8.2f";
+    theText = `::YGN3and4.InterfaceToGUI.Interface.HostOffData.RXPWRF`;
+    alignment = 0;
+    visibility = `!SETUP`;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 549;
+    yReference = 361;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text RCSCLD1I
+  {
+    x = 461;
+    y = 588;
+    format = "%8.2f";
+    theText = `::YGN3and4.InterfaceToGUI.Interface.HostOffData.RCSCLD1I`;
+    alignment = 0;
+    visibility = `!SETUP`;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 461;
+    yReference = 588;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text RCSCLD1F
+  {
+    x = 549;
+    y = 588;
+    format = "%8.2f";
+    theText = `::YGN3and4.InterfaceToGUI.Interface.HostOffData.RCSCLD1F`;
+    alignment = 0;
+    visibility = `!SETUP`;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 549;
+    yReference = 588;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text PZRPRI
+  {
+    x = 461;
+    y = 520;
+    format = "%8.2f";
+    theText = `::YGN3and4.InterfaceToGUI.Interface.HostOffData.PZRPRI`;
+    alignment = 0;
+    visibility = `!SETUP`;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 461;
+    yReference = 520;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text PZRPRF
+  {
+    x = 549;
+    y = 520;
+    format = "%8.2f";
+    theText = `::YGN3and4.InterfaceToGUI.Interface.HostOffData.PZRPRF`;
+    alignment = 0;
+    visibility = `!SETUP`;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 549;
+    yReference = 520;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text PZRTEMPI
+  {
+    x = 461;
+    y = 454;
+    format = "%8.2f";
+    theText = `::YGN3and4.InterfaceToGUI.Interface.HostOffData.PZRTEMPI`;
+    alignment = 0;
+    visibility = `!SETUP`;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 461;
+    yReference = 454;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text PZRTEMPF
+  {
+    x = 549;
+    y = 454;
+    format = "%8.2f";
+    theText = `::YGN3and4.InterfaceToGUI.Interface.HostOffData.PZRTEMPF`;
+    alignment = 0;
+    visibility = `!SETUP`;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 549;
+    yReference = 454;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text PZRLVLI
+  {
+    x = 461;
+    y = 485;
+    format = "%8.2f";
+    theText = `::YGN3and4.InterfaceToGUI.Interface.HostOffData.PZRLVLI`;
+    alignment = 0;
+    visibility = `!SETUP`;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 461;
+    yReference = 485;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text PZRLVLF
+  {
+    x = 549;
+    y = 485;
+    format = "%8.2f";
+    theText = `::YGN3and4.InterfaceToGUI.Interface.HostOffData.PZRLVLF`;
+    alignment = 0;
+    visibility = `!SETUP`;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 549;
+    yReference = 485;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text VCTTEMPI
+  {
+    x = 461;
+    y = 395;
+    format = "%8.2f";
+    theText = `::YGN3and4.InterfaceToGUI.Interface.HostOffData.VCTTEMPI`;
+    alignment = 0;
+    visibility = `!SETUP`;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 461;
+    yReference = 395;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text VCTTEMPF
+  {
+    x = 549;
+    y = 395;
+    format = "%8.2f";
+    theText = `::YGN3and4.InterfaceToGUI.Interface.HostOffData.VCTTEMPF`;
+    alignment = 0;
+    visibility = `!SETUP`;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 549;
+    yReference = 395;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text VCTLVLI
+  {
+    x = 461;
+    y = 425;
+    format = "%8.2f";
+    theText = `::YGN3and4.InterfaceToGUI.Interface.HostOffData.VCTLVLI`;
+    alignment = 0;
+    visibility = `!SETUP`;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 461;
+    yReference = 425;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text VCTLVLF
+  {
+    x = 549;
+    y = 425;
+    format = "%8.2f";
+    theText = `::YGN3and4.InterfaceToGUI.Interface.HostOffData.VCTLVLF`;
+    alignment = 0;
+    visibility = `!SETUP`;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 549;
+    yReference = 425;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 996;
+    y = 296;
+    format = "%s";
+    theText = "INITIAL";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 996;
+    yReference = 296;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 1088;
+    y = 295;
+    format = "%s";
+    theText = "FINAL";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 1088;
+    yReference = 295;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text INITIME1
+  {
+    x = 1005;
+    y = 326;
+    format = "%s";
+    theText = `&::YGN3and4.InterfaceToGUI.Interface.HostOffData.INITIME[0]`;
+    alignment = 0;
+    visibility = `!SETUP`;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 1005;
+    yReference = 326;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text FINTIME1
+  {
+    x = 1093;
+    y = 327;
+    format = "%s";
+    theText = `&::YGN3and4.InterfaceToGUI.Interface.HostOffData.FINTIME[0]`;
+    alignment = 0;
+    visibility = `!SETUP`;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 1093;
+    yReference = 327;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text SI1ALVLI
+  {
+    x = 991;
+    y = 365;
+    format = "%8.2f";
+    theText = `::YGN3and4.InterfaceToGUI.Interface.HostOffData.SI1ALVLI`;
+    alignment = 0;
+    visibility = `!SETUP`;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 991;
+    yReference = 365;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text SI1ALVLF
+  {
+    x = 1079;
+    y = 365;
+    format = "%8.2f";
+    theText = `::YGN3and4.InterfaceToGUI.Interface.HostOffData.SI1ALVLF`;
+    alignment = 0;
+    visibility = `!SETUP`;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 1079;
+    yReference = 365;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text SI1BLVLI
+  {
+    x = 991;
+    y = 425;
+    format = "%8.2f";
+    theText = `::YGN3and4.InterfaceToGUI.Interface.HostOffData.SI1BLVLI`;
+    alignment = 0;
+    visibility = `!SETUP`;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 991;
+    yReference = 425;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text SI1BLVLF
+  {
+    x = 1079;
+    y = 425;
+    format = "%8.2f";
+    theText = `::YGN3and4.InterfaceToGUI.Interface.HostOffData.SI1BLVLF`;
+    alignment = 0;
+    visibility = `!SETUP`;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 1079;
+    yReference = 425;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text SI2ALVLI
+  {
+    x = 991;
+    y = 493;
+    format = "%8.2f";
+    theText = `::YGN3and4.InterfaceToGUI.Interface.HostOffData.SI2ALVLI`;
+    alignment = 0;
+    visibility = `!SETUP`;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 991;
+    yReference = 493;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text SI2ALVLF
+  {
+    x = 1079;
+    y = 493;
+    format = "%8.2f";
+    theText = `::YGN3and4.InterfaceToGUI.Interface.HostOffData.SI2ALVLF`;
+    alignment = 0;
+    visibility = `!SETUP`;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 1079;
+    yReference = 493;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text SI2BLVLI
+  {
+    x = 991;
+    y = 559;
+    format = "%8.2f";
+    theText = `::YGN3and4.InterfaceToGUI.Interface.HostOffData.SI2BLVLI`;
+    alignment = 0;
+    visibility = `!SETUP`;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 991;
+    yReference = 559;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text SI2BLVLF
+  {
+    x = 1079;
+    y = 558;
+    format = "%8.2f";
+    theText = `::YGN3and4.InterfaceToGUI.Interface.HostOffData.SI2BLVLF`;
+    alignment = 0;
+    visibility = `!SETUP`;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 1079;
+    yReference = 558;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text OFUNLEAK
+  {
+    x = 776;
+    y = 36;
+    format = "%8.2f";
+    theText = `::YGN3and4.InterfaceToGUI.Interface.HostOffData.OFUNLEAK`;
+    alignment = 0;
+    visibility = `!SETUP`;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font7`;
+    xReference = 776;
+    yReference = 36;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text VCTDIFF
+  {
+    x = 510;
+    y = 177;
+    format = "%8.2f";
+    theText = `::YGN3and4.InterfaceToGUI.Interface.HostOffData.VCTDIFF`;
+    alignment = 0;
+    visibility = `!SETUP`;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 510;
+    yReference = 177;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text PZRDIFF
+  {
+    x = 510;
+    y = 210;
+    format = "%8.2f";
+    theText = `::YGN3and4.InterfaceToGUI.Interface.HostOffData.PZRDIFF`;
+    alignment = 0;
+    visibility = `!SETUP`;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 510;
+    yReference = 210;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text RCSDIFF
+  {
+    x = 510;
+    y = 239;
+    format = "%8.2f";
+    theText = `::YGN3and4.InterfaceToGUI.Interface.HostOffData.RCSDIFF`;
+    alignment = 0;
+    visibility = `!SETUP`;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 510;
+    yReference = 239;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text OFDVOL
+  {
+    x = 510;
+    y = 128;
+    format = "%8.2f";
+    theText = `::YGN3and4.InterfaceToGUI.Interface.HostOffData.OFDVOL`;
+    alignment = 0;
+    visibility = `!SETUP`;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 510;
+    yReference = 128;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text OFIDVOL
+  {
+    x = 510;
+    y = 96;
+    format = "%8.2f";
+    theText = `::YGN3and4.InterfaceToGUI.Interface.HostOffData.OFIDVOL`;
+    alignment = 0;
+    visibility = `!SETUP`;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 510;
+    yReference = 96;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text RDTDIFF
+  {
+    x = 1046;
+    y = 177;
+    format = "%8.2f";
+    theText = `::YGN3and4.InterfaceToGUI.Interface.HostOffData.RDTDIFF`;
+    alignment = 0;
+    visibility = `!SETUP`;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 1046;
+    yReference = 177;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text EDTDIFF
+  {
+    x = 1046;
+    y = 209;
+    format = "%8.2f";
+    theText = `::YGN3and4.InterfaceToGUI.Interface.HostOffData.EDTDIFF`;
+    alignment = 0;
+    visibility = `!SETUP`;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 1046;
+    yReference = 209;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text DIFFSIT
+  {
+    x = 1046;
+    y = 237;
+    format = "%8.2f";
+    theText = `::YGN3and4.InterfaceToGUI.Interface.HostOffData.DIFFSIT`;
+    alignment = 0;
+    visibility = `!SETUP`;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 1046;
+    yReference = 237;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text OFLEAK
+  {
+    x = 1046;
+    y = 128;
+    format = "%8.2f";
+    theText = `::YGN3and4.InterfaceToGUI.Interface.HostOffData.OFLEAK`;
+    alignment = 0;
+    visibility = `!SETUP`;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 1046;
+    yReference = 128;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text OFIDLEAK
+  {
+    x = 1046;
+    y = 96;
+    format = "%8.2f";
+    theText = `::YGN3and4.InterfaceToGUI.Interface.HostOffData.OFIDLEAK`;
+    alignment = 0;
+    visibility = `!SETUP`;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 1046;
+    yReference = 96;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 154;
+    y = 553;
+    format = "%s";
+    theText = "RCS HOT LEG TEMP. (DEG C)";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 154;
+    yReference = 553;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text RCSHOT1I
+  {
+    x = 461;
+    y = 553;
+    format = "%8.2f";
+    theText = `::YGN3and4.InterfaceToGUI.Interface.HostOffData.RCSCLD1I`;
+    alignment = 0;
+    visibility = `!SETUP`;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 461;
+    yReference = 553;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text RCSHOT1F
+  {
+    x = 549;
+    y = 553;
+    format = "%8.2f";
+    theText = `::YGN3and4.InterfaceToGUI.Interface.HostOffData.RCSCLD1F`;
+    alignment = 0;
+    visibility = `!SETUP`;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 549;
+    yReference = 553;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 675;
+    y = 393;
+    format = "%s";
+    theText = "SIT1A PRESS. (KG/CM2G)";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 675;
+    yReference = 393;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text SI1APRI
+  {
+    x = 991;
+    y = 395;
+    format = "%8.2f";
+    theText = `::YGN3and4.InterfaceToGUI.Interface.HostOffData.SI1APRI`;
+    alignment = 0;
+    visibility = `!SETUP`;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 991;
+    yReference = 395;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text SI1APRF
+  {
+    x = 1079;
+    y = 395;
+    format = "%8.2f";
+    theText = `::YGN3and4.InterfaceToGUI.Interface.HostOffData.SI1APRF`;
+    alignment = 0;
+    visibility = `!SETUP`;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 1079;
+    yReference = 395;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 675;
+    y = 458;
+    format = "%s";
+    theText = "SIT1B PRESS. (KG/CM2G)";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 675;
+    yReference = 458;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text SI1BPRI
+  {
+    x = 991;
+    y = 460;
+    format = "%8.2f";
+    theText = `::YGN3and4.InterfaceToGUI.Interface.HostOffData.SI1BPRI`;
+    alignment = 0;
+    visibility = `!SETUP`;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 991;
+    yReference = 460;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text SI1BPRF
+  {
+    x = 1079;
+    y = 460;
+    format = "%8.2f";
+    theText = `::YGN3and4.InterfaceToGUI.Interface.HostOffData.SI1BPRF`;
+    alignment = 0;
+    visibility = `!SETUP`;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 1079;
+    yReference = 460;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 675;
+    y = 525;
+    format = "%s";
+    theText = "SIT2A PRESS. (KG/CM2G)";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 675;
+    yReference = 525;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text SI2APRI
+  {
+    x = 991;
+    y = 525;
+    format = "%8.2f";
+    theText = `::YGN3and4.InterfaceToGUI.Interface.HostOffData.SI2APRI`;
+    alignment = 0;
+    visibility = `!SETUP`;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 991;
+    yReference = 525;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text SI2APRF
+  {
+    x = 1079;
+    y = 525;
+    format = "%8.2f";
+    theText = `::YGN3and4.InterfaceToGUI.Interface.HostOffData.SI2APRF`;
+    alignment = 0;
+    visibility = `!SETUP`;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 1079;
+    yReference = 525;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 675;
+    y = 588;
+    format = "%s";
+    theText = "SIT2B PRESS. (KG/CM2G)";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 675;
+    yReference = 588;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text SI2BPRI
+  {
+    x = 991;
+    y = 590;
+    format = "%8.2f";
+    theText = `::YGN3and4.InterfaceToGUI.Interface.HostOffData.SI2BPRI`;
+    alignment = 0;
+    visibility = `!SETUP`;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 991;
+    yReference = 590;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text SI2BPRF
+  {
+    x = 1079;
+    y = 590;
+    format = "%8.2f";
+    theText = `::YGN3and4.InterfaceToGUI.Interface.HostOffData.SI2BPRF`;
+    alignment = 0;
+    visibility = `!SETUP`;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 1079;
+    yReference = 590;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle
+  {
+    x = 101;
+    y = 68;
+    width = 539;
+    height = 190;
+    visibility = 1;
+    foregroundColour = `COLOR_LINE_BOUNDARY_6`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 2;
+    foregroundFillColour = -1;
+    backgroundFillColour = -1;
+    fillPattern = `NoPattern`;
+    xReference = 65;
+    yReference = 80;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle
+  {
+    x = 643;
+    y = 68;
+    width = 537;
+    height = 190;
+    visibility = 1;
+    foregroundColour = `COLOR_LINE_BOUNDARY_6`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 2;
+    foregroundFillColour = -1;
+    backgroundFillColour = -1;
+    fillPattern = `NoPattern`;
+    xReference = 640;
+    yReference = 80;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle
+  {
+    x = 101;
+    y = 266;
+    width = 539;
+    height = 459;
+    visibility = 1;
+    foregroundColour = `COLOR_LINE_BOUNDARY_6`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 2;
+    foregroundFillColour = -1;
+    backgroundFillColour = -1;
+    fillPattern = `NoPattern`;
+    xReference = 65;
+    yReference = 278;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle
+  {
+    x = 643;
+    y = 266;
+    width = 537;
+    height = 459;
+    visibility = 1;
+    foregroundColour = `COLOR_LINE_BOUNDARY_6`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 2;
+    foregroundFillColour = -1;
+    backgroundFillColour = -1;
+    fillPattern = `NoPattern`;
+    xReference = 605;
+    yReference = 278;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  polygon
+  {
+    numberOfPoints = 2;
+    point[0] = ( 100, 145 );
+    point[1] = ( 639, 145 );
+    visibility = 1;
+    foregroundColour = `COLOR_LINE_BOUNDARY_6`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 2;
+    foregroundFillColour = `COLOR_NON_ESSENTIAL`;
+    backgroundFillColour = -1;
+    fillPattern = `SolidPattern`;
+    xReference = 100;
+    yReference = 145;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  polygon
+  {
+    numberOfPoints = 2;
+    point[0] = ( 642, 145 );
+    point[1] = ( 1181, 145 );
+    visibility = 1;
+    foregroundColour = `COLOR_LINE_BOUNDARY_6`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 2;
+    foregroundFillColour = `COLOR_NON_ESSENTIAL`;
+    backgroundFillColour = -1;
+    fillPattern = `SolidPattern`;
+    xReference = 642;
+    yReference = 145;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+}

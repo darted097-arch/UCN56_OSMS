@@ -1,0 +1,316 @@
+/*
+ * ProcSee CONFIGURATION LANGUAGE FILE
+ *
+ *
+ * User : ucn56
+ * Host : y6cr02
+ * Date : 2017-01-12
+ * Time : 17:24:51
+ *
+ * ProcSee version : ProcSee 3.10.1 (June 2016)
+ * File version    : 1.26
+ *
+ *
+ */
+
+
+picture PicUCN_EQUIP_RUNTIME_MENU
+{
+  worldX = 0;
+  worldY = 0;
+  worldWidth = 1280;
+  worldHeight = 824;
+  oneToOne = 1;
+  backgroundColour = 0;
+  updateMode = 2;
+  resizeMode = 0;
+  xSnap = 5;
+  ySnap = 5;
+  radiusSnap = 0;
+  angleSnap = 0;
+  crosshairStyle = 1;
+  crosshairLength = 0;
+  crosshairFollowSnap = `isInEditMode()`;
+  crosshairVisibility = `isInEditMode()`;
+  xReference = 500;
+  yReference = 500;
+  xScaleFactor = 1;
+  yScaleFactor = 1;
+  rotationAngle = 0;
+
+  char EscDisplayPage[50] = "PicUCN_NSSSBOPApplication.ppic";
+
+  char PictureNumber[50] = "635";
+
+  char PictureTitle[50] = "EQUIPMENT   RUN   TIME   CALCULATION";
+
+  int TheFontColor = 4;
+
+  int TheTextFont = `font4`;
+
+  CCUR_Equip_Msg *pHostEquipMsg = `&Interface->hostEquipMsg`;
+
+  function `void escape()
+  {
+     execute("{DisplayPage(\\"%s\\");}",EscDisplayPage);
+     update();
+  }`
+
+  function `void Initialize()
+  {
+     CFMLevel = 0;
+     Current_Page = 635;
+
+     procMsg.visibility = 0;
+
+     InitConfirmMessages();
+     
+     update();
+  
+  }`
+
+  function `void InitConfirmMessages()
+  {
+	DisplayAdvisoryMessage("   ");
+	DisplayAdvisoryMessage1("   ");
+	DisplayAdvisoryMessage2("   ");
+	DisplayAdvisoryMessage3("   ");
+
+	strcpy(pHostEquipMsg->message1,"");
+	strcpy(pHostEquipMsg->message2,"");
+	strcpy(pHostEquipMsg->message3,"");
+  }`
+
+  function `void PrintRequest()
+  {
+	InitConfirmMessages();
+	DisplayAdvisoryMessage("EQUIPMENT RUNNING STATUS REPORT REQUESTED");
+	Interface->wsEquipPrnData.PAGENUM = Current_Page;
+	execute("{sendMessageToHost(REQUEST_EQUIPPRN);}");
+	procMsg.visibility = 1;
+  }`
+
+  function `void ProcessingConfirmed()
+  {
+	procMsg.visibility = 0;
+
+	DisplayAdvisoryMessage("   ");
+	DisplayAdvisoryMessage1("   ");
+	DisplayAdvisoryMessage2("   ");
+
+	DisplayAdvisoryMessage(pHostEquipMsg->message1);
+	DisplayAdvisoryMessage1(pHostEquipMsg->message2);
+	DisplayAdvisoryMessage2(pHostEquipMsg->message3);
+
+  }`
+
+/*
+  function `int KludgeConfirm()
+  {
+  	printf("sent[%d]---receive[%d]", Interface->System.sentData, Interface->System.receivedData);
+	printf("message is [%s]", Interface->hostEquipPrnData.messages);
+	if(Interface->System.sentData && Interface->System.receivedData)
+	{
+		DisplayAdvisoryMessage(Interface->hostEquipPrnData.messages);
+		procMsg.visibility = 0;
+		Interface->System.sentData = 0;
+		Interface->System.receivedData = 0;
+	}
+	return (1);
+  }`
+  */
+
+  dialogue
+  {
+    event = `keyPressed(0xFF1B)`;
+    action = `{
+    escape();
+    }`;
+  }
+
+  dialogue
+  {
+    event = `keyReleased(0x31) || keyReleased(0xFFB1)`;
+    action = `{
+    m1.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+    m1.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+    
+    m1.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+    m1.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+    m1.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+    m1.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+    
+    m1.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    m1.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    m1.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    m1.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    
+       execute("{DisplayPage(\\"%s\\");}",m1.TheDisplayPage);
+      
+    }`;
+  }
+
+  dialogue
+  {
+    event = `keyReleased(0x32) || keyReleased(0xFFB2)`;
+    action = `{
+    m2.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+    m2.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+    
+    m2.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+    m2.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+    m2.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+    m2.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+    
+    m2.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    m2.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    m2.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    m2.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    
+       execute("{DisplayPage(\\"%s\\");}",m2.TheDisplayPage);
+       
+    }
+    `;
+  }
+
+  dialogue
+  {
+    event = `keyReleased(0x33) || keyReleased(0xFFB3)`;
+    action = `{
+    m3.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+    m3.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+    
+    m3.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+    m3.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+    m3.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+    m3.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+    
+    m3.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    m3.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    m3.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    m3.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    
+    PrintRequest();
+       
+    }`;
+  }
+
+  rectangle
+  {
+    x = 130;
+    y = 0;
+    width = 0;
+    height = 0;
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = 0;
+    linePattern = `SolidPattern`;
+    lineWidth = 0;
+    foregroundFillColour = 0;
+    backgroundFillColour = -1;
+    fillPattern = `NoPattern`;
+    xReference = 130;
+    yReference = 0;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  instance DialogueSymbols.LargeMenuSelectionMid m1
+  {
+    x = 325.556;
+    y = 332.222;
+    visibility = 1;
+    xReference = 325.556;
+    yReference = 332.222;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Cascade = 0;
+    CascadeX = 400;
+    CascadeY = 400;
+    TheDisplayPage = "PicUCN_EQUIP_CAL_VALUE.ppic";
+    TheFontColor = 2;
+    TheOption = "1.";
+    TheTextFont = `font6`;
+    TheTitle = "EQUIPMENT CALCULATION VALUES CHANGE";
+  }
+
+  instance DialogueSymbols.LargeMenuSelectionMid m2
+  {
+    x = 325;
+    y = 391.111;
+    visibility = 1;
+    xReference = 300;
+    yReference = 391.111;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Cascade = 0;
+    CascadeX = 400;
+    CascadeY = 400;
+    TheDisplayPage = "PicUCN_EQUIP_RUN_STATUS.ppic";
+    TheFontColor = 2;
+    TheOption = "2.";
+    TheTextFont = `font6`;
+    TheTitle = "EQUIPMENT RUNNING STATUS   TO CRT";
+  }
+
+  instance DialogueSymbols.LargeMenuSelectMid m3
+  {
+    x = 325;
+    y = 452.222;
+    visibility = 1;
+    xReference = 321.111;
+    yReference = 452.222;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Cascade = 0;
+    CascadeX = 400;
+    CascadeY = 400;
+    ExecuteString = "PrintRequest()";
+    TheFontColor = 2;
+    TheOption = "3.";
+    TheTextFont = `font6`;
+    TheTitle = "EQUIPMENT RUNNING STATUS   TO PRINTER";
+  }
+
+/*
+  text message1
+  {
+    x = 55;
+    y = 690;
+    format = "%s";
+    theText = "";
+    alignment = 0;
+    visibility = `KludgeConfirm()`;
+    foregroundColour = `COLOR_BAD_OOR_UNACK`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 55;
+    yReference = 690;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+  */
+
+  text procMsg
+  {
+    x = 489;
+    y = 664.889;
+    format = "%s";
+    theText = "PROCESSING... WAIT";
+    alignment = 0;
+    visibility = 0;
+    foregroundColour = `COLOR_POPUP_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 488.889;
+    yReference = 664.444;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+}

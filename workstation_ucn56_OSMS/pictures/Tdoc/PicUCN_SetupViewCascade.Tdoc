@@ -1,0 +1,348 @@
+/*
+ * PICASSO-3 CONFIGURATION LANGUAGE FILE
+ *
+ *
+ * Picture name: PicUCN_SetupViewCascade
+ *
+ *
+ * Documented by  : asn
+ * Host           : y5maint1
+ * Date           : 16/12-96 at 06:49:41
+ *
+ *
+ * Generate with:
+ *    pcc PicUCN_SetupViewCascade.Tdoc
+ *
+ */
+
+
+picture PicUCN_SetupViewCascade
+{
+
+  function `void Initialize()
+{
+// if the user escapes from the widow without making a 
+// selection, the objetc remains "selected";
+// Reset all active colors
+   VideoTrends.TheFontColor = \`COLOR_STATIC_TEXT\`;
+   DigitalTrends.TheFontColor = \`COLOR_STATIC_TEXT\`;
+   GroupDisplays.TheFontColor = \`COLOR_STATIC_TEXT\`;
+   SinglePoint.TheFontColor = \`COLOR_STATIC_TEXT\`;
+   Barcharts.TheFontColor = \`COLOR_STATIC_TEXT\`;
+   PenRecorders.TheFontColor = \`COLOR_STATIC_TEXT\`;
+   update();
+}`
+
+
+
+  rectangle 
+  {
+    x = 3;
+    y = 8;
+    width = 308;
+    height = 395;
+
+    visibility = 1;
+    foregroundFillColour = `COLOR_PICTURE_BACKGROUND`;
+    backgroundFillColour = -1;
+    foregroundColour = `(CascadeMenuActive && !CascadeEnterActive)?COLOR_DATA_NORMAL:COLOR_STATIC_TEXT`;
+    backgroundColour = -1;
+    lineWidth = 7;
+    linePattern = 1;
+    fillPattern = 1;
+    xReference = 9;
+    yReference = 15;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 49;
+    y = 35;
+    format = "%s";
+    theText = "Setup/View Data Menu";
+
+    visibility = 1;
+    foregroundColour = `(CascadeMenuActive && !CascadeEnterActive)?COLOR_DATA_NORMAL:COLOR_STATIC_TEXT`;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 49;
+    yReference = 35;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  instance DialogueSymbols.SmallMenuSelection VideoTrends
+  {
+    attribute TheOption = "1";
+    attribute TheFontColor = `COLOR_STATIC_TEXT`;
+    attribute TheTitle = "VIDEO TRENDS";
+    attribute TheDisplayPage = "PicUCN_VideoTrendMenu.ppic";
+    attribute Cascade = 0;
+    attribute CascadeX = 400;
+    attribute CascadeY = 400;
+    attribute CursorX = 10;
+    attribute CursorY = 10;
+    x = 14;
+    y = 95;
+    visibility = 1;
+    xReference = 24;
+    yReference = 95;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance VideoTrends
+
+
+
+  line 
+  {
+    numberOfPoints = 2;
+
+    point[0] = (9, 45);
+    point[1] = (304, 45);
+
+    visibility = 1;
+    foregroundColour = `(CascadeMenuActive && !CascadeEnterActive)?COLOR_DATA_NORMAL:COLOR_STATIC_TEXT`;
+    backgroundColour = -1;
+    lineWidth = 3;
+    lineStyle = `SolidPattern`;
+    xReference = 9;
+    yReference = 45;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  instance DialogueSymbols.SmallMenuSelection DigitalTrends
+  {
+    attribute TheOption = "2";
+    attribute TheFontColor = `COLOR_STATIC_TEXT`;
+    attribute TheTitle = "DIGITAL TRENDS";
+    attribute TheDisplayPage = "PicUCN_DigitalTrendMenu.ppic";
+    attribute Cascade = 0;
+    attribute CascadeX = 400;
+    attribute CascadeY = 400;
+    attribute CursorX = 10;
+    attribute CursorY = 10;
+    x = 14;
+    y = 130;
+    visibility = 1;
+    xReference = 29;
+    yReference = 135;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance DigitalTrends
+
+
+
+  instance DialogueSymbols.SmallMenuSelection GroupDisplays
+  {
+    attribute TheOption = "3";
+    attribute TheFontColor = `COLOR_STATIC_TEXT`;
+    attribute TheTitle = "GROUP DISPLAYS";
+    attribute TheDisplayPage = "PicUCN_GroupDisplayMenu.ppic";
+    attribute Cascade = 0;
+    attribute CascadeX = 400;
+    attribute CascadeY = 400;
+    attribute CursorX = 10;
+    attribute CursorY = 10;
+    x = 14;
+    y = 165;
+    visibility = 1;
+    xReference = 29;
+    yReference = 190;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance GroupDisplays
+
+
+
+  instance DialogueSymbols.SmallMenuSelection SinglePoint
+  {
+    attribute TheOption = "4";
+    attribute TheFontColor = `COLOR_STATIC_TEXT`;
+    attribute TheTitle = "SINGLE POINT DISPLAY";
+    attribute TheDisplayPage = "PicUCN_SinglePointCascade.ppic";
+    attribute Cascade = 1;
+    attribute CascadeX = 550;
+    attribute CascadeY = 400;
+    attribute CursorX = 200;
+    attribute CursorY = 220;
+    x = 14;
+    y = 200;
+    visibility = 1;
+    xReference = 14;
+    yReference = 245;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance SinglePoint
+
+
+
+  instance DialogueSymbols.SmallMenuSelection Barcharts
+  {
+    attribute TheOption = "5";
+    attribute TheFontColor = `COLOR_STATIC_TEXT`;
+    attribute TheTitle = "BAR CHARTS";
+    attribute TheDisplayPage = "PicUCN_BarChartMenu.ppic";
+    attribute Cascade = 0;
+    attribute CascadeX = 400;
+    attribute CascadeY = 400;
+    attribute CursorX = 10;
+    attribute CursorY = 10;
+    x = 14;
+    y = 235;
+    visibility = 1;
+    xReference = 24;
+    yReference = 305;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance Barcharts
+
+
+
+  instance DialogueSymbols.SmallMenuSelection PenRecorders
+  {
+    attribute TheOption = "6";
+    attribute TheFontColor = `COLOR_STATIC_TEXT`;
+    attribute TheTitle = "PEN RECORDERS";
+    attribute TheDisplayPage = "PicUCN_PenRecorderMenu.ppic";
+    attribute Cascade = 0;
+    attribute CascadeX = 400;
+    attribute CascadeY = 400;
+    attribute CursorX = 10;
+    attribute CursorY = 10;
+    x = 14;
+    y = 330;
+    visibility = 1;
+    xReference = 29;
+    yReference = 340;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance PenRecorders
+
+
+
+  text 
+  {
+    x = 19;
+    y = 75;
+    format = "%s";
+    theText = "CRT DISPLAYS:";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 19;
+    yReference = 75;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  line 
+  {
+    numberOfPoints = 2;
+
+    point[0] = (19, 80);
+    point[1] = (159, 80);
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineWidth = 0;
+    lineStyle = `SolidPattern`;
+    xReference = 19;
+    yReference = 80;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 19;
+    y = 310;
+    format = "%s";
+    theText = "OTHER DEVICES:";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 19;
+    yReference = 75;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  line 
+  {
+    numberOfPoints = 2;
+
+    point[0] = (19, 315);
+    point[1] = (174, 315);
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineWidth = 0;
+    lineStyle = `SolidPattern`;
+    xReference = 19;
+    yReference = 315;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+// The picture's other attributes:
+
+  backgroundColour    = 0;
+  xSnap               = 5;
+  ySnap               = 5;
+  angleSnap           = 0;
+  radiusSnap          = 0;
+  worldX              = 0;
+  worldY              = 0;
+  worldWidth          = 320;
+  worldHeight         = 420;
+  oneToOne            = 1;
+  resizeMode          = 0;
+  updateMode          = 2;
+  crosshairStyle      = 1;
+  crosshairLength     = 0;
+  crosshairFollowSnap = `isInEditMode()`;
+  crosshairVisibility = `isInEditMode()`;
+  xReference = 500;
+  yReference = 500;
+  xScaleFactor = 1;
+  yScaleFactor = 1;
+  rotationAngle = 0;
+
+
+}  // end of picture PicUCN_SetupViewCascade

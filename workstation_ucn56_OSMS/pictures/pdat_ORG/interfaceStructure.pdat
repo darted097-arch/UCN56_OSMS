@@ -1,0 +1,264 @@
+// ***************************************************************************
+// *									     *
+// *	Copyright (C) 1996, ABB-CE Inc., All rights reserved.		     *
+// *	Proprietary information, ABB-CE Incorporated			     *
+// *									     *
+// ***************************************************************************
+//
+// ***** HIGH LEVEL DESCRIPTION **********************************************
+//
+// This structure contains system attributes which are passed from the Picasso Glue task 
+// to the GUI.  This data will be in a shared memory segment.
+//
+// **** REVISION HISTORY *****************************************************
+//
+// Revision 1.29  CORENET 2017.02.16 added.
+// Author: feel9zero@core-net.co.kr (Phil-kyu Kwon)
+// Added New Picture's structures.
+// (EQUIPStructure.pdat, printPIDTestStructure.pdat, portion of RCSLeakStructures.pdat)
+//
+// $Header: /PMSArchive/ygn56/workstation/pictures/pdat/interfaceStructure.pdat 1.28 1998/09/25 14:43:33 leo Exp $
+// $Log: interfaceStructure.pdat,v $
+// Revision 1.28  1998/09/25 14:43:33  leo
+// Author: leo@y6maint1 (Leo Olbrych)
+// Removed curPicName from Interface structure. Removed references to curPicName
+// in this file.
+//
+// Revision 1.27  1998/06/23 18:18:17  jws
+// Author: jws@y6maint1 (John Soisson)
+// Added two new system variables for FDDI Channel A and
+// Channel B status to the Interface structure.
+//
+// Revision 1.26  1998/06/10 21:01:54  gcs
+// Author: gcs@y6maint1 (Gail Sibley)
+// Added variables for Link Status page.
+//
+// Revision 1.25  1998/06/01 20:17:49  gcs
+// Author: gcs@y6maint1 (Gail Sibley)
+// Removed BdlPageOn,CalPageOn,OrlPageOn.
+//
+// Revision 1.24  1998/03/24 23:28:46  leo
+// Author: leo@y6maint1.usnus.abb.com (Leo Olbrych)
+// Initial WS state implementation.  Added wsState to System struct.
+//
+// Revision 1.23  1998/02/17 23:09:37  kn1
+// Author: kn1@y6maint1.usnus.abb.com (Kopec NSSS 1)
+// Kopec NSSS Phase 2 Status 1.  Removed newCEAMessageFlag and other flags used
+// in the footer. No longer used.
+//
+// Revision 1.22  1998/02/17 14:56:52  kn1
+// Author: kn1@y6maint1.usnus.abb.com (Kopec NSSS 1)
+// Kopec NSSS Phase 2 Status 1.  Removed processByException from System structure.
+//
+// Revision 1.21  1998/01/20 22:38:23  leo
+// Author: leo@y6maint1.usnus.abb.com (Leo Olbrych)
+// Preliminary implementation of reduction in size of permanent shopping list.
+// Preliminary implementation for reduction in size of permanent shopping list.
+//
+// Revision 1.20  1997/12/08 15:42:11  leo
+// Author: leo@y6maint1.usnus.abb.com (Leo Olbrych)
+// Changed hostNum to cpuNum.
+//
+// Revision 1.19  1997/12/03 19:10:34  gcs
+// Author: gcs@y6maint1.usnus.abb.com (Gail Sibley)
+// Added flags to indicate if BDL, CAL, and ORL pages are on (displayed) or not.
+//
+// Revision 1.18  1997/11/03 21:32:35  jws
+// Author: jws@y6maint1.usnus.abb.com (John Soisson)
+// Kopec NSSS Phase1 Status1. Modified to support delivery.
+//
+// Revision 1.17  1997/10/15 00:14:42  leo
+// Author: leo@y6maint1.usnus.abb.com (Leo Olbrych)
+// Removed variables that were not used to interface with Picasso and put them in
+// a new shared memory object InterProcSMObject.
+//
+// Revision 1.16  1997/10/10 18:10:47  gcs
+// Author: gcs@y6maint1.usnus.abb.com (Gail Sibley)
+// Added structures for Bad Data List and Out of Range List
+//
+// Revision 1.15  1997/09/24 18:21:40  kn1
+// Author: kn1@y6maint1.usnus.abb.com (Kopec NSSS 1)
+// Kopec NSSS Phase 3 Status 2. Modified to support delivery.
+//
+// Revision 1.14  1997/09/09 18:42:39  leo
+// Author: leo@y6maint1.usnus.abb.com (Leo Olbrych)
+// Added hostName array of pointers to host names, hostNum, and connected
+// variables to SYSVARS structure.
+//
+// Revision 1.13  1997/07/31 19:30:03  gcs
+// Author: gcs@y6maint1.usnus.abb.com (Gail Sibley)
+// Changed name of Current Alarm List Structure
+//
+// Revision 1.12  1997/07/25 10:38:32  gcs
+// Author: gcs@y6maint1 (Gail Sibley)
+// Added structures for Current Alarm List Page
+//
+// Revision 1.11  1997/07/18 17:11:25  leo
+// Author: leo@y6maint1 (Leo Olbrych)
+// Removed opcodeReceived for SYSVARS structure. Not used anywhere.
+//
+// Revision 1.10  1997/06/11 18:16:34  leo
+// Author: leo@y6maint1.usnus.abb.com (Leo Olbrych)
+// In SYSVARS, replace rtmInitialized with pidWSPCS. Added receivedDBdownload.
+//
+// Revision 1.9  1997/06/05 20:31:40  leo
+// Author: leo@y6maint1.usnus.abb.com (Leo Olbrych)
+// Added int rtmInitialized to SYSVARS structure.
+//
+// Revision 1.8  1997/05/30 21:51:47  leo
+// Author: leo@y6maint1.usnus.abb.com (Leo Olbrych)
+// Replaced pid_t with int for process id type variables.
+//
+// Revision 1.7  1997/05/30 21:20:03  leo
+// Author: leo@y6maint1.usnus.abb.com (Leo Olbrych)
+// Added process ids for tasks.
+//
+// Revision 1.6  1997/05/13 16:49:35  kn1
+// Author: kn1@y6maint1.usnus.abb.com (Kopec NSSS 1)
+// Kopec Nsss Phase 2 Status 2 delivery.
+//
+// Revision 1.5  1997/04/08 21:07:47  kn1
+// Author: kn1@y6maint1.usnus.abb.com (Kopec NSSS 1)
+// KN Phase 1 Status 2 Delivery.  Added structures to support delivery.
+//
+// Revision 1.4  1997/03/07 21:57:10  leo
+// Author: leo@y6maint1.usnus.abb.com (Leo Olbrych)
+// Removed use of Interface->System.[received,sent]Data. These have been removed
+// from the SYSVARS structure.
+//
+// Revision 1.3  1997/01/28 19:55:12  leo
+// Author: leo@y6maint1.usnus.abb.com (Leo Olbrych)
+// Added structure for database change functions.
+//
+// Revision 1.2  1996/12/16 12:26:24  asn
+// Author: asn@y6maint1.usnus.abb.com (Arthur Nowell)
+// added single point display structure
+//
+//
+// ***************************************************************************
+// System Include Files: NONE
+//
+//
+// User Defined Include Files: NONE
+//
+//
+// External Variables: NONE
+//
+//
+// Local Constant Definitions: NONE
+//
+//
+// Function Prototypes: NONE
+//
+//
+// ***************************************************************************
+//
+//
+
+struct  SYSVARS {
+   int	PicassoId;			// Picasso identifier
+   int	databaseRevision;		// loaded database revision
+   int	sentData;			// 1=GUI sent data to host
+   int	receivedData;			// 1=host sent data to GUI
+   int	opcodeReceived;			// last opcode received from host
+   int	displayedUnits;			// 1=Metric, 0=English
+   int	slaveUpdating;			// 1=Slave, 0=Master updating the display
+   char	timeString[12];			// HH:MM:SS with 3 pad bytes
+   char dateString[12];			// MM/DD/YY with 3 pad bytes
+   int  cpuNum;                         // 0 = NONE, 1 = CPU1, 1 = CPU 2
+   int  connected;                      // 1 = connected, 0 = not connected to host
+   int	wsState;			// state variable for workstation
+   int	FDDIChanA;			// status of FDDI Channel A
+   int	FDDIChanB;			// status of FDDI Channel B
+   };
+//
+// Interface Variables Structure
+//
+struct INTERFACE {
+   WSresponseMessage	        GenericResponseMessage;	  // Generic response message
+   WSrequestMessage	        GenericRequestMessage;    // Generic request message
+   WSconfirmMessage	        GenericConfirmMessage;    // Generic confirm message
+   GRconfirmMessage             GRConfirmMessage;         // Group Display confirm message
+   PEN_DATA		        PenRecorderData;	  // Variables for Pen Recorders
+   BAR_DATA		        BarChartData;		  // by KWANG
+   Colss_Data		        ColssData; 		  // Variables for COLSS
+   XRBP_ALL_DATA                XRBP;                     // XRBP Input/Output Data
+   XRBPAUTO_DATA                XRBPAUTO;                 // XRBPAUTO Output Data 
+   SINGLE_POINT		        SinglePointDisplay;	  // Variables for the Single Point Display
+   DB_CHANGE_DATA	        DatabaseDisplaysData;	  // Variables for database change functions
+                                                          // (Change Scan, Change Limits, 
+						          // Change Alarm, Insert Value)
+   LSF_INF                      LSF_Info_Data;             // Variables for Sensor Count Limits
+   RPCCEAModeMessage            RPCCEACurrentModeMessage; // RPCCEA: Current Mode message
+
+   CEAAlarmLimitMsg             CEAAlarmLimitData;        // cea alarm limit display 
+   CEADropSelectMsg             CEADropSelectData;        // CEA drop testing
+   CEDMCSDataUpLoadMsg          CEDMCSDataUpLoadData;     // cedmcs data transfer 
+
+   // 20061116 for CEATRACK
+   WS_IndiCeaMonitor1_Message   CEATrackingMonitor1;   // CEA Tracking Monitor display
+   WS_IndiCeaMonitor2_Message   CEATrackingMonitor2;   // CEA Tracking Monitor display
+   WS_SubDeviMonitor_Message    CEATrackingMonitor3;   // CEA Tracking Monitor display
+   WS_CPCTargetMonitor_Message  CEATrackingMonitor4;   // CEA Tracking Monitor display
+   WS_CEAPosComparision_Message CEATrackingMonitor5;   // CEA Tracking Monitor display
+   WS_CEATrack_Prn_Rst_Message  CEATrackingMonitor6;   // CEA Tracking Monitor display
+   WS_CEATrack_Prn_Rst_Message  CEATrackingMonitor9;   // CEA Tracking Monitor display
+
+   IncoreDataTemplate	        IncoreData;		  // Incore: Incore Processing Data
+   Group_Info_Data              GroupDisplay;  	          // all GROUP Data   ,received data
+   Group_Update	                GroupMember;              // one Group Data   ,request
+   WSPRTSUMRequestMessage       PRTSUM_REQUEST_MESSAGE;   // Print Summary request message ==ywjung===
+   WSPRTSUMConfirmMessage       PRTSUM_CONFIRM_MESSAGE;   // Print Summary confirm message ==ywjung===   
+   WSSecureDataMessage          SecureRequest;
+   WSSecureProcessingMessage    SecureConfirm;
+   WSBOPDMDRequestMessage       BOPDMD_REQUEST_MESSAGE;   // BOP Calculations request message ==jklee===
+   WSBOPDMDConfirmMessage       BOPDMD_CONFIRM_MESSAGE;   // BOP Calculations confirm message ==jklee===   
+   PRREPT_DYN_MSG               PrreptDynMsg;
+   TRIP_RECORD                  TripRecord;
+   SOE_RECORD                   SoeRecord;
+   UTDV_DIALOGUE_DATA		UtdvDialogue;
+   DTREND_RESET                 DigitalTrendReset;        // Variables for Digital Trend
+   DTREND_DATA                  DigitalTrendData;         // Variables for Digital Trend         ==jklee===
+   UTDV_DATA			UtdvData;   
+   CECOR_DATA                   CecorData;
+   CAL_DATA                     CAL_Data;
+   BDL_DATA                     BDL_Data;
+   ORL_DATA                     ORL_Data;
+   LINK_DATA                    Link_Data;
+   CSL_TEMPLATE                 CSL_Template;
+   VIDEO_DATA		        VideoTrendData;		  // Variables for the Video Trend     
+   VIDEO_SETUP_DATA		VideoTrendSetupData;      // Setup data for VTREND     
+   WSflagMessage                FlagHandleMessage;        // Flag handling message for GRDISP
+   VTflagMessage		VTFlagMessage;		  // Flag handling message for VTREND   
+   SYSVARS		        System;			  // Generic System Variables
+   CCUR_On_Data                 HostOnData;               // online host information           ==stchang
+   CCUR_Off_Data                HostOffData;              // offline host information          ==stchang
+   WS_On_Data                   WSOnData;                // offline ws information            ==stchang
+   WS_Off_Data                  WSOffData;                // offline ws information            ==stchang
+   WS_PRN_Data                  WSPrnData;                // ws print message  
+
+   // CORENET 2017.02.16 added Data Structure. by Philkyu Kwon
+   WS_Mass_Calc_Data            wsMassCalcData;		// WS RCS MASS CALC.
+   CCUR_Mass_Calc_Data          hostMassCalcData;	// HOST RCS MASS CALC.
+   CCUR_Mass_Calc_Msg           hostMassCalcMsg;	// HOST RCS MASS CALC.
+   CCUR_Equip_Msg       	hostEquipMsg;		// USED IN ALL EQUIPMENT PAGE 
+   WS_Equip_ValChg_Data         wsEquipValChgData;	// WS EQUIPMENT CALC. VALUE CHANGE
+   CCUR_EquipStatus_Data	hostEquipStatusData;	// HOST EQUIPMENT STATUS TO CRT
+   WS_Equip_Prn_Data            wsEquipPrnData;		// EQUIPMENT RUNNING STATUS TO PRINTER
+   WS_PidTest_Data              wsPidTestData;		// PRINT PID FOR TEST
+   CCUR_PidTest_Msg            	hostPidTestMsg;		// PRINT PID FOR TEST
+
+   // CORENET 2017.02.21 added Message Structure. by Philkyu Kwon
+   WS_Mass_Calc_Message		wsMassCalcMessage;
+   CCUR_Mass_Calc_Message	hostMassCalcMessage;
+   WS_Equip_ValChg_Message	wsEquipValChgMessage;
+   CCUR_Equip_ValChg_Message	hostEquipValChgMessage;
+   CCUR_EquipStatus_Message	hostEquipStatusMessage;
+   WS_Equip_Prn_Message		wsEquipPrnMessage;
+   CCUR_Equip_Prn_Message	hostEquipPrnMessage;
+   WS_PidTest_Message		wsPidTestMessage;
+   CCUR_PidTest_Message		hostPidTestMessage;
+
+   CCUR_EquipStatus_Data_BUF    hostEquipStatusDataBuf;
+};
+

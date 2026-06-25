@@ -1,0 +1,840 @@
+/*
+ * ProcSee CONFIGURATION LANGUAGE FILE
+ *
+ *
+ * User : ygn34
+ * Host : y6cr02
+ * Date : 2017-05-25
+ * Time : 14:36:07
+ *
+ * ProcSee version : ProcSee 3.10.1 (June 2016)
+ * File version    : 1.26
+ *
+ *
+ */
+
+
+picture PicYGN_Cecor
+{
+  worldX = 0;
+  worldY = 0;
+  worldWidth = 1280;
+  worldHeight = 824;
+  oneToOne = 1;
+  backgroundColour = 0;
+  updateMode = 2;
+  resizeMode = 0;
+  xSnap = 0;
+  ySnap = 0;
+  radiusSnap = 0;
+  angleSnap = 0;
+  crosshairStyle = 1;
+  crosshairLength = 0;
+  crosshairFollowSnap = `isInEditMode()`;
+  crosshairVisibility = `isInEditMode()`;
+  xReference = 500;
+  yReference = 500;
+  xScaleFactor = 1;
+  yScaleFactor = 1;
+  rotationAngle = 0;
+
+  int MSG_VIS = 1;
+
+  int Option = 1;
+
+  char PictureNumber[50] = "660";
+
+  char PictureTitle[50] = "CECOR SNAPSHOT";
+
+  function `void CecorCommentSelect()
+  {
+     int length;
+     int i;
+     length=strlen(CecorComment.TheOriginalText);
+     i = length -1;
+  
+     while ((CecorComment.TheOriginalText[i]==' ') && (i>=0))
+       i--;
+     CecorComment.TheOriginalText[i+1] = '\\0';
+     length=strlen(CecorComment.TheOriginalText);
+  
+     if(length>=17)
+     DisplayAdvisoryMessage("COMMENTS ERROR!  SHOULD BE 1-16 CHARACTERS");
+     else
+     strcpy(Interface->CecorData.cecorComments,CecorComment.TheOriginalText);
+  //   printf("comment is %s", CecorComment.TheOriginalText);
+  }
+     `
+
+  function `void CecorEscape()
+  {
+     displayPicture("Main","PicYGN_NSSSBOPApplication.ppic");
+     update();
+  }`
+
+  function `void CecorfileSelect()
+  {
+     int length;
+     length=strlen(CecorFile.TheOriginalText);
+     if(length>=9)
+     DisplayAdvisoryMessage("FILENAME ERROR!  SHOULD BE 1-8 CHARACTERS");
+     else
+     strcpy(Interface->CecorData.cecorFilename,CecorFile.TheOriginalText);
+  //   printf("file name is %s", CecorFile.TheOriginalText);
+  }`
+
+  function `void ClearWait()
+  {
+     if (MSG_VIS == 2)
+      {
+  //      printf("MSG_VIS2 =  %d", MSG_VIS);
+        MSG_VIS = 1;
+      }
+     else if ((MSG_VIS == 0) || (MSG_VIS == 1))
+     {
+        ProcessingMsg.visibility=0;
+  //      printf("MSG_VIS10 =  %d", MSG_VIS);
+     }
+     update();
+  }`
+
+  function `void displayCecorMessage()
+  {
+  //DisplayAdvisoryMessage(Interface->GenericConfirmMessage.data.message1);
+  //DisplayAdvisoryMessage1(Interface->GenericConfirmMessage.data.message2);
+  DisplayAdvisoryMessage1(Interface->GenericConfirmMessage.data.message1);
+  DisplayAdvisoryMessage2(Interface->GenericConfirmMessage.data.message2);
+  }`
+
+  function `void Initialize()
+  {
+     Current_Page = 660;
+     CFMLevel = 0;
+     ProcessingMsg.visibility=0;
+     DisplayAdvisoryMessage(" ");
+     DisplayAdvisoryMessage1(" ");
+     DisplayAdvisoryMessage2(" ");
+     DisplayAdvisoryMessage3(" ");
+     processButton.UnSelect();
+  
+     strcpy(CecorSelect.TheOriginalText,"1");
+     strcpy(CecorSelect.TheNewText,"1");
+     Interface->CecorData.cecorOption = 1;
+     CecorSelect.Flag = 2;
+  
+     strcpy(CecorFile.TheOriginalText,"        ");
+     strcpy(CecorFile.TheNewText,"        ");
+     strcpy(Interface->CecorData.cecorFilename,CecorFile.TheOriginalText);
+  
+     strcpy(CecorComment.TheOriginalText,"                ");
+     strcpy(CecorComment.TheNewText,"                ");
+     strcpy(Interface->CecorData.cecorComments,CecorComment.TheOriginalText);
+  //   printf("Default Option = %d", Interface->CecorData.cecorOption);
+     update();
+  }`
+
+// ***CORENET 20170601 by Philkyu Kwon ************
+  function `void DummyProcess()
+  {
+      //printf("Button Select OR Button Unselected");
+  }`
+// ***************************************************
+
+  function `void OptionSelect()
+  {
+  //   int Option;
+     Option=atoi(CecorSelect.TheNewText);
+     if(Option>=3)
+     DisplayAdvisoryMessage("SELECT 1 OR 2");
+     else
+     Interface->CecorData.cecorOption=Option;
+  //   printf("Option = %d", Option);
+  }`
+
+  function `void Process1()
+  {
+     int lenfile, lencomment;
+
+//CORENET 0706
+     if( (Interface->System.slaveUpdating!=0))
+     {
+        DisplayAdvisoryMessage("CHANGE FROM MASTER CPU ONLY") ;
+	return;
+     }
+
+     else
+     {
+     	lenfile=strlen(CecorFile.TheOriginalText);
+     	lencomment=strlen(CecorComment.TheOriginalText);
+
+     	if(lenfile>=9 || lencomment>=17)
+     		DisplayAdvisoryMessage("ERROR! ENTER CORRECT FILENAME OR COMMENTS");
+     	else
+     	{
+     		DisplayAdvisoryMessage(" ");
+     		DisplayAdvisoryMessage1(" ");
+     		DisplayAdvisoryMessage2(" ");
+     		DisplayAdvisoryMessage3(" ");
+     		execute("{sendMessageToHost(REQUEST_CECOR_SNAPSHOT);}");
+     		ProcessingMsg.visibility=1;
+     		MSG_VIS =  Interface->CecorData.cecorOption;
+     		update();
+     	}
+     }
+  }`
+
+  function `void selectedShape(int selectedNo)
+  {
+  switch(selectedNo){
+  case 1: {
+  Txt1_Box.foregroundFillColour=1;
+  Txt1.foregroundColour=0;
+  Txt2_Box.foregroundFillColour=0;
+  Txt2.foregroundColour=1;
+  update();
+  break;
+  }
+  case 2: {
+  Txt1_Box.foregroundFillColour=0;
+  Txt1.foregroundColour=1;
+  Txt2_Box.foregroundFillColour=1;
+  Txt2.foregroundColour=0;
+  update();
+  break;
+  }
+  default: {
+  Txt1_Box.foregroundFillColour=0;
+  Txt1.foregroundColour=1;
+  Txt2_Box.foregroundFillColour=0;
+  Txt2.foregroundColour=1;
+  update();
+  break;}
+  }
+  }
+  
+  `
+
+  rectangle
+  {
+    x = 635;
+    y = 508;
+    width = 341;
+    height = 100;
+    visibility = 1;
+    foregroundColour = `COLOR_LINE_BOUNDARY_6`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 3;
+    foregroundFillColour = 0;
+    backgroundFillColour = -1;
+    fillPattern = `SolidPattern`;
+    xReference = 635;
+    yReference = 508;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle
+  {
+    x = 269;
+    y = 9;
+    width = 706;
+    height = 396;
+    visibility = 1;
+    foregroundColour = `COLOR_LINE_BOUNDARY_6`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 3;
+    foregroundFillColour = `COLOR_PICTURE_BACKGROUND`;
+    backgroundFillColour = -1;
+    fillPattern = `SolidPattern`;
+    xReference = 269;
+    yReference = 9;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  group
+  {
+    visibility = 1;
+    xReference = 563;
+    yReference = 26;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+
+    text
+    {
+      x = 584;
+      y = 43;
+      format = "%s";
+      theText = "NOTES";
+      alignment = 0;
+      visibility = 1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = 4;
+      xReference = 584;
+      yReference = 43;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+    line
+    {
+      numberOfPoints = 2;
+      point[0] = ( 564, 49 );
+      point[1] = ( 668, 49 );
+      visibility = 1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      lineStyle = `SolidPattern`;
+      lineWidth = 0;
+      xReference = 564;
+      yReference = 49;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+  }
+
+  text
+  {
+    x = 317;
+    y = 86;
+    format = "%s";
+    theText = "OUTPUT  DEFAULTS  TO  DISK  FILE";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 317;
+    yReference = 86;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 317;
+    y = 133;
+    format = "%s";
+    theText = "FOR  BLANK  FILENAME,  DEFAULT  FILE  NAME  EQUALS";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 317;
+    yReference = 133;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 419;
+    y = 164;
+    format = "%s";
+    theText = "ADDDDTTT";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 419;
+    yReference = 164;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 370;
+    y = 191;
+    format = "%s";
+    theText = "WHERE :";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 370;
+    yReference = 191;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 418;
+    y = 221;
+    format = "%s";
+    theText = "A  =  PLANT  UNIT  ( V - 3 , W - 4)";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 418;
+    yReference = 221;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 376;
+    y = 251;
+    format = "%s";
+    theText = "DDDD  =  DAYS  SINCE  JAN  1,  1972  (HEXADECIMAL)";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 376;
+    yReference = 251;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 397;
+    y = 282;
+    format = "%s";
+    theText = "TTT  =  HALF  MINUTES  SINCE  MIDNIGHT  (HEXADECIMAL) ";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 397;
+    yReference = 282;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 317;
+    y = 333;
+    format = "%s";
+    theText = "OUTPUT  ALSO  GO  TO  MAG  TAPE";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 317;
+    yReference = 333;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  line
+  {
+    numberOfPoints = 2;
+    point[0] = ( 317, 77 );
+    point[1] = ( 317, 77 );
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineStyle = `SolidPattern`;
+    lineWidth = 0;
+    xReference = 317;
+    yReference = 77;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  line
+  {
+    numberOfPoints = 2;
+    point[0] = ( 214, 551 );
+    point[1] = ( 214, 551 );
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineStyle = `SolidPattern`;
+    lineWidth = 0;
+    xReference = 214;
+    yReference = 551;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  line
+  {
+    numberOfPoints = 2;
+    point[0] = ( 589, 606 );
+    point[1] = ( 589, 606 );
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineStyle = `SolidPattern`;
+    lineWidth = 0;
+    xReference = 589;
+    yReference = 606;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 418;
+    y = 542;
+    format = "%s";
+    theText = "ENTER FILENAME :";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 418;
+    yReference = 542;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 414;
+    y = 592;
+    format = "%s";
+    theText = "ENTER COMMENT :";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 414;
+    yReference = 592;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  line
+  {
+    numberOfPoints = 2;
+    point[0] = ( 180, 594 );
+    point[1] = ( 180, 594 );
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineStyle = `SolidPattern`;
+    lineWidth = 0;
+    xReference = 180;
+    yReference = 594;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 251;
+    y = 483;
+    format = "%s";
+    theText = "PRESS BUTTON TO SELECT  1  OR  2 :";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 251;
+    yReference = 483;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle
+  {
+    x = 662;
+    y = 430;
+    width = 0;
+    height = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 0;
+    foregroundFillColour = `COLOR_NON_ESSENTIAL`;
+    backgroundFillColour = -1;
+    fillPattern = `SolidPattern`;
+    xReference = 662;
+    yReference = 430;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle Txt1_Box
+  {
+    x = 667;
+    y = 429;
+    width = 300;
+    height = 50;
+    visibility = 1;
+    foregroundColour = 0;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 0;
+    foregroundFillColour = 0;
+    backgroundFillColour = -1;
+    fillPattern = `SolidPattern`;
+    xReference = 667;
+    yReference = 429;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text Txt1
+  {
+    x = 721;
+    y = 470;
+    format = "%s";
+    theText = "1  =  FILE  ONLY ( DEFAULT )";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 721;
+    yReference = 470;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text Txt2
+  {
+    x = 722;
+    y = 497;
+    format = "%s";
+    theText = "2  =  FILE  AND  TAPE";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 722;
+    yReference = 497;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text ProcessingMsg
+  {
+    x = 396;
+    y = 689;
+    format = "%s";
+    theText = "PROCESSING... WAIT";
+    alignment = 0;
+    visibility = 0;
+    foregroundColour = `COLOR_POPUP_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 396;
+    yReference = 689;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 317;
+    y = 374;
+    format = "%s";
+    theText = "TAPE  MUST  BE  MOUNTED";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 317;
+    yReference = 374;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 578;
+    y = 374;
+    format = "%s";
+    theText = "BEFORE  CHOOSING  OPTION  2";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 578;
+    yReference = 374;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  instance DialogueSymbols.PushButton processButton
+  {
+    x = 646;
+    y = 642;
+    visibility = 1;
+    xReference = 646;
+    yReference = 642;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ButtonState = 0;
+    DynamicLabel = "PROCESSING";
+    ExecuteString = "{Process1();}";
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    Label = "PROCESS";
+    Scope = "PicYGN_Cecor";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    StaticLabel = "PROCESS";
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextFontDynamic = `font2`;
+    TextFontStatic = `font4`;
+    TextX = 17;
+    TextXDynamic = 15;
+    TextXStatic = 17;
+    TextY = 22;
+    TextYDynamic = 21;
+    TextYStatic = 22;
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    Width = 128;
+  }
+
+  instance DialogueSymbols.InputDialogueText CecorFile
+  {
+    x = 646;
+    y = 523;
+    visibility = 1;
+    xReference = 646;
+    yReference = 523;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    ExecuteUnSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxCharacters = 16;
+    ReturnAction = "CecorfileSelect()";
+    Scope = "PicYGN_Cecor";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewText = "ASDASDASDASDASDASD";
+    TheOriginalText = "ASDASDASDASDASDASD";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 240;
+  }
+
+  instance DialogueSymbols.InputDialogueText_GrDs CecorComment
+  {
+    x = 646;
+    y = 569;
+    visibility = 1;
+    xReference = 646;
+    yReference = 569;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    ExecuteUnSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxCharacters = 20;
+    ReturnAction = "CecorCommentSelect()";
+    Scope = "::YGN3and4.PicYGN_Cecor";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewText = "A                  ";
+    TheOriginalText = "A                  ";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 200;
+  }
+
+  instance DialogueSymbols.ToggleButton_12 CecorSelect
+  {
+    x = 645;
+    y = 461;
+    visibility = 1;
+    xReference = 645;
+    yReference = 461;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "OptionSelect()";
+    ExecuteUnSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    Flag = 2;
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxCharacters = 3;
+    ReturnAction = "";
+    Scope = "PicYGN_Cecor";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 10;
+    TheNewText = "1";
+    TheOriginalText = "2";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 200;
+  }
+}

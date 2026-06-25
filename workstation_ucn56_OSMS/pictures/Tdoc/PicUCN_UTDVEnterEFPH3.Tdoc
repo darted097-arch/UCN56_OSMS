@@ -1,0 +1,564 @@
+/*
+ * ProcSee CONFIGURATION LANGUAGE FILE
+ *
+ *
+ * User : ucn56
+ * Host : y6cr02
+ * Date : 2017-05-25
+ * Time : 15:54:31
+ *
+ * ProcSee version : ProcSee 3.10.1 (June 2016)
+ * File version    : 1.26
+ *
+ *
+ */
+
+
+picture PicUCN_UTDVEnterEFPH3
+{
+  worldX = 0;
+  worldY = 0;
+  worldWidth = 1280;
+  worldHeight = 824;
+  oneToOne = 1;
+  backgroundColour = 0;
+  updateMode = 2;
+  resizeMode = 0;
+  xSnap = 5;
+  ySnap = 5;
+  radiusSnap = 0;
+  angleSnap = 0;
+  crosshairStyle = 1;
+  crosshairLength = 0;
+  crosshairFollowSnap = `isInEditMode()`;
+  crosshairVisibility = `isInEditMode()`;
+  xReference = 500;
+  yReference = 500;
+  xScaleFactor = 1;
+  yScaleFactor = 1;
+  rotationAngle = 0;
+
+  int Current_page = 684;
+
+  char PictureNumber[50] = "684";
+
+  char PictureTitle[50] = "UTDV  :  ENTER  PRESENT  EFPH";
+
+  int receivedCheck = 0;
+
+  function `void DisplayUTDVData()
+  {
+  //   printf("pendingPresentEfph = %d",Interface->UtdvData.present.pendingPresentEfph );
+  //   execute ("{strcpy(PresentEFPH.TheNewText, Interface->UtdvData.present.pendingPresentEfph);}");
+  //   PresentEFPH.TheNewNumber = Interface->UtdvData.present.pendingPresentEfph;
+  
+     TextProcessing.visibility = 0;
+  }`
+
+  function `void escape()
+  {
+  DisplayPage(Page681);
+  }`
+
+  function `void GettingData()
+  {
+     if (0 == UTDVDataWaitingTime)
+     {
+        TextProcessing.visibility = 0;
+        WaitingUTDVData684 = 0;
+        DisplayUTDVData();
+     }
+     else
+     {
+        UTDVDataWaitingTime = UTDVDataWaitingTime - 1;
+     }
+  }`
+
+  function `void Initialize()
+  {
+     Current_Page = 684;
+     CFMLevel =0;
+     Increment.visibility = 1;
+     EFPHValue.visibility = 1;
+     Present.visibility = 0;
+  
+     strcpy(Choice.TheNewText, "1");
+     Choice.Flag = 2;
+     Text1.foregroundColour = \`COLOR_DATA_NORMAL\`;    //JHC 990419
+     Text2.foregroundColour = \`COLOR_NON_ESSENTIAL\`;  //JHC 990419
+     Text31.foregroundColour = \`COLOR_NON_ESSENTIAL\`;  //JHC 990419
+     Text32.foregroundColour = \`COLOR_NON_ESSENTIAL\`;  //JHC 990419
+  
+     EFPHValue.TheNewNumber = 0; //JHC 990419
+  
+     Current_page = 684;
+     Interface->UtdvDialogue.option = 9;
+     Interface->UtdvDialogue.current_page = Current_page;
+  
+     execute("{sendMessageToHost(PROCESS_UTDV_SEND);}");
+  
+     TextProcessing.visibility = 1;
+     UTDVDataWaitingTime = 5;
+     WaitingUTDVData684 = 1;
+     processfiles.UnSelect(); //jsk
+  
+  }`
+
+  function `void MakeVis()
+  {
+     Text1.foregroundColour = \`COLOR_NON_ESSENTIAL\`;  //JHC 990419
+     Text2.foregroundColour = \`COLOR_NON_ESSENTIAL\`;  //JHC 990419
+     Text31.foregroundColour = \`COLOR_NON_ESSENTIAL\`;  //JHC 990419
+     Text32.foregroundColour = \`COLOR_NON_ESSENTIAL\`;  //JHC 990419
+  
+     if (strcmp(Choice.TheNewText, "1") == 0)
+     {
+     Increment.visibility = 1;
+     Present.visibility = 0;
+     EFPHValue.visibility = 1;
+     Text1.foregroundColour = \`COLOR_DATA_NORMAL\`;  //JHC 990419
+     }
+     else if ( strcmp(Choice.TheNewText, "2") == 0)
+     {
+     Increment.visibility = 0;
+     Present.visibility = 0;
+     EFPHValue.visibility = 0;
+     Text2.foregroundColour = \`COLOR_DATA_NORMAL\`;  //JHC 990419
+     }
+     else if ( strcmp(Choice.TheNewText, "3") == 0)
+     {
+     Increment.visibility = 0;
+     Present.visibility = 1;
+     EFPHValue.visibility = 1;
+     Text31.foregroundColour = \`COLOR_DATA_NORMAL\`;  //JHC 990419
+     Text32.foregroundColour = \`COLOR_DATA_NORMAL\`;  //JHC 990419
+     }
+  
+  }`
+
+  function `void NextAction()
+  {
+     if (strcmp(Choice.TheNewText, "1") == 0  || strcmp(Choice.TheNewText, "3") == 0)
+     {
+     Interface->UtdvDialogue.option = atoi(Choice.TheNewText);
+     Interface->UtdvDialogue.entered_EFPH = EFPHValue.TheNewNumber;
+     execute("{sendMessageToHost(PROCESS_UTDV_SEND);}");
+     //printf("dATA is Correct1...%d ", atoi(Choice.TheNewText));
+     }
+     else
+     {
+     Interface->UtdvDialogue.option = atoi(Choice.TheNewText);
+     execute("{sendMessageToHost(PROCESS_UTDV_SEND);}");  //jsk
+     //printf("dATA is Correct2...%d ", atoi(Choice.TheNewText));
+     }
+  }`
+
+  function `void ProcessingConfirmed()
+  {
+  }`
+
+  rectangle
+  {
+    x = 428;
+    y = 92;
+    width = 236;
+    height = 56;
+    visibility = 1;
+    foregroundColour = `COLOR_LINE_BOUNDARY_6`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 3;
+    foregroundFillColour = `COLOR_NON_ESSENTIAL`;
+    backgroundFillColour = -1;
+    fillPattern = `NoPattern`;
+    xReference = 235;
+    yReference = -115;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  ellipseArc
+  {
+    x = 223;
+    y = -4;
+    xRadius = 0;
+    yRadius = 0;
+    startAngle = `font4`;
+    openingAngle = 90;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 0;
+    foregroundFillColour = `COLOR_NON_ESSENTIAL`;
+    backgroundFillColour = -1;
+    fillPattern = `SolidPattern`;
+    xReference = 228;
+    yReference = -4;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  line
+  {
+    numberOfPoints = 2;
+    point[0] = ( 228, -4 );
+    point[1] = ( 228, -4 );
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineStyle = `SolidPattern`;
+    lineWidth = 0;
+    xReference = 228;
+    yReference = -4;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  line
+  {
+    numberOfPoints = 2;
+    point[0] = ( 433, 35 );
+    point[1] = ( 433, 35 );
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineStyle = `SolidPattern`;
+    lineWidth = 0;
+    xReference = 433;
+    yReference = 35;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 167;
+    y = 253;
+    format = "%s";
+    theText = "INITIALIZE  PRESENT  EFPHS  FROM";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 167;
+    yReference = 253;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 165;
+    y = 280;
+    format = "%s";
+    theText = "ONE  OF  THE  FOLLOWING  ? ( 1 - 3 )";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 165;
+    yReference = 280;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text Text32
+  {
+    x = 702;
+    y = 376;
+    format = "%s";
+    theText = "ENTERED  BELOW";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 702;
+    yReference = 376;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text Increment
+  {
+    x = 217;
+    y = 494;
+    format = "%s";
+    theText = "ENTER  PRESENT  EFPHS ( FOR CHOICE 1 ) :";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 217;
+    yReference = 494;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text Present
+  {
+    x = 204;
+    y = 494;
+    format = "%s";
+    theText = "ENTER  EFPH  INCREMENT ( FOR CHOICE 3 ) :";
+    alignment = 0;
+    visibility = 0;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 204;
+    yReference = 494;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 225;
+    y = 127;
+    format = "%s";
+    theText = "PRESENT  EFPHS :";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 225;
+    yReference = 127;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text TextProcessing
+  {
+    x = 524;
+    y = 692;
+    format = "%s";
+    theText = "PROCESSING... WAIT";
+    alignment = 0;
+    visibility = 0;
+    foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 524;
+    yReference = 692;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  instance DialogueSymbols.InputDialogueNumber EFPHValue
+  {
+    x = 656;
+    y = 476;
+    visibility = 1;
+    xReference = 656;
+    yReference = 476;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Active = 1;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "";
+    ExecuteUnSelect = "";
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxDigits = 8;
+    ReturnAction = "";
+    Scope = "::UCN5and6.PicUCN_UTDVEnterEFPH3";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewNumber = 0;
+    TheNewText = "123";
+    TheNumberFormat = "%-8.2f";
+    TheOriginalNumber = 34.5;
+    TheOriginalText = "123";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 150;
+  }
+
+  text Text1
+  {
+    x = 628;
+    y = 283;
+    format = "%s";
+    theText = "1  . . . .     ENTER PRESENT EFPHS";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 628;
+    yReference = 283;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text Text2
+  {
+    x = 628;
+    y = 314;
+    format = "%s";
+    theText = "2  . . . .     KEEP PRESENT EFPHS AS DISPLAYED ABOVE";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 628;
+    yReference = 314;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text Text31
+  {
+    x = 627;
+    y = 345;
+    format = "%s";
+    theText = "3  . . . .     PRESENT EFPHS PLUS EFPH INCREMENT";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 627;
+    yReference = 345;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  instance DialogueSymbols.ToggleButton_123 Choice
+  {
+    x = 546;
+    y = 260;
+    visibility = 1;
+    xReference = 546;
+    yReference = 260;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "MakeVis()";
+    ExecuteUnSelect = "";
+    Flag = 2;
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxCharacters = 3;
+    ReturnAction = "";
+    Scope = "::UCN5and6.PicUCN_UTDVEnterEFPH3";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 10;
+    TheNewText = "1";
+    TheOriginalText = "2";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 200;
+  }
+
+  instance DialogueSymbols.PushButton processfiles
+  {
+    x = 122;
+    y = 715;
+    visibility = 1;
+    xReference = 166;
+    yReference = 667;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ButtonState = 0;
+    DynamicLabel = "PROCESSING";
+    ExecuteString = "{NextAction();}";
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    Label = "PROCESS";
+    Scope = "PicUCN_UTDVEnterEFPH3";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    StaticLabel = "PROCESS";
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextFontDynamic = `font2`;
+    TextFontStatic = `font4`;
+    TextX = 17;
+    TextXDynamic = 15;
+    TextXStatic = 17;
+    TextY = 22;
+    TextYDynamic = 21;
+    TextYStatic = 22;
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    Width = 128;
+  }
+
+  instance cfmsSymbols.UTDVValue
+  {
+    x = 485;
+    y = 106;
+    visibility = 1;
+    xReference = 485;
+    yReference = 106;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Bad_Text_foregroundColour = `Bad_Text.foregroundColour`;
+    Bad_Text_visibility = `Bad_Text.visibility`;
+    BlinkBox_foregroundFillColour = `BlinkBox.foregroundFillColour`;
+    Dashes_foregroundColour = `Dashes.foregroundColour`;
+    Dashes_visibility = `Dashes.visibility`;
+    disfmt_temp = "%6.1f  ";
+    DisplayUnits = 1;
+    ErrorText_foregroundColour = `ErrorText.foregroundColour`;
+    ErrorText_visibility = `ErrorText.visibility`;
+    Inserted_visibility = `Inserted.visibility`;
+    message1_temp = "START      ";
+    newsta_temp = 5;
+    NumericValue_foregroundColour = `NumericValue.foregroundColour`;
+    NumericValue_visibility = `NumericValue.visibility`;
+    OOR_High_visibility = `OOR_High.visibility`;
+    OOR_Low_visibility = `OOR_Low.visibility`;
+    OOS_Text_backgroundColour = `OOS_Text.backgroundColour`;
+    OOS_Text_foregroundColour = `OOS_Text.foregroundColour`;
+    OOS_Text_visibility = `OOS_Text.visibility`;
+    pid_temp = "CET01      ";
+    pisabitmap_temp = 5;
+    PointId = `&PCJXEFPH`;
+    sig_type_temp = 6;
+    StatePhrase_foregroundColour = `StatePhrase.foregroundColour`;
+    StatePhrase_visibility = `StatePhrase.visibility`;
+    value_temp = 14.4016;
+  }
+}

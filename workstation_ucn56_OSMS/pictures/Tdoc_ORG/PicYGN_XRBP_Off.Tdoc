@@ -1,0 +1,2442 @@
+/*
+ * PICASSO-3 CONFIGURATION LANGUAGE FILE
+ *
+ *
+ * Picture name: PicYGN_XRBP_Off
+ *
+ *
+ * Documented by  : ygn56
+ * Host           : pcs3
+ * Date           : 21/01-00 at 11:23:12
+ *
+ *
+ * Generate with:
+ *    pcc PicYGN_XRBP_Off.Tdoc
+ *
+ */
+
+
+picture PicYGN_XRBP_Off
+{
+
+  char prev_MAN[80] = "5";
+  char prev_ASI[80] = "5";
+  char prev[80] = "4";
+  int CASE_FLAG = 0;
+  char TextS[80] = " ";
+  char Text0[80] = "0";
+  char *PictureTitle = "XENON REACTIVITY DIALOGUE";
+  char *PictureNumber = "621";
+  int InvalidEntry = 0;
+  char Text2[80] = "2";
+  char Text3[80] = "3";
+  char Text1[80] = "1";
+  char Text4[80] = "4";
+  char Text5[80] = "5";
+  char TextP[80] = "P";
+  char TextA[80] = "A";
+  char TextB[80] = "B";
+  float CEA_ASI = 6;
+  float CEA_MAN = 6;
+
+  function `void Check_Result()
+{
+   if((Current_Page!=621) && (Current_Page!=623)) 
+      return;
+
+      int i;	// loop counter
+      int susp; // FLAG for CEA Group Display
+   //
+       if((CASE_FLAG==1) && (LASTCASE.TheNewNumber==1)) {
+              Wait.visibility=1;
+              Wait1.visibility=1;
+              CASE_FLAG=0;
+              }
+         else {
+              Wait1.visibility=0;
+              Wait.visibility=0;
+             }
+//
+      ClearAdvisoryMessage();
+      DisplayAdvisoryMessage("REQUEST PROCESSED BY HOST");
+//
+//      It is recommeded to set the LAST CASE RUN to 0. --> delete due to TER 302
+//          execute ("{LASTCASE.TheNewNumber=0;}");
+//          execute ("{strcpy(LASTCASE.TheNewText, Text0);}");
+//
+      for (i=1;i<11;i++)
+         {
+        execute ("{XRBP_IN%d.TheNewNumber = Interface->XRBP.data.input_val[%d];}",i,i-1);
+        execute ("{strcpy(XRBP_IN%d.TheOriginalText,TextS);}",i);
+        execute ("{XRBP_IN%d.TheOriginalNumber = XRBP_IN%d.TheNewNumber;}",i,i);
+         }
+//     Set initial time to previous final time for next input.
+        execute ("{XRBP_IN11.TheNewNumber = Interface->XRBP.data.input_val[12];}");
+        execute ("{strcpy(XRBP_IN11.TheOriginalText,TextS);}");
+        execute ("{XRBP_IN11.TheOriginalNumber = XRBP_IN12.TheNewNumber;}");
+//
+      for (i=12;i<19;i++)
+         {
+        execute ("{XRBP_IN%d.TheNewNumber = Interface->XRBP.data.input_val[%d];}",i,i-1);
+        execute ("{strcpy(XRBP_IN%d.TheOriginalText,TextS);}",i);
+        execute ("{XRBP_IN%d.TheOriginalNumber = XRBP_IN%d.TheNewNumber;}",i,i);
+         }
+//
+// Do not permit the result of " " according UCN 3&4.
+      susp=0;
+      execute ("{CEA_ASI = Interface->XRBP.data.input_val[18];}");
+          if (CEA_ASI==2) execute ("{strcpy(XRBP_IN19.TheNewText, Text1);}");
+           else if (CEA_ASI== 3) execute ("{strcpy(XRBP_IN19.TheNewText, Text2);}");
+           else if (CEA_ASI== 4) execute ("{strcpy(XRBP_IN19.TheNewText, Text3);}");
+           else if (CEA_ASI== 5) execute ("{strcpy(XRBP_IN19.TheNewText, Text4);}");
+           else if (CEA_ASI== 6) execute ("{strcpy(XRBP_IN19.TheNewText, Text5);}");
+           else if (CEA_ASI== 7) execute ("{strcpy(XRBP_IN19.TheNewText, TextP);}");
+           else if (CEA_ASI== 9) execute ("{strcpy(XRBP_IN19.TheNewText, TextA);}");
+           else if (CEA_ASI==10) execute ("{strcpy(XRBP_IN19.TheNewText, TextB);}");
+           else {
+            susp=1;
+            ClearAdvisoryMessage();
+            DisplayAdvisoryMessage("ERROR OUTPUTING TO DISPLAY. RESULTS MAY NOT BE CORRECT");
+            DisplayAdvisoryMessage1("SEE OUTPUT & SUMMARY FILES. PLEASE WAIT");
+            execute ("{strcpy(XRBP_IN19.TheOriginalText,TextS);}");          
+             }
+          if(susp==0)   
+             execute ("{strcpy(XRBP_IN19.TheOriginalText,XRBP_IN19.TheNewText);}");          
+//
+// Permit the result of " " according UCN 3&4.
+      susp=0;
+      execute ("{CEA_MAN = Interface->XRBP.data.input_val[19] ;}");
+          if (CEA_MAN== 2) execute ("{strcpy(XRBP_IN20.TheNewText, Text1);}");
+           else if (CEA_MAN== 3) execute ("{strcpy(XRBP_IN20.TheNewText, Text2);}");
+           else if (CEA_MAN== 4) execute ("{strcpy(XRBP_IN20.TheNewText, Text3);}");
+           else if (CEA_MAN== 5) execute ("{strcpy(XRBP_IN20.TheNewText, Text4);}");
+           else if (CEA_MAN== 6) execute ("{strcpy(XRBP_IN20.TheNewText, Text5);}");
+           else if (CEA_MAN== 7) execute ("{strcpy(XRBP_IN20.TheNewText, TextP);}");
+           else if (CEA_MAN== 9) execute ("{strcpy(XRBP_IN20.TheNewText, TextA);}");
+           else if (CEA_MAN==10) execute ("{strcpy(XRBP_IN20.TheNewText, TextB);}");
+           else if (CEA_MAN==0 || CEA_MAN==1 || CEA_MAN==8) 
+                                 execute ("{strcpy(XRBP_IN20.TheNewText, TextS);}");
+           else {
+            susp=1;
+            ClearAdvisoryMessage();
+            DisplayAdvisoryMessage("ERROR OUTPUTING TO DISPLAY. RESULTS MAY NOT BE CORRECT");
+            DisplayAdvisoryMessage1("SEE OUTPUT & SUMMARY FILES. PLEASE WAIT");
+            execute ("{strcpy(XRBP_IN20.TheOriginalText, TextS);}");
+             }
+          if(susp==0)
+             execute ("{strcpy(XRBP_IN20.TheOriginalText, XRBP_IN20.TheNewText);}");
+//
+      execute ("{XRBP_IN21.TheNewNumber = Interface->XRBP.data.input_val[20];}");
+      execute ("{strcpy(XRBP_IN21.TheOriginalText,TextS);}");
+      execute ("{XRBP_IN21.TheOriginalNumber = XRBP_IN21.TheNewNumber;}");
+//
+      execute ("{LASTCASE.TheNewNumber = Interface->XRBP.data.last_case;}");
+      execute ("{strcpy(LASTCASE.TheOriginalText,TextS);}");
+      execute ("{LASTCASE.TheOriginalNumber = LASTCASE.TheNewNumber;}");
+//
+        update();
+}`
+
+
+
+  function `void Initialize()
+{
+   ClearAdvisoryMessage();
+
+   CFMLevel = 0;
+   Current_Page = 621;
+
+   if(XRBP_FLAG!=623){
+      //DisplayAdvisoryMessage("INITIALIZING XRBP OFF-LINE MODE");
+      execute("{sendMessageToHost(XRBP_INIT);}");
+      Wait.visibility=1;
+      Wait1.visibility=0;
+      CASE_FLAG=0;
+      }
+
+   XRBP_FLAG=621;
+}`
+
+
+
+  function `void Process1()
+{
+    int result;
+    int i;
+
+    ClearAdvisoryMessage();
+
+    // Verify each input field for offline XRBP
+    for (i=0;i<22;i++) {
+        result = VerifyInput(i);
+        if (result != 0) {
+           ClearAdvisoryMessage();
+           DisplayAdvisoryMessage("CANNOT SEND XRBP OFF-LINE CALCULATION REQUEST MESSAGE");
+           DisplayAdvisoryMessage1("INVALID INPUT EXIST");
+           return; 
+        }
+    }
+    // if everything is good, then send the message to CCUR
+       DisplayAdvisoryMessage("SENDING XRBP OFF-LINE CALCULATION REQUEST MESSAGE");
+       SaveData();
+       execute("{sendMessageToHost(XRBP_REQUEST);}"); 
+
+       Wait.visibility=1;
+       Wait1.visibility=0;
+}
+        
+       `
+
+
+
+  function `int VerifyInput(int number)
+{
+    float  value;
+    char   *temp;
+    float  temp_DegF;
+
+    switch (number)
+    {
+        case 1: //Criticality Search - 1=PPM,2=ROD,3=PWR,4=TAVG
+          value = XRBP_IN1.TheNewNumber;
+          if ((value<1.0)||(value>4.0)) {
+             ClearAdvisoryMessage();
+             DisplayAdvisoryMessage1("PRIMARY AND SECONDARY SEARCH PARAMETERS");
+             DisplayAdvisoryMessage2("MUST BE 1,2,3 OR 4");
+             DisplayAdvisoryMessage3("SECONDARY SEARCH PARAMETER MAY BE 0");
+             XRBP_IN1.input_mode_Btn();
+             return(1);
+          }
+          XRBP_IN1.TheOriginalNumber=value;
+          execute ("{strcpy(XRBP_IN1.TheOriginalText,TextS);}");
+          break;
+        case 2: //Initial Depletion Value
+          value = XRBP_IN2.TheNewNumber;
+          if (value<0.0) {
+             ClearAdvisoryMessage();
+             DisplayAdvisoryMessage1("INITIAL DEPLETION VALUE:");
+             DisplayAdvisoryMessage2("MUST BE GREATER THAN OR EQUAL TO 0");
+             DisplayAdvisoryMessage3(" ");
+             XRBP_IN2.input_mode_Btn();
+             return(1);
+          }
+          XRBP_IN2.TheOriginalNumber=value;
+          execute ("{strcpy(XRBP_IN2.TheOriginalText,TextS);}");
+          break;
+        case 3: //Incremental Depletion Value
+          value = XRBP_IN3.TheNewNumber;
+          if (value<0.0) {
+             ClearAdvisoryMessage();
+             DisplayAdvisoryMessage1("INCREMENTAL DEPLETION VALUE:");
+             DisplayAdvisoryMessage2("MUST BE GREATER THAN OR EQUAL TO 0");
+             DisplayAdvisoryMessage3(" ");
+             XRBP_IN3.input_mode_Btn();
+             return(1);
+          } 
+          XRBP_IN3.TheOriginalNumber=value;
+          execute ("{strcpy(XRBP_IN3.TheOriginalText,TextS);}");
+          break;
+        case 4: // Final Depletion Value
+          value = XRBP_IN4.TheNewNumber;
+         if (value<0.0) {
+             ClearAdvisoryMessage();
+             DisplayAdvisoryMessage1("FINAL DEPLETION VALUE:");
+             DisplayAdvisoryMessage2("MUST BE GREATER THAN OR EQUAL TO 0");
+             DisplayAdvisoryMessage3(" ");
+             XRBP_IN4.input_mode_Btn();
+             return(1);
+          } 
+          XRBP_IN4.TheOriginalNumber=value;
+          execute ("{strcpy(XRBP_IN4.TheOriginalText,TextS);}");
+          break;
+        case 5: // Exposure Block Number to be Read
+          value = XRBP_IN5.TheNewNumber;
+          if ((value<0.0)||(value>50.0)) {
+             ClearAdvisoryMessage();
+             DisplayAdvisoryMessage1("EXPOSURE BLOCK NUMBER TO READ:");
+             DisplayAdvisoryMessage2("MUST BE BETWEEN 0 AND 50");
+             XRBP_IN5.input_mode_Btn();
+             return(1);
+          } 
+          XRBP_IN5.TheOriginalNumber=value;
+          execute ("{strcpy(XRBP_IN5.TheOriginalText,TextS);}");
+          break;
+        case 6: // Exposure Block Number to be Written
+          value = XRBP_IN6.TheNewNumber;
+          if ((value<-50.0)||(value>50.0)) {
+             ClearAdvisoryMessage();
+             DisplayAdvisoryMessage1("EXPOSURE BLOCK NUMBER TO BE WRITTEN:");
+             DisplayAdvisoryMessage2("MUST BE BETWEEN -50 AND 50");
+             XRBP_IN6.input_mode_Btn();
+             return(1);
+          } 
+          XRBP_IN6.TheOriginalNumber=value;
+          execute ("{strcpy(XRBP_IN6.TheOriginalText,TextS);}");
+          break;
+        case 7: // Boron Concentration
+          value = XRBP_IN7.TheNewNumber;
+          if ((value<0.0)||(value>2000.0)) {
+             ClearAdvisoryMessage();
+             DisplayAdvisoryMessage1("BORON CONCENTRATION:");
+             DisplayAdvisoryMessage2("MUST BE FROM 0 TO 2000");
+             XRBP_IN7.input_mode_Btn();
+             return(1);
+          } 
+          XRBP_IN7.TheOriginalNumber=value;
+          execute ("{strcpy(XRBP_IN7.TheOriginalText,TextS);}");
+          break;
+        case 8: // Core Power Level 
+          value = XRBP_IN8.TheNewNumber;
+          if (value<0.0) {
+             ClearAdvisoryMessage();
+             DisplayAdvisoryMessage1("CORE POWER LEVEL:");
+             DisplayAdvisoryMessage2("MUST BE A POSITIVE NUMBER");
+             XRBP_IN8.input_mode_Btn();
+             return(1);
+          } 
+          XRBP_IN8.TheOriginalNumber=value;
+          execute ("{strcpy(XRBP_IN8.TheOriginalText,TextS);}");
+          break;
+        case 9: // Xenon-Iodine Block Numbers to be Read
+          value = XRBP_IN9.TheNewNumber;
+          if ((value<0.0)||(value>50.)) {
+             ClearAdvisoryMessage();
+             DisplayAdvisoryMessage1("XENON-IODINE BLOCK NUMBER TO BE READ:");
+             DisplayAdvisoryMessage2("MUST BE BETWEEN 0 AND 50");
+             XRBP_IN9.input_mode_Btn();
+             return(1);
+          } 
+          XRBP_IN9.TheOriginalNumber=value;
+          execute ("{strcpy(XRBP_IN9.TheOriginalText,TextS);}");
+          break;
+        case 10: // Xenon-Iodine Block Numbers to be Written 
+          value = XRBP_IN10.TheNewNumber;
+          if ((value<0.0)||(value>50.0)) {
+             ClearAdvisoryMessage();
+             DisplayAdvisoryMessage1("XENON-IODINE BLOCK NUMBER TO BE WRITTEN:");
+             DisplayAdvisoryMessage2("MUST BE BETWEEN 0 AND 50");
+             XRBP_IN10.input_mode_Btn();
+             return(1);
+          } 
+          XRBP_IN10.TheOriginalNumber=value;
+          execute ("{strcpy(XRBP_IN10.TheOriginalText,TextS);}");
+          break;
+        case 11: //Initial Xenon Transient Value
+          value = XRBP_IN11.TheNewNumber;
+          if (value<0.0) {
+             ClearAdvisoryMessage();
+             DisplayAdvisoryMessage1("INITIAL XENON TRANSIENT VALUE:");
+             DisplayAdvisoryMessage2("MUST BE GREATER THAN OR EQUAL TO 0");
+             XRBP_IN11.input_mode_Btn();
+             return(1);
+          } 
+          XRBP_IN11.TheOriginalNumber=value;
+          execute ("{strcpy(XRBP_IN11.TheOriginalText,TextS);}");
+          break;
+        case 12: //Incremental Xenon Transient Value
+          value = XRBP_IN12.TheNewNumber;
+          if (value<0.0) {
+             ClearAdvisoryMessage();
+             DisplayAdvisoryMessage1("INCREMENTAL XENON TRANSIENT VALUE:");
+             DisplayAdvisoryMessage2("MUST BE GREATER THAN OR EQUAL TO 0");
+             XRBP_IN12.input_mode_Btn();
+             return(1);
+          } 
+          XRBP_IN12.TheOriginalNumber=value;
+          execute ("{strcpy(XRBP_IN12.TheOriginalText,TextS);}");
+          break;
+        case 13: //Final Xenon Transient Value 
+          value = XRBP_IN13.TheNewNumber;
+          if (value<0.0) {
+             ClearAdvisoryMessage();
+             DisplayAdvisoryMessage1("FINAL XENON TRANSIENT VALUE:");
+             DisplayAdvisoryMessage2("MUST BE GREATER THAN OR EQUAL TO 0");
+             XRBP_IN13.input_mode_Btn();
+             return(1);
+          } 
+          XRBP_IN13.TheOriginalNumber=value;
+          execute ("{strcpy(XRBP_IN13.TheOriginalText,TextS);}");
+          break;
+        case 14: // Core Average Moderator Inlet Temperature
+          value = XRBP_IN14.TheNewNumber;
+          temp_DegF = (value * 1.8 ) +32.;
+          if (temp_DegF<300.0) {
+             ClearAdvisoryMessage();
+             DisplayAdvisoryMessage1("CORE AVERAGE MODERATOR INLET TEMP:");
+             DisplayAdvisoryMessage2("MUST BE GREATER THAN OR EQUAL TO 150");
+             XRBP_IN14.input_mode_Btn();
+             return(1);
+          } 
+          XRBP_IN14.TheOriginalNumber=value;
+          execute ("{strcpy(XRBP_IN14.TheOriginalText,TextS);}");
+          break;
+        case 15: // ASI Search Flag 
+          value = XRBP_IN15.TheNewNumber;
+          if ((value != 0) && (value != 1)) {
+             ClearAdvisoryMessage();
+             DisplayAdvisoryMessage1("ASI SEARCH FLAG:");
+             DisplayAdvisoryMessage2("MUST BE 0 OR 1");
+             XRBP_IN15.input_mode_Btn();
+             return(1);
+          } 
+          XRBP_IN15.TheOriginalNumber=value;
+          execute ("{strcpy(XRBP_IN15.TheOriginalText,TextS);}");
+          break;
+        case 16: //ASI SEARCH TARGET VALUE
+          value = XRBP_IN16.TheNewNumber;
+          if ((value < -1.0) || (value > 1.0)) {
+             ClearAdvisoryMessage();
+             DisplayAdvisoryMessage1("ASI SEARCH TARGET VALUE:");
+             DisplayAdvisoryMessage2("MUST BE BETWEEN -1 AND 1");
+             XRBP_IN16.input_mode_Btn();
+             return(1);
+          } 
+          XRBP_IN16.TheOriginalNumber=value;
+          execute ("{strcpy(XRBP_IN16.TheOriginalText,TextS);}");
+          break;
+        case 17: //ASI SEARCH DEAD BAND
+          value = XRBP_IN17.TheNewNumber;
+          if ((value < 0.0) || (value > 0.1)) {
+             ClearAdvisoryMessage();
+             DisplayAdvisoryMessage1("ASI SEARCH DEAD BAND:");
+             DisplayAdvisoryMessage2("MUST BE BETWEEN 0 AND 0.1");
+             XRBP_IN17.input_mode_Btn();
+             return(1);
+          } 
+          XRBP_IN17.TheOriginalNumber=value;
+          execute ("{strcpy(XRBP_IN17.TheOriginalText,TextS);}");
+          break;
+        case 18: //ASI SEARCH CONTROL BAND
+          value = XRBP_IN18.TheNewNumber;
+          if ((value < 0.0) || (value > 0.1)) {
+             ClearAdvisoryMessage();
+             DisplayAdvisoryMessage1("ASI SEARCH CONTROL BAND:");
+             DisplayAdvisoryMessage2("MUST BE BETWEEN 0 AND 0.1");
+             XRBP_IN18.input_mode_Btn();
+             return(1);
+          } 
+          XRBP_IN18.TheOriginalNumber=value;
+          execute ("{strcpy(XRBP_IN18.TheOriginalText,TextS);}");
+          break;
+        case 19: //ASI SEARCH SELECTED CONTROL ROD GROUP
+                 // Accoding to UCN 3&4, the input of " " is not prohibited.
+          temp = XRBP_IN19.TheNewText;
+          if (strcmp(temp,"1")==0) CEA_ASI=2;
+          else if (strcmp(temp,"2")==0) CEA_ASI=3;
+          else if (strcmp(temp,"3")==0) CEA_ASI=4;
+          else if (strcmp(temp,"4")==0) CEA_ASI=5;
+          else if (strcmp(temp,"5")==0) CEA_ASI=6;
+          else if (strcmp(temp,"P")==0) CEA_ASI=7;
+          else if (strcmp(temp,"A")==0) CEA_ASI=9;
+          else if (strcmp(temp,"B")==0) CEA_ASI=10;
+          else if (strcmp(temp," ")==0) CEA_ASI=0;
+          else {
+             ClearAdvisoryMessage();
+             DisplayAdvisoryMessage1("ASI SEARCH SELECTED CEA GROUP:");
+             DisplayAdvisoryMessage2("ALLOWABLE ENTRIES ARE: A,B,1,2,3,4,5,P");
+             execute ("{strcpy(XRBP_IN19.TheOriginalText, prev_ASI);}");
+             XRBP_IN19.input_mode_Btn();
+             XRBP_IN19.Selected=0;
+             return(1);
+          }  
+          execute ("{strcpy(prev_ASI,XRBP_IN19.TheNewText);}");
+          break; 
+        case 20: //CONTROL ROD GROUP NUMBER (MANUAL OPERATION)
+                 // Accoding to UCN 3&4, the input of " " is permitted.
+          temp = XRBP_IN20.TheNewText;
+          if (strcmp(temp,"1")==0) CEA_MAN=2;
+          else if (strcmp(temp,"2")==0) CEA_MAN=3;
+          else if (strcmp(temp,"3")==0) CEA_MAN=4;
+          else if (strcmp(temp,"4")==0) CEA_MAN=5;
+          else if (strcmp(temp,"5")==0) CEA_MAN=6;
+          else if (strcmp(temp,"P")==0) CEA_MAN=7;
+          else if (strcmp(temp,"A")==0) CEA_MAN=9;
+          else if (strcmp(temp,"B")==0) CEA_MAN=10;
+          else if (strcmp(temp," ")==0) CEA_MAN=0;
+          else {
+             ClearAdvisoryMessage();
+             DisplayAdvisoryMessage1("CEA GROUP (MANUAL OPERATION):");
+             DisplayAdvisoryMessage2("ALLOWABLE ENTRIES ARE: A,B,1,2,3,4,5, ,P");
+             execute ("{strcpy(XRBP_IN20.TheOriginalText,prev_MAN);}");
+             XRBP_IN20.input_mode_Btn();
+             XRBP_IN20.Selected=0;
+             return(1);
+          } 
+          execute ("{strcpy(prev_MAN, XRBP_IN20.TheNewText);}"); 
+          break; 
+        case 21: //CONTROL ROD GROUP POSITION
+          value = XRBP_IN21.TheNewNumber;
+          if ((value < 0.0) || (value > 381)) {
+             ClearAdvisoryMessage();
+             DisplayAdvisoryMessage1("CEA GROUP POSITION:");
+             DisplayAdvisoryMessage2("MUST BE FROM 0 TO 381");
+             XRBP_IN21.input_mode_Btn();
+             return(1);
+          } 
+          XRBP_IN21.TheOriginalNumber=value;
+          execute ("{strcpy(XRBP_IN21.TheOriginalText,TextS);}");
+          break;
+        case 0:
+          value = LASTCASE.TheNewNumber;
+          if ((value != 0) && (value != 1)) {
+             ClearAdvisoryMessage();
+             DisplayAdvisoryMessage1("LAST CASE:");
+             DisplayAdvisoryMessage2("MUST BE 0 OR 1");
+             LASTCASE.input_mode_Btn();
+             return(1);
+          } 
+          LASTCASE.TheOriginalNumber=value;
+          execute ("{strcpy(LASTCASE.TheOriginalText,TextS);}");
+          break;
+      }
+      return(0);
+}`
+
+
+
+  function `void Escape()
+{
+//This function is used for footer keys except PREV and NEXT keys.
+//
+      XRBP_FLAG=0;
+}`
+
+
+
+  function `void SaveData() //Send the user inputs to message buffer
+{
+      int i;	// loop counter
+   //
+      for (i=1;i<19;i++){
+          execute ("{Interface->XRBP.data.input_val[%d] = XRBP_IN%d.TheNewNumber;}",i-1,i);
+      }
+      execute ("{Interface->XRBP.data.input_val[18] = CEA_ASI;}");
+      execute ("{Interface->XRBP.data.input_val[19] = CEA_MAN;}");
+      //execute ("{Interface->XRBP.data.last_case = atoi(LASTCASE.TheNewText);}");
+      execute ("{Interface->XRBP.data.last_case = LASTCASE.TheNewNumber;}");
+      execute ("{Interface->XRBP.data.input_val[20] = XRBP_IN21.TheNewNumber;}"); 
+//
+      if(LASTCASE.TheNewNumber==1)
+               CASE_FLAG=1;
+        else
+               CASE_FLAG=0;          
+}
+`
+
+
+
+  function `void Init_Completed()
+{ 
+   if((Current_Page!=621) && (Current_Page!=623)) 
+      return;
+
+      int i;	// loop counter
+      int susp; // FLAG for CEA Group Display
+
+   //
+      for (i=1;i<19;i++)
+        {
+        execute ("{XRBP_IN%d.TheNewNumber = Interface->XRBP.data.input_val[%d];}",i,i-1);
+        execute ("{strcpy(XRBP_IN%d.TheOriginalText,TextS);}",i);
+        execute ("{XRBP_IN%d.TheOriginalNumber = XRBP_IN%d.TheNewNumber;}",i,i);
+        }
+      susp=0;
+      execute ("{CEA_ASI = Interface->XRBP.data.input_val[18];}");
+          if (CEA_ASI==2) execute ("{strcpy(XRBP_IN19.TheNewText, Text1);}");
+           else if (CEA_ASI== 3) execute ("{strcpy(XRBP_IN19.TheNewText, Text2);}");
+           else if (CEA_ASI== 4) execute ("{strcpy(XRBP_IN19.TheNewText, Text3);}");
+           else if (CEA_ASI== 5) execute ("{strcpy(XRBP_IN19.TheNewText, Text4);}");
+           else if (CEA_ASI== 6) execute ("{strcpy(XRBP_IN19.TheNewText, Text5);}");
+           else if (CEA_ASI== 7) execute ("{strcpy(XRBP_IN19.TheNewText, TextP);}");
+           else if (CEA_ASI== 9) execute ("{strcpy(XRBP_IN19.TheNewText, TextA);}");
+           else if (CEA_ASI==10) execute ("{strcpy(XRBP_IN19.TheNewText, TextB);}");
+           else susp=1;
+           // XRBP doesn't permit the result of " " according UCN 3&4.
+             //else if (CEA_ASI==0 || CEA_ASI==1 || CEA_ASI==8) 
+             //                      execute ("{strcpy(XRBP_IN19.TheNewText, TextS);}");
+          if(susp==0)  
+              execute ("{strcpy(XRBP_IN19.TheOriginalText,XRBP_IN19.TheNewText);}"); 
+//
+      susp=0;
+      execute ("{CEA_MAN = Interface->XRBP.data.input_val[19] ;}");
+          if (CEA_MAN== 2) execute ("{strcpy(XRBP_IN20.TheNewText, Text1);}");
+           else if (CEA_MAN== 3) execute ("{strcpy(XRBP_IN20.TheNewText, Text2);}");
+           else if (CEA_MAN== 4) execute ("{strcpy(XRBP_IN20.TheNewText, Text3);}");
+           else if (CEA_MAN== 5) execute ("{strcpy(XRBP_IN20.TheNewText, Text4);}");
+           else if (CEA_MAN== 6) execute ("{strcpy(XRBP_IN20.TheNewText, Text5);}");
+           else if (CEA_MAN== 7) execute ("{strcpy(XRBP_IN20.TheNewText, TextP);}");
+           else if (CEA_MAN== 9) execute ("{strcpy(XRBP_IN20.TheNewText, TextA);}");
+           else if (CEA_MAN==10) execute ("{strcpy(XRBP_IN20.TheNewText, TextB);}");
+           else if (CEA_MAN==0 || CEA_MAN==1 || CEA_MAN==8) 
+                                 execute ("{strcpy(XRBP_IN20.TheNewText, TextS);}");
+           else susp=1;
+          if(susp==0)  
+             execute ("{strcpy(XRBP_IN20.TheOriginalText, XRBP_IN20.TheNewText);}");
+//
+      execute ("{XRBP_IN21.TheNewNumber = Interface->XRBP.data.input_val[20];}");
+      execute ("{strcpy(XRBP_IN21.TheOriginalText,TextS);}");
+      execute ("{XRBP_IN21.TheOriginalNumber = XRBP_IN21.TheNewNumber;}");
+//
+      execute ("{LASTCASE.TheNewNumber = Interface->XRBP.data.last_case;}");
+      execute ("{strcpy(LASTCASE.TheOriginalText,TextS);}");
+      execute ("{LASTCASE.TheOriginalNumber = LASTCASE.TheNewNumber;}");
+    
+      Wait.visibility=0;
+      Wait1.visibility=0;
+      update();
+
+       //DisplayAdvisoryMessage("INITIALIZATION COMPLETED");
+       //DisplayAdvisoryMessage1("THE PREVIOUSLY RUN CASE IS PRESENTED.");
+       //DisplayAdvisoryMessage2("IT IS RECOMMEDED TO SET THE LAST CASE RUN TO 1.");
+}
+     `
+
+
+
+  function `void Host_Messages()
+{
+   if((Current_Page!=621) && (Current_Page!=623)) 
+      return;
+
+   ClearAdvisoryMessage();
+   DisplayAdvisoryMessage1(Interface->GenericConfirmMessage.data.message1);
+   DisplayAdvisoryMessage2(Interface->GenericConfirmMessage.data.message2);
+   DisplayAdvisoryMessage3(Interface->GenericConfirmMessage.data.message3);
+}`
+
+
+
+  text 
+  {
+    x = 244.444;
+    y = 54.4444;
+    format = "%s";
+    theText = "CRITICALITY SEARCH  (1:PPM  2:RODS  3:POWER  4:TAVG)";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 244.444;
+    yReference = 54.4444;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 240;
+    y = 143.333;
+    format = "%s";
+    theText = "INCREMENTAL";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 240;
+    yReference = 143.333;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 240;
+    y = 110;
+    format = "%s";
+    theText = "INITIAL";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 240;
+    yReference = 110;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 238.889;
+    y = 178.889;
+    format = "%s";
+    theText = "FINAL";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 238.889;
+    yReference = 178.889;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 414.444;
+    y = 131.111;
+    format = "%s";
+    theText = "DEPLETION";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 414.444;
+    yReference = 131.111;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 237.778;
+    y = 268.889;
+    format = "%s";
+    theText = "EXPOSURE BLOCK NUMBER TO WRITE";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 237.778;
+    yReference = 268.889;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 237.778;
+    y = 232.222;
+    format = "%s";
+    theText = "EXPOSURE BLOCK NUMBER TO READ";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 237.778;
+    yReference = 232.222;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 846;
+    y = 266;
+    format = "%s";
+    theText = "CORE POWER LEVEL (PERCENT)";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 846;
+    yReference = 266;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 845;
+    y = 231;
+    format = "%s";
+    theText = "BORON CONCENTRATION (PPM)";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 845;
+    yReference = 231;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 237.778;
+    y = 356.667;
+    format = "%s";
+    theText = "XENON-IODINE BLOCK NUMBERS TO WRITE IN PAIRS";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 237.778;
+    yReference = 356.667;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 237.778;
+    y = 320;
+    format = "%s";
+    theText = "XENON-IODINE BLOCK NUMBERS TO READ IN PAIRS";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 237.778;
+    yReference = 320;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 841;
+    y = 106;
+    format = "%s";
+    theText = "INCREMENTAL";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 841;
+    yReference = 106;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 844;
+    y = 143;
+    format = "%s";
+    theText = "INITIAL";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 844;
+    yReference = 143;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 846;
+    y = 178;
+    format = "%s";
+    theText = "FINAL";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 846;
+    yReference = 178;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 1008;
+    y = 126;
+    format = "%s";
+    theText = "XENON TRANSIENT";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 1008;
+    yReference = 126;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 237.778;
+    y = 401.111;
+    format = "%s";
+    theText = "CORE AVERAGE INLET TEMPERATURE (DEG C)";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 237.778;
+    yReference = 401.111;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 237.778;
+    y = 491.111;
+    format = "%s";
+    theText = "ASI SEARCH TARGET VALUE (ASI UNITS)";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 237.778;
+    yReference = 491.111;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 237.778;
+    y = 456.667;
+    format = "%s";
+    theText = "ASI SEARCH FLAG (0=OFF, 1=ON)";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 237.778;
+    yReference = 456.667;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 237.778;
+    y = 566.667;
+    format = "%s";
+    theText = "ASI SEARCH CONTROL BAND (ASI UNITS)";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 237.778;
+    yReference = 566.667;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 237.778;
+    y = 530;
+    format = "%s";
+    theText = "ASI SEARCH DEADBAND (ASI UNITS)";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 237.778;
+    yReference = 530;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 237.778;
+    y = 602.222;
+    format = "%s";
+    theText = "ASI SEARCH SELECTED CEA GROUP  (A, B, 1, 2, 3, 4, 5, P)";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 237.778;
+    yReference = 602.222;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 237.778;
+    y = 653.333;
+    format = "%s";
+    theText = "CEA GROUP MANUAL OPERATION -- (A, B, 1, 2, 3, 4, 5,  ,P)";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 237.778;
+    yReference = 653.333;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 237.778;
+    y = 690;
+    format = "%s";
+    theText = "CM WITHDRAWN (0-381)";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 237.778;
+    yReference = 690;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  line 
+  {
+    numberOfPoints = 2;
+
+    point[0] = (1000, 86);
+    point[1] = (1000, 86);
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineWidth = 0;
+    lineStyle = `SolidPattern`;
+    xReference = 1000;
+    yReference = 86;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  line 
+  {
+    numberOfPoints = 2;
+
+    point[0] = (998, 89);
+    point[1] = (998, 179);
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineWidth = 2;
+    lineStyle = `SolidPattern`;
+    xReference = 998;
+    yReference = 89;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  line 
+  {
+    numberOfPoints = 2;
+
+    point[0] = (400, 91.1111);
+    point[1] = (400, 181.111);
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineWidth = 2;
+    lineStyle = `SolidPattern`;
+    xReference = 400;
+    yReference = 91.1111;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 934.444;
+    y = 695.556;
+    format = "%s";
+    theText = "LAST CASE RUN (0=OFF 1=ON)";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 934.444;
+    yReference = 695.556;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  instance DialogueSymbols.PushButton PROCESS_BTN
+  {
+    attribute ExecuteString = "{Process1();}";
+    attribute isInside = 1;
+    attribute isDown = 0;
+    attribute Height = 30;
+    attribute Width = 120;
+    attribute ButtonState = 0;
+    attribute SelectColour = `COLOR_BUTTON_SELECTED`;
+    attribute BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    attribute BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    attribute TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    attribute TextX = 17;
+    attribute TextY = 22;
+    attribute Label = "PROCESS";
+    attribute TextColour = `COLOR_PICTURE_BACKGROUND`;
+    attribute TextFont = 4;
+    attribute TextXStatic = 17;
+    attribute TextXDynamic = 15;
+    attribute TextYStatic = 22;
+    attribute TextYDynamic = 21;
+    attribute DynamicLabel = "PROCESS";
+    attribute StaticLabel = "PROCESS";
+    attribute TextFontStatic = `font4`;
+    attribute TextFontDynamic = `font2`;
+    attribute Scope = "PicYGN_XRBP_Off";
+    x = 893;
+    y = 719;
+    visibility = 1;
+    xReference = 893;
+    yReference = 719;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance PROCESS_BTN
+
+
+
+  text 
+  {
+    x = 412.222;
+    y = 161.111;
+    format = "%s";
+    theText = "VALUE (GWD/T)";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 412.222;
+    yReference = 161.111;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 1006;
+    y = 159;
+    format = "%s";
+    theText = "VALUE (HOURS)";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 1006;
+    yReference = 159;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  line 
+  {
+    numberOfPoints = 2;
+
+    point[0] = (32.6316, 23.1579);
+    point[1] = (1229, 23);
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineWidth = 3;
+    lineStyle = `SolidPattern`;
+    xReference = 32.6316;
+    yReference = 23.1579;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  line 
+  {
+    numberOfPoints = 2;
+
+    point[0] = (32, 619);
+    point[1] = (1231, 619);
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineWidth = 3;
+    lineStyle = `SolidPattern`;
+    xReference = 32;
+    yReference = 619;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  line 
+  {
+    numberOfPoints = 2;
+
+    point[0] = (32.2222, 711.111);
+    point[1] = (1231.11, 711.111);
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineWidth = 3;
+    lineStyle = `SolidPattern`;
+    xReference = 32.2222;
+    yReference = 711.111;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  line 
+  {
+    numberOfPoints = 2;
+
+    point[0] = (32.6316, 74.7368);
+    point[1] = (1228, 75);
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineWidth = 3;
+    lineStyle = `SolidPattern`;
+    xReference = 32.6316;
+    yReference = 74.7368;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  line 
+  {
+    numberOfPoints = 2;
+
+    point[0] = (32.6316, 201.053);
+    point[1] = (1229, 201);
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineWidth = 3;
+    lineStyle = `SolidPattern`;
+    xReference = 32.6316;
+    yReference = 201.053;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  line 
+  {
+    numberOfPoints = 2;
+
+    point[0] = (31, 371);
+    point[1] = (1230, 371);
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineWidth = 3;
+    lineStyle = `SolidPattern`;
+    xReference = 31;
+    yReference = 371;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  line 
+  {
+    numberOfPoints = 2;
+
+    point[0] = (31, 422);
+    point[1] = (1230, 422);
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineWidth = 3;
+    lineStyle = `SolidPattern`;
+    xReference = 31;
+    yReference = 422;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  line 
+  {
+    numberOfPoints = 2;
+
+    point[0] = (32, 23);
+    point[1] = (32, 712);
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineWidth = 3;
+    lineStyle = `SolidPattern`;
+    xReference = 32;
+    yReference = 23;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  line 
+  {
+    numberOfPoints = 2;
+
+    point[0] = (1230, 23);
+    point[1] = (1230, 710);
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineWidth = 3;
+    lineStyle = `SolidPattern`;
+    xReference = 1230;
+    yReference = 23;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  line 
+  {
+    numberOfPoints = 2;
+
+    point[0] = (638, 75);
+    point[1] = (638, 75);
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineWidth = 0;
+    lineStyle = `SolidPattern`;
+    xReference = 638;
+    yReference = 75;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  line 
+  {
+    numberOfPoints = 2;
+
+    point[0] = (636, 75);
+    point[1] = (636, 288);
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineWidth = 3;
+    lineStyle = `SolidPattern`;
+    xReference = 636;
+    yReference = 75;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  instance DialogueSymbols.InputNumberBtn XRBP_IN2
+  {
+    attribute isInside = 1;
+    attribute isDown = 0;
+    attribute Height = 30;
+    attribute Width = 150;
+    attribute SelectColour = `COLOR_BUTTON_SELECTED`;
+    attribute BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    attribute BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    attribute TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    attribute TextX = 10;
+    attribute TextY = 21;
+    attribute TextColour = `COLOR_PICTURE_BACKGROUND`;
+    attribute TextFont = 4;
+    attribute ExecuteSelect = "";
+    attribute ExecuteUnSelect = "{VerifyInput(2);}";
+    attribute TheNewText = " ";
+    attribute TheOriginalText = " ";
+    attribute ERROR = 0;
+    attribute TheNumberFormat = "%18.5f";
+    attribute Selected = 0;
+    attribute ReturnAction = "";
+    attribute TheOriginalNumber = 4;
+    attribute MaxDigits = 8;
+    attribute TheNewNumber = 4;
+    attribute Scope = "::YGN3and4.PicYGN_XRBP_Off";
+    x = 50;
+    y = 87;
+    visibility = 1;
+    xReference = 50;
+    yReference = 87;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance XRBP_IN2
+
+
+
+  instance DialogueSymbols.InputNumberBtn XRBP_IN1
+  {
+    attribute isInside = 1;
+    attribute isDown = 0;
+    attribute Height = 30;
+    attribute Width = 150;
+    attribute SelectColour = `COLOR_BUTTON_SELECTED`;
+    attribute BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    attribute BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    attribute TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    attribute TextX = 10;
+    attribute TextY = 21;
+    attribute TextColour = `COLOR_PICTURE_BACKGROUND`;
+    attribute TextFont = 4;
+    attribute ExecuteSelect = "";
+    attribute ExecuteUnSelect = "{VerifyInput(1);}";
+    attribute TheNewText = " ";
+    attribute TheOriginalText = " ";
+    attribute ERROR = 0;
+    attribute TheNumberFormat = "%16d";
+    attribute Selected = 0;
+    attribute ReturnAction = "";
+    attribute TheOriginalNumber = 3;
+    attribute MaxDigits = 8;
+    attribute TheNewNumber = 3;
+    attribute Scope = "::YGN3and4.PicYGN_XRBP_Off";
+    x = 50;
+    y = 34;
+    visibility = 1;
+    xReference = 50;
+    yReference = 34;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance XRBP_IN1
+
+
+
+  instance DialogueSymbols.InputNumberBtn XRBP_IN4
+  {
+    attribute isInside = 1;
+    attribute isDown = 0;
+    attribute Height = 30;
+    attribute Width = 150;
+    attribute SelectColour = `COLOR_BUTTON_SELECTED`;
+    attribute BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    attribute BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    attribute TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    attribute TextX = 10;
+    attribute TextY = 21;
+    attribute TextColour = `COLOR_PICTURE_BACKGROUND`;
+    attribute TextFont = 4;
+    attribute ExecuteSelect = "";
+    attribute ExecuteUnSelect = "{VerifyInput(4);}";
+    attribute TheNewText = " ";
+    attribute TheOriginalText = " ";
+    attribute ERROR = 0;
+    attribute TheNumberFormat = "%18.5f";
+    attribute Selected = 0;
+    attribute ReturnAction = "";
+    attribute TheOriginalNumber = 0;
+    attribute MaxDigits = 8;
+    attribute TheNewNumber = 0;
+    attribute Scope = "::YGN3and4.PicYGN_XRBP_Off";
+    x = 50;
+    y = 162;
+    visibility = 1;
+    xReference = 50;
+    yReference = 162;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance XRBP_IN4
+
+
+
+  instance DialogueSymbols.InputNumberBtn XRBP_IN3
+  {
+    attribute isInside = 1;
+    attribute isDown = 0;
+    attribute Height = 30;
+    attribute Width = 150;
+    attribute SelectColour = `COLOR_BUTTON_SELECTED`;
+    attribute BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    attribute BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    attribute TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    attribute TextX = 10;
+    attribute TextY = 21;
+    attribute TextColour = `COLOR_PICTURE_BACKGROUND`;
+    attribute TextFont = 4;
+    attribute ExecuteSelect = "";
+    attribute ExecuteUnSelect = "{VerifyInput(3);}";
+    attribute TheNewText = " ";
+    attribute TheOriginalText = " ";
+    attribute ERROR = 0;
+    attribute TheNumberFormat = "%18.5f";
+    attribute Selected = 0;
+    attribute ReturnAction = "";
+    attribute TheOriginalNumber = 0;
+    attribute MaxDigits = 8;
+    attribute TheNewNumber = 0;
+    attribute Scope = "::YGN3and4.PicYGN_XRBP_Off";
+    x = 50;
+    y = 124;
+    visibility = 1;
+    xReference = 50;
+    yReference = 124;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance XRBP_IN3
+
+
+
+  instance DialogueSymbols.InputNumberBtn XRBP_IN11
+  {
+    attribute isInside = 1;
+    attribute isDown = 0;
+    attribute Height = 30;
+    attribute Width = 150;
+    attribute SelectColour = `COLOR_BUTTON_SELECTED`;
+    attribute BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    attribute BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    attribute TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    attribute TextX = 10;
+    attribute TextY = 21;
+    attribute TextColour = `COLOR_PICTURE_BACKGROUND`;
+    attribute TextFont = 4;
+    attribute ExecuteSelect = "";
+    attribute ExecuteUnSelect = "{VerifyInput(11);}";
+    attribute TheNewText = "0.0001";
+    attribute TheOriginalText = " ";
+    attribute ERROR = 0;
+    attribute TheNumberFormat = "%18.5f";
+    attribute Selected = 0;
+    attribute ReturnAction = "";
+    attribute TheOriginalNumber = 0;
+    attribute MaxDigits = 8;
+    attribute TheNewNumber = 0;
+    attribute Scope = "::YGN3and4.PicYGN_XRBP_Off";
+    x = 665;
+    y = 122;
+    visibility = 1;
+    xReference = 665;
+    yReference = 122;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance XRBP_IN11
+
+
+
+  instance DialogueSymbols.InputNumberBtn XRBP_IN13
+  {
+    attribute isInside = 1;
+    attribute isDown = 0;
+    attribute Height = 30;
+    attribute Width = 150;
+    attribute SelectColour = `COLOR_BUTTON_SELECTED`;
+    attribute BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    attribute BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    attribute TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    attribute TextX = 10;
+    attribute TextY = 21;
+    attribute TextColour = `COLOR_PICTURE_BACKGROUND`;
+    attribute TextFont = 4;
+    attribute ExecuteSelect = "";
+    attribute ExecuteUnSelect = "{VerifyInput(13);}";
+    attribute TheNewText = "0.0002";
+    attribute TheOriginalText = " ";
+    attribute ERROR = 0;
+    attribute TheNumberFormat = "%18.5f";
+    attribute Selected = 0;
+    attribute ReturnAction = "";
+    attribute TheOriginalNumber = 0;
+    attribute MaxDigits = 8;
+    attribute TheNewNumber = 0;
+    attribute Scope = "::YGN3and4.PicYGN_XRBP_Off";
+    x = 666;
+    y = 160;
+    visibility = 1;
+    xReference = 666;
+    yReference = 160;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance XRBP_IN13
+
+
+
+  instance DialogueSymbols.InputNumberBtn XRBP_IN12
+  {
+    attribute isInside = 1;
+    attribute isDown = 0;
+    attribute Height = 30;
+    attribute Width = 150;
+    attribute SelectColour = `COLOR_BUTTON_SELECTED`;
+    attribute BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    attribute BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    attribute TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    attribute TextX = 10;
+    attribute TextY = 21;
+    attribute TextColour = `COLOR_PICTURE_BACKGROUND`;
+    attribute TextFont = 4;
+    attribute ExecuteSelect = "";
+    attribute ExecuteUnSelect = "{VerifyInput(12);}";
+    attribute TheNewText = "0.0001";
+    attribute TheOriginalText = "0.0001";
+    attribute ERROR = 0;
+    attribute TheNumberFormat = "%18.5f";
+    attribute Selected = 0;
+    attribute ReturnAction = "";
+    attribute TheOriginalNumber = 34.5;
+    attribute MaxDigits = 8;
+    attribute TheNewNumber = 0;
+    attribute Scope = "::YGN3and4.PicYGN_XRBP_Off";
+    x = 664;
+    y = 85;
+    visibility = 1;
+    xReference = 664;
+    yReference = 85;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance XRBP_IN12
+
+
+
+  instance DialogueSymbols.InputNumberBtn XRBP_IN6
+  {
+    attribute isInside = 1;
+    attribute isDown = 0;
+    attribute Height = 30;
+    attribute Width = 150;
+    attribute SelectColour = `COLOR_BUTTON_SELECTED`;
+    attribute BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    attribute BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    attribute TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    attribute TextX = 10;
+    attribute TextY = 21;
+    attribute TextColour = `COLOR_PICTURE_BACKGROUND`;
+    attribute TextFont = 4;
+    attribute ExecuteSelect = "";
+    attribute ExecuteUnSelect = "{VerifyInput(6);}";
+    attribute TheNewText = " ";
+    attribute TheOriginalText = " ";
+    attribute ERROR = 0;
+    attribute TheNumberFormat = "%18.2f";
+    attribute Selected = 0;
+    attribute ReturnAction = "";
+    attribute TheOriginalNumber = 1;
+    attribute MaxDigits = 8;
+    attribute TheNewNumber = 1;
+    attribute Scope = "::YGN3and4.PicYGN_XRBP_Off";
+    x = 50;
+    y = 249;
+    visibility = 1;
+    xReference = 50;
+    yReference = 249;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance XRBP_IN6
+
+
+
+  instance DialogueSymbols.InputNumberBtn XRBP_IN5
+  {
+    attribute isInside = 1;
+    attribute isDown = 0;
+    attribute Height = 30;
+    attribute Width = 150;
+    attribute SelectColour = `COLOR_BUTTON_SELECTED`;
+    attribute BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    attribute BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    attribute TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    attribute TextX = 10;
+    attribute TextY = 21;
+    attribute TextColour = `COLOR_PICTURE_BACKGROUND`;
+    attribute TextFont = 4;
+    attribute ExecuteSelect = "";
+    attribute ExecuteUnSelect = "{VerifyInput(5);}";
+    attribute TheNewText = " ";
+    attribute TheOriginalText = " ";
+    attribute ERROR = 0;
+    attribute TheNumberFormat = "%18.2f";
+    attribute Selected = 0;
+    attribute ReturnAction = "";
+    attribute TheOriginalNumber = 7;
+    attribute MaxDigits = 8;
+    attribute TheNewNumber = 7;
+    attribute Scope = "::YGN3and4.PicYGN_XRBP_Off";
+    x = 50;
+    y = 211;
+    visibility = 1;
+    xReference = 50;
+    yReference = 211;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance XRBP_IN5
+
+
+
+  instance DialogueSymbols.InputNumberBtn XRBP_IN9
+  {
+    attribute isInside = 1;
+    attribute isDown = 0;
+    attribute Height = 30;
+    attribute Width = 150;
+    attribute SelectColour = `COLOR_BUTTON_SELECTED`;
+    attribute BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    attribute BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    attribute TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    attribute TextX = 10;
+    attribute TextY = 21;
+    attribute TextColour = `COLOR_PICTURE_BACKGROUND`;
+    attribute TextFont = 4;
+    attribute ExecuteSelect = "";
+    attribute ExecuteUnSelect = "{VerifyInput(9);}";
+    attribute TheNewText = " ";
+    attribute TheOriginalText = " ";
+    attribute ERROR = 0;
+    attribute TheNumberFormat = "%18.2f";
+    attribute Selected = 0;
+    attribute ReturnAction = "";
+    attribute TheOriginalNumber = 0;
+    attribute MaxDigits = 8;
+    attribute TheNewNumber = 0;
+    attribute Scope = "::YGN3and4.PicYGN_XRBP_Off";
+    x = 50;
+    y = 296.667;
+    visibility = 1;
+    xReference = 50;
+    yReference = 296.667;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance XRBP_IN9
+
+
+
+  instance DialogueSymbols.InputNumberBtn XRBP_IN8
+  {
+    attribute isInside = 1;
+    attribute isDown = 0;
+    attribute Height = 30;
+    attribute Width = 150;
+    attribute SelectColour = `COLOR_BUTTON_SELECTED`;
+    attribute BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    attribute BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    attribute TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    attribute TextX = 10;
+    attribute TextY = 21;
+    attribute TextColour = `COLOR_PICTURE_BACKGROUND`;
+    attribute TextFont = 4;
+    attribute ExecuteSelect = "";
+    attribute ExecuteUnSelect = "{VerifyInput(8);}";
+    attribute TheNewText = "100";
+    attribute TheOriginalText = " ";
+    attribute ERROR = 0;
+    attribute TheNumberFormat = "%18.4f";
+    attribute Selected = 0;
+    attribute ReturnAction = "";
+    attribute TheOriginalNumber = 100;
+    attribute MaxDigits = 8;
+    attribute TheNewNumber = 100;
+    attribute Scope = "::YGN3and4.PicYGN_XRBP_Off";
+    x = 666;
+    y = 248;
+    visibility = 1;
+    xReference = 666;
+    yReference = 248;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance XRBP_IN8
+
+
+
+  instance DialogueSymbols.InputNumberBtn XRBP_IN7
+  {
+    attribute isInside = 1;
+    attribute isDown = 0;
+    attribute Height = 30;
+    attribute Width = 150;
+    attribute SelectColour = `COLOR_BUTTON_SELECTED`;
+    attribute BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    attribute BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    attribute TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    attribute TextX = 10;
+    attribute TextY = 21;
+    attribute TextColour = `COLOR_PICTURE_BACKGROUND`;
+    attribute TextFont = 4;
+    attribute ExecuteSelect = "";
+    attribute ExecuteUnSelect = "{VerifyInput(7);}";
+    attribute TheNewText = "703.0";
+    attribute TheOriginalText = " ";
+    attribute ERROR = 0;
+    attribute TheNumberFormat = "%18.4f";
+    attribute Selected = 0;
+    attribute ReturnAction = "";
+    attribute TheOriginalNumber = 767.015;
+    attribute MaxDigits = 8;
+    attribute TheNewNumber = 767.015;
+    attribute Scope = "::YGN3and4.PicYGN_XRBP_Off";
+    x = 666;
+    y = 210;
+    visibility = 1;
+    xReference = 666;
+    yReference = 210;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance XRBP_IN7
+
+
+
+  instance DialogueSymbols.InputNumberBtn XRBP_IN10
+  {
+    attribute isInside = 1;
+    attribute isDown = 0;
+    attribute Height = 30;
+    attribute Width = 150;
+    attribute SelectColour = `COLOR_BUTTON_SELECTED`;
+    attribute BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    attribute BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    attribute TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    attribute TextX = 10;
+    attribute TextY = 21;
+    attribute TextColour = `COLOR_PICTURE_BACKGROUND`;
+    attribute TextFont = 4;
+    attribute ExecuteSelect = "";
+    attribute ExecuteUnSelect = "{VerifyInput(10);}";
+    attribute TheNewText = " ";
+    attribute TheOriginalText = " ";
+    attribute ERROR = 0;
+    attribute TheNumberFormat = "%18.2f";
+    attribute Selected = 0;
+    attribute ReturnAction = "";
+    attribute TheOriginalNumber = 2;
+    attribute MaxDigits = 8;
+    attribute TheNewNumber = 2;
+    attribute Scope = "::YGN3and4.PicYGN_XRBP_Off";
+    x = 50;
+    y = 334.444;
+    visibility = 1;
+    xReference = 50;
+    yReference = 334.444;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance XRBP_IN10
+
+
+
+  instance DialogueSymbols.InputNumberBtn XRBP_IN14
+  {
+    attribute isInside = 1;
+    attribute isDown = 0;
+    attribute Height = 30;
+    attribute Width = 150;
+    attribute SelectColour = `COLOR_BUTTON_SELECTED`;
+    attribute BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    attribute BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    attribute TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    attribute TextX = 10;
+    attribute TextY = 21;
+    attribute TextColour = `COLOR_PICTURE_BACKGROUND`;
+    attribute TextFont = 4;
+    attribute ExecuteSelect = "";
+    attribute ExecuteUnSelect = "{VerifyInput(14);}";
+    attribute TheNewText = " ";
+    attribute TheOriginalText = " ";
+    attribute ERROR = 0;
+    attribute TheNumberFormat = "%18.4f";
+    attribute Selected = 0;
+    attribute ReturnAction = "";
+    attribute TheOriginalNumber = 296.111;
+    attribute MaxDigits = 8;
+    attribute TheNewNumber = 296.111;
+    attribute Scope = "::YGN3and4.PicYGN_XRBP_Off";
+    x = 50;
+    y = 383.333;
+    visibility = 1;
+    xReference = 50;
+    yReference = 383.333;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance XRBP_IN14
+
+
+
+  instance DialogueSymbols.InputNumberBtn XRBP_IN16
+  {
+    attribute isInside = 1;
+    attribute isDown = 0;
+    attribute Height = 30;
+    attribute Width = 150;
+    attribute SelectColour = `COLOR_BUTTON_SELECTED`;
+    attribute BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    attribute BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    attribute TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    attribute TextX = 10;
+    attribute TextY = 21;
+    attribute TextColour = `COLOR_PICTURE_BACKGROUND`;
+    attribute TextFont = 4;
+    attribute ExecuteSelect = "";
+    attribute ExecuteUnSelect = "{VerifyInput(16);}";
+    attribute TheNewText = " ";
+    attribute TheOriginalText = " ";
+    attribute ERROR = 0;
+    attribute TheNumberFormat = "%18.5f";
+    attribute Selected = 0;
+    attribute ReturnAction = "";
+    attribute TheOriginalNumber = 0;
+    attribute MaxDigits = 8;
+    attribute TheNewNumber = 0;
+    attribute Scope = "::YGN3and4.PicYGN_XRBP_Off";
+    x = 50;
+    y = 470;
+    visibility = 1;
+    xReference = 50;
+    yReference = 470;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance XRBP_IN16
+
+
+
+  instance DialogueSymbols.InputNumberBtn XRBP_IN17
+  {
+    attribute isInside = 1;
+    attribute isDown = 0;
+    attribute Height = 30;
+    attribute Width = 150;
+    attribute SelectColour = `COLOR_BUTTON_SELECTED`;
+    attribute BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    attribute BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    attribute TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    attribute TextX = 10;
+    attribute TextY = 21;
+    attribute TextColour = `COLOR_PICTURE_BACKGROUND`;
+    attribute TextFont = 4;
+    attribute ExecuteSelect = "";
+    attribute ExecuteUnSelect = "{VerifyInput(17);}";
+    attribute TheNewText = " ";
+    attribute TheOriginalText = " ";
+    attribute ERROR = 0;
+    attribute TheNumberFormat = "%18.5f";
+    attribute Selected = 0;
+    attribute ReturnAction = "";
+    attribute TheOriginalNumber = 0;
+    attribute MaxDigits = 8;
+    attribute TheNewNumber = 0;
+    attribute Scope = "::YGN3and4.PicYGN_XRBP_Off";
+    x = 50;
+    y = 507.778;
+    visibility = 1;
+    xReference = 50;
+    yReference = 507.778;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance XRBP_IN17
+
+
+
+  instance DialogueSymbols.InputNumberBtn XRBP_IN18
+  {
+    attribute isInside = 1;
+    attribute isDown = 0;
+    attribute Height = 30;
+    attribute Width = 150;
+    attribute SelectColour = `COLOR_BUTTON_SELECTED`;
+    attribute BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    attribute BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    attribute TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    attribute TextX = 10;
+    attribute TextY = 21;
+    attribute TextColour = `COLOR_PICTURE_BACKGROUND`;
+    attribute TextFont = 4;
+    attribute ExecuteSelect = "";
+    attribute ExecuteUnSelect = "{VerifyInput(18);}";
+    attribute TheNewText = " ";
+    attribute TheOriginalText = " ";
+    attribute ERROR = 0;
+    attribute TheNumberFormat = "%18.5f";
+    attribute Selected = 0;
+    attribute ReturnAction = "";
+    attribute TheOriginalNumber = 0;
+    attribute MaxDigits = 8;
+    attribute TheNewNumber = 0;
+    attribute Scope = "::YGN3and4.PicYGN_XRBP_Off";
+    x = 50;
+    y = 544.444;
+    visibility = 1;
+    xReference = 50;
+    yReference = 544.444;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance XRBP_IN18
+
+
+
+  instance DialogueSymbols.InputNumberBtn XRBP_IN21
+  {
+    attribute isInside = 1;
+    attribute isDown = 0;
+    attribute Height = 30;
+    attribute Width = 150;
+    attribute SelectColour = `COLOR_BUTTON_SELECTED`;
+    attribute BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    attribute BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    attribute TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    attribute TextX = 10;
+    attribute TextY = 21;
+    attribute TextColour = `COLOR_PICTURE_BACKGROUND`;
+    attribute TextFont = 4;
+    attribute ExecuteSelect = "";
+    attribute ExecuteUnSelect = "{VerifyInput(21);}";
+    attribute TheNewText = " ";
+    attribute TheOriginalText = " ";
+    attribute ERROR = 0;
+    attribute TheNumberFormat = "%18.2f";
+    attribute Selected = 0;
+    attribute ReturnAction = "";
+    attribute TheOriginalNumber = 0;
+    attribute MaxDigits = 8;
+    attribute TheNewNumber = 0;
+    attribute Scope = "::YGN3and4.PicYGN_XRBP_Off";
+    x = 50;
+    y = 670;
+    visibility = 1;
+    xReference = 50;
+    yReference = 670;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance XRBP_IN21
+
+
+
+  instance DialogueSymbols.InputNumberBtn XRBP_IN15
+  {
+    attribute isInside = 1;
+    attribute isDown = 0;
+    attribute Height = 30;
+    attribute Width = 150;
+    attribute SelectColour = `COLOR_BUTTON_SELECTED`;
+    attribute BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    attribute BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    attribute TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    attribute TextX = 10;
+    attribute TextY = 21;
+    attribute TextColour = `COLOR_PICTURE_BACKGROUND`;
+    attribute TextFont = 4;
+    attribute ExecuteSelect = "";
+    attribute ExecuteUnSelect = "{VerifyInput(15);}";
+    attribute TheNewText = " ";
+    attribute TheOriginalText = " ";
+    attribute ERROR = 0;
+    attribute TheNumberFormat = "%16d";
+    attribute Selected = 0;
+    attribute ReturnAction = "";
+    attribute TheOriginalNumber = 0;
+    attribute MaxDigits = 8;
+    attribute TheNewNumber = 0;
+    attribute Scope = "::YGN3and4.PicYGN_XRBP_Off";
+    x = 50;
+    y = 432.222;
+    visibility = 1;
+    xReference = 50;
+    yReference = 432.222;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance XRBP_IN15
+
+
+
+  instance DialogueSymbols.InputTextBtn XRBP_IN19
+  {
+    attribute isInside = 1;
+    attribute isDown = 0;
+    attribute Height = 30;
+    attribute Width = 150;
+    attribute SelectColour = `COLOR_BUTTON_SELECTED`;
+    attribute BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    attribute BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    attribute TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    attribute TextX = 85;
+    attribute TextY = 21;
+    attribute TextColour = `COLOR_PICTURE_BACKGROUND`;
+    attribute TextFont = 4;
+    attribute ExecuteSelect = "";
+    attribute ExecuteUnSelect = "{VerifyInput(19);}";
+    attribute TheNewText = "5";
+    attribute TheOriginalText = "5";
+    attribute ERROR = 0;
+    attribute Selected = 0;
+    attribute ReturnAction = "";
+    attribute MaxCharacters = 2;
+    attribute Scope = "::YGN3and4.PicYGN_XRBP_Off";
+    x = 50;
+    y = 581.111;
+    visibility = 1;
+    xReference = 50;
+    yReference = 581.111;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance XRBP_IN19
+
+
+
+  instance DialogueSymbols.InputTextBtn XRBP_IN20
+  {
+    attribute isInside = 1;
+    attribute isDown = 0;
+    attribute Height = 30;
+    attribute Width = 150;
+    attribute SelectColour = `COLOR_BUTTON_SELECTED`;
+    attribute BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    attribute BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    attribute TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    attribute TextX = 85;
+    attribute TextY = 21;
+    attribute TextColour = `COLOR_PICTURE_BACKGROUND`;
+    attribute TextFont = 4;
+    attribute ExecuteSelect = "";
+    attribute ExecuteUnSelect = "{VerifyInput(20);}";
+    attribute TheNewText = "5";
+    attribute TheOriginalText = "5";
+    attribute ERROR = 0;
+    attribute Selected = 0;
+    attribute ReturnAction = "";
+    attribute MaxCharacters = 2;
+    attribute Scope = "::YGN3and4.PicYGN_XRBP_Off";
+    x = 50;
+    y = 631.111;
+    visibility = 1;
+    xReference = 50;
+    yReference = 631.111;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance XRBP_IN20
+
+
+
+  instance DialogueSymbols.InputNumberBtn LASTCASE
+  {
+    attribute isInside = 1;
+    attribute isDown = 0;
+    attribute Height = 30;
+    attribute Width = 100;
+    attribute SelectColour = `COLOR_BUTTON_SELECTED`;
+    attribute BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    attribute BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    attribute TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    attribute TextX = 40;
+    attribute TextY = 21;
+    attribute TextColour = `COLOR_PICTURE_BACKGROUND`;
+    attribute TextFont = 4;
+    attribute ExecuteSelect = "";
+    attribute ExecuteUnSelect = "{VerifyInput(0);}";
+    attribute TheNewText = "1";
+    attribute TheOriginalText = "1";
+    attribute ERROR = 0;
+    attribute TheNumberFormat = "%2d";
+    attribute Selected = 0;
+    attribute ReturnAction = "";
+    attribute TheOriginalNumber = 34.5;
+    attribute MaxDigits = 2;
+    attribute TheNewNumber = 0;
+    attribute Scope = "::YGN3and4.PicYGN_XRBP_Off";
+    x = 788;
+    y = 675;
+    visibility = 1;
+    xReference = 788;
+    yReference = 675;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance LASTCASE
+
+
+
+  line 
+  {
+    numberOfPoints = 2;
+
+    point[0] = (741.111, 517.778);
+    point[1] = (741.111, 517.778);
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineWidth = 0;
+    lineStyle = `SolidPattern`;
+    xReference = 741.111;
+    yReference = 517.778;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  line 
+  {
+    numberOfPoints = 3;
+
+    point[0] = (750, 710);
+    point[1] = (750, 666.667);
+    point[2] = (1227.78, 666.667);
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineWidth = 3;
+    lineStyle = `SolidPattern`;
+    xReference = 750;
+    yReference = 710;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  line 
+  {
+    numberOfPoints = 2;
+
+    point[0] = (34, 289);
+    point[1] = (1230, 289);
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineWidth = 3;
+    lineStyle = `SolidPattern`;
+    xReference = 34;
+    yReference = 289;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text Wait
+  {
+    x = 422;
+    y = 740;
+    format = "%s";
+    theText = "PROCESSING ...   WAIT";
+
+    visibility = 0;
+    foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 422;
+    yReference = 740;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text Wait1
+  {
+    x = 629;
+    y = 740;
+    format = "%s";
+    theText = "...  CASE RUN CONTINUED";
+
+    visibility = 0;
+    foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 629;
+    yReference = 740;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  circle 
+  {
+    x = 159;
+    y = 591;
+    radius = 0;
+    visibility = 1;
+    foregroundFillColour = `COLOR_NON_ESSENTIAL`;
+    backgroundFillColour = -1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineWidth = 0;
+    linePattern = `SolidPattern`;
+    fillPattern = `SolidPattern`;
+    xReference = 159;
+    yReference = 591;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+// The picture's other attributes:
+
+  backgroundColour    = 0;
+  xSnap               = 0;
+  ySnap               = 0;
+  angleSnap           = 0;
+  radiusSnap          = 0;
+  worldX              = 0;
+  worldY              = 0;
+  worldWidth          = 1280;
+  worldHeight         = 824;
+  oneToOne            = 1;
+  resizeMode          = 0;
+  updateMode          = 2;
+  crosshairStyle      = 1;
+  crosshairLength     = 0;
+  crosshairFollowSnap = `isInEditMode()`;
+  crosshairVisibility = `isInEditMode()`;
+  xReference = 500;
+  yReference = 500;
+  xScaleFactor = 1;
+  yScaleFactor = 1;
+  rotationAngle = 0;
+
+
+}  // end of picture PicYGN_XRBP_Off

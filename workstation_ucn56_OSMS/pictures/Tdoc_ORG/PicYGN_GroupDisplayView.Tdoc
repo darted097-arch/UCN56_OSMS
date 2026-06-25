@@ -1,0 +1,1186 @@
+/*
+ * PICASSO-3 CONFIGURATION LANGUAGE FILE
+ *
+ *
+ * Picture name: PicYGN_GroupDisplayView
+ *
+ *
+ * Documented by  : ygn56
+ * Host           : pcs4
+ * Date           : 24/09-01 at 21:01:20
+ *
+ *
+ * Generate with:
+ *    pcc PicYGN_GroupDisplayView.Tdoc
+ *
+ */
+
+
+picture PicYGN_GroupDisplayView
+{
+
+  float temp_val12 = `symbol12.ThePointId.value`;
+  float temp_val24 = `symbol24.ThePointId.value`;
+  float temp_val23 = `symbol23.ThePointId.value`;
+  float temp_val22 = `symbol22.ThePointId.value`;
+  float temp_val21 = `symbol21.ThePointId.value`;
+  float temp_val20 = `symbol20.ThePointId.value`;
+  float temp_val19 = `symbol19.ThePointId.value`;
+  float temp_val18 = `symbol18.ThePointId.value`;
+  float temp_val17 = `symbol17.ThePointId.value`;
+  float temp_val16 = `symbol16.ThePointId.value`;
+  float temp_val15 = `symbol15.ThePointId.value`;
+  float temp_val14 = `symbol14.ThePointId.value`;
+  float temp_val13 = `symbol13.ThePointId.value`;
+  float temp_val11 = `symbol11.ThePointId.value`;
+  float temp_val10 = `symbol10.ThePointId.value`;
+  float temp_val9 = `symbol9.ThePointId.value`;
+  float temp_val8 = `symbol8.ThePointId.value`;
+  float temp_val7 = `symbol7.ThePointId.value`;
+  float temp_val6 = `symbol6.ThePointId.value`;
+  float temp_val5 = `symbol5.ThePointId.value`;
+  float temp_val4 = `symbol4.ThePointId.value`;
+  float temp_val3 = `symbol3.ThePointId.value`;
+  float temp_val2 = `symbol2.ThePointId.value`;
+  float temp_val1 = `symbol1.ThePointId.value`;
+  char PictureNumber[50] = "832";
+  char TEMP[10] = "";
+  RECORD *PicturePointId24 = `&BLANK`;
+  RECORD *PicturePointId23 = `&BLANK`;
+  RECORD *PicturePointId22 = `&BLANK`;
+  RECORD *PicturePointId21 = `&BLANK`;
+  RECORD *PicturePointId20 = `&BLANK`;
+  RECORD *PicturePointId19 = `&BLANK`;
+  RECORD *PicturePointId18 = `&BLANK`;
+  RECORD *PicturePointId17 = `&BLANK`;
+  RECORD *PicturePointId16 = `&BLANK`;
+  RECORD *PicturePointId15 = `&BLANK`;
+  RECORD *PicturePointId14 = `&BLANK`;
+  RECORD *PicturePointId13 = `&BLANK`;
+  RECORD *PicturePointId12 = `&BLANK`;
+  RECORD *PicturePointId11 = `&BLANK`;
+  RECORD *PicturePointId10 = `&BLANK`;
+  RECORD *PicturePointId9 = `&BLANK`;
+  RECORD *PicturePointId8 = `&BLANK`;
+  RECORD *PicturePointId7 = `&BLANK`;
+  RECORD *PicturePointId6 = `&BLANK`;
+  RECORD *PicturePointId5 = `&BLANK`;
+  RECORD *PicturePointId4 = `&BLANK`;
+  RECORD *PicturePointId3 = `&CET01`;
+  RECORD *PicturePointId2 = `&RCT111Y`;
+  RECORD *PicturePointId1 = `&RCT111X`;
+  //char PictureTitle[50] = "GROUP DISPLAY 20";
+  char PictureTitle[50] = "                  ";	//CORENET 201705 by Philkyu Kwon
+  char dtime[4] = "0";
+  char STITLE[30] = "";
+  int GROUPNUMBER = 0;
+  int Priority = 1;
+  char *dummy_arg = " ";
+  char TempTitle[50] = "";	//CORENET 201705 by Philkyu Kwon
+
+  function `void ReadyView()
+{
+    if(GroupDisplay_CurrentTime == 1){
+       InterValue();
+//==       ProcessGroupView();
+       GroupDisplay_CurrentTime = GR_DisplayRate;
+     }
+     else {
+       GroupDisplay_CurrentTime--;
+       ProcessSleepView(); 
+      }
+}`
+
+
+
+  function `void Initialize()
+ {
+   int i,k,m ;
+   char *blank = "BLANK";
+
+//   Current_Page = 832;
+
+   CFMLevel = 0;
+
+   DisplayAdvisoryMessage(" ");
+   DisplayAdvisoryMessage1(" ");
+   DisplayAdvisoryMessage2(" ");
+   DisplayAdvisoryMessage3(" ");
+
+//   k = Interface->GroupDisplay.data.group.groupNumber;
+   k = Interface->GenericRequestMessage.data.requestOption;
+   m = Interface->GroupDisplay.data.group.displayRate;
+
+  // printf("RequestOption is k = %d", k);
+   printf("DisplayRate is m = %d", m);
+
+   sprintf(TempTitle,"GROUP DISPLAY %d",k);	//CORENET 201705 by Philkyu Kwon
+  // printf("TempTitle is %s", TempTitle);
+
+   strcpy(::YGN3and4.PicYGN_header.PictureTitle.theText, TempTitle);	//CORENET 201705 by Philkyu Kwon
+  // printf("YGN Title is %s",::YGN3and4.PicYGN_header.PictureTitle.theText);
+   //execute("{strcpy(PictureTitle,\\"GROUP DISPLAY %d\\");}",k);
+   GR_Page = k + 10;
+   Current_Page = GR_Page;
+
+//1998.6.16 Interface->FlagHandleMessage.data.requestOption = k;
+//          Interface->FlagHandleMessage.data.flipflop1 = 1;  //for flag set
+//          execute("{sendMessageToHost(GROUP_RESET_REQUEST);}");
+
+   procMsg.visibility = 0 ;
+   Perror.visibility = 0;
+   Perror1.visibility = 0;
+
+ //CaButton.UnSelect();  
+
+   strcpy(STITLE,Interface->GroupDisplay.data.group.Title) ;
+   sprintf(dtime,"%d",Interface->GroupDisplay.data.group.displayRate);
+   tbase.theText = dtime;
+   // ******CORENET 201705 by Philkyu Kwon**********************
+   printf("*******************************");
+   printf("dtime = %s",dtime);
+   printf("YGN dtime = %c", &::YGN3and4.PicYGN_GroupDisplayView.dtime[0]);
+   printf("YGN2 dtime = %c", ::YGN3and4.PicYGN_GroupDisplayView.dtime[0]);
+   printf("*******************************");
+   // **************************************************************
+
+
+// Checking setup is correct 
+
+   if (m <= 0)
+   { 
+      Perror.visibility = 1;
+      Perror1.visibility = 1;
+
+      for(i=1 ; i<=24 ; i++)
+      {
+         execute("{symbol%d.ThePointId = \`&BLANK\`;}",i) ;
+         execute("{symbol%d.visibility = 0;}",i);
+      }
+   } 
+
+   else
+   {  
+      Perror.visibility = 0; 
+      Perror1.visibility = 0;  
+
+      if(m > 1) 
+      { 
+         tsec2.visibility = 1;    
+         tsec1.visibility = 0; 
+      }
+      else 
+      {
+         tsec1.visibility = 1;    
+         tsec2.visibility = 0; 
+      }
+
+// Initilization for visibility
+ 
+      for (i=1 ; i<=24 ; i++) 
+          execute("{symbol%d.visibility = 1;}",i);
+  
+ 
+      GroupDisplay_Active = 0;
+      GroupDisplay_CurrentTime = GR_DisplayRate;
+
+// Display for PID Information & Add shopping list
+
+      execute("{manageTempShopList(INIT_TEMP_SHOP_LIST,dummy_arg);}");  
+
+      for (i=1 ; i<=24 ; i++)
+      {
+         execute("{strcpy(TEMP,Interface->GroupDisplay.data.group.Point%d);}",i) ;
+
+         if (strlen(TEMP) > 0)
+         {
+             execute("{PicturePointId%d = \\\`&%s\\\`;}",i,TEMP);
+             execute("{symbol%d.ThePointId = \\\`PicturePointId%d\\\`;}",i,i) ;
+             execute("{manageTempShopList(TEMP_SHOP_LIST_ADD,TEMP);}");
+         }
+         else 
+         {
+             execute("{PicturePointId%d = \\\`&BLANK\\\`;}",i) ;
+             execute("{symbol%d.ThePointId = \\\`PicturePointId%d\\\`;}",i,i) ;
+             execute("{symbol%d.visibility = 0;}",i) ;
+         }
+         //printf("%d: strlen = %d",i,strlen(TEMP));
+      }
+      execute("{manageTempShopList(TEMP_SHOP_LIST_SEND,dummy_arg);}"); 
+
+   }
+   Priority = !Interface->FlagHandleMessage.data.flipflop2 ;
+
+   if (Priority) 
+      FlagSet(k) ;
+
+   update();
+
+}`
+
+
+
+  function `char* sigTypeDisplay()
+{
+ switch(ThePointId->sig_type) {
+
+     case  1:   return("AO");
+     case  2:   return("QA");
+     case  3:   return("XA");
+     case  4:   return("KO");
+     case  5:   return("AL");
+
+     case  6:   return("AI");
+     case  7:   return("PI");
+     case  8:   return("FI");
+     case  9:   return("ROD");
+     case 10:  return("CI");
+
+     case 11:  return("DI");
+     case 12:  return("SOE");
+     case 13:  return("BCI");
+     case 14:  return("DL");
+     case 15:  return("QD");
+
+     case 16:  return("XD");
+     case 17:  return("CO");
+     case 18:  return("BCO");
+
+     default:  return("");
+    }
+}`
+
+
+
+  function `void ProcessGroupView()
+{
+// Display for PID Information  
+      symbol1.ThePointId = \`PicturePointId1\`;
+      symbol2.ThePointId = \`PicturePointId2\`;
+      symbol3.ThePointId = \`PicturePointId3\`;
+      symbol4.ThePointId = \`PicturePointId4\`;
+      symbol5.ThePointId = \`PicturePointId5\`;
+      symbol6.ThePointId = \`PicturePointId6\`;
+      symbol7.ThePointId = \`PicturePointId7\`;
+      symbol8.ThePointId = \`PicturePointId8\`;
+      symbol9.ThePointId = \`PicturePointId9\`;
+      symbol10.ThePointId = \`PicturePointId10\`;
+      symbol11.ThePointId = \`PicturePointId11\`;
+      symbol12.ThePointId = \`PicturePointId12\`;
+      symbol13.ThePointId = \`PicturePointId13\`;
+      symbol14.ThePointId = \`PicturePointId14\`;
+      symbol15.ThePointId = \`PicturePointId15\`;
+      symbol16.ThePointId = \`PicturePointId16\`;
+      symbol17.ThePointId = \`PicturePointId17\`;
+      symbol18.ThePointId = \`PicturePointId18\`;
+      symbol19.ThePointId = \`PicturePointId19\`;
+      symbol20.ThePointId = \`PicturePointId20\`;
+      symbol21.ThePointId = \`PicturePointId21\`;
+      symbol22.ThePointId = \`PicturePointId22\`;
+      symbol23.ThePointId = \`PicturePointId23\`;
+      symbol24.ThePointId = \`PicturePointId24\`;
+
+ update();
+}// end of function.
+`
+
+
+
+  function `void ProcessSleepView()
+{
+//  printf("Sleeping Timer = %d",GroupDisplay_CurrentTime);
+// Display for PID Information  
+//-  strcpy(TEMP,Interface->GroupDisplay.data.group.Point1);
+//-  if (TEMP[0] != ' ') {
+//      valuesymbol1.PointId.value = temp_val1;
+//-    }
+//-    else {
+//-      PicturePointId1 = \`&BLANK\`; 
+//-      symbol1.ThePointId = \`PicturePointId1\`;
+//-      symbol1.visibility = 0; }
+
+      symbol1.ThePointId.value = temp_val1;
+      symbol2.ThePointId.value = temp_val2;
+      symbol3.ThePointId.value = temp_val3;
+      symbol4.ThePointId.value = temp_val4;
+      symbol5.ThePointId.value = temp_val5;
+      symbol6.ThePointId.value = temp_val6;
+      symbol7.ThePointId.value = temp_val7;
+      symbol8.ThePointId.value = temp_val8;
+      symbol9.ThePointId.value = temp_val9;
+
+      symbol10.ThePointId.value = temp_val10;
+      symbol11.ThePointId.value = temp_val11;
+      symbol12.ThePointId.value = temp_val12;
+      symbol13.ThePointId.value = temp_val13;
+      symbol14.ThePointId.value = temp_val14;
+      symbol15.ThePointId.value = temp_val15;
+      symbol16.ThePointId.value = temp_val16;
+      symbol17.ThePointId.value = temp_val17;
+
+      symbol18.ThePointId.value = temp_val18;
+      symbol19.ThePointId.value = temp_val19;
+      symbol20.ThePointId.value = temp_val20;
+      symbol21.ThePointId.value = temp_val21;
+      symbol22.ThePointId.value = temp_val22;
+      symbol23.ThePointId.value = temp_val23;
+      symbol24.ThePointId.value = temp_val24;
+
+ update();
+}// end of function.
+`
+
+
+
+  function `void InterValue()
+{
+ int i;
+             // assign temporary value for waiting
+ for (i=1;i<=24;i++){
+    execute("{temp_val%d = \\\`symbol%d.ThePointId.value\\\`;}",i,i); 
+   }
+
+/*
+ temp_val1 = \`symbol1.ThePointId.value\`; 
+ temp_val2 = \`symbol2.ThePointId.value\`; 
+ temp_val3 = \`symbol3.ThePointId.value\`; 
+ temp_val4 = \`symbol4.ThePointId.value\`; 
+ temp_val5 = \`symbol5.ThePointId.value\`; 
+ temp_val6 = \`symbol6.ThePointId.value\`; 
+ temp_val7 = \`symbol7.ThePointId.value\`; 
+ temp_val8 = \`symbol8.ThePointId.value\`; 
+ temp_val9 = \`symbol9.ThePointId.value\`; 
+
+ temp_val10 = \`symbol10.ThePointId.value\`; 
+ temp_val11 = \`symbol11.ThePointId.value\`; 
+ temp_val12 = \`symbol12.ThePointId.value\`; 
+ temp_val13 = \`symbol13.ThePointId.value\`; 
+ temp_val14 = \`symbol14.ThePointId.value\`; 
+ temp_val15 = \`symbol15.ThePointId.value\`; 
+ temp_val16 = \`symbol16.ThePointId.value\`; 
+ temp_val17 = \`symbol17.ThePointId.value\`; 
+ temp_val18 = \`symbol18.ThePointId.value\`; 
+ temp_val19 = \`symbol19.ThePointId.value\`; 
+
+ temp_val20 = \`symbol20.ThePointId.value\`; 
+ temp_val21 = \`symbol21.ThePointId.value\`; 
+ temp_val22 = \`symbol22.ThePointId.value\`; 
+ temp_val23 = \`symbol23.ThePointId.value\`; 
+ temp_val24 = \`symbol24.ThePointId.value\`; 
+*/
+
+ update();
+}`
+
+
+
+  function `void escape()
+{
+
+
+//1998.6.16  Interface->FlagHandleMessage.data.requestOption = k;
+//           Interface->FlagHandleMessage.data.flipflop1 = 0;  //for flag reset
+//           execute("{sendMessageToHost(GROUP_RESET_REQUEST);}");
+
+   GroupDisplay_CurrentTime = GR_DisplayRate;
+   GroupDisplay_Active = 1;
+//   DelayedDisplayPicture("PicYGN_GroupDisplayMenu.ppic");
+
+   procMsg.visibility = 1 ;
+
+   if(Priority)
+      FlagReset(Interface->GroupDisplay.data.group.groupNumber) ;
+
+
+}`
+
+
+
+  function `void FlagSet(int Sel)
+{
+//   Set Flag for Using...
+//   int k ;
+
+//   k = Interface->GroupDisplay.data.group.groupNumber;
+
+   Interface->FlagHandleMessage.data.requestOption = Sel;
+   Interface->FlagHandleMessage.data.flipflop1 = 1;   //for flag set 
+   execute("{sendMessageToHost(GROUP_RESET_REQUEST);}");
+
+   //printf("------------------------\\nGRDISP %d Flag = ON\\n------------------------",Sel) ;
+}`
+
+
+
+  function `void FlagReset(int Sel)
+{
+//   Set Flag for Using...
+//   int k ;
+
+//   k = Interface->GroupDisplay.data.group.groupNumber;
+
+   Interface->FlagHandleMessage.data.requestOption = Sel ;
+   Interface->FlagHandleMessage.data.flipflop1 = 0;   //for flag set 
+   execute("{sendMessageToHost(GROUP_RESET_REQUEST);}");
+
+   //printf("========================\\nGRDISP %d Flag = OFF\\n========================",Sel) ;
+}`
+
+
+
+  function `void escapeToMenu()
+{
+   int k = Interface->GroupDisplay.data.group.groupNumber;
+
+//1998.6.16  Interface->FlagHandleMessage.data.requestOption = k;
+//           Interface->FlagHandleMessage.data.flipflop1 = 0;  //for flag reset
+//           execute("{sendMessageToHost(GROUP_RESET_REQUEST);}");
+
+   if(Priority)
+      FlagReset(Interface->GroupDisplay.data.group.groupNumber) ;
+
+   GroupDisplay_CurrentTime = GR_DisplayRate;
+   GroupDisplay_Active = 1;
+   DelayedDisplayPicture("PicYGN_GroupDisplayMenu.ppic");
+
+   procMsg.visibility = 1 ;
+}`
+
+
+
+  function `void FlagResetAll()   // This Function is only used for development.
+{
+   int i ;
+
+   for(i=1 ; i<=20 ; i++)
+      FlagReset(i) ;
+}`
+
+
+
+  dialogue
+  {
+    event = `keyPressed(0xFF1B)`;
+    action = statement `{
+   escapeToMenu();
+/*
+ int k;
+ k = Interface->GroupDisplay.data.group.groupNumber;
+ Interface->FlagHandleMessage.data.requestOption = k;
+ Interface->FlagHandleMessage.data.flipflop1 = 0;  //for flag reset
+ execute("{sendMessageToHost(GROUP_RESET_REQUEST);}");
+
+ GroupDisplay_CurrentTime = GR_DisplayRate;
+ GroupDisplay_Active = 1;
+ DelayedDisplayPicture("PicYGN_GroupDisplayMenu.ppic");
+*/
+}`;
+  }
+
+  text 
+  {
+    x = 140;
+    y = 24;
+    format = "%s";
+    theText = "TITLE :";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 140;
+    yReference = 24;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 850;
+    y = 25;
+    format = "%s";
+    theText = "TIMEBASE :";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 850;
+    yReference = 25;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text tsec2
+  {
+    x = 1032;
+    y = 27;
+    format = "%s";
+    theText = "SECONDS";
+
+    visibility = 0;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 1032;
+    yReference = 27;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 143;
+    y = 59;
+    format = "%s";
+    theText = "PID";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 143;
+    yReference = 59;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 301;
+    y = 59;
+    format = "%s";
+    theText = "ENGLISH DESCRIPTION";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 301;
+    yReference = 59;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 760;
+    y = 59;
+    format = "%s";
+    theText = "STATUS";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 760;
+    yReference = 59;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 853;
+    y = 60;
+    format = "%s";
+    theText = "UNITS";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 853;
+    yReference = 60;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 1047;
+    y = 60;
+    format = "%s";
+    theText = "SIG";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 1047;
+    yReference = 60;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text TITLE
+  {
+    x = 220;
+    y = 24;
+    format = "%s";
+    theText = `STITLE`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 220;
+    yReference = 24;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  instance DialogueSymbols.GroupView symbol2
+  {
+    attribute ThePointId = `&BLANK`;
+    x = 44;
+    y = 105;
+    visibility = 0;
+    xReference = 44;
+    yReference = 105;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance symbol2
+
+
+
+  line 
+  {
+    numberOfPoints = 2;
+
+    point[0] = (131, 70);
+    point[1] = (1131, 70);
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineWidth = 2;
+    lineStyle = `SolidPattern`;
+    xReference = 131;
+    yReference = 70;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  instance DialogueSymbols.GroupView symbol3
+  {
+    attribute ThePointId = `&BLANK`;
+    x = 44;
+    y = 130;
+    visibility = 0;
+    xReference = 44;
+    yReference = 130;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance symbol3
+
+
+
+  instance DialogueSymbols.GroupView symbol4
+  {
+    attribute ThePointId = `&BLANK`;
+    x = 44;
+    y = 154;
+    visibility = 0;
+    xReference = 44;
+    yReference = 154;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance symbol4
+
+
+
+  instance DialogueSymbols.GroupView symbol5
+  {
+    attribute ThePointId = `&BLANK`;
+    x = 44;
+    y = 180;
+    visibility = 0;
+    xReference = 44;
+    yReference = 180;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance symbol5
+
+
+
+  instance DialogueSymbols.GroupView symbol6
+  {
+    attribute ThePointId = `&BLANK`;
+    x = 44;
+    y = 204;
+    visibility = 0;
+    xReference = 44;
+    yReference = 204;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance symbol6
+
+
+
+  instance DialogueSymbols.GroupView symbol7
+  {
+    attribute ThePointId = `&BLANK`;
+    x = 44;
+    y = 230;
+    visibility = 0;
+    xReference = 44;
+    yReference = 230;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance symbol7
+
+
+
+  instance DialogueSymbols.GroupView symbol8
+  {
+    attribute ThePointId = `&BLANK`;
+    x = 44;
+    y = 257;
+    visibility = 0;
+    xReference = 44;
+    yReference = 257;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance symbol8
+
+
+
+  instance DialogueSymbols.GroupView symbol9
+  {
+    attribute ThePointId = `&BLANK`;
+    x = 44;
+    y = 284;
+    visibility = 0;
+    xReference = 44;
+    yReference = 284;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance symbol9
+
+
+
+  instance DialogueSymbols.GroupView symbol10
+  {
+    attribute ThePointId = `&BLANK`;
+    x = 44;
+    y = 311;
+    visibility = 0;
+    xReference = 44;
+    yReference = 311;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance symbol10
+
+
+
+  instance DialogueSymbols.GroupView symbol11
+  {
+    attribute ThePointId = `&BLANK`;
+    x = 44;
+    y = 337;
+    visibility = 0;
+    xReference = 44;
+    yReference = 337;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance symbol11
+
+
+
+  instance DialogueSymbols.GroupView symbol12
+  {
+    attribute ThePointId = `&BLANK`;
+    x = 44;
+    y = 364;
+    visibility = 0;
+    xReference = 44;
+    yReference = 364;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance symbol12
+
+
+
+  instance DialogueSymbols.GroupView symbol13
+  {
+    attribute ThePointId = `&BLANK`;
+    x = 44;
+    y = 392;
+    visibility = 0;
+    xReference = 44;
+    yReference = 392;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance symbol13
+
+
+
+  instance DialogueSymbols.GroupView symbol14
+  {
+    attribute ThePointId = `&BLANK`;
+    x = 44;
+    y = 417;
+    visibility = 0;
+    xReference = 44;
+    yReference = 417;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance symbol14
+
+
+
+  instance DialogueSymbols.GroupView symbol15
+  {
+    attribute ThePointId = `&BLANK`;
+    x = 44;
+    y = 443;
+    visibility = 0;
+    xReference = 44;
+    yReference = 443;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance symbol15
+
+
+
+  instance DialogueSymbols.GroupView symbol16
+  {
+    attribute ThePointId = `&BLANK`;
+    x = 44;
+    y = 469;
+    visibility = 0;
+    xReference = 44;
+    yReference = 469;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance symbol16
+
+
+
+  instance DialogueSymbols.GroupView symbol17
+  {
+    attribute ThePointId = `&BLANK`;
+    x = 44;
+    y = 497;
+    visibility = 0;
+    xReference = 44;
+    yReference = 497;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance symbol17
+
+
+
+  instance DialogueSymbols.GroupView symbol18
+  {
+    attribute ThePointId = `&BLANK`;
+    x = 44;
+    y = 524;
+    visibility = 0;
+    xReference = 44;
+    yReference = 524;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance symbol18
+
+
+
+  instance DialogueSymbols.GroupView symbol19
+  {
+    attribute ThePointId = `&BLANK`;
+    x = 44;
+    y = 551;
+    visibility = 0;
+    xReference = 44;
+    yReference = 551;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance symbol19
+
+
+
+  instance DialogueSymbols.GroupView symbol20
+  {
+    attribute ThePointId = `&BLANK`;
+    x = 44;
+    y = 579;
+    visibility = 0;
+    xReference = 44;
+    yReference = 579;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance symbol20
+
+
+
+  instance DialogueSymbols.GroupView symbol21
+  {
+    attribute ThePointId = `&BLANK`;
+    x = 44;
+    y = 607;
+    visibility = 0;
+    xReference = 44;
+    yReference = 607;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance symbol21
+
+
+
+  instance DialogueSymbols.GroupView symbol22
+  {
+    attribute ThePointId = `&BLANK`;
+    x = 44;
+    y = 634;
+    visibility = 0;
+    xReference = 44;
+    yReference = 634;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance symbol22
+
+
+
+  instance DialogueSymbols.GroupView symbol23
+  {
+    attribute ThePointId = `&BLANK`;
+    x = 44;
+    y = 660;
+    visibility = 0;
+    xReference = 44;
+    yReference = 660;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance symbol23
+
+
+
+  instance DialogueSymbols.GroupView symbol24
+  {
+    attribute ThePointId = `&BLANK`;
+    x = 44;
+    y = 684;
+    visibility = 0;
+    xReference = 44;
+    yReference = 684;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance symbol24
+
+
+
+  text tbase
+  {
+    x = 987;
+    y = 26;
+    format = "%s";
+    theText = `&::YGN3and4.PicYGN_GroupDisplayView.dtime[0]`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 987;
+    yReference = 26;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  instance DialogueSymbols.GroupView symbol1
+  {
+    attribute ThePointId = `&BLANK`;
+    x = 44;
+    y = 78;
+    visibility = 0;
+    xReference = 44;
+    yReference = 78;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance symbol1
+
+
+
+  text tsec1
+  {
+    x = 1032;
+    y = 27;
+    format = "%s";
+    theText = "SECOND";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 1032;
+    yReference = 27;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text Perror
+  {
+    x = 523;
+    y = 27;
+    format = "%s";
+    theText = "INCORRECT SETUP DATA";
+
+    visibility = 1;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 523;
+    yReference = 27;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text Perror1
+  {
+    x = 540;
+    y = 50;
+    format = "%s";
+    theText = "/OR NO SETUP DATA";
+
+    visibility = 1;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 540;
+    yReference = 50;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text procMsg
+  {
+    x = 516;
+    y = 754;
+    format = "%s";
+    theText = "PROCESSING... WAIT";
+
+    visibility = 1;
+    foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 516;
+    yReference = 754;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 936;
+    y = 755;
+    format = "%s";
+    theText = "(BEING USED BY OTHERS)";
+
+    visibility = `!Priority`;
+    foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 936;
+    yReference = 755;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+// The picture's other attributes:
+
+  backgroundColour    = 0;
+  xSnap               = 5;
+  ySnap               = 5;
+  angleSnap           = 0;
+  radiusSnap          = 0;
+  worldX              = 0;
+  worldY              = 0;
+  worldWidth          = 1280;
+  worldHeight         = 824;
+  oneToOne            = 1;
+  resizeMode          = 0;
+  updateMode          = 2;
+  crosshairStyle      = 1;
+  crosshairLength     = 0;
+  crosshairFollowSnap = `isInEditMode()`;
+  crosshairVisibility = `isInEditMode()`;
+  xReference = 500;
+  yReference = 500;
+  xScaleFactor = 1;
+  yScaleFactor = 1;
+  rotationAngle = 0;
+
+
+}  // end of picture PicYGN_GroupDisplayView

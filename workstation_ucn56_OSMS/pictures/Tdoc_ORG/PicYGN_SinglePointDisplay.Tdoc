@@ -1,0 +1,319 @@
+/*
+ * PICASSO-3 CONFIGURATION LANGUAGE FILE
+ *
+ *
+ * Picture name: PicYGN_SinglePointDisplay
+ *
+ *
+ * Documented by  : ygn56
+ * Host           : pcs4
+ * Date           : 25/09-01 at 00:24:28
+ *
+ *
+ * Generate with:
+ *    pcc PicYGN_SinglePointDisplay.Tdoc
+ *
+ */
+
+
+picture PicYGN_SinglePointDisplay
+{
+
+  char ThePictureScope[80] = "PicYGN_SinglePointDisplay.PID.InputArea";
+  RECORD *PictureLowAlarmPID = 0;
+  char *PictureTitle = "SINGLE POINT DISPLAY";
+  char *PictureNumber = "841";
+  char *PageForward = "";
+  char *PageBack = "";
+  //RECORD *PicturePointId = `&CXYKMETD`;
+  RECORD *PicturePointId = `&METDISP`;	// for Y34 (CORENET 2013.10.30)
+  char TheDisplayPage[50] = "PicYGN_SetupViewMenu.ppic";
+  RECORD *PictureHighAlarmPID = 0;
+
+  function `void PrintThePoint()
+{
+   PrintProcessReqMsg.visibility = 1;
+   printf("Printing the point: %s",PicturePointId->pid);
+   strcpy(Interface->SinglePointDisplay.thePointId,PicturePointId->pid);
+   execute("{sendMessageToHost(PRINT_SINGLE_POINT);}");
+}`
+
+
+
+  function `void escape() 
+{
+   execute("{DisplayPage(\\"%s\\");}",TheDisplayPage);
+   update(); 
+}`
+
+
+
+  function `void Initialize() 
+{
+
+   InitPid();
+
+   DisplayAdvisoryMessage(" ");
+   DisplayAdvisoryMessage1(" ");
+   DisplayAdvisoryMessage2(" ");
+   DisplayAdvisoryMessage3(" ");
+
+   if(IsAnalog(PicturePointId))
+   {
+      if(0 != PicturePointId->lIPN)
+      {
+         execute ("{PictureLowAlarmPID = \`&::YGN3and4.InterfaceToGUI.%s\`;}",PicturePointId->message1);
+      }
+      else
+      {
+         PictureLowAlarmPID = 0;
+      }
+
+      if(0 != PicturePointId->hIPN)
+      {
+         execute ("{PictureHighAlarmPID = \`&::YGN3and4.InterfaceToGUI.%s\`;}",PicturePointId->message2);
+      }
+      else
+      {
+         PictureHighAlarmPID = 0;
+      }
+   }
+
+   CFMLevel = 0;
+   Current_Page = 841;
+   printf("%s Initialize()",PictureTitle);
+   AdvisoryMsg_Active = 0;
+   update();
+}`
+
+// ***CORENET 20170601 by Philkyu Kwon ************
+  function `void DummyProcess()
+  {
+    //printf("Button Select OR Button Unselected");
+  }`
+// ***************************************************
+
+
+  function `void UpdateLocalsFromInterface()
+{
+  PrintProcessReqMsg.visibility = 0;
+  update();
+}`
+
+
+
+  function `void InitPid()
+{
+  execute ("{PicturePointId = \\\`&%s\\\`;}",PID.TheOriginalText);
+
+  DBCinfo.pPID = PicturePointId;
+
+  execute ("{ manageTempShopList(TEMP_SHOP_INIT_ADD,PID.TheOriginalText); }");
+  update();
+}
+
+`
+
+
+
+  dialogue
+  {
+    event = `keyPressed(0xFF1B)`;
+    action = statement `{
+  escape();
+}`;
+  }
+
+  instance DialogueSymbols.PushButton 
+  {
+    attribute Scope = "PicYGN_SinglePointDisplay";
+    attribute TextFontDynamic = `font2`;
+    attribute TextFontStatic = `font4`;
+    attribute StaticLabel = "PRINT";
+    attribute DynamicLabel = "PRINTING";
+    attribute TextYDynamic = 21;
+    attribute TextYStatic = 22;
+    attribute TextXDynamic = 15;
+    attribute TextXStatic = 21;
+    attribute TextFont = 4;
+    attribute TextColour = `COLOR_PICTURE_BACKGROUND`;
+    attribute Label = "PRINT";
+    attribute TextY = 22;
+    attribute TextX = 21;
+    attribute TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    attribute BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    attribute BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    attribute SelectColour = `COLOR_BUTTON_SELECTED`;
+    attribute ButtonState = 0;
+    attribute Width = 100;
+    attribute Height = 30;
+    attribute isDown = 0;
+    attribute isInside = 1;
+    attribute ExecuteString = "{PrintThePoint();}";
+    x = 99;
+    y = 720;
+    visibility = 1;
+    xReference = 99;
+    yReference = 720;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  text 
+  {
+    x = 210;
+    y = 742;
+    format = "%s";
+    theText = "CURRENT POINT INFORMATION";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 210;
+    yReference = 742;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  instance DialogueSymbols.DatabaseDisplayInfo DBCinfo
+  {
+    attribute pLoAlmPID = `PictureLowAlarmPID`;
+    attribute pHiAlmPID = `PictureHighAlarmPID`;
+    //attribute pPID = `&::YGN3and4.InterfaceToGUI.CXYKMETD`;
+    //attribute pPID = `&::YGN3and4.InterfaceToGUI.METDISP`;	// for Y34 (CORENET 2013.10.30)
+    attribute pPID = `&METDISP`;	// for Y34 (CORENET 2013.10.30)
+    x = 3;
+    y = 40;
+    visibility = 1;
+    xReference = 3;
+    yReference = 40;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance DBCinfo
+
+
+
+  text PrintProcessReqMsg
+  {
+    dialogue
+    {
+      event = `buttonPressed(Left)`;
+      action = statement `{
+  if (0 == visibility) visibility = 1;
+  else                 visibility = 0;
+}`;
+    }
+    x = 551;
+    y = 609;
+    format = "%s";
+    theText = "PRINT PROCESSING... WAIT";
+
+    visibility = 0;
+    foregroundColour = `COLOR_POPUP_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 551;
+    yReference = 609;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  instance DialogueSymbols.PidInputButton PID
+  {
+    attribute Scope = `ThePictureScope`;
+    attribute MaxCharacters = 9;
+    attribute Selected = 0;
+    attribute ERROR = 0;
+    //attribute TheOriginalText = "CXYKMETD";
+    //attribute TheNewText = "CXYKMETD";
+    attribute TheOriginalText = "METDISP";	// for Y34 (CORENET 2013.10.30)
+    attribute TheNewText = "METDISP";	// for Y34 (CORENET 2013.10.30)
+
+    attribute ExecuteUnSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    attribute ExecuteSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    attribute TextFont = 4;
+    attribute TextColour = `COLOR_PICTURE_BACKGROUND`;
+    attribute TextY = 21;
+    attribute TextX = 10;
+    attribute TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    attribute BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    attribute BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    attribute SelectColour = `COLOR_BUTTON_SELECTED`;
+    attribute Width = 200;
+    attribute Height = 30;
+    attribute isDown = 0;
+    attribute isInside = 1;
+    attribute vis = `visibility`;
+    attribute FindPidScope = `ThePictureScope`;
+    attribute NotFound = "{ERROR = 1;}";
+    attribute Found = "{ERROR = 0; InitPid();}";
+    attribute ReturnAction = "";
+    x = 105;
+    y = 123;
+    visibility = 1;
+    xReference = 105;
+    yReference = 123;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance PID
+
+
+
+  text invalidPID
+  {
+    x = 112;
+    y = 168;
+    format = "%s";
+    theText = "INVALID PID";
+
+    visibility = `PID.ERROR`;
+    foregroundColour = `COLOR_BAD_OOR_UNACK`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 112;
+    yReference = 168;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+// The picture's other attributes:
+
+  backgroundColour    = 0;
+  xSnap               = 5;
+  ySnap               = 5;
+  angleSnap           = 0;
+  radiusSnap          = 0;
+  worldX              = 0;
+  worldY              = 0;
+  worldWidth          = 1280;
+  worldHeight         = 824;
+  oneToOne            = 1;
+  resizeMode          = 0;
+  updateMode          = 2;
+  crosshairStyle      = 1;
+  crosshairLength     = 0;
+  crosshairFollowSnap = `isInEditMode()`;
+  crosshairVisibility = `isInEditMode()`;
+  xReference = 500;
+  yReference = 500;
+  xScaleFactor = 1;
+  yScaleFactor = 1;
+  rotationAngle = 0;
+
+
+}  // end of picture PicYGN_SinglePointDisplay

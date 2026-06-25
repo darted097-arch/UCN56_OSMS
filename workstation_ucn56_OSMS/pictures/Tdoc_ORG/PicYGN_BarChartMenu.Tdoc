@@ -1,0 +1,2687 @@
+/*
+ * ProcSee CONFIGURATION LANGUAGE FILE
+ *
+ *
+ * User : ygn34
+ * Host : y6cr02
+ * Date : 2017-05-25
+ * Time : 14:22:28
+ *
+ * ProcSee version : ProcSee 3.10.1 (June 2016)
+ * File version    : 1.26
+ *
+ *
+ */
+
+
+picture PicYGN_BarChartMenu
+{
+  worldX = 0;
+  worldY = 0;
+  worldWidth = 1280;
+  worldHeight = 824;
+  oneToOne = 1;
+  backgroundColour = 0;
+  updateMode = 2;
+  resizeMode = 0;
+  xSnap = 5;
+  ySnap = 5;
+  radiusSnap = 0;
+  angleSnap = 0;
+  crosshairStyle = 1;
+  crosshairLength = 0;
+  crosshairFollowSnap = `isInEditMode()`;
+  crosshairVisibility = `isInEditMode()`;
+  xReference = 500;
+  yReference = 500;
+  xScaleFactor = 1;
+  yScaleFactor = 1;
+  rotationAngle = 0;
+
+  float DB_HiER = 0.7;
+
+  float DB_LoER = 0;
+
+  char* dummy_arg = " ";
+
+  int error = 0;
+
+  int FULL_TYPE_CHECK = 1;
+
+  int init = 0;
+
+  int isDisplay = 0;
+
+  int isGroup1Display = 0;
+
+  int isGroup2Display = 0;
+
+  int NO_RANGE_TYPE_CHECK = 3;
+
+  char NULL_STRING[8] = " ";
+
+  int NUM_BAR_PER_SET = 4;
+
+  int NUM_BAR_SETS = 2;
+
+  char* PageBack = "";
+
+  char* PageForward1 = "PicYGN_BarChartView1";
+
+  char* PageForward2 = "PicYGN_BarChartView2";
+
+  BAR_DATA* pBarChartData = `Interface.BarChartData`;
+
+  char* PictureNumber = "850";
+
+  char* PictureTitle = "SETUP / VIEW  BAR  CHARTS";
+
+  DialogueSymbols.InputDialogueNumber* poBasValue = `&::YGN3and4.PicYGN_BarChartMenu.BarChart4Base`;
+
+  DialogueSymbols.InputDialogueNumber* poMaxValue = `&::YGN3and4.PicYGN_BarChartMenu.BarChart4MaxValue`;
+
+  DialogueSymbols.InputDialogueNumber* poMinValue = `&::YGN3and4.PicYGN_BarChartMenu.BarChart4MinValue`;
+
+  DialogueSymbols.InputDialogueNumber* poPID = `&::YGN3and4.PicYGN_BarChartMenu.BarChart4PID`;
+
+  RECORD* pPID1 = `&CET01`;
+
+  RECORD* pPID2 = `&RCT111X`;
+
+  RECORD* pPID3 = `&CNYXAL7`;
+
+  RECORD* pPID4 = `&IAP0012`;
+
+  RECORD* pRECORD = `&::YGN3and4.YGN3and4.IAP0012`;
+
+  int ProcessERROR = 0;
+
+  int Sel = 1;
+
+  int SETUP = 0;
+
+  char StrHiER[40] = "CET01   .erange_hi";
+
+  char StrLoER[40] = "RCT111X.erange_lo";
+
+  char TEMP[10] = "APY0129";
+
+  char temp[12] = "   0.7";
+
+  int TEMP_ERROR = 0;
+
+  int TEMPINT = 5;
+
+  char TEMPSTR[40] = "IAP0012.sig_type";
+
+  char TheDisplayPage[50] = "PicYGN_SetupViewMenu.ppic";
+
+  float xx = 0;
+
+  float yy = 0.3;
+
+  float z = 1250;
+
+  int ZERO_OR_ONE_TYPE_CHECK = 2;
+
+  float zz = 0.7;
+
+  function `void AssignPid()  // yrlee990118
+  {
+     if (strlen(BarChart1PID.TheOriginalText)<1) execute("{pPID1=\\\`&%s\\\`;}","ERRORPID") ;
+     else execute("{pPID1=\\\`&%s\\\`;}",BarChart1PID.TheOriginalText) ;
+  
+     if (strlen(BarChart2PID.TheOriginalText)<1) execute("{pPID2=\\\`&%s\\\`;}","ERRORPID") ;
+     else execute("{pPID2=\\\`&%s\\\`;}",BarChart2PID.TheOriginalText) ;
+  
+     if (strlen(BarChart3PID.TheOriginalText)<1) execute("{pPID3=\\\`&%s\\\`;}","ERRORPID") ;
+     else execute("{pPID3=\\\`&%s\\\`;}",BarChart3PID.TheOriginalText) ;
+  
+     if (strlen(BarChart4PID.TheOriginalText)<1) execute("{pPID4=\\\`&%s\\\`;}","ERRORPID") ;
+     else execute("{pPID4=\\\`&%s\\\`;}",BarChart4PID.TheOriginalText) ;
+  }`
+
+  function `void BarMinMaxFromPID(int Chart)
+  {
+  
+      // Set the Numbers in the Min and Max fields.
+  
+  
+    if (1 == IsAllBlank(GetstrPID(Chart)))
+    {
+      execute("{BarChart%dMinValue.TheNewNumber = 0.0;}",Chart);
+      execute("{BarChart%dMinValue.TheOriginalNumber = 0.0;}",Chart);
+  
+      execute("{BarChart%dMaxValue.TheNewNumber = 0.0;}",Chart);
+      execute("{BarChart%dMaxValue.TheOriginalNumber = 0.0;}",Chart);
+  
+      execute("{BarChart%dBase.TheNewNumber = 0.0;}",Chart);
+      execute("{BarChart%dBase.TheOriginalNumber = 0.0;}",Chart);
+  
+    }//endif PID is all blanks
+    else
+    {
+      if (IsDigital(GetstrPID(Chart)))		// For Digital PID
+      {
+        execute("{BarChart%dMinValue.TheNewNumber = 0.0;}",Chart);
+        execute("{BarChart%dMinValue.TheOriginalNumber = 0.0;}",Chart);
+        execute("{BarChart%dMaxValue.TheNewNumber = 1.0;}",Chart);
+        execute("{BarChart%dMaxValue.TheOriginalNumber = 1.0;}",Chart);
+        execute("{BarChart%dBase.TheNewNumber = 0.5;}",Chart);
+        execute("{BarChart%dBase.TheOriginalNumber = 0.5;}",Chart);
+      }//endif is digital point
+      else					// For Analog PID
+      {
+           execute("{pRECORD = \`&%s\`;}",GetstrPID(Chart));
+  //-------------------------------------------------------------------------------------------------------------------------
+           // For checking Exceptional PID like CIYKASIL that has zero(0) for both
+           // engineering range high and low.
+           if ( (0==EngRangeLo(pRECORD)) && (0==EngRangeHi(pRECORD)) )
+           {
+              execute("{BarChart%dMinValue.TheNewNumber = pRECORD->value -100;}",Chart);
+              execute("{BarChart%dMinValue.TheOriginalNumber = BarChart%dMinValue.TheNewNumber;}",Chart,Chart);
+              execute("{BarChart%dMaxValue.TheNewNumber = pRECORD->value +100;}",Chart);
+              execute("{BarChart%dMaxValue.TheOriginalNumber = BarChart%dMaxValue.TheNewNumber;}",Chart,Chart);
+              execute("{BarChart%dBase.TheNewNumber = pRECORD->value ;}",Chart);
+              execute("{BarChart%dBase.TheOriginalNumber = BarChart%dBase.TheNewNumber;}",Chart,Chart);
+           }
+           else
+           {
+              execute("{BarChart%dMinValue.TheNewNumber = EngRangeLo(pRECORD);}",Chart);
+              execute("{BarChart%dMinValue.TheOriginalNumber = BarChart%dMinValue.TheNewNumber;}",Chart,Chart);
+              execute("{BarChart%dMaxValue.TheNewNumber = EngRangeHi(pRECORD);}",Chart);
+              execute("{BarChart%dMaxValue.TheOriginalNumber = BarChart%dMaxValue.TheNewNumber;}",Chart,Chart);
+  
+              execute("{BarChart%dBase.TheNewNumber =(BarChart%dMinValue.TheNewNumber + BarChart%dMaxValue.TheNewNumber)/2.0;}",Chart,Chart,Chart);
+              execute("{sprintf(temp,\\"%s\\",BarChart%dBase.TheNewNumber);}",pRECORD->disfmt,Chart);
+              execute("{BarChart%dBase.TheNewNumber = atof(temp);}",Chart);
+              execute("{BarChart%dBase.TheOriginalNumber = BarChart%dBase.TheNewNumber;}",Chart,Chart);
+           }
+      }//endelse not a digital point
+  
+    }//endelse not all blank
+  
+    execute("{sprintf(BarChart%dMinValue.TheNewText, \\"%s\\", BarChart%dMinValue.TheNewNumber);}",Chart,GetstrMinNumberFormat(Chart),Chart);
+    execute("{sprintf(BarChart%dMinValue.TheOriginalText, \\"%s\\", BarChart%dMinValue.TheOriginalNumber);}",Chart,GetstrMinNumberFormat(Chart),Chart);
+    execute("{BarChart%dMinValue.ERROR = 0;}",Chart);
+  
+    execute("{sprintf(BarChart%dMaxValue.TheNewText, \\"%s\\", BarChart%dMaxValue.TheNewNumber);}",Chart,GetstrMinNumberFormat(Chart),Chart);
+    execute("{sprintf(BarChart%dMaxValue.TheOriginalText, \\"%s\\", BarChart%dMaxValue.TheOriginalNumber);}",Chart,GetstrMinNumberFormat(Chart),Chart);
+    execute("{BarChart%dMaxValue.ERROR = 0;}",Chart);
+  
+    execute("{sprintf(BarChart%dBase.TheNewText, \\"%s\\", BarChart%dBase.TheNewNumber);}",Chart,GetstrMinNumberFormat(Chart),Chart);
+    execute("{sprintf(BarChart%dBase.TheOriginalText, \\"%s\\", BarChart%dBase.TheOriginalNumber);}",Chart,GetstrMinNumberFormat(Chart),Chart);
+    execute("{BarChart%dBase.ERROR = 0;}",Chart);
+  }//end routine`
+
+  function `void DUMMY()
+  {
+     printf(" INVALID PID ENTERED!!!");
+  }`
+
+  function `void ErrorMsgReset()
+  {
+  
+      BarChart1MaxValue.ERROR = 0 ;
+      BarChart1MinValue.ERROR = 0 ;
+      BarChart2MaxValue.ERROR = 0 ;
+      BarChart2MinValue.ERROR = 0 ;
+      BarChart3MaxValue.ERROR = 0 ;
+      BarChart3MinValue.ERROR = 0 ;
+      BarChart4MaxValue.ERROR = 0 ;
+      BarChart4MinValue.ERROR = 0 ;
+  
+      BarChart1Base.ERROR = 0 ;
+      BarChart2Base.ERROR = 0 ;
+      BarChart3Base.ERROR = 0 ;
+      BarChart4Base.ERROR = 0 ;
+  
+      BarChart1PID.ERROR = 0 ;
+      BarChart2PID.ERROR = 0 ;
+      BarChart3PID.ERROR = 0 ;
+      BarChart4PID.ERROR = 0 ;
+  
+      ProcessError1Msg.visibility = 0 ;
+  }
+  
+  `
+
+  function `void escape()
+  {
+     if(SETUP)
+     {
+        Reset() ;
+        strcpy(SetupButton.Label,SetupButton.StaticLabel) ;
+     } // 2016.11.11 core-net
+     else
+        execute("{DisplayPage(\\"%s\\");}",TheDisplayPage);
+  
+  //   displayPicture("Main","PicYGN_SetupViewMenu.ppic");
+  //   update();
+  }`
+
+  function `float GetDB_HiER(int Chart)
+  {
+  // Returns the database High Engineering Range for the PID in Bar #, Chart #
+  
+     execute ("{pRECORD = \`&%s\`;}",GetstrPID(Chart));
+  
+     DB_HiER = EngRangeHi(pRECORD) ;
+  
+   //  strcpy(StrLoER, GetstrPID(Chart));
+  
+   // execute("{DB_HiER = %s;}",GetstrDB_HiER(Chart));
+  
+  
+  
+    return(DB_HiER);
+  }`
+
+  function `float GetDB_LoER(int Chart)
+  {
+  // Returns the Low Engineering Range for the PID in Bar #, Chart #
+  
+     execute ("{pRECORD = \`&%s\`;}",GetstrPID(Chart));
+  
+     DB_LoER = EngRangeLo(pRECORD) ;
+  
+  
+  //  execute("{DB_LoER = %s;}",GetstrDB_LoER(Chart));
+    return(DB_LoER);
+  }`
+
+  function `int GetPID_CheckType(char * PID)
+  {
+    int point_type;
+    int retval = FULL_TYPE_CHECK;
+  
+    strcpy(TEMPSTR, PID);
+    strcat(TEMPSTR, ".sig_type");
+    execute("{TEMPINT = %s;}",TEMPSTR);
+    point_type = TEMPINT;
+  
+    switch (point_type)
+    {
+      case AI:
+      case PI:
+      case FI:
+      case ROD:
+        retval = FULL_TYPE_CHECK;
+        break;
+  
+      case CI:
+      case DI:
+      case SOE:
+      case BCI:
+      case DL:
+      case QD:
+      case XD:
+      case CO:
+      case BCO:
+        retval = ZERO_OR_ONE_TYPE_CHECK;
+        break;
+  
+      case XA:
+      case QA:
+        retval = NO_RANGE_TYPE_CHECK;
+        break;
+  
+      case AO:
+      case KO:
+        strcpy(TEMPSTR, PID);
+        strcat(TEMPSTR, ".erange_lo");
+        execute("{DB_LoER = %s;}",TEMPSTR);
+        strcpy(TEMPSTR, PID);
+        strcat(TEMPSTR, ".erange_hi");
+        execute("{DB_HiER = %s;}",TEMPSTR);
+        if ((0.0 == DB_LoER)  &&  (0.0 == DB_HiER))
+          retval = NO_RANGE_TYPE_CHECK;
+        else
+          retval = FULL_TYPE_CHECK;
+        break;
+  
+      default:
+        //printf("%s GetPID_CheckType() ERROR: Point type not found", PictureTitle);
+        retval = FULL_TYPE_CHECK;
+        break;
+    }
+    return(retval);
+  }`
+
+  function `InputDialogueNumber *GetpoBaseValue(int Chart)
+  {
+  // Returns a pointer to the BaseValue object for Bar #, Chart #
+     execute("{poBasValue = &BarChart%dBase;}", Chart);
+     return(poBasValue);
+  }`
+
+  function `InputDialogueNumber * GetpoMaxValue(int Chart)
+  {
+  // Returns a pointer to the MaxValue object for Bar #, Chart #
+  
+    execute("{poMaxValue = &BarChart%dMaxValue;}", Chart);
+    return(poMaxValue);
+  }`
+
+  function `InputDialogueNumber * GetpoMinValue(int Chart)
+  {
+    // Returns a pointer to the MinValue object for Bar #, Chart #
+  
+    execute("{poMinValue = &BarChart%dMinValue;}", Chart);
+    return(poMinValue);
+  
+  }`
+
+  function `InputDialogueText * GetpoPID(int Chart)
+  {
+    // Returns a pointer to the object that holds the PID
+    // for Bar #, Chart #
+  
+    execute("{poPID = &BarChart%dPID;}", Chart);
+    return(poPID);
+  
+  }`
+
+  function `char * GetstrBasNumberFormat(int Chart)
+  {
+    execute("{poBasValue = &BarChart%dBase;}", Chart);
+    return(poBasValue->TheNumberFormat);
+  }`
+
+  function `char * GetstrDB_HiER(int Chart)
+  {
+  // Returns pointer to char string that contains
+  // the name of the variable that contains the
+  // database High Engineering Value
+    strcpy(StrHiER,GetstrPID(Chart));
+    strcat(StrHiER,".erange_hi");
+    return(StrHiER);
+  }`
+
+  function `char * GetstrDB_LoER(int Chart)
+  {
+  // Returns pointer to string that contains the variable
+  // name that contains the database Low Engineering Value
+    strcpy(StrLoER, GetstrPID(Chart));
+    strcat(StrLoER, ".erange_lo");
+    return(StrLoER);
+  }`
+
+  function `char * GetstrMaxNumberFormat(int Chart)
+  {
+    execute("{poMaxValue = &BarChart%dMaxValue;}", Chart);
+    return(poMaxValue->TheNumberFormat);
+  }`
+
+  function `char * GetstrMinNumberFormat(int Chart)
+  {
+    execute("{poMinValue = &BarChart%dMinValue;}",Chart);
+    return(poMinValue->TheNumberFormat);
+  }`
+
+  function `char * GetstrPID(int Chart)
+  {
+  // Returns the string of the PID for Bar #, Chart #
+    InputDialogueText * idt = 0;
+  
+    idt = GetpoPID(Chart);
+    return(idt->TheNewText);
+  }`
+
+  function `void Grp1Select()
+  {
+     Group2Button.UnSelect() ;
+     Sel = 1 ;
+  //   Reset() ;
+  
+     if(!init) UpdateLocalsFromInterface() ;
+  
+     update() ;
+  }`
+
+  function `void Grp2Select()
+  {
+     Group1Button.UnSelect() ;
+     Sel = 2 ;
+  //   Reset() ;
+  
+     if (!init)  UpdateLocalsFromInterface() ;
+  
+     update() ;
+  }`
+
+  function `void Initialize()
+  {
+     CFMLevel = 0;
+     Current_Page = 850;
+     init = 1 ;
+  
+     procMsg.visibility = 1 ;
+  
+     DisplayAdvisoryMessage(" ");
+     DisplayAdvisoryMessage1(" ");
+     DisplayAdvisoryMessage2(" ");
+     DisplayAdvisoryMessage3(" ");
+  
+  // Request pen data from host
+  
+  //   execute("{sendMessageToHost(REQUEST_BAR_DATA);}");
+  //   ErrorMsgReset() ;
+  
+     Reset() ;
+  
+  // Bar visibility for request message
+  // RequestChartDataMsg.visibility = 1;
+  // EscapeButton.UnSelect();
+  
+     if(Sel==2)
+     {
+         Group2Button.Select() ;
+     }
+     else
+     {
+        Sel = 1 ;
+        Group1Button.Select() ;
+     }
+  
+  //   SETUP = 0 ;
+     strcpy(SetupButton.Label,SetupButton.StaticLabel);   //2016.11.21 core-net
+     init = 0 ;
+  
+     update();
+  }`
+
+// ***CORENET 20170601 by Philkyu Kwon ************
+  function `void DummyProcess()
+  {
+      //printf("Button Select OR Button Unselected");
+  }`
+// ***************************************************
+
+  function `int IsAllBlank(char * cptr)
+  {
+    // Return 0 if one non-blank character is found, 1 otherwise
+    int blank = 1;
+    int i;
+  
+    for (i=0; i<strlen(cptr); i++, cptr++)
+    {
+      if (*cptr != ' ')
+      {
+        blank = 0;
+        break;
+      }//endif
+    }//endfor
+    return (blank);
+  }`
+
+  function `int IsDigital(char * PID)
+  {
+    int retval, sigtype;
+  
+    // get a pointer to the record for the PID
+    execute("{pRECORD = &%s;}",PID);
+  
+    sigtype = pRECORD->sig_type;
+    switch(sigtype)
+    {
+      case CI:
+      case DI:
+      case SOE:
+      case BCI:
+      case DL:
+      case QD:
+      case XD:
+      case CO:
+      case BCO:
+        retval = 1;
+        break;
+      default:
+        retval = 0;
+        break;
+    }//endswitch
+    return(retval);
+  }`
+
+  function `int isDigital(RECORD *PID)
+  {
+    int retval, sigtype;
+  
+    // get a pointer to the record for the PID
+    pRECORD = PID ;
+  
+    sigtype = pRECORD->sig_type;
+  
+    switch(sigtype)
+    {
+      case CI:
+      case DI:
+      case SOE:
+      case BCI:
+      case DL:
+      case QD:
+      case XD:
+      case CO:
+      case BCO:
+        retval = 1;
+        break;
+      default:
+        retval = 0;
+        break;
+    }//endswitch
+    return(retval);
+  }`
+
+  function `void ProcessThis(int sel)
+  {
+    int i,j;
+    InputDialogueNumber * poMinValue;
+    InputDialogueNumber * poMaxValue;
+    InputDialogueNumber * poBasValue;
+    InputDialogueText   * poPID;
+  
+  
+      i = Sel = sel ;
+  
+  
+  //  ADD TEMPOTRARY SHOPPING LIST
+  
+      execute("{ manageTempShopList(INIT_TEMP_SHOP_LIST,dummy_arg);}");
+  
+      for (j=1; j<=NUM_BAR_PER_SET; j++)
+      {
+        execute("{ strcpy(TEMP, pBarChartData->Group%dPoint%d.BarChartId);}",i,j);
+        if(strlen(TEMP)>1)
+           execute("{ manageTempShopList(TEMP_SHOP_LIST_ADD, TEMP);}");
+      }
+  
+      execute("{ manageTempShopList(TEMP_SHOP_LIST_SEND,dummy_arg);}");
+  
+  //    execute("{sendMessageToHost(PROCESS_BAR_DATA);}");  commented out by yrlee (990114)
+  
+  //--------------------------------------------------------------------------------------------------------
+  //  For PREV, NEXT, sending shopping list is enough
+     if (Current_Page == 851 || Current_Page == 852) return;
+     //------------------------------------------------------------------------------------------------------
+  
+     if (Sel == 1)
+     {
+  //   execute ("{displayPicture(\\"Main\\",\\"%s.ppic\\");}",PageForward1);
+       DisplayPage(Page851);
+     }
+     else
+     {
+  //   execute ("{displayPicture(\\"Main\\",\\"%s.ppic\\");}",PageForward2);
+       DisplayPage(Page852);
+     }
+  
+  //>>>>>>>>>>>>>>>>>>>>>>>> CORENET
+  	Group1Select.UnSelect();
+  //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+  
+     update() ;
+  }
+  `
+
+  function `void Reset()
+  {
+  //  printf("%s Resetting", PictureTitle);
+  //  UpdateLocalsFromInterface();
+  
+    execute("{sendMessageToHost(REQUEST_BAR_DATA);}");
+    ErrorMsgReset() ;
+    SETUP = 0 ;
+  }`
+
+  function `void SaveSetting()
+  {
+     int i,j;
+     InputDialogueNumber * poMinValue;
+     InputDialogueNumber * poMaxValue;
+     InputDialogueNumber * poBasValue;
+     InputDialogueText   * poPID;
+  
+     i = Sel ;
+  
+     for (j=1; j<=NUM_BAR_PER_SET; j++)
+     {
+        execute("{ProcessERROR = BarChart%dPID.ERROR;}",j);
+        if (1 == ProcessERROR) break;
+        execute("{ProcessERROR = BarChart%dMinValue.ERROR;}",j);
+        if (1 == ProcessERROR) break;
+        execute("{ProcessERROR = BarChart%dMaxValue.ERROR;}",j);
+        if (1 == ProcessERROR) break;
+        execute("{ProcessERROR = BarChart%dBase.ERROR;}",j);
+        if (1 == ProcessERROR) break;
+  
+        poMinValue = GetpoMinValue(j);
+        poMaxValue = GetpoMaxValue(j);
+        poBasValue = GetpoBaseValue(j);  // by kwang
+        poPID = GetpoPID(j);
+  
+  
+        // In case of Reversed Range, Check the the MAX and MIN is within the engineering range.
+        // For example, the Pid IMR1S1 has reversed engineering range.
+        if ( (poMaxValue->TheNewNumber <= poBasValue->TheNewNumber)&&(poBasValue->TheNewNumber <= poMinValue->TheNewNumber) )
+           { ProcessERROR = 0; }
+        // In case of Normal Range, Check the the MAX and MIN is within the engineering range
+        else if ( ((poMaxValue->TheNewNumber >= poBasValue->TheNewNumber)&&(poBasValue->TheNewNumber >= poMinValue->TheNewNumber)) )
+           { ProcessERROR = 0; }
+        else
+        {
+          ProcessERROR = 1;
+          poMinValue.ERROR = 1;
+          poMaxValue.ERROR = 1;
+          break;
+        } //endif
+     } //endfor
+  
+     if (!ProcessERROR)
+     {
+        i = Sel ;
+  
+        for (j=1;j<=NUM_BAR_PER_SET;j++)
+        {
+           execute("{strcpy(pBarChartData->Group%dPoint%d.BarChartId, BarChart%dPID.TheNewText);}" ,i,j,j);
+           execute ("{pRECORD = \`&%s\`;}",GetstrPID(j));
+  
+           if (IsDigital(GetstrPID(j)))		// For Digital PID
+           {
+              execute("{pBarChartData->Group%dPoint%d.Minimum  = BarChart%dMinValue.TheNewNumber;}",i,j,j);
+              execute("{pBarChartData->Group%dPoint%d.Maximum  = BarChart%dMaxValue.TheNewNumber;}",i,j,j);
+              execute("{pBarChartData->Group%dPoint%d.Baseline = BarChart%dBase.TheNewNumber;}",i,j,j);
+           }
+           else
+           {
+              if (IsAllBlank(GetstrPID(j))!=1)
+              {
+                 if ( (Interface->System.displayedUnits) && (!(pRECORD->pipbitmap & bMETUNIT)) )
+                 {
+                    execute("{pBarChartData->Group%dPoint%d.Minimum  = (BarChart%dMinValue.TheNewNumber - pRECORD->moffset) / pRECORD->mfactor;}",i,j,j);
+                    execute("{pBarChartData->Group%dPoint%d.Maximum  = (BarChart%dMaxValue.TheNewNumber - pRECORD->moffset) / pRECORD->mfactor;}",i,j,j);
+                    execute("{pBarChartData->Group%dPoint%d.Baseline = (BarChart%dBase.TheNewNumber     - pRECORD->moffset) / pRECORD->mfactor;}",i,j,j);
+                 }
+                 else if ( (!Interface->System.displayedUnits) && (pRECORD->pipbitmap & bMETUNIT) )
+                 {
+                    execute("{pBarChartData->Group%dPoint%d.Minimum  = BarChart%dMinValue.TheNewNumber * pRECORD->mfactor + pRECORD->moffset;}",i,j,j);
+                    execute("{pBarChartData->Group%dPoint%d.Maximum  = BarChart%dMaxValue.TheNewNumber * pRECORD->mfactor + pRECORD->moffset;}",i,j,j);
+                    execute("{pBarChartData->Group%dPoint%d.Baseline = BarChart%dBase.TheNewNumber     * pRECORD->mfactor + pRECORD->moffset;}",i,j,j);
+                 }
+                 else
+                 {
+                    execute("{pBarChartData->Group%dPoint%d.Minimum  = BarChart%dMinValue.TheNewNumber;}",i,j,j);
+                    execute("{pBarChartData->Group%dPoint%d.Maximum  = BarChart%dMaxValue.TheNewNumber;}",i,j,j);
+                    execute("{pBarChartData->Group%dPoint%d.Baseline = BarChart%dBase.TheNewNumber;}",i,j,j);
+                 }
+              }
+           }
+        } // by yrlee
+  
+        ProcessError1Msg.visibility = 0;
+        procMsg.visibility = 1 ;
+  
+        execute("{sendMessageToHost(PROCESS_BAR_DATA);}");  // by yrlee (990114)
+        SETUP = 0;   //2016.11.11 core-net
+  
+     } // endif (1 != ProcessERROR)
+     else
+     {
+        ProcessError1Msg.visibility = 1;
+     } //endelse
+  
+     strcpy(SetupButton.Label,SetupButton.StaticLabel) ; //2016.11.11 core-net
+     update() ;
+  }
+  
+  `
+
+  function `void SetupNcancel()
+  {
+     if (!SETUP)         // For SETUP
+     {
+        if (accesslevel<5)
+           SETUP = 1 ;
+        else
+           DisplayAdvisoryMessage("ACCESS LEVEL 3 OR 4 REQUIRED");
+     }
+     else                     // For CANCEL
+     {
+        SETUP = 0 ;
+        procMsg.visibility = 1 ;
+        Reset() ;
+     }
+  
+     update() ;
+  }`
+
+  function `void UpdateLocalsFromInterface()
+  {
+    int i,j;
+  
+  // start ------- changed by yrlee
+  
+  
+  //  for (i=1; i<=NUM_BAR_SETS; i++)
+  
+      i = Sel ;                      // Group Selection
+  
+      for (j=1; j<=NUM_BAR_PER_SET; j++)
+      {
+  
+  
+  //    Get the PID stuff
+        execute("{strcpy(BarChart%dPID.TheOriginalText,pBarChartData->Group%dPoint%d.BarChartId);}",j,i,j);
+        execute("{strcpy(BarChart%dPID.TheNewText,BarChart%dPID.TheOriginalText);}",j,j);
+        execute("{BarChart%dPID.ERROR = 0;}",j);
+  
+  // Metric/English Conversion
+  
+        execute ("{pRECORD = \`&%s\`;}",GetstrPID(j));
+  
+        if (IsAllBlank(GetstrPID(j)))
+           execute ("{pRECORD = \\\`&ERRORPID\\\`;}");
+        else if (IsDigital(GetstrPID(j)))              // For Digital PID
+        {
+              execute("{BarChart%dMinValue.TheNewNumber = pBarChartData->Group%dPoint%d.Minimum ;}",j,i,j);
+              execute("{BarChart%dBase.TheNewNumber =     pBarChartData->Group%dPoint%d.Baseline;}",j,i,j);
+              execute("{BarChart%dMaxValue.TheNewNumber = pBarChartData->Group%dPoint%d.Maximum ;}",j,i,j);
+        }
+        else
+        {
+           if ( (Interface->System.displayedUnits) && (!(pRECORD->pipbitmap & bMETUNIT)) )
+           {
+              execute("{BarChart%dMinValue.TheNewNumber = pBarChartData->Group%dPoint%d.Minimum  * pRECORD->mfactor + pRECORD->moffset ;}",j,i,j);
+              execute("{BarChart%dBase.TheNewNumber =     pBarChartData->Group%dPoint%d.Baseline * pRECORD->mfactor + pRECORD->moffset ;}",j,i,j);
+              execute("{BarChart%dMaxValue.TheNewNumber = pBarChartData->Group%dPoint%d.Maximum  * pRECORD->mfactor + pRECORD->moffset ;}",j,i,j);
+           }
+           else if ( (!Interface->System.displayedUnits) && (pRECORD->pipbitmap & bMETUNIT) )
+           {
+              execute("{BarChart%dMinValue.TheNewNumber = (pBarChartData->Group%dPoint%d.Minimum - pRECORD->moffset) / pRECORD->mfactor ;}",j,i,j);
+              execute("{BarChart%dBase.TheNewNumber =     (pBarChartData->Group%dPoint%d.Baseline- pRECORD->moffset) / pRECORD->mfactor ;}",j,i,j);
+              execute("{BarChart%dMaxValue.TheNewNumber = (pBarChartData->Group%dPoint%d.Maximum - pRECORD->moffset) / pRECORD->mfactor;}",j,i,j);
+           }
+           else
+           {
+              execute("{BarChart%dMinValue.TheNewNumber = pBarChartData->Group%dPoint%d.Minimum ;}",j,i,j);
+              execute("{BarChart%dBase.TheNewNumber =     pBarChartData->Group%dPoint%d.Baseline;}",j,i,j);
+              execute("{BarChart%dMaxValue.TheNewNumber = pBarChartData->Group%dPoint%d.Maximum ;}",j,i,j);
+           }
+        }
+  
+  
+  
+  
+  //    Get the MinValue stuff
+  
+        execute("{BarChart%dMinValue.TheOriginalNumber = BarChart%dMinValue.TheNewNumber;}",j,j);
+        execute("{sprintf(BarChart%dMinValue.TheNewText, \\"%s\\", BarChart%dMinValue.TheNewNumber);}",j,GetstrMinNumberFormat(j),j);
+        execute("{sprintf(BarChart%dMinValue.TheOriginalText, \\"%s\\", BarChart%dMinValue.TheOriginalNumber);}",j,GetstrMinNumberFormat(j),j);
+        execute("{BarChart%dMinValue.ERROR = 0;}",j);
+  
+  //    Get the Base stuff
+  
+        execute("{BarChart%dBase.TheOriginalNumber = BarChart%dBase.TheNewNumber;}",j,j);
+        execute("{sprintf(BarChart%dBase.TheNewText, \\"%s\\", BarChart%dBase.TheNewNumber);}",j,GetstrBasNumberFormat(j),j);
+        execute("{sprintf(BarChart%dBase.TheOriginalText, \\"%s\\", BarChart%dBase.TheOriginalNumber);}",j,GetstrBasNumberFormat(j),j);
+        execute("{BarChart%dBase.ERROR = 0;}",j);
+  
+  //    Get the MaxValue stuff
+  
+        execute("{BarChart%dMaxValue.TheOriginalNumber = BarChart%dMaxValue.TheNewNumber;}",j,j);
+        execute("{sprintf(BarChart%dMaxValue.TheNewText, \\"%s\\", BarChart%dMaxValue.TheNewNumber);}",j,GetstrMaxNumberFormat(j),j);
+        execute("{sprintf(BarChart%dMaxValue.TheOriginalText, \\"%s\\", BarChart%dMaxValue.TheOriginalNumber);}",j,GetstrMaxNumberFormat(j),j);
+        execute("{BarChart%dMaxValue.ERROR = 0;}",j);
+  
+      }
+  
+  // end ------- changed by yrlee
+  
+  
+  /*
+   //printf("%s|",pBarChartData->Group1Point1.BarChartId) ;
+   //printf("%s|",pBarChartData->Group1Point2.BarChartId) ;
+   //printf("%s|",pBarChartData->Group1Point3.BarChartId) ;
+   //printf("%s|",pBarChartData->Group1Point4.BarChartId) ;
+  
+   //printf("%s|",pBarChartData->Group2Point1.BarChartId) ;
+   //printf("%s|",pBarChartData->Group2Point2.BarChartId) ;
+   //printf("%s|",pBarChartData->Group2Point3.BarChartId) ;
+   //printf("%s|",pBarChartData->Group2Point4.BarChartId) ;
+  */
+  
+    AssignPid() ;
+  
+    ProcessError1Msg.visibility = 0;
+    procMsg.visibility = 0 ;
+  
+    update();
+  }`
+
+  function `void ValueErrorReset(int i)
+  {
+     switch(i)
+     {
+        case 1 : BarChart1MinValue.ERROR = 0 ;
+                 BarChart1Base.ERROR = 0 ;
+                 BarChart1MaxValue.ERROR = 0 ;
+                 break ;
+        case 2 : BarChart2MinValue.ERROR = 0 ;
+                 BarChart2Base.ERROR = 0 ;
+                 BarChart2MaxValue.ERROR = 0 ;
+                 break ;
+        case 3 : BarChart3MinValue.ERROR = 0 ;
+                 BarChart3Base.ERROR = 0 ;
+                 BarChart3MaxValue.ERROR = 0 ;
+                 break ;
+        case 4 : BarChart4MinValue.ERROR = 0 ;
+                 BarChart4Base.ERROR = 0 ;
+                 BarChart4MaxValue.ERROR = 0 ;
+                 break ;
+     }
+  }
+  `
+
+  function `void VerifyBaseValue(int Bar, int Chart)
+  {
+  
+    int error = 0;
+  
+    execute("{xx = BarChart%dMinValue.TheNewNumber;}",Chart);
+    execute("{yy = BarChart%dBase.TheNewNumber;}",Chart);
+    execute("{zz = BarChart%dMaxValue.TheNewNumber;}",Chart);
+  
+    if ( !((xx <= yy)&&(yy <= zz)) ) error = 1;
+  
+    if (error)
+      execute("{BarChart%dBase.ERROR = 1;}",Chart);
+    else
+    {
+      execute("{BarChart%dBase.ERROR = 0;}",Chart);
+      ProcessError1Msg.visibility = 0 ;
+    }
+  
+  
+  
+  
+  }`
+
+  function `void VerifyMaxValue(int Bar, int Chart)
+  {
+  // Verify valid input for the Max Value entered for Bar #, Chart #
+    InputDialogueNumber * poMax = 0;
+    InputDialogueNumber * poMin = 0;
+    int error = 0;
+    int check_type;
+  
+    poMax = GetpoMaxValue(Chart);
+    poMin = GetpoMinValue(Chart);
+  
+    // Determine the type of checking that is needed and do it.
+    check_type = GetPID_CheckType(GetstrPID(Chart));
+    switch(check_type)
+    {
+      case NO_RANGE_TYPE_CHECK:
+        error = 0;
+        break;
+  
+      case ZERO_OR_ONE_TYPE_CHECK:
+        if (1.0 != poMax->TheNewNumber) error = 1;
+        break;
+  
+      case FULL_TYPE_CHECK:
+      default:
+        xx = GetDB_LoER(Chart);
+        yy = poMax->TheNewNumber;
+        zz = GetDB_HiER(Chart);
+  
+        execute("{sprintf(temp,\\"%s\\",xx);}",poMax->TheNumberFormat); xx = atof(temp);
+        execute("{sprintf(temp,\\"%s\\",yy);}",poMax->TheNumberFormat); yy = atof(temp);
+        execute("{sprintf(temp,\\"%s\\",zz);}",poMax->TheNumberFormat); zz = atof(temp);
+  
+        // if the entered value is not between the hi and lo engineering range,
+        // we have an error
+        if ( !((xx <= yy) && (yy <= zz)) ) error = 1;
+  
+        if (poMax->TheNewNumber <= poMin->TheNewNumber) error = 1;
+        break;
+    }//endswitch
+  
+    if (0 == error)
+     {
+      execute("{BarChart%dMaxValue.ERROR = 0;}", Chart);
+      ProcessError1Msg.visibility = 0 ;
+     }
+    else
+     {
+      execute("{BarChart%dMaxValue.ERROR = 1;}", Chart);
+     }
+  }`
+
+  function `void VerifyMinMaxValues(int Bar, int Chart)
+  {
+    int error;
+  
+    execute("{pRECORD = \`&%s\`;}",GetstrPID(Chart));
+  
+    execute("{sprintf(temp,\\"%s\\",BarChart%dMaxValue.TheNewNumber);}",pRECORD->disfmt,Chart);
+    execute("{BarChart%dMaxValue.TheNewNumber = atof(temp);}",Chart);
+    execute("{BarChart%dMaxValue.TheOriginalNumber = BarChart%dMaxValue.TheNewNumber;}",Chart,Chart);
+  
+    execute("{sprintf(temp,\\"%s\\",BarChart%dMinValue.TheNewNumber);}",pRECORD->disfmt,Chart);
+    execute("{BarChart%dMinValue.TheNewNumber = atof(temp);}",Chart);
+    execute("{BarChart%dMinValue.TheOriginalNumber = BarChart%dMinValue.TheNewNumber;}",Chart,Chart);
+  
+    execute("{sprintf(temp,\\"%s\\",BarChart%dBase.TheNewNumber);}",pRECORD->disfmt,Chart);
+    execute("{BarChart%dBase.TheNewNumber = atof(temp);}",Chart);
+    execute("{BarChart%dBase.TheOriginalNumber = BarChart%dBase.TheNewNumber;}",Chart,Chart);
+  
+    execute("{error = BarChart%dPID.ERROR;}", Chart);
+    if ( (!IsAllBlank(GetstrPID(Chart)))  ||
+         (0 == error) )
+    {
+      VerifyMinValue(Bar, Chart);
+      VerifyMaxValue(Bar, Chart);
+      VerifyBaseValue(Bar, Chart);
+    }//endif
+  //----------------------------------------------------------------
+  //   PROCESS button error processing using OneSecondTimer
+  //
+  
+  //by yrlee      ProcessButtonERRFlag = 1;
+  
+  //----------------------------------------------------------------
+  //   this portion should be included for HF, bUT NOW SOME PICASSO's
+  //   mis-operarion keeps this from being implemented.
+  //   ProcessErrorReset();
+  //   After return from ProcessErrorReset(), Do the followings
+  //   ProcessError1Msg.visibility = PROCESS1_ERROR;
+  //   update();
+  //   printf(" ERROR is Zero");
+  //
+  }`
+
+  function `void VerifyMinValue(int Bar, int Chart)
+  {
+  // Verify valid input for the Min Value entered for Bar #, Chart #
+    InputDialogueNumber * poMin = 0;
+    InputDialogueNumber * poMax = 0;
+    int error = 0;
+    int check_type;
+  
+    poMin = GetpoMinValue(Chart);
+    poMax = GetpoMaxValue(Chart);
+  
+    // Determine the type of checking that is needed and do it.
+    check_type = GetPID_CheckType(GetstrPID(Chart));
+    switch(check_type)
+    {
+      case NO_RANGE_TYPE_CHECK:
+        error = 0;
+        break;
+  
+      case ZERO_OR_ONE_TYPE_CHECK:
+        if (0.0 != poMin->TheNewNumber) error = 1;
+  //      printf("adifaklsdjflkasd");
+        break;
+  
+      case FULL_TYPE_CHECK:
+      default:
+        xx = GetDB_LoER(Chart);
+        yy = poMin->TheNewNumber;
+        zz = GetDB_HiER(Chart);
+  
+        execute("{sprintf(temp,\\"%s\\",xx);}",poMax->TheNumberFormat); xx = atof(temp);
+        execute("{sprintf(temp,\\"%s\\",yy);}",poMax->TheNumberFormat); yy = atof(temp);
+        execute("{sprintf(temp,\\"%s\\",zz);}",poMax->TheNumberFormat); zz = atof(temp);
+  
+        // if the entered value is not between the hi and lo engineering range,
+        // we have an error
+        if ( !((xx <= yy) && (yy <= zz)) ) error = 1;
+  
+        if (poMax->TheNewNumber <= poMin->TheNewNumber) error = 1;
+        break;
+    }//endswitch
+  
+    if (0 == error)
+     {
+      execute("{BarChart%dMinValue.ERROR = 0;}", Chart);
+      ProcessError1Msg.visibility = 0 ;
+     }
+    else
+     {
+      execute("{BarChart%dMinValue.ERROR = 1;}", Chart);
+     }
+  }`
+
+  function `void VerifyPID(int Bar,int Chart)
+  {
+    int blanks = 1;
+    char * cptr;
+    InputDialogueText * Input = 0;
+    // Get pointers to the PID, Min, and Max objects
+    Input = GetpoPID(Chart);
+  
+    cptr = Input->TheNewText;
+  
+    blanks = IsAllBlank(cptr);
+  
+    if (1 == blanks)
+    {
+      BarMinMaxFromPID(Chart);
+      Input->ERROR = 0;
+    }//endif
+    else
+    {
+      Input->ERROR = FindPointId(Input->TheNewText);
+    }
+  
+    if (Input->ERROR != 0)
+    {
+      Input->ERROR = 1;
+    }
+    else if (1 != blanks)
+    {
+      BarMinMaxFromPID(Chart);
+      ProcessError1Msg.visibility = 0 ;
+    } // endelseif (1 == blanks)
+    update();
+  }`
+
+  rectangle
+  {
+    x = 267;
+    y = 269;
+    width = 820;
+    height = 300;
+    visibility = 1;
+    foregroundColour = `COLOR_LINE_BOUNDARY_6`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 2;
+    foregroundFillColour = `COLOR_PICTURE_BACKGROUND`;
+    backgroundFillColour = -1;
+    fillPattern = `SolidPattern`;
+    xReference = 267;
+    yReference = 260;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 165;
+    y = 341;
+    format = "%s";
+    theText = "CHART #1";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 165;
+    yReference = 341;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 165;
+    y = 396;
+    format = "%s";
+    theText = "CHART #2";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 165;
+    yReference = 396;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 165;
+    y = 453;
+    format = "%s";
+    theText = "CHART #3";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 165;
+    yReference = 453;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 165;
+    y = 512;
+    format = "%s";
+    theText = "CHART #4";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 165;
+    yReference = 512;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 267;
+    y = 157;
+    format = "%s";
+    theText = "BARCHART GROUP NUMBER : ";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 267;
+    yReference = 157;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text PID_Title
+  {
+    x = 338;
+    y = 255;
+    format = "%s";
+    theText = "POINT ID";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 338;
+    yReference = 255;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text MINVAL_Title
+  {
+    x = 575;
+    y = 255;
+    format = "%s";
+    theText = "MIN VALUE";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 575;
+    yReference = 255;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text MAXVAL_Title
+  {
+    x = 894;
+    y = 255;
+    format = "%s";
+    theText = "MAX VALUE";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 894;
+    yReference = 255;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text BarChart1NotFoundMsg
+  {
+    x = 331;
+    y = 367;
+    format = "%s";
+    theText = "INVALID PID";
+    alignment = 0;
+    visibility = `BarChart1PID.ERROR`;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 331;
+    yReference = 367;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text BarChart2NotFoundMsg
+  {
+    x = 331;
+    y = 422;
+    format = "%s";
+    theText = "INVALID PID";
+    alignment = 0;
+    visibility = `BarChart2PID.ERROR`;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 331;
+    yReference = 422;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text BarChart3NotFoundMsg
+  {
+    x = 331;
+    y = 482;
+    format = "%s";
+    theText = "INVALID PID";
+    alignment = 0;
+    visibility = `BarChart3PID.ERROR`;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 331;
+    yReference = 482;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text BarChart4NotFoundMsg
+  {
+    x = 330;
+    y = 542;
+    format = "%s";
+    theText = "INVALID PID";
+    alignment = 0;
+    visibility = `BarChart4PID.ERROR`;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 330;
+    yReference = 542;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  instance DialogueSymbols.InputDialogueNumber BarChart1MinValue
+  {
+    x = 578;
+    y = 320;
+    visibility = `SETUP && strlen(BarChart1PID.TheOriginalText) && !BarChart1PID.ERROR && !isDigital(pPID1)`;
+    xReference = 578;
+    yReference = 320;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Active = 1;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    ExecuteUnSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxDigits = 10;
+    ReturnAction = "{PicYGN_BarChartMenu.VerifyMinMaxValues(Sel,1);}";
+    Scope = "PicYGN_BarChartMenu";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewNumber = 0;
+    TheNewText = "   0.0";
+    TheNumberFormat = `(isDigital(pPID1))? "%5d":pPID1->disfmt`;
+    TheOriginalNumber = 0;
+    TheOriginalText = "   0.0";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 125;
+  }
+
+  instance DialogueSymbols.InputDialogueNumber BarChart1MaxValue
+  {
+    x = 899;
+    y = 320;
+    visibility = `BarChart1MinValue.visibility`;
+    xReference = 899;
+    yReference = 320;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Active = 1;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    ExecuteUnSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxDigits = 10;
+    ReturnAction = "{PicYGN_BarChartMenu.VerifyMinMaxValues(Sel,1);}";
+    Scope = "PicYGN_BarChartMenu";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewNumber = 1260;
+    TheNewText = "1260.0";
+    TheNumberFormat = `(isDigital(pPID1))? "%5d":pPID1->disfmt`;
+    TheOriginalNumber = 1260;
+    TheOriginalText = "1260.0";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 125;
+  }
+
+  instance DialogueSymbols.InputDialogueNumber BarChart2MinValue
+  {
+    x = 578;
+    y = 375;
+    visibility = `SETUP && strlen(BarChart2PID.TheOriginalText) && !BarChart2PID.ERROR && !isDigital(pPID2)`;
+    xReference = 578;
+    yReference = 375;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Active = 1;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    ExecuteUnSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxDigits = 10;
+    ReturnAction = "{PicYGN_BarChartMenu.VerifyMinMaxValues(Sel,2);}";
+    Scope = "PicYGN_BarChartMenu";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewNumber = 250;
+    TheNewText = " 250.0";
+    TheNumberFormat = `(isDigital(pPID2))? "%5d":pPID2->disfmt`;
+    TheOriginalNumber = 250;
+    TheOriginalText = " 250.0";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 125;
+  }
+
+  instance DialogueSymbols.InputDialogueNumber BarChart3MinValue
+  {
+    x = 578;
+    y = 432;
+    visibility = `SETUP && strlen(BarChart3PID.TheOriginalText) && !BarChart3PID.ERROR && !isDigital(pPID3)`;
+    xReference = 578;
+    yReference = 432;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Active = 1;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    ExecuteUnSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxDigits = 10;
+    ReturnAction = "{PicYGN_BarChartMenu.VerifyMinMaxValues(Sel,3);}";
+    Scope = "PicYGN_BarChartMenu";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewNumber = 0;
+    TheNewText = "    0";
+    TheNumberFormat = `(isDigital(pPID3))? "%5d":pPID3->disfmt`;
+    TheOriginalNumber = 0;
+    TheOriginalText = "    0";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 125;
+  }
+
+  instance DialogueSymbols.InputDialogueNumber BarChart4MinValue
+  {
+    x = 578;
+    y = 491;
+    visibility = `SETUP && strlen(BarChart4PID.TheOriginalText) && !BarChart4PID.ERROR && !isDigital(pPID4)`;
+    xReference = 578;
+    yReference = 491;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Active = 1;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    ExecuteUnSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxDigits = 10;
+    ReturnAction = "{PicYGN_BarChartMenu.VerifyMinMaxValues(Sel,4);}";
+    Scope = "PicYGN_BarChartMenu";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewNumber = 0;
+    TheNewText = "   0.0";
+    TheNumberFormat = `(isDigital(pPID4))? "%5d":pPID4->disfmt`;
+    TheOriginalNumber = 0;
+    TheOriginalText = "   0.0";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 125;
+  }
+
+  instance DialogueSymbols.InputDialogueNumber BarChart2MaxValue
+  {
+    x = 899;
+    y = 375;
+    visibility = `BarChart2MinValue.visibility`;
+    xReference = 899;
+    yReference = 375;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Active = 1;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    ExecuteUnSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxDigits = 10;
+    ReturnAction = "{PicYGN_BarChartMenu.VerifyMinMaxValues(Sel,2);}";
+    Scope = "PicYGN_BarChartMenu";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewNumber = 350;
+    TheNewText = " 350.0";
+    TheNumberFormat = `(isDigital(pPID2))? "%5d":pPID2->disfmt`;
+    TheOriginalNumber = 350;
+    TheOriginalText = " 350.0";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 125;
+  }
+
+  instance DialogueSymbols.InputDialogueNumber BarChart3MaxValue
+  {
+    x = 899;
+    y = 432;
+    visibility = `BarChart3MinValue.visibility`;
+    xReference = 899;
+    yReference = 432;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Active = 1;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    ExecuteUnSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxDigits = 10;
+    ReturnAction = "{PicYGN_BarChartMenu.VerifyMinMaxValues(Sel,3);}";
+    Scope = "PicYGN_BarChartMenu";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewNumber = 1;
+    TheNewText = "1065353216";
+    TheNumberFormat = `(isDigital(pPID3))? "%5d":pPID3->disfmt`;
+    TheOriginalNumber = 1;
+    TheOriginalText = "1065353216";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 125;
+  }
+
+  instance DialogueSymbols.InputDialogueNumber BarChart4MaxValue
+  {
+    x = 899;
+    y = 491;
+    visibility = `BarChart4MinValue.visibility`;
+    xReference = 899;
+    yReference = 491;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Active = 1;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    ExecuteUnSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxDigits = 10;
+    ReturnAction = "{PicYGN_BarChartMenu.VerifyMinMaxValues(Sel,4);}";
+    Scope = "PicYGN_BarChartMenu";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewNumber = 0.7;
+    TheNewText = "   0.7";
+    TheNumberFormat = `(isDigital(pPID4))? "%5d":pPID4->disfmt`;
+    TheOriginalNumber = 0.7;
+    TheOriginalText = "   0.7";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 125;
+  }
+
+  text BarChart1BadMinMsg
+  {
+    x = 577;
+    y = 367;
+    format = "%s";
+    theText = "INVALID VALUE";
+    alignment = 0;
+    visibility = `BarChart1MinValue.ERROR`;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 577;
+    yReference = 367;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text BarChart1BadMaxMsg
+  {
+    x = 898;
+    y = 367;
+    format = "%s";
+    theText = "INVALID VALUE";
+    alignment = 0;
+    visibility = `BarChart1MaxValue.ERROR`;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 898;
+    yReference = 367;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text BarChart2BadMinMsg
+  {
+    x = 577;
+    y = 422;
+    format = "%s";
+    theText = "INVALID VALUE";
+    alignment = 0;
+    visibility = `BarChart2MinValue.ERROR`;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 577;
+    yReference = 422;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text BarChart2BadMaxMsg
+  {
+    x = 898;
+    y = 422;
+    format = "%s";
+    theText = "INVALID VALUE";
+    alignment = 0;
+    visibility = `BarChart2MaxValue.ERROR`;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 898;
+    yReference = 422;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text BarChart3BadMinMsg
+  {
+    x = 577;
+    y = 482;
+    format = "%s";
+    theText = "INVALID VALUE";
+    alignment = 0;
+    visibility = `BarChart3MinValue.ERROR`;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 577;
+    yReference = 482;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text BarChart4BadMinMsg
+  {
+    x = 577;
+    y = 542;
+    format = "%s";
+    theText = "INVALID VALUE";
+    alignment = 0;
+    visibility = `BarChart4MinValue.ERROR`;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 577;
+    yReference = 542;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text BarChart3BadMaxMsg
+  {
+    x = 898;
+    y = 482;
+    format = "%s";
+    theText = "INVALID VALUE";
+    alignment = 0;
+    visibility = `BarChart3MaxValue.ERROR`;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 898;
+    yReference = 482;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text BarChart4BadMaxMsg
+  {
+    x = 898;
+    y = 542;
+    format = "%s";
+    theText = "INVALID VALUE";
+    alignment = 0;
+    visibility = `BarChart4MaxValue.ERROR`;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 898;
+    yReference = 542;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 735;
+    y = 255;
+    format = "%s";
+    theText = "BASELINE";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 735;
+    yReference = 255;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  instance DialogueSymbols.InputDialogueNumber BarChart1Base
+  {
+    x = 738;
+    y = 320;
+    visibility = `BarChart1MinValue.visibility`;
+    xReference = 738;
+    yReference = 320;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Active = 1;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    ExecuteUnSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxDigits = 10;
+    ReturnAction = "PicYGN_BarChartMenu.VerifyMinMaxValues(Sel,1)";
+    Scope = "PicYGN_BarChartMenu";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewNumber = 630;
+    TheNewText = " 630.0";
+    TheNumberFormat = `(isDigital(pPID1))? "%5d":pPID1->disfmt`;
+    TheOriginalNumber = 630;
+    TheOriginalText = " 630.0";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 125;
+  }
+
+  instance DialogueSymbols.InputDialogueNumber BarChart2Base
+  {
+    x = 738;
+    y = 375;
+    visibility = `BarChart2MinValue.visibility`;
+    xReference = 738;
+    yReference = 375;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Active = 1;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    ExecuteUnSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxDigits = 10;
+    ReturnAction = "PicYGN_BarChartMenu.VerifyMinMaxValues(Sel,2)";
+    Scope = "PicYGN_BarChartMenu";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewNumber = 300;
+    TheNewText = " 300.0";
+    TheNumberFormat = `(isDigital(pPID2))? "%5d":pPID2->disfmt`;
+    TheOriginalNumber = 300;
+    TheOriginalText = " 300.0";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 125;
+  }
+
+  instance DialogueSymbols.InputDialogueNumber BarChart3Base
+  {
+    x = 738;
+    y = 432;
+    visibility = `BarChart3MinValue.visibility`;
+    xReference = 738;
+    yReference = 432;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Active = 1;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    ExecuteUnSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxDigits = 10;
+    ReturnAction = "PicYGN_BarChartMenu.VerifyMinMaxValues(Sel,3)";
+    Scope = "PicYGN_BarChartMenu";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewNumber = 0.5;
+    TheNewText = "1056964608";
+    TheNumberFormat = `(isDigital(pPID3))? "%5d":pPID3->disfmt`;
+    TheOriginalNumber = 0.5;
+    TheOriginalText = "1056964608";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 125;
+  }
+
+  instance DialogueSymbols.InputDialogueNumber BarChart4Base
+  {
+    x = 738;
+    y = 491;
+    visibility = `BarChart4MinValue.visibility`;
+    xReference = 738;
+    yReference = 491;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Active = 1;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    ExecuteUnSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxDigits = 10;
+    ReturnAction = "PicYGN_BarChartMenu.VerifyMinMaxValues(Sel,4)";
+    Scope = "PicYGN_BarChartMenu";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewNumber = 0.3;
+    TheNewText = "   0.3";
+    TheNumberFormat = `(isDigital(pPID4))? "%5d":pPID4->disfmt`;
+    TheOriginalNumber = 0.3;
+    TheOriginalText = "   0.3";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 125;
+  }
+
+  instance DialogueSymbols.PushButton Group1Select
+  {
+    x = 179;
+    y = 686;
+    visibility = 1;
+    xReference = 179;
+    yReference = 686;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ButtonState = 0;
+    DynamicLabel = "   PROCESS";
+    ExecuteString = "{if(SETUP) { SaveSetting(); } else ProcessThis(Sel); }";
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    Label = "PROCESS";
+    Scope = "PicYGN_BarChartMenu";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    StaticLabel = "PROCESS";
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextFontDynamic = `font2`;
+    TextFontStatic = `font4`;
+    TextX = 17;
+    TextXDynamic = 15;
+    TextXStatic = 17;
+    TextY = 22;
+    TextYDynamic = 21;
+    TextYStatic = 22;
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    Width = 125;
+  }
+
+  text ProcessError1Msg
+  {
+    x = 177;
+    y = 742;
+    format = "%s";
+    theText = "FIX ALL INVALID ENTRY BEFORE PROCESSING / SAVING";
+    alignment = 0;
+    visibility = 0;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 177;
+    yReference = 742;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  instance DialogueSymbols.PidInputButton BarChart1PID
+  {
+    x = 332;
+    y = 322;
+    visibility = `SETUP`;
+    xReference = 332;
+    yReference = 322;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    ExecuteUnSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    FindPidScope = "::YGN3and4.PicYGN_BarChartMenu.BarChart1PID.InputArea";
+    Found = "{ ProcessError1Msg.visibility = 0; AssignPid(); BarMinMaxFromPID(1);}";
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxCharacters = 8;
+    NotFound = "{ValueErrorReset(1);}";
+    ReturnAction = "";
+    Scope = "::YGN3and4.PicYGN_BarChartMenu";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewText = "CET01";
+    TheOriginalText = "CET01";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 200;
+  }
+
+  instance DialogueSymbols.PidInputButton BarChart2PID
+  {
+    x = 332;
+    y = 377;
+    visibility = `SETUP`;
+    xReference = 332;
+    yReference = 377;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    ExecuteUnSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    FindPidScope = "::YGN3and4.PicYGN_BarChartMenu.BarChart2PID.InputArea";
+    Found = "{ProcessError1Msg.visibility = 0; AssignPid(); BarMinMaxFromPID(2);}";
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxCharacters = 8;
+    NotFound = "{ValueErrorReset(2);}";
+    ReturnAction = "";
+    Scope = "::YGN3and4.PicYGN_BarChartMenu";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewText = "RCT111X";
+    TheOriginalText = "RCT111X";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 200;
+  }
+
+  instance DialogueSymbols.PidInputButton BarChart3PID
+  {
+    x = 332;
+    y = 434;
+    visibility = `SETUP`;
+    xReference = 332;
+    yReference = 434;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    ExecuteUnSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    FindPidScope = "::YGN3and4.PicYGN_BarChartMenu.BarChart3PID.InputArea";
+    Found = "{ ProcessError1Msg.visibility = 0; AssignPid(); BarMinMaxFromPID(3);}";
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxCharacters = 8;
+    NotFound = "{ValueErrorReset(3);}";
+    ReturnAction = "";
+    Scope = "::YGN3and4.PicYGN_BarChartMenu";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewText = "CNYXAL7";
+    TheOriginalText = "CNYXAL7";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 200;
+  }
+
+  instance DialogueSymbols.PidInputButton BarChart4PID
+  {
+    x = 332;
+    y = 493;
+    visibility = `SETUP`;
+    xReference = 332;
+    yReference = 493;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    ExecuteUnSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    FindPidScope = "::YGN3and4.PicYGN_BarChartMenu.BarChart4PID.InputArea";
+    Found = "{ ProcessError1Msg.visibility = 0; AssignPid(); BarMinMaxFromPID(4);}";
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxCharacters = 8;
+    NotFound = "{ValueErrorReset(4);}";
+    ReturnAction = "";
+    Scope = "::YGN3and4.PicYGN_BarChartMenu";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewText = "IAP0012";
+    TheOriginalText = "IAP0012";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 200;
+  }
+
+  instance DialogueSymbols.OptionButton Group1Button
+  {
+    x = 587;
+    y = 136;
+    visibility = 1;
+    xReference = 587;
+    yReference = 136;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ButtonState = 1;
+    DisplayText = 1;
+    DynamicLabel = "1";
+    ExecuteSelect = "{if(!init) SaveSetting() ; Grp1Select();}";
+    ExecuteUnSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    Label = "1";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    StaticLabel = "1";
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextFontDynamic = `font4`;
+    TextFontStatic = `font4`;
+    TextX = 15;
+    TextXDynamic = 15;
+    TextXStatic = 17;
+    TextY = 22;
+    TextYDynamic = `TextY`;
+    TextYStatic = `TextY`;
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    Width = 45;
+  }
+
+  instance DialogueSymbols.OptionButton Group2Button
+  {
+    x = 647;
+    y = 136;
+    visibility = 1;
+    xReference = 647;
+    yReference = 136;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ButtonState = 0;
+    DisplayText = 1;
+    DynamicLabel = "2";
+    ExecuteSelect = "{if(!init) SaveSetting() ; Grp2Select();}";
+    ExecuteUnSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    Label = "2";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    StaticLabel = "2";
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextFontDynamic = `font4`;
+    TextFontStatic = `font4`;
+    TextX = 17;
+    TextXDynamic = 15;
+    TextXStatic = 17;
+    TextY = 22;
+    TextYDynamic = `TextY`;
+    TextYStatic = `TextY`;
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    Width = 45;
+  }
+
+  line
+  {
+    numberOfPoints = 2;
+    point[0] = ( 505, 270 );
+    point[1] = ( 505, 570 );
+    visibility = 1;
+    foregroundColour = `COLOR_LINE_BOUNDARY_6`;
+    backgroundColour = -1;
+    lineStyle = `SolidPattern`;
+    lineWidth = `2`;
+    xReference = 515;
+    yReference = 320;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 320;
+    y = 707;
+    format = "%s";
+    theText = `(SETUP==1)? "SETUP":"VIEW"`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 320;
+    yReference = 707;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text BC1PID
+  {
+    x = 338;
+    y = 341;
+    format = "%s";
+    theText = `BarChart1PID.TheNewText`;
+    alignment = 0;
+    visibility = `!SETUP`;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 338;
+    yReference = 341;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text BC2PID
+  {
+    x = 338;
+    y = 396;
+    format = "%s";
+    theText = `BarChart2PID.TheNewText`;
+    alignment = 0;
+    visibility = `!SETUP`;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 338;
+    yReference = 396;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text BC3PID
+  {
+    x = 338;
+    y = 454;
+    format = "%s";
+    theText = `BarChart3PID.TheNewText`;
+    alignment = 0;
+    visibility = `!SETUP`;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 338;
+    yReference = 454;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text BC4PID
+  {
+    x = 338;
+    y = 514;
+    format = "%s";
+    theText = `BarChart4PID.TheNewText`;
+    alignment = 0;
+    visibility = `!SETUP`;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 338;
+    yReference = 514;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text BC1MinValue
+  {
+    x = 588;
+    y = 340;
+    format = `(isDigital(pPID1))? "%5d":pPID1->disfmt`;
+    theText = `BarChart1MinValue.TheNewNumber`;
+    alignment = 0;
+    visibility = `(!SETUP)&&(0 != strncmp(BC1PID.theText, " ", 1))&&strlen(BC1PID.theText) && !isDigital(pPID1)`;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 588;
+    yReference = 340;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text BC2MinValue
+  {
+    x = 588;
+    y = 395;
+    format = `(isDigital(pPID2))? "%5d":pPID2->disfmt`;
+    theText = `BarChart2MinValue.TheNewNumber`;
+    alignment = 0;
+    visibility = `(!SETUP)&&(0 != strncmp(BC2PID.theText, " ", 1))&&strlen(BC2PID.theText) && !isDigital(pPID2)`;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 588;
+    yReference = 395;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text BC3MinValue
+  {
+    x = 588;
+    y = 454;
+    format = `(isDigital(pPID3))? "%5d":pPID3->disfmt`;
+    theText = `BarChart3MinValue.TheNewNumber`;
+    alignment = 0;
+    visibility = `(!SETUP)&&(0 != strncmp(BC3PID.theText, " ", 1))&&strlen(BC3PID.theText) && !isDigital(pPID3)`;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 588;
+    yReference = 454;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text BC4MinValue
+  {
+    x = 588;
+    y = 511;
+    format = `(isDigital(pPID4))? "%5d":pPID4->disfmt`;
+    theText = `BarChart4MinValue.TheNewNumber`;
+    alignment = 0;
+    visibility = `(!SETUP)&&(0 != strncmp(BC4PID.theText, " ", 1))&&strlen(BC4PID.theText) && !isDigital(pPID4)`;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 588;
+    yReference = 511;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text BC1Base
+  {
+    x = 748;
+    y = 340;
+    format = `(isDigital(pPID1))? "%5d":pPID1->disfmt`;
+    theText = `BarChart1Base.TheNewNumber`;
+    alignment = 0;
+    visibility = `BC1MinValue.visibility`;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 748;
+    yReference = 340;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text BC2Base
+  {
+    x = 748;
+    y = 395;
+    format = `(isDigital(pPID2))? "%5d":pPID2->disfmt`;
+    theText = `BarChart2Base.TheNewNumber`;
+    alignment = 0;
+    visibility = `BC2MinValue.visibility`;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 748;
+    yReference = 395;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text BC3Base
+  {
+    x = 748;
+    y = 454;
+    format = `(isDigital(pPID3))? "%5d":pPID3->disfmt`;
+    theText = `BarChart3Base.TheNewNumber`;
+    alignment = 0;
+    visibility = `BC3MinValue.visibility`;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 748;
+    yReference = 454;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text BC4Base
+  {
+    x = 748;
+    y = 511;
+    format = `(isDigital(pPID4))? "%5d":pPID4->disfmt`;
+    theText = `BarChart4Base.TheNewNumber`;
+    alignment = 0;
+    visibility = `BC4MinValue.visibility`;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 748;
+    yReference = 511;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text BC1MaxValue
+  {
+    x = 908;
+    y = 340;
+    format = `(isDigital(pPID1))? "%5d":pPID1->disfmt`;
+    theText = `BarChart1MaxValue.TheNewNumber`;
+    alignment = 0;
+    visibility = `BC1MinValue.visibility`;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 908;
+    yReference = 340;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text BC2MaxValue
+  {
+    x = 908;
+    y = 395;
+    format = `(isDigital(pPID2))? "%5d":pPID2->disfmt`;
+    theText = `BarChart2MaxValue.TheNewNumber`;
+    alignment = 0;
+    visibility = `BC2MinValue.visibility`;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 908;
+    yReference = 395;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text BC3MaxValue
+  {
+    x = 908;
+    y = 452;
+    format = `(isDigital(pPID3))? "%5d":pPID3->disfmt`;
+    theText = `BarChart3MaxValue.TheNewNumber`;
+    alignment = 0;
+    visibility = `BC3MinValue.visibility`;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 908;
+    yReference = 452;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text BC4MaxValue
+  {
+    x = 908;
+    y = 511;
+    format = `(isDigital(pPID4))? "%5d":pPID4->disfmt`;
+    theText = `BarChart4MaxValue.TheNewNumber`;
+    alignment = 0;
+    visibility = `BC4MinValue.visibility`;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 908;
+    yReference = 511;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  instance DialogueSymbols.PushButton SetupButton
+  {
+    x = 940;
+    y = 686;
+    visibility = 1;
+    xReference = 940;
+    yReference = 686;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ButtonState = 0;
+    DynamicLabel = `(SETUP)?"CANCEL":" SETUP"`;
+    ExecuteString = "{ SetupNcancel(); }";
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    Label = `(SETUP)?"CANCEL":" SETUP"`;
+    Scope = "PicYGN_BarChartMenu";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    StaticLabel = `(SETUP)?"CANCEL":" SETUP"`;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextFontDynamic = `font2`;
+    TextFontStatic = `font4`;
+    TextX = 17;
+    TextXDynamic = 25;
+    TextXStatic = 17;
+    TextY = 22;
+    TextYDynamic = 21;
+    TextYStatic = 22;
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    Width = 110;
+  }
+
+  text BarChart1BadBaseMsg
+  {
+    x = 737;
+    y = 367;
+    format = "%s";
+    theText = "INVALID VALUE";
+    alignment = 0;
+    visibility = `BarChart1Base.ERROR`;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 737;
+    yReference = 367;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text BarChart2BadBaseMsg
+  {
+    x = 737;
+    y = 422;
+    format = "%s";
+    theText = "INVALID VALUE";
+    alignment = 0;
+    visibility = `BarChart2Base.ERROR`;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 737;
+    yReference = 422;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text BarChart3BadBaseMsg
+  {
+    x = 737;
+    y = 482;
+    format = "%s";
+    theText = "INVALID VALUE";
+    alignment = 0;
+    visibility = `BarChart3Base.ERROR`;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 737;
+    yReference = 482;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text BarChart4BadBaseMsg
+  {
+    x = 737;
+    y = 542;
+    format = "%s";
+    theText = "INVALID VALUE";
+    alignment = 0;
+    visibility = `BarChart4Base.ERROR`;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 737;
+    yReference = 542;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 1065;
+    y = 707;
+    format = "%s";
+    theText = "SETUP";
+    alignment = 0;
+    visibility = `SETUP`;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 1065;
+    yReference = 707;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text procMsg
+  {
+    x = 532;
+    y = 662;
+    format = "%s";
+    theText = "PROCESSING... WAIT";
+    alignment = 0;
+    visibility = 0;
+    foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 532;
+    yReference = 662;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+}

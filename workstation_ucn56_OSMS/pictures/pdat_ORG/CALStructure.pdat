@@ -1,0 +1,80 @@
+// ***************************************************************************
+// *									     *
+// *	Copyright (C) 1996, ABB-CE Inc., All rights reserved.		     *
+// *	Proprietary information, ABB-CE Incorporated			     *
+// *									     *
+// ***************************************************************************
+//
+// ***** HIGH LEVEL DESCRIPTION **********************************************
+//
+// This pdat file contains the variables used by the CSL displays.
+//
+// **** REVISION HISTORY *****************************************************
+//
+// Author: GCS
+//
+// $Header: /PMSArchive/ygn56/workstation/pictures/pdat/CALStructure.pdat 1.5 1998/05/19 21:41:17 gcs Exp $
+// $Log: CALStructure.pdat,v $
+// Revision 1.5  1998/05/19 21:41:17  gcs
+// Author: gcs@y6maint1 (Gail Sibley)
+// Removed display  message structure
+//
+// Revision 1.4  1997/08/15 13:34:58  gcs
+// Author: gcs@y6maint1.usnus.abb.com (Gail Sibley)
+// Changed AlarmPid to character string (was an int)
+//
+// Revision 1.3  1997/08/05 18:09:22  gcs
+// Author: gcs@y6maint1.usnus.abb.com (Gail Sibley)
+// Modified structure (using shopping list approach)
+//
+// Revision 1.2  1997/07/31 19:16:13  gcs
+// Author: gcs@y6maint1.usnus.abb.com (Gail Sibley)
+// Changed structure to add page number, and to divide CAL line into seperate elements
+//
+// Revision 1.1  1997/07/25 14:39:13  gcs
+// Author: gcs@y6maint1.usnus.abb.com (Gail Sibley)
+// Initial revision
+//
+//
+// ***************************************************************************
+// System Include Files: NONE
+//
+//
+// User Defined Include Files: NONE
+//
+//
+// External Variables: NONE
+//
+//
+// Local Constant Definitions: NONE
+//
+//
+// Function Prototypes: NONE
+//
+//
+// ***************************************************************************
+//
+struct CAL_MEMBER{
+   char    Time[12];
+   char    AlarmProb[8];
+   char    AlarmPid[12];
+};
+
+struct CAL_DATA{
+	int		CalPage;
+	CAL_MEMBER	CALine1;
+	CAL_MEMBER	CALine2;
+	CAL_MEMBER	CALine3;
+	CAL_MEMBER	CALine4;
+	CAL_MEMBER	CALine5;
+	CAL_MEMBER	CALine6;
+	CAL_MEMBER	CALine7;
+	CAL_MEMBER	CALine8;
+	CAL_MEMBER	CALine9;
+	CAL_MEMBER	CALine10;
+	CAL_MEMBER	CALine11;
+	CAL_MEMBER	CALine12;
+	CAL_MEMBER	CALine13;
+	CAL_MEMBER	CALine14;
+	CAL_MEMBER	CALine15;
+	};

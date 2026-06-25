@@ -1,0 +1,394 @@
+/*
+ * ProcSee CONFIGURATION LANGUAGE FILE
+ *
+ *
+ * User : ygn34
+ * Host : y6cr02
+ * Date : 2017-05-24
+ * Time : 13:31:51
+ *
+ * ProcSee version : ProcSee 3.10.1 (June 2016)
+ * File version    : 1.26
+ *
+ *
+ */
+
+
+picture Pic220_CoreHeatRemoval
+{
+  worldX = 0;
+  worldY = 0;
+  worldWidth = 1280;
+  worldHeight = 824;
+  oneToOne = 1;
+  backgroundColour = 0;
+  updateMode = 2;
+  resizeMode = 0;
+  xSnap = 5;
+  ySnap = 5;
+  radiusSnap = 0;
+  angleSnap = 0;
+  crosshairStyle = 1;
+  crosshairLength = 0;
+  crosshairFollowSnap = `isInEditMode()`;
+  crosshairVisibility = `isInEditMode()`;
+  xReference = 500;
+  yReference = 500;
+  xScaleFactor = 1;
+  yScaleFactor = 1;
+  rotationAngle = 0;
+
+  char* PageBack = "";
+
+  char* PageForward = "";
+
+  char* PictureNumber = "220";
+
+  char* PictureTitle = "CORE HEAT REMOVAL";
+
+  int ThePictureFrequency = 1;
+
+  function `void Initialize()
+  {
+  CFMLevel = 2;
+  SectoringPage = 2;
+  Current_Page = 220;
+  }`
+
+  dialogue
+  {
+    event = `keyPressed(0x1000FF72)`;
+    action = `{
+       DisplayPage(Page230);
+    }`;
+  }
+
+  dialogue
+  {
+    event = `keyPressed(0x1000FF70)`;
+    action = `{
+       DisplayPage(Page210);
+    }`;
+  }
+
+  dialogue
+  {
+    event = `keyPressed(0x1000FF71)`;
+    action = `{
+    DisplaySectorPopUpMenu();
+    update();
+    //printf("Display: DisplayPagePopUp");
+    }`;
+  }
+
+  dialogue
+  {
+    event = `keyPressed(0x1000FF73)`;
+    action = `{
+    DisplayPopUpMenu();
+    update();
+    //printf("Display: DisplayPagePopUp");
+    }`;
+  }
+
+  rectangle
+  {
+    x = 890;
+    y = 9;
+    width = 245;
+    height = 26;
+    visibility = 1;
+    foregroundColour = `COLOR_LINE_BOUNDARY_6`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 0;
+    foregroundFillColour = -1;
+    backgroundFillColour = -1;
+    fillPattern = `SolidPattern`;
+    xReference = 890;
+    yReference = 10;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  instance TrendLibrary.VideoTrend_Cfms Trend1
+  {
+    x = 92;
+    y = 35;
+    visibility = 1;
+    xReference = 92;
+    yReference = 33;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BASE = 0;
+    Baseline = `(HighLimit+LowLimit)/2.0`;
+    DigitalOnePhrase = `TheVariable->message2`;
+    DigitalZeroPhrase = `TheVariable->message1`;
+    HighLimit = `TheVariable->erange_hi`;
+    LowLimit = `TheVariable->erange_lo`;
+    TheFrequency = `ThePictureFrequency`;
+    TheTrackTime = "13:18:15";
+    TheTrendVariable = "::YGN3and4.Page220Tr1";
+    TheVariable = `&IMTSM`;
+  }
+
+  instance DialogueSymbols.StatusLine_Cfms
+  {
+    x = 11;
+    y = 45;
+    visibility = 1;
+    xReference = 21;
+    yReference = 70;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    ThePointId = `&IMTSM`;
+  }
+
+  instance DialogueSymbols.StatusLine_Cfms1
+  {
+    x = 11;
+    y = 229;
+    visibility = 1;
+    xReference = 76;
+    yReference = 239;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    ThePointId = `&IMLVH`;
+  }
+
+  instance TrendLibrary.VideoTrend_Cfms3
+  {
+    x = 92;
+    y = 445;
+    visibility = 1;
+    xReference = 92;
+    yReference = -157;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BASE = 0;
+    Baseline = `(HighLimit+LowLimit)/2.0`;
+    HighLimit = `TheVariable->erange_hi`;
+    LowLimit = `TheVariable->erange_lo`;
+    TheFrequency = `ThePictureFrequency`;
+    TheTrackTime = "09:00:01";
+    TheTrendVariable = "::YGN3and4.Page220Tr4";
+    TheVariable = `&IMTRC`;
+  }
+
+  instance DialogueSymbols.StatusLine_Cfms
+  {
+    x = 11;
+    y = 412;
+    visibility = 1;
+    xReference = 46;
+    yReference = 432;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    ThePointId = `&IMTRC`;
+  }
+
+  instance cfmsSymbols.DynamicTextPhrase
+  {
+    x = 545;
+    y = 7;
+    visibility = 1;
+    xReference = 577;
+    yReference = 7;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    PointId = `&RCYQVALD`;
+    TheText = "CAUTION: PUMP ON";
+  }
+
+  text
+  {
+    x = 900;
+    y = 29;
+    format = "%s";
+    theText = "TIMEBASE:";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 932;
+    yReference = 26;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 1030;
+    y = 33;
+    format = "%s";
+    theText = "SECONDS";
+    alignment = 0;
+    visibility = `(ThePictureFrequency > 1)`;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 932;
+    yReference = 30;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 1030;
+    y = 28;
+    format = "%s";
+    theText = "SECOND";
+    alignment = 0;
+    visibility = `(ThePictureFrequency <= 1)`;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 932;
+    yReference = 25;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 1010;
+    y = 28;
+    format = "%d";
+    theText = `ThePictureFrequency`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 927;
+    yReference = 25;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  instance cfmsSymbols.CSFBarSize1
+  {
+    x = 777;
+    y = 33;
+    visibility = 1;
+    xReference = 777;
+    yReference = 33;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    PointId = `&DSL2201`;
+    SectoringPage = "321";
+    SectorNumber = " 1";
+  }
+
+  instance cfmsSymbols.CSFBarSize1
+  {
+    x = 503;
+    y = 219;
+    visibility = 1;
+    xReference = 503;
+    yReference = 219;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    PointId = `&DSL2202`;
+    SectoringPage = "322";
+    SectorNumber = " 2";
+  }
+
+  instance cfmsSymbols.CSFBarSize1
+  {
+    x = 776;
+    y = 402;
+    visibility = 1;
+    xReference = 776;
+    yReference = 402;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    PointId = `&DSL2203`;
+    SectoringPage = "323";
+    SectorNumber = " 3";
+  }
+
+  instance DialogueSymbols.StatusLine_Cfms1
+  {
+    x = 585;
+    y = 229;
+    visibility = 1;
+    xReference = 695;
+    yReference = 544;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    ThePointId = `&IMLVP`;
+  }
+
+  instance cfmsSymbols.CSFBarSize1
+  {
+    x = 1074;
+    y = 220;
+    visibility = 1;
+    xReference = 1074;
+    yReference = 220;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    PointId = `&DSL2202`;
+    SectoringPage = "322";
+    SectorNumber = " 2";
+  }
+
+  instance TrendLibrary.VideoTrend_Cfms1 Trend3
+  {
+    x = 92;
+    y = 258;
+    visibility = 1;
+    xReference = 92;
+    yReference = -144;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BASE = 0;
+    Baseline = `(HighLimit+LowLimit)/2.0`;
+    HighLimit = `TheVariable->erange_hi`;
+    LowLimit = `TheVariable->erange_lo`;
+    TheFrequency = `ThePictureFrequency`;
+    TheTrackTime = "13:20:14";
+    TheTrendVariable = "::YGN3and4.Page220Tr3";
+    TheVariable = `&IMLVH`;
+  }
+
+  instance TrendLibrary.VideoTrend_Cfms2 Trend2
+  {
+    x = 92;
+    y = 335;
+    visibility = 1;
+    xReference = 92;
+    yReference = 133;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BASE = 0;
+    Baseline = `(HighLimit+LowLimit)/2.0`;
+    HighLimit = `TheVariable->erange_hi`;
+    LowLimit = `TheVariable->erange_lo`;
+    TheFrequency = `ThePictureFrequency`;
+    TheTrackTime = "13:19:55";
+    TheTrendVariable = "::YGN3and4.Page220Tr2";
+    TheVariable = `&IMLVP`;
+  }
+}

@@ -1,0 +1,1911 @@
+/*
+ * ProcSee CONFIGURATION LANGUAGE FILE
+ *
+ *
+ * User : ygn34
+ * Host : y6cr02
+ * Date : 2017-05-25
+ * Time : 15:45:52
+ *
+ * ProcSee version : ProcSee 3.10.1 (June 2016)
+ * File version    : 1.26
+ *
+ *
+ */
+
+
+picture PicYGN_RCSLeak_OnLine
+{
+  worldX = 0;
+  worldY = 0;
+  worldWidth = 1280;
+  worldHeight = 824;
+  oneToOne = 1;
+  backgroundColour = 0;
+  updateMode = 2;
+  resizeMode = 0;
+  xSnap = 5;
+  ySnap = 2;
+  radiusSnap = 0;
+  angleSnap = 0;
+  crosshairStyle = 1;
+  crosshairLength = 0;
+  crosshairFollowSnap = `isInEditMode()`;
+  crosshairVisibility = `isInEditMode()`;
+  xReference = 500;
+  yReference = 500;
+  xScaleFactor = 1;
+  yScaleFactor = 1;
+  rotationAngle = 0;
+
+  int iLeakSelection = 1;
+
+  int LeakTime = 0;
+
+  char* PictureNumber = "641";
+
+  char* PictureTitle = "RCS LEAK RATE CALCULATION RESULT(ON-LINE)";
+
+  RECORD* pid1 = `&RCT111X`;
+
+  RECORD* pid2 = `&RCT111X`;
+
+  RECORD* pid3 = `&RCT111X`;
+
+  RECORD* pid4 = `&RCT111X`;
+
+  RECORD* pid5 = `&RCT111X`;
+
+  RECORD* pid6 = `&RCT111X`;
+
+  char TheDisplayPage[50] = "PicYGN_RCSLeak.ppic";
+
+  char* trend1 = "::YGN3and4.RcsLeakUnid";
+
+  char* trend2 = "::YGN3and4.RcsLeakIdnt";
+
+  char wBalCharg[10] = "   17.25";
+
+  char wEdtChange[9] = "    0.00";
+
+  char wEdtDrainVol[9] = "0.00";
+
+  char wIdentiLeak[9] = "    0.00";
+
+  char wIdentiLeakGpm[9] = "    0.00";
+
+  char wModeSelection[20] = "NARROW";
+
+  char wPzrChange[9] = "    0.00";
+
+  char wRcsChange[9] = "    0.00";
+
+  char wRdtChange[9] = "    0.00";
+
+  char wRdtDrainVol[9] = "0.00";
+
+  char wSitChange[9] = "    0.00";
+
+  char wSystemChange[9] = "    0.00";
+
+  char wSystemChangeGpm[9] = "    0.00";
+
+  char wTimeSelection[20] = "60 MINUTES";
+
+  char wUnidentiLeakGpm[9] = "    0.00";
+
+  char wVctChange[9] = "    0.00";
+
+  char wVctMakeupVol[9] = "0.00";
+
+  function `void Escape()
+  {
+  
+       execute("{DisplayPage(\\"%s\\");}",TheDisplayPage);
+  }`
+
+  function `void Exit_RcsLeakRate()
+  {
+     printf("[RcsLeakRate] Disable automatic Update");
+     RcsLeakRate_Active = 0;
+  }`
+
+  function `void Initialize()
+  {
+  
+     int i;
+     CFMLevel = 0;
+     Current_Page = 641;
+  
+  // Display the selected button
+  // Defaults are 1Hours and Narrow mode.
+  
+  //   Interface->RcsLeak.data.timeInterval = 1;
+  
+      for (i=1 ; i<=3 ; i++)
+         execute("{ buttonTime%d.UnSelect(); }",i) ;
+      buttonTime3.Select();
+  //    strcpy(wTimeSelection, "1 HOUR");
+  
+      for (i=1 ; i<=3 ; i++)
+         execute("{ range%d.UnSelect(); }",i) ;
+      range1.Select();
+  //    strcpy(wModeSelection, "NARROW");
+  
+      for (i=1 ; i<=2 ; i++)
+          execute("{ buttonLeak%d.UnSelect(); }",i) ;
+      buttonLeak1.Select();
+  
+       for (i=1 ; i<=5 ; i++)
+         execute("{ freq%d.UnSelect(); }",i) ;
+      freq1.Select();
+  
+  //   RcsLeakRate_Active = 1;
+  //   execute("{sendMessageToHost(REQUEST_RCSLEAK_RESULTS);}");
+
+      execute ("{ manageTempShopList(TEMP_SHOP_INIT_ADD,\\"RCL0115\\");
+  
+  
+  }`
+
+  function `void InitTimes(int kk)
+  {
+     int i;
+  
+  // Unselect them all
+  
+      for (i=1 ; i<=5 ; i++)
+         if(kk!=i)
+            execute("{ freq%d.UnSelect(); }",i) ;
+  
+  
+        switch (kk) {
+  
+        case 1 :
+           leakTrend.TheFrequency = 1;
+           break;
+  
+        case 2 :
+           leakTrend.TheFrequency = 5;
+           break;
+  
+        case 3 :
+           leakTrend.TheFrequency = 10;
+           break;
+  
+        case 4 :
+           leakTrend.TheFrequency = 30;
+           break;
+  
+        case 5 :
+           leakTrend.TheFrequency = 60;
+           break;
+  
+        default :
+  
+           printf("Selected Button == %d", kk);
+  
+       }
+  
+     update();
+  }`
+
+  function `void LeakSelection(int k)
+  {
+     int i;
+  
+     // Unselect the button.
+     for(i=1; i<=2; i++)
+     {
+        if( k != i )
+           execute("{ buttonLeak%d.UnSelect(); }",i) ;
+     }
+  
+     // Change the PointID of Statusline and Trend.
+     switch( k )
+     {
+        // When "Unidentified Leak" button is selected.
+        case 1 :
+           iLeakSelection = 1;
+           //switch(Interface->RcsLeak.data.timeInterval)
+           {
+              //case 1 :
+                 leakTrend.TheTrendVariable = trend1;
+                 //execute("{leakTrend.TheVariable = \`&RCT111X\`; }") ;
+                 //break;
+              //case 2 :
+                 //leakTrend.TheTrendVariable = trend1;
+                 //execute("{leakTrend.TheVariable = \`&RCT111X\`; }") ;
+                // break;
+              //case 3 :
+                 //leakTrend.TheTrendVariable = trend1;
+                 //execute("{leakTrend.TheVariable = \`&RCT111X\`; }") ;
+                 //break;
+              //default :
+                 //printf("Selected Time Interval == %d", Interface->RcsLeak.data.timeInterval);
+           }
+           break;
+  
+        // When "Identified Leak" button is selected.
+        case 2 :
+           iLeakSelection = 2;
+           //switch(Interface->RcsLeak.data.timeInterval)
+           {
+              //case 1 :
+                 leakTrend.TheTrendVariable = trend2;
+                 //execute("{leakTrend.TheVariable = \`&RCT111Y\`; }") ;
+                 break;
+              //case 2 :
+                 //leakTrend.TheTrendVariable = trend2;
+                 //execute("{leakTrend.TheVariable = \`&RCT111Y\`; }") ;
+                 //break;
+              //case 3 :
+                 //leakTrend.TheTrendVariable = trend2;
+                 //execute("{leakTrend.TheVariable = \`&RCT111Y\`; }") ;
+                 break;
+              //default :
+                 //printf("Selected Time Interval == %d", Interface->RcsLeak.data.timeInterval);
+           }
+           //break;
+  
+        default :
+           printf("Selected Leak Button == %d", k);
+     }
+     update();
+  }`
+
+  function `void myPrintButton()
+  {
+  //   strcpy(Interface->WSPrnData.WSNAME,"2");
+     Interface->WSPrnData.PAGENUM = Current_Page;
+     DisplayAdvisoryMessage("REQUEST RCS LEAK RATE DATA PRINT TO HOST.");
+     execute("{sendMessageToHost(REQUEST_LEAKPRN);}");
+  }
+  `
+
+  function `void ProcessingConfirmed(int i)
+  {
+     printf("*** RCS ONLINE DATA RECEIVED FROM CCUR\\n");
+     DisplayAdvisoryMessage1("                    ");
+  }
+  `
+
+  function `void ProcessUpdate()
+  {
+     int i;
+  
+     // Set the buttons to "Unselect" status
+     for(i=1; i<=3; i++)
+     {
+        if(Interface->RcsLeak.data.timeInterval != i)
+           execute("{ buttonTime%d.UnSelect(); }",i) ;
+     }
+  
+     switch(Interface->RcsLeak.data.timeInterval)
+     {
+        case 1:
+           strcpy(wTimeSelection, "10 MINUTES");
+           break;
+  
+        case 2:
+           strcpy(wTimeSelection, "30 MINUTES");
+           break;
+  
+        case 3:
+           strcpy(wTimeSelection, "1 HOUR");
+           break;
+  
+        default:
+           break;
+     }
+     update();
+  
+     printf("[Rcs Leak Rate] All Status : 0x%x.", Interface->RcsLeak.data.uAllStatus );
+     printf("[Rcs Leak Rate] Event Status : 0x%x.", Interface->RcsLeak.data.EventStatus );
+     // Display the Event Status
+     //
+  //   sprintf( wBalCharg, "%8.2f", Interface->RcsLeak.data.balCharg );
+  
+     if( Interface->RcsLeak.data.EventStatus & 0x1 )
+        ErrorText1.visibility = 1;
+     else
+        ErrorText1.visibility = 0;
+  
+     if( Interface->RcsLeak.data.EventStatus & 0x2 )
+        ErrorText2.visibility = 1;
+     else
+        ErrorText2.visibility = 0;
+  
+     if( Interface->RcsLeak.data.EventStatus & 0x4 )
+        ErrorText3.visibility = 1;
+     else
+        ErrorText3.visibility = 0;
+  
+     if( Interface->RcsLeak.data.EventStatus & 0x8 )
+        ErrorText4.visibility = 1;
+     else
+        ErrorText4.visibility = 0;
+  
+     if( Interface->RcsLeak.data.uAllStatus != 0 )
+     {
+        // for the color setting of Unidentified Leak
+        dUnidentiLeakGpm.backgroundColour = COLOR_DANGER_UNACK;
+        dUnidentiLeakGpm.foregroundColour = COLOR_PICTURE_BACKGROUND;
+  
+        strcpy( wUnidentiLeakGpm, "BAD DATA" );
+     }
+     else
+     {
+        // for the color setting of Unidentified Leak
+        if( Interface->RcsLeak.data.UnidentiLeakGpm > 0.5 )
+        {
+           dUnidentiLeakGpm.backgroundColour = COLOR_DANGER_UNACK;
+           dUnidentiLeakGpm.foregroundColour = COLOR_PICTURE_BACKGROUND;
+        }
+        else
+        {
+           dUnidentiLeakGpm.backgroundColour = COLOR_PICTURE_BACKGROUND;
+           dUnidentiLeakGpm.foregroundColour = COLOR_NON_ESSENTIAL;
+        }
+  
+        sprintf( wUnidentiLeakGpm, "%8.2f", Interface->RcsLeak.data.UnidentiLeakGpm );
+     }
+     if( (Interface->RcsLeak.data.uAllStatus & 0x31) != 0 )
+     {
+        strcpy( wSystemChange, "BAD DATA" );
+        strcpy( wSystemChangeGpm, "BAD DATA" );
+     }
+     else
+     {
+        sprintf( wSystemChange, "%8.2f", Interface->RcsLeak.data.SystemChange );
+        sprintf( wSystemChangeGpm, "%8.2f", Interface->RcsLeak.data.SystemChangeGpm );
+     }
+     if( (Interface->RcsLeak.data.uAllStatus & 0x0E) != 0 )
+     {
+        strcpy( wIdentiLeak, "BAD DATA" );
+        strcpy( wIdentiLeakGpm, "BAD DATA" );
+     }
+     else
+     {
+        sprintf( wIdentiLeak, "%8.2f", Interface->RcsLeak.data.IdentiLeak );
+        sprintf( wIdentiLeakGpm, "%8.2f", Interface->RcsLeak.data.IdentiLeakGpm );
+     }
+  
+     if( Interface->RcsLeak.data.uAllStatus & 0x01 )
+     {
+        strcpy( wVctChange, "BAD DATA" );
+     }
+     else
+        sprintf( wVctChange, "%8.2f", Interface->RcsLeak.data.VctChange );
+     if( Interface->RcsLeak.data.uPzrAllStatus != 0 )
+     {
+        strcpy( wPzrChange, "BAD DATA" );
+     }
+     else
+        sprintf( wPzrChange, "%8.2f", Interface->RcsLeak.data.PzrChange );
+     if( Interface->RcsLeak.data.uRcsAllStatus != 0 )
+     {
+        strcpy( wRcsChange, "BAD DATA" );
+     }
+     else
+        sprintf( wRcsChange, "%8.2f", Interface->RcsLeak.data.RcsChange );
+     if( Interface->RcsLeak.data.uAllStatus & 0x02 )
+     {
+        strcpy( wRdtChange, "BAD DATA" );
+     }
+     else
+        sprintf( wRdtChange, "%8.2f", Interface->RcsLeak.data.RdtChange );
+     if( Interface->RcsLeak.data.uAllStatus & 0x04 )
+     {
+        strcpy( wEdtChange, "BAD DATA" );
+     }
+     else
+        sprintf( wEdtChange, "%8.2f", Interface->RcsLeak.data.EdtChange );
+     if( Interface->RcsLeak.data.uSitAllStatus != 0 )
+     {
+        strcpy( wSitChange, "BAD DATA" );
+     }
+     else
+        sprintf( wSitChange, "%8.2f", Interface->RcsLeak.data.SitChange );
+  
+     Interface->RcsLeak.data.leakRatePrint = 0;
+  }`
+
+  function `void RangeSelection(int k)
+  {
+     int i;
+  
+     for(i=1; i<=3; i++)
+     {
+        if(k != i)
+           execute("{ range%d.UnSelect(); }",i) ;
+     }
+  
+     switch( k )
+     {
+        case 1 :
+           strcpy(wModeSelection, "NARROW");
+           leakTrend.HighLimit = 1;
+           leakTrend.LowLimit = -1;
+           break;
+  
+        case 2 :
+           strcpy(wModeSelection, "WIDE");
+           leakTrend.HighLimit = 10;
+           leakTrend.LowLimit = -10;
+           break;
+  
+        case 3 :
+           strcpy(wModeSelection, "WIDE2");
+           leakTrend.HighLimit = 20;
+           leakTrend.LowLimit = -20;
+           break;
+  
+        default :
+           printf("Selected Button == %d", k);
+     }
+     update();
+  }`
+
+  function `void TimeSelection(int k)
+  {
+     int i;
+  
+      for (i=1 ; i<=3 ; i++)
+         if(i!=k)
+            execute("{ buttonTime%d.UnSelect(); }",i) ;
+  
+     // Change the Time. If Time is not the correct range, set the time to 1(10M).
+     if( (k <= 0) && (k >=4) ) k = 1;
+  
+     switch(k)
+     {
+        case 1: strcpy(wTimeSelection, "10 MINUTES");
+                break;
+        case 2: strcpy(wTimeSelection, "30 MINUTES");
+                break;
+        case 3: strcpy(wTimeSelection, "60 MINUTES");
+                break;
+     }
+  
+       Interface->WSOnData.TIME = k;
+       execute("{sendMessageToHost(REQUEST_RCS_LEAK_DATA);}");
+       DisplayAdvisoryMessage1("PROCESSING...  WAIT");
+       printf("------%d\\n",k);
+  }
+  `
+
+  function `void UpdateAutoRequest()
+  {
+     if( strcmp( &Interface->System.timeString[7], "1" )==0 )
+     {
+        DisplayAdvisoryMessage("REQUEST RCS LEAK RATE TO HOST.");
+        execute("{sendMessageToHost(REQUEST_RCSLEAK_RESULTS);}");
+     }
+  }`
+
+  dialogue
+  {
+    event = `keyPressed(0xFF1B)`;
+    action = `{
+       Escape();
+    }`;
+  }
+
+  text
+  {
+    x = 128;
+    y = 107;
+    format = "%s";
+    theText = "TOTAL VCT CHANGE(GAL)";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 128;
+    yReference = 107;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 128;
+    y = 137;
+    format = "%s";
+    theText = "TOTAL PZR CHANGE(GAL)";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 128;
+    yReference = 137;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 128;
+    y = 167;
+    format = "%s";
+    theText = "TOTAL RCS CHANGE(GAL)";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 128;
+    yReference = 167;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 671;
+    y = 161;
+    format = "%s";
+    theText = "SELECT THE CALCULATION MODE :";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 671;
+    yReference = 161;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 128;
+    y = 197;
+    format = "%s";
+    theText = "TOTAL RDT CHANGE(GAL)";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 128;
+    yReference = 196;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 128;
+    y = 227;
+    format = "%s";
+    theText = "TOTAL EDT CHANGE(GAL)";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 128;
+    yReference = 226;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 128;
+    y = 257;
+    format = "%s";
+    theText = "TOTAL SIT   CHANGE(GAL)";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 128;
+    yReference = 256;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  instance DialogueSymbols.PushButton
+  {
+    x = 474;
+    y = 42;
+    visibility = 1;
+    xReference = 474;
+    yReference = 42;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ButtonState = 0;
+    DynamicLabel = "    PRINT";
+    ExecuteString = "myPrintButton()";
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    Label = `StaticLabel`;
+    Scope = "::YGN3and4.PicYGN_RCSLeak_OnLine";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    StaticLabel = "    PRINT";
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextFontDynamic = `font2`;
+    TextFontStatic = `font4`;
+    TextX = 17;
+    TextXDynamic = 15;
+    TextXStatic = 17;
+    TextY = 22;
+    TextYDynamic = 21;
+    TextYStatic = 22;
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    Width = 130;
+  }
+
+  text
+  {
+    x = 133;
+    y = 373;
+    format = "%s";
+    theText = "N-16";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 133;
+    yReference = 373;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 132;
+    y = 411;
+    format = "%s";
+    theText = "S/G 1 :";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 132;
+    yReference = 411;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 131;
+    y = 442;
+    format = "%s";
+    theText = "S/G 2 :";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 131;
+    yReference = 442;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 469;
+    y = 374;
+    format = "%s";
+    theText = "GPD";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 469;
+    yReference = 374;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle
+  {
+    x = 104;
+    y = 336;
+    width = 514;
+    height = 125;
+    visibility = 1;
+    foregroundColour = `COLOR_LINE_BOUNDARY_6`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 2;
+    foregroundFillColour = -1;
+    backgroundFillColour = -1;
+    fillPattern = `NoPattern`;
+    xReference = 104;
+    yReference = 361;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle
+  {
+    x = 104;
+    y = 23;
+    width = 514;
+    height = 302;
+    visibility = 1;
+    foregroundColour = `COLOR_LINE_BOUNDARY_6`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 2;
+    foregroundFillColour = -1;
+    backgroundFillColour = -1;
+    fillPattern = `NoPattern`;
+    xReference = 104;
+    yReference = 81;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 127;
+    y = 67;
+    format = "%s";
+    theText = "VOL CHANGE IN :";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 127;
+    yReference = 67;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 347;
+    y = 65;
+    format = "%s";
+    theText = `wTimeSelection`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 347;
+    yReference = 65;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 670;
+    y = 110;
+    format = "%s";
+    theText = "UNIDENTIFIED LEAK RATE(GPM)";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 670;
+    yReference = 77;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 670;
+    y = 80;
+    format = "%s";
+    theText = "IDENTIFIED LEAK RATE(GPM)";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 670;
+    yReference = 42;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 670;
+    y = 50;
+    format = "%s";
+    theText = "TOTAL LEAK RATE(GPM)";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 670;
+    yReference = 50;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle
+  {
+    x = 641;
+    y = 23;
+    width = 514;
+    height = 100;
+    visibility = 1;
+    foregroundColour = `COLOR_LINE_BOUNDARY_6`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 2;
+    foregroundFillColour = -1;
+    backgroundFillColour = -1;
+    fillPattern = `NoPattern`;
+    xReference = 641;
+    yReference = 23;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 672;
+    y = 332;
+    format = "%s";
+    theText = "SELECT THE DISPLAY MODE :";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 672;
+    yReference = 332;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 129;
+    y = 302;
+    format = "%s";
+    theText = "TOTAL VOLUME CHANGE(GAL)";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 129;
+    yReference = 302;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle
+  {
+    x = 641;
+    y = 133;
+    width = 514;
+    height = 160;
+    visibility = 1;
+    foregroundColour = `COLOR_LINE_BOUNDARY_6`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 2;
+    foregroundFillColour = -1;
+    backgroundFillColour = -1;
+    fillPattern = `NoPattern`;
+    xReference = 641;
+    yReference = 143;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle
+  {
+    x = 640;
+    y = 304;
+    width = 514;
+    height = 159;
+    visibility = 1;
+    foregroundColour = `COLOR_LINE_BOUNDARY_6`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 2;
+    foregroundFillColour = -1;
+    backgroundFillColour = -1;
+    fillPattern = `NoPattern`;
+    xReference = 640;
+    yReference = 312;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text timeMode
+  {
+    x = 1024;
+    y = 161;
+    format = "%s";
+    theText = `wTimeSelection`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 1024;
+    yReference = 161;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text displayMode
+  {
+    x = 1022;
+    y = 331;
+    format = "%s";
+    theText = `wModeSelection`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 1022;
+    yReference = 331;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text ErrorText1
+  {
+    x = 104;
+    y = 498;
+    format = "%s";
+    theText = "VCT MAKE-UP";
+    alignment = 0;
+    visibility = `Interface->HostOnData.SITEVENT`;
+    foregroundColour = `COLOR_CAUTION_UNACK`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 104;
+    yReference = 498;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text ErrorText2
+  {
+    x = 263;
+    y = 499;
+    format = "%s";
+    theText = "VCT DIVERT";
+    alignment = 0;
+    visibility = `Interface->HostOnData.VCTEVENT`;
+    foregroundColour = `COLOR_CAUTION_UNACK`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 263;
+    yReference = 499;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text ErrorText3
+  {
+    x = 413;
+    y = 500;
+    format = "%s";
+    theText = "HPSIP START";
+    alignment = 0;
+    visibility = `Interface->HostOnData.HPSION`;
+    foregroundColour = `COLOR_CAUTION_UNACK`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 413;
+    yReference = 500;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text ErrorText4
+  {
+    x = 572;
+    y = 501;
+    format = "%s";
+    theText = "BAD DATA CALC.";
+    alignment = 0;
+    visibility = `!Interface->HostOnData.INPUTSTS`;
+    foregroundColour = `COLOR_CAUTION_UNACK`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 572;
+    yReference = 501;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  instance DialogueSymbols.OptionButton range2
+  {
+    x = 752;
+    y = 385;
+    visibility = 1;
+    xReference = 752;
+    yReference = 385;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ButtonState = 0;
+    DisplayText = 1;
+    DynamicLabel = "                     WIDE";
+    ExecuteSelect = `RangeSelection(2)`;
+    ExecuteUnSelect = "";
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    Label = "                     WIDE";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    StaticLabel = "                     WIDE";
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextFontDynamic = 4;
+    TextFontStatic = 4;
+    TextX = 17;
+    TextXDynamic = 15;
+    TextXStatic = 17;
+    TextY = 22;
+    TextYDynamic = `TextY`;
+    TextYStatic = `TextY`;
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    Width = 300;
+  }
+
+  instance DialogueSymbols.OptionButton range1
+  {
+    x = 751;
+    y = 349;
+    visibility = 1;
+    xReference = 751;
+    yReference = 349;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ButtonState = 1;
+    DisplayText = 1;
+    DynamicLabel = "                 NARROW";
+    ExecuteSelect = `RangeSelection(1)`;
+    ExecuteUnSelect = "";
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    Label = "                 NARROW";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    StaticLabel = "                 NARROW";
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextFontDynamic = 4;
+    TextFontStatic = 4;
+    TextX = 15;
+    TextXDynamic = 15;
+    TextXStatic = 17;
+    TextY = 22;
+    TextYDynamic = `TextY`;
+    TextYStatic = `TextY`;
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    Width = 300;
+  }
+
+  instance DialogueSymbols.OptionButton buttonTime3
+  {
+    x = 748;
+    y = 252;
+    visibility = 1;
+    xReference = 748;
+    yReference = 252;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ButtonState = 1;
+    DisplayText = 1;
+    DynamicLabel = "                60 MINITES";
+    ExecuteSelect = `TimeSelection(3)`;
+    ExecuteUnSelect = "";
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    Label = "                60 MINITES";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    StaticLabel = "                60 MINITES";
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextFontDynamic = 4;
+    TextFontStatic = 4;
+    TextX = 15;
+    TextXDynamic = 15;
+    TextXStatic = 17;
+    TextY = 22;
+    TextYDynamic = `TextY`;
+    TextYStatic = `TextY`;
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    Width = 300;
+  }
+
+  instance DialogueSymbols.OptionButton buttonTime2
+  {
+    x = 748;
+    y = 216;
+    visibility = 1;
+    xReference = 748;
+    yReference = 216;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ButtonState = 0;
+    DisplayText = 1;
+    DynamicLabel = "                30 MINITES";
+    ExecuteSelect = `TimeSelection(2)`;
+    ExecuteUnSelect = "";
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    Label = "                30 MINITES";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    StaticLabel = "                30 MINITES";
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextFontDynamic = 4;
+    TextFontStatic = 4;
+    TextX = 17;
+    TextXDynamic = 15;
+    TextXStatic = 17;
+    TextY = 22;
+    TextYDynamic = `TextY`;
+    TextYStatic = `TextY`;
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    Width = 300;
+  }
+
+  instance DialogueSymbols.OptionButton buttonTime1
+  {
+    x = 749;
+    y = 180;
+    visibility = 1;
+    xReference = 749;
+    yReference = 180;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ButtonState = 0;
+    DisplayText = 1;
+    DynamicLabel = "                10 MINITES";
+    ExecuteSelect = `TimeSelection(1)`;
+    ExecuteUnSelect = "";
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    Label = "                10 MINITES";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    StaticLabel = "                10 MINITES";
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextFontDynamic = 4;
+    TextFontStatic = 4;
+    TextX = 17;
+    TextXDynamic = 15;
+    TextXStatic = 17;
+    TextY = 22;
+    TextYDynamic = `TextY`;
+    TextYStatic = `TextY`;
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    Width = 300;
+  }
+
+  instance cfmsSymbols.ValueAndState
+  {
+    x = 196;
+    y = 389;
+    visibility = 1;
+    xReference = 196;
+    yReference = 389;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    DisplayUnits = 1;
+    PointId = `&PRR0217`;
+  }
+
+  instance cfmsSymbols.ValueAndState
+  {
+    x = 195;
+    y = 419;
+    visibility = 1;
+    xReference = 195;
+    yReference = 419;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    DisplayUnits = 1;
+    PointId = `&PRR0218`;
+  }
+
+  instance cfmsSymbols.ValueAndState
+  {
+    x = 424;
+    y = 392;
+    visibility = 1;
+    xReference = 424;
+    yReference = 392;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    DisplayUnits = 1;
+    PointId = `&PRR0217A`;
+  }
+
+  instance cfmsSymbols.ValueAndState
+  {
+    x = 424;
+    y = 419;
+    visibility = 1;
+    xReference = 424;
+    yReference = 419;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    DisplayUnits = 1;
+    PointId = `&PRR0218A`;
+  }
+
+  line
+  {
+    numberOfPoints = 2;
+    point[0] = ( 1169, 648 );
+    point[1] = ( 1169, 648 );
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    lineStyle = 0;
+    lineWidth = 0;
+    xReference = 1169;
+    yReference = 648;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  instance DialogueSymbols.smallSelectButton freq1
+  {
+    x = 1124;
+    y = 591;
+    visibility = 1;
+    xReference = 1124;
+    yReference = 591;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Action = "{InitTimes(1);}";
+    DynamicLabel = "  1";
+    Label = "  1";
+    Scope = "::YGN3and4.PicYGN_RCSLeak_OnLine";
+    Selected = 1;
+    StaticLabel = "  1";
+    UnSelectAction = " ";
+  }
+
+  instance DialogueSymbols.smallSelectButton freq2
+  {
+    x = 1124;
+    y = 620;
+    visibility = 1;
+    xReference = 1124;
+    yReference = 620;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Action = "{InitTimes(2);}";
+    DynamicLabel = "  5";
+    Label = "  5";
+    Scope = "::YGN3and4.PicYGN_RCSLeak_OnLine";
+    Selected = 0;
+    StaticLabel = "  5";
+    UnSelectAction = " ";
+  }
+
+  instance DialogueSymbols.smallSelectButton freq3
+  {
+    x = 1124;
+    y = 650;
+    visibility = 1;
+    xReference = 1124;
+    yReference = 650;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Action = "{InitTimes(3);}";
+    DynamicLabel = " 10";
+    Label = " 10";
+    Scope = "::YGN3and4.PicYGN_RCSLeak_OnLine";
+    Selected = 0;
+    StaticLabel = " 10";
+    UnSelectAction = " ";
+  }
+
+  instance DialogueSymbols.smallSelectButton freq4
+  {
+    x = 1124;
+    y = 679;
+    visibility = 1;
+    xReference = 1124;
+    yReference = 679;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Action = "{InitTimes(4);}";
+    DynamicLabel = " 30";
+    Label = " 30";
+    Scope = "::YGN3and4.PicYGN_RCSLeak_OnLine";
+    Selected = 0;
+    StaticLabel = " 30";
+    UnSelectAction = " ";
+  }
+
+  instance DialogueSymbols.smallSelectButton freq5
+  {
+    x = 1124;
+    y = 708;
+    visibility = 1;
+    xReference = 1124;
+    yReference = 708;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Action = "{InitTimes(5);}";
+    DynamicLabel = " 60";
+    Label = " 60";
+    Scope = "::YGN3and4.PicYGN_RCSLeak_OnLine";
+    Selected = 0;
+    StaticLabel = " 60";
+    UnSelectAction = " ";
+  }
+
+  text
+  {
+    x = 1075;
+    y = 50;
+    format = "%s";
+    theText = "GPM";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 1075;
+    yReference = 50;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 1075;
+    y = 110;
+    format = "%s";
+    theText = "GPM";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 1082;
+    yReference = 88;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  instance DialogueSymbols.OptionButton range3
+  {
+    x = 752;
+    y = 421;
+    visibility = 1;
+    xReference = 752;
+    yReference = 421;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ButtonState = 0;
+    DisplayText = 1;
+    DynamicLabel = "                     WIDE2";
+    ExecuteSelect = `RangeSelection(3)`;
+    ExecuteUnSelect = "";
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    Label = "                     WIDE2";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    StaticLabel = "                     WIDE2";
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextFontDynamic = 4;
+    TextFontStatic = 4;
+    TextX = 17;
+    TextXDynamic = 15;
+    TextXStatic = 17;
+    TextY = 22;
+    TextYDynamic = `TextY`;
+    TextYStatic = `TextY`;
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    Width = 300;
+  }
+
+  text
+  {
+    x = 1075;
+    y = 80;
+    format = "%s";
+    theText = "GPM";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 1075;
+    yReference = 80;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  instance DialogueSymbols.OptionButton buttonLeak2
+  {
+    x = 991;
+    y = 523;
+    visibility = 1;
+    xReference = 991;
+    yReference = 523;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ButtonState = 0;
+    DisplayText = 1;
+    DynamicLabel = "   IDENTIFIED";
+    ExecuteSelect = `LeakSelection(2)`;
+    ExecuteUnSelect = "";
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    Label = "   IDENTIFIED";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    StaticLabel = "   IDENTIFIED";
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextFontDynamic = 4;
+    TextFontStatic = 4;
+    TextX = 17;
+    TextXDynamic = 15;
+    TextXStatic = 17;
+    TextY = 22;
+    TextYDynamic = `TextY`;
+    TextYStatic = `TextY`;
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    Width = 160;
+  }
+
+  instance DialogueSymbols.OptionButton buttonLeak1
+  {
+    x = 826;
+    y = 523;
+    visibility = 1;
+    xReference = 826;
+    yReference = 523;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ButtonState = 1;
+    DisplayText = 1;
+    DynamicLabel = "UNIDENTIFIED";
+    ExecuteSelect = `LeakSelection(1)`;
+    ExecuteUnSelect = "";
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    Label = "UNIDENTIFIED";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    StaticLabel = "UNIDENTIFIED";
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextFontDynamic = 4;
+    TextFontStatic = 4;
+    TextX = 15;
+    TextXDynamic = 15;
+    TextXStatic = 17;
+    TextY = 22;
+    TextYDynamic = `TextY`;
+    TextYStatic = `TextY`;
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    Width = 160;
+  }
+
+  instance DialogueSymbols.TextNumber dVctChangee
+  {
+    x = 462;
+    y = 85;
+    visibility = 1;
+    xReference = 462;
+    yReference = 85;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    f_color = `COLOR_DATA_NORMAL`;
+    NumberFormat = "%-8.2f";
+    Scope = "";
+    TheNewNumber = `RCYXVCTC->value`;
+  }
+
+  text dVctChange
+  {
+    x = 511;
+    y = 107;
+    format = "%s";
+    theText = "";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 515;
+    yReference = 112;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  instance DialogueSymbols.TextNumber
+  {
+    x = 462;
+    y = 114;
+    visibility = 1;
+    xReference = 462;
+    yReference = 114;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    f_color = `COLOR_DATA_NORMAL`;
+    NumberFormat = "%-8.2f";
+    Scope = "";
+    TheNewNumber = `RCYXPZRC->value`;
+  }
+
+  instance DialogueSymbols.TextNumber
+  {
+    x = 462;
+    y = 144;
+    visibility = 1;
+    xReference = 462;
+    yReference = 144;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    f_color = `COLOR_DATA_NORMAL`;
+    NumberFormat = "%-8.2f";
+    Scope = "";
+    TheNewNumber = `RCYXRCSC->value`;
+  }
+
+  instance DialogueSymbols.TextNumber
+  {
+    x = 462;
+    y = 173;
+    visibility = 1;
+    xReference = 462;
+    yReference = 173;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    f_color = `COLOR_DATA_NORMAL`;
+    NumberFormat = "%-8.2f";
+    Scope = "";
+    TheNewNumber = `RCYXRDTC->value`;
+  }
+
+  instance DialogueSymbols.TextNumber
+  {
+    x = 462;
+    y = 203;
+    visibility = 1;
+    xReference = 462;
+    yReference = 203;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    f_color = `COLOR_DATA_NORMAL`;
+    NumberFormat = "%-8.2f";
+    Scope = "";
+    TheNewNumber = `RCYXEDTC->value`;
+  }
+
+  instance DialogueSymbols.TextNumber
+  {
+    x = 462;
+    y = 233;
+    visibility = 1;
+    xReference = 462;
+    yReference = 233;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    f_color = `COLOR_DATA_NORMAL`;
+    NumberFormat = "%-8.2f";
+    Scope = "";
+    TheNewNumber = `RCYXSITC->value`;
+  }
+
+  instance DialogueSymbols.TextNumber
+  {
+    x = 463;
+    y = 282;
+    visibility = 1;
+    xReference = 463;
+    yReference = 282;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    f_color = `COLOR_DATA_NORMAL`;
+    NumberFormat = "%-8.2f";
+    Scope = "";
+    TheNewNumber = `RCYXCDTC->value`;
+  }
+
+  instance DialogueSymbols.TextNumber
+  {
+    x = 985;
+    y = 29;
+    visibility = 1;
+    xReference = 985;
+    yReference = 29;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    f_color = `COLOR_DATA_NORMAL`;
+    NumberFormat = "%-8.2f";
+    Scope = "";
+    TheNewNumber = `RCYXLKT->value`;
+  }
+
+  instance DialogueSymbols.TextNumber
+  {
+    x = 986;
+    y = 59;
+    visibility = 1;
+    xReference = 986;
+    yReference = 59;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    f_color = `COLOR_DATA_NORMAL`;
+    NumberFormat = "%-8.2f";
+    Scope = "";
+    TheNewNumber = `RCYXLKI->value`;
+  }
+
+  instance DialogueSymbols.TextNumber
+  {
+    x = 986;
+    y = 87;
+    visibility = 1;
+    xReference = 986;
+    yReference = 87;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    f_color = `COLOR_DATA_NORMAL`;
+    NumberFormat = "%-8.2f";
+    Scope = "";
+    TheNewNumber = `RCYXLKU->value`;
+  }
+
+  instance TrendLibrary.VideoTrend_Cfms leakTrend
+  {
+    x = 37;
+    y = 501;
+    visibility = 1;
+    xReference = 37;
+    yReference = 501;
+    xScaleFactor = 1;
+    yScaleFactor = 1.4;
+    rotationAngle = 0;
+    BASE = 0;
+    Baseline = `(HighLimit+LowLimit)/2.0`;
+    DigitalOnePhrase = `TheVariable->message2`;
+    DigitalZeroPhrase = `TheVariable->message1`;
+    HighLimit = 1;
+    LowLimit = -1;
+    TheFrequency = 1;
+    TheTrackTime = "09:00:00";
+    TheTrendVariable = "::YGN3and4.RcsLeakUnid";
+    TheVariable = `&ERRORPID`;
+  }
+
+  text
+  {
+    x = 558;
+    y = 107;
+    format = "%s";
+    theText = "GAL";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 558;
+    yReference = 107;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 558;
+    y = 137;
+    format = "%s";
+    theText = "GAL";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 558;
+    yReference = 137;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 558;
+    y = 167;
+    format = "%s";
+    theText = "GAL";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 558;
+    yReference = 167;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 558;
+    y = 197;
+    format = "%s";
+    theText = "GAL";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 558;
+    yReference = 197;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 558;
+    y = 227;
+    format = "%s";
+    theText = "GAL";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 558;
+    yReference = 227;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 558;
+    y = 257;
+    format = "%s";
+    theText = "GAL";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 558;
+    yReference = 257;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 558;
+    y = 302;
+    format = "%s";
+    theText = "GAL";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 558;
+    yReference = 302;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+}

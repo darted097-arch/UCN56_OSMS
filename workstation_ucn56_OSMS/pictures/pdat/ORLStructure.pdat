@@ -1,0 +1,71 @@
+// ***************************************************************************
+// *									     *
+// *	Copyright (C) 1996, ABB-CE Inc., All rights reserved.		     *
+// *	Proprietary information, ABB-CE Incorporated			     *
+// *									     *
+// ***************************************************************************
+//
+// ***** HIGH LEVEL DESCRIPTION **********************************************
+//
+// This pdat file contains the variables used by the CSL displays.
+//
+// **** REVISION HISTORY *****************************************************
+//
+// Author: GCS
+//
+// $Header: /PMSArchive/ucn56/workstation/pictures/pdat/ORLStructure.pdat 1.2 1998/05/19 21:39:34 gcs Exp $
+// $Log: ORLStructure.pdat,v $
+// Revision 1.2  1998/05/19 21:39:34  gcs
+// Author: gcs@y6maint1 (Gail Sibley)
+// Removed display  message structure
+//
+// Revision 1.1  1997/10/10 18:56:04  gcs
+// Author: gcs@y6maint1.usnus.abb.com (Gail Sibley)
+// Initial revision
+//
+//
+// ***************************************************************************
+// System Include Files: NONE
+//
+//
+// User Defined Include Files: NONE
+//
+//
+// External Variables: NONE
+//
+//
+// Local Constant Definitions: NONE
+//
+//
+// Function Prototypes: NONE
+//
+//
+// ***************************************************************************
+//
+struct ORL_MEMBER{
+
+   char    AlarmProb[8];
+   char    AlarmPid[12];
+
+};
+
+struct ORL_DATA{
+	int		OrlPage;
+	ORL_MEMBER	ORLine1;
+	ORL_MEMBER	ORLine2;
+	ORL_MEMBER	ORLine3;
+	ORL_MEMBER	ORLine4;
+	ORL_MEMBER	ORLine5;
+	ORL_MEMBER	ORLine6;
+	ORL_MEMBER	ORLine7;
+	ORL_MEMBER	ORLine8;
+	ORL_MEMBER	ORLine9;
+	ORL_MEMBER	ORLine10;
+	ORL_MEMBER	ORLine11;
+	ORL_MEMBER	ORLine12;
+	ORL_MEMBER	ORLine13;
+	ORL_MEMBER	ORLine14;
+	ORL_MEMBER	ORLine15;
+	};
+
+

@@ -1,0 +1,61 @@
+// ***************************************************************************
+// *                                                                         *
+// *    Copyright (C) 1996, KOPEC Inc., All rights reserved.                 *
+// *    Proprietary information, KOPEC Incorporated                          *
+// *                                                                         *
+// ***************************************************************************
+//
+// ***** HIGH LEVEL DESCRIPTION **********************************************
+//
+// File Name: XRBPStructure.pdat
+//
+// This pdat file contains the variables used by the XRBP Displays.
+//
+// **** REVISION HISTORY *****************************************************
+//
+// Revision 0  1997/3/07 
+//             Author: S.M.Baek (smbaek@kopec.co.kr)
+//
+// $Header: /PMSArchive/ygn56/workstation/pictures/pdat/XRBPStructure.pdat 1.2 1998/02/11 20:56:52 kn1 Exp $
+// $Log: XRBPStructure.pdat,v $
+// Revision 1.2  1998/02/11 20:56:52  kn1
+// Author: kn1@y6maint1.usnus.abb.com (Kopec NSSS 1)
+// Kopec NSSS Phase 2 Status 1
+//
+// Revision 1.1  1997/05/13 15:24:42  kn1
+// Author: kn1@y6maint1.usnus.abb.com (Kopec NSSS 1)
+// Initial revision
+//
+//
+// ***************************************************************************
+// System Include Files: NONE
+//
+//
+// User Defined Include Files: NONE
+//
+//
+// External Variables: NONE
+//
+//
+// Local Constant Definitions: NONE
+//
+//
+// Function Prototypes: NONE
+//
+//
+// ***************************************************************************
+//
+//
+struct XRBP_INPUT_TEMPLATE {
+   float                      input_val[21];
+   int                        last_case;
+   int                        error_code;
+   float                      output_val[13];
+};
+struct XRBP_ALL_DATA {
+   WSmessageHeader            header;      //message information
+   XRBP_INPUT_TEMPLATE        data;
+};
+//
+//********************************************************************
+

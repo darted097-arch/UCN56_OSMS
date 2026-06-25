@@ -1,0 +1,185 @@
+	aCC +O2 -Dhpi32Arch -c -I.  -I/usr/include/Motif2.1  -I/usr/include/X11R6  -I/usr/local/procsee  -I../include  -I../pictures/pdat  -I /usr/local/procsee/include  \
+				../src/mainInterfaceToGUI.C -o ../obj/mainInterfaceToGUI.o
+	aCC +O2 -Dhpi32Arch -c -I.  -I/usr/include/Motif2.1  -I/usr/include/X11R6  -I/usr/local/procsee  -I../include  -I../pictures/pdat  -I /usr/local/procsee/include  \
+				../src/messageObject.C \
+				 -o ../obj/messageObject.o
+	aCC +O2 -Dhpi32Arch -c -I.  -I/usr/include/Motif2.1  -I/usr/include/X11R6  -I/usr/local/procsee  -I../include  -I../pictures/pdat  -I /usr/local/procsee/include  \
+				../src/DataQueueObject.C -o ../obj/DataQueueObject.o
+	aCC +O2 -Dhpi32Arch -c -I.  -I/usr/include/Motif2.1  -I/usr/include/X11R6  -I/usr/local/procsee  -I../include  -I../pictures/pdat  -I /usr/local/procsee/include  \
+				../src/DatabaseObject.C -o ../obj/DatabaseObject.o
+	aCC +O2 -Dhpi32Arch -c -I.  -I/usr/include/Motif2.1  -I/usr/include/X11R6  -I/usr/local/procsee  -I../include  -I../pictures/pdat  -I /usr/local/procsee/include  \
+				../src/InterProcSMObject.C -o ../obj/InterProcSMObject.o
+	aCC +O2 -Dhpi32Arch -c -I.  -I/usr/include/Motif2.1  -I/usr/include/X11R6  -I/usr/local/procsee  -I../include  -I../pictures/pdat  -I /usr/local/procsee/include  \
+					../src/IntListObject.C \
+					 -o ../obj/IntListObject.o
+	aCC +O2 -Dhpi32Arch -c -I.  -I/usr/include/Motif2.1  -I/usr/include/X11R6  -I/usr/local/procsee  -I../include  -I../pictures/pdat  -I /usr/local/procsee/include  \
+					../src/PermShoppingListObject.C \
+					 -o ../obj/PermShoppingListObject.o
+	aCC +O2 -Dhpi32Arch -c -I.  -I/usr/include/Motif2.1  -I/usr/include/X11R6  -I/usr/local/procsee  -I../include  -I../pictures/pdat  -I /usr/local/procsee/include  \
+					../src/PidListItemObject.C \
+					 -o ../obj/PidListItemObject.o
+	aCC +O2 -Dhpi32Arch -c -I.  -I/usr/include/Motif2.1  -I/usr/include/X11R6  -I/usr/local/procsee  -I../include  -I../pictures/pdat  -I /usr/local/procsee/include  \
+					../src/PictureListItemObject.C \
+					 -o ../obj/PictureListItemObject.o
+	aCC +O2 -Dhpi32Arch -c -I.  -I/usr/include/Motif2.1  -I/usr/include/X11R6  -I/usr/local/procsee  -I../include  -I../pictures/pdat  -I /usr/local/procsee/include  \
+					../src/PicPidListObject.C \
+					 -o ../obj/PicPidListObject.o
+	aCC +O2 -Dhpi32Arch -c -I.  -I/usr/include/Motif2.1  -I/usr/include/X11R6  -I/usr/local/procsee  -I../include  -I../pictures/pdat  -I /usr/local/procsee/include  \
+					../src/createPicturePidLists.C \
+					 -o ../obj/createPicturePidLists.o
+	aCC +O2 -Dhpi32Arch -c -I.  -I/usr/include/Motif2.1  -I/usr/include/X11R6  -I/usr/local/procsee  -I../include  -I../pictures/pdat  -I /usr/local/procsee/include  \
+					../src/buildPermanentShoppingList.C \
+					 -o ../obj/buildPermanentShoppingList.o
+	aCC +O2 -Dhpi32Arch -c -I.  -I/usr/include/Motif2.1  -I/usr/include/X11R6  -I/usr/local/procsee  -I../include  -I../pictures/pdat  -I /usr/local/procsee/include  \
+				../src/initInterfaceToGUI.C -o ../obj/initInterfaceToGUI.o
+	aCC +O2 -Dhpi32Arch -c -I.  -I/usr/include/Motif2.1  -I/usr/include/X11R6  -I/usr/local/procsee  -I../include  -I../pictures/pdat  -I /usr/local/procsee/include  \
+				../src/cyclicProcessing.C -o ../obj/cyclicProcessing.o
+	aCC +O2 -Dhpi32Arch -c -I.  -I/usr/include/Motif2.1  -I/usr/include/X11R6  -I/usr/local/procsee  -I../include  -I../pictures/pdat  -I /usr/local/procsee/include  \
+				../src/connectToGUI.C -o ../obj/connectToGUI.o
+	aCC +O2 -Dhpi32Arch -c -I.  -I/usr/include/Motif2.1  -I/usr/include/X11R6  -I/usr/local/procsee  -I../include  -I../pictures/pdat  -I /usr/local/procsee/include  \
+				../src/defineDatabase.C -o ../obj/defineDatabase.o
+	aCC +O2 -Dhpi32Arch -c -I.  -I/usr/include/Motif2.1  -I/usr/include/X11R6  -I/usr/local/procsee  -I../include  -I../pictures/pdat  -I /usr/local/procsee/include  \
+				../src/defineMessages.C -o ../obj/defineMessages.o
+	aCC +O2 -Dhpi32Arch -c -I.  -I/usr/include/Motif2.1  -I/usr/include/X11R6  -I/usr/local/procsee  -I../include  -I../pictures/pdat  -I /usr/local/procsee/include  \
+				../src/defineInterface.C -o ../obj/defineInterface.o
+	aCC +O2 -Dhpi32Arch -c -I.  -I/usr/include/Motif2.1  -I/usr/include/X11R6  -I/usr/local/procsee  -I../include  -I../pictures/pdat  -I /usr/local/procsee/include  \
+				../src/defineFunctions.C -o ../obj/defineFunctions.o
+	aCC +O2 -Dhpi32Arch -c -I.  -I/usr/include/Motif2.1  -I/usr/include/X11R6  -I/usr/local/procsee  -I../include  -I../pictures/pdat  -I /usr/local/procsee/include  \
+				../src/manageTempShopList.C -o ../obj/manageTempShopList.o
+	aCC +O2 -Dhpi32Arch -c -I.  -I/usr/include/Motif2.1  -I/usr/include/X11R6  -I/usr/local/procsee  -I../include  -I../pictures/pdat  -I /usr/local/procsee/include  \
+					../src/parseSinglePointMessages.C \
+				 	-o ../obj/parseSinglePointMessages.o
+	aCC +O2 -Dhpi32Arch -c -I.  -I/usr/include/Motif2.1  -I/usr/include/X11R6  -I/usr/local/procsee  -I../include  -I../pictures/pdat  -I /usr/local/procsee/include  \
+				../src/parsePenMessages.C \
+				 -o ../obj/parsePenMessages.o
+	aCC +O2 -Dhpi32Arch -c -I.  -I/usr/include/Motif2.1  -I/usr/include/X11R6  -I/usr/local/procsee  -I../include  -I../pictures/pdat  -I /usr/local/procsee/include  \
+				../src/parseBarMessages.C \
+				 -o ../obj/parseBarMessages.o
+	aCC +O2 -Dhpi32Arch -c -I.  -I/usr/include/Motif2.1  -I/usr/include/X11R6  -I/usr/local/procsee  -I../include  -I../pictures/pdat  -I /usr/local/procsee/include  \
+				../src/parseCALMessages.C \
+				 -o ../obj/parseCALMessages.o
+	aCC +O2 -Dhpi32Arch -c -I.  -I/usr/include/Motif2.1  -I/usr/include/X11R6  -I/usr/local/procsee  -I../include  -I../pictures/pdat  -I /usr/local/procsee/include  \
+				../src/parseCPCSMessages.C \
+				 -o ../obj/parseCPCSMessages.o
+	aCC +O2 -Dhpi32Arch -c -I.  -I/usr/include/Motif2.1  -I/usr/include/X11R6  -I/usr/local/procsee  -I../include  -I../pictures/pdat  -I /usr/local/procsee/include  \
+				../src/parseBDLMessages.C \
+				 -o ../obj/parseBDLMessages.o
+	aCC +O2 -Dhpi32Arch -c -I.  -I/usr/include/Motif2.1  -I/usr/include/X11R6  -I/usr/local/procsee  -I../include  -I../pictures/pdat  -I /usr/local/procsee/include  \
+				../src/parseORLMessages.C \
+				 -o ../obj/parseORLMessages.o
+	aCC +O2 -Dhpi32Arch -c -I.  -I/usr/include/Motif2.1  -I/usr/include/X11R6  -I/usr/local/procsee  -I../include  -I../pictures/pdat  -I /usr/local/procsee/include  \
+				../src/parseCslMessages.C \
+				 -o ../obj/parseCslMessages.o
+	aCC +O2 -Dhpi32Arch -c -I.  -I/usr/include/Motif2.1  -I/usr/include/X11R6  -I/usr/local/procsee  -I../include  -I../pictures/pdat  -I /usr/local/procsee/include  \
+				../src/parseCecorMessages.C \
+				 -o ../obj/parseCecorMessages.o
+	aCC +O2 -Dhpi32Arch -c -I.  -I/usr/include/Motif2.1  -I/usr/include/X11R6  -I/usr/local/procsee  -I../include  -I../pictures/pdat  -I /usr/local/procsee/include  \
+				../src/parseColssMessages.C \
+				 -o ../obj/parseColssMessages.o
+	aCC +O2 -Dhpi32Arch -c -I.  -I/usr/include/Motif2.1  -I/usr/include/X11R6  -I/usr/local/procsee  -I../include  -I../pictures/pdat  -I /usr/local/procsee/include  \
+				../src/parseDTrendMessages.C \
+				 -o ../obj/parseDTrendMessages.o
+	aCC +O2 -Dhpi32Arch -c -I.  -I/usr/include/Motif2.1  -I/usr/include/X11R6  -I/usr/local/procsee  -I../include  -I../pictures/pdat  -I /usr/local/procsee/include  \
+				../src/parseDspmMessages.C \
+				 -o ../obj/parseDspmMessages.o
+	aCC +O2 -Dhpi32Arch -c -I.  -I/usr/include/Motif2.1  -I/usr/include/X11R6  -I/usr/local/procsee  -I../include  -I../pictures/pdat  -I /usr/local/procsee/include  \
+				../src/parseDBC_Messages.C \
+				 -o ../obj/parseDBC_Messages.o
+	aCC +O2 -Dhpi32Arch -c -I.  -I/usr/include/Motif2.1  -I/usr/include/X11R6  -I/usr/local/procsee  -I../include  -I../pictures/pdat  -I /usr/local/procsee/include  \
+				../src/parseGroupMessages.C \
+				 -o ../obj/parseGroupMessages.o
+	aCC +O2 -Dhpi32Arch -c -I.  -I/usr/include/Motif2.1  -I/usr/include/X11R6  -I/usr/local/procsee  -I../include  -I../pictures/pdat  -I /usr/local/procsee/include  \
+					../src/parseBOPDMDMessages.C \
+				 	-o ../obj/parseBOPDMDMessages.o
+	aCC +O2 -Dhpi32Arch -c -I.  -I/usr/include/Motif2.1  -I/usr/include/X11R6  -I/usr/local/procsee  -I../include  -I../pictures/pdat  -I /usr/local/procsee/include  \
+					../src/parseIncoreMessages.C \
+				 	-o ../obj/parseIncoreMessages.o
+	aCC +O2 -Dhpi32Arch -c -I.  -I/usr/include/Motif2.1  -I/usr/include/X11R6  -I/usr/local/procsee  -I../include  -I../pictures/pdat  -I /usr/local/procsee/include  \
+				../src/parseLinkMessages.C \
+				 -o ../obj/parseLinkMessages.o
+	aCC +O2 -Dhpi32Arch -c -I.  -I/usr/include/Motif2.1  -I/usr/include/X11R6  -I/usr/local/procsee  -I../include  -I../pictures/pdat  -I /usr/local/procsee/include  \
+					../src/parsePRTSUMMessages.C \
+				 	-o ../obj/parsePRTSUMMessages.o
+	aCC +O2 -Dhpi32Arch -c -I.  -I/usr/include/Motif2.1  -I/usr/include/X11R6  -I/usr/local/procsee  -I../include  -I../pictures/pdat  -I /usr/local/procsee/include  \
+					../src/parsePrreptMessages.C \
+				 	-o ../obj/parsePrreptMessages.o
+	aCC +O2 -Dhpi32Arch -c -I.  -I/usr/include/Motif2.1  -I/usr/include/X11R6  -I/usr/local/procsee  -I../include  -I../pictures/pdat  -I /usr/local/procsee/include  \
+					../src/parseRPCCEAMessages.C \
+				 	-o ../obj/parseRPCCEAMessages.o
+	aCC +O2 -Dhpi32Arch -c -I.  -I/usr/include/Motif2.1  -I/usr/include/X11R6  -I/usr/local/procsee  -I../include  -I../pictures/pdat  -I /usr/local/procsee/include  \
+					../src/parseSecureMessages.C \
+				 	-o ../obj/parseSecureMessages.o
+	aCC +O2 -Dhpi32Arch -c -I.  -I/usr/include/Motif2.1  -I/usr/include/X11R6  -I/usr/local/procsee  -I../include  -I../pictures/pdat  -I /usr/local/procsee/include  \
+				../src/parseUTDVMessages.C \
+				 -o ../obj/parseUTDVMessages.o
+	aCC +O2 -Dhpi32Arch -c -I.  -I/usr/include/Motif2.1  -I/usr/include/X11R6  -I/usr/local/procsee  -I../include  -I../pictures/pdat  -I /usr/local/procsee/include  \
+				../src/parseHDSRMessages.C \
+				 -o ../obj/parseHDSRMessages.o
+	aCC +O2 -Dhpi32Arch -c -I.  -I/usr/include/Motif2.1  -I/usr/include/X11R6  -I/usr/local/procsee  -I../include  -I../pictures/pdat  -I /usr/local/procsee/include  \
+				../src/parseVTRENDMessages.C \
+				 -o ../obj/parseVTRENDMessages.o
+	aCC +O2 -Dhpi32Arch -c -I.  -I/usr/include/Motif2.1  -I/usr/include/X11R6  -I/usr/local/procsee  -I../include  -I../pictures/pdat  -I /usr/local/procsee/include  \
+				../src/parseXRBPMessages.C \
+				 -o ../obj/parseXRBPMessages.o
+	aCC +O2 -Dhpi32Arch -c -I.  -I/usr/include/Motif2.1  -I/usr/include/X11R6  -I/usr/local/procsee  -I../include  -I../pictures/pdat  -I /usr/local/procsee/include  \
+				../src/parseXRBPAMessages.C \
+				 -o ../obj/parseXRBPAMessages.o
+	aCC +O2 -Dhpi32Arch -c -I.  -I/usr/include/Motif2.1  -I/usr/include/X11R6  -I/usr/local/procsee  -I../include  -I../pictures/pdat  -I /usr/local/procsee/include  \
+				../src/parseRcsLeakMessages.C \
+				 -o ../obj/parseRcsLeakMessages.o				 
+	aCC +O2 -Dhpi32Arch -c -I.  -I/usr/include/Motif2.1  -I/usr/include/X11R6  -I/usr/local/procsee  -I../include  -I../pictures/pdat  -I /usr/local/procsee/include  \
+				../src/parsePidForTestMessages.C \
+				 -o ../obj/parsePidForTestMessages.o				 
+	aCC +O2 -Dhpi32Arch -c -I.  -I/usr/include/Motif2.1  -I/usr/include/X11R6  -I/usr/local/procsee  -I../include  -I../pictures/pdat  -I /usr/local/procsee/include  \
+				../src/parseEquipmentMessages.C \
+				 -o ../obj/parseEquipmentMessages.o				 
+	aCC +O2 -Dhpi32Arch -c -I.  -I/usr/include/Motif2.1  -I/usr/include/X11R6  -I/usr/local/procsee  -I../include  -I../pictures/pdat  -I /usr/local/procsee/include  \
+			        ../src/parseCEATrackMonitorMessages.C \
+			         -o ../obj/parseCEATrackMonitorMessages.o
+	aCC +O2 -Dhpi32Arch -c -I.  -I/usr/include/Motif2.1  -I/usr/include/X11R6  -I/usr/local/procsee  -I../include  -I../pictures/pdat  -I /usr/local/procsee/include  \
+				../src/findPidForGUI.C -o ../obj/findPidForGUI.o
+	aCC +O2 -Dhpi32Arch -c -I.  -I/usr/include/Motif2.1  -I/usr/include/X11R6  -I/usr/local/procsee  -I../include  -I../pictures/pdat  -I /usr/local/procsee/include  \
+				../src/sendPictureNameToInterfaceToGUI.C \
+				-o ../obj/sendPictureNameToInterfaceToGUI.o
+	aCC +O2 -Dhpi32Arch -c -I.  -I/usr/include/Motif2.1  -I/usr/include/X11R6  -I/usr/local/procsee  -I../include  -I../pictures/pdat  -I /usr/local/procsee/include  \
+				../src/sendMessageToHost.C -o ../obj/sendMessageToHost.o
+	aCC +O2 -Dhpi32Arch -c -I.  -I/usr/include/Motif2.1  -I/usr/include/X11R6  -I/usr/local/procsee  -I../include  -I../pictures/pdat  -I /usr/local/procsee/include  \
+				../src/disconnectFromGUI.C -o ../obj/disconnectFromGUI.o
+	aCC +O2 -Dhpi32Arch -c -I.  -I/usr/include/Motif2.1  -I/usr/include/X11R6  -I/usr/local/procsee  -I../include  -I../pictures/pdat  -I /usr/local/procsee/include  \
+				../src/find_pid.C \
+				 -o ../obj/find_pid.o
+	aCC +O2 -Dhpi32Arch -c -I.  -I/usr/include/Motif2.1  -I/usr/include/X11R6  -I/usr/local/procsee  -I../include  -I../pictures/pdat  -I /usr/local/procsee/include  \
+				../src/messageQueueObject.C \
+				 -o ../obj/messageQueueObject.o
+	aCC +O2 -Dhpi32Arch -c -I.  -I/usr/include/Motif2.1  -I/usr/include/X11R6  -I/usr/local/procsee  -I../include  -I../pictures/pdat  -I /usr/local/procsee/include  \
+					../src/parsePictureMessages.C \
+					 -o ../obj/parsePictureMessages.o
+	aCC +O2 -Dhpi32Arch -c -I.  -I/usr/include/Motif2.1  -I/usr/include/X11R6  -I/usr/local/procsee  -I../include  -I../pictures/pdat  -I /usr/local/procsee/include  \
+				../src/sharedMemoryObject.C -o ../obj/sharedMemoryObject.o
+	aCC +O2 -Dhpi32Arch -c -I.  -I/usr/include/Motif2.1  -I/usr/include/X11R6  -I/usr/local/procsee  -I../include  -I../pictures/pdat  -I /usr/local/procsee/include  \
+					../src/TempShoppingListObject.C \
+					 -o ../obj/TempShoppingListObject.o
+	aCC +O2 -Dhpi32Arch  -L/usr/local/procsee/lib  \
+				-L /usr/local/procsee/lib/hpi32Arch ../obj/mainInterfaceToGUI.o  ../obj/messageObject.o  ../obj/DataQueueObject.o  ../obj/DatabaseObject.o  ../obj/InterProcSMObject.o  ../obj/IntListObject.o  ../obj/PermShoppingListObject.o  ../obj/PidListItemObject.o  ../obj/PictureListItemObject.o  ../obj/PicPidListObject.o  ../obj/createPicturePidLists.o  ../obj/buildPermanentShoppingList.o  ../obj/initInterfaceToGUI.o  ../obj/cyclicProcessing.o  ../obj/connectToGUI.o  ../obj/defineDatabase.o  ../obj/defineMessages.o  ../obj/defineInterface.o  ../obj/defineFunctions.o  ../obj/manageTempShopList.o  ../obj/parseSinglePointMessages.o  ../obj/parsePenMessages.o  ../obj/parseBarMessages.o  ../obj/parseCALMessages.o  ../obj/parseCPCSMessages.o  ../obj/parseBDLMessages.o  ../obj/parseORLMessages.o  ../obj/parseCslMessages.o  ../obj/parseCecorMessages.o  ../obj/parseColssMessages.o  ../obj/parseDTrendMessages.o  ../obj/parseDspmMessages.o  ../obj/parseDBC_Messages.o  ../obj/parseGroupMessages.o  ../obj/parseBOPDMDMessages.o  ../obj/parseIncoreMessages.o  ../obj/parseLinkMessages.o  ../obj/parsePRTSUMMessages.o  ../obj/parsePrreptMessages.o  ../obj/parseRPCCEAMessages.o  ../obj/parseSecureMessages.o  ../obj/parseUTDVMessages.o  ../obj/parseHDSRMessages.o  ../obj/parseVTRENDMessages.o  ../obj/parseXRBPMessages.o  ../obj/parseXRBPAMessages.o  ../obj/parseRcsLeakMessages.o  ../obj/parsePidForTestMessages.o  ../obj/parseEquipmentMessages.o  ../obj/parseCEATrackMonitorMessages.o  ../obj/findPidForGUI.o  ../obj/sendPictureNameToInterfaceToGUI.o  ../obj/sendMessageToHost.o  ../obj/disconnectFromGUI.o  ../obj/find_pid.o  ../obj/messageQueueObject.o  ../obj/parsePictureMessages.o  ../obj/sharedMemoryObject.o  ../obj/TempShoppingListObject.o 		 -lm -lProcSeeApiC  \
+				-o ../bin/InterfaceToGUI
+	aCC +O2 -Dhpi32Arch -c -I.  -I/usr/include/Motif2.1  -I/usr/include/X11R6  -I/usr/local/procsee  -I../include  -I../pictures/pdat  ../src/mainCommLink.C \
+				      -o ../obj/mainCommLink.o
+	aCC +O2 -Dhpi32Arch -c -I.  -I/usr/include/Motif2.1  -I/usr/include/X11R6  -I/usr/local/procsee  -I../include  -I../pictures/pdat  -I /usr/local/procsee/include  \
+				../src/setPBstatuses.C \
+				 -o ../obj/setPBstatuses.o
+	aCC +O2 -Dhpi32Arch -c -I.  -I/usr/include/Motif2.1  -I/usr/include/X11R6  -I/usr/local/procsee  -I../include  -I../pictures/pdat  ../src/CommLinkObject.C \
+				      -o ../obj/CommLinkObject.o
+	aCC +O2 -Dhpi32Arch -c -I.  -I/usr/include/Motif2.1  -I/usr/include/X11R6  -I/usr/local/procsee  -I../include  -I../pictures/pdat  ../src/parseHostMessages.C \
+				-o ../obj/parseHostMessages.o
+	aCC +O2 -Dhpi32Arch -c -I.  -I/usr/include/Motif2.1  -I/usr/include/X11R6  -I/usr/local/procsee  -I../include  -I../pictures/pdat  ../src/parseAckResetMessages.C \
+				      	      -o ../obj/parseAckResetMessages.o
+	aCC +O2 -Dhpi32Arch -c -I.  -I/usr/include/Motif2.1  -I/usr/include/X11R6  -I/usr/local/procsee  -I../include  -I../pictures/pdat  ../src/parseDBLoadMessages.C \
+				              -o ../obj/parseDBLoadMessages.o
+	aCC +O2 -Dhpi32Arch -c -I.  -I/usr/include/Motif2.1  -I/usr/include/X11R6  -I/usr/local/procsee  -I../include  -I../pictures/pdat  ../src/parseDBUpdateMessages.C \
+				              -o ../obj/parseDBUpdateMessages.o
+	aCC +O2 -Dhpi32Arch -c -I.  -I/usr/include/Motif2.1  -I/usr/include/X11R6  -I/usr/local/procsee  -I../include  -I../pictures/pdat  ../src/getLocalTime.C \
+				      -o ../obj/getLocalTime.o
+	aCC +O2 -Dhpi32Arch  \
+				-L /usr/local/procsee/lib/hpi32Arch ../obj/mainCommLink.o  ../obj/setPBstatuses.o  ../obj/messageObject.o  ../obj/InterProcSMObject.o  ../obj/DatabaseObject.o  ../obj/CommLinkObject.o  ../obj/parseHostMessages.o  ../obj/parseAckResetMessages.o  ../obj/parseBOPDMDMessages.o  ../obj/parseDBC_Messages.o  ../obj/parseDBLoadMessages.o  ../obj/parseDBUpdateMessages.o  ../obj/parseDTrendMessages.o  ../obj/parsePRTSUMMessages.o  ../obj/parseRPCCEAMessages.o  ../obj/parseBarMessages.o  ../obj/parseCALMessages.o  ../obj/parseCPCSMessages.o  ../obj/parseBDLMessages.o  ../obj/parseORLMessages.o  ../obj/parseCecorMessages.o  ../obj/parseCslMessages.o  ../obj/parseColssMessages.o  ../obj/parseDspmMessages.o  ../obj/parseGroupMessages.o  ../obj/parsePenMessages.o  ../obj/parseIncoreMessages.o  ../obj/parseLinkMessages.o  ../obj/parsePrreptMessages.o  ../obj/parseSecureMessages.o  ../obj/parseSinglePointMessages.o  ../obj/parseUTDVMessages.o  ../obj/parseVTRENDMessages.o  ../obj/parseXRBPMessages.o  ../obj/parseXRBPAMessages.o  ../obj/parseCEATrackMonitorMessages.o  ../obj/getLocalTime.o  ../obj/parseRcsLeakMessages.o  ../obj/parsePidForTestMessages.o  ../obj/parseEquipmentMessages.o  ../obj/find_pid.o  ../obj/messageQueueObject.o  ../obj/sharedMemoryObject.o		 -lm -lProcSeeApiC  \
+				-o ../bin/CommLink
+*** Error exit code 1

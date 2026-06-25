@@ -1,0 +1,6004 @@
+/*
+ * ProcSee CONFIGURATION LANGUAGE FILE
+ *
+ *
+ * User : ygn34
+ * Host : y4cr01
+ * Date : 2017-06-27
+ *
+ * ProcSee version : ProcSee 3.10.1 (June 2016)
+ * File version    : 1.0  -- Initial version
+ * File version    : 1.1  -- Reflecting revisions due to TER-008 issue.
+ *
+ *
+ */
+
+
+application YGN3and4
+{
+
+  database = "databaseParameters.pdat";
+
+  database = "databaseStructure.pdat";
+
+  database = "messageStructure.pdat";
+
+  database = "penRecorderStructure.pdat";
+
+  database = "XRBPStructure.pdat";
+
+  database = "XRBPAUTO.pdat";
+
+  database = "RPCCEAStructure.pdat";
+
+  database = "DigitalTrendStructure.pdat";
+
+  database = "BarChartStructure.pdat";
+
+  database = "secureStructure.pdat";
+
+  database = "incoreStructure.pdat";
+
+  database = "BOPDMDStructure.pdat";
+
+  database = "groupDisplayStructure.pdat";
+
+  database = "pointSummaryStructure.pdat";
+
+  database = "VideoTrendStructure.pdat";
+
+  database = "printReportsStructure.pdat";
+
+  database = "cecorStructure.pdat";
+
+  database = "colssParameters.pdat";
+
+  database = "colssStructure.pdat";
+
+  database = "cslStructure.pdat";
+
+  database = "databaseDisplaysStructure.pdat";
+
+  database = "UTDVStructure.pdat";
+
+  database = "HDSRStructure.pdat";
+
+  database = "CALStructure.pdat";
+
+  database = "BDLStructure.pdat";
+
+  database = "ORLStructure.pdat";
+
+  database = "LinkStructure.pdat";
+  
+  database = "RCSLeakStructure.pdat";
+
+  database = "printPIDTestStructure.pdat";
+
+  database = "EQUIPStructure.pdat";
+
+  database = "CEATrackMonitorStructure.pdat";
+
+  database = "interfaceStructure.pdat";
+
+  database = "justPicasso.pdat";
+
+  database = "displayPage.pdat";
+
+  database = "messageParameters.pdat";
+
+  database = "theDatabase.pdat";
+
+
+
+  int ORL_Active = 0;
+
+  int ORL_CurrentTime = 0;
+
+  int ORL_MaximumTime = 3;
+
+  int CAL_Active = 0;
+
+  int CAL_CurrentTime = 0;
+
+  int CAL_MaximumTime = 3;
+
+  int BDL_Active = 0;
+
+  int BDL_CurrentTime = 0;
+
+  int BDL_MaximumTime = 3;
+
+  int AlarmAck_Active = 0;
+
+  int AlarmAck_CurrentTime = 0;
+
+  int AlarmAck_MaximumTime = 3;
+
+  int AlarmReset_Active = 0;
+
+  int AlarmReset_CurrentTime = 0;
+
+  int AlarmReset_MaximumTime = 3;
+
+  char tmp[12] = "           ";
+
+  float erangelo = 0;
+
+  float erangehi = 0;
+
+  char GroupFrom659[80] = " ";
+
+  int Option_From_659 = 0;
+
+  char GroupFrom695[80] = "2";
+
+  int Option_From_695 = 0;
+
+  int UTDV692_Hr = 1;
+
+  int UTDV692_Mid = 1;
+
+  int UTDVLapseTime = 0;
+
+  int UTDV10Min_UpdateFlag = 0;
+
+  VT_DateTime *VideoSet5 = `&videoSet5`;
+
+  VT_DateTime *VideoSet4 = `&videoSet4`;
+
+  VT_DateTime *VideoSet3 = `&videoSet3`;
+
+  VT_DateTime *VideoSet2 = `&videoSet2`;
+
+  VT_DateTime *VideoSet1 = `&videoSet1`;
+
+  char VTset5Temp4[10] = "CET16";
+
+  char VTset5Temp3[10] = "CET15";
+
+  char VTset5Temp2[10] = "CET14";
+
+  char VTset5Temp1[10] = "CET13";
+
+  char VTset4Temp4[10] = "CET12";
+
+  char VTset4Temp3[10] = "CET11";
+
+  char VTset4Temp2[10] = "CET10";
+
+  char VTset4Temp1[10] = "CET09";
+
+  char VTset3Temp4[10] = "CET08   ";
+
+  char VTset3Temp3[10] = "CET07   ";
+
+  char VTset3Temp2[10] = "CET06   ";
+
+  char VTset3Temp1[10] = "CET05   ";
+
+  char VTset2Temp4[10] = "CET11";
+
+  char VTset2Temp3[10] = "CET09";
+
+  char VTset2Temp2[10] = "CET16";
+
+  char VTset2Temp1[10] = "CET13";
+
+  char VTset1Temp4[10] = "CET03";
+
+  char VTset1Temp3[10] = "CET01";
+
+  char VTset1Temp2[10] = "CET01";
+
+  char VTset1Temp1[10] = "APJ0015";
+
+  int DTrendInUse = 0;
+
+  int DtrendInUse = 1;
+
+  int DoneClearDisplayBlock = 1;
+
+  int DoneLastThingForPictureDisplay = 1;
+
+  int isPtPlotEmergencyDisplay = 0;
+
+  int printQ = 0;
+
+  int isPtPlotNormalDisplay = 1;
+
+  float HiHotLegTemp_Emergency[60] = {312.2, 312.2, 312.2, 312.2, 312.2, 312.2, 312.2, 312.2, 312.2, 312.2, 312.2, 312.2, 312.2, 312.2, 312.2, 312.2, 312.2, 312.2, 312.2, 312.2, 312.2, 312.2, 312.2, 312.2, 312.2, 312.2, 312.2, 312.2, 312.2, 312.2, 312.2, 312.2, 312.2, 312.2, 312.2, 312.2, 312.2, 312.2, 312.2, 312.2, 312.2, 312.2, 312.2, 312.2, 312.2, 312.2, 312.2, 312.2, 312.2, 312.2, 312.2, 312.2, 312.2, 312.2, 312.2, 312.2, 312.2, 312.2, 312.2, 312.2};
+
+  float LoColdLegTemp_Emergency[60] = {295, 295, 295, 295, 295, 295, 295, 295, 295, 295, 295, 295, 295, 295, 295, 295, 295, 295, 295, 295, 295, 295, 295, 295, 295, 295, 295, 295, 295, 295, 295, 295, 295, 295, 295, 295, 295, 295, 295, 295, 295, 295, 295, 295, 295, 295, 295, 295, 295, 295, 295, 295, 295, 295, 295, 295, 295, 295, 295, 295};
+
+  float LoColdLegTemp_Normal[60] = {297.2, 297.2, 297.2, 297.2, 297.2, 297.2, 297.2, 297.2, 297.2, 297.2, 297.2, 297.2, 297.2, 297.2, 297.2, 297.2, 297.2, 297.2, 297.2, 297.2, 297.2, 297.2, 297.2, 297.2, 297.2, 297.2, 297.2, 297.2, 297.2, 297.2, 297.2, 297.2, 297.2, 297.2, 297.2, 297.2, 297.2, 297.2, 297.2, 297.2, 297.2, 297.2, 297.2, 297.2, 297.2, 297.2, 297.2, 297.2, 297.2, 297.2, 297.2, 297.2, 297.2, 297.2, 297.2, 297.2, 297.2, 297.2, 297.2, 297.2};
+
+  float LoPZRPress[60] = {158.386, 158.386, 158.386, 158.386, 158.386, 158.386, 158.386, 158.386, 158.386, 158.386, 158.386, 158.386, 158.386, 158.386, 158.386, 158.386, 158.386, 158.386, 158.386, 158.386, 158.386, 158.386, 158.386, 158.386, 158.386, 158.386, 158.386, 158.386, 158.386, 158.386, 158.386, 158.386, 158.386, 158.386, 158.386, 158.386, 158.386, 158.386, 158.386, 158.386, 158.386, 158.386, 158.386, 158.386, 158.386, 158.386, 158.386, 158.386, 158.386, 158.386, 158.386, 158.386, 158.386, 158.386, 158.386, 158.386, 158.386, 158.386, 158.386, 158.386};
+
+  float HiPZRPress[60] = {173.782, 173.782, 173.782, 173.782, 173.782, 173.782, 173.782, 173.782, 173.782, 173.782, 173.782, 173.782, 173.782, 173.782, 173.782, 173.782, 173.782, 173.782, 173.782, 173.782, 173.782, 173.782, 173.782, 173.782, 173.782, 173.782, 173.782, 173.782, 173.782, 173.782, 173.782, 173.782, 173.782, 173.782, 173.782, 173.782, 173.782, 173.782, 173.782, 173.782, 173.782, 173.782, 173.782, 173.782, 173.782, 173.782, 173.782, 173.782, 173.782, 173.782, 173.782, 173.782, 173.782, 173.782, 173.782, 173.782, 173.782, 173.782, 173.782, 173.782};
+
+  int PT_DBcomplete = 0;
+
+  int PT_DBpointer = 9;
+
+  int PT_Trend_MaximumTime = 60;
+
+  int PT_Plot_MaximumTime = 5;
+
+  int PT_Trend_CurrentTime = 26;
+
+  int PT_Plot_CurrentTime = 50;
+
+  int PT_Trend_Active = 0;
+
+  int PT_Plot_Active = 0;
+
+  int AdvisoryMsg1_MaximumTime = 7;
+
+  int AdvisoryMsg1_CurrentTime = -519;
+
+  int AdvisoryMsg1_Active = 1;
+
+  int DisplayBlock = 0;
+
+  int AdvisoryCEAMsg_MaximumTime = 5;
+
+  char UtdvPg692_midnightfile[24] = "LOG2:UTLMID.DAT";
+
+  char UtdvPg692_ceafile[24] = "LOG2:UTLHCEA.DAT";
+
+  int New_page_request = 595919104;
+
+  int Current_page_returned = 596050176;
+
+  int GROUPNUMBER = 0;
+
+  int accesslevel = 1;
+
+  int Logon = 0;
+
+  char utlhcea652[24] = "LOG2:UTLHCEA.DAT";
+
+  char utlmid652[24] = "LOG2:UTLMID.DAT";
+
+  char utnlmid652[24] = "LOG2:UTNLMID.DAT";
+
+  int WaitingUTDVData658 = 0;
+
+  int WaitingUTDVData657 = 0;
+
+  int WaitingUTDVData655 = 0;
+
+  int WaitingUTDVData654 = 0;
+
+  int WaitingUTDVData653 = 0;
+
+  int UTDVDataWaitingTime = 0;
+
+  int FindPidResult = 5887;
+
+  char TEMPID[10] = "CET01 ";
+
+  float Page220Tr4 = `IMTRC->value`;
+
+  float Page220Tr3 = `IMLVH->value`;
+
+  float Page220Tr2 = `IMLVP->value`;
+
+  float Page220Tr1 = `IMTSM->value`;
+
+  int FeedbackMsg_MaximumTime = 10;
+
+  int FeedbackMsg_CurrentTime = 0;
+
+  int FeedbackMsg_Active = 0;
+
+  int AdvisoryMsg_MaximumTime = 7;
+
+  int AdvisoryMsg_CurrentTime = -518;
+
+  int AdvisoryMsg2_MaximumTime = 7;
+
+  int AdvisoryMsg3_MaximumTime = 7;
+
+  int AdvisoryMsg2_CurrentTime = -517;
+
+  int AdvisoryMsg3_CurrentTime = -517;
+
+  int AdvisoryMsg2_Active = 1;
+
+  int AdvisoryMsg3_Active = 1;
+
+  int AdvisoryMsg_Active = 1;
+
+  char *DisplayDelay_PictureNumber = "PicYGN_VideoTrendMenu.ppic";
+
+  char *DisplayDelay_PictureName = "PicYGN_GroupDisplayView.ppic";
+
+  int DisplayDelay_CurrentTime = 0;
+
+  int DisplayDelay_MaximumTime = 5;
+
+  int PageDelay_Active = 0;
+
+  int PictureDelay_Active = 0;
+
+  int SectorInfo_Active = 0;
+
+  int SectorInfo_MaximumTime = 10;
+
+  int SectorInfo_CurrentTime = -1023;
+
+  int COLORS[32] = {3, 3, 3, 3, 3, 3, 3, 10, 10, 10, 11, 11, 11, 12, 12, 14, 14, 13, 13, 15, 15, 14, 15, 10, 16, 16, 16, 16, 16, 16, 16, 3};
+
+  int Any = 0;
+
+  int Left = 1;
+
+  int Middle = 2;
+
+  int Right = 3;
+
+  int TEXT = 1;
+
+  int INTEGER = 2;
+
+  int FLOAT = 3;
+
+  int TimersRunning = 1;
+
+  float VideoSet1Tr1 = `APJ0015->value`;
+
+  float VideoSet1Tr2 = `APJ0016->value`;
+
+  float VideoSet1Tr3 = `APY0128->value`;
+
+  float VideoSet1Tr4 = `APY0129->value`;
+
+  float VideoSet2Tr1 = `CET01->value`;
+
+  float VideoSet2Tr2 = `CET02->value`;
+
+  float VideoSet2Tr3 = `CET03->value`;
+
+  float VideoSet2Tr4 = `CET04->value`;
+
+  float VideoSet3Tr1 = `CET05->value`;
+
+  float VideoSet3Tr2 = `CET06->value`;
+
+  float VideoSet3Tr3 = `CET07->value`;
+
+  float VideoSet3Tr4 = `CET08->value`;
+
+  float VideoSet4Tr1 = `CET09->value`;
+
+  float VideoSet4Tr2 = `CET10->value`;
+
+  float VideoSet4Tr3 = `CET11->value`;
+
+  float VideoSet4Tr4 = `CET12->value`;
+
+  float VideoSet5Tr1 = `CET13->value`;
+
+  float VideoSet5Tr2 = `CET14->value`;
+
+  float VideoSet5Tr3 = `CET15->value`;
+
+  float VideoSet5Tr4 = `CET16->value`;
+
+  float RcsLeakUnid = `RCYXLKU->value`;
+   
+  float RcsLeakIdnt = `RCYXLKI->value`;
+
+  int CascadeMenuActive = 0;
+
+  int CFMLevel = 0;
+
+  int CascadeEnterActive = 0;
+
+  int Last_Page = 100;
+
+//  float SinglePointTrend = `(SIZ698H->value>0)`; // comment out by yrlee
+  float SinglePointTrend = `RCT111X->value`;
+
+  int SectoringPage = 5;
+
+  int BarInfo_Active = 1;
+
+  int Current_Page = 190;
+
+  int isGroup1Display = 1;
+
+  int isGroup2Display = 0;
+
+  int DTrendTimer_Active = 0;
+
+  int DTrendSet = 1;
+
+  int GR_DisplayRate = 2;
+
+  int GroupDisplay_Active = 1;
+
+  int GroupDisplay_CurrentTime = 2;
+
+  int VT_ScanRate5 = 1;
+
+  int VT_ScanRate4 = 1;
+
+  int VT_ScanRate3 = 1;
+
+  int VT_ScanRate2 = 1;
+
+  int VT_ScanRate1 = 1;
+
+  int DT_ScanRate = 1;		//CORENET 20170629
+
+  int VideoSetno = 1;
+
+  int WaitingUTDVData683 = 0;
+
+  int WaitingUTDVData687 = 0;
+
+  int WaitingUTDVData685 = 0;
+
+  int WaitingUTDVData682 = 0;
+
+  int WaitingUTDVData684 = 0;
+
+  int WaitingUTDVData688 = 0;
+
+  int WaitingUTDVData686 = 0;
+
+  int WaitingUTDVData693 = 0;
+
+  int WaitingUTDVData694 = 0;
+
+  int Security1 = 0;
+
+  int Security2 = 0;
+
+  int CEAAlarmDisplayFlag = 0;
+
+  int XRBP_FLAG = 621;
+
+  int GR_Page = 25;
+
+  int CEA_ALARM_RESET = 0;
+
+  int LinkPageOn = 0;
+
+  int BdlPageOn = 0;
+
+  int OrlPageOn = 0;
+
+  int CalPageOn = 0;
+
+  int option = 1;
+
+  char utlhcea692[24] = "LOG2:UTLHCEA.DAT";
+
+  char utlmid692[24] = "LOG2:UTLMID.DAT";
+
+  int DisplayProcessing = 0;
+
+  int UTDV652_option = 1;
+
+  int UTDV681_option = 1;
+
+// to update rcs leak cal. values by Hoontae Park
+
+  int RCS_LEAK = 0;
+//-----------------------------
+
+//>>>>>>>>>>>>>>>>>>>>>>. CORENET 2012.07.18.
+  int __Result;
+  int __Size;
+//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function `void DisplayPageNext()
+{
+//--------------------------------------------------------------------------
+// Keep display page navigation from working !!!
+   if (0 == Interface->System.connected)
+   {
+      DisplayAdvisoryMessage("CONNECTION LOST. NO PAGING ALLOWED");
+      DisplayProcessing = 0 ;
+      return;
+   }
+//--------------------------------------------------------------------------
+
+// for escape key function
+   Last_Page = Current_Page;
+
+   if(!DisplayProcessing)
+      switch(Current_Page)
+      {
+
+// GroupDisplay view
+     
+   case 11:
+      Current_Page = 11;
+      printf("Now transfer to GR_VIEW2 .....");
+//6.16      Interface->FlagHandleMessage.data.requestOption = 1;
+//6.16      Interface->FlagHandleMessage.data.flipflop1 = 0;
+//6.16      execute("{sendMessageToHost(GROUP_RESET_REQUEST);}");
+      GroupDisplay_CurrentTime = GR_DisplayRate;
+      GroupDisplay_Active = 1;
+      execute("::YGN3and4.PicYGN_GroupDisplayMenu.GroupDisplayShift(1,2)");
+      break;   
+   case 12:
+      Current_Page = 12; 
+      printf("Now transfer to GR_VIEW3 .....");
+//6.16      Interface->FlagHandleMessage.data.requestOption = 2;
+//6.16      Interface->FlagHandleMessage.data.flipflop1 = 0;
+//6.16      execute("{sendMessageToHost(GROUP_RESET_REQUEST);}");
+      GroupDisplay_CurrentTime = GR_DisplayRate;
+      GroupDisplay_Active = 1;
+      execute("::YGN3and4.PicYGN_GroupDisplayMenu.GroupDisplayShift(2,3)");
+      break;   
+   case 13:
+      Current_Page = 13; 
+//6.16      Interface->FlagHandleMessage.data.requestOption = 3;
+//6.16      Interface->FlagHandleMessage.data.flipflop1 = 0;
+//6.16      execute("{sendMessageToHost(GROUP_RESET_REQUEST);}");
+      GroupDisplay_CurrentTime = GR_DisplayRate;
+      GroupDisplay_Active = 1;
+      execute("::YGN3and4.PicYGN_GroupDisplayMenu.GroupDisplayShift(3,4)");
+      break;   
+   case 14:
+      Current_Page = 14; 
+//6.16      Interface->FlagHandleMessage.data.requestOption = 4;
+//6.16      Interface->FlagHandleMessage.data.flipflop1 = 0;
+//6.16      execute("{sendMessageToHost(GROUP_RESET_REQUEST);}");
+      GroupDisplay_CurrentTime = GR_DisplayRate;
+      GroupDisplay_Active = 1;
+      execute("::YGN3and4.PicYGN_GroupDisplayMenu.GroupDisplayShift(4,5)");
+      break;   
+   case 15:
+      Current_Page = 15; 
+//6.16      Interface->FlagHandleMessage.data.requestOption = 5;
+//6.16      Interface->FlagHandleMessage.data.flipflop1 = 0;
+//6.16      execute("{sendMessageToHost(GROUP_RESET_REQUEST);}");
+      GroupDisplay_CurrentTime = GR_DisplayRate;
+      GroupDisplay_Active = 1;
+      execute("::YGN3and4.PicYGN_GroupDisplayMenu.GroupDisplayShift(5,6)");
+      break;   
+   case 16:
+      Current_Page = 16; 
+//6.16      Interface->FlagHandleMessage.data.requestOption = 6;
+//6.16      Interface->FlagHandleMessage.data.flipflop1 = 0;
+//6.16      execute("{sendMessageToHost(GROUP_RESET_REQUEST);}");
+      GroupDisplay_CurrentTime = GR_DisplayRate;
+      GroupDisplay_Active = 1;
+      execute("::YGN3and4.PicYGN_GroupDisplayMenu.GroupDisplayShift(6,7)");
+      break;   
+   case 17:
+      Current_Page = 17; 
+//6.16      Interface->FlagHandleMessage.data.requestOption = 7;
+//6.16      Interface->FlagHandleMessage.data.flipflop1 = 0;
+//6.16      execute("{sendMessageToHost(GROUP_RESET_REQUEST);}");
+      GroupDisplay_CurrentTime = GR_DisplayRate;
+      GroupDisplay_Active = 1;
+      execute("::YGN3and4.PicYGN_GroupDisplayMenu.GroupDisplayShift(7,8)");
+      break;   
+   case 18:
+      Current_Page = 18; 
+//6.16      Interface->FlagHandleMessage.data.requestOption = 8;
+//6.16      Interface->FlagHandleMessage.data.flipflop1 = 0;
+//6.16      execute("{sendMessageToHost(GROUP_RESET_REQUEST);}");
+      GroupDisplay_CurrentTime = GR_DisplayRate;
+      GroupDisplay_Active = 1;
+      execute("::YGN3and4.PicYGN_GroupDisplayMenu.GroupDisplayShift(8,9)");
+      break;   
+   case 19:
+      Current_Page = 19; 
+//6.16      Interface->FlagHandleMessage.data.requestOption = 9;
+//6.16      Interface->FlagHandleMessage.data.flipflop1 = 0;
+//6.16      execute("{sendMessageToHost(GROUP_RESET_REQUEST);}");
+      GroupDisplay_CurrentTime = GR_DisplayRate;
+      GroupDisplay_Active = 1;
+      execute("::YGN3and4.PicYGN_GroupDisplayMenu.GroupDisplayShift(9,10)");
+      break;   
+   case 20:
+      Current_Page = 20; 
+//6.16      Interface->FlagHandleMessage.data.requestOption = 10;
+//6.16      Interface->FlagHandleMessage.data.flipflop1 = 0;
+//6.16      execute("{sendMessageToHost(GROUP_RESET_REQUEST);}");
+      GroupDisplay_CurrentTime = GR_DisplayRate;
+      GroupDisplay_Active = 1;
+      execute("::YGN3and4.PicYGN_GroupDisplayMenu.GroupDisplayShift(10,11)");
+      break; 
+        
+   case 21:
+      Current_Page = 21; 
+//6.16      Interface->FlagHandleMessage.data.requestOption = 11;
+//6.16      Interface->FlagHandleMessage.data.flipflop1 = 0;
+//6.16      execute("{sendMessageToHost(GROUP_RESET_REQUEST);}");
+      GroupDisplay_CurrentTime = GR_DisplayRate;
+      GroupDisplay_Active = 1;
+      execute("::YGN3and4.PicYGN_GroupDisplayMenu.GroupDisplayShift(11,12)");
+      break;   
+   case 22:
+      Current_Page = 22;
+//6.16      Interface->FlagHandleMessage.data.requestOption = 12;
+//6.16      Interface->FlagHandleMessage.data.flipflop1 = 0;
+//6.16      execute("{sendMessageToHost(GROUP_RESET_REQUEST);}");
+      GroupDisplay_CurrentTime = GR_DisplayRate;
+      GroupDisplay_Active = 1;
+      execute("::YGN3and4.PicYGN_GroupDisplayMenu.GroupDisplayShift(12,13)");
+      break;   
+   case 23:
+      Current_Page = 23; 
+//6.16      Interface->FlagHandleMessage.data.requestOption = 13;
+//6.16      Interface->FlagHandleMessage.data.flipflop1 = 0;
+//6.16      execute("{sendMessageToHost(GROUP_RESET_REQUEST);}");
+      GroupDisplay_CurrentTime = GR_DisplayRate;
+      GroupDisplay_Active = 1;
+      execute("::YGN3and4.PicYGN_GroupDisplayMenu.GroupDisplayShift(13,14)");
+      break;   
+   case 24:
+      Current_Page = 24; 
+//6.16      Interface->FlagHandleMessage.data.requestOption = 14;
+//6.16      Interface->FlagHandleMessage.data.flipflop1 = 0;
+//6.16      execute("{sendMessageToHost(GROUP_RESET_REQUEST);}");
+      GroupDisplay_CurrentTime = GR_DisplayRate;
+      GroupDisplay_Active = 1;
+      execute("::YGN3and4.PicYGN_GroupDisplayMenu.GroupDisplayShift(14,15)");
+      break;   
+   case 25:
+      Current_Page = 25;
+//6.16      Interface->FlagHandleMessage.data.requestOption = 15;
+//6.16      Interface->FlagHandleMessage.data.flipflop1 = 0;
+//6.16      execute("{sendMessageToHost(GROUP_RESET_REQUEST);}");
+      GroupDisplay_CurrentTime = GR_DisplayRate;
+      GroupDisplay_Active = 1;
+      execute("::YGN3and4.PicYGN_GroupDisplayMenu.GroupDisplayShift(15,16)");
+      break;   
+   case 26:
+      Current_Page = 26; 
+//6.16      Interface->FlagHandleMessage.data.requestOption = 16;
+//6.16      Interface->FlagHandleMessage.data.flipflop1 = 0;
+//6.16      execute("{sendMessageToHost(GROUP_RESET_REQUEST);}");
+      GroupDisplay_CurrentTime = GR_DisplayRate;
+      GroupDisplay_Active = 1;
+      execute("::YGN3and4.PicYGN_GroupDisplayMenu.GroupDisplayShift(16,17)");
+      break;   
+   case 27:
+      Current_Page = 27;
+//6.16      Interface->FlagHandleMessage.data.requestOption = 17;
+//6.16      Interface->FlagHandleMessage.data.flipflop1 = 0;
+//6.16      execute("{sendMessageToHost(GROUP_RESET_REQUEST);}");
+      GroupDisplay_CurrentTime = GR_DisplayRate;
+      GroupDisplay_Active = 1;
+      execute("::YGN3and4.PicYGN_GroupDisplayMenu.GroupDisplayShift(17,18)");
+      break;   
+   case 28:
+      Current_Page = 28; 
+//6.16      Interface->FlagHandleMessage.data.requestOption = 18;
+//6.16      Interface->FlagHandleMessage.data.flipflop1 = 0;
+//6.16      execute("{sendMessageToHost(GROUP_RESET_REQUEST);}");
+      GroupDisplay_CurrentTime = GR_DisplayRate;
+      GroupDisplay_Active = 1;
+      execute("::YGN3and4.PicYGN_GroupDisplayMenu.GroupDisplayShift(18,19)");
+      break;   
+   case 29:
+      Current_Page = 29; 
+//6.16      Interface->FlagHandleMessage.data.requestOption = 19;
+//6.16      Interface->FlagHandleMessage.data.flipflop1 = 0;
+//6.16      execute("{sendMessageToHost(GROUP_RESET_REQUEST);}");
+      GroupDisplay_CurrentTime = GR_DisplayRate;
+      GroupDisplay_Active = 1;
+      execute("::YGN3and4.PicYGN_GroupDisplayMenu.GroupDisplayShift(19,20)");
+      break;   
+   case 30:
+      Current_Page = 30; 
+//6.16      Interface->FlagHandleMessage.data.requestOption = 20;
+//6.16      Interface->FlagHandleMessage.data.flipflop1 = 0;
+//6.16      execute("{sendMessageToHost(GROUP_RESET_REQUEST);}");
+      GroupDisplay_CurrentTime = GR_DisplayRate;
+      GroupDisplay_Active = 1;
+      execute("::YGN3and4.PicYGN_GroupDisplayMenu.GroupDisplayShift(20,1)");
+      break;   
+//-----------  CPC MONITORING --------------------
+//	   case 380:
+//		  DisplayPage(Page381);
+//		  break;
+//         case 381:
+//		  DisplayPage(Page382);
+//		  break;
+//         case 382:
+//		  DisplayPage(Page383);
+//		  break;
+//         case 383:
+//		  DisplayPage(Page380);
+//		  break;
+//
+//-----------   colss -----------------------------
+         case 41:
+                  DisplayPage(Page42);
+                  break;
+         case 42:
+                  DisplayPage(Page43);
+                  break;
+         case 43:
+                  DisplayPage(Page44);
+                  break;
+         case 44:
+                  DisplayPage(Page45);
+                  break;
+         case 45:
+                  DisplayPage(Page46);
+                  break;
+         case 46:
+                  executeAsync ("::YGN3and4.PicYGN_COLSSPowerDP","{escape();}");
+                  DisplayPage(Page41);
+                  break;
+         case 140:
+            if(!CAL_Active)
+              {
+	 	  CAL_Active=1;
+	 	  CAL_CurrentTime=CAL_MaximumTime;
+                  execute("{sendMessageToHost(REQUEST_CAL_NEXT_DATA);}");
+	      }
+            break;
+         case 155:
+            if(!BDL_Active)
+              {
+	 	  BDL_Active=1;
+	 	  BDL_CurrentTime=BDL_MaximumTime;
+           	  execute("{sendMessageToHost(REQUEST_BDL_NEXT_DATA);}");
+	      }
+            break;
+         case 156:
+            if(!ORL_Active)
+              {
+	 	  ORL_Active=1;
+	 	  ORL_CurrentTime=ORL_MaximumTime;
+            	  execute("{sendMessageToHost(REQUEST_ORL_NEXT_DATA);}");
+	       }
+            break;
+
+         case 176:
+            executeAsync ("::YGN3and4.PicYGN_HDSR74Xview","{NextSet();}");
+            break;
+
+         case 621:
+            DisplayPage(Page623);
+            break;
+         case 623:
+            DisplayPage(Page621);
+            break;
+
+   case 811:
+//6.16      Interface->VTFlagMessage.data.requestOption = 1;
+//6.16      Interface->VTFlagMessage.data.flipflop1 = 0;
+//6.16      execute("{sendMessageToHost(REQUEST_VTREND_DATA);}");
+//      VideoSetno = 0 ;
+
+      Interface->VTFlagMessage.data.requestOption = 2;
+      execute("{sendMessageToHost(VTREND_RESET_REQUEST);}");
+      DelayedDisplayPicture("PicYGN_VideoTrendView2.ppic"); 
+      executeAsync ("::YGN3and4.PicYGN_VideoTrendView1","{escape();}");      
+      break; 
+   case 812:
+//6.16      Interface->VTFlagMessage.data.requestOption = 2;
+//6.16      Interface->VTFlagMessage.data.flipflop1 = 0;
+//6.16      execute("{sendMessageToHost(REQUEST_VTREND_DATA);}");
+//      VideoSetno = 0 ;
+
+// 20170308 CORENET by Philkyu Kwon ********************************************
+     // Interface->VTFlagMessage.data.requestOption = 3;
+     // execute("{sendMessageToHost(VTREND_RESET_REQUEST);}");
+     // DelayedDisplayPicture("PicYGN_VideoTrendView3.ppic"); 
+     // executeAsync ("::YGN3and4.PicYGN_VideoTrendView2","{escape();}");
+     // break; 
+
+      Interface->VTFlagMessage.data.requestOption = 1;
+      execute("{sendMessageToHost(VTREND_RESET_REQUEST);}");
+      DelayedDisplayPicture("PicYGN_VideoTrendView1.ppic"); 
+      executeAsync ("::YGN3and4.PicYGN_VideoTrendView2","{escape();}");
+      break;
+/*
+   case 813:
+//6.16      Interface->VTFlagMessage.data.requestOption = 3;
+//6.16      Interface->VTFlagMessage.data.flipflop1 = 0;
+//6.16      execute("{sendMessageToHost(REQUEST_VTREND_DATA);}");
+//      VideoSetno = 0 ;
+      Interface->VTFlagMessage.data.requestOption = 4;
+      execute("{sendMessageToHost(VTREND_RESET_REQUEST);}");
+      DelayedDisplayPicture("PicYGN_VideoTrendView4.ppic"); 
+      executeAsync ("::YGN3and4.PicYGN_VideoTrendView3","{escape();}");      
+      break; 
+   case 814:
+//6.16      Interface->VTFlagMessage.data.requestOption = 4;
+//6.16      Interface->VTFlagMessage.data.flipflop1 = 0;
+//6.16      execute("{sendMessageToHost(REQUEST_VTREND_DATA);}");
+//      VideoSetno = 0 ;
+      Interface->VTFlagMessage.data.requestOption = 5;
+      execute("{sendMessageToHost(VTREND_RESET_REQUEST);}");
+      DelayedDisplayPicture("PicYGN_VideoTrendView5.ppic"); 
+      executeAsync ("::YGN3and4.PicYGN_VideoTrendView4","{escape();}");      
+      break; 
+   case 815:
+//6.16      Interface->VTFlagMessage.data.requestOption = 5;
+//6.16      Interface->VTFlagMessage.data.flipflop1 = 0;
+//6.16      execute("{sendMessageToHost(REQUEST_VTREND_DATA);}");
+//      VideoSetno = 0 ;
+      Interface->VTFlagMessage.data.requestOption = 1;
+      execute("{sendMessageToHost(VTREND_RESET_REQUEST);}");
+      DelayedDisplayPicture("PicYGN_VideoTrendView1.ppic"); 
+      executeAsync ("::YGN3and4.PicYGN_VideoTrendView5","{escape();}");      
+      break;
+*/
+// *****************************************************************************
+
+//----------- DigitalTrendView -----------------------------
+    case 821:
+//            executeAsync ("::YGN3and4.PicYGN_DigitalTrendView","{nextView();}");
+            DTrendSet = 2 ;
+            DisplayPage(Page822);
+            break;
+    case 822:
+//            executeAsync ("::YGN3and4.PicYGN_DigitalTrendView","{nextView();}");
+            DTrendSet = 1 ;
+            DisplayPage(Page821);
+            break;
+//-----------Bar chart-----------------------------
+    case 851:
+             executeAsync("::YGN3and4.PicYGN_BarChartMenu","{ProcessThis(2);}");
+             DisplayPage(Page852);
+             break;
+    case 852:
+             executeAsync("::YGN3and4.PicYGN_BarChartMenu","{ProcessThis(1);}");
+             DisplayPage(Page851);
+             break;
+
+//----------- CFMS PAGES -----------------------------
+
+   case 110:
+      DisplayPage(Page111);
+      break;
+   case 111:
+      DisplayPage(Page110);
+      break;
+   case 210:
+      DisplayPage(Page220);
+      break;
+   case 220:
+      DisplayPage(Page230);
+      break;
+   case 230:
+      DisplayPage(Page240);
+      break;
+   case 240:
+      DisplayPage(Page250);
+      break;
+   case 250:
+      DisplayPage(Page260);
+      break;
+   case 260:
+      DisplayPage(Page270);
+      break;
+   case 270:
+      DisplayPage(Page210);
+      break;
+
+   case 321:
+      DisplayPage(Page322);
+      break;
+   case 322:
+      DisplayPage(Page323);
+      break;
+   case 323:
+      DisplayPage(Page324);
+      break;
+   case 324:
+      DisplayPage(Page325);
+      break;
+   case 325:
+      DisplayPage(Page321);
+      break;
+
+
+   case 331:
+      DisplayPage(Page332);
+      break;
+   case 332:
+      DisplayPage(Page333);
+      break;
+   case 333:
+      DisplayPage(Page334);
+      break;
+   case 334:
+      DisplayPage(Page335);
+      break;
+   case 335:
+      DisplayPage(Page336);
+      break;
+   case 336:
+      DisplayPage(Page331);
+      break;
+
+   case 341:
+      DisplayPage(Page342);
+      break;
+   case 342:
+      DisplayPage(Page343);
+      break;
+   case 343:
+      DisplayPage(Page341);
+      break;
+
+   case 351:
+      DisplayPage(Page352);
+      break;
+   case 352:
+      DisplayPage(Page353);
+      break;
+   case 353:
+      DisplayPage(Page354);
+      break;
+   case 354:
+      DisplayPage(Page355);
+      break;
+   case 355:
+      DisplayPage(Page356);
+      break;
+   case 356:
+      DisplayPage(Page351);
+      break;
+
+   case 361:
+      DisplayPage(Page362);
+      break;
+   case 362:
+      DisplayPage(Page361);
+      break;
+
+   case 371:
+      DisplayPage(Page372);
+      break;
+   case 372:
+      DisplayPage(Page373);
+      break;
+   case 373:
+      DisplayPage(Page374);
+      break;
+   case 374:
+      DisplayPage(Page375);
+      break;
+   case 375:
+      DisplayPage(Page371);
+      break;
+   default:
+      DisplayAdvisoryMessage3("NEXT PAGE REQUESTS NOT ALLOWED HERE");
+      break;
+
+   } // endswitch
+}`
+
+function `void OneSecondTimer(){
+//
+// If the message is inactive (-1) then return
+   if (AdvisoryMsg_Active)
+   {
+      //printf("Processing the Advisory Messages");       
+      ProcessAdvisoryMsg();
+   }
+//
+   if (AdvisoryMsg1_Active)
+   {
+      //printf("Processing the Advisory Messages");       
+      ProcessAdvisoryMsg1();
+   }
+   if (AdvisoryMsg2_Active)
+   {
+      //printf("Processing the Advisory Messages");       
+      ProcessAdvisoryMsg2();
+   }
+   if (AdvisoryMsg3_Active)
+   {
+      //printf("Processing the Advisory Messages");       
+      ProcessAdvisoryMsg3();
+   }
+// If the message is inactive (-1) then return
+   if (FeedbackMsg_Active)
+   {
+      //printf("Processing the Feedback Messages");       
+      ProcessFeedbackMsg();
+   }
+//
+// Check the Sector Info Timer
+   if (SectorInfo_Active)
+   {
+      //printf("Processing the Sector Information");       
+      ProcessSectorInfo();
+   }
+
+// Check the DTrend Timer
+   if (DTrendTimer_Active)
+   {
+//      printf("YGN3and4- OneSecondTimer()Processing the DTrendTimer");
+     executeAsync("::YGN3and4.PicYGN_DigitalTrendView", "{ProcessDTrendTimer();}");
+   }
+
+// Check the Group Display View Timer
+   if (GroupDisplay_Active == 0)
+   {
+      executeAsync("::YGN3and4.PicYGN_GroupDisplayView", "{ReadyView();}");
+//      printf("Processing the Group View Timer = %d",GroupDisplay_CurrentTime);       
+   }  
+//-------------------------------------------------------------------------------------  
+
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+   if (UTDV10Min_UpdateFlag)
+   {
+      UTDVLapseTime = UTDVLapseTime + 1;
+      //printf(">>>>> UTDV 10 Min. count started: page %d, Lapse Time: %d..... ", Current_Page, UTDVLapseTime);       
+      if (UTDVLapseTime >= 600)
+         { 
+            UTDVLapseTime = 0;
+            switch(Current_Page)
+            {
+            case  653:
+                  executeAsync("::YGN3and4.PicYGN_UTDVEnterEFPH1","{Initialize();}");
+                  //printf("##### 10-Min Updating Executed #####");
+                  break;
+            case  654:
+                  executeAsync("::YGN3and4.PicYGN_UTDVConfirmEFPH1","{Initialize();}");
+                  //printf("##### 10-Min Updating Executed #####");
+                  break;
+            case  655:
+                  executeAsync("::YGN3and4.PicYGN_UTDVRPCBBurnup1","{Initialize();}");
+                  //printf("##### 10-Min Updating Executed #####");
+                  break;
+            case  657:
+                  executeAsync("::YGN3and4.PicYGN_UTDVCEADataUpdate","{Initialize();}");
+                  //printf("##### 10-Min Updating Executed #####");
+                  break;
+            case  682:
+                  executeAsync("::YGN3and4.PicYGN_UTDVVerifyFile","{Initialize();}");
+                  //printf("##### 10-Min Updating Executed #####");
+                  break;
+            case  683:
+                  executeAsync("::YGN3and4.PicYGN_UTDVEnterEFPH2","{Initialize();}");
+                  //printf("##### 10-Min Updating Executed #####");
+                  break;
+            case  684:
+                  //executeAsync("::YGN3and4.PicYGN_UTDVEnterEFPH3","{Initialize();}");
+                  break;
+            case  685:
+                  executeAsync("::YGN3and4.PicYGN_UTDVConfirmEFPH2","{Initialize();}");
+                  //printf("##### 10-Min Updating Executed #####");
+                  break;
+            case  686:
+                  executeAsync("::YGN3and4.PicYGN_UTDVConfirmEFPH3","{Initialize();}");
+                  //printf("##### 10-Min Updating Executed #####");
+                  break;
+            case  687:
+                  executeAsync("::YGN3and4.PicYGN_UTDVRPCBBurnup2","{Initialize();}");
+                  //printf("##### 10-Min Updating Executed #####");
+                  break;
+            case  688:
+                  executeAsync("::YGN3and4.PicYGN_UTDVRPCBBurnup3","{Initialize();}");
+                  //printf("##### 10-Min Updating Executed #####");
+                  break;
+            }
+         }
+   }
+   else
+   {
+      //printf("<<<<< UTDV 10 Min. counting STOPPED");       
+      UTDVLapseTime = 0;
+   }
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+   if (WaitingUTDVData653)
+   {
+//      printf("Waiting for UTDV Data(653) ............");       
+      executeAsync("::YGN3and4.PicYGN_UTDVEnterEFPH1", "{GettingData();}");
+   }   
+
+   if (WaitingUTDVData654)
+   {
+//      printf("Waiting for UTDV Data(654) ............");       
+      executeAsync("::YGN3and4.PicYGN_UTDVConfirmEFPH1", "{GettingData();}");
+   }   
+
+   if (WaitingUTDVData655)
+   {
+//      printf("Waiting for UTDV Data(655) ............");       
+      executeAsync("::YGN3and4.PicYGN_UTDVRPCBBurnup1", "{GettingData();}");
+   }   
+
+   if (WaitingUTDVData657)
+   {
+//      printf("Waiting for UTDV Data(657) ............");       
+      executeAsync("::YGN3and4.PicYGN_UTDVCEADataUpdate", "{GettingData();}");
+   }   
+
+   if (WaitingUTDVData658)
+   {
+//      printf("Waiting for UTDV Data(658) ............");       
+      executeAsync("::YGN3and4.PicYGN_UTDVVerifyCEAUpdate", "{GettingData();}");
+   }   
+   if (WaitingUTDVData682)
+   {
+//      printf("Waiting for UTDV Data(682) ............");       
+      executeAsync("::YGN3and4.PicYGN_UTDVVerifyFile", "{GettingData();}");
+   }   
+   if (WaitingUTDVData683)
+   {
+//      printf("Waiting for UTDV Data(683) ............");       
+      executeAsync("::YGN3and4.PicYGN_UTDVEnterEFPH2", "{GettingData();}");
+   }   
+   if (WaitingUTDVData684)
+   {
+//      printf("Waiting for UTDV Data(684) ............");       
+      executeAsync("::YGN3and4.PicYGN_UTDVEnterEFPH3", "{GettingData();}");
+   }   
+   if (WaitingUTDVData685)
+   {
+//      printf("Waiting for UTDV Data(685)............");       
+      executeAsync("::YGN3and4.PicYGN_UTDVConfirmEFPH2", "{GettingData();}");
+   }   
+   if (WaitingUTDVData686)
+   {
+//      printf("Waiting for UTDV Data(686) ............");       
+      executeAsync("::YGN3and4.PicYGN_UTDVConfirmEFPH3", "{GettingData();}");
+   }   
+   if (WaitingUTDVData687)
+   {
+//      printf("Waiting for UTDV Data(687) ............");       
+      executeAsync("::YGN3and4.PicYGN_UTDVRPCBBurnup2", "{GettingData();}");
+   }   
+   if (WaitingUTDVData688)
+   {
+//      printf("Waiting for UTDV Data(688) ............");       
+      executeAsync("::YGN3and4.PicYGN_UTDVRPCBBurnup3", "{GettingData();}");
+   }   
+
+   if (WaitingUTDVData693)
+   {
+//      printf("Waiting for UTDV Data(693) ............");       
+      executeAsync("::YGN3and4.PicYGN_UTDVCEAFileCEDMCS", "{GettingData();}");
+   }   
+
+   if (WaitingUTDVData694)
+   {
+//      printf("Waiting for UTDV Data(694) ............");       
+      executeAsync("::YGN3and4.PicYGN_UTDVVerifyCEACEDMCS", "{GettingData();}");
+   }   
+   if (Security1)
+   {
+      executeAsync("::YGN3and4.PicYGN_Security", "{Interval1();}");
+   }
+
+   if (Security2)
+   {
+      executeAsync("::YGN3and4.PicYGN_Security", "{Interval2();}");
+   }
+   if (PictureDelay_Active)
+   {
+      printf("Processing Display Picture Timer");       
+      DisplayPictureAfterDelay();
+   }
+   if (PageDelay_Active)
+   {
+      printf("Processing Display Picture Timer");       
+      DisplayPageAfterDelay();
+   }
+
+// for P-T Curve
+   
+   if (PT_Plot_Active)
+   {
+      ProcessPT_Plot();
+      ProcessPT_Trend();
+   }
+   else
+   {
+      ProcessPT_Trend();
+   }
+
+// for Alarm Reset
+
+   if (AlarmReset_Active)
+   {
+      ProcessAlarmReset();
+   }
+
+// for Alarm Acknowledge
+
+   if (AlarmAck_Active)
+   {
+      ProcessAlarmAck();
+   }
+
+// for CAL Page prev and next
+
+   if (CAL_Active)
+   {
+      ProcessCAL();
+   }   
+   
+// for BDL Page prev and next
+
+   if (BDL_Active)
+   {
+      ProcessBDL();
+   }
+   
+// for ORL Page prev and next
+
+   if (ORL_Active)
+   {
+      ProcessORL();
+   }
+   
+// to update rcs leak cal values by Hoontae park
+/*
+   if (RCS_LEAK >=1)
+   {
+      executeAsync("::YGN3and4.PicYGN_RCSLeak_OnLine","{ProcessRcsLeakTimer ();}");
+   }
+*/   
+// -----------------------
+   return;
+}`
+
+function `void ProcessPT_Plot()
+{
+   PT_Plot_CurrentTime--;
+
+   if (!PT_Plot_CurrentTime)
+   {
+
+      if (isPtPlotNormalDisplay)
+      {   
+         CalculatePT_Data() ;
+         executeAsync("::YGN3and4.PicYGN_PtPlotNormal","{MovePointer();}");
+      }      
+      else if (isPtPlotEmergencyDisplay)
+      {   
+         CalculatePT_Data() ;
+         executeAsync("::YGN3and4.PicYGN_PtPlotEmergency","{MovePointer();}");
+      }                
+                    
+      PT_Plot_CurrentTime = PT_Plot_MaximumTime;
+   }
+   return;
+}`
+
+function `void ProcessPT_Trend()
+{
+   PT_Trend_CurrentTime--;
+
+   if (!PT_Trend_CurrentTime)
+   {
+//      if (!(isPtPlotNormalDisplay||isPtPlotEmergencyDisplay)) 
+      CalculatePT_Data() ;
+
+//      printf("PT_Trend Activated... DB Pointer : %d",PT_DBpointer) ;
+//      printf("Hi-Press: %6.2f    Lo-Press: %6.2f     Temp: %6.2f", HiPZRPress[PT_DBpointer], LoPZRPress[PT_DBpointer], LoColdLegTemp_Normal[PT_DBpointer]) ;
+
+      if (isPtPlotNormalDisplay) 
+         executeAsync("::YGN3and4.PicYGN_PtPlotNormal","{MoveTrend();}");
+      else if (isPtPlotEmergencyDisplay) 
+         executeAsync("::YGN3and4.PicYGN_PtPlotEmergency","{MoveTrend();}"); 
+              
+      if(++PT_DBpointer>=60)
+      {
+         PT_DBpointer=0 ;
+         PT_DBcomplete = 1 ;
+      }    
+      
+      if (isPtPlotNormalDisplay || isPtPlotEmergencyDisplay) CalculatePT_Data() ;
+      
+      PT_Trend_CurrentTime = PT_Trend_MaximumTime;
+      
+   }
+   return;
+}`
+
+function `void CalculatePT_Data()
+{
+   float AvgWR ;
+   float HiValue, LoValue ;
+
+// [1/2]Calculate Highest and Lowest PZR Pressure based on Average of 4CH WR values
+
+      if(Interface->System.displayedUnits)
+         AvgWR = (RCP102A->value+RCP102B->value+RCP102C->value+RCP102D->value)/4.0 ;
+      else 
+         AvgWR = (RCP102A->value+RCP102B->value+RCP102C->value+RCP102D->value)/4.0 * RCP102A->mfactor + RCP102A->moffset ;
+
+      if (AvgWR >= 52.7)
+      {
+         HiValue = (RCP102A->value>RCP102B->value) ? RCP102A->value:RCP102B->value ;
+         HiValue = (RCP102C->value>HiValue)        ? RCP102C->value:HiValue ;
+         HiValue = (RCP102D->value>HiValue)        ? RCP102D->value:HiValue ;
+       
+         LoValue = (RCP102A->value<RCP102B->value) ? RCP102A->value:RCP102B->value ;
+         LoValue = (RCP102C->value<LoValue)        ? RCP102C->value:LoValue ;
+         LoValue = (RCP102D->value<LoValue)        ? RCP102D->value:LoValue ;
+      }
+      else
+      {
+         HiValue = (RCP103J->value>RCP104K->value)   ? RCP103J->value:RCP104K->value ;
+         LoValue = (RCP103J->value<RCP104K->value)   ? RCP103J->value:RCP104K->value ;
+      }
+
+      HiPZRPress[PT_DBpointer] = (Interface->System.displayedUnits)? HiValue : (HiValue * RCP102A->mfactor +RCP102A->moffset) ; 
+      LoPZRPress[PT_DBpointer] = (Interface->System.displayedUnits)? LoValue : (LoValue * RCP102A->mfactor +RCP102A->moffset) ;
+
+// [3]Select the Lower Temp.  of 2 Cold Legs for Normal P-T Curve
+
+      LoColdLegTemp_Normal[PT_DBpointer] = (RCT115->value<RCT125->value) ? RCT115->value:RCT125->value ;
+
+      if(!Interface->System.displayedUnits) 
+         LoColdLegTemp_Normal[PT_DBpointer] = LoColdLegTemp_Normal[PT_DBpointer] * RCT115->mfactor + RCT115->moffset ;
+
+// [4]Select the Highest Temp. of 4 Hot Legs for Emergency P-T Curve
+
+      HiValue = (RCT112HA->value>RCT112HB->value) ? RCT112HA->value:RCT112HB->value ;
+      HiValue = (RCT122HA->value>HiValue)         ? RCT122HA->value:HiValue ;
+      HiValue = (RCT122HB->value>HiValue)         ? RCT122HB->value:HiValue ;
+
+      HiHotLegTemp_Emergency[PT_DBpointer] = (Interface->System.displayedUnits)? HiValue : (HiValue * RCT112HA->mfactor + RCT112HA->moffset) ;
+
+// [5]Select the Lowest Temp. of 4 Cold Legs for Emergency P-T Curve
+
+      LoValue = (RCT112CA->value<RCT112CB->value) ? RCT112CA->value:RCT112CB->value ;
+      LoValue = (RCT122CA->value<LoValue)         ? RCT122CA->value:LoValue ;
+      LoValue = (RCT122CB->value<LoValue)         ? RCT122CB->value:LoValue ;
+
+      LoColdLegTemp_Emergency[PT_DBpointer] = (Interface->System.displayedUnits)? LoValue : (LoValue * RCT112CA->mfactor + RCT112CA->moffset);
+
+   return;
+}`
+
+function `void doUTDVAction()
+{
+// Timer to get the new UTDV data (updated every 10 Min.) from Concurrent
+// UTDV10Min_UpdateFlag = 1;
+
+   Current_page_returned=Interface->UtdvDialogue.current_page;
+//   Current_page_returned = Current_Page;   
+   printf("doUTDVAction() Current page returned = %d",Current_page_returned);
+//
+   New_page_request=Interface->UtdvDialogue.new_page_request;
+   printf("doUTDVAction() New page = %d",New_page_request);
+
+//
+   switch(Current_page_returned)
+   {
+      case -1:
+         break;
+
+      case 650:
+	 executeAsync("::YGN3and4.PicYGN_UTDVMain","{ProcessingConfirmed();}");      
+         break;
+
+      case 651:
+         executeAsync("::YGN3and4.PicYGN_UTDVReports","{ProcessingConfirmed();}");
+         break;
+
+      case 652:    
+         break; 
+           
+      case 653:
+         executeAsync("::YGN3and4.PicYGN_UTDVEnterEFPH1","{ProcessingConfirmed();}");
+         break;
+
+      case 654:
+         executeAsync("::YGN3and4.PicYGN_UTDVConfirmEFPH1","{ProcessingConfirmed();}");
+         break;
+
+      case 655:
+         executeAsync("::YGN3and4.PicYGN_UTDVRPCBBurnup1","{ProcessingConfirmed();}");
+         break;
+
+      case 657:
+         executeAsync("::YGN3and4.PicYGN_UTDVCEADataUpdate","{ProcessingConfirmed();}");
+         break;
+
+      case 658:
+         executeAsync("::YGN3and4.PicYGN_UTDVVerifyCEAUpdate","{ProcessingConfirmed();}");
+         break;
+
+      case 659:
+         executeAsync("::YGN3and4.PicYGN_UTDVPerformUpdate","{ProcessingConfirmed();}");
+         break;
+
+      case 681:   
+         executeAsync("::YGN3and4.PicYGN_UTDVSelectFiles2","{ProcessingConfirmed();}");
+         break;
+
+      case 682:   
+         executeAsync("::YGN3and4.PicYGN_UTDVVerifyFile","{ProcessingConfirmed();}");
+         break;
+
+      case 683:   
+         executeAsync("::YGN3and4.PicYGN_UTDVEnterEFPH2","{ProcessingConfirmed();}");
+         break;
+
+      case 684:   
+         executeAsync("::YGN3and4.PicYGN_UTDVEnterEFPH3","{ProcessingConfirmed();}");
+         break;
+
+     case 685:   
+         executeAsync("::YGN3and4.PicYGN_UTDVConfirmEFPH2","{ProcessingConfirmed();}");
+         break;
+
+     case 686:   
+         executeAsync("::YGN3and4.PicYGN_UTDVConfirmEFPH3","{ProcessingConfirmed();}");
+         break;
+
+     case 687:   
+         executeAsync("::YGN3and4.PicYGN_UTDVRPCBBurnup2","{ProcessingConfirmed();}");
+         break;
+
+     case 688:   
+         executeAsync("::YGN3and4.PicYGN_UTDVRPCBBurnup3","{ProcessingConfirmed();}");
+         break;
+
+      case 691:
+         executeAsync("::YGN3and4.PicYGN_UTDVPerformInit","{ProcessingConfirmed();}");
+         break;
+      case 692:
+         executeAsync("::YGN3and4.PicYGN_UTDVCEADataCEDMCS","{ProcessingConfirmed();}");
+         break;
+//      case 693:
+//         executeAsync("::YGN3and4.PicYGN_UTDVCEAFileCEDMCS","{ProcessingConfirmed();}");
+//         break;
+      case 694:
+         executeAsync("::YGN3and4.PicYGN_UTDVVerifyCEDMCS","{ProcessingConfirmed();}");
+         break;
+      case 695:
+         executeAsync("::YGN3and4.PicYGN_UTDVDownloadCEDMCS","{ProcessingConfirmed();}");
+         break;
+      case 696:
+         executeAsync("::YGN3and4.PicYGN_UTDVRestoreCount","{ProcessingConfirmed();}");
+         break;
+      case 697:
+         executeAsync("::YGN3and4.PicYGN_UTDVWriteValue","{ProcessingConfirmed();}");
+         break;
+     default:
+         printf("doUTDVAction() received invalid current page returned = %x",Current_page_returned);
+	 break;
+   } //endswitch
+//
+//
+   switch(New_page_request)
+   {
+      case -1:
+         break;
+
+      case 650:     
+         DisplayPage(Page650);      
+         break;
+
+      case 651:
+         break; 
+
+      case 652:
+         DisplayPage(Page652);      
+         break;            
+           
+      case 653:
+         DisplayPage(Page653);      
+         UTDV10Min_UpdateFlag = 1;
+         UTDVLapseTime = 0;
+         break;
+
+      case 654:
+         DisplayPage(Page654);      
+         UTDV10Min_UpdateFlag = 1;
+         UTDVLapseTime = 0;
+         break;
+
+      case 655:
+         DisplayPage(Page655);      
+         UTDV10Min_UpdateFlag = 1;
+         UTDVLapseTime = 0;
+         break;
+
+      case 657:
+         DisplayPage(Page657);      
+         UTDV10Min_UpdateFlag = 1;
+         UTDVLapseTime = 0;
+         break;
+
+      case 658:
+         if (Current_page_returned == 658)
+            {
+// -------------------------------------------------------
+// THis portion should be run on doUTDVAction when Current_Page
+// and New_page_request are 658.
+//            ::YGN3and4.PicYGN_UTDVVerifyCEAUpdate.TextProcessing.visibility = 1;
+            executeAsync("::YGN3and4.PicYGN_UTDVVerifyCEAUpdate","{SetTextProcessing();}");
+            WaitingUTDVData658 = 1;
+            UTDVDataWaitingTime = 3;
+//            executeAsync("::YGN3and4.PicYGN_UTDVVerifyCEAUpdate","{DisplayCEAData();}");
+            executeAsync("::YGN3and4.PicYGN_UTDVVerifyCEAUpdate","{InputButtonBehavior();}");
+            executeAsync("::YGN3and4.PicYGN_UTDVVerifyCEAUpdate","{ActonQuality();}");
+//
+// -------------------------------------------------------
+               
+            }
+         else DisplayPage(Page658);      
+         break;
+
+      case 659:
+         DisplayPage(Page659);      
+         break;
+
+      case 681:
+         DisplayPage(Page681);      
+         break;
+
+      case 682:
+         DisplayPage(Page682);      
+         UTDV10Min_UpdateFlag = 1;
+         UTDVLapseTime = 0;
+         break;
+
+      case 683:
+         DisplayPage(Page683);      
+         UTDV10Min_UpdateFlag = 1;
+         UTDVLapseTime = 0;
+         break;
+
+      case 684:
+         DisplayPage(Page684);      
+         break;
+
+      case 685:
+         DisplayPage(Page685);      
+         UTDV10Min_UpdateFlag = 1;
+         UTDVLapseTime = 0;
+         break;
+
+      case 686:
+         DisplayPage(Page686);      
+         break;
+
+      case 687:
+         DisplayPage(Page687);      
+         UTDV10Min_UpdateFlag = 1;
+         UTDVLapseTime = 0;
+         break;
+
+      case 688:
+         DisplayPage(Page688);      
+         break;
+
+//      case 689:
+//         DisplayPage(Page689);      
+//         break;
+
+      case 691:
+         DisplayPage(Page691);
+         break;
+      case 692:
+         DisplayPage(Page692);
+         break;
+      case 693:
+         DisplayPage(Page693);
+         UTDV10Min_UpdateFlag = 1;
+         break;
+      case 694:
+         if (Current_page_returned == 694)
+            {
+// -------------------------------------------------------
+// THis portion should be run on doUTDVAction when Current_Page
+// and New_page_request are 694.
+//            ::YGN3and4.PicYGN_UTDVVerifyCEACEDMCS.TextProcessing.visibility = 1;
+            executeAsync("::YGN3and4.PicYGN_UTDVVerifyCEACEDMCS","{SetTextProcessing();}");
+            WaitingUTDVData694 = 1;
+            UTDVDataWaitingTime = 3;
+//            executeAsync("::YGN3and4.PicYGN_UTDVVerifyCEACEDMCS","{DisplayCEAData();}");
+            executeAsync("::YGN3and4.PicYGN_UTDVVerifyCEACEDMCS","{InputButtonBehavior();}");
+            executeAsync("::YGN3and4.PicYGN_UTDVVerifyCEACEDMCS","{ActonQuality();}");
+//
+// -------------------------------------------------------
+            }
+         else DisplayPage(Page694);      
+         break;
+      case 695:
+         DisplayPage(Page695);
+         break;
+      case 696:
+         break;
+      case 697:
+         break;  
+      default:
+         printf("doUTDVAction() received invalid new page request = %x",New_page_request);
+	 break;
+   }//endswitch
+//
+   //DisplayAdvisoryMessage(&Interface->UtdvDialogue.message1);
+   //DisplayAdvisoryMessage1(&Interface->UtdvDialogue.message2);
+   //DisplayAdvisoryMessage2(&Interface->UtdvDialogue.message3);
+   DisplayAdvisoryMessage(Interface->UtdvDialogue.message1);
+   DisplayAdvisoryMessage1(Interface->UtdvDialogue.message2);
+   DisplayAdvisoryMessage2(Interface->UtdvDialogue.message3);
+//
+//
+}`
+
+function `void displayPicture (char* win, char* pic)
+{
+   printf ("\\ndisplayPicture(%s, %s)", win, pic);
+
+   DisplayProcessing = 1 ;
+
+   // Ignore all additions if the window is not Main (i.e., header or footer)
+   if ("Main" != win)
+   {
+      ::displayPicture(win,pic);
+
+      // If it exists, run the Picture's Initialize Routine
+      executeAsync("","{InitializePicture(\\"%s\\",\\"Initialize\\");}",win);
+   }
+   else
+   {
+      if (DisplayBlock == 0)
+      {
+	 execute("{sendPictureNameToInterfaceToGUI(\\"%s\\");}", pic);
+         DoneClearDisplayBlock = 0;
+         DoneLastThingForPictureDisplay = 0;
+         DisplayBlock = 1;
+	 ::YGN3and4.PicYGN_footer.LockedText.updateShape();	 	 
+
+         // If the popup window exists, remove it
+         if (popup.isMapped() )
+         {
+            popup.unmap();
+         }
+
+         // If the cascade menu window exists, remove it
+         if (CascadeMenu.isMapped() )
+         {
+            CascadeMenu.unmap();
+         }
+
+         // If the cascade enter window exists, remove it
+         if (CascadeEnter.isMapped() )
+         {
+            CascadeEnter.unmap();
+         }
+
+         // clear all Poke messages
+         ClearPokeMessages();
+
+         // call the Picasso displayPicture function
+         ::displayPicture(win,pic);
+
+         // General display initializations:
+         // Clear Any Advisory Messages 
+         AdvisoryMsg_Active = 0;
+
+         // Clear Any Feedback Messages 
+         FeedbackMsg_Active = 0;
+
+         // Set Sector Information indicator to OFF
+         SectorInfo_Active = 0;
+
+	 if (Interface->System.connected != 0)
+	 {
+	   if (BdlPageOn == TRUE )
+	   {
+	// printf("calling turnoff page BDL " );
+             turnOffPage(1);
+	   }
+           if (CalPageOn == TRUE )
+	   {
+	 printf("calling turnoff page CAL " );
+             turnOffPage(2);
+	   }
+           if (OrlPageOn == TRUE )
+	   {
+	// printf("calling turnoff page ORL " );
+             turnOffPage(3);
+	   }
+           if (LinkPageOn == TRUE )
+	   {
+             turnOffPage(4);
+	   }
+	 } // end if connected
+
+         // Display the Picture Title
+         executeAsync("","{DisplayPictureTitle(\\"%s\\",\\"PictureTitle\\");}",win);
+
+         // Display the Picture Number
+         executeAsync("","{DisplayPictureNumber(\\"%s\\",\\"PictureNumber\\");}",win);
+
+         if (BdlPageOn == TRUE )
+	 {
+	// printf("calling turnoff page BDL " );
+            turnOffPage(1);
+	 }
+         if (CalPageOn == TRUE )
+	 {
+	 printf("calling turnoff page CAL " );
+            turnOffPage(2);
+	 }
+         if (OrlPageOn == TRUE )
+	 {
+	// printf("calling turnoff page ORL " );
+            turnOffPage(3);
+	 }
+         if (LinkPageOn == TRUE )
+	 {
+            turnOffPage(4);
+	 }
+	 
+         // If it exists, run the Picture's Initialize Routine   
+         executeAsync("","{InitializePicture(\\"%s\\",\\"Initialize\\");}",win);
+
+         // run the last routine for displaying a picture
+         executeAsync("","{LastThingForPictureDisplay(\\"%s\\", \\"%s\\");}", win, pic);
+
+      } // endif display is not blocked
+   } // endelse window is Main
+
+   DisplayProcessing = 0 ;
+}`
+
+function `void LastThingForPictureDisplay(char * win, char * pic)
+{
+   // if ClearDisplayBlock() has already completed, clear the display 
+   //block here.  ClearDisplayBlock() will only clear the display block 
+   //if this routine has completed.
+   if (DoneClearDisplayBlock)
+   {
+//      if (DisplayBlock) printf("ClearDisplayBlock() in lfp");
+      DisplayBlock = 0;
+      ::YGN3and4.PicYGN_footer.LockedText.updateShape();
+  }
+   DoneLastThingForPictureDisplay = 1;
+}`
+
+function `void DisplayFeedbackMessage (char *theMessage)
+{
+   //printf("The Feedback message is %s",theMessage);
+// 
+// Insert the message into the display field
+   ::YGN3and4.PicYGN_footer.FeedbackMessage.theText    = theMessage;
+// Initialize the timer 
+   FeedbackMsg_CurrentTime = FeedbackMsg_MaximumTime;
+// Start your engines
+   FeedbackMsg_Active = 1;
+
+// And update the display    
+   update();
+}`
+
+function `void DisplayCascadeMenu (char *thePicture, int theX, int theY, float CursorX, float CursorY)
+{
+   CascadeMenu.map();
+   CascadeMenu.move (theX,theY);
+   CascadeMenu.moveCursor(10.0,10.0);
+   execute( "{ displayPicture( \\"CascadeMenu\\", \\"%s\\" ); }",thePicture);
+}`
+
+function `void DisplayAdvisoryMessage (char *theMessage)
+{
+   //printf("The Advisory message is %s",theMessage);
+// 
+// Insert the message into the display field
+   ::YGN3and4.PicYGN_footer.AdvisoryMessage.theText    = theMessage;
+// Initialize the timer 
+   AdvisoryMsg_CurrentTime = AdvisoryMsg_MaximumTime;
+// Start your engines
+   AdvisoryMsg_Active = 1;
+
+// And update the display    
+   update();
+}`
+
+function `void DisplayAdvisoryMessage2 (char *theMessage)
+{
+   //printf("The Advisory message2 is %s",theMessage);
+// 
+// Insert the message into the display field
+   ::YGN3and4.PicYGN_footer.AdvisoryMessage2.theText    = theMessage;
+// Initialize the timer 
+   AdvisoryMsg2_CurrentTime = AdvisoryMsg2_MaximumTime;
+// Start your engines
+   AdvisoryMsg2_Active = 1;
+
+// And update the display    
+   update();
+}`
+
+function `void DisplayAdvisoryMessage3 (char *theMessage)
+{
+   //printf("The Advisory message3 is %s",theMessage);
+// 
+// Insert the message into the display field
+   ::YGN3and4.PicYGN_footer.AdvisoryMessage3.theText    = theMessage;
+// Initialize the timer 
+   AdvisoryMsg3_CurrentTime = AdvisoryMsg3_MaximumTime;
+// Start your engines
+   AdvisoryMsg3_Active = 1;
+
+// And update the display    
+   update();
+}`
+
+function `void constructor()
+{
+// Initialize the timer flag and start the external timer
+   TimersRunning = 0;
+
+   //Initialize the colour map
+   InitializeColors();
+
+   // load the important displays
+   load ("PicYGN_header.ppic");
+   load ("PicYGN_footer.ppic");
+//   load ("PicYGN_Security.ppic");			//for ygn34EOF by feel9 20200211
+//
+// Initiate Display Block
+   DisplayBlock=1;
+//
+// load other displays 
+//    load("PicYGN_CFMmatrix.ppic");
+    load("Pic111_CFM_Directory.ppic");	//for ygn34EOF by feel9 20200211
+//
+//    load("Pic210_CoreReactivity.ppic");
+//    load("Pic220_CoreHeatRemoval.ppic");
+//    load("Pic230_Primary.ppic");
+//    load("Pic240_Secondary.ppic");
+//    load("Pic250_Containment.ppic");
+//    load("Pic260_Environment.ppic");
+//    load("Pic270_VitalAuxiliaries.ppic");
+//    load("Pic321_SaturationMargin.ppic");
+//    load("Pic322_ReactorVesselLevel.ppic");
+//    load("Pic323_CoreExitTemperature.ppic");
+//    load("Pic324_CoreExitTempCh1A.ppic");
+//    load("Pic325_CoreExitTempCh1B.ppic");
+//    load("Pic331_siPumps.ppic");
+//    load("Pic332_siTanks.ppic");
+//    load("Pic333_letdownCharging.ppic");
+//    load("Pic334_BorationDilution.ppic");
+//    load("Pic335_Pressurizer.ppic");
+//    load("Pic336_ShutdownCooling.ppic");
+//    load("Pic341_MainSteamSystem.ppic");
+//    load("Pic342_MainFeedwaterSystem.ppic");
+//    load("Pic343_AuxiliaryFeedwater.ppic");
+//    load("Pic351_CntmtSprayCooling.ppic");
+//    load("Pic352_CntmtPurgeGasCtrl.ppic");
+//    load("Pic353_CntmtIsolation1.ppic");
+//    load("Pic354_CntmtIsolation2.ppic");
+//    load("Pic361_FuelBuildingHVAC.ppic");
+//    load("Pic362_ControlRoomHVAC.ppic");
+//    load("Pic371_ESFpowerA.ppic");
+//    load("Pic372_ESFpowerB.ppic");
+//    load("Pic373_AlternateAC_Power.ppic");
+//    load("Pic374_CompCoolingWtrTrnA.ppic");
+//    load("Pic375_CompCoolingWtrTrnB.ppic");
+//    load("PicYGN_VideoTrendMenu.ppic");
+//    load("PicYGN_VideoTrendView1.ppic");
+//    load("PicYGN_VideoTrendView2.ppic");
+//    load("PicYGN_VideoTrendView3.ppic");
+//    load("PicYGN_VideoTrendView4.ppic");
+//    load("PicYGN_VideoTrendView5.ppic");
+//
+   // start everything up
+   win0.map();
+//   displayPicture("header","PicYGN_header.ppic");
+//   displayPicture("footer","PicYGN_footer.ppic");
+//   displayPicture("Main","PicYGN_Security.ppic");
+   displayPicture("win0","PicYGN_WarmStart.ppic");
+
+}`
+
+function `void DisplayPictureNumber (char* theWindow, char* theNumber)
+{
+   int	 length;		// length of new page number
+   float OFFSET = 5.7;		// approximate offset for each character
+   float start;			// computed start (x) of new page number
+//
+// See whether the picture contains the picture number attribute.  If so,
+// display the text contained at PictureNumber   
+   if (containsName( 
+      (Window@theWindow).thePicture().fullName(), theNumber) > 0)
+   {
+      execute("{::YGN3and4.PicYGN_header.PictureNumber.theText= %s.%s;}",
+             (Window@theWindow).thePicture().fullName(),theNumber);
+   }
+//
+// if not, call attention and have user make corrections
+   else
+      execute("{::YGN3and4.PicYGN_header.PictureNumber.theText=\\"INSERT NUMBER INTO PICTURE\\";}");
+//
+// Page number (or error) has been set.  Now, center.       
+   length = strlen(::YGN3and4.PicYGN_header.PictureNumber.theText);
+   start = 640.0 - (length*OFFSET);
+   execute("{::YGN3and4.PicYGN_header.PictureNumber_x = %f;}",start);
+}`
+
+function `void DisplayPictureTitle (char* theWindow, char* theTitle)
+{
+   int	 length;		// length of new title
+   float OFFSET = 7.0;		// approximate offset for each character
+   float start;			// computed start (x) of new title
+//
+// See whether the picture contains the Title attribute.  If so,
+// display the text contained at PictureTitle
+   if (containsName( 
+      (Window@theWindow).thePicture().fullName(), theTitle) > 0)
+   { 
+       execute("{::YGN3and4.PicYGN_header.PictureTitle.theText= %s.%s;}",
+              (Window@theWindow).thePicture().fullName(),theTitle);
+   }
+
+
+   else
+      execute("{::YGN3and4.PicYGN_header.PictureTitle.theText=\\"INSERT TITLE INTO PICTURE\\";}");
+//
+// Title (or error) has been set.  Now, center the title.       
+   length = strlen(::YGN3and4.PicYGN_header.PictureTitle.theText);
+   start = 640.0 - (length*OFFSET);
+   execute("{::YGN3and4.PicYGN_header.PictureTitle_x = %f;}",start);
+}`
+
+function `void InitializePicture (char* theWindow, char* theFunction)
+{
+   if (containsName( 
+      (Window@theWindow).thePicture().fullName(), theFunction) > 0)
+      
+      execute("{%s.%s();}",
+         (Window@theWindow).thePicture().fullName(), theFunction);
+//   else
+//      printf("The function: %s does not exist in the display",theFunction);
+}`
+
+function `char Toupper (char c)
+{
+   if (c >= 'a' && c <= 'z')
+   {
+       return (c - ' ');
+   }
+   else 
+   {
+       return (c);
+   }
+} `
+
+function `void ClearPokeMessages ()
+{
+// To clear them, just set them invisible
+   PicYGN_footer.PokeMessageArea.visibility = INVISIBLE;
+}`
+
+function `void DisplayPage (char *thePicture)
+{
+//--------------------------------------------------------------------------
+// Keep display page navigation from working !!!
+   if (0 == Interface->System.connected)
+   {
+      DisplayAdvisoryMessage("CONNECTION LOST. NO PAGING ALLOWED");
+      DisplayProcessing = 0 ;
+      return;
+   }
+//--------------------------------------------------------------------------
+
+// printf("Page : %s", thePicture);
+
+// For UTDV 10-Min Update Flag Resetting
+   UTDV10Min_UpdateFlag = 0;
+//
+   DisplayProcessing = 1 ;
+
+   if (1 == DisplayBlock)
+   {
+      DisplayProcessing = 0 ;
+      return;
+   }
+
+   if ( strcmp(thePicture, Page61) == 0 ) GoToHDSRgraph(1);
+   else if ( strcmp(thePicture, Page62) == 0 ) GoToHDSRgraph(2);
+   else if ( strcmp(thePicture, Page63) == 0 ) { GoToHDSRgraph(3); printf("=========");}
+   else if ( strcmp(thePicture, Page64) == 0 ) GoToHDSRgraph(4);
+   else if ( strcmp(thePicture, Page65) == 0 ) GoToHDSRgraph(5);
+   else if ( strcmp(thePicture, Page66) == 0 ) GoToHDSRgraph(6);
+   else if ( strcmp(thePicture, Page67) == 0 ) GoToHDSRgraph(7);
+   else if ( strcmp(thePicture, Page68) == 0 ) GoToHDSRgraph(8);
+
+
+// -------------------------------------------------------------------------------------
+// If accesslevel == 3, Do page display
+
+   if (accesslevel == 3)
+   {                                      // Protect DB Change in SLAVE CPU - yrlee 990426
+   //*******CORENET 20170620**************************************
+      //if( (Interface->System.slaveUpdating!=0) && !strcmp(thePicture, Page152) )
+      if( (Interface->System.slaveUpdating!=0) && (!strcmp(thePicture, Page511) || !strcmp(thePicture, Page551) || !strcmp(thePicture, Page561) || !strcmp(thePicture, Page562)) )
+      {
+         DisplayAdvisoryMessage("CHANGE FROM MASTER CPU ONLY") ;
+         return;
+      }
+      else
+         execute( "{ displayPicture( \\"Main\\", \\"./%s\\" ); }",thePicture);
+   }
+
+// -------------------------------------------------------------------------------------
+
+// -------------------------------------------------------------------------------------
+   if (accesslevel == 4)
+   {
+
+// access level 3 pages
+      if( ((strcmp(thePicture, Page132)) && (strcmp(thePicture, Page133)) &&
+           (strcmp(thePicture, Page171)) && //(strcmp(thePicture, Page510)) &&
+           (strcmp(thePicture, Page511)) && 
+//         (strcmp(thePicture, Page511)) && (strcmp(thePicture, Page520)) &&
+//         (strcmp(thePicture, Page521)) && (strcmp(thePicture, Page530)) &&
+//         (strcmp(thePicture, Page531)) && (strcmp(thePicture, Page540)) &&
+//         (strcmp(thePicture, Page541)) &&
+           (strcmp(thePicture, Page550)) &&
+           (strcmp(thePicture, Page551)) && (strcmp(thePicture, Page560)) &&
+           (strcmp(thePicture, Page561)) && (strcmp(thePicture, Page562)) &&
+
+           (strcmp(thePicture, Page612)) && (strcmp(thePicture, Page620)) &&
+           (strcmp(thePicture, Page621)) && (strcmp(thePicture, Page622)) &&
+           (strcmp(thePicture, Page623)) && (strcmp(thePicture, Page650)) &&
+           (strcmp(thePicture, Page651)) && (strcmp(thePicture, Page652)) &&
+           (strcmp(thePicture, Page653)) && (strcmp(thePicture, Page654)) &&
+           (strcmp(thePicture, Page655)) && (strcmp(thePicture, Page657)) &&
+           (strcmp(thePicture, Page658)) && (strcmp(thePicture, Page659)) &&
+           (strcmp(thePicture, Page660)) && (strcmp(thePicture, Page860)) &&
+
+           (strcmp(thePicture, Page121)) && (strcmp(thePicture, Page123)) &&
+           (strcmp(thePicture, Page124)) && 
+
+           (strcmp(thePicture, Page681)) && (strcmp(thePicture, Page682)) &&
+           (strcmp(thePicture, Page683)) && (strcmp(thePicture, Page684)) &&
+           (strcmp(thePicture, Page685)) && (strcmp(thePicture, Page686)) &&
+           (strcmp(thePicture, Page687)) && (strcmp(thePicture, Page688)) &&
+
+           (strcmp(thePicture, Page691)) && (strcmp(thePicture, Page692)) &&
+           (strcmp(thePicture, Page693)) && (strcmp(thePicture, Page694)) &&
+           (strcmp(thePicture, Page695)) && (strcmp(thePicture, Page696)) &&
+           (strcmp(thePicture, Page697)) && (strcmp(thePicture, Page860)) &&
+	   // CORENET 20170407 by Philkyu Kwon 134, 430~435 add.
+           (strcmp(thePicture, Page134)) && (strcmp(thePicture, Page430)) &&
+           (strcmp(thePicture, Page431)) && (strcmp(thePicture, Page432)) &&
+           (strcmp(thePicture, Page433)) && (strcmp(thePicture, Page434)) &&
+           (strcmp(thePicture, Page435)) && (strcmp(thePicture, Page870)) &&
+           (strcmp(thePicture, Page152)) ) == 0)
+         {
+            DisplayAdvisoryMessage("ACCESS LEVEL 3 REQUIRED");
+            return;
+         }
+      else
+         {
+            execute( "{ displayPicture( \\"Main\\", \\"./%s\\" ); }",thePicture);
+            //return;
+         }
+   }     //end -- accesslevel == 4
+//-------------------------------------------------------------------------------------
+   if (accesslevel == 5)
+   {
+
+// accesslevel 3 pages
+      if( ((strcmp(thePicture, Page132)) && (strcmp(thePicture, Page133)) &&
+           (strcmp(thePicture, Page171)) && //(strcmp(thePicture, Page510)) &&
+           (strcmp(thePicture, Page511)) &&
+//         (strcmp(thePicture, Page511)) && (strcmp(thePicture, Page520)) &&
+//         (strcmp(thePicture, Page521)) && (strcmp(thePicture, Page530)) &&
+//         (strcmp(thePicture, Page531)) && (strcmp(thePicture, Page540)) &&
+//         (strcmp(thePicture, Page541)) &&
+           (strcmp(thePicture, Page550)) &&
+           (strcmp(thePicture, Page551)) && (strcmp(thePicture, Page560)) &&
+           (strcmp(thePicture, Page561)) && (strcmp(thePicture, Page562)) &&
+
+           (strcmp(thePicture, Page612)) && (strcmp(thePicture, Page620)) &&
+           (strcmp(thePicture, Page621)) && (strcmp(thePicture, Page622)) &&
+           (strcmp(thePicture, Page623)) && (strcmp(thePicture, Page650)) &&
+           (strcmp(thePicture, Page651)) && (strcmp(thePicture, Page652)) &&
+           (strcmp(thePicture, Page653)) && (strcmp(thePicture, Page654)) &&
+           (strcmp(thePicture, Page655)) && (strcmp(thePicture, Page657)) &&
+           (strcmp(thePicture, Page658)) && (strcmp(thePicture, Page659)) &&
+           (strcmp(thePicture, Page660)) && (strcmp(thePicture, Page860)) &&
+
+           (strcmp(thePicture, Page121)) && (strcmp(thePicture, Page123)) &&
+           (strcmp(thePicture, Page124)) &&
+
+           (strcmp(thePicture, Page681)) && (strcmp(thePicture, Page682)) &&
+           (strcmp(thePicture, Page683)) && (strcmp(thePicture, Page684)) &&
+           (strcmp(thePicture, Page685)) && (strcmp(thePicture, Page686)) &&
+           (strcmp(thePicture, Page687)) && (strcmp(thePicture, Page688)) &&
+
+           (strcmp(thePicture, Page691)) && (strcmp(thePicture, Page692)) &&
+           (strcmp(thePicture, Page693)) && (strcmp(thePicture, Page694)) &&
+           (strcmp(thePicture, Page695)) && (strcmp(thePicture, Page696)) &&
+           (strcmp(thePicture, Page697)) && (strcmp(thePicture, Page860)) &&
+	   // CORENET 20170407 by Philkyu Kwon 134, 430~435 add.
+           (strcmp(thePicture, Page134)) && (strcmp(thePicture, Page430)) &&
+           (strcmp(thePicture, Page431)) && (strcmp(thePicture, Page432)) &&
+           (strcmp(thePicture, Page433)) && (strcmp(thePicture, Page434)) &&
+           (strcmp(thePicture, Page435)) && (strcmp(thePicture, Page870)) &&
+           (strcmp(thePicture, Page152)) ) == 0)
+            {
+               DisplayAdvisoryMessage("ACCESS LEVEL 3 REQUIRED");
+               return;
+            }
+
+// accesslevel 4 pages
+        else if( ((strcmp(thePicture, Page41))  && (strcmp(thePicture, Page42))  &&
+                  (strcmp(thePicture, Page43))  && (strcmp(thePicture, Page44))  &&
+                  (strcmp(thePicture, Page45))  && (strcmp(thePicture, Page46))  &&
+                  (strcmp(thePicture, Page47))  && 
+                  (strcmp(thePicture, Page172)) && (strcmp(thePicture, Page820)) &&
+                  (strcmp(thePicture, Page821)) && (strcmp(thePicture, Page822)) &&
+                  (strcmp(thePicture, Page830)) && (strcmp(thePicture, Page831)) &&
+                  (strcmp(thePicture, Page832)) && (strcmp(thePicture, Page152)) &&
+                  (strcmp(thePicture, Page820)) && (strcmp(thePicture, Page830)) ) == 0)
+                  {
+                     DisplayAdvisoryMessage("ACCESS LEVEL 3 OR 4 REQUIRED");
+                     return;
+                  }
+             else
+             {
+                execute( "{ displayPicture( \\"Main\\", \\"./%s\\" ); }",thePicture);
+                //return;
+             }
+   }
+//-------------------------------------------------------------------------------------
+//
+// To clear all the Advisory message whenever new page is displayed
+   ClearAdvisoryMessage();
+   DisplayProcessing = 0 ;
+}`
+
+function `void InitializeColors()
+{
+//
+// This routine initializes the color map for the objects and 
+// the displays.
+
+// This should be run at startup in the constructor
+
+   printf("InitializeColors: Initializing Color Map");
+
+   COLORS [NORMAL]   = COLOR_DATA_NORMAL;		// NORMAL
+   COLORS [RALACK]   = COLOR_DATA_NORMAL;		// RALACK
+   COLORS [RORACK]   = COLOR_DATA_NORMAL;		// RORACK
+   COLORS [RBDACK]   = COLOR_DATA_NORMAL;		// RBDACK
+   COLORS [RALNAK]   = COLOR_DATA_NORMAL;		// RALNAK
+   COLORS [RORNAK]   = COLOR_DATA_NORMAL;		// RORNAK
+   COLORS [RBDNAK]   = COLOR_DATA_NORMAL;		// RBDNAK
+   COLORS [ORHACK]   = COLOR_BAD_OOR_ACK;		// ORHACK
+   COLORS [ORLACK]   = COLOR_BAD_OOR_ACK;		// ORLACK
+   COLORS [BDACK]    = COLOR_BAD_OOR_ACK;		// BDACK
+   COLORS [ORHNAK]   = COLOR_BAD_OOR_UNACK;		// ORHNAK
+   COLORS [ORLNAK]   = COLOR_BAD_OOR_UNACK;		// ORLNAK
+   COLORS [BDNAK]    = COLOR_BAD_OOR_UNACK;		// BDNAK
+   COLORS [HACK]     = COLOR_CAUTION_ACK;		// HACK
+   COLORS [LACK]     = COLOR_CAUTION_ACK;		// LACK
+   COLORS [HHACK]    = COLOR_DANGER_ACK;		// HHACK
+   COLORS [LLACK]    = COLOR_DANGER_ACK;		// LLACK
+   COLORS [HNAK]     = COLOR_CAUTION_UNACK;		// HNAK
+   COLORS [LNAK]     = COLOR_CAUTION_UNACK;		// LNAK
+   COLORS [HHNAK]    = COLOR_DANGER_UNACK;		// HHNAK 
+   COLORS [LLNAK]    = COLOR_DANGER_UNACK;		// LLNAK
+   COLORS [CACK]     = COLOR_DANGER_ACK;		// CACK
+   COLORS [CNAK]     = COLOR_DANGER_UNACK;		// CNAK 
+   COLORS [BADSTA]   = COLOR_BAD_OOR_ACK;		// BADSTA
+   COLORS [24]       = COLOR_CONFIG_ERROR;
+   COLORS [25]       = COLOR_CONFIG_ERROR;
+   COLORS [26]       = COLOR_CONFIG_ERROR;
+   COLORS [27]       = COLOR_CONFIG_ERROR;
+   COLORS [28]       = COLOR_CONFIG_ERROR;
+   COLORS [29]       = COLOR_CONFIG_ERROR;
+   COLORS [30]       = COLOR_CONFIG_ERROR;
+   COLORS [OSCAN]    = COLOR_DATA_NORMAL;               // Out of Scan
+
+}`
+
+function `void DisplayPokeMessages(RECORD *thePointId)
+{
+//////////////// TEMP CORENET 2016.07.26 ////////////////
+//   if(!strcmp(thePointId.pid,"IMTQHA"))
+//   {
+//       thePointId->hmet = IMTQMSPA->value; 
+//    }
+//   if(!strcmp(thePointId.pid,"IMTQHB"))
+//   {
+//       thePointId->hmet = IMTQMSPB->value; 
+//    }
+//////////////// TEMP CORENET 2016.07.26 ////////////////
+
+   PicYGN_footer.PokeMessageArea.PokePointId = thePointId;
+   PicYGN_footer.PokeMessageArea.visibility = VISIBLE;
+
+}`
+
+function `void DisplaySectorInfo ()
+{
+   if (SectorInfo_Active)
+   {
+      SectorInfo_Active = 0;
+      printf("Aborting The Sector Timer");
+//    Clear the timer
+      SectorInfo_CurrentTime = -1;
+   }
+   else
+   {
+      SectorInfo_Active = 1;
+      //printf("Starting The Sector Timer");
+//    Initialize the timer 
+      SectorInfo_CurrentTime = SectorInfo_MaximumTime;
+   }
+// And update the display    
+   update();
+}`
+
+function `void ProcessSectorInfo()
+{
+// Decrement the Sector Info timer
+   SectorInfo_CurrentTime--;
+
+// If the timer has expired, then clear the display
+   if (!SectorInfo_CurrentTime)
+   {
+      SectorInfo_Active = 0;
+      update();
+      //printf("Clearing The Sector Timer");
+   }
+   return;
+}`
+
+function `void ProcessAdvisoryMsg()
+{
+// Decrement the Sector Info timer
+   AdvisoryMsg_CurrentTime--;
+
+// If the timer has expired, then clear the display
+   if (!AdvisoryMsg_CurrentTime)
+   {
+      AdvisoryMsg_Active = 1;
+      ::YGN3and4.PicYGN_footer.AdvisoryMessage.theText = "";
+      update();
+      //printf("Clearing The Advisory Msg Timer");
+   }
+   return;
+}`
+
+function `void ProcessAdvisoryMsg2()
+{
+// Decrement the Sector Info timer
+   AdvisoryMsg2_CurrentTime--;
+
+// If the timer has expired, then clear the display
+   if (!AdvisoryMsg2_CurrentTime)
+   {
+      AdvisoryMsg2_Active = 1;
+      ::YGN3and4.PicYGN_footer.AdvisoryMessage2.theText = "";
+      update();
+      //printf("Clearing The Advisory Msg2 Timer");
+   }
+   return;
+}`
+
+function `void ProcessAdvisoryMsg3()
+{
+// Decrement the Sector Info timer
+   AdvisoryMsg3_CurrentTime--;
+
+// If the timer has expired, then clear the display
+   if (!AdvisoryMsg3_CurrentTime)
+   {
+      AdvisoryMsg3_Active = 1;
+      ::YGN3and4.PicYGN_footer.AdvisoryMessage3.theText = "";
+      update();
+      //printf("Clearing The Advisory Msg3 Timer");
+   }
+   return;
+}`
+
+function `void ProcessFeedbackMsg()
+{
+// Decrement the Sector Info timer
+   FeedbackMsg_CurrentTime--;
+
+// If the timer has expired, then clear the display
+   if (!FeedbackMsg_CurrentTime)
+   {
+      FeedbackMsg_Active = 0;
+      update();
+      //printf("Clearing The Feedback Msg Timer");
+   }
+   return;
+}`
+
+function `void ProcessAlarmReset()
+{
+   AlarmReset_CurrentTime--;
+//
+   if (!AlarmReset_CurrentTime)
+   {
+      AlarmReset_Active=0;
+      update();
+   }
+}`
+
+function `void ProcessAlarmAck()
+{
+   AlarmAck_CurrentTime--;
+//
+   if (!AlarmAck_CurrentTime)
+   {
+      AlarmAck_Active=0;
+      update();
+   }
+}`
+
+function `void ProcessCAL()
+{
+   CAL_CurrentTime--;
+//
+   if (!CAL_CurrentTime)
+      CAL_Active=0;
+}`
+
+function `void ProcessBDL()
+{
+   BDL_CurrentTime--;
+//
+   if (!BDL_CurrentTime)
+      BDL_Active=0;
+}`
+
+function `void ProcessORL()
+{
+   ORL_CurrentTime--;
+//
+   if (!ORL_CurrentTime)
+      ORL_Active=0;
+}`
+
+function `void TESTLimits()
+{
+   if (TESTPID->pipbitmap == 0)
+       TESTPID->pipbitmap = bLLE;
+   else if (TESTPID->pipbitmap == bLLE)
+       TESTPID->pipbitmap = bLLE + bLE;
+   else if (TESTPID->pipbitmap == bLLE + bLE)
+       TESTPID->pipbitmap = bLLE + bLE + bHE;
+   else if (TESTPID->pipbitmap == bLLE + bLE + bHE)
+       TESTPID->pipbitmap = bLLE + bLE + bHE + bHHE;
+   else
+       TESTPID->pipbitmap = 0;
+   printf("TESTPID->pipbitmap = %d",TESTPID->pipbitmap);
+   update();
+}`
+
+function `void TESTnewsta()
+{
+   if (TESTPID->newsta > 23)
+       TESTPID->newsta = 0;
+   else
+       TESTPID->newsta++;
+   printf("TESTPID->newsta = %d",TESTPID->newsta);
+   update();
+}
+`
+
+function `void TESTtoggleType()
+{
+  if (TESTPID->sig_type < MinimumDigitalType)
+   {
+      TESTPID->sig_type = DI;
+      TESTPID->pipbitmap = bALMTYP;
+      //TESTPID->pipbitmap = 0;
+      strcpy(TESTPID->message1,"STATE 0");
+      strcpy(TESTPID->message2,"STATE 1");
+
+   }
+  else
+   {
+   
+   TESTPID->sig_type = AI;
+
+   TESTPID->hhval = 100.1;
+   TESTPID->hhmet = 100.2;
+
+   TESTPID->hval = 90.1;
+   TESTPID->hmet = 90.2;
+
+   TESTPID->llval = 10.1;
+   TESTPID->llmet = 10.2;
+
+   TESTPID->lval = 20.1;
+   TESTPID->lmet = 20.2;
+   
+   }
+  printf("TESTPID->sig_type = %d",TESTPID->sig_type);
+  update();
+}`
+
+function `void DelayedDisplayPage(char *PictureNumber)
+{
+   DisplayDelay_CurrentTime = DisplayDelay_MaximumTime;
+   PageDelay_Active = 1;
+   DisplayDelay_PictureNumber = PictureNumber;
+   DisplayProcessing = 1 ;
+}`
+
+function `void DisplayPageAfterDelay()
+{
+// Decrement the Sector Info timer
+   DisplayDelay_CurrentTime--;
+
+// If the timer has expired, then clear the display
+   if (!DisplayDelay_CurrentTime)
+   {
+      PageDelay_Active = 0;
+      printf("5 second timer complete");
+      DisplayPage( DisplayDelay_PictureNumber );
+      //printf("Clearing The Advisory Msg Timer");
+   }
+   return;
+}`
+
+function `void DelayedDisplayPicture(char *PictureName)
+{
+
+ if (1 == DisplayBlock)
+   {
+    DisplayProcessing = 0 ;
+    return;
+   }
+
+   DisplayDelay_CurrentTime = DisplayDelay_MaximumTime;
+   PictureDelay_Active = 1;
+   DisplayDelay_PictureName = PictureName;
+   DisplayProcessing = 1 ;
+}`
+
+function `void DisplayPictureAfterDelay()
+{
+// Decrement the Sector Info timer
+
+   DisplayDelay_CurrentTime--;
+
+// If the timer has expired, then clear the display
+   if (!DisplayDelay_CurrentTime)
+   {
+      PictureDelay_Active = 0;
+      printf("5 second timer complete");
+      displayPicture( "Main", DisplayDelay_PictureName );
+      //printf("Clearing The Advisory Msg Timer");
+   }
+   return;
+}`
+
+function `void StartInternalTimers()
+{
+   TheTimer.atIntervalDo(101,0,0,1,0,"","{OneSecondTimer();}");
+   TimersRunning = 1;
+   printf("StartInternalTimers(): Everything Started by TheTimer");
+}`
+
+function `int StartExternalTimer()
+{
+   return(system("startTheTimer"));
+}`
+
+function `void DisplayCascadeEnter (char *thePicture, int theX, int theY, float CursorX, float CursorY)
+{
+   CascadeEnter.map();
+   CascadeEnter.move (theX,theY);
+   CascadeEnter.moveCursor(CursorX,CursorY);
+   execute( "{ displayPicture( \\"CascadeEnter\\", \\"%s\\" ); }",thePicture);
+}`
+
+function `void ParseAndToupper (char *theString, int numberOfChars)
+{
+   int i;
+//
+// do until the max number of chars have been processed
+   for  (i=0; i<numberOfChars ; i++) 
+   {
+//    if lowercase, convert 
+      if (*theString >= 'a' && *theString <= 'z')
+          *theString -= ' ';
+//    move to the next character
+      ++theString;
+   }
+// terminate the string and return it
+   *theString = '\\0';
+}`
+
+function `int FindPointId (char *thePointId)
+{
+//   int __Result;
+ //  int __Size;
+
+// Get the size of the input
+   __Size = strlen(thePointId);
+
+   // If size > 8, this is not a valid PID
+   if (__Size > 8)
+   {
+      strcpy(TEMPID,"iamaputz");
+   }
+   else
+   {
+      strcpy(TEMPID,thePointId);
+   }
+
+   // Pad with one blank so that grep will not find APJ001 as a valid PID for APJ0015
+   if (__Size < 8) strcat(TEMPID," ");
+
+   // Look through the pdat file for the PID
+   __Result = system("grep \\'RECORD %s\\'  theDatabase.pdat > /dev/null",TEMPID);
+
+   printf("The result for point id %s is %d",thePointId,__Result);
+
+   return(__Result);
+}`
+
+function `char *GetAlarmText (RECORD *ThePointId)
+{
+// See databaseParameters for definitions.
+
+   switch (ThePointId->newsta)
+   {
+      case NORMAL:
+      case RALACK:
+      case RORACK:
+      case RBDACK:
+      case RALNAK:
+      case RORNAK:
+      case RBDNAK:
+         return("NORM");
+         break;
+
+     case ORHACK:
+     case ORHNAK:
+         return("OORH");
+         break;
+
+    case ORLACK:
+    case ORLNAK:
+         return("OORL");
+         break;
+
+    case BDACK: 
+    case BDNAK:
+         return("BADD");
+         break;
+
+    case HACK:
+    case HNAK:
+         if (ThePointId->sig_type < MinimumDigitalType)
+             return("HIGH");
+         else
+             return("ALRM");
+         break;
+         
+    case LACK:
+    case LNAK:
+         if (ThePointId->sig_type < MinimumDigitalType)
+             return("LOW");
+         else
+             return("ALRM");
+         break;
+       
+    case HHACK:
+    case HHNAK:
+         if (ThePointId->sig_type < MinimumDigitalType)
+             return("HIHI");
+         else
+             return("ALRM");
+         break;
+       
+    case LLACK:  
+    case LLNAK:   
+         if (ThePointId->sig_type < MinimumDigitalType)
+             return("LOLO");
+         else
+             return("ALRM");
+         break;
+
+    case OSCAN:
+        return ("OSCN");
+        break;
+
+    default:
+        return ("UNKN");
+   }
+}`
+
+function `char *GetSignalTypeText (RECORD *ThePointId)
+{
+// See databaseParameters for definitions.
+
+   switch (ThePointId->sig_type)
+   {
+// Analogues:
+     case AO:
+        return("ANALOG OUTPUT");
+        break;
+
+     case QA:
+        return("COMPOSED ANALOG");
+        break;
+
+     case XA:
+        return("CALCULATED ANALOG");
+        break;
+
+     case KO:
+        return("CONSTANT");
+        break;
+
+     case AL:
+        return("ANALOG DATALINK");
+        break;
+
+     case AI:
+        return("ANALOG INPUT");
+        break;
+
+     case PI:
+        return("PULSE INPUT");
+        break;
+
+     case FI:
+        return("FREQUENCY INPUT");
+        break;
+
+     case ROD:
+        return("ROD INPUT");
+        break;
+
+     case CI:
+        return("CONTACT INPUT");
+        break;
+ 
+     case DI:
+        return("DIGITAL INTERRUPT");
+        break;
+ 
+     case SOE:
+        return("DIGITAL SOE");
+        break;
+ 
+     case BCI:
+        return("BIN CODED");
+        break;
+ 
+     case DL: 
+        return("DIGITAL DATALINK");
+        break;
+ 
+     case QD: 
+        return("COMPOSED DIGITAL");
+        break;
+ 
+     case XD:
+        return("CALCULATED DIGITAL");
+        break;
+ 
+     case CO:
+        return("CONTACT OUTPUT");
+        break;
+ 
+     case BCO:
+        return("BCD OUTPUT");
+        break;
+ 
+    default:
+        return ("UNKNOWN");
+   }
+}`
+
+function `void AddToShoppingList(char *thePointId)
+{
+//   printf("Adding: %s to the Temporary Shopping List",thePointId);
+   strcpy(Interface->SinglePointDisplay.thePointId,thePointId);
+   execute("{sendMessageToHost(DISPLAY_SINGLE_POINT);}");
+}`
+
+function `void Request_Alarm_Acknowledge()
+{
+//--------------------------------------------------------------------------
+// Keep alarm acknowledge from working 
+   if (0 == Interface->System.connected)
+   {
+      DisplayAdvisoryMessage("CONNECTION LOST. NO ALARM ACKNOWLEDGE ALLOWED");
+      return;
+   }
+//--------------------------------------------------------------------------
+
+   //printf("Request alarm acknowledge");
+   if (accesslevel == 3)
+   {
+      if(!AlarmAck_Active)
+      {
+	 AlarmAck_Active=1;
+	 AlarmAck_CurrentTime=AlarmAck_MaximumTime;
+
+         execute("{sendMessageToHost(REQUEST_ALARM_ACK);}");
+         DisplayAdvisoryMessage("PROCESSING...  WAIT");
+         DisplayAdvisoryMessage1("");
+         DisplayAdvisoryMessage2("");
+      }
+   }
+   else
+   {
+      DisplayAdvisoryMessage("ACCESS LEVEL 3 REQUIRED");
+      DisplayAdvisoryMessage1("");
+      DisplayAdvisoryMessage2("");
+   }
+}`
+
+function `void Request_Alarm_Reset()
+{
+//--------------------------------------------------------------------------
+// Keep alarm reset from working 
+   if (0 == Interface->System.connected)
+   {
+      DisplayAdvisoryMessage("CONNECTION LOST. NO ALARM RESET ALLOWED");
+      return;
+   }
+//--------------------------------------------------------------------------
+
+   //printf("Request alarm reset");
+   if (accesslevel == 3)
+   {
+      if(!AlarmReset_Active)
+      {
+	 AlarmReset_Active=1;
+	 AlarmReset_CurrentTime=AlarmReset_MaximumTime;
+
+         execute("{sendMessageToHost(REQUEST_ALARM_RESET);}");
+         DisplayAdvisoryMessage("PROCESSING...  WAIT");
+         DisplayAdvisoryMessage1("");
+         DisplayAdvisoryMessage2("");
+      }
+   }
+   else
+   {
+      DisplayAdvisoryMessage("ACCESS LEVEL 3 REQUIRED");
+      DisplayAdvisoryMessage1("");
+      DisplayAdvisoryMessage2("");
+   }   
+}`
+
+function `void doPictureAction(int opcode)
+{
+   printf("doPictureAction() Processing opcode = %x",opcode);
+
+   switch(opcode)
+   {
+   //CORENET 0706
+      case HDSR_GRAPH_VIEWr:
+	 printf("doPictureAction() DISPLAY_HDSR_RECEIVE");
+         executeAsync("::YGN3and4.PicYGN_HDSR74Xview","{ConfirmProcess();}");
+	 break;
+
+      case PB_STATUS_CHANGE_ON:
+         printf("doPictureAction() PB_STATUS_CHANGE");
+
+/* for ygn34EOF by feel9 20200211//////////////////////////////////////////////
+         Logon = 0;
+	 accesslevel = 0;
+	 Interface->SecureConfirm.data.accessstatus = 3; // already signed off
+	 Interface->SecureConfirm.data.accesslevel = 0;
+	 Interface->SecureConfirm.data.utdvflag = 0;
+         displayPicture("Main","PicYGN_Security.ppic");	
+*//////////////////////////////////////////////////////////////////////////////
+         break;   
+
+      case DISPLAY_PEN_DATA:
+	 printf("doPictureAction() DISPLAY_PEN_DATA");
+         executeAsync("::YGN3and4.PicYGN_PenRecorderMenu","{UpdateLocalsFromInterface();}");
+	 break;
+
+	 //***********CORENET 20170629*****************************
+      case CONFIRM_PEN_PROCESSING:
+         executeAsync("::YGN3and4.PicYGN_PenRecorderMenu","{ConfirmProcess();}");
+
+	 break; 
+	//**********************************************************
+
+      case PEN_PROCESSING_CONFIRMED:
+         printf("doPictureAction() PEN_PROCESSING_CONFIRMED");
+         executeAsync("::YGN3and4.PicYGN_PenRecorderMenu","{UpdateLocalsFromInterface();}");
+         break;
+         
+      case DISPLAY_BAR_DATA:
+	 printf("doPictureAction() DISPLAY_BAR_DATA");
+         executeAsync("::YGN3and4.PicYGN_BarChartMenu","{UpdateLocalsFromInterface();}");
+	 break;
+       case BAR_PROCESSING_CONFIRMED:
+         printf("doPictureAction() BAR_PROCESSING_CONFIRMED");
+         executeAsync("::YGN3and4.PicYGN_BarChartMenu","{UpdateLocalsFromInterface();}");
+         break;
+
+      case DISPLAY_DTREND_DATA:
+	 printf("doPictureAction() DISPLAY_DTREND_DATA");
+         executeAsync("::YGN3and4.PicYGN_DigitalTrendMenu","{UpdateLocalsFromInterface();}");
+//         executeAsync("::YGN3and4.PicYGN_DigitalTrendView","{UpdateLocalsFromInterface();}");
+	 break;
+      
+      case DTREND_PROCESSING_CONFIRMED:
+         printf("doPictureAction() DTREND_PROCESSING_CONFIRMED");
+
+         if(printQ)
+             executeAsync("::YGN3and4.PicYGN_DigitalTrendView","{UpdateLocalsFromInterface();}");
+         else
+             executeAsync("::YGN3and4.PicYGN_DigitalTrendMenu","{UpdateLocalsFromInterface();}");
+
+         break;
+        
+       case DTREND_PRT_PROCESS_CONFIRMED:
+         printf("doPictureAction() DTREND_PRT_PROCESS_CONFIRMED");
+//         executeAsync("::YGN3and4.PicYGN_DigitalTrendMenu","{UpdateLocalsFromInterfacePrint();}");
+         executeAsync("::YGN3and4.PicYGN_DigitalTrendView","{UpdateLocalsFromInterfacePrint();}");
+         break;
+
+       case INUSE_DTRD_RESPONSE_CONFIRM:
+         printf("doPictureAction() INUSE_DTRD_RESPONSE_CONFIRM");
+         executeAsync("::YGN3and4.PicYGN_DigitalTrendMenu","{UpdateLocalsForInUseMessage();}");
+//         executeAsync("::YGN3and4.PicYGN_DigitalTrendView","{UpdateLocalsForInUseMessage();}");
+         break;
+
+       case COMPLETED_DTRD_PRT_CONFIRM:
+         printf("doPictureAction() COMPLETED_DTRD_PRT_CONFIRM");
+//         executeAsync("::YGN3and4.PicYGN_DigitalTrendMenu","{UpdateLocalsFromInterfacePrint();}");
+         executeAsync("::YGN3and4.PicYGN_DigitalTrendView","{UpdateLocalsFromInterfacePrint();}");
+         break;
+        
+       case INTERRUPT_DTRD_PRT_CONFIRM:
+         printf("doPictureAction() INTERRUPT_DTRD_PRT_CONFIRM");
+         executeAsync("::YGN3and4.PicYGN_DigitalTrendMenu","{UpdateLocalsFromInterface();}");
+//         executeAsync("::YGN3and4.PicYGN_DigitalTrendView","{UpdateLocalsFromInterface();}");
+         break;
+
+       case PRINT_SINGLE_POINT_CONFIRMED:
+         printf("doPictureAction() PRINT_SINGLE_POINT_CONFIRMED");
+         executeAsync("::YGN3and4.PicYGN_SinglePointDisplay","{UpdateLocalsFromInterface();}");
+         break;
+      
+      case SEND_CAL_DATA:
+//           printf(" case SEND_CAL_DATA ");
+	 if (Current_Page != 140)
+	  { 
+           printf(" case SEND_CAL_DATA - turning off cal page");
+	   turnOffPage(2);
+	  }
+	 break;
+
+
+      case SEND_BDL_DATA:
+	 if (Current_Page != 155)
+	  { 
+           printf(" case SEND_BDL_DATA - turning off bdl page");
+	   turnOffPage(1);
+	  }
+         break;
+
+      case SEND_ORL_DATA:
+	 if (Current_Page != 156)
+	  { 
+           printf(" case SEND_ORL_DATA - turning off orl page");
+	   turnOffPage(3);
+	  }
+         break;
+
+      case SEND_LINK_STATUS:
+	 if (LinkPageOn == FALSE)
+	  { 
+	   turnOffPage(4);
+	  }
+	 else
+	  {
+           printf("doPictureAction() SEND_LINK_STATUS");
+           executeAsync("::YGN3and4.LinkStatus","{displayLinks();}");
+	  }
+         break;
+
+      case CHGSCN_PROCESSING_CONFIRMED:
+         printf("doPictureAction() CHGSCN_PROCESSING_CONFIRMED");
+         executeAsync("::YGN3and4.PicYGN_MajorDbChange","{ProcessingConfirmed();}");
+         break;
+      case CHGALM_PROCESSING_CONFIRMED:
+         printf("doPictureAction() CHGALM_PROCESSING_CONFIRMED");
+         executeAsync("::YGN3and4.PicYGN_MajorDbChange","{ProcessingConfirmed();}");
+         break;
+      case CHGLIM_PROCESSING_CONFIRMED:
+         printf("doPictureAction() CHGLIM_PROCESSING_CONFIRMED");
+         executeAsync("::YGN3and4.PicYGN_MajorDbChange","{ProcessingConfirmed();}");
+         break;
+      case INSVAL_PROCESSING_CONFIRMED:
+         printf("doPictureAction() INSVAL_PROCESSING_CONFIRMED");
+         executeAsync("::YGN3and4.PicYGN_MajorDbChange","{ProcessingConfirmed();}");
+         break;
+      case SENCAL_PROCESSING_CONFIRMED:
+         printf("doPictureAction() SENCAL_PROCESSING_CONFIRMED");
+         executeAsync("::YGN3and4.PicYGN_SensorCalibDisplay","{ProcessingConfirmed();}");
+         break;
+      case LSF_PROCESSING_CONFIRMED:
+         printf("doPictureAction() LSF_PROCESSING_CONFIRMED");
+         executeAsync("::YGN3and4.PicYGN_LSFDisplay","{ProcessingConfirmed();}");
+         executeAsync("::YGN3and4.PicYGN_LSFPrint","{ProcessingConfirmed();}");
+         break;
+      case LSF_SCOUNT_CONFIRMED:
+         printf("doPictureAction() LSF_SCOUNT_CONFIRMED");
+         executeAsync("::YGN3and4.PicYGN_LSFDisplay","{SCountConfirmed();}");
+         break;
+
+      case CONFIRM_SECURE_PROCESSING:
+         printf("doPictureAction() CONFIRM_SECURE_PROCESSING");
+         executeAsync("::YGN3and4.PicYGN_Security","{ProcessThis();}");
+         break;
+
+      case REQUEST_SECURE_SIGNOFF:
+         printf("doPictureAction() REQUEST_SECURE_SIGNOFF");
+
+/* for ygn34EOF by feel9 20200211////////////////////////////////////////////
+	 // Since we received this opcode from the CCC, we must be connected via a
+	 //Primary Connection.  This will allow DisplayPage to display the security page.
+	 Interface->System.connected = TRUE;
+
+         DisplayPage(Page190);
+         executeAsync("::YGN3and4.PicYGN_Security","{Signoff();}");
+*/////////////////////////////////////////////////////////////////////
+         break;
+      case DISPLAY_SECURITY_PAGE:
+         printf("doPictureAction() DISPLAY_SECURITY_PAGE");
+         //Clear Display Block
+         DisplayBlock=0;
+
+         // Start timers initially
+         if (!TimersRunning)
+         {
+            StartInternalTimers();
+            TimersRunning = 1;
+         }
+
+// for ygn34EOF by feel9 20200211////////////////////////////////////////////
+				 Logon = 1;
+	 			 accesslevel = 4;
+	 			 Interface->SecureConfirm.data.accessstatus = 0; 
+	 			 Interface->SecureConfirm.data.accesslevel = 4;
+	 			 Interface->SecureConfirm.data.utdvflag = 1;
+
+         //displayPicture("Main","PicYGN_Security.ppic");
+				 displayPicture("Main","Pic111_CFM_Directory.ppic");
+////////////////////////////////////////////////////////////////////////////////
+         displayPicture("header","PicYGN_header.ppic");
+         displayPicture("footer","PicYGN_footer.ppic");
+         break;
+
+      case DISPLAY_POSTRIP_DATA:
+         printf("doPictureAction() DISPLAY_POSTRIP_DATA");
+         executeAsync("::YGN3and4.PicYGN_PrintReports","{PostripRecordDisplay();}");  
+         break;
+      case DISPLAY_SOE_DATA:
+         printf("doPictureAction() DISPLAY_SOE_DATA");
+         executeAsync("::YGN3and4.PicYGN_PrintReports","{SoeRecordDisplay();}");  
+         break;
+      case LASTPOSTRIP_PRINT_CONFIRMED:
+      case LASTSOE_PRINT_CONFIRMED:
+         printf("dopictureAction() LAST_RECORD_PRINT_CONFIRMED");
+         executeAsync("::YGN3and4.PicYGN_PrintReports","{PrreptDynMsg();}");  
+         break;
+      case POSTRIP_PRINT_CONFIRMED:
+         printf("dopictureAction() SELECTED_POSTRIP_PRINT_CONFIRMED");
+         executeAsync("::YGN3and4.PicYGN_PostTripReports","{PrreptDynMsg();}");  
+         break;
+      case SOE_PRINT_CONFIRMED:
+         printf("doPictureAction() SELECTED_SOE_PRINT_CONFIRMED");
+         executeAsync("::YGN3and4.PicYGN_SoeReports","{PrreptDynMsg();}");  
+         break;
+
+//CECOR
+      case CONFIRM_CECOR_DISKFILE:
+      case CONFIRM_CECOR_TAPE:
+         printf("dopictureAction() CECOR CONFIRM MESSAGE");
+         executeAsync("::YGN3and4.PicYGN_Cecor","{ClearWait();}");
+         break;         
+      case ERROR_QUEUE_IOCPCS:
+      case ERROR_CECOR_FILEOPEN:
+      case ERROR_CECOR_MAG1OPEN:
+      case ERROR_CECOR_DISKREAD:
+      case ERROR_TAPE_NOT_MOUNT:
+      case ERROR_CECOR_MAG1WRITE:
+         printf("dopictureAction() CECOR ERROR MESSAGE");
+         executeAsync("::YGN3and4.PicYGN_Cecor","{ClearWait();}");
+         executeAsync("::YGN3and4.PicYGN_Cecor","{displayCecorMessage();}");
+         break;
+
+//DSPM
+      case ERROR_QUEUE_TASK:
+         printf("dopictureAction() DSPM ERROR MESSAGE"); 
+         executeAsync("::YGN3and4.PicYGN_DSPM","{ClearWait();}");  
+         executeAsync("::YGN3and4.PicYGN_DSPM","{DspmErrMsg();}"); 
+         break;
+      case CONFIRM_CECOR_REQUEST:
+      case CONFIRM_CPCEAC_REQUEST:
+      case CONFIRM_CPCS_REQUEST:
+      case CONFIRM_CEAC_REQUEST:
+      case REJECT_CPCS_REQUEST:
+      case CONFIRM_CPC_REPORT:         
+      case CONFIRM_CEAC_REPORT:               
+      case CONFIRM_CPC_TRP_RPT:            
+      case CONFIRM_CEAC_TRP_RPT:          
+      case CONFIRM_QUEUE_DSPMRPT:         
+         executeAsync("::YGN3and4.PicYGN_DSPM","{ClearWait();}");          
+         break;         
+      case ERROR_OPEN_PRINTER:
+         printf("dopictureAction() DSPM ERROR MESSAGE");
+         executeAsync("::YGN3and4.PicYGN_DSPM","{ClearWait();}");           
+         executeAsync("::YGN3and4.PicYGN_DSPM","{DspmErrMsg();}");
+         break;
+                  
+      case SEND_CSL_DISPLAY:
+//         printf("dopictureAction() SEND_CSL_DISPLAY");
+         executeAsync("::YGN3and4.PicYGN_CSL","{displayCSL();}");
+         break;
+
+      case XRBP_READY:
+	 load("PicYGN_XRBP_Off2.ppic");
+         printf("doPictureAction() XRBP Initialization Completed");
+         executeAsync("::YGN3and4.PicYGN_XRBP_Off","{Init_Completed();}");
+         executeAsync("::YGN3and4.PicYGN_XRBP_Off2","{Result_Mapping();}");
+         break; 
+      case XRBP_MSG:
+         printf("doPictureAction() XRBP Initialization Completed");
+         executeAsync("::YGN3and4.PicYGN_XRBP_Off","{Host_Messages();}");
+         break; 
+      case XRBP_DATA:
+         printf("doPictureAction() XRBP Offline calculation completed");
+         executeAsync("::YGN3and4.PicYGN_XRBP_Off","{Check_Result();}");
+         executeAsync("::YGN3and4.PicYGN_XRBP_Off2","{Result_Mapping();}");
+         break;
+      case XRBPA_DISPLAY:
+         printf("doPictureAction() XRBP Online update");
+         executeAsync("::YGN3and4.PicYGN_XRBP_On","{Result_Mapping();}");
+         break;
+
+      case  CONFIRM_COLSS_CURRENT_MODE: 
+         executeAsync("::YGN3and4.PicYGN_COLSSModeSelection","{ProcessingConfirmed(CONFIRM_COLSS_CURRENT_MODE);}");
+         break;
+      case  CONFIRM_COLSS_MODE_CHANGE: 
+         executeAsync("::YGN3and4.PicYGN_COLSSModeSelection","{ProcessingConfirmed(CONFIRM_COLSS_MODE_CHANGE);}");
+         break;
+      case  CONFIRM_COLSS_TEST_CASE :
+         executeAsync("::YGN3and4.PicYGN_COLSSModeSelection","{ProcessingConfirmed(CONFIRM_COLSS_TEST_CASE);}");
+         break;
+
+      case  CONFIRM_COLSS_POWER_DP :
+         executeAsync("::YGN3and4.PicYGN_COLSSPowerDP","{ProcessingConfirmed();}");
+         break;
+
+      case  CONFIRM_COLSS_CPU_COMPARISON :
+         executeAsync("::YGN3and4.PicYGN_COLSSCPUComparison","{ProcessingConfirmed();}");
+         break;
+
+      case  CONFIRM_COLSS_INITIALIZATION :
+      	 executeAsync("::YGN3and4.PicYGN_COLSSInit7","{ProcessingConfirmed();}");
+         break;
+
+//      case  CONFIRM_COLSS_REPORTS :
+      case  CONFIRM_COLSS_SURV_TEST :
+          executeAsync("::YGN3and4.PicYGN_COLSSSurveillance","{ProcessingConfirmed();}");
+          break;
+
+      case  CONFIRM_COLSS_FAILED_SENSOR :
+//        executeAsync("::YGN3and4.PicYGN_COLSSFailedSensors","{ProcessingConfirmed();}");
+          break;
+
+      case  CONFIRM_COLSS_DETAILED_PRINT :
+//        executeAsync("::YGN3and4.PicYGN_COLSSDetailedPrint","{ProcessingConfirmed();}");
+          break;
+
+      case DISPLAY_VTREND_DATA:
+         printf("doPictureAction() DISPLAY_VTREND_DATA");
+
+	 if(Current_Page!=190)		// yrlee 981112 
+	 {
+	printf("Min : %f", Interface->VideoTrendData.Set1Point1.Minimum);
+	printf("Baseline : %f", Interface->VideoTrendData.Set1Point1.Baseline);
+	printf("Max : %f", Interface->VideoTrendData.Set1Point1.Maximum);
+ 	    DisplayAdvisoryMessage("VIDEO TREND DATA RECEIVED FROM HOST");
+	 }
+else
+{
+	//CORENET 20170620
+	printf("Min : %f", Interface->VideoTrendData.Set1Point1.Minimum);
+	printf("Baseline : %f", Interface->VideoTrendData.Set1Point1.Baseline);
+	printf("Max : %f", Interface->VideoTrendData.Set1Point1.Maximum);
+    if(strlen(Interface->VideoTrendData.Set1Point1.VideoTrendId) < 2) execute("{VideoSet1Tr1 = \\\`ERRORPID->value\\\`;}");
+    else execute("{VideoSet1Tr1 = \\\`%s->value\\\`;}",Interface->VideoTrendData.Set1Point1.VideoTrendId);
+
+    if(strlen(Interface->VideoTrendData.Set1Point2.VideoTrendId) < 2) execute("{VideoSet1Tr2 = \\\`ERRORPID->value\\\`;}");
+    else execute("{VideoSet1Tr2 = \\\`%s->value\\\`;}",Interface->VideoTrendData.Set1Point2.VideoTrendId);
+
+    if(strlen(Interface->VideoTrendData.Set1Point3.VideoTrendId) < 2) execute("{VideoSet1Tr3 = \\\`ERRORPID->value\\\`;}");
+    else execute("{VideoSet1Tr3 = \\\`%s->value\\\`;}",Interface->VideoTrendData.Set1Point3.VideoTrendId);
+
+    if(strlen(Interface->VideoTrendData.Set1Point4.VideoTrendId) < 2) execute("{VideoSet1Tr4 = \\\`ERRORPID->value\\\`;}");
+    else execute("{VideoSet1Tr4 = \\\`%s->value\\\`;}",Interface->VideoTrendData.Set1Point4.VideoTrendId);
+
+//---------------------------------
+    if(strlen(Interface->VideoTrendData.Set2Point1.VideoTrendId) < 2) execute("{VideoSet2Tr1 = \\\`ERRORPID->value\\\`;}");
+    else execute("{VideoSet2Tr1 = \\\`%s->value\\\`;}",Interface->VideoTrendData.Set2Point1.VideoTrendId);
+
+    if(strlen(Interface->VideoTrendData.Set2Point2.VideoTrendId) < 2) execute("{VideoSet2Tr2 = \\\`ERRORPID->value\\\`;}");
+    else execute("{VideoSet2Tr2 = \\\`%s->value\\\`;}",Interface->VideoTrendData.Set2Point2.VideoTrendId);
+
+    if(strlen(Interface->VideoTrendData.Set2Point3.VideoTrendId) < 2) execute("{VideoSet2Tr3 = \\\`ERRORPID->value\\\`;}");
+    else execute("{VideoSet2Tr3 = \\\`%s->value\\\`;}",Interface->VideoTrendData.Set2Point3.VideoTrendId);
+
+    if(strlen(Interface->VideoTrendData.Set2Point4.VideoTrendId) < 2) execute("{VideoSet2Tr4 = \\\`ERRORPID->value\\\`;}");
+    else execute("{VideoSet2Tr4 = \\\`%s->value\\\`;}",Interface->VideoTrendData.Set2Point4.VideoTrendId);
+
+//---------------------------------
+// 20170308 CORENET by Philkyu Kwon **********************************************
+/*
+    if(strlen(Interface->VideoTrendData.Set3Point1.VideoTrendId) < 2) execute("{VideoSet3Tr1 = \\\`ERRORPID->value\\\`;}");
+    else execute("{VideoSet3Tr1 = \\\`%s->value\\\`;}",Interface->VideoTrendData.Set3Point1.VideoTrendId);
+
+    if(strlen(Interface->VideoTrendData.Set3Point2.VideoTrendId) < 2) execute("{VideoSet3Tr2 = \\\`ERRORPID->value\\\`;}");
+    else execute("{VideoSet3Tr2 = \\\`%s->value\\\`;}",Interface->VideoTrendData.Set3Point2.VideoTrendId);
+
+    if(strlen(Interface->VideoTrendData.Set3Point3.VideoTrendId) < 2) execute("{VideoSet3Tr3 = \\\`ERRORPID->value\\\`;}");
+    else execute("{VideoSet3Tr3 = \\\`%s->value\\\`;}",Interface->VideoTrendData.Set3Point3.VideoTrendId);
+
+    if(strlen(Interface->VideoTrendData.Set3Point4.VideoTrendId) < 2) execute("{VideoSet3Tr4 = \\\`ERRORPID->value\\\`;}");
+    else execute("{VideoSet3Tr4 = \\\`%s->value\\\`;}",Interface->VideoTrendData.Set3Point4.VideoTrendId);
+
+//---------------------------------
+    if(strlen(Interface->VideoTrendData.Set4Point1.VideoTrendId) < 2) execute("{VideoSet4Tr1 = \\\`ERRORPID->value\\\`;}");
+    else execute("{VideoSet4Tr1 = \\\`%s->value\\\`;}",Interface->VideoTrendData.Set4Point1.VideoTrendId);
+
+    if(strlen(Interface->VideoTrendData.Set4Point2.VideoTrendId) < 2) execute("{VideoSet4Tr2 = \\\`ERRORPID->value\\\`;}");
+    else execute("{VideoSet4Tr2 = \\\`%s->value\\\`;}",Interface->VideoTrendData.Set4Point2.VideoTrendId);
+
+    if(strlen(Interface->VideoTrendData.Set4Point3.VideoTrendId) < 2) execute("{VideoSet4Tr3 = \\\`ERRORPID->value\\\`;}");
+    else execute("{VideoSet4Tr3 = \\\`%s->value\\\`;}",Interface->VideoTrendData.Set4Point3.VideoTrendId);
+
+    if(strlen(Interface->VideoTrendData.Set4Point4.VideoTrendId) < 2) execute("{VideoSet4Tr4 = \\\`ERRORPID->value\\\`;}");
+    else execute("{VideoSet4Tr4 = \\\`%s->value\\\`;}",Interface->VideoTrendData.Set4Point4.VideoTrendId);
+
+//---------------------------------
+    if(strlen(Interface->VideoTrendData.Set5Point1.VideoTrendId) < 2) execute("{VideoSet5Tr1 = \\\`ERRORPID->value\\\`;}");
+    else execute("{VideoSet5Tr1 = \\\`%s->value\\\`;}",Interface->VideoTrendData.Set5Point1.VideoTrendId);
+
+    if(strlen(Interface->VideoTrendData.Set5Point2.VideoTrendId) < 2) execute("{VideoSet5Tr2 = \\\`ERRORPID->value\\\`;}");
+    else execute("{VideoSet5Tr2 = \\\`%s->value\\\`;}",Interface->VideoTrendData.Set5Point2.VideoTrendId);
+
+    if(strlen(Interface->VideoTrendData.Set5Point3.VideoTrendId) < 2) execute("{VideoSet5Tr3 = \\\`ERRORPID->value\\\`;}");
+    else execute("{VideoSet5Tr3 = \\\`%s->value\\\`;}",Interface->VideoTrendData.Set5Point3.VideoTrendId);
+
+    if(strlen(Interface->VideoTrendData.Set5Point4.VideoTrendId) < 2) execute("{VideoSet5Tr4 = \\\`ERRORPID->value\\\`;}");
+    else execute("{VideoSet5Tr4 = \\\`%s->value\\\`;}",Interface->VideoTrendData.Set5Point4.VideoTrendId);
+*/
+// ************************************************************************************************
+
+}
+
+         executeAsync("::YGN3and4.PicYGN_VideoTrendMenu","{UpdateLocalsFromInterface(); TimeUpdate();}");
+         break;
+
+      case VTREND_PROCESS_CONFIRMED:
+         printf("doPictureAction() VTREND_PROCESS_CONFIRMED");
+         executeAsync("::YGN3and4.PicYGN_VideoTrendMenu","{UpdateLocalsFromInterface();}");
+         break;
+
+      case DISPLAY_VTREND_RESET:
+         printf("doPictureAction() DISPLAY_VTREND_RESET");
+         executeAsync("::YGN3and4.PicYGN_VideoTrendMenu","{UpdateLocalsFromInterface();}");
+         break;
+         
+      case DISPLAY_GROUP_DATA:
+         printf("doPictureAction() DISPLAY_GROUP_DATA");
+         executeAsync("::YGN3and4.PicYGN_GroupDisplayMenu","{UpdateLocalsFromInterface();}");
+         break;
+      case GROUP_PROCESS_CONFIRMED:
+         printf("doPictureAction() GROUP_PROCESS_CONFIRMED");
+         break;
+      case DISPLAY_FLAG_RESET:
+         printf("doPictureAction() DISPLAY_GROUP_FLAG");
+         executeAsync("::YGN3and4.PicYGN_GroupDisplayMenu","{ModifyDenied();}");         
+         break;
+         
+// RCS LEAK BY ST. CHANG *********************************************************************
+      case SEND_RCS_LEAK_DATA:
+         printf("doPictureAction() SEND_RCS_LEAK_DATA");
+         executeAsync("::YGN3and4.PicYGN_RCSLeak_OnLine","{ProcessingConfirmed(SEND_RCS_LEAK_DATA);}");
+         break;
+      case SEND_LEAK_OFF_DATA:         
+         printf("doPictureAction() SEND_LEAK_OFF_DATA");
+         executeAsync("::YGN3and4.PicYGN_RCSLeak_OffInput","{UpdateLocalsFromInterface();}");
+         break;         
+
+// RCS MASS FLOW CALCULATION by CORENET 2017, Philkyu Kwon.
+
+      case CONFIRM_MASS_CALC:         
+         printf("doPictureAction() CONFIRM_MASS_CALC");
+         executeAsync("::YGN3and4.PicYGN_RCS_MASS_FLOW","{UpdateLocalsFromInterface();}");
+         break; 
+
+      case CONFIRM_MASS_MSG:         
+         printf("doPictureAction() CONFIRM_MASS_MSG");
+         executeAsync("::YGN3and4.PicYGN_RCS_MASS_FLOW","{UpdateLocalsFromInterface1();}");
+         break;         
+/* *****************************************************
+      case CONFIRM_MASS_PRN:         
+         printf("doPictureAction() CONFIRM_MASS_PRN");
+         executeAsync("::YGN3and4.PicYGN_RCS_MASS_FLOW","{InitProcMsg();}");
+         break;         
+******************************************************** */
+
+// PRINT PID FOR TEST by CORENET 2017, Philkyu Kwon.
+
+      case CONFIRM_PIDTEST:         
+         printf("doPictureAction() CONFIRM_PIDTEST");
+         executeAsync("::YGN3and4.PicYGN_PRINT_PID_TEST","{ProcessingConfirmed();}");
+         break;         
+
+// EQUIPMENT RUN TIME CALCULATION by CORENET 2017, Philkyu Kwon.
+
+      case CONFIRM_EQUIPVALCHG:         
+	 if(Current_Page==636){		 
+         	printf("doPictureAction() CONFIRM_EQUIPVALCHG");
+         	executeAsync("::YGN3and4.PicYGN_EQUIP_CAL_VALUE","{ProcessingConfirmed();}");
+	 }
+         break;         
+      case CONFIRM_EQUIPPRN:         
+	 if(Current_Page==635){		 
+         	printf("doPictureAction() CONFIRM_EQUIPPRN");
+         	executeAsync("::YGN3and4.PicYGN_EQUIP_RUNTIME_MENU","{ProcessingConfirmed();}");
+	 }
+         break;         
+      case CONFIRM_EQUIPSTATUS:         
+	 if(Current_Page==637){		 
+         	printf("doPictureAction() CONFIRM_EQUIPSTATUS");
+         	executeAsync("::YGN3and4.PicYGN_EQUIP_RUN_STATUS","{ProcessingConfirmed();}");
+	 }
+         break;         
+	
+
+// CEA TRACK MONITOR yrlee 20061207
+
+      case CONFIRM_CEA_TRACK_MONITOR1:         
+         printf("doPictureAction() CONFIRM_CEA_TRACK_MONITOR1");
+         executeAsync("::YGN3and4.PicYGN_CEAMonitorCeac1","{Update();}");
+         break;         
+      case CONFIRM_CEA_TRACK_MONITOR2:         
+         printf("doPictureAction() CONFIRM_CEA_TRACK_MONITOR2");
+         executeAsync("::YGN3and4.PicYGN_CEAMonitorCeac2","{Update();}");
+         break;         
+
+      case CONFIRM_CEA_TRACK_MONITOR3:         
+         printf("doPictureAction() CONFIRM_CEA_TRACK_MONITOR3");
+         executeAsync("::YGN3and4.PicYGN_CEASubDeviationMoni","{Update();}");
+         break;         
+      case CONFIRM_CEA_TRACK_MONITOR4:         
+         printf("doPictureAction() CONFIRM_CEA_TRACK_MONITOR4");
+         executeAsync("::YGN3and4.PicYGN_CPCTargetCEAMonitor","{Update();}");
+         break;         
+      case CONFIRM_CEA_TRACK_MONITOR5:         
+         printf("doPictureAction() CONFIRM_CEA_TRACK_MONITOR5");
+         executeAsync("::YGN3and4.PicYGN_CPCCEACPosCompariso","{Update();}");
+         break;         
+      case CONFIRM_CEA_TRACK_MONITOR6:         
+         printf("doPictureAction() CONFIRM_CEA_TRACK_MONITOR6");
+         DisplayAdvisoryMessage("CEA POS REPORT COMPLETED") ;
+         break;         
+      case CONFIRM_CEA_TRACK_MONITOR9:         
+         printf("doPictureAction() CONFIRM_CEA_TRACK_MONITOR9");
+         DisplayAdvisoryMessage("CEA TRACKING RESET COMPLETED") ;
+         break;         
+
+	 //***********CORENET 20170623*****************************
+      case BOP_PRINT_CONFIRMED:
+         executeAsync("::YGN3and4.PicYGN_BOPCalculation","{ProcessConfirmed();}");
+	 break; 
+
+      default:
+         printf("doPictureAction() received invalid opcode = %x",opcode);
+	 break;
+   }//endswitch
+
+
+}`
+
+function `void CompileAll1()
+{
+printf("Starting CompileAll1....wait....\\n");
+
+save("StaticSymbols");
+
+save("TrendLibrary");
+
+save("cfmsSymbols");
+
+save("DialogueSymbols");
+
+save("HDSRLib");
+
+save("YGN3and4TrendVars");
+
+load("Pic111_CFM_Directory.ppic");
+save("Pic111_CFM_Directory");
+
+load("Pic210_CoreReactivity.ppic");
+save("Pic210_CoreReactivity");
+
+load("Pic220_CoreHeatRemoval.ppic");
+save("Pic220_CoreHeatRemoval");
+
+load("Pic230_Primary.ppic");
+save("Pic230_Primary");
+
+load("Pic240_Secondary.ppic");
+save("Pic240_Secondary");
+
+load("Pic250_Containment.ppic");
+save("Pic250_Containment");
+
+load("Pic260_Environment.ppic");
+save("Pic260_Environment");
+
+load("Pic270_VitalAuxiliaries.ppic");
+save("Pic270_VitalAuxiliaries");
+
+load("Pic321_SaturationMargin.ppic");
+save("Pic321_SaturationMargin");
+
+load("Pic322_ReactorVesselLevel.ppic");
+save("Pic322_ReactorVesselLevel");
+
+load("Pic323_CoreExitTemperature.ppic");
+save("Pic323_CoreExitTemperature");
+
+load("Pic324_CoreExitTempCh1A.ppic");
+save("Pic324_CoreExitTempCh1A");
+
+load("Pic325_CoreExitTempCh1B.ppic");
+save("Pic325_CoreExitTempCh1B");
+
+load("Pic331_siPumps.ppic");
+save("Pic331_siPumps");
+
+load("Pic332_siTanks.ppic");
+save("Pic332_siTanks");
+
+load("Pic333_letdownCharging.ppic");
+save("Pic333_letdownCharging");
+
+load("Pic334_BorationDilution.ppic");
+save("Pic334_BorationDilution");
+
+load("Pic335_Pressurizer.ppic");
+save("Pic335_Pressurizer");
+
+load("Pic336_ShutdownCooling.ppic");
+save("Pic336_ShutdownCooling");
+
+load("Pic341_MainSteamSystem.ppic");
+save("Pic341_MainSteamSystem");
+
+load("Pic342_MainFeedwaterSystem.ppic");
+save("Pic342_MainFeedwaterSystem");
+
+load("Pic343_AuxiliaryFeedwater.ppic");
+save("Pic343_AuxiliaryFeedwater");
+
+load("Pic351_CntmtSprayCooling.ppic");
+save("Pic351_CntmtSprayCooling");
+
+load("Pic352_CntmtPurgeGasCtrl.ppic");
+save("Pic352_CntmtPurgeGasCtrl");
+
+load("Pic353_CntmtIsolation1.ppic");
+save("Pic353_CntmtIsolation1");
+
+load("Pic354_CntmtIsolation2.ppic");
+save("Pic354_CntmtIsolation2");
+
+load("Pic355_CntmtIsolation3.ppic");
+save("Pic355_CntmtIsolation3");
+
+load("Pic356_CntmtIsolation4.ppic");
+save("Pic356_CntmtIsolation4");
+
+load("Pic361_FuelBuildingHVAC.ppic");
+save("Pic361_FuelBuildingHVAC");
+
+load("Pic362_ControlRoomHVAC.ppic");
+save("Pic362_ControlRoomHVAC");
+
+load("Pic371_ESFpowerA.ppic");
+save("Pic371_ESFpowerA");
+
+load("Pic372_ESFpowerB.ppic");
+save("Pic372_ESFpowerB");
+
+load("Pic373_AlternateAC_Power.ppic");
+save("Pic373_AlternateAC_Power");
+
+load("Pic374_CompCoolingWtrTrnA.ppic");
+save("Pic374_CompCoolingWtrTrnA");
+
+load("Pic375_CompCoolingWtrTrnB.ppic");
+save("Pic375_CompCoolingWtrTrnB");
+
+printf("CompileAll1 Completed\\n");
+}`
+
+function `void CompileAll2()
+{
+printf("Starting CompileAll2....wait....\\n");
+
+load("PicYGN_BDL.ppic");
+save("PicYGN_BDL");
+
+load("PicYGN_BOPCalculation.ppic");
+save("PicYGN_BOPCalculation");
+
+load("PicYGN_BarChartMenu.ppic");
+save("PicYGN_BarChartMenu");
+
+load("PicYGN_BarChartView1.ppic");
+save("PicYGN_BarChartView1");
+
+load("PicYGN_BarChartView2.ppic");
+save("PicYGN_BarChartView2");
+
+load("PicYGN_CAL.ppic");
+save("PicYGN_CAL");
+
+load("PicYGN_CEAAlmLimitDisp.ppic");
+save("PicYGN_CEAAlmLimitDisp");
+
+load("PicYGN_CEACEDMCSXfer.ppic");
+save("PicYGN_CEACEDMCSXfer");
+
+load("PicYGN_CEADropTest.ppic");
+save("PicYGN_CEADropTest");
+
+load("PicYGN_CEAPdilTest.ppic");
+save("PicYGN_CEAPdilTest");
+
+load("PicYGN_CEAMenu.ppic");
+save("PicYGN_CEAMenu");
+
+load("PicYGN_CFMmatrix.ppic");
+save("PicYGN_CFMmatrix");
+
+load("PicYGN_COLSSCPUComparison.ppic");
+save("PicYGN_COLSSCPUComparison");
+
+load("PicYGN_COLSSCeaGPD.ppic");
+save("PicYGN_COLSSCeaGPD");
+
+load("PicYGN_COLSSCoreAAP.ppic");
+save("PicYGN_COLSSCoreAAP");
+
+load("PicYGN_COLSSInit7.ppic");
+save("PicYGN_COLSSInit7");
+
+load("PicYGN_COLSSMenu.ppic");
+save("PicYGN_COLSSMenu");
+
+load("PicYGN_COLSSModeSelection.ppic");
+save("PicYGN_COLSSModeSelection");
+
+load("PicYGN_COLSSPOLimit.ppic");
+save("PicYGN_COLSSPOLimit");
+
+load("PicYGN_COLSSPSLoop.ppic");
+save("PicYGN_COLSSPSLoop");
+
+load("PicYGN_COLSSPowerDP.ppic");
+save("PicYGN_COLSSPowerDP");
+
+load("PicYGN_COLSSRcpData.ppic");
+save("PicYGN_COLSSRcpData");
+
+load("PicYGN_COLSSReports.ppic");
+save("PicYGN_COLSSReports");
+
+load("PicYGN_COLSSSurveillance.ppic");
+save("PicYGN_COLSSSurveillance");
+
+load("PicYGN_CSL.ppic");
+save("PicYGN_CSL");
+
+load("PicYGN_Cecor.ppic");
+save("PicYGN_Cecor");
+
+//load("PicYGN_ChgAlmLimitsCascade.ppic");
+//save("PicYGN_ChgAlmLimitsCascade");
+
+//load("PicYGN_ChgAlmLimitsDisplay.ppic");
+//save("PicYGN_ChgAlmLimitsDisplay");
+
+//load("PicYGN_ChgAlmStatusCascade.ppic");
+//save("PicYGN_ChgAlmStatusCascade");
+
+//load("PicYGN_ChgAlmStatusDisplay.ppic");
+//save("PicYGN_ChgAlmStatusDisplay");
+
+//load("PicYGN_ChgScanCascade.ppic");
+//save("PicYGN_ChgScanCascade");
+
+//load("PicYGN_ChgScanDisplay.ppic");
+//save("PicYGN_ChgScanDisplay");
+
+load("PicYGN_CurrentParamsMenu.ppic");
+save("PicYGN_CurrentParamsMenu");
+
+load("PicYGN_DBChangeMenu.ppic");
+save("PicYGN_DBChangeMenu");
+
+load("PicYGN_DSPM.ppic");
+save("PicYGN_DSPM");
+
+load("PicYGN_DigitalTrendMenu.ppic");
+save("PicYGN_DigitalTrendMenu");
+
+load("PicYGN_DigitalTrendView.ppic");
+save("PicYGN_DigitalTrendView");
+
+load("PicYGN_DisplayPagePopUp.ppic");
+save("PicYGN_DisplayPagePopUp");
+
+load("PicYGN_DisplaySectorPopUp.ppic");
+save("PicYGN_DisplaySectorPopUp");
+
+load("PicYGN_GroupDisplayMenu.ppic");
+save("PicYGN_GroupDisplayMenu");
+
+load("PicYGN_GroupDisplaySetup.ppic");
+save("PicYGN_GroupDisplaySetup");
+
+load("PicYGN_GroupDisplayView.ppic");
+save("PicYGN_GroupDisplayView");
+
+load("PicYGN_HDSR.ppic");
+save("PicYGN_HDSR");
+
+load("PicYGN_HDSR710.ppic");
+save("PicYGN_HDSR710");
+
+load("PicYGN_HDSR720.ppic");
+save("PicYGN_HDSR720");
+
+load("PicYGN_HDSR730.ppic");
+save("PicYGN_HDSR730");
+
+load("PicYGN_HDSR740.ppic");
+save("PicYGN_HDSR740");
+
+load("PicYGN_HDSR74Xsetup.ppic");
+save("PicYGN_HDSR74Xsetup");
+
+load("PicYGN_HDSR74Xview.ppic");
+save("PicYGN_HDSR74Xview");
+
+load("PicYGN_HDSR750.ppic");
+save("PicYGN_HDSR750");
+
+//load("PicYGN_HDSRgraph.ppic");
+//save("PicYGN_HDSRgraph");
+
+printf("CompileAll2 Completed\\n");
+}`
+
+function `void CompileAll3()
+{
+printf("Starting CompileAll3....wait....\\n");
+
+load("PicYGN_INCOREMenu.ppic");
+save("PicYGN_INCOREMenu");
+
+load("PicYGN_INCOREReports.ppic");
+save("PicYGN_INCOREReports");
+
+load("PicYGN_INCOREUpdate.ppic");
+save("PicYGN_INCOREUpdate");
+
+//load("PicYGN_InsertValueCascade.ppic");
+//save("PicYGN_InsertValueCascade");
+
+//load("PicYGN_InsertValueDisplay.ppic");
+//save("PicYGN_InsertValueDisplay");
+
+load("PicYGN_MajorDbChange.ppic");
+save("PicYGN_MajorDbChange");
+
+load("PicYGN_LSFCascade.ppic");
+save("PicYGN_LSFCascade");
+
+load("PicYGN_LSFDisplay.ppic");
+save("PicYGN_LSFDisplay");
+
+load("PicYGN_LSFPrint.ppic");
+save("PicYGN_LSFPrint");
+
+load("PicYGN_Logon.ppic");
+save("PicYGN_Logon");
+
+load("PicYGN_Mainmenu.ppic");
+save("PicYGN_Mainmenu");
+
+//load("PicYGN_Midloop.ppic");		//CORENET 20170605 by Philkyu Kwon
+//save("PicYGN_Midloop");		//CORENET 20170605 by Philkyu Kwon
+
+load("PicYGN_PRINT_PID_TEST.ppic");	//CORENET 20170629 
+save("PicYGN_PRINT_PID_TEST");		//CORENET 20170629
+
+load("PicYGN_ModifyDbCascade.ppic");
+save("PicYGN_ModifyDbCascade");
+
+load("PicYGN_NSSSBOPApplication.ppic");
+save("PicYGN_NSSSBOPApplication");
+
+load("PicYGN_ORL.ppic");
+save("PicYGN_ORL");
+
+load("PicYGN_PenRecorderMenu.ppic");
+save("PicYGN_PenRecorderMenu");
+
+load("PicYGN_PointSummaries.ppic");
+save("PicYGN_PointSummaries");
+
+load("PicYGN_PostTripReports.ppic");
+save("PicYGN_PostTripReports");
+
+load("PicYGN_PrintReports.ppic");
+save("PicYGN_PrintReports");
+
+load("PicYGN_PtPlotEmergency.ppic");
+save("PicYGN_PtPlotEmergency");
+
+load("PicYGN_PtPlotNormal.ppic");
+save("PicYGN_PtPlotNormal");
+
+load("PicYGN_RPCCEASelection.ppic");
+save("PicYGN_RPCCEASelection");
+
+load("PicYGN_Security.ppic");
+save("PicYGN_Security");
+
+load("PicYGN_SensorCalibCascade.ppic");
+save("PicYGN_SensorCalibCascade");
+
+load("PicYGN_SensorCalibDisplay.ppic");
+save("PicYGN_SensorCalibDisplay");
+
+load("PicYGN_SetupViewCascade.ppic");
+save("PicYGN_SetupViewCascade");
+
+load("PicYGN_SetupViewMenu.ppic");
+save("PicYGN_SetupViewMenu");
+
+//load("PicYGN_SinglePointCascade.ppic");
+//save("PicYGN_SinglePointCascade");
+
+load("PicYGN_SinglePointDisplay.ppic");
+save("PicYGN_SinglePointDisplay");
+
+load("PicYGN_SoeReports.ppic");
+save("PicYGN_SoeReports");
+
+load("PicYGN_Test.ppic");
+save("PicYGN_Test");
+
+load("PicYGN_UTDVCEADataCEDMCS.ppic");
+save("PicYGN_UTDVCEADataCEDMCS");
+
+load("PicYGN_UTDVCEADataUpdate.ppic");
+save("PicYGN_UTDVCEADataUpdate");
+
+load("PicYGN_UTDVCEAFileCEDMCS.ppic");
+save("PicYGN_UTDVCEAFileCEDMCS");
+
+load("PicYGN_UTDVConfirmEFPH1.ppic");
+save("PicYGN_UTDVConfirmEFPH1");
+
+load("PicYGN_UTDVConfirmEFPH2.ppic");
+save("PicYGN_UTDVConfirmEFPH2");
+
+load("PicYGN_UTDVConfirmEFPH3.ppic");
+save("PicYGN_UTDVConfirmEFPH3");
+
+load("PicYGN_UTDVDownloadCEA.ppic");
+save("PicYGN_UTDVDownloadCEA");
+
+load("PicYGN_UTDVEnterEFPH1.ppic");
+save("PicYGN_UTDVEnterEFPH1");
+
+load("PicYGN_UTDVEnterEFPH2.ppic");
+save("PicYGN_UTDVEnterEFPH2");
+
+load("PicYGN_UTDVEnterEFPH3.ppic");
+save("PicYGN_UTDVEnterEFPH3");
+
+load("PicYGN_UTDVMain.ppic");
+save("PicYGN_UTDVMain");
+
+load("PicYGN_UTDVPerformInit.ppic");
+save("PicYGN_UTDVPerformInit");
+
+load("PicYGN_UTDVPerformUpdate.ppic");
+save("PicYGN_UTDVPerformUpdate");
+
+load("PicYGN_UTDVRPCBBurnup1.ppic");
+save("PicYGN_UTDVRPCBBurnup1");
+
+load("PicYGN_UTDVRPCBBurnup2.ppic");
+save("PicYGN_UTDVRPCBBurnup2");
+
+load("PicYGN_UTDVRPCBBurnup3.ppic");
+save("PicYGN_UTDVRPCBBurnup3");
+
+load("PicYGN_UTDVReports.ppic");
+save("PicYGN_UTDVReports");
+
+load("PicYGN_UTDVRestoreCount.ppic");
+save("PicYGN_UTDVRestoreCount");
+
+load("PicYGN_UTDVSelectFiles1.ppic");
+save("PicYGN_UTDVSelectFiles1");
+
+load("PicYGN_UTDVSelectFiles2.ppic");
+save("PicYGN_UTDVSelectFiles2");
+
+load("PicYGN_UTDVVerifyCEACEDMCS.ppic");
+save("PicYGN_UTDVVerifyCEACEDMCS");
+
+load("PicYGN_UTDVVerifyCEAUpdate.ppic");
+save("PicYGN_UTDVVerifyCEAUpdate");
+
+load("PicYGN_UTDVVerifyFile.ppic");
+save("PicYGN_UTDVVerifyFile");
+
+load("PicYGN_UTDVWriteValue.ppic");
+save("PicYGN_UTDVWriteValue");
+
+load("PicYGN_VideoTrendMenu.ppic");
+save("PicYGN_VideoTrendMenu");
+
+load("PicYGN_VideoTrendView1.ppic");
+save("PicYGN_VideoTrendView1");
+
+load("PicYGN_VideoTrendView2.ppic");
+save("PicYGN_VideoTrendView2");
+
+load("PicYGN_VideoTrendView3.ppic");
+save("PicYGN_VideoTrendView3");
+
+load("PicYGN_VideoTrendView4.ppic");
+save("PicYGN_VideoTrendView4");
+
+load("PicYGN_VideoTrendView5.ppic");
+save("PicYGN_VideoTrendView5");
+
+load("PicYGN_WarmStart.ppic");
+save("PicYGN_WarmStart");
+
+load("PicYGN_XRBPSelection.ppic");
+save("PicYGN_XRBPSelection");
+
+load("PicYGN_XRBP_Off.ppic");
+save("PicYGN_XRBP_Off");
+
+load("PicYGN_XRBP_Off2.ppic");
+save("PicYGN_XRBP_Off2");
+
+load("PicYGN_XRBP_On.ppic");
+save("PicYGN_XRBP_On");
+
+load("PicYGN_footer.ppic");
+save("PicYGN_footer");
+
+load("PicYGN_header.ppic");
+save("PicYGN_header");
+
+load("PicYGN_wait.ppic");
+save("PicYGN_wait");
+
+save("YGN3and4");
+
+printf("CompileAll3 Completed\\n");
+}`
+
+function `void DisplayAdvisoryMessage1 (char *theMessage)
+{
+   //printf("The Advisory message is %s",theMessage);
+// 
+// Insert the message into the display field
+   ::YGN3and4.PicYGN_footer.AdvisoryMessage1.theText    = theMessage;
+// Initialize the timer 
+   AdvisoryMsg1_CurrentTime = AdvisoryMsg1_MaximumTime;
+// Start your engines
+   AdvisoryMsg1_Active = 1;
+
+// And update the display    
+   update();
+}`
+
+function `void DisplayPopUpMenu()
+{
+      if (Logon == 0) return;
+
+//   popup.map();
+//   popup.move (830,860);
+   popup.moveCursor(200, 50);
+
+   popup.map();
+   displayPicture("popup","PicYGN_DisplayPagePopUp.ppic");
+}`
+
+function `void DisplaySectorPopUpMenu()
+{
+   if (Logon == 0) return;
+   if ((0 == CFMLevel) || (3 == CFMLevel))
+   {
+      switch(Current_Page)
+      {
+         case 176:
+                  executeAsync ("::YGN3and4.PicYGN_HDSR74Xview","{PressSector();}");
+                  break;
+      }   
+   return;
+   }
+   //to make hidden sector bar to come up   
+   SectorInfo_Active = 1;
+//   printf("DisplaySectorPopUpMenu(): SectorInfo_Active is set");
+//
+   popup.moveCursor(200, 50);
+   popup.map();
+   displayPicture("popup","PicYGN_DisplaySectorPopUp.ppic");
+}`
+
+function `void DisplayPageLast()
+{
+//--------------------------------------------------------------------------
+// Keep display page navigation from working !!!
+   if (0 == Interface->System.connected)
+   {
+      DisplayAdvisoryMessage("CONNECTION LOST. NO PAGING ALLOWED");
+      DisplayProcessing = 0 ;
+      return;
+   }
+//--------------------------------------------------------------------------
+
+// for escape key function
+   Last_Page = Current_Page;
+
+   if(!DisplayProcessing)
+      switch(Current_Page)
+      {
+
+// GroupDisplay view previous page.
+     
+   case 11:
+      Current_Page = 11;
+      printf("Now transfer to GR_VIEW20 .....");
+//6.16      Interface->FlagHandleMessage.data.requestOption = 1;
+//6.16      Interface->FlagHandleMessage.data.flipflop1 = 0;
+//6.16      execute("{sendMessageToHost(GROUP_RESET_REQUEST);}");
+      GroupDisplay_CurrentTime = GR_DisplayRate;
+      GroupDisplay_Active = 1;
+      execute("::YGN3and4.PicYGN_GroupDisplayMenu.GroupDisplayShift(1,20)");
+      break;   
+   case 12:
+      Current_Page = 12; 
+      printf("Now transfer to GR_VIEW1 ....."); 
+//6.16      Interface->FlagHandleMessage.data.requestOption = 2;
+//6.16      Interface->FlagHandleMessage.data.flipflop1 = 0;
+//6.16      execute("{sendMessageToHost(GROUP_RESET_REQUEST);}");
+      GroupDisplay_CurrentTime = GR_DisplayRate;
+      GroupDisplay_Active = 1;
+      execute("::YGN3and4.PicYGN_GroupDisplayMenu.GroupDisplayShift(2,1)");
+      break;   
+   case 13:
+      Current_Page = 13; 
+//6.16      Interface->FlagHandleMessage.data.requestOption = 3;
+//6.16      Interface->FlagHandleMessage.data.flipflop1 = 0;
+//6.16      execute("{sendMessageToHost(GROUP_RESET_REQUEST);}");
+      GroupDisplay_CurrentTime = GR_DisplayRate;
+      GroupDisplay_Active = 1;
+      execute("::YGN3and4.PicYGN_GroupDisplayMenu.GroupDisplayShift(3,2)");
+      break;   
+   case 14:
+      Current_Page = 14; 
+//6.16      Interface->FlagHandleMessage.data.requestOption = 4;
+//6.16      Interface->FlagHandleMessage.data.flipflop1 = 0;
+//6.16      execute("{sendMessageToHost(GROUP_RESET_REQUEST);}");
+      GroupDisplay_CurrentTime = GR_DisplayRate;
+      GroupDisplay_Active = 1;
+      execute("::YGN3and4.PicYGN_GroupDisplayMenu.GroupDisplayShift(4,3)");
+      break;   
+   case 15:
+      Current_Page = 15;   
+//6.16      Interface->FlagHandleMessage.data.requestOption = 5;
+//6.16      Interface->FlagHandleMessage.data.flipflop1 = 0;
+//6.16      execute("{sendMessageToHost(GROUP_RESET_REQUEST);}");
+      GroupDisplay_CurrentTime = GR_DisplayRate;
+      GroupDisplay_Active = 1;
+      execute("::YGN3and4.PicYGN_GroupDisplayMenu.GroupDisplayShift(5,4)");
+      break;   
+   case 16:
+      Current_Page = 16; 
+//6.16      Interface->FlagHandleMessage.data.requestOption = 6;
+//6.16      Interface->FlagHandleMessage.data.flipflop1 = 0;
+//6.16      execute("{sendMessageToHost(GROUP_RESET_REQUEST);}");
+      GroupDisplay_CurrentTime = GR_DisplayRate;
+      GroupDisplay_Active = 1;
+      execute("::YGN3and4.PicYGN_GroupDisplayMenu.GroupDisplayShift(6,5)");
+      break;   
+   case 17:
+      Current_Page = 17; 
+//6.16      Interface->FlagHandleMessage.data.requestOption = 7;
+//6.16      Interface->FlagHandleMessage.data.flipflop1 = 0;
+//6.16      execute("{sendMessageToHost(GROUP_RESET_REQUEST);}");
+      GroupDisplay_CurrentTime = GR_DisplayRate;
+      GroupDisplay_Active = 1;
+      execute("::YGN3and4.PicYGN_GroupDisplayMenu.GroupDisplayShift(7,6)");
+      break;   
+   case 18:
+      Current_Page = 18;  
+//6.16      Interface->FlagHandleMessage.data.requestOption = 8;
+//6.16      Interface->FlagHandleMessage.data.flipflop1 = 0;
+//6.16      execute("{sendMessageToHost(GROUP_RESET_REQUEST);}");
+      GroupDisplay_CurrentTime = GR_DisplayRate;
+      GroupDisplay_Active = 1;
+      execute("::YGN3and4.PicYGN_GroupDisplayMenu.GroupDisplayShift(8,7)");
+      break;   
+   case 19:
+      Current_Page = 19;  
+//6.16      Interface->FlagHandleMessage.data.requestOption = 9;
+//6.16      Interface->FlagHandleMessage.data.flipflop1 = 0;
+//6.16      execute("{sendMessageToHost(GROUP_RESET_REQUEST);}");
+      GroupDisplay_CurrentTime = GR_DisplayRate;
+      GroupDisplay_Active = 1;
+      execute("::YGN3and4.PicYGN_GroupDisplayMenu.GroupDisplayShift(9,8)");
+      break;   
+   case 20:
+      Current_Page = 20;
+//6.16      Current_Page = 20;
+//6.16      Interface->FlagHandleMessage.data.requestOption = 10;
+//6.16      Interface->FlagHandleMessage.data.flipflop1 = 0;
+      GroupDisplay_CurrentTime = GR_DisplayRate;
+      GroupDisplay_Active = 1;
+      execute("::YGN3and4.PicYGN_GroupDisplayMenu.GroupDisplayShift(10,9)");
+      break; 
+        
+   case 21:
+      Current_Page = 21;
+//6.16      Interface->FlagHandleMessage.data.requestOption = 11;
+//6.16      Interface->FlagHandleMessage.data.flipflop1 = 0;
+//6.16      execute("{sendMessageToHost(GROUP_RESET_REQUEST);}");
+      GroupDisplay_CurrentTime = GR_DisplayRate;
+      GroupDisplay_Active = 1;
+      execute("::YGN3and4.PicYGN_GroupDisplayMenu.GroupDisplayShift(11,10)");
+      break;   
+   case 22:
+      Current_Page = 22;
+//6.16      Interface->FlagHandleMessage.data.requestOption = 12;
+//6.16      Interface->FlagHandleMessage.data.flipflop1 = 0;
+//6.16      execute("{sendMessageToHost(GROUP_RESET_REQUEST);}");
+      GroupDisplay_CurrentTime = GR_DisplayRate;
+      GroupDisplay_Active = 1;
+      execute("::YGN3and4.PicYGN_GroupDisplayMenu.GroupDisplayShift(12,11)");
+      break;   
+   case 23:
+      Current_Page = 23;
+//6.16      Interface->FlagHandleMessage.data.requestOption = 13;
+//6.16      Interface->FlagHandleMessage.data.flipflop1 = 0;
+//6.16      execute("{sendMessageToHost(GROUP_RESET_REQUEST);}");
+      GroupDisplay_CurrentTime = GR_DisplayRate;
+      GroupDisplay_Active = 1;
+      execute("::YGN3and4.PicYGN_GroupDisplayMenu.GroupDisplayShift(13,12)");
+      break;   
+   case 24:
+      Current_Page = 24;
+//6.16      Interface->FlagHandleMessage.data.requestOption = 14;
+//6.16      Interface->FlagHandleMessage.data.flipflop1 = 0;
+//6.16      execute("{sendMessageToHost(GROUP_RESET_REQUEST);}");
+      GroupDisplay_CurrentTime = GR_DisplayRate;
+      GroupDisplay_Active = 1;
+      execute("::YGN3and4.PicYGN_GroupDisplayMenu.GroupDisplayShift(14,13)");
+      break;   
+   case 25:
+      Current_Page = 25;
+//6.16      Interface->FlagHandleMessage.data.requestOption = 15;
+//6.16      Interface->FlagHandleMessage.data.flipflop1 = 0;
+//6.16      execute("{sendMessageToHost(GROUP_RESET_REQUEST);}");
+      GroupDisplay_CurrentTime = GR_DisplayRate;
+      GroupDisplay_Active = 1;
+      execute("::YGN3and4.PicYGN_GroupDisplayMenu.GroupDisplayShift(15,14)");
+      break;   
+   case 26:
+      Current_Page = 26; 
+//6.16      Interface->FlagHandleMessage.data.requestOption = 16;
+//6.16      Interface->FlagHandleMessage.data.flipflop1 = 0;
+//6.16      execute("{sendMessageToHost(GROUP_RESET_REQUEST);}");
+      GroupDisplay_CurrentTime = GR_DisplayRate;
+      GroupDisplay_Active = 1;
+      execute("::YGN3and4.PicYGN_GroupDisplayMenu.GroupDisplayShift(16,15)");
+      break;   
+   case 27:
+      Current_Page = 27; 
+//6.16      Interface->FlagHandleMessage.data.requestOption = 17;
+//6.16      Interface->FlagHandleMessage.data.flipflop1 = 0;
+//6.16      execute("{sendMessageToHost(GROUP_RESET_REQUEST);}");
+      GroupDisplay_CurrentTime = GR_DisplayRate;
+      GroupDisplay_Active = 1;
+      execute("::YGN3and4.PicYGN_GroupDisplayMenu.GroupDisplayShift(17,16)");
+      break;   
+   case 28:
+      Current_Page = 28; 
+//6.16      Interface->FlagHandleMessage.data.requestOption = 18;
+//6.16      Interface->FlagHandleMessage.data.flipflop1 = 0;
+//6.16      execute("{sendMessageToHost(GROUP_RESET_REQUEST);}");
+      GroupDisplay_CurrentTime = GR_DisplayRate;
+      GroupDisplay_Active = 1;
+      execute("::YGN3and4.PicYGN_GroupDisplayMenu.GroupDisplayShift(18,17)");
+      break;   
+   case 29:
+      Current_Page = 29;
+//6.16      Interface->FlagHandleMessage.data.requestOption = 19;
+//6.16      Interface->FlagHandleMessage.data.flipflop1 = 0;
+//6.16      execute("{sendMessageToHost(GROUP_RESET_REQUEST);}");
+      GroupDisplay_CurrentTime = GR_DisplayRate;
+      GroupDisplay_Active = 1;
+      execute("::YGN3and4.PicYGN_GroupDisplayMenu.GroupDisplayShift(19,18)");
+      break;   
+   case 30:
+      Current_Page = 30;
+//6.16      Interface->FlagHandleMessage.data.requestOption = 20;
+//6.16      Interface->FlagHandleMessage.data.flipflop1 = 0;
+//6.16      execute("{sendMessageToHost(GROUP_RESET_REQUEST);}");
+      GroupDisplay_CurrentTime = GR_DisplayRate;
+      GroupDisplay_Active = 1;
+      execute("::YGN3and4.PicYGN_GroupDisplayMenu.GroupDisplayShift(20,19)");
+      break;   
+        
+//-----------   colss -----------------------------
+   case 41:
+           DisplayPage(Page46);
+           break;
+   case 42:
+           DisplayPage(Page41);
+           break;
+   case 43:
+           DisplayPage(Page42);
+           break;
+   case 44:
+           DisplayPage(Page43);
+           break;
+   case 45:
+           DisplayPage(Page44);
+           break;
+   case 46:
+           executeAsync ("::YGN3and4.PicYGN_COLSSPowerDP","{escape();}");
+           DisplayPage(Page45);
+           break;
+   case 140:
+            if(!CAL_Active)
+              {
+	 	  CAL_Active=1;
+	 	  CAL_CurrentTime=CAL_MaximumTime;
+            	  execute("{sendMessageToHost(REQUEST_CAL_PREV_DATA);}");
+	       }
+            break;
+   case 155:
+            if(!BDL_Active)
+              {
+	 	  BDL_Active=1;
+	 	  BDL_CurrentTime=BDL_MaximumTime;
+            	  execute("{sendMessageToHost(REQUEST_BDL_PREV_DATA);}");
+	      }
+            break;
+   case 156:
+            if(!ORL_Active)
+              {
+	 	  ORL_Active=1;
+	 	  ORL_CurrentTime=ORL_MaximumTime;
+            	  execute("{sendMessageToHost(REQUEST_ORL_PREV_DATA);}");
+	      }
+            break;
+   case 176:
+            executeAsync ("::YGN3and4.PicYGN_HDSR74Xview","{PrevSet();}");
+            break;
+   case 621:
+            DisplayPage(Page623);
+            break;
+   case 623:
+            DisplayPage(Page621);
+            break;
+
+   case 811:
+//6.16      Interface->VTFlagMessage.data.requestOption = 1;
+//6.16      Interface->VTFlagMessage.data.flipflop1 = 0;
+//6.16      execute("{sendMessageToHost(REQUEST_VTREND_DATA);}");
+//      VideoSetno = 0 ;
+
+// 20170308 CORENET by Philkyu Kwon ***************************************
+    //  Interface->VTFlagMessage.data.requestOption = 5;
+    //  execute("{sendMessageToHost(VTREND_RESET_REQUEST);}");
+    //  DelayedDisplayPicture("PicYGN_VideoTrendView5.ppic"); 
+    //  executeAsync ("::YGN3and4.PicYGN_VideoTrendView1","{escape();}");
+    //  break; 
+      Interface->VTFlagMessage.data.requestOption = 2;
+      execute("{sendMessageToHost(VTREND_RESET_REQUEST);}");
+      DelayedDisplayPicture("PicYGN_VideoTrendView2.ppic"); 
+      executeAsync ("::YGN3and4.PicYGN_VideoTrendView1","{escape();}");
+      break; 
+   case 812:
+//6.16      Interface->VTFlagMessage.data.requestOption = 2;
+//6.16      Interface->VTFlagMessage.data.flipflop1 = 0;
+//6.16      execute("{sendMessageToHost(REQUEST_VTREND_DATA);}");
+//      VideoSetno = 0 ;
+      Interface->VTFlagMessage.data.requestOption = 1;
+      execute("{sendMessageToHost(VTREND_RESET_REQUEST);}");
+      DelayedDisplayPicture("PicYGN_VideoTrendView1.ppic"); 
+      executeAsync ("::YGN3and4.PicYGN_VideoTrendView2","{escape();}");      
+      break; 
+/*
+   case 813:
+//6.16      Interface->VTFlagMessage.data.requestOption = 3;
+//6.16      Interface->VTFlagMessage.data.flipflop1 = 0;
+//6.16      execute("{sendMessageToHost(REQUEST_VTREND_DATA);}");
+//      VideoSetno = 0 ;
+      Interface->VTFlagMessage.data.requestOption = 2;
+      execute("{sendMessageToHost(VTREND_RESET_REQUEST);}");
+      DelayedDisplayPicture("PicYGN_VideoTrendView2.ppic"); 
+      executeAsync ("::YGN3and4.PicYGN_VideoTrendView3","{escape();}");      
+      break; 
+   case 814:
+//6.16      Interface->VTFlagMessage.data.requestOption = 4;
+//6.16      Interface->VTFlagMessage.data.flipflop1 = 0;
+//6.16      execute("{sendMessageToHost(REQUEST_VTREND_DATA);}");
+//      VideoSetno = 0 ;
+      Interface->VTFlagMessage.data.requestOption = 3;
+      execute("{sendMessageToHost(VTREND_RESET_REQUEST);}");
+      DelayedDisplayPicture("PicYGN_VideoTrendView3.ppic"); 
+      executeAsync ("::YGN3and4.PicYGN_VideoTrendView4","{escape();}");      
+      break; 
+   case 815:
+//6.16      Interface->VTFlagMessage.data.requestOption = 5;
+//6.16      Interface->VTFlagMessage.data.flipflop1 = 0;
+//6.16      execute("{sendMessageToHost(REQUEST_VTREND_DATA);}");
+//      VideoSetno = 0 ;
+      Interface->VTFlagMessage.data.requestOption = 4;
+      execute("{sendMessageToHost(VTREND_RESET_REQUEST);}");
+      DelayedDisplayPicture("PicYGN_VideoTrendView4.ppic"); 
+      executeAsync ("::YGN3and4.PicYGN_VideoTrendView5","{escape();}");      
+      break;
+*/
+      
+//----------- DigitalTrendView -----------------------------
+   case 821:
+//            executeAsync ("::YGN3and4.PicYGN_DigitalTrendView","{nextView();}");
+            DTrendSet = 2 ;
+            DisplayPage(Page822);
+            break;
+   case 822:
+//            executeAsync ("::YGN3and4.PicYGN_DigitalTrendView","{nextView();}");
+            DTrendSet = 1 ;
+            DisplayPage(Page821);
+            break;
+      
+//-----------Bar chart-----------------------------
+   case 851:
+            executeAsync("::YGN3and4.PicYGN_BarChartMenu","{ProcessThis(2);}");
+            DisplayPage(Page852);
+            break;
+   case 852:
+            executeAsync("::YGN3and4.PicYGN_BarChartMenu","{ProcessThis(1);}");
+            DisplayPage(Page851);
+            break;
+
+//----------- CFMS PAGES -----------------------------
+
+   case 110:
+      DisplayPage(Page111);
+      break;
+   case 111:
+      DisplayPage(Page110);
+      break;
+   case 210:
+      DisplayPage(Page270);
+      break;
+   case 220:
+      DisplayPage(Page210);
+      break;
+   case 230:
+      DisplayPage(Page220);
+      break;
+   case 240:
+      DisplayPage(Page230);
+      break;
+   case 250:
+      DisplayPage(Page240);
+      break;
+   case 260:
+      DisplayPage(Page250);
+      break;
+   case 270:
+      DisplayPage(Page260);
+      break;
+
+   case 321:
+      DisplayPage(Page325);
+      break;
+   case 322:
+      DisplayPage(Page321);
+      break;
+   case 323:
+      DisplayPage(Page322);
+      break;
+   case 324:
+      DisplayPage(Page323);
+      break;
+   case 325:
+      DisplayPage(Page324);
+      break;
+
+
+   case 331:
+      DisplayPage(Page336);
+      break;
+   case 332:
+      DisplayPage(Page331);
+      break;
+   case 333:
+      DisplayPage(Page332);
+      break;
+   case 334:
+      DisplayPage(Page333);
+      break;
+   case 335:
+      DisplayPage(Page334);
+      break;
+   case 336:
+      DisplayPage(Page335);
+      break;
+
+   case 341:
+      DisplayPage(Page343);
+      break;
+   case 342:
+      DisplayPage(Page341);
+      break;
+   case 343:
+      DisplayPage(Page342);
+      break;
+
+   case 351:
+      DisplayPage(Page356);
+      break;
+   case 352:
+      DisplayPage(Page351);
+      break;
+   case 353:
+      DisplayPage(Page352);
+      break;
+   case 354:
+      DisplayPage(Page353);
+      break;
+   case 355:
+      DisplayPage(Page354);
+      break;
+   case 356:
+      DisplayPage(Page355);
+      break;
+
+   case 361:
+      DisplayPage(Page362);
+      break;
+   case 362:
+      DisplayPage(Page361);
+      break;
+
+   case 371:
+      DisplayPage(Page375);
+      break;
+   case 372:
+      DisplayPage(Page371);
+      break;
+   case 373:
+      DisplayPage(Page372);
+      break;
+   case 374:
+      DisplayPage(Page373);
+      break;
+   case 375:
+      DisplayPage(Page374);
+      break;
+
+
+   case 430:
+      DisplayPage(Page130);
+      break;
+   case 431:
+      DisplayPage(Page430);
+      break;
+   case 432:
+      DisplayPage(Page430);
+      break;
+   case 433:
+      DisplayPage(Page430);
+      break;
+   case 434:
+      DisplayPage(Page430);
+      break;
+   case 435:
+      DisplayPage(Page430);
+      break;
+
+   default:
+      DisplayAdvisoryMessage3("PRIOR PAGE REQUESTS NOT ALLOWED HERE");
+      break;
+
+   } // end switch for escape
+}`
+
+function `void DisplayESCPage()
+{
+//--------------------------------------------------------------------------
+// Keep display page navigation from working !!!
+   if (0 == Interface->System.connected)
+   {
+      DisplayAdvisoryMessage("CONNECTION LOST. NO PAGING ALLOWED");
+      DisplayProcessing = 0 ;
+      return;
+   }
+//--------------------------------------------------------------------------
+
+// Keep sign-on/off function from working !!!
+
+   DisplayProcessing = 1 ;
+
+   if (0 == Interface->System.connected)
+   {
+      DisplayAdvisoryMessage("CONNECTION LOST. NO SIGN-ON/OFF AVAILABLE");
+      return;
+   }
+// for escape key function
+if ( 0 == CFMLevel)
+   {
+//    printf(" DisplayESCPage(): Display Page Level is 0, general menu .....");
+      switch(Current_Page)
+      {
+// For escape from SectorPopUp and PagePopUp cascade display page
+         case 367:
+                  executeAsync ("::YGN3and4.PicYGN_DisplayPagePopUp","{escape();}");
+                  break;
+         case 368:
+                  executeAsync ("::YGN3and4.PicYGN_DisplaySectorPopUp","{escape();}");
+                  break;
+//
+//
+         case 41:
+         case 42:
+         case 43:
+         case 44:
+         case 45:
+                  DisplayPage(Page122);
+                  break;
+         case 46:
+                  executeAsync ("::YGN3and4.PicYGN_COLSSPowerDP","{escape();}");
+                  DisplayPage(Page122);
+                  break;
+         case 47:
+         case 48:
+         case 49:
+                  DisplayPage(Page122);
+                  break;
+         case 100:
+                  DisplayPage(Page190);
+                  break;
+// for ygn34EOF by feel9 20200212/////////////////////////////
+				 case 110:
+         case 111:
+									DisplayAdvisoryMessage("THIS PAGE IS LAST SECTOR PAGE IN EOF");
+									break;
+				 //case 110:
+				 //case 111:
+///////////////////////////////////////////////////////////////
+         case 120:
+                  DisplayPage(Page100);
+                  break;
+         case 121:
+         case 122:
+         case 123:
+         case 124:
+                  DisplayPage(Page120);
+                  break;
+         case 130:
+                  DisplayPage(Page100);
+                  break;
+         case 131:
+         case 135:
+                  CEA_ALARM_RESET = 0;
+                  DisplayPage(Page130);
+                  break;
+         case 132:
+         case 133:
+                  DisplayPage(Page130);
+                  break;
+         case 134:
+                  executeAsync ("::YGN3and4.PicYGN_RPCCEASelection","{ESCProcess();}");
+                  DisplayPage(Page130);
+                  break;
+         case 140:
+         case 150:
+                  DisplayPage(Page100);
+                  break;
+         case 151:
+                  DisplayPage(Page150);
+                  break;
+         case 152:
+		if(CascadeEnterActive == 1)
+		{
+			CascadeEnterActive = 0;
+			CascadeEnter.unmap();
+			update();
+		}
+		else
+                	DisplayPage(Page150);
+                  break;
+         case 153:
+         case 154:
+         case 155:
+         case 156:
+                  DisplayPage(Page150);
+                  break;
+         case 157:
+         case 158:
+                  DisplayPage(Page154);
+                  break;
+         case 160:
+//------ HDSR related display pages ----------------------------------------------
+         case 170:
+                  DisplayPage(Page100);
+                  break;
+         case 171:
+                  executeAsync ("::YGN3and4.PicYGN_HDSR710","{Finished();}");         
+                  DisplayPage(Page170);
+                  break;
+         case 172:
+                  executeAsync ("::YGN3and4.PicYGN_HDSR720","{Finished();}");
+                  DisplayPage(Page170);
+                  break;
+         case 173:
+                  executeAsync ("::YGN3and4.PicYGN_HDSR730","{Finished();}");
+                  DisplayPage(Page170);
+                  break;
+         case 174:
+                  DisplayPage(Page170);
+                  break;
+         case 175:
+                  executeAsync ("::YGN3and4.PicYGN_HDSR74Xsetup","{Finished();}");
+                  DisplayPage(Page174);
+                  break;
+         case 176:
+                  executeAsync ("::YGN3and4.PicYGN_HDSR74Xview","{ProcessExit();}");
+                  DisplayPage(Page174);
+                  break;
+         case 177:
+                  DisplayPage(Page170);
+                  break;
+//------ HDSR related display pages ----------------------------------------------
+
+
+
+         case 180:
+                  printf(" send request EXIT_CSL_DISPLAY .....");
+                  executeAsync ("::YGN3and4.PicYGN_CSL","{ExitCSL();}");
+                  DisplayPage(Page100);
+                  break;
+         case 190:
+                  executeAsync ("::YGN3and4.PicYGN_Security","{Signoff1();}");
+                  break;
+
+// CORENET 20170331 by Philkyu Kwon -------------
+         case 551:
+         case 561:
+         case 562:
+		if(CascadeEnterActive == 1)
+		{
+			CascadeEnterActive = 0;
+			CascadeEnter.unmap();
+			update();
+		}
+		else
+                	DisplayPage(Page152);
+                  break;
+// ----------------------------------------------
+
+         case 510:
+         case 520:
+         case 530:
+         case 540:
+         case 550:
+         case 560:
+         case 511:
+         case 521:
+         case 531:
+         case 541:
+                DisplayPage(Page152);
+                  break;
+         case 610:
+                  DisplayPage(Page160);
+                  break;
+         case 611:
+         case 612:
+                  DisplayPage(Page610);
+                  break;
+         case 620:
+                  DisplayPage(Page160);
+                  break;
+         case 621:
+                  executeAsync ("::YGN3and4.PicYGN_XRBP_Off","{Escape();}");
+                  DisplayPage(Page620);
+                  break;         
+         case 622:
+                  executeAsync ("::YGN3and4.PicYGN_XRBP_On","{Escape();}");
+                  DisplayPage(Page620);
+                  break;
+         case 623:
+                  DisplayPage(Page621);
+                  break;
+         case 630:
+                  DisplayPage(Page160);
+                  break;
+
+// CORENET 2017 for EQUIPMENT RUNTIME CALCULATION MENU, by Philkyu Kwon.--------------------
+
+         case 635:
+                  DisplayPage(Page160);
+                  break;
+         case 636:
+                  executeAsync ("::YGN3and4.PicYGN_EQUIP_CAL_VALUE","{escape();}");
+                  //DisplayPage(Page635);
+                  break;
+         case 637:
+                  executeAsync ("::YGN3and4.PicYGN_EQUIP_RUN_STATUS","{escape();}");
+                  //DisplayPage(Page635);
+                  break;
+         case 670:
+                  DisplayPage(Page160);
+                  break;
+                           
+// RCS LEAK BY ST. CHANG---------------------------------------------------------------------
+                  
+         case 644:
+                  DisplayPage(Page160);
+                  break;
+         case 641:
+                  DisplayPage(Page644);		// CORENET 2017, by Philkyu Kwon.
+                  break;        
+         case 642:
+                  DisplayPage(Page644);		// CORENET 2017, by Philkyu Kwon.
+                  break; 
+         case 643:
+                  DisplayPage(Page642);		// CORENET 2017, by Philkyu Kwon.
+                  break;   
+         case 645:
+                  DisplayPage(Page644);		// CORENET 2017, by Philkyu Kwon.
+                  break;   
+         case 650:
+         case 660:
+         case 640:	// CORENET 2012.07.19
+                  DisplayPage(Page160);
+                  break;
+         // for UTDV  
+         case 651:
+         case 652:
+         case 653:
+         case 654:
+         case 655:
+         case 657:
+         case 658:
+         case 659:
+         case 681:
+         case 682:
+         case 683:
+         case 684:
+         case 685:
+         case 686:
+         case 687:
+         case 688:
+         case 691:
+         case 692:
+         case 693:
+         case 694:
+         case 695:
+         case 696:
+         case 697:
+                  DisplayPage(Page650);
+                  break;
+         case 680:				// CORENET 2017, by Philkyu Kwon. for MIDLOOP.
+                  DisplayPage(Page160);
+                  break;
+         case 675:
+         case 676:
+                  executeAsync ("::YGN3and4.PicYGN_PtPlotNormal","{ExitCurrentPage();}");
+//                  execute("{DisplayPage(\\\\"PicYGN_NSSSBOPApplication\\\\");}") ;
+                  DisplayPage(Page160);
+                  break;
+
+         case 810:
+                  executeAsync ("::YGN3and4.PicYGN_VideoTrendMenu","{Escape();}");
+                  break;
+         case 811:
+                  executeAsync ("::YGN3and4.PicYGN_VideoTrendView1","{escapeToMenu();}");
+                  break;
+         case 812:
+                  executeAsync ("::YGN3and4.PicYGN_VideoTrendView2","{escapeToMenu();}");
+                  break;
+         case 813:
+                  executeAsync ("::YGN3and4.PicYGN_VideoTrendView3","{escapeToMenu();}");
+                  break;
+         case 814:
+                  executeAsync ("::YGN3and4.PicYGN_VideoTrendView4","{escapeToMenu();}");
+                  break;
+         case 815:
+                  executeAsync ("::YGN3and4.PicYGN_VideoTrendView5","{escapeToMenu();}");
+                  break;
+         case 820:
+                  executeAsync ("::YGN3and4.PicYGN_DigitalTrendMenu","{escape();}");
+                  break;
+         case 821:
+         case 822:
+                  executeAsync ("::YGN3and4.PicYGN_DigitalTrendView","{escape();}");
+                  break;
+         case 830:
+                  executeAsync ("::YGN3and4.PicYGN_GroupDisplayMenu","{escapeToMenu();}");
+                  break;
+         case 831:
+                  executeAsync ("::YGN3and4.PicYGN_GroupDisplaySetup","{escapeToMenu();}");
+                  break;
+
+         case 832:
+                  executeAsync ("::YGN3and4.PicYGN_GroupDisplayView","{escapeToMenu();}");
+                  break;
+
+         case 840:
+         case 841:
+                  DisplayPage(Page151);
+                  break;
+         case 850:
+                  executeAsync ("::YGN3and4.PicYGN_BarChartMenu","{escape();}");
+                  break;
+
+         case 11:
+         case 12:
+         case 13:
+         case 14:
+         case 15:
+         case 16:
+         case 17:
+         case 18:
+         case 19:
+         case 20:
+         case 21:
+         case 22:
+         case 23:
+         case 24:
+         case 25:
+         case 26:
+         case 27:
+         case 28:
+         case 29:
+         case 30:
+                  executeAsync ("::YGN3and4.PicYGN_GroupDisplayView","{escapeToMenu();}");
+                  break;
+         case 851:
+		  DisplayPage(Page850);
+                  break;
+         case 852:
+		  DisplayPage(Page850);
+                  break;
+         case 860:
+                  DisplayPage(Page151);
+                  break;
+         case 861:
+         case 862:
+                  DisplayPage(Page860);
+                  break;
+         case 870:			// CORENET 2017 for PRINT PID FOR TEST byr Philkyu Kwon.
+                  DisplayPage(Page151);
+                  break;
+
+// For CEA Tracking by yrlee 20061209 
+
+         case 430:
+                  DisplayPage(Page130);
+                  break;
+         case 431:
+         case 432:
+         case 433:
+         case 434:
+         case 435:
+                  DisplayPage(Page430);
+                  break;
+      }  // end of switch statement     
+
+   }     // end of if statement
+
+
+   if (CFMLevel == 1 || CFMLevel == 2 || CFMLevel ==3)
+   {
+
+   switch(Current_Page)
+   {
+ 
+   case 100:
+      DisplayPage(Page190);
+      break;
+
+// for ygn34EOF by feel9 20200212/////////////////////////////
+	 case 110:
+   case 111:
+						DisplayAdvisoryMessage("THIS PAGE IS LAST SECTOR PAGE IN EOF");
+						break;
+
+   //case 111:
+   //case 110:
+     // DisplayPage(Page100);
+     // break;
+///////////////////////////////////////////////////////////////
+
+   case 210:
+   case 220:
+   case 230:
+   case 240:
+   case 250:
+   case 260:
+   case 270:
+      DisplayPage(Page111);
+      break; 
+
+   case 321:
+   case 322:
+   case 323:
+   case 324:
+   case 325:
+      DisplayPage(Page220);
+      break;
+
+
+   case 331:
+   case 332:
+   case 333:
+   case 334:
+   case 335:
+   case 336:
+      DisplayPage(Page230);
+      break;
+
+   case 341:
+   case 342:
+   case 343:
+      DisplayPage(Page240);
+      break;
+
+   case 351:
+   case 352:
+   case 353:
+   case 354:
+   case 355:
+   case 356:
+      DisplayPage(Page250);
+      break;
+
+   case 361:
+   case 362:
+      DisplayPage(Page260);
+      break;
+
+   case 371:
+   case 372:
+   case 373:
+   case 374:
+   case 375:
+      DisplayPage(Page270);
+      break;
+      }
+      }
+   DisplayProcessing = 0; 
+}`
+
+function `void DisplayCEAMessage1 (char *theMessage)
+{
+//printf("The Advisory message is %s",theMessage);
+// 
+// Insert the message into the display field
+   ::YGN3and4.PicYGN_CEADropTest.CEAMessage1.theText = theMessage;
+// Initialize the timer 
+   AdvisoryMsg_CurrentTime = AdvisoryCEAMsg_MaximumTime;
+// Start your engines
+//   AdvisoryMsg_Active = 1;
+
+// And update the display    
+   update();
+}`
+
+function `void DisplayCEAMessage2 (char *theMessage)
+{
+//printf("The Advisory message is %s",theMessage);
+// 
+// Insert the message into the display field
+   ::YGN3and4.PicYGN_CEADropTest.CEAMessage2.theText = theMessage;
+// Initialize the timer 
+   AdvisoryMsg_CurrentTime = AdvisoryCEAMsg_MaximumTime;
+// Start your engines
+//   AdvisoryMsg_Active = 1;
+
+// And update the display    
+   update();
+}`
+
+function `void DisplayCEAMessage3 (char *theMessage)
+{
+//printf("The Advisory message is %s",theMessage);
+// 
+// Insert the message into the display field
+   ::YGN3and4.PicYGN_CEADropTest.CEAMessage3.theText = theMessage;
+// Initialize the timer 
+   AdvisoryMsg_CurrentTime = AdvisoryCEAMsg_MaximumTime;
+// Start your engines
+//   AdvisoryMsg_Active = 1;
+
+// And update the display    
+   update();
+}`
+
+function `void DisplayCEAMessage4 (char *theMessage)
+{
+//printf("The Advisory message is %s",theMessage);
+// 
+// Insert the message into the display field
+   ::YGN3and4.PicYGN_CEADropTest.CEAMessage4.theText = theMessage;
+// Initialize the timer 
+   AdvisoryMsg_CurrentTime = AdvisoryCEAMsg_MaximumTime;
+// Start your engines
+//   AdvisoryMsg_Active = 1;
+
+// And update the display    
+   update();
+}`
+
+function `void DisplayCEAMessage5 (char *theMessage)
+{
+//printf("The Advisory message is %s",theMessage);
+// 
+// Insert the message into the display field
+   ::YGN3and4.PicYGN_CEADropTest.CEAMessage5.theText = theMessage;
+// Initialize the timer 
+   AdvisoryMsg_CurrentTime = AdvisoryCEAMsg_MaximumTime;
+// Start your engines
+//   AdvisoryMsg_Active = 1;
+
+// And update the display    
+   update();
+}`
+
+function `void DisplayHDSRTrend(int actNo)
+{
+//   executeAsync("::YGN3and4.PicYGN_HDSR74Xview", "ActDisplay(%d)", actNo);
+   executeAsync("::YGN3and4.PicYGN_HDSR74Xview", "DisplayTrend(%d)", actNo);
+}`
+
+function `void ClearAdvisoryMessage()
+{
+   DisplayAdvisoryMessage("");
+   DisplayAdvisoryMessage1("");
+   DisplayAdvisoryMessage2("");
+   DisplayAdvisoryMessage3("");
+
+}`
+
+function `void ClearDisplayBlock()
+{
+//  Clear Display Block
+   // if LastThingForDisplayPicture() has already completed, clear the 
+   //display block here.  LastThingForDisplayPicture() will only clear 
+   //the display block if this routine has completed.
+   if (DoneLastThingForPictureDisplay)
+   {
+//      if (DisplayBlock) printf("ClearDisplayBlock() in cdb");
+      DisplayBlock = 0;
+      ::YGN3and4.PicYGN_footer.LockedText.updateShape();
+   }
+   DoneClearDisplayBlock = 1;
+}`
+
+function `void turnOffPage(int page)
+{
+     switch (page)
+     {
+       case 1 :     execute("{sendMessageToHost(BDL_PAGE_OFF);}");
+                    BdlPageOn = FALSE;
+                    break;
+       case 2:      execute("{sendMessageToHost(CAL_PAGE_OFF);}");
+                    CalPageOn = FALSE;
+                    break;
+       case 3:      execute("{sendMessageToHost(ORL_PAGE_OFF);}");
+                    OrlPageOn = FALSE;
+                    break;
+       case 4:      execute("{sendMessageToHost(LINK_PAGE_OFF);}");
+                    LinkPageOn = FALSE;
+                    break;
+     }
+     return;
+}`
+
+function `void ProcessAdvisoryMsg1()
+{
+// Decrement the Sector Info timer
+   AdvisoryMsg1_CurrentTime--;
+
+// If the timer has expired, then clear the display
+   if (!AdvisoryMsg1_CurrentTime)
+   {
+      AdvisoryMsg1_Active = 1;
+      ::YGN3and4.PicYGN_footer.AdvisoryMessage1.theText = "";
+      update();
+      //printf("Clearing The Advisory Msg1 Timer");
+   }
+   return;
+}`
+
+function `void DisplayMAINPage()
+{
+   GeneralEscape();
+   DisplayPage(Page100);
+}`
+
+function `void DisplayTRENDPage()
+{
+//--------------------------------------------------------------------------
+// Keep display page navigation from working !!!
+   if (0 == Interface->System.connected)
+   {
+      DisplayAdvisoryMessage("CONNECTION LOST. NO PAGING ALLOWED");
+      DisplayProcessing = 0 ;
+      return;
+   }
+//--------------------------------------------------------------------------
+
+   if (0 == CFMLevel)
+   {
+      switch(Current_Page)
+      {
+// --- start of Group Display function ---------------------------------------------------------------
+         case 11:
+         case 12:
+         case 13:
+         case 14:
+         case 15:
+         case 16:
+         case 17:
+         case 18:
+         case 19:
+         case 20:
+         case 21:
+         case 22:
+         case 23:
+         case 24:
+         case 25:
+         case 26:
+         case 27:
+         case 28:
+         case 29:
+         case 30:
+                  executeAsync ("::YGN3and4.PicYGN_GroupDisplayView","{escape();}");
+                  break;
+// ------------------------------------------------------------------------------------------------
+         case 46:
+                  executeAsync ("::YGN3and4.PicYGN_COLSSPowerDP","{escape();}");
+                  break;
+         case 131:
+         case 135:
+                  CEA_ALARM_RESET = 0;
+                  break;
+         case 173:
+                  executeAsync ("::YGN3and4.PicYGN_HDSR730","{Finished();}");
+                  break;
+         case 175:
+                  executeAsync ("::YGN3and4.PicYGN_HDSR74Xsetup","{Finished();}");
+                  break;
+         case 176:
+                  executeAsync ("::YGN3and4.PicYGN_HDSR74Xview","{ProcessExit();}");
+                  break;
+         case 180:
+                  executeAsync ("::YGN3and4.PicYGN_CSL","{ExitCSL();}");
+                  break;
+         case 621:
+                  executeAsync ("::YGN3and4.PicYGN_XRBP_Off","{Escape();}");
+                  break;
+         case 622:
+                  executeAsync ("::YGN3and4.PicYGN_XRBP_On","{Escape();}");
+                  break;
+
+         case 623:
+                  executeAsync ("::YGN3and4.PicYGN_XRBP_Off2","{Escape();}");
+                  break;
+
+// RCS LEAK BY ST. CHANG--------------------------------------------------------------------------
+         case 644:
+                  executeAsync ("::YGN3and4.PicYGN_RCSLeak","{EscapeOutside();}");
+                  break;
+         case 641:
+                  executeAsync ("::YGN3and4.PicYGN_RCSLeak_OnLine","{EscapeOutside();}");
+                  break;        
+         case 642:
+                  executeAsync ("::YGN3and4.PicYGN_RCSLeak_OffInput","{EscapeOutside();}");
+                  break; 
+         case 643:
+                  executeAsync ("::YGN3and4.PicYGN_RCSLeak_OffLine","{EscapeOutside();}");
+                  break;            
+// ------------------------------------------------------------------------------------------------
+         case 676:
+                  executeAsync ("::YGN3and4.PicYGN_PtPlotNormal","{ExitCurrentPage();}");
+                  break;
+         case 851:
+                  executeAsync ("::YGN3and4.PicYGN_BarChartView1","{escape();}");
+                  break;
+         case 852:
+                  executeAsync ("::YGN3and4.PicYGN_BarChartView2","{escape();}");
+                  break;
+// ------------------------------------------------------------------------------------------------
+         case 820:
+                  executeAsync ("::YGN3and4.PicYGN_DigitalTrendMenu","{MAINescape();}");
+                  break;
+         case 821:
+         case 822:
+                  executeAsync ("::YGN3and4.PicYGN_DigitalTrendView","{MAINescape();}");
+                  break;
+         case 830:
+         case 831:
+                  executeAsync ("::YGN3and4.PicYGN_GroupDisplaySetup","{escape();}");
+                  break;
+         case 832:
+                  executeAsync ("::YGN3and4.PicYGN_GroupDisplayView","{escape();}");
+                  break;
+
+      }  // end of switch statement     
+//       executeAsync ("::YGN3and4.PicYGN_footer","{trendview();}");
+//   return;
+   }
+//to make hidden sector bar to come up   
+   if (Logon) executeAsync ("::YGN3and4.PicYGN_footer","{trendview();}");
+//   DisplayPage(Page100);
+//   DelayedDisplayPage(Page811);
+}`
+
+function `void GeneralEscape()
+{
+//--------------------------------------------------------------------------
+// Keep display page navigation from working !!!
+   if (0 == Interface->System.connected)
+   {
+      DisplayAdvisoryMessage("CONNECTION LOST. NO PAGING ALLOWED");
+      DisplayProcessing = 0 ;
+      return;
+   }
+//--------------------------------------------------------------------------
+
+   if (0 == CFMLevel)
+   {
+      switch(Current_Page)
+      {
+// For escape from SectorPopUp and PagePopUp cascade display page
+         case 367:
+                  executeAsync ("::YGN3and4.PicYGN_DisplayPagePopUp","{escape();}");
+                  break;
+         case 368:
+                  executeAsync ("::YGN3and4.PicYGN_DisplaySectorPopUp","{escape();}");
+                  break;
+//
+// --- start of Group Display function ---------------------------------------------------------------
+         case 11:
+         case 12:
+         case 13:
+         case 14:
+         case 15:
+         case 16:
+         case 17:
+         case 18:
+         case 19:
+         case 20:
+         case 21:
+         case 22:
+         case 23:
+         case 24:
+         case 25:
+         case 26:
+         case 27:
+         case 28:
+         case 29:
+         case 30:
+                  executeAsync ("::YGN3and4.PicYGN_GroupDisplayView","{escape();}");
+                  break;
+// ------------------------------------------------------------------------------------------------
+         case 46:
+                  executeAsync ("::YGN3and4.PicYGN_COLSSPowerDP","{escape();}");
+                  break;
+         case 131:
+         case 135:
+                  CEA_ALARM_RESET = 0;
+                  break;
+         case 171:
+                  executeAsync ("::YGN3and4.PicYGN_HDSR710","{Finished();}");
+                  break;
+         case 172:
+                  executeAsync ("::YGN3and4.PicYGN_HDSR720","{Finished();}");
+                  break;
+         case 173:
+                  executeAsync ("::YGN3and4.PicYGN_HDSR730","{Finished();}");
+                  break;
+         case 175:
+                  executeAsync ("::YGN3and4.PicYGN_HDSR74Xsetup","{Finished();}");
+                  break;
+         case 176:
+                  executeAsync ("::YGN3and4.PicYGN_HDSR74Xview","{ProcessExit();}");
+                  break;
+         case 180:
+                  executeAsync ("::YGN3and4.PicYGN_CSL","{ExitCSL();}");
+                  break;
+         case 621:
+                  executeAsync ("::YGN3and4.PicYGN_XRBP_Off","{Escape();}");
+                  break;
+         case 622:
+                  executeAsync ("::YGN3and4.PicYGN_XRBP_On","{Escape();}");
+                  break;
+         case 623:
+                  executeAsync ("::YGN3and4.PicYGN_XRBP_Off2","{Escape();}");
+                  break;
+         case 676:
+                  executeAsync ("::YGN3and4.PicYGN_PtPlotNormal","{ExitCurrentPage();}");
+                  break;
+// --- start of VideoTrend  function ---------------------------------------------------------------
+         case 810:
+                  executeAsync ("::YGN3and4.PicYGN_VideoTrendMenu","{EscapeOutside();}");
+                  break;
+         case 811:
+                  executeAsync ("::YGN3and4.PicYGN_VideoTrendView1","{escape();}");
+                  break;
+         case 812:
+                  executeAsync ("::YGN3and4.PicYGN_VideoTrendView2","{escape();}");
+                  break;
+         case 813:
+                  executeAsync ("::YGN3and4.PicYGN_VideoTrendView3","{escape();}");
+                  break;
+         case 814:
+                  executeAsync ("::YGN3and4.PicYGN_VideoTrendView4","{escape();}");
+                  break;
+         case 815:
+                  executeAsync ("::YGN3and4.PicYGN_VideoTrendView5","{escape();}");
+                  break;
+//----------- DigitalTrendView -----------------------------
+         case 820:
+                  executeAsync ("::YGN3and4.PicYGN_DigitalTrendMenu","{MAINescape();}");
+                  break;
+         case 821:
+         case 822:
+                  executeAsync ("::YGN3and4.PicYGN_DigitalTrendView","{MAINescape();}");
+                  break;
+         case 830:
+         case 831:
+                  executeAsync ("::YGN3and4.PicYGN_GroupDisplaySetup","{escape();}");
+                  break;
+         case 832:
+                  executeAsync ("::YGN3and4.PicYGN_GroupDisplayView","{escape();}");
+                  break;
+         default:
+//                  DisplayPage(Page100);
+                  break;
+      }  // end of switch statement     
+   return;
+   }
+}`
+
+function `void DisplayCFMPage()
+{
+   GeneralEscape();
+   DisplayPage(Page110);
+}`
+
+function `void DisplayCALPage()
+{
+   GeneralEscape();
+   DisplayPage(Page140);
+}`
+
+function `void DisplayLinkPage()
+{
+   GeneralEscape();
+   DisplayPage(Page998);
+}`
+
+function `int IsAnalog(RECORD * pPID)
+{
+   if(pPID->sig_type < MinimumDigitalType) return TRUE;
+   else return FALSE;
+}`
+
+function `float EngRangeHi(RECORD *pPID)      // yrlee
+{
+   float ErangeHi, ErangeLo ;
+
+   ErangeHi = pPID->erange_hi ;
+   ErangeLo = pPID->erange_lo ;
+
+
+   if(ErangeHi<ErangeLo)                  // for saturation margin, PID: IMR1S1 (yrlee 990114)
+   {
+      ErangeHi = pPID->erange_lo ;
+      ErangeLo = pPID->erange_hi ;
+   }
+
+// if ((ErangeHi==0)&&(ErangeLo==0))      // for constant & calculated PID (yrlee 990114); comment out (yrlee990223)
+//    erangehi = pPID->value +100 ;
+// else 
+// {
+      if ( (Interface->System.displayedUnits) && (!(pPID->pipbitmap & bMETUNIT)) )
+         erangehi = ErangeHi * pPID->mfactor + pPID->moffset ;
+      else if ( (!Interface->System.displayedUnits) && (pPID->pipbitmap & bMETUNIT) )
+         erangehi = (ErangeHi - pPID->moffset) / pPID->mfactor ;
+      else
+         erangehi = ErangeHi ;  
+// }
+   execute("{sprintf(tmp,\\"%s\\",erangehi);}",pPID->disfmt);
+   erangehi = atof(tmp) ;
+   return (erangehi) ;       // for Normal
+}`
+
+function `float EngRangeLo(RECORD *pPID)      // yrlee
+{
+   float ErangeHi, ErangeLo ;
+
+   ErangeHi = pPID->erange_hi ;
+   ErangeLo = pPID->erange_lo ;
+
+
+   if(ErangeHi<ErangeLo)              // for saturation margin, PID: IMR1S1 (yrlee 990114)
+   {
+      ErangeLo = pPID->erange_hi ;
+      ErangeHi = pPID->erange_lo ;
+   }
+
+// if ((ErangeHi==0)&&(ErangeLo==0))  // for constant & calculated PID (yrlee 990114); comment out (yrlee990223)
+//    erangelo = pPID->value -100 ;
+// else
+// {
+      if ( (Interface->System.displayedUnits) && (!(pPID->pipbitmap & bMETUNIT)) )
+         erangelo = ErangeLo * pPID->mfactor + pPID->moffset ;
+      else if ( (!Interface->System.displayedUnits) && (pPID->pipbitmap & bMETUNIT) )
+         erangelo = (ErangeLo - pPID->moffset) / pPID->mfactor ;
+      else
+         erangelo = ErangeLo ;  
+// }
+   execute("{sprintf(tmp,\\"%s\\",erangelo);}",pPID->disfmt);
+   erangelo = atof(tmp) ;
+   return (erangelo) ;       // for Normal
+}`
+
+function `void ResetAllUTDVFlags()
+{
+//
+//    SectorInfo_Active = 0;
+//    DTrendTimer_Active = 0;
+//    GroupDisplay_Active == 0; = 0
+//-------------------------------------------------------------------------------------
+    WaitingUTDVData653 = 0;
+    WaitingUTDVData654 = 0;
+    WaitingUTDVData655 = 0;
+    WaitingUTDVData657 = 0;
+    WaitingUTDVData658 = 0;
+    WaitingUTDVData682 = 0;
+    WaitingUTDVData683 = 0;
+    WaitingUTDVData684 = 0;
+    WaitingUTDVData685 = 0;
+    WaitingUTDVData686 = 0;
+    WaitingUTDVData687 = 0;
+    WaitingUTDVData688 = 0;
+    WaitingUTDVData693 = 0;
+    WaitingUTDVData694 = 0;
+
+    UTDV10Min_UpdateFlag = 0;
+    UTDVLapseTime = 0;
+//    Security1 = 0;
+//    Security2 = 0;
+//    PictureDelay_Active = 0;
+//    PageDelay_Active = 0;
+  
+//    PT_Plot_Active = 0;
+}
+`
+
+function `void GoToHDSRgraph(int numSet)
+{
+    gView_x.whichView = numSet;
+//  execute( "{ sendMessageToHost(HDSR_GRAPH_VIEW); }");
+
+    execute( "{ displayPicture(\\"Main\\", \\"./PicYGN_HDSR74Xview.ppic\\"); }");
+}`
+
+// for ygn34EOF by feel9 20200212////////////////////////////////////////////////
+function `void NotUseButton()
+{
+		DisplayAdvisoryMessage("THIS BUTTON IS NOT USING IN EOF");
+}`
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  trendLog YGN3and4TrendLog
+  {
+    diskLogLimIntvl = 60;
+    timeTickIntvl = 1;
+    timeMaster = 1;
+    trendVariableFile = "YGN3and4TrendVars.ptrv";
+    diskFlushIntvl = 0;
+    diskBufferSize = 30;
+    diskForceWrite = 120;
+  }
+
+  use "./cfmsSymbols.plib";
+
+  use "./TrendLibrary.plib";
+
+  use "./DialogueSymbols.plib";
+
+  use "./HDSRLib.plib";
+
+  use "./StaticSymbols.plib";
+
+  dialogue
+  {
+    event = `keyPressed(F1) && Logon`;
+    action = statement `{
+    Request_Alarm_Acknowledge();
+}`;
+  }
+
+  dialogue
+  {
+    event = `keyPressed(F2)`;
+    action = statement `{
+//    doPictureAction(DISPLAY_SECURITY_PAGE);
+}`;
+  }
+
+  dialogue
+  {
+    event = `keyPressed(F4) && Logon`;
+    action = statement `{
+    Request_Alarm_Reset();
+}`;
+  }
+
+  dialogue
+  {
+    event = `keyPressed(GCS)`;
+    action = statement `{
+   DisplayLinkPage();
+}`;
+  }
+
+  dialogue
+  {
+    event = `keyPressed(PAGEUP) && Logon`;
+    action = statement `{
+   DisplaySectorPopUpMenu();
+}`;
+  }
+
+  dialogue
+  {
+    event = `keyPressed(F12) && Logon`;
+    action = statement `{
+// DisplayCFMPage();
+   GeneralEscape();
+   DisplayPage(Page111);
+}`;
+  }
+
+  dialogue
+  {
+    event = `keyPressed(F10) && Logon`;
+    action = statement `{
+   DisplayPage(Page140);
+}`;
+  }
+
+  dialogue
+  {
+    event = `keyPressed(F7) && Logon`;
+    action = statement `{
+   DisplayMAINPage();
+}`;
+  }
+
+  dialogue
+  {
+    event = `keyPressed(F6) `;
+    action = statement `{
+// Uncomment the next line if you want this to work in ged
+// ClearDisplayBlock();
+}`;
+  }
+
+  dialogue
+  {
+    event = `buttonPressed(Right)`;
+    action = statement `{
+   if (CascadeEnterActive && CascadeMenuActive)
+   {
+      CascadeEnterActive = 0;
+      CascadeEnter.unmap();
+   }
+   else if (!CascadeEnterActive && CascadeMenuActive)
+   {
+      CascadeEnterActive = 0;
+      CascadeEnter.unmap();
+      CascadeMenuActive = 0;
+      CascadeMenu.unmap();
+   }
+   update();
+}`;
+  }
+
+  dialogue
+  {
+    event = `keyPressed(ESC) && Logon`;
+    action = statement `{
+    if (CascadeEnterActive)
+     {
+        CascadeEnterActive = 0;
+        CascadeEnter.unmap();
+        update() ;
+     }
+    else   
+        DisplayESCPage();
+}`;
+  }
+
+  dialogue
+  {
+    event = `keyPressed(F11) && Logon`;
+    action = statement `{
+    if (CascadeEnterActive && CascadeMenuActive)
+     {
+      CascadeEnterActive = 0;
+      CascadeEnter.unmap();
+     }
+    else if (!CascadeEnterActive && CascadeMenuActive)
+     {
+      CascadeEnterActive = 0;
+      CascadeEnter.unmap();
+      CascadeMenuActive = 0;
+      CascadeMenu.unmap();
+     }
+    else
+      DisplayTRENDPage();
+}`;
+  }
+
+  dialogue
+  {
+    event = `keyPressed(PAGEDOWN) && Logon`;
+    action = statement `{
+   DisplayPopUpMenu();
+}`;
+  }
+
+  dialogue
+  {
+    event = `keyPressed(INSERT) && Logon`;
+    action = statement `{
+   DisplayPageLast();
+}`;
+  }
+
+  dialogue
+  {
+    event = `keyPressed(DEL) && Logon`;
+    action = statement `{
+   DisplayPageNext();
+}`;
+  }
+
+  dialogue
+  {
+    event = `keyPressed(CAPITALQ)`;
+    action = statement `{
+}`;
+  }
+
+  colour COLOR_PICTURE_BACKGROUND { red = 0; green = 0; blue = 0; }
+  colour COLOR_NON_ESSENTIAL { red = 49150; green = 48498; blue = 49150; }
+
+//  colour COLOR_STATIC_TEXT { red = 49150; green = 49150; blue = 49150; }
+  colour COLOR_STATIC_TEXT { red = 30000; green = 30000; blue = 30000; }	// CORENET 2016.07.26. TEMP
+
+  colour COLOR_DATA_NORMAL { red = 65535; green = 65535; blue = 65535; }
+  colour COLOR_FEEDBACK_MESSAGES { red = 0; green = 65535; blue = 65535; }
+  colour COLOR_THROTTLING { red = 65535; green = 65535; blue = 65535; }
+  colour COLOR_ACTIVE_ON_OPEN { red = 65535; green = 0; blue = 0; }
+  colour COLOR_ACTIVE_OFF_CLOSED { red = 0; green = 45875; blue = 0; }
+  colour COLOR_ACTIVE_ON_SECURITY { red = 0; green = 65535; blue = 0; }
+  colour COLOR_INACTIVE_OFF_CLOSED { red = 0; green = 45875; blue = 0; }
+  colour COLOR_BAD_OOR_ACK { red = 0; green = 42585; blue = 65535; }
+  colour COLOR_BAD_OOR_UNACK
+  {
+     type = 2; /* blink */
+    rgb {red = 6550; green = 6565; blue = 65535; time = 500; }
+    rgb {red = 0; green = 42661; blue = 65535; time = 500; }
+  }
+  colour COLOR_CAUTION_ACK { red = 65535; green = 39321; blue = 0; }
+  colour COLOR_CAUTION_UNACK
+  {
+     type = 2; /* blink */
+    rgb {red = 52427; green = 19663; blue = 0; time = 500; }
+    rgb {red = 65535; green = 39320; blue = 0; time = 500; }
+  }
+  colour COLOR_DANGER_ACK { red = 65535; green = 0; blue = 45872; }
+  colour COLOR_DANGER_UNACK
+  {
+     type = 2; /* blink */
+    rgb {red = 45871; green = 0; blue = 45877; time = 500; }
+    rgb {red = 65535; green = 0; blue = 45871; time = 500; }
+  }
+  colour COLOR_CONFIG_ERROR
+  {
+     type = 2; /* blink */
+    rgb {red = 65535; green = 0; blue = 0; time = 250; }
+    rgb {red = 0; green = 65535; blue = 0; time = 250; }
+    rgb {red = 0; green = 0; blue = 65535; time = 250; }
+  }
+  colour COLOR_POPUP_BACKGROUND { red = 0; green = 0; blue = 65535; }
+  colour COLOR_POPUP_STATIC_TEXT { red = 65535; green = 65535; blue = 65535; }
+  colour COLOR_POPUP_FEEDBACK_MESSAGES { red = 0; green = 65535; blue = 65535; }
+  colour COLOR_POPUP_ERROR
+  {
+     type = 2; /* blink */
+    rgb {red = 6425; green = 6682; blue = 65535; time = 500; }
+    rgb {red = 0; green = 42662; blue = 65535; time = 500; }
+  }
+  colour COLOR_DATA_ENTRY
+  {
+     type = 2; /* blink */
+    rgb {red = 65535; green = 65535; blue = 65535; time = 500; }
+    rgb {red = 0; green = 32896; blue = 33667; time = 500; }
+  }
+  colour COLOR_BUTTON_TOP_SHADOW { red = 56828; green = 47108; blue = 34563; }
+  colour COLOR_BUTTON_BOTTOM_SHADOW { red = 26921; green = 14592; blue = 14592; }
+  colour COLOR_BUTTON_SELECTED { red = 38814; green = 28924; blue = 21077; }
+  colour COLOR_BUTTON_BACKGROUND { red = 45422; green = 36042; blue = 28578; }
+  colour COLOR_TOP_EDGE { red = 56828; green = 47108; blue = 34563; }
+  colour COLOR_BOTTOM_EDGE { red = 26921; green = 14592; blue = 14592; }
+  colour COLOR_BUTTON_FILL { red = 45466; green = 36049; blue = 28578; }
+  colour COLOR_MENU_BACKGROUND { red = 36055; green = 26303; blue = 22404; }
+  colour Colour29 { red = 50886; green = 53199; blue = 59110; }
+  colour Colour40 { red = 28269; green = 33924; blue = 47031; }
+  colour Colour32 { red = 35980; green = 41120; blue = 52942; }
+  colour Colour33 { red = 41634; green = 45746; blue = 55255; }
+  colour Colour39 { red = 22102; green = 31611; blue = 38550; }
+  colour Colour37 { red = 32382; green = 40606; blue = 46260; }
+  colour Colour36 { red = 46774; green = 50115; blue = 57568; }
+  colour Colour30 { red = 34438; green = 40092; blue = 52428; }
+  colour Colour41 { red = 28783; green = 35209; blue = 50115; }
+  colour Colour42 { red = 24672; green = 30069; blue = 35466; }
+  colour Colour43 { red = 33667; green = 37008; blue = 39321; }
+  colour Colour45 { red = 19275; green = 29041; blue = 37265; }
+  colour Colour44 { red = 57054; green = 58339; blue = 61680; }
+  colour Colour46 { red = 50886; green = 53199; blue = 59110; }
+  colour Colour47 { red = 35209; green = 40091; blue = 52171; }
+  colour Colour48 { red = 42148; green = 45489; blue = 52685; }
+  colour Colour49 { red = 0; green = 0; blue = 0; }
+  colour Colour50 { red = 15677; green = 23901; blue = 30583; }
+  colour Colour51 { red = 13364; green = 20303; blue = 25700; }
+  colour COLOR_DARK_RED { red = 39666; green = 0; blue = 0; }
+  colour COLOR_DARK_GREEN { red = 0; green = 29812; blue = 0; }
+  colour COLOR_LIGHT_BLUE { red = 14135; green = 28784; blue = 65535; }
+  colour COLOR_DARK_BROWN { red = 25006; green = 23462; blue = 0; }
+  colour COLOR_YELLOW { red = 65535; green = 65535; blue = 0; }
+  colour COLOR_DARK_GRAY { red = 21558; green = 21558; blue = 21558; }
+  colour COLOR_CEA_RALNAK_BLINK
+  {
+     type = 2; /* blink */
+    rgb {red = 65535; green = 65535; blue = 65535; time = 500; }
+    rgb {red = 0; green = 0; blue = 0; time = 500; }
+  }
+  colour COLOR_LINE_BOUNDARY_6 { red = 0; green = 49000; blue = 65535; } //CORENET 201705 by Philkyu Kwon
+
+  font font0
+  { name = "-adobe-helvetica-bold-r-normal--12-120-75-75-p-70-iso8859-1"; }
+  font font1
+  { name = "-adobe-helvetica-medium-r-normal--14-140-75-75-p-77-iso8859-1"; }
+  font font2
+  { name = "-adobe-helvetica-bold-r-normal--14-140-75-75-p-82-iso8859-1"; }
+  font font3
+  { name = "-adobe-helvetica-medium-r-normal-*-10-*-*-*-*-*-*-*"; }
+  font font4
+  { name = "-adobe-helvetica-bold-r-normal--18-180-75-75-p-103-iso8859-1"; }
+  font font5
+  { name = "-adobe-helvetica-bold-r-normal-*-10-*-*-*-*-*-*-*"; }
+  font font6
+  { name = "-adobe-helvetica-medium-r-normal--24-240-75-75-p-130-iso8859-1"; }
+  font font7
+  { name = "-adobe-helvetica-bold-r-normal--24-240-75-75-p-138-iso8859-1"; }
+  font font8
+  { name = "8x13"; }
+  font font9
+  { name = "8x13"; }
+  font font10
+  { name = "8x13"; }
+  font font11
+  { name = "ifevg-40"; }
+  font font12
+  { name = "-adobe-helvetica-bold-r-normal--12-120-75-75-p-70-iso8859-1"; }
+  font font13
+  { name = "-adobe-helvetica-bold-r-normal--14-140-75-75-p-82-iso8859-1"; }
+  font font14
+  { name = "-adobe-helvetica-bold-r-normal--18-180-75-75-p-103-iso8859-1"; }
+  font font15
+  { name = "-adobe-helvetica-bold-r-normal--24-240-75-75-p-138-iso8859-1"; }
+  font font16
+  { name = "-adobe-helvetica-bold-o-normal--12-120-75-75-p-69-iso8859-1"; }
+  font font17
+  { name = "-adobe-helvetica-bold-o-normal--14-140-75-75-p-82-iso8859-1"; }
+  font font18
+  { name = "8x13"; }
+
+  pattern DefaultPattern1 { patternBitmap = "p3.internal.patt1"; }
+  pattern DefaultPattern2 { patternBitmap = "p3.internal.patt2"; }
+  pattern DefaultPattern3 { patternBitmap = "p3.internal.patt3"; }
+
+  linestyle DefaultStyle1
+  {
+    numberOfElements = 1;
+    element[0] = 1;
+  }
+
+  linestyle DefaultStyle2
+  {
+    numberOfElements = 1;
+    element[0] = 2;
+  }
+
+  linestyle DefaultStyle3
+  {
+    numberOfElements = 1;
+    element[0] = 4;
+  }
+
+  linestyle DefaultStyle4
+  {
+    numberOfElements = 1;
+    element[0] = 8;
+  }
+
+  linestyle DefaultStyle5
+  {
+    numberOfElements = 1;
+    element[0] = 12;
+  }
+
+  linestyle DefaultStyle6
+  {
+    numberOfElements = 1;
+    element[0] = 16;
+  }
+
+  linestyle DefaultStyle7
+  {
+    numberOfElements = 1;
+    element[0] = 24;
+  }
+
+  window win0
+  {
+    parent = ":0.0";
+    //x = 0;
+    //y = 0;
+    x = 5;	// temp 2016.07.25 CORENET
+    y = 5;	// temp 2016.07.25 CORENET
+    width  = 1280;
+    height = 1024;
+    borderWidth  = 0;
+    borderColour = 0;
+    backgroundColour = 0;
+    theCursor = -1;
+    theTitle = "";
+    decorations = "BORDER + RESIZEH";
+    functions = "ALL";
+    type = "NORMAL";
+    mode = "MODELESS";
+  }
+
+  window Main
+  {
+    parent = "win0";
+    x = 0;
+    y = 100;
+    width  = 1280;
+    height = 789;
+    borderWidth  = 0;
+    borderColour = 0;
+    backgroundColour = 0;
+    theCursor = -1;
+    theTitle = "";
+    decorations = "ALL";
+    functions = "ALL";
+    type = "NORMAL";
+    mode = "MODELESS";
+  }
+
+  window header
+  {
+    parent = "win0";
+    x = 0;
+    y = 0;
+    width  = 1280;
+    height = 100;
+    borderWidth  = 0;
+    borderColour = 0;
+    backgroundColour = 0;
+    theCursor = -1;
+    theTitle = "";
+    decorations = "ALL";
+    functions = "ALL";
+    type = "NORMAL";
+    mode = "MODELESS";
+  }
+
+  window footer
+  {
+    parent = "win0";
+    x = 0;
+    y = 876;
+    width  = 1280;
+    height = 135;
+    borderWidth  = 0;
+    borderColour = 0;
+    backgroundColour = 0;
+    theCursor = -1;
+    theTitle = "";
+    decorations = "ALL";
+    functions = "ALL";
+    type = "NORMAL";
+    mode = "MODELESS";
+  }
+
+  window popup
+  {
+    parent = "win0";
+    x = 824;
+    y = 850;
+    width  = 442;
+    height = 122;
+    borderWidth  = 0;
+    borderColour = 0;
+    backgroundColour = -1;
+    theCursor = -1;
+    theTitle = "";
+    decorations = "ALL";
+    functions = "ALL";
+    type = "NORMAL";
+    mode = "MODELESS";
+  }
+
+  window CascadeMenu
+  {
+    parent = "win0";
+    x = 400;
+    y = 200;
+    width  = 320;
+    height = 420;
+    borderWidth  = 0;
+    borderColour = 0;
+    backgroundColour = -1;
+    theCursor = -1;
+    theTitle = "";
+    decorations = "ALL";
+    functions = "ALL";
+    type = "NORMAL";
+    mode = "MODELESS";
+  }
+
+  window cascade
+  {
+    parent = "win0";
+    x = 400;
+    y = 200;
+    width  = 320;
+    height = 420;
+    borderWidth  = 0;
+    borderColour = 0;
+    backgroundColour = -1;
+    theCursor = -1;
+    theTitle = "";
+    decorations = "ALL";
+    functions = "ALL";
+    type = "NORMAL";
+    mode = "MODELESS";
+  }
+
+  window CascadeEnter
+  {
+    parent = "win0";
+    x = 550;
+    y = 400;
+    width  = 417;
+    height = 305;
+    borderWidth  = 0;
+    borderColour = 0;
+    backgroundColour = -1;
+    theCursor = -1;
+    theTitle = "";
+    decorations = "ALL";
+    functions = "ALL";
+    type = "NORMAL";
+    mode = "MODELESS";
+  }
+
+  window cascade2
+  {
+    parent = "win0";
+    x = 400;
+    y = 200;
+    width  = 420;
+    height = 320;
+    borderWidth  = 0;
+    borderColour = 0;
+    backgroundColour = -1;
+    theCursor = -1;
+    theTitle = "";
+    decorations = "ALL";
+    functions = "ALL";
+    type = "NORMAL";
+    mode = "MODELESS";
+  }
+}  // end of application YGN3and4

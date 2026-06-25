@@ -1,0 +1,275 @@
+// ***************************************************************************
+// *									     *
+// *	2017, CORENET Corporation generated this page.		             *
+// *									     *
+// ***************************************************************************
+//
+// **** REVISION HISTORY *****************************************************
+// EQUIPStructure.pdat
+// feel9zero@core-net.co.kr (Phil-Kyu Kwon) 
+//
+//
+// ***************************************************************************
+// System Include Files: NONE 
+//
+//
+// User Defined Include Files: NONE 
+//
+//
+// External Variables: NONE
+//
+//
+// Local Constant Definitions: NONE
+//
+//
+// Function Prototypes: NONE 
+//
+//
+// ******************* EQUIPMENT RUN TIME CALCULATION VARIABLES ********************
+//
+//
+// ====== EQUIPMENT VALUE CHANGE ===============
+
+struct WS_Equip_ValChg_Data {
+  char		pointId[12];		// point id to view
+  int		numDay;			// NO. OF EQUIPMENT RUN(DAY)
+  int		numMonth;		// NO. OF EQUIPMENT RUN(MONTH)
+  int		numYear;		// NO. OF EQUIPMENT RUN(YEAR)
+  float		runDay;			// RUNNING TIME DAY(HRS)
+  float		runMonth;		// RUNNING TIME MONTH(HRS)
+  float		runYear;		// RUNNING TIME YEAR(HRS)
+};
+
+//
+struct WS_Equip_ValChg_Message {
+  WSmessageHeader	header;		// message information		(24-bit)
+  WS_Equip_ValChg_Data	wsEquipValChgData;	// Equip value change ws information (36-bit)
+};
+
+//
+struct CCUR_Equip_Msg {
+  char		message1[40];
+  char		message2[40];
+  char		message3[40];
+};
+
+//
+struct CCUR_Equip_ValChg_Message {
+  WSmessageHeader		header;		// message information		(24-bit)
+  CCUR_Equip_Msg		hostEquipMsg;	// Equip value change host information (120-bit)
+};
+
+// ====== END EQUIPMENT VALUE CHANGE ==============
+
+
+
+
+// ====== EQUIPMENT RUNNING STATUS TO CRT ===========
+//
+/*   *************************************
+struct CCUR_EquipStatus_Data {
+  char		curStatus[12];
+  char		startDate[11];
+  char		startTime[9];
+  float		runningTime;
+};
+
+//
+struct CCUR_EquipStatus_Message {
+  WSmessageHeader		header;		// message information		(24-bit)
+  CCUR_EquipStatus_Data		hostReactorData;
+  CCUR_EquipStatus_Data		hostTurGenData;
+  CCUR_EquipStatus_Data		hostRCP1AData;
+  CCUR_EquipStatus_Data		hostRCP1BData;
+  CCUR_EquipStatus_Data		hostRCP2AData;
+  CCUR_EquipStatus_Data		hostRCP2BData;
+  CCUR_EquipStatus_Data		hostMFWP01PData;
+  CCUR_EquipStatus_Data		hostMFWP02PData;
+  CCUR_EquipStatus_Data		hostMFWP03PData;
+  CCUR_EquipStatus_Data		hostMFWBP04PData;
+  CCUR_EquipStatus_Data		hostMFWBP05PData;
+  CCUR_EquipStatus_Data		hostMFWBP06PData;
+};
+******************************************* */
+//
+struct CCUR_CurStatus_Data {
+  char 	reactorCurStatus[12];
+  char 	turGenCurStatus[12];
+  char 	rcp1aCurStatus[12];
+  char 	rcp1bCurStatus[12];
+  char 	rcp2aCurStatus[12];
+  char 	rcp2bCurStatus[12];
+  char 	mfwp01pCurStatus[12];
+  char 	mfwp02pCurStatus[12];
+  char	mfwp03pCurStatus[12];
+  char 	mfwbp04pCurStatus[12];
+  char	mfwbp05pCurStatus[12];
+  char	mfwbp06pCurStatus[12];
+};
+
+//
+struct CCUR_StartDate_Data {
+  char 	reactorStartDate[10];
+  char 	turGenStartDate[10];
+  char 	rcp1aStartDate[10];
+  char 	rcp1bStartDate[10];
+  char 	rcp2aStartDate[10];
+  char 	rcp2bStartDate[10];
+  char 	mfwp01pStartDate[10];
+  char 	mfwp02pStartDate[10];
+  char	mfwp03pStartDate[10];
+  char 	mfwbp04pStartDate[10];
+  char	mfwbp05pStartDate[10];
+  char	mfwbp06pStartDate[10];
+};
+
+//
+struct CCUR_StartTime_Data {
+  char 	reactorStartTime[8];
+  char 	turGenStartTime[8];
+  char 	rcp1aStartTime[8];
+  char 	rcp1bStartTime[8];
+  char 	rcp2aStartTime[8];
+  char 	rcp2bStartTime[8];
+  char 	mfwp01pStartTime[8];
+  char 	mfwp02pStartTime[8];
+  char	mfwp03pStartTime[8];
+  char 	mfwbp04pStartTime[8];
+  char	mfwbp05pStartTime[8];
+  char	mfwbp06pStartTime[8];
+};
+
+//
+struct CCUR_RunningTime_Data {
+  float 	reactorRunningTime;
+  float 	turGenRunningTime;
+  float 	rcp1aRunningTime;
+  float 	rcp1bRunningTime;
+  float 	rcp2aRunningTime;
+  float 	rcp2bRunningTime;
+  float 	mfwp01pRunningTime;
+  float 	mfwp02pRunningTime;
+  float		mfwp03pRunningTime;
+  float 	mfwbp04pRunningTime;
+  float		mfwbp05pRunningTime;
+  float		mfwbp06pRunningTime;
+};
+
+struct CCUR_EquipStatus_Data {
+  CCUR_CurStatus_Data		hostCurStatusData;
+  CCUR_StartDate_Data		hostStartDateData;
+  CCUR_StartTime_Data		hostStartTimeData;
+  CCUR_RunningTime_Data		hostRunningTimeData;
+  CCUR_Equip_Msg		hostEquipMsg;
+};
+//
+struct CCUR_EquipStatus_Message {
+  WSmessageHeader		header;
+  CCUR_EquipStatus_Data         hostEquipStatusData;
+}; // 600-bit
+
+
+struct CCUR_CurStatus_Data_BUF {
+  char 	reactorCurStatus[13];
+  char 	turGenCurStatus[13];
+  char 	rcp1aCurStatus[13];
+  char 	rcp1bCurStatus[13];
+  char 	rcp2aCurStatus[13];
+  char 	rcp2bCurStatus[13];
+  char 	mfwp01pCurStatus[13];
+  char 	mfwp02pCurStatus[13];
+  char	mfwp03pCurStatus[13];
+  char 	mfwbp04pCurStatus[13];
+  char	mfwbp05pCurStatus[13];
+  char	mfwbp06pCurStatus[13];
+};
+
+struct CCUR_StartDate_Data_BUF {
+  char 	reactorStartDate[11];
+  char 	turGenStartDate[11];
+  char 	rcp1aStartDate[11];
+  char 	rcp1bStartDate[11];
+  char 	rcp2aStartDate[11];
+  char 	rcp2bStartDate[11];
+  char 	mfwp01pStartDate[11];
+  char 	mfwp02pStartDate[11];
+  char	mfwp03pStartDate[11];
+  char 	mfwbp04pStartDate[11];
+  char	mfwbp05pStartDate[11];
+  char	mfwbp06pStartDate[11];
+};
+
+struct CCUR_StartTime_Data_BUF {
+  char 	reactorStartTime[9];
+  char 	turGenStartTime[9];
+  char 	rcp1aStartTime[9];
+  char 	rcp1bStartTime[9];
+  char 	rcp2aStartTime[9];
+  char 	rcp2bStartTime[9];
+  char 	mfwp01pStartTime[9];
+  char 	mfwp02pStartTime[9];
+  char	mfwp03pStartTime[9];
+  char 	mfwbp04pStartTime[9];
+  char	mfwbp05pStartTime[9];
+  char	mfwbp06pStartTime[9];
+};
+
+struct CCUR_RunningTime_Data_BUF {
+  float 	reactorRunningTime;
+  float 	turGenRunningTime;
+  float 	rcp1aRunningTime;
+  float 	rcp1bRunningTime;
+  float 	rcp2aRunningTime;
+  float 	rcp2bRunningTime;
+  float 	mfwp01pRunningTime;
+  float 	mfwp02pRunningTime;
+  float		mfwp03pRunningTime;
+  float 	mfwbp04pRunningTime;
+  float		mfwbp05pRunningTime;
+  float		mfwbp06pRunningTime;
+};
+
+struct CCUR_Equip_Msg_BUF {
+  char		message1[40];
+  char		message2[40];
+  char		message3[40];
+};
+
+struct CCUR_EquipStatus_Data_BUF {
+  CCUR_CurStatus_Data_BUF		hostCurStatusData;
+  CCUR_StartDate_Data_BUF		hostStartDateData;
+  CCUR_StartTime_Data_BUF		hostStartTimeData;
+  CCUR_RunningTime_Data_BUF		hostRunningTimeData;
+  CCUR_Equip_Msg_BUF		hostEquipMsg;
+};
+
+
+//
+// ====== END EQUIPMENT RUNNING STATUS TO CRT ===========
+
+
+
+// ====== EQUIPMENT RUNNING STATUS TO PRINTER ==========
+//
+struct WS_Equip_Prn_Data {
+  int 		PAGENUM;			// PAGENUM : 635
+  char		WSNAME[12];
+};
+
+//
+struct WS_Equip_Prn_Message {
+  WSmessageHeader		header;			// message information 		(24-bit)
+  WS_Equip_Prn_Data		wsEquipPrnData;		// ws print information		(16-bit)
+};
+
+//
+struct CCUR_Equip_Prn_Message {
+  WSmessageHeader		header;			// message information		(24-bit)
+  CCUR_Equip_Msg		hostEquipMsg;	// Equip print host information (120-bit)
+};
+//
+// ====== END EQUIPMENT RUNNING STATUS TO PRINTER ===========
+//
+// **************** END EQUIPMENT RUN TIME CALCULATION'S DEFINITION ****************
+//
+//

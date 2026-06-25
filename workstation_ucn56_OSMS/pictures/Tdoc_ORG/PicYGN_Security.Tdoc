@@ -1,0 +1,527 @@
+/*
+ * ProcSee CONFIGURATION LANGUAGE FILE
+ *
+ *
+ * User : ygn34
+ * Host : y6cr02
+ * Date : 2017-05-26
+ * Time : 11:03:21
+ *
+ * ProcSee version : ProcSee 3.10.1 (June 2016)
+ * File version    : 1.26
+ *
+ *
+ */
+
+
+picture PicYGN_Security
+{
+  worldX = 0;
+  worldY = 0;
+  worldWidth = 1280;
+  worldHeight = 824;
+  oneToOne = 1;
+  backgroundColour = 0;
+  updateMode = 2;
+  resizeMode = 0;
+  xSnap = 5;
+  ySnap = 5;
+  radiusSnap = 0;
+  angleSnap = 0;
+  crosshairStyle = 1;
+  crosshairLength = 0;
+  crosshairFollowSnap = `isInEditMode()`;
+  crosshairVisibility = `isInEditMode()`;
+  xReference = 500;
+  yReference = 500;
+  xScaleFactor = 1;
+  yScaleFactor = 1;
+  rotationAngle = 0;
+
+  int accessstatus = 0;
+
+  char PictureNumber[50] = "190";
+
+  char PictureTitle[50] = "SECURITY";
+
+  int Sec_Time = 0;
+
+  int utdvflag = 0;
+
+  function `void Initialize()
+  {
+     strcpy(Input.TheNewText," ");
+     strcpy(Input.TheOriginalText," ");
+     strcpy(Input.TheViewText," ");
+     if (Logon == 1)
+     {
+        Sec_Time = 1;
+        ProcessReqMsg.visibility = 0;
+  
+        Current_Page=190;
+  
+        DisplayAdvisoryMessage(" ");
+        DisplayAdvisoryMessage1(" ");
+        DisplayAdvisoryMessage2(" ");
+        DisplayAdvisoryMessage3(" ");
+  
+        CFMLevel = 0;
+        Current_Page = 190;
+     }
+     else
+     {
+        Signoff1();
+  
+        Sec_Time = 1;
+        ProcessReqMsg.visibility = 0;
+  
+        Current_Page=190;
+  
+        DisplayAdvisoryMessage(" ");
+        DisplayAdvisoryMessage1(" ");
+        DisplayAdvisoryMessage2(" ");
+        DisplayAdvisoryMessage3(" ");
+  
+        CFMLevel = 0;
+        Current_Page = 190;
+  
+  //    level3_box.foregroundFillColour=0;
+  //    level4_box.foregroundFillColour=0;
+  //    level5_box.foregroundFillColour=0;
+  //    signoff_box.foregroundFillColour=7;
+     }
+  
+     if (!Logon)
+     {
+  //    HDSR Initialization routine by thlee
+        sendMessageToHost(GRAPH_VIEW_DONE);
+  
+  //    VTREND Initialization routine by yrlee
+        int i;
+        int j;
+        Interface->VTFlagMessage.data.requestOption = 6; //dummy option..
+        execute("{sendMessageToHost(VTREND_RESET_REQUEST);}");
+     }
+  
+     update();
+  }`
+
+// ***CORENET 20170601 by Philkyu Kwon ************
+  function `void DummyProcess()
+  {
+	//printf("Button Select OR Button Unselected");
+  }`
+// ***************************************************
+
+  function `void Interval1()
+  {
+     if (Sec_Time == 0)
+     {
+        //DisplayPage(Page652);	// CORENET 2013.09 TEMP
+        Security1=0;
+     }
+     else
+     {
+     Sec_Time --;
+     }
+  }`
+
+  function `void Interval2()
+  {
+     if (Sec_Time == 0)
+     {
+  //      DisplayPage(Page100);
+        Security2=0;
+     }
+     else
+     {
+     Sec_Time --;
+     }
+  }`
+
+  function `void ProcessThis()
+  {
+       accessstatus=Interface->SecureConfirm.data.accessstatus;
+       accesslevel=Interface->SecureConfirm.data.accesslevel;
+       utdvflag=Interface->SecureConfirm.data.utdvflag;
+  //   printf("utdvflag = ", i);
+  
+       ProcessReqMsg.visibility = 0;
+  //
+  
+       switch(accessstatus)
+       {
+          case 0 : Logon = 1; break ;
+          case 1 : DisplayAdvisoryMessage("ALREADY SIGNED ON");
+                   break ;
+          case 2 : DisplayAdvisoryMessage("INVALID PASSWORD ENTERED");
+                   break ;
+          case 3 : DisplayAdvisoryMessage("ALREADY SIGNED OFF");
+                   break ;
+          case 4 : DisplayAdvisoryMessage("SIGN OFF ANOTHER STATION");
+                   Logon = 1;
+                   break ;
+       }
+  
+  //
+        if(accesslevel==3 && utdvflag==1)
+        {
+  //          signoff_box.foregroundFillColour=0;
+  //          level3_box.foregroundFillColour=7;
+            Security1 =1;
+  //        DisplayPage(Page652);
+        };
+  
+        if(accesslevel==3 && utdvflag==0)
+        {
+  //          signoff_box.foregroundFillColour=0;
+  //          level3_box.foregroundFillColour=7;
+            Security2 =1;
+  //        DisplayPage(Page100);
+        };
+  
+         if(accesslevel==4)
+         {
+  //          signoff_box.foregroundFillColour=0;
+  //          level4_box.foregroundFillColour=7;
+            Security2=1;
+  //        DisplayPage(Page100);
+         };
+  
+         if(accesslevel==5)
+         {
+  //          signoff_box.foregroundFillColour=0;
+  //          level5_box.foregroundFillColour=7;
+            Security2=1;
+  //        DisplayPage(Page100);
+         };
+  
+  }
+  `
+
+  function `void SendMsgToHost()
+  {
+     Input.TheNewText[7] = '\\0';
+     ProcessReqMsg.visibility = 1;
+     Interface->SecureRequest.data.signonoff=1;
+     strcpy(Interface->SecureRequest.data.password,Input.TheNewText);
+     execute("{sendMessageToHost(PROCESS_SECURE_DATA);}");
+  }`
+
+  function `void Signoff()
+  {
+  
+  // level3_box.foregroundFillColour=0;
+  // level4_box.foregroundFillColour=0;
+  // level5_box.foregroundFillColour=0;
+  // signoff_box.foregroundFillColour=7;
+  
+     Input.TheNewText[0]='\\0';
+     Input.TheOriginalText[0]='\\0';
+     Input.TheViewText[0]='\\0';
+  
+     Logon=0;
+     accesslevel=0;
+     update();
+  }`
+
+  function `void Signoff1()
+  {
+     Interface->SecureRequest.data.signonoff=2;
+     execute("{sendMessageToHost(PROCESS_SECURE_DATA);}");
+  
+     Signoff() ;
+  }`
+
+  rectangle
+  {
+    x = 149;
+    y = 74;
+    width = 978;
+    height = 380;
+    visibility = 1;
+    foregroundColour = `COLOR_LINE_BOUNDARY_6`;
+    backgroundColour = -1;
+    linePattern = 1;
+    lineWidth = 4;
+    foregroundFillColour = 0;
+    backgroundFillColour = -1;
+    fillPattern = 1;
+    xReference = 158;
+    yReference = 58;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle level3_box
+  {
+    x = 224;
+    y = 120;
+    width = 192;
+    height = 45;
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    linePattern = 1;
+    lineWidth = 2;
+    foregroundFillColour = `(Logon && (accesslevel==3))? 7:0`;
+    backgroundFillColour = -1;
+    fillPattern = 1;
+    xReference = 224;
+    yReference = 120;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle level4_box
+  {
+    x = 224;
+    y = 195;
+    width = 192;
+    height = 45;
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    linePattern = 1;
+    lineWidth = 2;
+    foregroundFillColour = `(Logon && (accesslevel==4))? 7:0`;
+    backgroundFillColour = -1;
+    fillPattern = 1;
+    xReference = 224;
+    yReference = 195;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle level5_box
+  {
+    x = 224;
+    y = 267;
+    width = 192;
+    height = 45;
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    linePattern = 1;
+    lineWidth = 2;
+    foregroundFillColour = `(Logon && (accesslevel==5))? 7:0`;
+    backgroundFillColour = -1;
+    fillPattern = 1;
+    xReference = 224;
+    yReference = 267;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle signoff_box
+  {
+    x = 225;
+    y = 366;
+    width = 192;
+    height = 45;
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    linePattern = 1;
+    lineWidth = 2;
+    foregroundFillColour = `(!Logon)? 7:0`;
+    backgroundFillColour = -1;
+    fillPattern = `SolidPattern`;
+    xReference = 225;
+    yReference = 366;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  line
+  {
+    numberOfPoints = 2;
+    point[0] = ( 149, 338 );
+    point[1] = ( 1129, 338 );
+    visibility = 1;
+    foregroundColour = `COLOR_LINE_BOUNDARY_6`;
+    backgroundColour = -1;
+    lineStyle = 1;
+    lineWidth = 2;
+    xReference = 149;
+    yReference = 338;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 498;
+    y = 152;
+    format = "%s";
+    theText = "LEVEL  3  (ONLY  IN  CONTROL  ROOM)";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font6`;
+    xReference = 498;
+    yReference = 152;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 498;
+    y = 227;
+    format = "%s";
+    theText = "LEVEL  4  (ONLY  IN  CONTROL  ROOM / TSC)";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font6`;
+    xReference = 498;
+    yReference = 227;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 498;
+    y = 299;
+    format = "%s";
+    theText = "LEVEL  5  (ONLY  IN  CONTROL  ROOM / TSC / EOF)";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font6`;
+    xReference = 498;
+    yReference = 299;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 498;
+    y = 398;
+    format = "%s";
+    theText = "SIGN - OFF";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font6`;
+    xReference = 498;
+    yReference = 398;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  instance DialogueSymbols.InputDialogueText_Sec Input
+  {
+    x = 787;
+    y = 517;
+    visibility = `!Logon`;
+    xReference = 787;
+    yReference = 517;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "DummyProcess()";	//CORENET 20170601 by Philkyu Kwon 
+    ExecuteUnSelect = "DummyProcess()";	//CORENET 20170601 by Philkyu Kwon
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxCharacters = 8;
+    ReturnAction = "SendMsgToHost()";
+    Scope = "::YGN3and4.PicYGN_Security";
+    SelectColour = `COLOR_BUTTON_BACKGROUND`;
+    Selected = 0;
+    TextColour = `COLOR_BUTTON_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewText = "YRL";
+    TheOriginalText = "YRL";
+    TheViewText = "***";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `!Logon`;
+    Width = 150;
+  }
+
+  text On
+  {
+    x = 353;
+    y = 537;
+    format = "%s";
+    theText = "TO   SIGNON : TYPE PASSWORD AND ENTER";
+    alignment = 0;
+    visibility = `!Logon`;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 353;
+    yReference = 537;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text ProcessReqMsg
+  {
+    x = 786;
+    y = 579;
+    format = "%s";
+    theText = "PROCESSING... WAIT";
+    alignment = 0;
+    visibility = 0;
+    foregroundColour = `COLOR_POPUP_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 786;
+    yReference = 579;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+
+    dialogue
+    {
+      event = `buttonPressed(Left)`;
+      action = `{
+        if (0 == visibility) visibility = 1;
+        else                 visibility = 0;
+      }`;
+    }
+  }
+
+  text Off
+  {
+    x = 355;
+    y = 615;
+    format = "%s";
+    theText = "TO SIGNOFF :  PRESS ESCAPE";
+    alignment = 0;
+    visibility = `Logon`;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 355;
+    yReference = 615;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+}

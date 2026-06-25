@@ -1,0 +1,233 @@
+/*
+ * PICASSO-3 CONFIGURATION LANGUAGE FILE
+ *
+ *
+ * Picture name: Art
+ *
+ *
+ * Documented by  : asn
+ * Host           : y5maint1
+ * Date           : 16/12-96 at 06:42:50
+ *
+ *
+ * Generate with:
+ *    pcc Art.Tdoc
+ *
+ */
+
+
+picture Art
+{
+
+  char *PictureTitle = "Art's Test Picture";
+  char *PictureNumber = "";
+  RECORD *MyTestPid = `ERRORPID`;
+
+  function `void TEST()
+{
+   Interface->GenericRequestMessage.data.requestOption = 69;
+   sendMessageToHost(DISPLAY_SINGLE_POINT);
+   printf ("message is %d",DISPLAY_SINGLE_POINT);
+}`
+
+
+
+  dialogue
+  {
+    event = `buttonPressed(3)`;
+    action = statement `{
+ DisplayAdvisoryMessage ("This is a new Test");
+ DisplayFeedbackMessage ("This is a feedback message");
+}`;
+  }
+
+  dialogue
+  {
+    event = `buttonPressed(2)`;
+    action = statement `{ 
+   if (TESTPID->value > 100.0)
+       TESTPID->value = .11;
+   else
+       TESTPID->value++;
+ update();
+}`;
+  }
+
+  dialogue
+  {
+    event = `buttonPressed(1)`;
+    action = statement `{ TEST(); }`;
+  }
+
+  instance cfmsSymbols.Pressurizer 
+  {
+    attribute PointId = `&TESTPID`;
+    x = 165;
+    y = 80;
+    visibility = 1;
+    xReference = 165;
+    yReference = 80;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  text 
+  {
+    x = 90;
+    y = 208;
+    format = "%s";
+    theText = "TESTPID->newsta = ";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font2`;
+    xReference = 90;
+    yReference = 208;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 235;
+    y = 208;
+    format = "%d";
+    theText = `TESTPID.newsta`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font2`;
+    xReference = 235;
+    yReference = 208;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  instance cfmsSymbols.ValueAndState 
+  {
+    attribute DisplayUnits = 1;
+    attribute PointId = `&TESTPID`;
+    x = 425;
+    y = 125;
+    visibility = 1;
+    xReference = 425;
+    yReference = 125;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  text 
+  {
+    x = 435;
+    y = 75;
+    format = "%s";
+    theText = "Value = ";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font0`;
+    xReference = 435;
+    yReference = 75;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 495;
+    y = 75;
+    format = "%f";
+    theText = `SIZ698L->value`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font0`;
+    xReference = 495;
+    yReference = 75;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  instance DialogueSymbols.InputDialogueText 
+  {
+    attribute isInside = 1;
+    attribute isDown = 0;
+    attribute Height = 30;
+    attribute Width = 200;
+    attribute SelectColour = `COLOR_BUTTON_SELECTED`;
+    attribute BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    attribute BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    attribute TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    attribute TextX = 10;
+    attribute TextY = 21;
+    attribute TextColour = `COLOR_PICTURE_BACKGROUND`;
+    attribute TextFont = 4;
+    attribute ExecuteSelect = "";
+    attribute ExecuteUnSelect = "";
+    attribute TheNewText = "12345";
+    attribute TheOriginalText = "12345";
+    attribute ERROR = 0;
+    attribute Selected = 0;
+    attribute ReturnAction = "";
+    attribute MaxCharacters = 10;
+    attribute Scope = "";
+    x = 205;
+    y = 300;
+    visibility = 1;
+    xReference = 205;
+    yReference = 300;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+// The picture's other attributes:
+
+  backgroundColour    = 0;
+  xSnap               = 5;
+  ySnap               = 5;
+  angleSnap           = 0;
+  radiusSnap          = 0;
+  worldX              = 0;
+  worldY              = 0;
+  worldWidth          = 1280;
+  worldHeight         = 824;
+  oneToOne            = 1;
+  resizeMode          = 0;
+  updateMode          = 2;
+  crosshairStyle      = 1;
+  crosshairLength     = 0;
+  crosshairFollowSnap = `isInEditMode()`;
+  crosshairVisibility = `isInEditMode()`;
+  xReference = 500;
+  yReference = 500;
+  xScaleFactor = 1;
+  yScaleFactor = 1;
+  rotationAngle = 0;
+
+
+}  // end of picture Art

@@ -1,0 +1,934 @@
+/*
+ * PICASSO-3 CONFIGURATION LANGUAGE FILE
+ *
+ *
+ * Picture name: PicYGN_ChgAlmLimitsDisplay
+ *
+ *
+ * Documented by  : ygn56
+ * Host           : ucn5
+ * Date           : 02/06-99 at 16:43:30
+ *
+ *
+ * Generate with:
+ *    pcc PicYGN_ChgAlmLimitsDisplay.Tdoc
+ *
+ */
+
+
+picture PicYGN_ChgAlmLimitsDisplay
+{
+
+  float Range_lo = `EngRangeLo(PicturePointId)`;
+  float Range_hi = `EngRangeHi(PicturePointId)`;
+  RECORD *PictureHighAlarmPID = `&::YGN3and4.InterfaceToGUI.IMTQMSPB`;
+  RECORD *PictureLowAlarmPID = 0;
+  int Protected = `(PicturePointId->pipbitmap&bCHGPROT)||(PicturePointId->sig_type==SOE)`;
+  int ERROR = `HiHiLimitEntry.ERROR || HiLimitEntry.ERROR || LoLimitEntry.ERROR || LoLoLimitEntry.ERROR`;
+  char TheDisplayPage[50] = "PicYGN_DBChangeMenu";
+  DB_CHANGE_DATA *pDBC_DATA = `&::YGN3and4.InterfaceToGUI.Interface.DatabaseDisplaysData`;
+  RECORD *PicturePointId = `&APEA0045`;
+  char *PageBack = "";
+  char *PageForward = "";
+  char *PictureNumber = "521";
+  char *PictureTitle = "CHANGE ALARM LIMITS";
+  int NoAlarm = `!Protected && !(AnalogAlarm||DigitalAlarm)`;
+  int DigitalAlarm = `Digital && (PicturePointId->pipbitmap&bALMTYP)`;
+  int AnalogAlarm = `Analog && (PicturePointId->pipbitmap&0x0F00)`;
+  int Analog = `(PicturePointId->sig_type<MinimumDigitalType)`;
+  int Digital = `(PicturePointId->sig_type>=MinimumDigitalType)`;
+
+  function `void Initialize()
+{
+   Current_Page = 521;
+   CFMLevel = 0;
+   
+   DisplayAdvisoryMessage(" ");
+   DisplayAdvisoryMessage1(" ");
+   DisplayAdvisoryMessage2(" ");
+   DisplayAdvisoryMessage3(" ");
+
+   HiHiLimitEntry.ERROR = 0 ;
+   HiLimitEntry.ERROR = 0 ;
+   LoLimitEntry.ERROR = 0 ;
+   LoLoLimitEntry.ERROR = 0 ;
+
+   ProcessingMsg.visibility = 0;
+   ProcessingErrorMsg.visibility = 0;
+
+   DBCinfo.pPID = PicturePointId;
+   strcpy(pDBC_DATA->PID,PicturePointId->pid);
+
+   sprintf(HiHiLimitEntry.TheOriginalText,"%-8.2f",HiHiLimitEntry.TheOriginalNumber) ;
+   sprintf(HiLimitEntry.TheOriginalText,"%-8.2f",HiLimitEntry.TheOriginalNumber) ;
+   sprintf(LoLimitEntry.TheOriginalText,"%-8.2f",LoLimitEntry.TheOriginalNumber) ;
+   sprintf(LoLoLimitEntry.TheOriginalText,"%-8.2f",LoLoLimitEntry.TheOriginalNumber) ;
+
+   HiHiLimitEntry.TheNewNumber = \`HiHiLimitEntry.TheOriginalNumber\` ;
+   HiLimitEntry.TheNewNumber = \`HiLimitEntry.TheOriginalNumber\` ;
+   LoLimitEntry.TheNewNumber = \`LoLimitEntry.TheOriginalNumber\` ;
+   LoLoLimitEntry.TheNewNumber = \`LoLoLimitEntry.TheOriginalNumber\` ;
+
+   strcpy(HiHiLimitEntry.TheNewText,HiHiLimitEntry.TheOriginalText) ;
+   strcpy(HiLimitEntry.TheNewText,HiLimitEntry.TheOriginalText) ;  
+   strcpy(LoLimitEntry.TheNewText,LoLimitEntry.TheOriginalText) ;
+   strcpy(LoLoLimitEntry.TheNewText,LoLoLimitEntry.TheOriginalText) ;
+
+   //printf("\\n%-8.2f    %-8.2f    %-8.2f    %-8.2f\\n",HiHiLimitEntry.TheOriginalNumber,HiLimitEntry.TheOriginalNumber,
+   //       LoLimitEntry.TheOriginalNumber, LoLoLimitEntry.TheOriginalNumber ) ;
+
+
+   if(IsAnalog(PicturePointId))
+   {
+      if(0 != PicturePointId->lIPN)
+      {
+         execute ("{PictureLowAlarmPID = \`&::YGN3and4.InterfaceToGUI.%s\`;}",PicturePointId->message1);
+      }
+      else
+      {
+         PictureLowAlarmPID = 0;
+      }
+
+      if(0 != PicturePointId->hIPN)
+      {
+         execute ("{PictureHighAlarmPID = \`&::YGN3and4.InterfaceToGUI.%s\`;}",PicturePointId->message2);
+      }
+      else
+      {
+         PictureHighAlarmPID = 0;
+      }
+
+      LoLoLimitEntry.TheNumberFormat = PicturePointId->disfmt;
+   }   
+   else LoLoLimitEntry.TheNumberFormat = "%d";
+
+   update();
+}`
+
+
+
+  function `void Process1()
+{
+   if (ERROR ==0)
+   {
+      ProcessingMsg.visibility = 1;
+//      ProcessingErrorMsg.visibility = 0;
+
+      if(PicturePointId->sig_type >= MinimumDigitalType)      // FOR DIGITAL
+      {             
+         if(PicturePointId->pipbitmap & bALMTYP)
+           pDBC_DATA->LoLoLim = LoLoLimitEntry.TheNewNumber;
+         else
+           pDBC_DATA->LoLoLim = 0.0;
+      }
+      else                                                   // FOR ANALOG
+      {
+         if(PicturePointId->pipbitmap & bLLE)
+           pDBC_DATA->LoLoLim = (Interface->System.displayedUnits) ? LoLoLimitEntry.TheNewNumber :
+                                LoLoLimitEntry.TheNewNumber * PicturePointId->mfactor + PicturePointId->moffset ;
+         else
+           pDBC_DATA->LoLoLim = 0.0;
+
+         if(PicturePointId->pipbitmap & bLE) 
+           pDBC_DATA->LoLim   = (Interface->System.displayedUnits) ? LoLimitEntry.TheNewNumber :
+                                LoLimitEntry.TheNewNumber * PicturePointId->mfactor + PicturePointId->moffset ;
+         else
+           pDBC_DATA->LoLim   = 0.0;
+
+         if(PicturePointId->pipbitmap & bHE)
+           pDBC_DATA->HiLim   = (Interface->System.displayedUnits) ? HiLimitEntry.TheNewNumber :
+                                HiLimitEntry.TheNewNumber * PicturePointId->mfactor + PicturePointId->moffset ;
+         else
+           pDBC_DATA->HiLim   = 0.0;
+  
+         if(PicturePointId->pipbitmap & bHHE)
+           pDBC_DATA->HiHiLim = (Interface->System.displayedUnits) ? HiHiLimitEntry.TheNewNumber :
+                                HiHiLimitEntry.TheNewNumber * PicturePointId->mfactor + PicturePointId->moffset ;
+         else
+           pDBC_DATA->HiHiLim = 0.0;
+      }
+
+      execute("{sendMessageToHost(PROCESS_CHGLIM_DATA);}");
+   }
+   else
+   {
+     ProcessingErrorMsg.visibility = 1;
+   }
+   update();
+}`
+
+
+
+  function `void ProcessingConfirmed()
+{
+  ProcessingMsg.visibility = 0;
+  update();
+}`
+
+
+
+  function `void VerifyLimits()
+{
+   if(PicturePointId->sig_type < MinimumDigitalType)  //for Analog 
+   {
+      if(PicturePointId->pipbitmap&bHHE)
+      {
+          if((HiHiLimitEntry.TheNewNumber >= Range_lo) && (HiHiLimitEntry.TheNewNumber <= Range_hi))
+               HiHiLimitEntry.ERROR = 0;
+          else
+               HiHiLimitEntry.ERROR = 1;
+      }
+
+      if(PicturePointId->pipbitmap&bHE)
+      {
+          if((HiLimitEntry.TheNewNumber >= Range_lo) && (HiLimitEntry.TheNewNumber <= Range_hi))
+               HiLimitEntry.ERROR = 0;
+          else
+               HiLimitEntry.ERROR = 1;
+      }
+
+      if(PicturePointId->pipbitmap&bLE)
+      {
+          if((LoLimitEntry.TheNewNumber >= Range_lo) && (LoLimitEntry.TheNewNumber <= Range_hi))
+               LoLimitEntry.ERROR = 0;
+          else
+               LoLimitEntry.ERROR = 1;
+      }
+
+      if(PicturePointId->pipbitmap&bLLE)
+      {
+          if((LoLoLimitEntry.TheNewNumber >= Range_lo) && (LoLoLimitEntry.TheNewNumber <= Range_hi))
+               LoLoLimitEntry.ERROR = 0;
+          else
+               LoLoLimitEntry.ERROR = 1;
+      }
+
+//      ValueErrorMsg.visibility = HiHiLimitEntry.ERROR || HiLimitEntry.ERROR || LoLimitEntry.ERROR || LoLoLimitEntry.ERROR ;
+   }
+   else       // for Digital
+   {
+      if(((LoLoLimitEntry.TheNewNumber==0)||(LoLoLimitEntry.TheNewNumber==1)) && (PicturePointId->pipbitmap&bALMTYP))
+          LoLoLimitEntry.ERROR = 0;
+      else
+          LoLoLimitEntry.ERROR = 1;
+
+//      ValueErrorMsg.visibility = LoLoLimitEntry.ERROR ;
+   }
+
+   ProcessingErrorMsg.visibility = 0 ;
+
+}`
+
+
+
+  dialogue
+  {
+    event = `buttonPressed(Right)`;
+    action = statement `{
+  Initialize();
+}`;
+  }
+
+  instance DialogueSymbols.PushButton 
+  {
+    attribute ExecuteString = "{Process1();}";
+    attribute isInside = 1;
+    attribute isDown = 0;
+    attribute Height = 30;
+    attribute Width = 110;
+    attribute ButtonState = 0;
+    attribute SelectColour = `COLOR_BUTTON_SELECTED`;
+    attribute BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    attribute BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    attribute TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    attribute TextX = 7;
+    attribute TextY = 22;
+    attribute Label = "PROCESS";
+    attribute TextColour = `COLOR_PICTURE_BACKGROUND`;
+    attribute TextFont = 4;
+    attribute TextXStatic = 7;
+    attribute TextXDynamic = 5;
+    attribute TextYStatic = 22;
+    attribute TextYDynamic = 21;
+    attribute DynamicLabel = "PROCESSING";
+    attribute StaticLabel = "PROCESS";
+    attribute TextFontStatic = `font4`;
+    attribute TextFontDynamic = `font2`;
+    attribute Scope = "PicYGN_ChgAlmLimitsDisplay";
+    x = 103;
+    y = 718;
+    visibility = `!Protected`;
+    xReference = 103;
+    yReference = 718;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance DialogueSymbols.PushButton 
+  {
+    attribute ExecuteString = "{CascadeEnterActive=1;DisplayCascadeEnter(\"PicYGN_ChgAlmLimitsCascade.ppic\",550,400,200,220);}";
+    attribute isInside = 1;
+    attribute isDown = 0;
+    attribute Height = 30;
+    attribute Width = 110;
+    attribute ButtonState = 0;
+    attribute SelectColour = `COLOR_BUTTON_SELECTED`;
+    attribute BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    attribute BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    attribute TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    attribute TextX = 18;
+    attribute TextY = 22;
+    attribute Label = "SELECT";
+    attribute TextColour = `COLOR_PICTURE_BACKGROUND`;
+    attribute TextFont = 4;
+    attribute TextXStatic = 18;
+    attribute TextXDynamic = 15;
+    attribute TextYStatic = 22;
+    attribute TextYDynamic = 21;
+    attribute DynamicLabel = "SELECTING";
+    attribute StaticLabel = "SELECT";
+    attribute TextFontStatic = `font4`;
+    attribute TextFontDynamic = `font2`;
+    attribute Scope = "PicYGN_ChgAlmLimitsDisplay";
+    x = 653;
+    y = 718;
+    visibility = 1;
+    xReference = 863;
+    yReference = 718;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  text 
+  {
+    x = 778;
+    y = 740;
+    format = "%s";
+    theText = "A NEW POINT ID";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 198;
+    yReference = 740;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  instance DialogueSymbols.DatabaseDisplayInfo DBCinfo
+  {
+    attribute pPID = `&::YGN3and4.InterfaceToGUI.APEA0045`;
+    attribute pHiAlmPID = `PictureHighAlarmPID`;
+    attribute pLoAlmPID = `PictureLowAlarmPID`;
+    x = 0;
+    y = 0;
+    visibility = 1;
+    xReference = 0;
+    yReference = 0;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance DBCinfo
+
+
+
+  text ProcessingMsg
+  {
+    x = 553;
+    y = 663;
+    format = "%s";
+    theText = "PROCESSING...  WAIT";
+
+    visibility = 0;
+    foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 553;
+    yReference = 663;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text LoLimitLabel
+  {
+    x = 143;
+    y = 526;
+    format = "%s";
+    theText = "LO LIMIT:";
+
+    visibility = `!Protected && AnalogAlarm`;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 143;
+    yReference = 526;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text LoLoLimitLabel
+  {
+    x = 116;
+    y = 581;
+    format = "%s";
+    theText = "LOLO LIMIT:";
+
+    visibility = `!Protected && AnalogAlarm`;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 116;
+    yReference = 581;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text HiLimitLabel
+  {
+    x = 152;
+    y = 470;
+    format = "%s";
+    theText = "HI LIMIT:";
+
+    visibility = `!Protected && AnalogAlarm`;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 152;
+    yReference = 470;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text HiHiLimitLabel
+  {
+    x = 134;
+    y = 414;
+    format = "%s";
+    theText = "HIHI LIMIT:";
+
+    visibility = `!Protected && AnalogAlarm`;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 134;
+    yReference = 414;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  instance DialogueSymbols.InputDialogueNumber LoLoLimitEntry
+  {
+    attribute isInside = 1;
+    attribute isDown = 0;
+    attribute Height = 30;
+    attribute Width = 150;
+    attribute SelectColour = `COLOR_BUTTON_SELECTED`;
+    attribute BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    attribute BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    attribute TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    attribute TextX = 10;
+    attribute TextY = 21;
+    attribute TextColour = `COLOR_PICTURE_BACKGROUND`;
+    attribute TextFont = 4;
+    attribute ExecuteSelect = "";
+    attribute ExecuteUnSelect = "";
+    attribute TheNewText = "0";
+    attribute TheOriginalText = "0";
+    attribute ERROR = 0;
+    attribute TheNumberFormat = "%d";
+    attribute Selected = 0;
+    attribute ReturnAction = "{VerifyLimits();}";
+    attribute TheOriginalNumber = `(Interface->System.displayedUnits)?PicturePointId->llmet:PicturePointId->llval`;
+    attribute MaxDigits = 8;
+    attribute TheNewNumber = 0;
+    attribute Scope = "PicYGN_ChgAlmLimitsDisplay";
+    attribute Active = 1;
+    attribute vis = `visibility`;
+    x = 289;
+    y = 560;
+    visibility = `!Protected && ( (Analog && (PicturePointId->pipbitmap&bLLE)) || DigitalAlarm )`;
+    xReference = 289;
+    yReference = 560;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance LoLoLimitEntry
+
+
+
+  instance DialogueSymbols.InputDialogueNumber LoLimitEntry
+  {
+    attribute isInside = 1;
+    attribute isDown = 0;
+    attribute Height = 30;
+    attribute Width = 150;
+    attribute SelectColour = `COLOR_BUTTON_SELECTED`;
+    attribute BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    attribute BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    attribute TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    attribute TextX = 10;
+    attribute TextY = 21;
+    attribute TextColour = `COLOR_PICTURE_BACKGROUND`;
+    attribute TextFont = 4;
+    attribute ExecuteSelect = "";
+    attribute ExecuteUnSelect = "";
+    attribute TheNewText = "0.00    ";
+    attribute TheOriginalText = "0.00    ";
+    attribute ERROR = 0;
+    attribute TheNumberFormat = `PicturePointId->disfmt`;
+    attribute Selected = 0;
+    attribute ReturnAction = "{VerifyLimits();}";
+    attribute TheOriginalNumber = `(Interface->System.displayedUnits)?PicturePointId->lmet:PicturePointId->lval`;
+    attribute MaxDigits = 8;
+    attribute TheNewNumber = `LoLimitEntry.TheOriginalNumber`;
+    attribute Scope = "PicYGN_ChgAlmLimitsDisplay";
+    attribute Active = 1;
+    attribute vis = `visibility`;
+    x = 289;
+    y = 505;
+    visibility = `!Protected && (Analog && (PicturePointId->pipbitmap&bLE))`;
+    xReference = 289;
+    yReference = 505;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance LoLimitEntry
+
+
+
+  instance DialogueSymbols.InputDialogueNumber HiLimitEntry
+  {
+    attribute isInside = 1;
+    attribute isDown = 0;
+    attribute Height = 30;
+    attribute Width = 150;
+    attribute SelectColour = `COLOR_BUTTON_SELECTED`;
+    attribute BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    attribute BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    attribute TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    attribute TextX = 10;
+    attribute TextY = 21;
+    attribute TextColour = `COLOR_PICTURE_BACKGROUND`;
+    attribute TextFont = 4;
+    attribute ExecuteSelect = "";
+    attribute ExecuteUnSelect = "";
+    attribute TheNewText = "0.00    ";
+    attribute TheOriginalText = "0.00    ";
+    attribute ERROR = 0;
+    attribute TheNumberFormat = `PicturePointId->disfmt`;
+    attribute Selected = 0;
+    attribute ReturnAction = "{VerifyLimits();}";
+    attribute TheOriginalNumber = `(Interface->System.displayedUnits)?PicturePointId->hmet:PicturePointId->hval`;
+    attribute MaxDigits = 8;
+    attribute TheNewNumber = `HiLimitEntry.TheOriginalNumber`;
+    attribute Scope = "PicYGN_ChgAlmLimitsDisplay";
+    attribute Active = 1;
+    attribute vis = `visibility`;
+    x = 289;
+    y = 450;
+    visibility = `!Protected &&(Analog && (PicturePointId->pipbitmap&bHE))`;
+    xReference = 289;
+    yReference = 450;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance HiLimitEntry
+
+
+
+  instance DialogueSymbols.InputDialogueNumber HiHiLimitEntry
+  {
+    attribute isInside = 1;
+    attribute isDown = 0;
+    attribute Height = 30;
+    attribute Width = 150;
+    attribute SelectColour = `COLOR_BUTTON_SELECTED`;
+    attribute BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    attribute BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    attribute TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    attribute TextX = 10;
+    attribute TextY = 21;
+    attribute TextColour = `COLOR_PICTURE_BACKGROUND`;
+    attribute TextFont = 4;
+    attribute ExecuteSelect = "";
+    attribute ExecuteUnSelect = "";
+    attribute TheNewText = "0.00    ";
+    attribute TheOriginalText = "0.00    ";
+    attribute ERROR = 0;
+    attribute TheNumberFormat = `PicturePointId->disfmt`;
+    attribute Selected = 0;
+    attribute ReturnAction = "{PicYGN_ChgAlmLimitsDisplay.VerifyLimits();}";
+    attribute TheOriginalNumber = `(Interface->System.displayedUnits)?PicturePointId->hhmet:PicturePointId->hhval`;
+    attribute MaxDigits = 8;
+    attribute TheNewNumber = `HiHiLimitEntry.TheOriginalNumber`;
+    attribute Scope = "::YGN3and4.PicYGN_ChgAlmLimitsDisplay";
+    attribute Active = 1;
+    attribute vis = `visibility`;
+    x = 289;
+    y = 395;
+    visibility = `!Protected &&(Analog && (PicturePointId->pipbitmap&bHHE))`;
+    xReference = 289;
+    yReference = 395;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance HiHiLimitEntry
+
+
+
+  text LoLoLimitNone
+  {
+    x = 299;
+    y = 581;
+    format = "%s";
+    theText = "NONE";
+
+    visibility = `!Protected &&(Analog && !(PicturePointId->pipbitmap&bLLE)) 
+                             && !NoAlarm`;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 299;
+    yReference = 581;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text LoLimitNone
+  {
+    x = 299;
+    y = 527;
+    format = "%s";
+    theText = "NONE";
+
+    visibility = `!Protected && (Analog && !(PicturePointId->pipbitmap&bLE) )
+                             && !NoAlarm`;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 299;
+    yReference = 527;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text HiLimitNone
+  {
+    x = 300;
+    y = 471;
+    format = "%s";
+    theText = "NONE";
+
+    visibility = `!Protected && (Analog && !(PicturePointId->pipbitmap&bHE) )
+                             && !NoAlarm`;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 300;
+    yReference = 471;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text HiHiLimitNone
+  {
+    x = 299;
+    y = 416;
+    format = "%s";
+    theText = "NONE";
+
+    visibility = `!Protected && (Analog && !(PicturePointId->pipbitmap&bHHE)) 
+                             && !NoAlarm`;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 299;
+    yReference = 416;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text Text1
+  {
+    x = 511;
+    y = 567;
+    format = "%s";
+    theText = "0 = ALARM WHEN CONTACT OPEN";
+
+    visibility = `!Protected && (PicturePointId->sig_type >= MinimumDigitalType) && DigitalAlarm`;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 511;
+    yReference = 567;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text Text2
+  {
+    x = 511;
+    y = 590;
+    format = "%s";
+    theText = "1 = ALARM WHEN CONTACT CLOSED";
+
+    visibility = `!Protected && (PicturePointId->sig_type >= MinimumDigitalType) && DigitalAlarm`;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 511;
+    yReference = 590;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text NewState
+  {
+    x = 110;
+    y = 580;
+    format = "%s";
+    theText = "NEW STATE:";
+
+    visibility = `!Protected && DigitalAlarm`;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 110;
+    yReference = 580;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text ValueError1Msg
+  {
+    x = 292;
+    y = 443;
+    format = "%s";
+    theText = "INVALID VALUE";
+
+    visibility = `HiHiLimitEntry.ERROR`;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 292;
+    yReference = 443;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text ProcessingErrorMsg
+  {
+    x = 101;
+    y = 709;
+    format = "%s";
+    theText = "CORRECT ALL ERRORS BEFORE PROCESSING";
+
+    visibility = 0;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 101;
+    yReference = 709;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 229;
+    y = 740;
+    format = "%s";
+    theText = "CURRENT POINT INFORMATION";
+
+    visibility = `!Protected`;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 229;
+    yReference = 740;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text ChangeProtected
+  {
+    x = 102;
+    y = 443;
+    format = "%s";
+    theText = "DATABASE CHANGES NOT ALLOWED";
+
+    visibility = `Protected`;
+    foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 102;
+    yReference = 443;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text NoAlarmMsg
+  {
+    x = 102;
+    y = 498;
+    format = "%s";
+    theText = "CURRENT POINT HAS NO ALARM LIMITS OR STATE";
+
+    visibility = `NoAlarm`;
+    foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 102;
+    yReference = 498;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text ValueError2Msg
+  {
+    x = 292;
+    y = 498;
+    format = "%s";
+    theText = "INVALID VALUE";
+
+    visibility = `HiLimitEntry.ERROR`;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 292;
+    yReference = 498;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text ValueError3Msg
+  {
+    x = 292;
+    y = 553;
+    format = "%s";
+    theText = "INVALID VALUE";
+
+    visibility = `LoLimitEntry.ERROR`;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 292;
+    yReference = 553;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text ValueError4Msg
+  {
+    x = 292;
+    y = 606;
+    format = "%s";
+    theText = "INVALID VALUE";
+
+    visibility = `LoLoLimitEntry.ERROR`;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 292;
+    yReference = 606;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+// The picture's other attributes:
+
+  backgroundColour    = 0;
+  xSnap               = 5;
+  ySnap               = 5;
+  angleSnap           = 0;
+  radiusSnap          = 0;
+  worldX              = 0;
+  worldY              = 0;
+  worldWidth          = 1280;
+  worldHeight         = 824;
+  oneToOne            = 1;
+  resizeMode          = 0;
+  updateMode          = 2;
+  crosshairStyle      = 1;
+  crosshairLength     = 0;
+  crosshairFollowSnap = `isInEditMode()`;
+  crosshairVisibility = `isInEditMode()`;
+  xReference = 500;
+  yReference = 500;
+  xScaleFactor = 1;
+  yScaleFactor = 1;
+  rotationAngle = 0;
+
+
+}  // end of picture PicYGN_ChgAlmLimitsDisplay

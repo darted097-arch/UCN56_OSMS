@@ -1,0 +1,7 @@
+rm ../obj/*
+make -f MakeWorkstation
+cp ../bin/* /home/runtime/pictures_ucn56EOF/
+
+#cd ../pictures
+#BuildDisplays
+#cp Runtime/* /home/runtime/pictures_ucn56EOF/

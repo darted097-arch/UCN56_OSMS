@@ -1,0 +1,3523 @@
+/*
+ * ProcSee CONFIGURATION LANGUAGE FILE
+ *
+ *
+ * User : ucn56
+ * Host : y6cr02
+ * Date : 2017-05-25
+ * Time : 15:40:03
+ *
+ * ProcSee version : ProcSee 3.10.1 (June 2016)
+ * File version    : 1.26
+ *
+ *
+ */
+
+
+picture PicUCN_HDSR74Xview
+{
+  worldX = 0;
+  worldY = 0;
+  worldWidth = 1280;
+  worldHeight = 824;
+  oneToOne = 1;
+  backgroundColour = 0;
+  updateMode = 2;
+  resizeMode = 0;
+  xSnap = 3;
+  ySnap = 5;
+  radiusSnap = 0;
+  angleSnap = 0;
+  crosshairStyle = 1;
+  crosshairLength = 0;
+  crosshairFollowSnap = `isInEditMode()`;
+  crosshairVisibility = `isInEditMode()`;
+  xReference = 500;
+  yReference = 500;
+  xScaleFactor = 1;
+  yScaleFactor = 1;
+  rotationAngle = 0;
+
+  int Level = 1;
+
+  char PictureNumber[50] = "   ";
+
+  char PictureTitle[50] = "                  ";			// CORENET 201705 by Philkyu Kwon
+
+  char* Resolution = `&::UCN5and6.InterfaceToGUI.gPage745.resolution[0]`;
+
+  char* Resource = `&::UCN5and6.InterfaceToGUI.gPage745.dataSource[0]`;
+
+  int Sector = 1;
+
+  int Sector_1 = 0;
+
+  int Sector_2 = 0;
+
+  int Sector_3 = 0;
+
+  int Type = 1;
+
+  char TempTitle[50] = "";				// CORENET 201705 by Philkyu Kwon
+
+  char TempNumber[50] = "";				// CORENET 201705 by Philkyu Kwon
+
+//CORENET 0706
+  function `void ConfirmProcess()
+  {
+
+  }`
+
+
+
+  function `int ActDisplay( int actNo )
+  {
+     switch( actNo ) {
+        case 0:     // initialization
+              Level = 1;
+              Sector = 1;
+              Sector_1 = 0;
+              Sector_2 = 0;
+              Sector_3 = 0;
+              Scaling( Sector_1, Sector_2, Sector_3 );
+              break;
+        case 1:      // left
+              tLeftSectoring();
+              break;
+        case 2:      // right
+              tRightSectoring();
+              break;
+        case 3:      // up
+              UpSectoring();
+              break;
+        case 4:      // down
+              DownSectoring();
+              break;
+        default:
+              DisplayAdvisoryMessage1("ERROR: Display Graphic Trends");
+     }
+  }`
+
+  function `int AllDownSectoring(int sector)
+  {
+     if( Level == 4 )
+        return -1;
+     else {
+        Level++;
+        Sector = sector;
+     }
+  
+  // scaling
+     if( Sector_1 == 0 )
+        Sector_1 = sector;
+     else if( Sector_2 == 0 )
+        Sector_2 = sector;
+     else if( Sector_3 == 0 )
+        Sector_3 = sector;
+     else
+        return -1;
+  
+  //  Scaling( Sector_1, Sector_2, Sector_3);
+     return 1;
+  }`
+
+  function `void AppearScale()
+  {
+     t_time2.visibility = 1;
+     t_time3.visibility = 1;
+     t_time4.visibility = 1;
+  
+     time2_2.visibility = 1;
+     time3_2.visibility = 1;
+     time4_2.visibility = 1;
+  
+     time2_3.visibility = 1;
+     time3_3.visibility = 1;
+     time4_3.visibility = 1;
+  
+     time2_4.visibility = 1;
+     time3_4.visibility = 1;
+     time4_4.visibility = 1;
+  
+  //   line_1.visibility = 1;
+  //   line_2.visibility = 1;
+  //   line_3.visibility = 1;
+  
+     update();
+  }`
+
+  function `int DDisplayTrend()
+  {
+     int i;
+  
+     if( gView_x.pointType_1 == 1 )
+        DisplayAnalogTrend(1);
+     else      // DI or DL
+        DisplayDigitalTrend(1);
+  
+     if( gView_x.pointType_2 == 1 )
+        DisplayAnalogTrend(2);
+     else
+        DisplayDigitalTrend(2);
+  
+     if( gView_x.pointType_3 == 1 )
+        DisplayAnalogTrend(3);
+     else
+        DisplayDigitalTrend(3);
+  
+     if( gView_x.pointType_4 == 1 ) {
+        for(i=0;i<1200;i++){
+        }
+        DisplayAnalogTrend(4);
+        DisplayAnalogTrend(4);
+     }
+     else
+        DisplayDigitalTrend(4);
+  }`
+
+  function `void DisappearScale()
+  {
+     t_time2.visibility = 0;
+     t_time3.visibility = 0;
+     t_time4.visibility = 0;
+  
+     time2_2.visibility = 0;
+     time3_2.visibility = 0;
+     time4_2.visibility = 0;
+  
+     time2_3.visibility = 0;
+     time3_3.visibility = 0;
+     time4_3.visibility = 0;
+  
+     time2_4.visibility = 0;
+     time3_4.visibility = 0;
+     time4_4.visibility = 0;
+  
+  //   line_1.visibility = 0;
+  //   line_2.visibility = 0;
+  //   line_3.visibility = 0;
+     update();
+  }`
+
+  function `int DisplayAnalogTrend(int num)
+  {
+     execute("{ trend_%d.DrawAnalogTrend(); }", num);
+     return 1;
+  }`
+
+  function `int DisplayDigitalTrend(int num)
+  {
+     execute("{ strcpy(trend_%d.On, gView_x.onScale_%d); }", num, num);
+     execute("{ strcpy(trend_%d.Off, gView_x.offScale_%d); }", num, num);
+     execute("{ trend_%d.DigitalValues = gView_x.iValue_%d; }", num, num);
+     execute("{ trend_%d.DrawDigitalTrend(); }", num);
+     return 1;
+  }`
+
+  function `int DisplayTrend( int num )
+  {
+     execute( "Type = gView_x.pointType_%d", num);
+  
+     if( Type == 1 )
+        execute( "DisplayAnalogTrend(%d)", num);
+     else      // DI or DL
+        execute( "DisplayDigitalTrend(%d)", num);
+  
+  }`
+
+  function `int DownSectoring()
+  {
+     if( Level == 4 )
+        return -1;
+     else {
+        Level++;
+        Sector = 1;
+     }
+  
+     if( Level == 4 )
+           DisappearScale();
+     else
+           AppearScale();
+  
+  // scaling
+     if( Sector_1 == 0 )
+        Sector_1 = 1;
+     else if( Sector_2 == 0 )
+        Sector_2 = 1;
+     else if( Sector_3 == 0 )
+        Sector_3 = 1;
+     else
+        return -1;
+  
+  //  Scaling( Sector_1, Sector_2, Sector_3);
+     return 1;
+  }`
+
+  function `void Initialize()
+  {
+      int setNo;
+      setNo = gView_x.whichView;
+  
+     sendMessageToHost(HDSR_GRAPH_VIEW);
+     //sendMessageToHost(GRAPH_VIEW_74X);
+  
+     CFMLevel = 0;
+     Current_Page = 176;
+     ClearAdvisoryMessage();
+      MakeTitle(setNo);
+  //    bExit.UnSelect();
+      ActDisplay(0);
+     InitializeInput();
+  //      boxSector.fillPattern = SolidPattern;
+     update();
+  
+      gView_x.actNo = 0;         // what action?
+      gView_x.actMask = 1;         //action mask
+      gView_x.level = 1;
+      gView_x.useView = 0;   // busy view?
+  
+  //    execute( "Resolution = gPage74%d.resolution", setNo);
+  //    execute( "Resource = gPage74%d.dataSource", setNo);
+  
+  //    if( strcmp( Resolution, "L") == 0 )
+  //         sprintf( gView_x.resolution, "LOW");
+  //    else
+  //         sprintf( gView_x.resolution, "HIGH");
+  
+  //    if( strcmp( Resource, "T") == 0 )
+  //         sprintf( gView_x.resource, "TAPE");
+  //    else
+  //         sprintf( gView_x.resource, "DISK");
+  
+        t_description1.visibility = 1;
+        t_description2.visibility = 1;
+        t_description3.visibility = 1;
+        t_description4.visibility = 1;
+        AppearScale();
+  
+        DisplayAdvisoryMessage1("REQUEST TO HOST... WAIT");
+  }`
+
+// ***CORENET 20170601 by Philkyu Kwon ************
+  function `void DummyProcess()
+  {
+      //printf("Button Select OR Button Unselected");
+  }`
+// ***************************************************
+
+  function `void InitializeInput()
+  {
+     int i;
+  
+     strcpy(gView_x.resolution, "");
+     strcpy(gView_x.resource, "");
+     strcpy(gView_x.startDate, "");
+     strcpy(gView_x.endDate, "");
+  
+     strcpy(gView_x.time_1, "");
+     strcpy(gView_x.time_2, "");
+     strcpy(gView_x.time_3, "");
+     strcpy(gView_x.time_4, "");
+     strcpy(gView_x.time_5, "");
+  
+     strcpy(gView_x.pointID_1, "");
+     strcpy(gView_x.pointID_2, "");
+     strcpy(gView_x.pointID_3, "");
+     strcpy(gView_x.pointID_4, "");
+  
+     strcpy(gView_x.description_1, "");
+     strcpy(gView_x.description_2, "");
+     strcpy(gView_x.description_3, "");
+     strcpy(gView_x.description_4, "");
+  
+     for( i = 1; i <= 4; i++ )
+     execute("{ trend_%d.Reset(); }", i);
+  }`
+
+  function `int LeftSectoring()
+  {
+     if( Level == 1 )
+        Sector = 1;
+     else {
+        if( Sector == 1 )
+           Sector = 4;
+        else
+           Sector--;
+     }
+  
+  // scaling
+     if( Sector_1 == 0 || Level == 1)
+        return -1;
+     else if( Sector_2 == 0 ) {
+        if( Sector_1 == 1 )
+           Sector_1 = 4;
+        else
+           Sector_1--;
+     }
+     else if( Sector_3 == 0) {
+        if( Sector_2 == 1 ) {
+           if( Sector_1 == 1 )
+              Sector_1 = 4;
+           else
+              Sector_1--;
+  
+           Sector_2 = 4;
+        }
+        else
+           Sector_2--;
+     }
+     else {
+        if( Sector_3 == 1 ) {
+           if( Sector_2 == 1 ) {
+              if( Sector_1 == 1 )
+                 Sector_1 = 4;
+              else
+                 Sector_1--;
+  
+              Sector_2 = 4;
+           }
+           else
+              Sector_2--;
+  
+           Sector_3 = 4;
+        }
+        else
+           Sector_3--;
+     }
+  
+  //  Scaling( Sector_1, Sector_2, Sector_3);
+     return 1;
+  }`
+
+  function `void MakeTitle(int num)
+  {
+  // ****CORENET 201705 by Philkyu Kwon **************************************
+    sprintf( TempTitle,"VIEW HDSR GRAPH %d", num);
+    sprintf( TempNumber,"6%d", num);
+    strcpy(::UCN5and6.PicUCN_header.PictureTitle.theText, TempTitle);
+    strcpy(::UCN5and6.PicUCN_header.PictureNumber.theText, TempNumber);
+  //sprintf( PictureTitle,"SETUP HDSR GRAPH %d", num);
+  // *************************************************************************
+    // sprintf( PictureTitle,"VIEW HDSR GRAPH %d", num);
+    // sprintf( PictureNumber, "6%d", num);
+      update();
+  }`
+
+  function `void NextSet()
+  {
+     if( gView_x.actMask == 1 ) {
+        DisplayAdvisoryMessage1("PROCESSING...  WAIT");
+        return;
+     }
+  
+     if( gView_x.level == 1 || gView_x.useView == 1 ) {
+     sendMessageToHost(GRAPH_VIEW_DONE);
+  
+        if( gView_x.whichView < 8 )
+           gView_x.whichView++;
+        else
+           gView_x.whichView = 1;
+  
+        sprintf(gPage740.graphSet, "%d", gView_x.whichView);
+  
+        sendMessageToHost( HDSR_GRAPH_VIEW );
+        DisplayPage(176);
+     }
+     else {
+        if( strcmp(gView_x.resolution,"LOW") == 0 ) {
+        DisplayAdvisoryMessage1("THIS GRAPH SET IS IN LOW RESOLUTION ");
+           return;
+        }
+  
+        if( gView_x.actMask == 1 ) {
+           DisplayAdvisoryMessage1("PROCESSING...  WAIT");
+           return;
+        }
+  
+           gView_x.actNo = 2;
+           gView_x.actMask = 1;
+           RightSectoring();
+           gView_x.level = Level;
+           gView_x.sector = Sector;
+  
+           sendMessageToHost(GRAPH_VIEW_RIGHT);
+        WaitTrend();
+     }
+  }`
+
+  function `int PressSector()
+  {
+     if( gView_x.useView == 1 ) {
+        DisplayAdvisoryMessage1("CANNOT USE THIS GRAPH SET NOW");
+        DisplayAdvisoryMessage2("FOR TAPE ERROR, ESCAPE AND RETRY THIS GRAPH VIEW");
+        DisplayAdvisoryMessage3(" AFTER CHECK THE TAPE DRIVER");
+        return -1;
+     }
+  
+     if( strcmp(gView_x.resolution,"LOW") == 0 ) {
+        DisplayAdvisoryMessage1("THIS GRAPH SET IS IN LOW RESOLUTION ");
+        return -1;
+     }
+  
+     if( gView_x.actMask == 1 ) {
+        DisplayAdvisoryMessage1("PROCESSING...  WAIT");
+        return -1;
+     }
+  
+  //   boxSector.fillPattern = NoPattern;
+  //   update();
+     return 0;
+  }`
+
+  function `void PrevSet()
+  {
+     if( gView_x.actMask == 1 ) {
+        DisplayAdvisoryMessage1("PROCESSING...  WAIT");
+        return;
+     }
+  
+     if( gView_x.level == 1 || gView_x.useView == 1 ) {
+     sendMessageToHost(GRAPH_VIEW_DONE);
+  
+        if( gView_x.whichView == 1 )
+           gView_x.whichView = 8;
+        else
+           gView_x.whichView--;
+  
+        sprintf(gPage740.graphSet, "%d", gView_x.whichView);
+  
+        sendMessageToHost( HDSR_GRAPH_VIEW );
+        DisplayPage(176);
+     }
+     else {
+        if( strcmp(gView_x.resolution,"LOW") == 0 ) {
+        DisplayAdvisoryMessage1("THIS GRAPH SET IS IN LOW RESOLUTION ");
+           return;
+     }
+  
+        if( gView_x.actMask == 1 ) {
+           DisplayAdvisoryMessage1("PROCESSING...  WAIT");
+           return;
+        }
+  
+           gView_x.actNo = 1;
+           gView_x.actMask = 1;
+           LeftSectoring();
+           gView_x.level = Level;
+           gView_x.sector = Sector;
+  
+           sendMessageToHost(GRAPH_VIEW_LEFT);
+        WaitTrend();
+    }
+  }`
+
+  function `int ProcessActNo()
+  {
+     if( gView_x.actNo == 0 )   // no action
+        return -1;
+     else
+       Scaling( Sector_1, Sector_2, Sector_3);
+       gView_x.actNo = 0;
+       return 0;
+  }`
+
+  function `void ProcessExit()
+  {
+     if( gView_x.useView == 0 )
+        sendMessageToHost(GRAPH_VIEW_DONE);
+  
+  //   execute( "{ displayPicture(\\"Main\\", \\"./PicUCN_HDSR740.ppic\\"); }");
+  }`
+
+  function `int RightSectoring()
+  {
+     if( Sector == 4 )
+        Sector = 1;
+     else
+        Sector++;
+  
+  //scaling
+     if( Sector_1 == 0 )
+        return -1;
+     else if( Sector_2 == 0 ) {
+        if( Sector_1 == 4 )
+           Sector_1 = 1;
+        else
+           Sector_1++;
+     }
+     else if( Sector_3 == 0) {
+        if( Sector_2 == 4 ) {
+           if( Sector_1 == 4 )
+              Sector_1 = 1;
+           else
+              Sector_1++;
+  
+           Sector_2 = 1;
+        }
+        else
+           Sector_2++;
+     }
+     else {
+        if( Sector_3 == 4 ) {
+           if( Sector_2 == 4 ) {
+              if( Sector_1 == 4 )
+                 Sector_1 = 1;
+              else
+                 Sector_1++;
+  
+              Sector_2 = 1;
+           }
+           else
+              Sector_2++;
+  
+           Sector_3 = 1;
+        }
+        else
+           Sector_3++;
+     }
+  
+  //  Scaling( Sector_1, Sector_2, Sector_3);
+     return 1;
+  }
+  `
+
+  function `int Scaling( int sector_1, int sector_2, int sector_3 )
+  {
+     int i, j, k;
+  
+        for( i=1; i<=4; i++ )
+           for( j=1; j<=4; j++ )
+              for( k=1; k<=4; k++ )
+                 execute( "{ scale_%d%d%d.foregroundFillColour = 1; }", i, j, k);
+  //               executeAsync( "::UCN5and6.HDSR74Xview", "{ scale_%d%d%d.foregroundFillColour = 0; }", i, j, k);
+  
+     if( sector_1 == 0 ) {
+  // display
+        for( i=1; i<=4; i++ )
+           for( j=1; j<=4; j++ )
+              for( k=1; k<=4; k++ )
+                 execute( "{ scale_%d%d%d.foregroundFillColour = 9; }", i, j, k);
+     }
+     else  if( sector_2 == 0 ) {
+  // display available region
+        for( i=1; i<=4; i++ )
+           for( j=1; j<=4; j++ )
+              for( k=1; k<=4; k++ )
+                 execute( "{ scale_%d%d%d.foregroundFillColour = 3; }", i, j, k);
+  //
+        for( i=1; i<=4; i++ )
+           for( j=1; j<=4; j++ )
+              for( k=1; k<=4; k++ )
+                 execute("{ scale_%d%d%d.foregroundFillColour = 9; }", sector_1, j, k);
+     }
+     else  if( sector_3 == 0 ) {
+  // display available region
+        for( i=1; i<=4; i++ )
+           for( j=1; j<=4; j++ )
+              for( k=1; k<=4; k++ )
+                 execute( "{ scale_%d%d%d.foregroundFillColour = 3; }", sector_1, j, k);
+  //
+        for( i=1; i<=4; i++ )
+           for( j=1; j<=4; j++ )
+              for( k=1; k<=4; k++ )
+                 execute("{ scale_%d%d%d.foregroundFillColour = 9; }", sector_1, sector_2, k);
+     }
+     else {
+  // display available region
+        for( i=1; i<=4; i++ )
+           for( j=1; j<=4; j++ )
+              for( k=1; k<=4; k++ )
+                 execute( "{ scale_%d%d%d.foregroundFillColour = 3; }", sector_1, sector_2, k);
+  //
+        for( i=1; i<=4; i++ )
+           for( j=1; j<=4; j++ )
+              for( k=1; k<=4; k++ )
+                 execute("{ scale_%d%d%d.foregroundFillColour = 9; }", sector_1, sector_2, sector_3);
+     }
+  
+     update();
+  }`
+
+  function `void SectorProcess()
+  {
+     int no;
+  
+     if( PressSector() == -1 )
+        return;
+  
+     no = atoi( bSector.TheNewText );
+  
+     if ( no == 0 ) {
+        if( gView_x.actMask == 1 ) {
+           DisplayAdvisoryMessage1("PROCESSING...  WAIT");
+           return;
+        }
+  
+        if( Level != 1 ) {
+           gView_x.actNo = 3;
+           gView_x.actMask = 1;
+           UpSectoring();
+           gView_x.level = Level;
+           gView_x.sector = Sector;
+  
+        update();
+  
+           sendMessageToHost(GRAPH_VIEW_UP);
+        WaitTrend();
+           AppearScale();
+           return;
+        }
+        else {
+           DisplayAdvisoryMessage1("YOU ARE ON LEVEL 1, CANNOT UP");
+           return;
+        }
+     }
+     else if( no < 1 || no > 4 ) {
+        DisplayAdvisoryMessage1("WRONG SECTOR NO.");
+        return;
+     }
+  //      boxSector.fillPattern = SolidPattern;
+        update();
+  
+     if( Level == 4 ) {
+        DisplayAdvisoryMessage1("YOU ARE ON LEVEL 4, CANNOT SECTOR DOWN");
+        return;
+     }
+       Sector = no;
+  
+     if( Level == 3 || Level == 4 )
+           DisappearScale();
+     else
+           AppearScale();
+  
+  //   if( Level != 4 ) {
+        gView_x.actNo = 5;
+        gView_x.actMask = 1;
+        AllDownSectoring( Sector );
+        gView_x.level = Level;
+        gView_x.sector = Sector;
+  
+        sendMessageToHost(HDSR_SECTOR);
+           DisplayAdvisoryMessage1("PROCESSING...  WAIT");
+        WaitTrend();
+  //   }
+  //   else
+  //      DisplayAdvisoryMessage1("YOU ARE ON LEVEL 4, CANNOT SECTOR DOWN");
+  }`
+
+  function `void SimulateTrend( int num )
+  {
+     int i;
+  
+     for( i=0; i<256; i++ )
+        execute("{ gView_x.values_%d[%d] = random(700); }", num, i);
+  //      execute("{ gView_x.values_%d[%d] = random(2)-1; }", num, i);
+  
+  //   execute("{ gView_x.baseline_%d = random(100); }", num);
+  }`
+
+  function `int tLeftSectoring()
+  {
+     if( Level == 1 )
+        Sector = 1;
+     else {
+        if( Sector == 1 )
+           Sector = 4;
+        else
+           Sector--;
+     }
+  
+  // scaling
+     if( Sector_1 == 0 )
+        return -1;
+     else if( Sector_2 == 0 ) {
+        if( Sector_1 == 1 )
+           Sector_1 = 4;
+        else
+           Sector_1--;
+     }
+     else if( Sector_3 == 0) {
+        if( Sector_2 == 1 ) {
+           Sector_2 = 4;
+        }
+        else
+           Sector_2--;
+     }
+     else {
+        if( Sector_3 == 1 ) {
+           Sector_3 = 4;
+        }
+        else
+           Sector_3--;
+     }
+  
+    Scaling( Sector_1, Sector_2, Sector_3);
+     return 1;
+  }`
+
+  function `int tRightSectoring()
+  {
+     if( Level == 1 )
+        Sector = 1;
+     else {
+        if( Sector == 4 )
+           Sector = 1;
+        else
+           Sector++;
+     }
+  
+  //scaling
+     if( Sector_1 == 0 )
+        return -1;
+     else if( Sector_2 == 0 ) {
+        if( Sector_1 == 4 )
+           Sector_1 = 1;
+        else
+           Sector_1++;
+     }
+     else if( Sector_3 == 0) {
+        if( Sector_2 == 4 ) {
+           Sector_2 = 1;
+        }
+        else
+           Sector_2++;
+     }
+     else {
+        if( Sector_3 == 4 ) {
+           Sector_3 = 1;
+        }
+        else
+           Sector_3++;
+     }
+  
+    Scaling( Sector_1, Sector_2, Sector_3);
+     return 1;
+  }
+  `
+
+  function `int UpSectoring()
+  {
+     if( Level == 1 )
+        return -1;
+     else {
+        Level--;
+        if( Level == 1 )
+           Sector = 1;
+        else if( Level == 2 )
+           Sector = Sector_1;
+        else if( Level == 3 )
+           Sector = Sector_2;
+     }
+  
+     if( Level == 4 )
+           DisappearScale();
+     else
+           AppearScale();
+  
+  // scaling
+     if( Sector_1 == 0 )
+        return -1;
+     else if( Sector_2 == 0 )
+        Sector_1 = 0;
+     else if( Sector_3 == 0 )
+        Sector_2 = 0;
+     else
+        Sector_3 = 0;
+  
+  //   Scaling( Sector_1, Sector_2, Sector_3);
+     return 1;
+  }`
+
+  function `void WaitTrend()
+  {
+  /*
+     //CORENET 0706********************
+     printf("-----gView_x.useView = %d", gView_x.useView);
+     printf("-----gView_x.whichView = %d", gView_x.whichView);
+     printf("-----gView_x.level = %d", gView_x.level);
+     printf("-----gView_x.sector = %d", gView_x.sector);
+     printf("-----gView_x.actNo = %d", gView_x.actNo);
+     printf("-----gView_x.actMask = %d", gView_x.actMask);
+     //**************************************************
+*/
+
+     trend_1.ResetTrend();
+     trend_2.ResetTrend();
+     trend_3.ResetTrend();
+     trend_4.ResetTrend();
+  }`
+
+  dialogue
+  {
+    event = `keyPressed(0xFF52)`;
+    action = `{
+       if (gView_x.useView == 1 ) {
+          DisplayAdvisoryMessage1("CANNOT USE THIS GRAPH SET NOW");
+          DisplayAdvisoryMessage2("FOR TAPE ERROR, ESCAPE AND RETRY THIS GRAPH VIEW");
+          DisplayAdvisoryMessage3(" AFTER CHECK THE TAPE DRIVER");
+          return;
+       }
+    
+       if( strcmp(gView_x.resolution,"LOW") == 0 ) {
+          DisplayAdvisoryMessage1("THIS GRAPH SET IS IN LOW RESOLUTION ");
+          return;
+       }
+    
+       if( gView_x.actMask == 1 ) {
+          DisplayAdvisoryMessage1("PROCESSING...  WAIT");
+         return;
+       }
+    
+       if( Level != 1 ) {
+          gView_x.actNo = 3;
+          gView_x.actMask = 1;
+          UpSectoring();
+          gView_x.level = Level;
+          gView_x.sector = Sector;
+    
+          sendMessageToHost(GRAPH_VIEW_UP);
+          DisplayAdvisoryMessage1("PROCESSING...  WAIT");
+          WaitTrend();
+       }
+       else
+          DisplayAdvisoryMessage1("YOU ARE ON LEVEL 1, CANNOT UP");
+    }`;
+  }
+
+  dialogue
+  {
+    event = `keyPressed(0xFF54)`;
+    action = `{
+       if( gView_x.useView == 1 ) {
+          DisplayAdvisoryMessage1("CANNOT USE THIS GRAPH SET NOW");
+          DisplayAdvisoryMessage2("FOR TAPE ERROR, ESCAPE AND RETRY THIS GRAPH VIEW");
+          DisplayAdvisoryMessage3(" AFTER CHECK THE TAPE DRIVER");
+          return;
+       }
+    
+       if( strcmp(gView_x.resolution,"LOW") == 0 ) {
+          DisplayAdvisoryMessage1("THIS GRAPH SET IS IN LOW RESOLUTION ");
+          return;
+       }
+    
+       if( gView_x.actMask == 1 ) {
+          DisplayAdvisoryMessage1("PROCESSING...  WAIT");
+          return;
+       }
+    
+       if( Level != 4 ) {
+          gView_x.actNo = 4;
+          gView_x.actMask = 1;
+          DownSectoring();
+          gView_x.level = Level;
+          gView_x.sector = Sector;
+    
+          sendMessageToHost(GRAPH_VIEW_DOWN);
+          DisplayAdvisoryMessage1("PROCESSING...  WAIT");
+          WaitTrend();
+       }
+       else
+          DisplayAdvisoryMessage1("YOU ARE ON LEVEL 4, CANNOT DOWN");
+    }`;
+  }
+
+  dialogue
+  {
+    event = `keyPressed(0xFF53)`;
+    action = `{
+       if( gView_x.useView == 1 ) {
+          DisplayAdvisoryMessage1("CANNOT USE THIS GRAPH SET NOW");
+          DisplayAdvisoryMessage2("FOR TAPE ERROR, ESCAPE AND RETRY THIS GRAPH VIEW");
+          DisplayAdvisoryMessage3(" AFTER CHECK THE TAPE DRIVER");
+          return;
+       }
+    
+       if( strcmp(gView_x.resolution,"LOW") == 0 ) {
+          DisplayAdvisoryMessage1("THIS GRAPH SET IS IN LOW RESOLUTION ");
+          return;
+       }
+    
+       if( gView_x.actMask == 1 ) {
+          DisplayAdvisoryMessage1("PROCESSING...  WAIT");
+          return;
+       }
+    
+       if( Level != 1 ) {
+          gView_x.actNo = 2;
+          gView_x.actMask = 1;
+          RightSectoring();
+          gView_x.level = Level;
+          gView_x.sector = Sector;
+    
+          sendMessageToHost(GRAPH_VIEW_RIGHT);
+          DisplayAdvisoryMessage1("PROCESSING...  WAIT");
+          WaitTrend();
+       }
+       else
+          DisplayAdvisoryMessage1("YOU ARE ON LEVEL 1, CANNOT SHIFT YO RIGHT");
+    }`;
+  }
+
+  dialogue
+  {
+    event = `keyPressed(0xFF51)`;
+    action = `{
+       if( gView_x.useView == 1 ) {
+          DisplayAdvisoryMessage1("CANNOT USE THIS GRAPH SET NOW");
+          DisplayAdvisoryMessage2("FOR TAPE ERROR, ESCAPE AND RETRY THIS GRAPH VIEW");
+          DisplayAdvisoryMessage3(" AFTER CHECK THE TAPE DRIVER");
+          return;
+       }
+    
+       if( strcmp(gView_x.resolution,"LOW") == 0 ) {
+          DisplayAdvisoryMessage1("THIS GRAPH SET IS IN LOW RESOLUTION ");
+          return;
+       }
+    
+       if( strcmp(gView_x.resolution,"LOW") == 0 )
+          return;
+    
+       if( gView_x.actMask == 1 ) {
+          DisplayAdvisoryMessage1("PROCESSING...  WAIT");
+          return;
+       }
+    
+       if( Level != 1 ) {
+          gView_x.actNo = 1;
+          gView_x.actMask = 1;
+          LeftSectoring();
+          gView_x.level = Level;
+          gView_x.sector = Sector;
+    
+          sendMessageToHost(GRAPH_VIEW_LEFT);
+          DisplayAdvisoryMessage1("PROCESSING...  WAIT");
+          WaitTrend();
+       }
+       else
+          DisplayAdvisoryMessage1("YOU ARE ON LEVEL 1, CANNOT SHIFT TO LEFT");
+    }`;
+  }
+
+  dialogue
+  {
+    event = `keyPressed(0x73)`;
+    action = `{
+       PressSector();
+    }`;
+  }
+
+  dialogue
+  {
+    event = `keyPressed(0xFF55)`;
+    action = `{
+       PressSector();
+    }`;
+  }
+
+  instance HDSRLib.graphTrend trend_1
+  {
+    x = 90;
+    y = 143;
+    visibility = 1;
+    xReference = 90;
+    yReference = 143;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    AnalogValues = `&::UCN5and6.InterfaceToGUI.gView_x.values_1[0]`;
+    Baseline = `&::UCN5and6.InterfaceToGUI.gView_x.baseline_1`;
+    Description = `gView_x.description_1`;
+    DigitalValues = `&::UCN5and6.InterfaceToGUI.gView_x.iValue_1[0]`;
+    Maximum = `&::UCN5and6.InterfaceToGUI.gView_x.maximum_1`;
+    Minimum = `&::UCN5and6.InterfaceToGUI.gView_x.minimum_1`;
+    Off = "NOT FOPN";
+    On = "OPEN    ";
+    PointID = "RCXX1234";
+    Tval = { 10, 23, 34, 45, 56, 67, 78,
+      89, 20, 90, 10, 23, 34, 45, 56,
+      67, 78, 89, 20, 90 };
+  }
+
+  rectangle scale_111
+  {
+    x = 270;
+    y = 23.75;
+    width = 12;
+    height = 20;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 1;
+    foregroundFillColour = 9;
+    backgroundFillColour = -1;
+    fillPattern = `SolidPattern`;
+    xReference = 270;
+    yReference = 23.75;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle scale_112
+  {
+    x = 282.5;
+    y = 23.75;
+    width = 12;
+    height = 20;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 1;
+    foregroundFillColour = 9;
+    backgroundFillColour = -1;
+    fillPattern = `SolidPattern`;
+    xReference = 282.5;
+    yReference = 23.75;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle scale_122
+  {
+    x = 330;
+    y = 23.75;
+    width = 12;
+    height = 20;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 1;
+    foregroundFillColour = 9;
+    backgroundFillColour = -1;
+    fillPattern = `SolidPattern`;
+    xReference = 330;
+    yReference = 23.75;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle scale_121
+  {
+    x = 317.5;
+    y = 23.75;
+    width = 12;
+    height = 20;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 1;
+    foregroundFillColour = 9;
+    backgroundFillColour = -1;
+    fillPattern = `SolidPattern`;
+    xReference = 317.5;
+    yReference = 23.75;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle scale_114
+  {
+    x = 306.25;
+    y = 23.75;
+    width = 12;
+    height = 20;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 1;
+    foregroundFillColour = 9;
+    backgroundFillColour = -1;
+    fillPattern = `SolidPattern`;
+    xReference = 306.25;
+    yReference = 23.75;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle scale_113
+  {
+    x = 293.75;
+    y = 23.75;
+    width = 12;
+    height = 20;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 1;
+    foregroundFillColour = 9;
+    backgroundFillColour = -1;
+    fillPattern = `SolidPattern`;
+    xReference = 293.75;
+    yReference = 23.75;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle scale_124
+  {
+    x = 353.75;
+    y = 23.75;
+    width = 12;
+    height = 20;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 1;
+    foregroundFillColour = 9;
+    backgroundFillColour = -1;
+    fillPattern = `SolidPattern`;
+    xReference = 353.75;
+    yReference = 23.75;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle scale_123
+  {
+    x = 342.5;
+    y = 23.75;
+    width = 12;
+    height = 20;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 1;
+    foregroundFillColour = 9;
+    backgroundFillColour = -1;
+    fillPattern = `SolidPattern`;
+    xReference = 342.5;
+    yReference = 23.75;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle scale_131
+  {
+    x = 366.25;
+    y = 23.75;
+    width = 12;
+    height = 20;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 1;
+    foregroundFillColour = 9;
+    backgroundFillColour = -1;
+    fillPattern = `SolidPattern`;
+    xReference = 366.25;
+    yReference = 23.75;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle scale_132
+  {
+    x = 377.5;
+    y = 23.75;
+    width = 12;
+    height = 20;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 1;
+    foregroundFillColour = 9;
+    backgroundFillColour = -1;
+    fillPattern = `SolidPattern`;
+    xReference = 377.5;
+    yReference = 23.75;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle scale_142
+  {
+    x = 426.25;
+    y = 23.75;
+    width = 12;
+    height = 20;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 1;
+    foregroundFillColour = 9;
+    backgroundFillColour = -1;
+    fillPattern = `SolidPattern`;
+    xReference = 426.25;
+    yReference = 23.75;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle scale_141
+  {
+    x = 413.75;
+    y = 23.75;
+    width = 12;
+    height = 20;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 1;
+    foregroundFillColour = 9;
+    backgroundFillColour = -1;
+    fillPattern = `SolidPattern`;
+    xReference = 413.75;
+    yReference = 23.75;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle scale_134
+  {
+    x = 402.5;
+    y = 23.75;
+    width = 12;
+    height = 20;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 1;
+    foregroundFillColour = 9;
+    backgroundFillColour = -1;
+    fillPattern = `SolidPattern`;
+    xReference = 402.5;
+    yReference = 23.75;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle scale_133
+  {
+    x = 390;
+    y = 23.75;
+    width = 12;
+    height = 20;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 1;
+    foregroundFillColour = 9;
+    backgroundFillColour = -1;
+    fillPattern = `SolidPattern`;
+    xReference = 390;
+    yReference = 23.75;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle scale_144
+  {
+    x = 450;
+    y = 23.75;
+    width = 12;
+    height = 20;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 1;
+    foregroundFillColour = 9;
+    backgroundFillColour = -1;
+    fillPattern = `SolidPattern`;
+    xReference = 450;
+    yReference = 23.75;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle scale_143
+  {
+    x = 437.5;
+    y = 23.75;
+    width = 12;
+    height = 20;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 1;
+    foregroundFillColour = 9;
+    backgroundFillColour = -1;
+    fillPattern = `SolidPattern`;
+    xReference = 437.5;
+    yReference = 23.75;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle scale_211
+  {
+    x = 462.5;
+    y = 23.75;
+    width = 12;
+    height = 20;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 1;
+    foregroundFillColour = 9;
+    backgroundFillColour = -1;
+    fillPattern = `SolidPattern`;
+    xReference = 462.5;
+    yReference = 23.75;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle scale_212
+  {
+    x = 473.75;
+    y = 23.75;
+    width = 12;
+    height = 20;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 1;
+    foregroundFillColour = 9;
+    backgroundFillColour = -1;
+    fillPattern = `SolidPattern`;
+    xReference = 473.75;
+    yReference = 23.75;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle scale_222
+  {
+    x = 522.5;
+    y = 23.75;
+    width = 12;
+    height = 20;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 1;
+    foregroundFillColour = 9;
+    backgroundFillColour = -1;
+    fillPattern = `SolidPattern`;
+    xReference = 522.5;
+    yReference = 23.75;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle scale_221
+  {
+    x = 510;
+    y = 23.75;
+    width = 12;
+    height = 20;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 1;
+    foregroundFillColour = 9;
+    backgroundFillColour = -1;
+    fillPattern = `SolidPattern`;
+    xReference = 510;
+    yReference = 23.75;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle scale_214
+  {
+    x = 497.5;
+    y = 23.75;
+    width = 12;
+    height = 20;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 1;
+    foregroundFillColour = 9;
+    backgroundFillColour = -1;
+    fillPattern = `SolidPattern`;
+    xReference = 497.5;
+    yReference = 23.75;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle scale_213
+  {
+    x = 486.25;
+    y = 23.75;
+    width = 12;
+    height = 20;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 1;
+    foregroundFillColour = 9;
+    backgroundFillColour = -1;
+    fillPattern = `SolidPattern`;
+    xReference = 486.25;
+    yReference = 23.75;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle scale_224
+  {
+    x = 546.25;
+    y = 23.75;
+    width = 12;
+    height = 20;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 1;
+    foregroundFillColour = 9;
+    backgroundFillColour = -1;
+    fillPattern = `SolidPattern`;
+    xReference = 546.25;
+    yReference = 23.75;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle scale_223
+  {
+    x = 533.75;
+    y = 23.75;
+    width = 12;
+    height = 20;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 1;
+    foregroundFillColour = 9;
+    backgroundFillColour = -1;
+    fillPattern = `SolidPattern`;
+    xReference = 533.75;
+    yReference = 23.75;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle scale_231
+  {
+    x = 557.5;
+    y = 23.75;
+    width = 12;
+    height = 20;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 1;
+    foregroundFillColour = 9;
+    backgroundFillColour = -1;
+    fillPattern = `SolidPattern`;
+    xReference = 557.5;
+    yReference = 23.75;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle scale_232
+  {
+    x = 570;
+    y = 23.75;
+    width = 12;
+    height = 20;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 1;
+    foregroundFillColour = 9;
+    backgroundFillColour = -1;
+    fillPattern = `SolidPattern`;
+    xReference = 570;
+    yReference = 23.75;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle scale_233
+  {
+    x = 582.5;
+    y = 23.75;
+    width = 12;
+    height = 20;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 1;
+    foregroundFillColour = 9;
+    backgroundFillColour = -1;
+    fillPattern = `SolidPattern`;
+    xReference = 582.5;
+    yReference = 23.75;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle scale_242
+  {
+    x = 617.5;
+    y = 23.75;
+    width = 12;
+    height = 20;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 1;
+    foregroundFillColour = 9;
+    backgroundFillColour = -1;
+    fillPattern = `SolidPattern`;
+    xReference = 617.5;
+    yReference = 23.75;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle scale_241
+  {
+    x = 606.25;
+    y = 23.75;
+    width = 12;
+    height = 20;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 1;
+    foregroundFillColour = 9;
+    backgroundFillColour = -1;
+    fillPattern = `SolidPattern`;
+    xReference = 606.25;
+    yReference = 23.75;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle scale_234
+  {
+    x = 593.75;
+    y = 23.75;
+    width = 12;
+    height = 20;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 1;
+    foregroundFillColour = 9;
+    backgroundFillColour = -1;
+    fillPattern = `SolidPattern`;
+    xReference = 593.75;
+    yReference = 23.75;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle scale_244
+  {
+    x = 642.5;
+    y = 23.75;
+    width = 12;
+    height = 20;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 1;
+    foregroundFillColour = 9;
+    backgroundFillColour = -1;
+    fillPattern = `SolidPattern`;
+    xReference = 642.5;
+    yReference = 23.75;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle scale_243
+  {
+    x = 630;
+    y = 23.75;
+    width = 12;
+    height = 20;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 1;
+    foregroundFillColour = 9;
+    backgroundFillColour = -1;
+    fillPattern = `SolidPattern`;
+    xReference = 630;
+    yReference = 23.75;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle scale_311
+  {
+    x = 653.75;
+    y = 23.75;
+    width = 12;
+    height = 20;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 1;
+    foregroundFillColour = 9;
+    backgroundFillColour = -1;
+    fillPattern = `SolidPattern`;
+    xReference = 653.75;
+    yReference = 23.75;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle scale_312
+  {
+    x = 666.25;
+    y = 23.75;
+    width = 12;
+    height = 20;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 1;
+    foregroundFillColour = 9;
+    backgroundFillColour = -1;
+    fillPattern = `SolidPattern`;
+    xReference = 666.25;
+    yReference = 23.75;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle scale_322
+  {
+    x = 713.75;
+    y = 23.75;
+    width = 12;
+    height = 20;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 1;
+    foregroundFillColour = 9;
+    backgroundFillColour = -1;
+    fillPattern = `SolidPattern`;
+    xReference = 713.75;
+    yReference = 23.75;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle scale_321
+  {
+    x = 702.5;
+    y = 23.75;
+    width = 12;
+    height = 20;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 1;
+    foregroundFillColour = 9;
+    backgroundFillColour = -1;
+    fillPattern = `SolidPattern`;
+    xReference = 702.5;
+    yReference = 23.75;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle scale_314
+  {
+    x = 690;
+    y = 23.75;
+    width = 12;
+    height = 20;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 1;
+    foregroundFillColour = 9;
+    backgroundFillColour = -1;
+    fillPattern = `SolidPattern`;
+    xReference = 690;
+    yReference = 23.75;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle scale_313
+  {
+    x = 677.5;
+    y = 23.75;
+    width = 12;
+    height = 20;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 1;
+    foregroundFillColour = 9;
+    backgroundFillColour = -1;
+    fillPattern = `SolidPattern`;
+    xReference = 677.5;
+    yReference = 23.75;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle scale_324
+  {
+    x = 737.5;
+    y = 23.75;
+    width = 12;
+    height = 20;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 1;
+    foregroundFillColour = 9;
+    backgroundFillColour = -1;
+    fillPattern = `SolidPattern`;
+    xReference = 737.5;
+    yReference = 23.75;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle scale_323
+  {
+    x = 726.25;
+    y = 23.75;
+    width = 12;
+    height = 20;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 1;
+    foregroundFillColour = 9;
+    backgroundFillColour = -1;
+    fillPattern = `SolidPattern`;
+    xReference = 726.25;
+    yReference = 23.75;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle scale_331
+  {
+    x = 750;
+    y = 23.75;
+    width = 12;
+    height = 20;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 1;
+    foregroundFillColour = 9;
+    backgroundFillColour = -1;
+    fillPattern = `SolidPattern`;
+    xReference = 750;
+    yReference = 23.75;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle scale_332
+  {
+    x = 762.5;
+    y = 23.75;
+    width = 12;
+    height = 20;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 1;
+    foregroundFillColour = 9;
+    backgroundFillColour = -1;
+    fillPattern = `SolidPattern`;
+    xReference = 762.5;
+    yReference = 23.75;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle scale_342
+  {
+    x = 810;
+    y = 23.75;
+    width = 12;
+    height = 20;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 1;
+    foregroundFillColour = 9;
+    backgroundFillColour = -1;
+    fillPattern = `SolidPattern`;
+    xReference = 810;
+    yReference = 23.75;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle scale_341
+  {
+    x = 797.5;
+    y = 23.75;
+    width = 12;
+    height = 20;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 1;
+    foregroundFillColour = 9;
+    backgroundFillColour = -1;
+    fillPattern = `SolidPattern`;
+    xReference = 797.5;
+    yReference = 23.75;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle scale_334
+  {
+    x = 786.25;
+    y = 23.75;
+    width = 12;
+    height = 20;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 1;
+    foregroundFillColour = 9;
+    backgroundFillColour = -1;
+    fillPattern = `SolidPattern`;
+    xReference = 786.25;
+    yReference = 23.75;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle scale_333
+  {
+    x = 773.75;
+    y = 23.75;
+    width = 12;
+    height = 20;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 1;
+    foregroundFillColour = 9;
+    backgroundFillColour = -1;
+    fillPattern = `SolidPattern`;
+    xReference = 773.75;
+    yReference = 23.75;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle scale_344
+  {
+    x = 833.75;
+    y = 23.75;
+    width = 12;
+    height = 20;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 1;
+    foregroundFillColour = 9;
+    backgroundFillColour = -1;
+    fillPattern = `SolidPattern`;
+    xReference = 833.75;
+    yReference = 23.75;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle scale_343
+  {
+    x = 822.5;
+    y = 23.75;
+    width = 12;
+    height = 20;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 1;
+    foregroundFillColour = 9;
+    backgroundFillColour = -1;
+    fillPattern = `SolidPattern`;
+    xReference = 822.5;
+    yReference = 23.75;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle scale_411
+  {
+    x = 846.25;
+    y = 23.75;
+    width = 12;
+    height = 20;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 1;
+    foregroundFillColour = 9;
+    backgroundFillColour = -1;
+    fillPattern = `SolidPattern`;
+    xReference = 846.25;
+    yReference = 23.75;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle scale_412
+  {
+    x = 857.5;
+    y = 23.75;
+    width = 12;
+    height = 20;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 1;
+    foregroundFillColour = 9;
+    backgroundFillColour = -1;
+    fillPattern = `SolidPattern`;
+    xReference = 857.5;
+    yReference = 23.75;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle scale_422
+  {
+    x = 906.25;
+    y = 23.75;
+    width = 12;
+    height = 20;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 1;
+    foregroundFillColour = 9;
+    backgroundFillColour = -1;
+    fillPattern = `SolidPattern`;
+    xReference = 906.25;
+    yReference = 23.75;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle scale_421
+  {
+    x = 893.75;
+    y = 23.75;
+    width = 12;
+    height = 20;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 1;
+    foregroundFillColour = 9;
+    backgroundFillColour = -1;
+    fillPattern = `SolidPattern`;
+    xReference = 893.75;
+    yReference = 23.75;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle scale_414
+  {
+    x = 882.5;
+    y = 23.75;
+    width = 12;
+    height = 20;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 1;
+    foregroundFillColour = 9;
+    backgroundFillColour = -1;
+    fillPattern = `SolidPattern`;
+    xReference = 882.5;
+    yReference = 23.75;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle scale_413
+  {
+    x = 870;
+    y = 23.75;
+    width = 12;
+    height = 20;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 1;
+    foregroundFillColour = 9;
+    backgroundFillColour = -1;
+    fillPattern = `SolidPattern`;
+    xReference = 870;
+    yReference = 23.75;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle scale_424
+  {
+    x = 930;
+    y = 23.75;
+    width = 12;
+    height = 20;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 1;
+    foregroundFillColour = 9;
+    backgroundFillColour = -1;
+    fillPattern = `SolidPattern`;
+    xReference = 930;
+    yReference = 23.75;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle scale_423
+  {
+    x = 917.5;
+    y = 23.75;
+    width = 12;
+    height = 20;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 1;
+    foregroundFillColour = 9;
+    backgroundFillColour = -1;
+    fillPattern = `SolidPattern`;
+    xReference = 917.5;
+    yReference = 23.75;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle scale_431
+  {
+    x = 942.5;
+    y = 23.75;
+    width = 12;
+    height = 20;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 1;
+    foregroundFillColour = 9;
+    backgroundFillColour = -1;
+    fillPattern = `SolidPattern`;
+    xReference = 942.5;
+    yReference = 23.75;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle scale_432
+  {
+    x = 953.75;
+    y = 23.75;
+    width = 12;
+    height = 20;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 1;
+    foregroundFillColour = 9;
+    backgroundFillColour = -1;
+    fillPattern = `SolidPattern`;
+    xReference = 953.75;
+    yReference = 23.75;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle scale_442
+  {
+    x = 1002.5;
+    y = 23.75;
+    width = 12;
+    height = 20;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 1;
+    foregroundFillColour = 9;
+    backgroundFillColour = -1;
+    fillPattern = `SolidPattern`;
+    xReference = 1002.5;
+    yReference = 23.75;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle scale_441
+  {
+    x = 990;
+    y = 23.75;
+    width = 12;
+    height = 20;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 1;
+    foregroundFillColour = 9;
+    backgroundFillColour = -1;
+    fillPattern = `SolidPattern`;
+    xReference = 990;
+    yReference = 23.75;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle scale_434
+  {
+    x = 977.5;
+    y = 23.75;
+    width = 12;
+    height = 20;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 1;
+    foregroundFillColour = 9;
+    backgroundFillColour = -1;
+    fillPattern = `SolidPattern`;
+    xReference = 977.5;
+    yReference = 23.75;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle scale_433
+  {
+    x = 966.25;
+    y = 23.75;
+    width = 12;
+    height = 20;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 1;
+    foregroundFillColour = 9;
+    backgroundFillColour = -1;
+    fillPattern = `SolidPattern`;
+    xReference = 966.25;
+    yReference = 23.75;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle scale_444
+  {
+    x = 1026.25;
+    y = 23.75;
+    width = 12;
+    height = 20;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 1;
+    foregroundFillColour = 9;
+    backgroundFillColour = -1;
+    fillPattern = `SolidPattern`;
+    xReference = 1026.25;
+    yReference = 23.75;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle scale_443
+  {
+    x = 1013.75;
+    y = 23.75;
+    width = 12;
+    height = 20;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 1;
+    foregroundFillColour = 9;
+    backgroundFillColour = -1;
+    fillPattern = `SolidPattern`;
+    xReference = 1013.75;
+    yReference = 23.75;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text t_time1
+  {
+    x = 243;
+    y = 147;
+    format = "%s";
+    theText = `gView_x.time_1`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font0`;
+    xReference = 243;
+    yReference = 147;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text t_time2
+  {
+    x = 432;
+    y = 147;
+    format = "%s";
+    theText = `gView_x.time_2`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font0`;
+    xReference = 432;
+    yReference = 147;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text t_time3
+  {
+    x = 624;
+    y = 147;
+    format = "%s";
+    theText = `gView_x.time_3`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font0`;
+    xReference = 624;
+    yReference = 147;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text t_time4
+  {
+    x = 816;
+    y = 147;
+    format = "%s";
+    theText = `gView_x.time_4`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font0`;
+    xReference = 816;
+    yReference = 147;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text t_time5
+  {
+    x = 1005;
+    y = 147;
+    format = "%s";
+    theText = `gView_x.time_5`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font0`;
+    xReference = 1005;
+    yReference = 147;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text t_startDate
+  {
+    x = 92.5;
+    y = 38.75;
+    format = "%s";
+    theText = `gView_x.startDate`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font14`;
+    xReference = 92.5;
+    yReference = 38.75;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text t_endDate
+  {
+    x = 1073.75;
+    y = 38.75;
+    format = "%s";
+    theText = `gView_x.endDate`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font14`;
+    xReference = 1073.75;
+    yReference = 38.75;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle
+  {
+    x = 60;
+    y = 15;
+    width = 1191;
+    height = 39;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 2;
+    foregroundFillColour = -1;
+    backgroundFillColour = -1;
+    fillPattern = `NoPattern`;
+    xReference = 60;
+    yReference = 8.75;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  line
+  {
+    numberOfPoints = 2;
+    point[0] = ( 317.5, 18.75 );
+    point[1] = ( 317.5, 48.75 );
+    visibility = 1;
+    foregroundColour = `COLOR_STATIC_TEXT`;
+    backgroundColour = -1;
+    lineStyle = `SolidPattern`;
+    lineWidth = 0;
+    xReference = 317.5;
+    yReference = 18.75;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  line
+  {
+    numberOfPoints = 2;
+    point[0] = ( 366.25, 18.75 );
+    point[1] = ( 366.25, 48.75 );
+    visibility = 1;
+    foregroundColour = `COLOR_STATIC_TEXT`;
+    backgroundColour = -1;
+    lineStyle = `SolidPattern`;
+    lineWidth = 0;
+    xReference = 366.25;
+    yReference = 18.75;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 216.25;
+    y = 80;
+    format = "%s";
+    theText = "MEDIUM :";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font14`;
+    xReference = 216.25;
+    yReference = 80;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text t_medium
+  {
+    x = 327.5;
+    y = 80;
+    format = "%s";
+    theText = `gView_x.resource`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font14`;
+    xReference = 327.5;
+    yReference = 80;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 422.5;
+    y = 80;
+    format = "%s";
+    theText = "RESOLUTION :";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font14`;
+    xReference = 422.5;
+    yReference = 80;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text t_resolution
+  {
+    x = 578.75;
+    y = 80;
+    format = "%s";
+    theText = `gView_x.resolution`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font14`;
+    xReference = 578.75;
+    yReference = 80;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle
+  {
+    x = 178.75;
+    y = 61.25;
+    width = 929;
+    height = 23;
+    visibility = 1;
+    foregroundColour = `COLOR_LINE_BOUNDARY_6`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 1;
+    foregroundFillColour = `COLOR_NON_ESSENTIAL`;
+    backgroundFillColour = -1;
+    fillPattern = `NoPattern`;
+    xReference = 180;
+    yReference = 55;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text t_pointID1
+  {
+    x = 150;
+    y = 128;
+    format = "%s";
+    theText = `gView_x.pointID_1`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font14`;
+    xReference = 150;
+    yReference = 128;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  instance HDSRLib.graphTrend trend_2
+  {
+    x = 90;
+    y = 303;
+    visibility = 1;
+    xReference = 90;
+    yReference = 303;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    AnalogValues = `&::UCN5and6.InterfaceToGUI.gView_x.values_2[0]`;
+    Baseline = `&::UCN5and6.InterfaceToGUI.gView_x.baseline_2`;
+    Description = `gView_x.description_2`;
+    DigitalValues = `&::UCN5and6.InterfaceToGUI.gView_x.values_2[0]`;
+    Maximum = `&::UCN5and6.InterfaceToGUI.gView_x.maximum_2`;
+    Minimum = `&::UCN5and6.InterfaceToGUI.gView_x.minimum_2`;
+    Off = "OPEN";
+    On = "CLOSE";
+    PointID = "RCXX1234";
+    Tval = { 10, 23, 34, 45, 56, 67, 78,
+      89, 20, 90, 10, 23, 34, 45, 56,
+      67, 78, 89, 20, 90 };
+  }
+
+  instance HDSRLib.graphTrend trend_3
+  {
+    x = 90;
+    y = 462;
+    visibility = 1;
+    xReference = 90;
+    yReference = 462;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    AnalogValues = `&::UCN5and6.InterfaceToGUI.gView_x.values_3[0]`;
+    Baseline = `&::UCN5and6.InterfaceToGUI.gView_x.baseline_3`;
+    Description = `gView_x.description_3`;
+    DigitalValues = `&::UCN5and6.InterfaceToGUI.gView_x.values_3[0]`;
+    Maximum = `&::UCN5and6.InterfaceToGUI.gView_x.maximum_3`;
+    Minimum = `&::UCN5and6.InterfaceToGUI.gView_x.minimum_3`;
+    Off = "OPEN";
+    On = "CLOSE";
+    PointID = "RCXX1234";
+    Tval = { 10, 23, 34, 45, 56, 67, 78,
+      89, 20, 90, 10, 23, 34, 45, 56,
+      67, 78, 89, 20, 90 };
+  }
+
+  instance HDSRLib.graphTrend trend_4
+  {
+    x = 90;
+    y = 618;
+    visibility = 1;
+    xReference = 90;
+    yReference = 618;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    AnalogValues = `&::UCN5and6.InterfaceToGUI.gView_x.values_4[0]`;
+    Baseline = `&::UCN5and6.InterfaceToGUI.gView_x.baseline_4`;
+    Description = `gView_x.description_4`;
+    DigitalValues = `&::UCN5and6.InterfaceToGUI.gView_x.iValue_4[0]`;
+    Maximum = `&::UCN5and6.InterfaceToGUI.gView_x.maximum_4`;
+    Minimum = `&::UCN5and6.InterfaceToGUI.gView_x.minimum_4`;
+    Off = "OPEN";
+    On = "CLOSE";
+    PointID = "RCXX1234";
+    Tval = { 10, 23, 34, 45, 56, 67, 78,
+      89, 20, 90, 10, 23, 34, 45, 56,
+      67, 78, 89, 20, 90 };
+  }
+
+  line
+  {
+    numberOfPoints = 2;
+    point[0] = ( 270, 13.75 );
+    point[1] = ( 270, 53.75 );
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineStyle = `SolidPattern`;
+    lineWidth = 2;
+    xReference = 270;
+    yReference = 8.75;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  line
+  {
+    numberOfPoints = 2;
+    point[0] = ( 462.5, 13.75 );
+    point[1] = ( 462.5, 53.75 );
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineStyle = `SolidPattern`;
+    lineWidth = 2;
+    xReference = 462.5;
+    yReference = 8.75;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  line
+  {
+    numberOfPoints = 2;
+    point[0] = ( 653.75, 13.75 );
+    point[1] = ( 653.75, 53.75 );
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineStyle = `SolidPattern`;
+    lineWidth = 2;
+    xReference = 653.75;
+    yReference = 8.75;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  line
+  {
+    numberOfPoints = 2;
+    point[0] = ( 846.25, 13.75 );
+    point[1] = ( 846.25, 53.75 );
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineStyle = `SolidPattern`;
+    lineWidth = 2;
+    xReference = 846.25;
+    yReference = 13.75;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  line
+  {
+    numberOfPoints = 2;
+    point[0] = ( 1037.5, 13.75 );
+    point[1] = ( 1037.5, 53.75 );
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineStyle = `SolidPattern`;
+    lineWidth = 2;
+    xReference = 1037.5;
+    yReference = 8.75;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 690;
+    y = 80;
+    format = "%s";
+    theText = "GRAPH LEVEL :";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font14`;
+    xReference = 690;
+    yReference = 80;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text t_level
+  {
+    x = 863.75;
+    y = 80;
+    format = "%d";
+    theText = `Level`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font14`;
+    xReference = 863.75;
+    yReference = 80;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text t_description1
+  {
+    x = 302;
+    y = 128;
+    format = "%s";
+    theText = `gView_x.description_1`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font14`;
+    xReference = 302;
+    yReference = 128;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text t_description2
+  {
+    x = 301;
+    y = 288;
+    format = "%s";
+    theText = `gView_x.description_2`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font14`;
+    xReference = 301;
+    yReference = 288;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text t_description3
+  {
+    x = 301;
+    y = 448;
+    format = "%s";
+    theText = `gView_x.description_3`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font14`;
+    xReference = 301;
+    yReference = 448;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text t_description4
+  {
+    x = 301;
+    y = 606;
+    format = "%s";
+    theText = `gView_x.description_4`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font14`;
+    xReference = 301;
+    yReference = 606;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text t_pointID2
+  {
+    x = 150;
+    y = 288;
+    format = "%s";
+    theText = `gView_x.pointID_2`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font14`;
+    xReference = 150;
+    yReference = 288;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text t_pointID3
+  {
+    x = 150;
+    y = 448;
+    format = "%s";
+    theText = `gView_x.pointID_3`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font14`;
+    xReference = 150;
+    yReference = 448;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text t_pointID4
+  {
+    x = 150;
+    y = 606;
+    format = "%s";
+    theText = `gView_x.pointID_4`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font14`;
+    xReference = 150;
+    yReference = 606;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 947.5;
+    y = 80;
+    format = "%s";
+    theText = "SECTOR :";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font14`;
+    xReference = 947.5;
+    yReference = 80;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text t_sector
+  {
+    x = 1062.5;
+    y = 80;
+    format = "%d";
+    theText = `Sector`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font14`;
+    xReference = 1062.5;
+    yReference = 80;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  line
+  {
+    numberOfPoints = 2;
+    point[0] = ( 413.75, 18.75 );
+    point[1] = ( 413.75, 48.75 );
+    visibility = 1;
+    foregroundColour = `COLOR_STATIC_TEXT`;
+    backgroundColour = -1;
+    lineStyle = `SolidPattern`;
+    lineWidth = 0;
+    xReference = 413.75;
+    yReference = 18.75;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  line
+  {
+    numberOfPoints = 2;
+    point[0] = ( 510, 18.75 );
+    point[1] = ( 510, 48.75 );
+    visibility = 1;
+    foregroundColour = `COLOR_STATIC_TEXT`;
+    backgroundColour = -1;
+    lineStyle = `SolidPattern`;
+    lineWidth = 0;
+    xReference = 510;
+    yReference = 18.75;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  line
+  {
+    numberOfPoints = 2;
+    point[0] = ( 557.5, 18.75 );
+    point[1] = ( 557.5, 48.75 );
+    visibility = 1;
+    foregroundColour = `COLOR_STATIC_TEXT`;
+    backgroundColour = -1;
+    lineStyle = `SolidPattern`;
+    lineWidth = 0;
+    xReference = 557.5;
+    yReference = 18.75;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  line
+  {
+    numberOfPoints = 2;
+    point[0] = ( 606.25, 18.75 );
+    point[1] = ( 606.25, 48.75 );
+    visibility = 1;
+    foregroundColour = `COLOR_STATIC_TEXT`;
+    backgroundColour = -1;
+    lineStyle = `SolidPattern`;
+    lineWidth = 0;
+    xReference = 606.25;
+    yReference = 18.75;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  line
+  {
+    numberOfPoints = 2;
+    point[0] = ( 702.5, 18.75 );
+    point[1] = ( 702.5, 48.75 );
+    visibility = 1;
+    foregroundColour = `COLOR_STATIC_TEXT`;
+    backgroundColour = -1;
+    lineStyle = `SolidPattern`;
+    lineWidth = 0;
+    xReference = 702.5;
+    yReference = 18.75;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  line
+  {
+    numberOfPoints = 2;
+    point[0] = ( 750, 18.75 );
+    point[1] = ( 750, 48.75 );
+    visibility = 1;
+    foregroundColour = `COLOR_STATIC_TEXT`;
+    backgroundColour = -1;
+    lineStyle = `SolidPattern`;
+    lineWidth = 0;
+    xReference = 750;
+    yReference = 18.75;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  line
+  {
+    numberOfPoints = 2;
+    point[0] = ( 797.5, 18.75 );
+    point[1] = ( 797.5, 48.75 );
+    visibility = 1;
+    foregroundColour = `COLOR_STATIC_TEXT`;
+    backgroundColour = -1;
+    lineStyle = `SolidPattern`;
+    lineWidth = 0;
+    xReference = 797.5;
+    yReference = 18.75;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  line
+  {
+    numberOfPoints = 2;
+    point[0] = ( 893.75, 18.75 );
+    point[1] = ( 893.75, 48.75 );
+    visibility = 1;
+    foregroundColour = `COLOR_STATIC_TEXT`;
+    backgroundColour = -1;
+    lineStyle = `SolidPattern`;
+    lineWidth = 0;
+    xReference = 893.75;
+    yReference = 18.75;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  line
+  {
+    numberOfPoints = 2;
+    point[0] = ( 942.5, 18.75 );
+    point[1] = ( 942.5, 48.75 );
+    visibility = 1;
+    foregroundColour = `COLOR_STATIC_TEXT`;
+    backgroundColour = -1;
+    lineStyle = `SolidPattern`;
+    lineWidth = 0;
+    xReference = 942.5;
+    yReference = 18.75;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  line
+  {
+    numberOfPoints = 2;
+    point[0] = ( 990, 18.75 );
+    point[1] = ( 990, 48.75 );
+    visibility = 1;
+    foregroundColour = `COLOR_STATIC_TEXT`;
+    backgroundColour = -1;
+    lineStyle = `SolidPattern`;
+    lineWidth = 0;
+    xReference = 990;
+    yReference = 18.75;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 1030;
+    y = 116;
+    format = "%s";
+    theText = "SECTOR NO:";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font14`;
+    xReference = 1030;
+    yReference = 116;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  instance DialogueSymbols.InputDialogueText50 bSector
+  {
+    x = 1168;
+    y = 96;
+    visibility = 1;
+    xReference = 1168;
+    yReference = 96;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "DummyProcess()";	//CORENET 0705
+    ExecuteUnSelect = "DummyProcess()";   //CORENET 0705
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxCharacters = 3;
+    ReturnAction = "{ SectorProcess(); }";
+    Scope = "::UCN5and6.PicUCN_HDSR74Xview";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewText = "2";
+    TheOriginalText = "2";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 200;
+  }
+
+  text timer1_2
+  {
+    x = 243;
+    y = 307;
+    format = "%s";
+    theText = `gView_x.time_1`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font0`;
+    xReference = 243;
+    yReference = 307;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text time2_2
+  {
+    x = 432;
+    y = 307;
+    format = "%s";
+    theText = `gView_x.time_2`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font0`;
+    xReference = 432;
+    yReference = 307;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text time3_2
+  {
+    x = 624;
+    y = 307;
+    format = "%s";
+    theText = `gView_x.time_3`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font0`;
+    xReference = 624;
+    yReference = 307;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text time4_2
+  {
+    x = 816;
+    y = 307;
+    format = "%s";
+    theText = `gView_x.time_4`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font0`;
+    xReference = 816;
+    yReference = 307;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text time5_2
+  {
+    x = 1005;
+    y = 307;
+    format = "%s";
+    theText = `gView_x.time_5`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font0`;
+    xReference = 1005;
+    yReference = 307;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text timer1_3
+  {
+    x = 243;
+    y = 466;
+    format = "%s";
+    theText = `gView_x.time_1`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font0`;
+    xReference = 243;
+    yReference = 466;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text time2_3
+  {
+    x = 432;
+    y = 466;
+    format = "%s";
+    theText = `gView_x.time_2`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font0`;
+    xReference = 432;
+    yReference = 466;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text time3_3
+  {
+    x = 624;
+    y = 466;
+    format = "%s";
+    theText = `gView_x.time_3`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font0`;
+    xReference = 624;
+    yReference = 466;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text time4_3
+  {
+    x = 816;
+    y = 466;
+    format = "%s";
+    theText = `gView_x.time_4`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font0`;
+    xReference = 816;
+    yReference = 466;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text time5_3
+  {
+    x = 1005;
+    y = 466;
+    format = "%s";
+    theText = `gView_x.time_5`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font0`;
+    xReference = 1005;
+    yReference = 466;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text time1_4
+  {
+    x = 243;
+    y = 623;
+    format = "%s";
+    theText = `gView_x.time_1`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font0`;
+    xReference = 243;
+    yReference = 623;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text time2_4
+  {
+    x = 432;
+    y = 623;
+    format = "%s";
+    theText = `gView_x.time_2`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font0`;
+    xReference = 432;
+    yReference = 623;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text time3_4
+  {
+    x = 624;
+    y = 623;
+    format = "%s";
+    theText = `gView_x.time_3`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font0`;
+    xReference = 624;
+    yReference = 623;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text time4_4
+  {
+    x = 816;
+    y = 623;
+    format = "%s";
+    theText = `gView_x.time_4`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font0`;
+    xReference = 816;
+    yReference = 623;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text time5_4
+  {
+    x = 1005;
+    y = 623;
+    format = "%s";
+    theText = `gView_x.time_5`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font0`;
+    xReference = 1005;
+    yReference = 623;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+}

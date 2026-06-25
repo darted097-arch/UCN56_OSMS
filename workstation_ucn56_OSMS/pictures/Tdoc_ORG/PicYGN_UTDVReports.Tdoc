@@ -1,0 +1,424 @@
+/*
+ * PICASSO-3 CONFIGURATION LANGUAGE FILE
+ *
+ *
+ * Picture name: PicYGN_UTDVReports
+ *
+ *
+ * Documented by  : ygn56
+ * Host           : pcs3
+ * Date           : 19/04-99 at 11:05:53
+ *
+ *
+ * Generate with:
+ *    pcc PicYGN_UTDVReports.Tdoc
+ *
+ */
+
+
+picture PicYGN_UTDVReports
+{
+
+  int Current_page = 651;
+  int option = 4;
+  int receivedCheck = 0;
+  char PictureNumber[50] = "651";
+  char PictureTitle[50] = "UTDV  REPORTS";
+
+  function `void Option1()
+{
+   option=1;
+   SendToHost();
+}`
+
+
+
+  function `void Option2()
+{
+   option=2;
+   SendToHost();
+}`
+
+
+
+  function `void Option3()
+{
+   option=3;
+   SendToHost();
+}`
+
+
+
+  function `void Option4()
+{
+   option=4;
+   SendToHost();
+}`
+
+
+
+  function `void Option5()
+{
+   option=5;
+   SendToHost();
+}`
+
+
+
+  function `void SendToHost()
+{
+  Interface->UtdvDialogue.option=option;
+  Interface->UtdvDialogue.current_page=651;
+  execute("{sendMessageToHost(PROCESS_UTDV_SEND);}");
+  processingText.visibility=1;
+  update();
+}`
+
+
+
+  function `void Initialize()
+{
+   Current_Page = 651;
+   CFMLevel =0;
+   Current_page = 651;
+//   CaButton.UnSelect();
+
+   processingText.visibility=0;
+   update();
+}`
+
+
+
+  function `void ProcessingConfirmed()
+{
+  processingText.visibility=0;
+  update();
+}`
+
+
+
+  function `void escape()
+{
+DisplayPage(Page650);
+}`
+
+
+
+  dialogue
+  {
+    event = `keyReleased(0x31) || keyReleased(0xFFB1)`;
+    action = statement `{
+m1.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+m1.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+
+m1.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+m1.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+m1.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+m1.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+
+m1.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+m1.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+m1.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+m1.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+
+   if ( strlen(m1.ExecuteString) > 0)
+       execute(m1.ExecuteString);
+}`;
+  }
+
+  dialogue
+  {
+    event = `keyReleased(0x32) || keyReleased(0xFFB2)`;
+    action = statement `{
+m2.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+m2.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+
+m2.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+m2.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+m2.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+m2.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+
+m2.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+m2.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+m2.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+m2.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+
+   if ( strlen(m2.ExecuteString) > 0)
+       execute(m2.ExecuteString);
+}`;
+  }
+
+  dialogue
+  {
+    event = `keyReleased(0x33) || keyReleased(0xFFB3)`;
+    action = statement `{
+m3.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+m3.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+
+m3.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+m3.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+m3.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+m3.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+
+m3.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+m3.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+m3.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+m3.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+
+   if ( strlen(m3.ExecuteString) > 0)
+       execute(m3.ExecuteString);
+}`;
+  }
+
+  dialogue
+  {
+    event = `keyReleased(0x34) || keyReleased(0xFFB4)`;
+    action = statement `{
+m4.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+m4.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+
+m4.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+m4.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+m4.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+m4.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+
+m4.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+m4.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+m4.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+m4.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+
+   if ( strlen(m4.ExecuteString) > 0)
+       execute(m4.ExecuteString);
+}`;
+  }
+
+  dialogue
+  {
+    event = `keyReleased(0x35) || keyReleased(0xFFB5)`;
+    action = statement `{
+m5.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+m5.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+
+m5.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+m5.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+m5.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+m5.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+
+m5.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+m5.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+m5.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+m5.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+
+   if ( strlen(m5.ExecuteString) > 0)
+       execute(m5.ExecuteString);
+}`;
+  }
+
+  ellipseArc
+  {
+    x = 474;
+    y = 660;
+    xRadius = 0;
+    yRadius = 0;
+    startAngle = `font4`;
+    openingAngle = 90;
+
+    visibility = 1;
+    foregroundFillColour = `COLOR_NON_ESSENTIAL`;
+    backgroundFillColour = -1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineWidth = 0;
+    linePattern = `SolidPattern`;
+    fillPattern = `SolidPattern`;
+    xReference = 474;
+    yReference = 660;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  ellipseArc
+  {
+    x = 474;
+    y = 660;
+    xRadius = 0;
+    yRadius = 0;
+    startAngle = 0;
+    openingAngle = 90;
+
+    visibility = 1;
+    foregroundFillColour = -1;
+    backgroundFillColour = -1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineWidth = `4`;
+    linePattern = `SolidPattern`;
+    fillPattern = `NoPattern`;
+    xReference = 474;
+    yReference = 660;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text processingText
+  {
+    x = 548;
+    y = 622;
+    format = "%s";
+    theText = "PROCESSING... WAIT";
+
+    visibility = 0;
+    foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 548;
+    yReference = 622;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  instance DialogueSymbols.LargeMenuSelectMid m1
+  {
+    attribute TheOption = "1.";
+    attribute TheFontColor = 2;
+    attribute TheTitle = "NEXT  TO  LAST  MIDNIGHT  FILE  REPORT";
+    attribute TheTextFont = `font6`;
+    attribute Cascade = 0;
+    attribute CascadeX = 400;
+    attribute CascadeY = 400;
+    attribute ExecuteString = "Option1()";
+    x = 350;
+    y = 250;
+    visibility = 1;
+    xReference = 350;
+    yReference = 250;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance m1
+
+
+
+  instance DialogueSymbols.LargeMenuSelectMid m2
+  {
+    attribute TheOption = "2.";
+    attribute TheFontColor = 2;
+    attribute TheTitle = "LAST  MIDNIGHT  FILE  REPORT";
+    attribute TheTextFont = `font6`;
+    attribute Cascade = 0;
+    attribute CascadeX = 400;
+    attribute CascadeY = 400;
+    attribute ExecuteString = "Option2()";
+    x = 350;
+    y = 288;
+    visibility = 1;
+    xReference = 350;
+    yReference = 288;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance m2
+
+
+
+  instance DialogueSymbols.LargeMenuSelectMid m3
+  {
+    attribute TheOption = "3.";
+    attribute TheFontColor = 2;
+    attribute TheTitle = "LAST  HOURLY  CEA  FILE  REPORT";
+    attribute TheTextFont = `font6`;
+    attribute Cascade = 0;
+    attribute CascadeX = 400;
+    attribute CascadeY = 400;
+    attribute ExecuteString = "Option3()";
+    x = 350;
+    y = 326;
+    visibility = 1;
+    xReference = 350;
+    yReference = 326;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance m3
+
+
+
+  instance DialogueSymbols.LargeMenuSelectMid m4
+  {
+    attribute TheOption = "4.";
+    attribute TheFontColor = 2;
+    attribute TheTitle = "CURRENT  MIDNIGHT  INFORMATION  REPORT";
+    attribute TheTextFont = `font6`;
+    attribute Cascade = 0;
+    attribute CascadeX = 400;
+    attribute CascadeY = 400;
+    attribute ExecuteString = "Option4()";
+    x = 350;
+    y = 364;
+    visibility = 1;
+    xReference = 350;
+    yReference = 364;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance m4
+
+
+
+  instance DialogueSymbols.LargeMenuSelectMid m5
+  {
+    attribute TheOption = "5.";
+    attribute TheFontColor = 2;
+    attribute TheTitle = "CURRENT  HOURLY  CEA  INFORMATION  REPORT";
+    attribute TheTextFont = `font6`;
+    attribute Cascade = 0;
+    attribute CascadeX = 400;
+    attribute CascadeY = 400;
+    attribute ExecuteString = "Option5()";
+    x = 350;
+    y = 402;
+    visibility = 1;
+    xReference = 350;
+    yReference = 402;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance m5
+
+
+
+// The picture's other attributes:
+
+  backgroundColour    = 0;
+  xSnap               = 5;
+  ySnap               = 5;
+  angleSnap           = 0;
+  radiusSnap          = 0;
+  worldX              = 0;
+  worldY              = 0;
+  worldWidth          = 1280;
+  worldHeight         = 824;
+  oneToOne            = 1;
+  resizeMode          = 0;
+  updateMode          = 2;
+  crosshairStyle      = 1;
+  crosshairLength     = 0;
+  crosshairFollowSnap = `isInEditMode()`;
+  crosshairVisibility = `isInEditMode()`;
+  xReference = 500;
+  yReference = 500;
+  xScaleFactor = 1;
+  yScaleFactor = 1;
+  rotationAngle = 0;
+
+
+}  // end of picture PicYGN_UTDVReports

@@ -1,0 +1,862 @@
+/*
+ * ProcSee CONFIGURATION LANGUAGE FILE
+ *
+ *
+ * User : ygn34
+ * Host : y4cr01
+ * Date : 2017-06-22
+ * Time : 10:15:26
+ *
+ * ProcSee version : ProcSee 3.10.1 (June 2016)
+ * File version    : 1.26
+ *
+ *
+ */
+
+
+picture PicYGN_footer
+{
+  worldX = 0;
+  worldY = 0;
+  worldWidth = 1280;
+  worldHeight = 140;
+  oneToOne = 1;
+  backgroundColour = 0;
+  updateMode = 2;
+  resizeMode = 0;
+  xSnap = 5;
+  ySnap = 5;
+  radiusSnap = 0;
+  angleSnap = 0;
+  crosshairStyle = 1;
+  crosshairLength = 0;
+  crosshairFollowSnap = `isInEditMode()`;
+  crosshairVisibility = `isInEditMode()`;
+  xReference = 500;
+  yReference = 500;
+  xScaleFactor = 1;
+  yScaleFactor = 1;
+  rotationAngle = 0;
+
+  char HDSRBackupString[32] = "                             ";
+
+  RECORD* pBackupRecord = `&CXYQHDSB`;
+
+  RECORD* pNewAlarmRecord = `&CXYQANEW`;
+
+  RECORD* pNewBadRecord = `&CXYQABAD`;
+
+  RECORD* pNewCEARecord = `&CXYQACEA`;
+
+  RECORD* pProtRecord = `&CXYQHDSP`;
+
+  function `char * determineHDSRBackupString()
+  {
+     if      (3 == pBackupRecord->value) strcpy(HDSRBackupString, "HI AND LO RES BACKUP REQUIRED");
+     else if (1 == pBackupRecord->value) strcpy(HDSRBackupString, "LO RESOLUTION BACKUP REQUIRED");
+     else if (2 == pBackupRecord->value) strcpy(HDSRBackupString, "HI RESOLUTION BACKUP REQUIRED");
+     else if (0 == pBackupRecord->value) strcpy(HDSRBackupString, "                             ");
+     else                                strcpy(HDSRBackupString, "HDSR BACKUP STATUS UNKNOWN   ");
+     return (HDSRBackupString);
+  }
+  `
+
+  function `char *SetFDDIText()
+  {
+     if(Interface->System.FDDIChanA == 0 && Interface->System.FDDIChanB == 0)
+     {
+        return(" FDDI BOTH DOWN                                     ");
+     }
+     else if(Interface->System.FDDIChanA == 0)
+     {
+        return(" FDDI CHAN A DOWN                                 ");
+     }
+     else if(Interface->System.FDDIChanB == 0)
+     {
+        return(" FDDI CHAN B DOWN                                 ");
+     }
+     else
+     {
+        return(" FDDI NORMAL                                            ");
+     }
+  }`
+
+  function `int SetFDDIVisibility()
+  {
+     if( Interface->System.FDDIChanA == 0 ||
+         Interface->System.FDDIChanB == 0 )
+     {
+        return(1);
+     }
+     else
+     {
+        return(0);
+     }
+  }`
+
+  function `void trendview()
+  {
+  // VT_ScanRate1 = 1;  by yrlee 981215
+   Interface->VTFlagMessage.data.requestOption = 1;
+   execute("{sendMessageToHost(VTREND_RESET_REQUEST);}");
+   execute("{sendMessageToHost(REQUEST_VTREND_DATA);}");	// CORENET
+   DelayedDisplayPicture("PicYGN_VideoTrendView1.ppic");
+  //
+  }`
+
+  dialogue
+  {
+    event = `keyPressed(0x31)||keyPressed(0x32)||keyPressed(0x33)||keyPressed(0x34)||keyPressed(0x35)||keyPressed(0x36)||keyPressed(0x37)||keyPressed(0x38)||keyPressed(0x39)`;
+    action = `{
+       win0.moveCursor(640,512) ;
+    }`;
+  }
+
+  dialogue
+  {
+    event = `keyPressed(0xFFB1)||keyPressed(0xFFB2)||keyPressed(0xFFB3)||keyPressed(0xFFB4)||keyPressed(0xFFB5)||keyPressed(0xFFB6)||keyPressed(0xFFB7)||keyPressed(0xFFB8)||keyPressed(0xFFB9)`;
+    action = `{
+       win0.moveCursor(640,512) ;
+    }`;
+  }
+
+  line
+  {
+    numberOfPoints = 5;
+    point[0] = ( 1275, 0 );
+    point[1] = ( 650, 0 );
+    point[2] = ( 650, 0 );
+    point[3] = ( 650, 0 );
+    point[4] = ( 650, 95 );
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    lineStyle = 1;
+    lineWidth = 3;
+    xReference = 1275;
+    yReference = 0;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  line
+  {
+    numberOfPoints = 2;
+    point[0] = ( 950, 0 );
+    point[1] = ( 950, 95 );
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    lineStyle = 1;
+    lineWidth = 3;
+    xReference = 950;
+    yReference = 0;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text FeedbackMessage
+  {
+    x = 285;
+    y = 20;
+    format = "%s";
+    theText = "This is a feedback message";
+    alignment = 0;
+    visibility = `FeedbackMsg_Active`;
+    foregroundColour = 4;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 285;
+    yReference = 25;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text AdvisoryMessage
+  {
+    x = 7;
+    y = 16.5;
+    format = "%s";
+    theText = "";
+    alignment = 0;
+    visibility = `AdvisoryMsg_Active`;
+    foregroundColour = 4;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 7;
+    yReference = 13.5;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  instance cfmsSymbols.pokeMessageArea PokeMessageArea
+  {
+    x = 0;
+    y = 5;
+    visibility = 0;
+    xReference = 5;
+    yReference = 5;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    PokePointId = `&::YGN3and4.InterfaceToGUI.CNYXAL7`;
+  }
+
+  instance cfmsSymbols.FooterSystemMessage NewAlarm
+  {
+    x = 995;
+    y = 5;
+    visibility = `(pNewAlarmRecord->value==0)?0:1`;
+    xReference = 670;
+    yReference = 5;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    TheText = "NEW ALARM";
+    backgroundFlag = 1;	//CORENET 20170622
+  }
+
+  instance cfmsSymbols.FooterSystemMessage NewBadData
+  {
+    x = 995;
+    y = 35;
+    visibility = `(pNewBadRecord->value==0)?0:1`;
+    xReference = 670;
+    yReference = 5;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    TheText = "NEW BAD DATA";
+    backgroundFlag = 2;	//CORENET 20170622
+  }
+
+  instance cfmsSymbols.FooterSystemMessage NewCEA
+  {
+    x = 995;
+    y = 65;
+    visibility = `(pNewCEARecord->value==0 || CEA_ALARM_RESET == 1)?0:1`;
+    xReference = 670;
+    yReference = 5;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    TheText = "NEW CEA MESSAGE";
+    backgroundFlag = 3;	//CORENET 20170622
+  }
+
+  text AdvisoryMessage1
+  {
+    x = 7;
+    y = 39;
+    format = "%s";
+    theText = "";
+    alignment = 0;
+    visibility = `AdvisoryMsg_Active`;
+    foregroundColour = 4;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 7;
+    yReference = 36;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text AdvisoryMessage2
+  {
+    x = 7;
+    y = 61.5;
+    format = "%s";
+    theText = "";
+    alignment = 0;
+    visibility = `AdvisoryMsg_Active`;
+    foregroundColour = 4;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 7;
+    yReference = 58.5;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text AdvisoryMessage3
+  {
+    x = 7;
+    y = 84;
+    format = "%s";
+    theText = "";
+    alignment = 0;
+    visibility = `AdvisoryMsg3_Active`;
+    foregroundColour = 4;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 7;
+    yReference = 81;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle
+  {
+    x = 1212;
+    y = 94;
+    width = -1;
+    height = 37;
+    visibility = 1;
+    foregroundColour = `Colour50`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 0;
+    foregroundFillColour = `Colour50`;
+    backgroundFillColour = -1;
+    fillPattern = `SolidPattern`;
+    xReference = 1212;
+    yReference = 93;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle
+  {
+    x = 0;
+    y = 130;
+    width = 1285;
+    height = 5;
+    visibility = 1;
+    foregroundColour = `Colour50`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 1;
+    foregroundFillColour = `Colour50`;
+    backgroundFillColour = -1;
+    fillPattern = `SolidPattern`;
+    xReference = -1;
+    yReference = 134;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle
+  {
+    x = -6;
+    y = 97;
+    width = 1283.5;
+    height = 36;
+    visibility = 1;
+    foregroundColour = `Colour39`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 1;
+    foregroundFillColour = `Colour39`;
+    backgroundFillColour = -1;
+    fillPattern = `SolidPattern`;
+    xReference = 859;
+    yReference = 97;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle
+  {
+    x = 5;
+    y = 97;
+    width = 1205;
+    height = 0;
+    visibility = 1;
+    foregroundColour = `Colour30`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 0;
+    foregroundFillColour = `Colour36`;
+    backgroundFillColour = -1;
+    fillPattern = `SolidPattern`;
+    xReference = 5;
+    yReference = 100;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  instance DialogueSymbols.FooterMenuButton
+  {
+    x = 2;
+    y = 100;
+    visibility = 1;
+    xReference = 2;
+    yReference = 100;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ButtonState = 0;
+    DynamicLabel = "ESCAPE";
+    ExecuteString = "::YGN3and4.DisplayESCPage()";
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    Label = "ESCAPE";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    StaticLabel = "ESCAPE";
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 2;
+    TextFontDynamic = `font2`;
+    TextFontStatic = `font4`;
+    TextX = 17;
+    TextXDynamic = 15;
+    TextXStatic = 17;
+    TextY = 22;
+    TextYDynamic = 21;
+    TextYStatic = 22;
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    Width = 100;
+  }
+
+  instance DialogueSymbols.FooterMenuButton
+  {
+    x = 118;
+    y = 100;
+    visibility = 1;
+    xReference = 118;
+    yReference = 100;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ButtonState = 0;
+    DynamicLabel = "ALM ACK";
+    ExecuteString = "::YGN3and4.Request_Alarm_Acknowledge()";
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    Label = "ALM ACK";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    StaticLabel = "ALM ACK";
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 2;
+    TextFontDynamic = `font2`;
+    TextFontStatic = `font4`;
+    TextX = 17;
+    TextXDynamic = 15;
+    TextXStatic = 17;
+    TextY = 22;
+    TextYDynamic = 21;
+    TextYStatic = 22;
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    Width = 100;
+  }
+
+  instance DialogueSymbols.FooterMenuButton
+  {
+    x = 234;
+    y = 100;
+    visibility = 1;
+    xReference = 234;
+    yReference = 100;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ButtonState = 0;
+    DynamicLabel = "ALM RST";
+    ExecuteString = "::YGN3and4.Request_Alarm_Reset()";
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    Label = "ALM RST";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    StaticLabel = "ALM RST";
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 2;
+    TextFontDynamic = `font2`;
+    TextFontStatic = `font4`;
+    TextX = 17;
+    TextXDynamic = 15;
+    TextXStatic = 17;
+    TextY = 22;
+    TextYDynamic = 21;
+    TextYStatic = 22;
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    Width = 100;
+  }
+
+  instance DialogueSymbols.FooterMenuButton
+  {
+    x = 583;
+    y = 100;
+    visibility = 1;
+    xReference = 583;
+    yReference = 100;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ButtonState = 0;
+    DynamicLabel = "   TREND";
+    ExecuteString = "DisplayTRENDPage()";
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    Label = "   TREND";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    StaticLabel = "   TREND";
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 2;
+    TextFontDynamic = `font2`;
+    TextFontStatic = `font4`;
+    TextX = 17;
+    TextXDynamic = 15;
+    TextXStatic = 17;
+    TextY = 22;
+    TextYDynamic = 21;
+    TextYStatic = 22;
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    Width = 100;
+  }
+
+  instance DialogueSymbols.FooterMenuButton
+  {
+    x = 350;
+    y = 100;
+    visibility = 1;
+    xReference = 350;
+    yReference = 100;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ButtonState = 0;
+    DynamicLabel = "   MAIN";
+    ExecuteString = "DisplayMAINPage()";
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    Label = "   MAIN";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    StaticLabel = "   MAIN";
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 2;
+    TextFontDynamic = `font2`;
+    TextFontStatic = `font4`;
+    TextX = 17;
+    TextXDynamic = 15;
+    TextXStatic = 17;
+    TextY = 22;
+    TextYDynamic = 21;
+    TextYStatic = 22;
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    Width = 100;
+  }
+
+  instance DialogueSymbols.FooterMenuButton
+  {
+    x = 467;
+    y = 100;
+    visibility = 1;
+    xReference = 467;
+    yReference = 100;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ButtonState = 0;
+    DynamicLabel = "    CAL";
+    ExecuteString = "DisplayCALPage()";
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    Label = "    CAL";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    StaticLabel = "    CAL";
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 2;
+    TextFontDynamic = `font2`;
+    TextFontStatic = `font4`;
+    TextX = 17;
+    TextXDynamic = 15;
+    TextXStatic = 17;
+    TextY = 22;
+    TextYDynamic = 21;
+    TextYStatic = 22;
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    Width = 100;
+  }
+
+  instance DialogueSymbols.FooterMenuButton
+  {
+    x = 700;
+    y = 100;
+    visibility = 1;
+    xReference = 700;
+    yReference = 100;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ButtonState = 0;
+    DynamicLabel = "CFM MON";
+    ExecuteString = "DisplayCFMPage()";
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    Label = "CFM MON";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    StaticLabel = "CFM MON";
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 2;
+    TextFontDynamic = `font2`;
+    TextFontStatic = `font4`;
+    TextX = 17;
+    TextXDynamic = 15;
+    TextXStatic = 17;
+    TextY = 22;
+    TextYDynamic = 21;
+    TextYStatic = 22;
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    Width = 100;
+  }
+
+  instance DialogueSymbols.FooterMenuButton
+  {
+    x = 816;
+    y = 100;
+    visibility = 1;
+    xReference = 816;
+    yReference = 100;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ButtonState = 0;
+    DynamicLabel = "   PRIOR";
+    ExecuteString = "::YGN3and4.DisplayPageLast()";
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    Label = "   PRIOR";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    StaticLabel = "   PRIOR";
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 2;
+    TextFontDynamic = `font2`;
+    TextFontStatic = `font4`;
+    TextX = 17;
+    TextXDynamic = 15;
+    TextXStatic = 17;
+    TextY = 22;
+    TextYDynamic = 21;
+    TextYStatic = 22;
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    Width = 100;
+  }
+
+  instance DialogueSymbols.FooterMenuButton
+  {
+    x = 932;
+    y = 100;
+    visibility = 1;
+    xReference = 932;
+    yReference = 100;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ButtonState = 0;
+    DynamicLabel = "   NEXT";
+    ExecuteString = "::YGN3and4.DisplayPageNext()";
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    Label = "   NEXT";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    StaticLabel = "   NEXT";
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 2;
+    TextFontDynamic = `font2`;
+    TextFontStatic = `font4`;
+    TextX = 17;
+    TextXDynamic = 15;
+    TextXStatic = 17;
+    TextY = 22;
+    TextYDynamic = 21;
+    TextYStatic = 22;
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    Width = 100;
+  }
+
+  instance DialogueSymbols.FooterMenuButton
+  {
+    x = 1048;
+    y = 100;
+    visibility = 1;
+    xReference = 1048;
+    yReference = 100;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ButtonState = 0;
+    DynamicLabel = "   PAGE";
+    ExecuteString = "::YGN3and4.DisplayPopUpMenu()";
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    Label = "   PAGE";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    StaticLabel = "   PAGE";
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 2;
+    TextFontDynamic = `font2`;
+    TextFontStatic = `font4`;
+    TextX = 17;
+    TextXDynamic = 15;
+    TextXStatic = 17;
+    TextY = 22;
+    TextYDynamic = 21;
+    TextYStatic = 22;
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    Width = 100;
+  }
+
+  instance DialogueSymbols.FooterMenuButton
+  {
+    x = 1165;
+    y = 100;
+    visibility = 1;
+    xReference = 1165;
+    yReference = 100;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ButtonState = 0;
+    DynamicLabel = "SECTOR";
+    ExecuteString = "::YGN3and4.DisplaySectorPopUpMenu()";
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    Label = "SECTOR";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    StaticLabel = "SECTOR";
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 2;
+    TextFontDynamic = `font2`;
+    TextFontStatic = `font4`;
+    TextX = 17;
+    TextXDynamic = 15;
+    TextXStatic = 17;
+    TextY = 22;
+    TextYDynamic = 21;
+    TextYStatic = 22;
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    Width = 100;
+  }
+
+  text t_diskProtect
+  {
+    x = 655;
+    y = 28;
+    format = "%s";
+    theText = " DISK PROTECTED                                     ";
+    alignment = 0;
+    visibility = `(pProtRecord->value==0)?0:1`;
+    foregroundColour = `COLOR_PICTURE_BACKGROUND`;
+    backgroundColour = `COLOR_BAD_OOR_ACK`;
+    theFont = `font13`;
+    xReference = 655;
+    yReference = 28;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text t_backupRequest
+  {
+    x = 655;
+    y = 54;
+    format = "%s";
+    theText = `determineHDSRBackupString()`;
+    alignment = 0;
+    visibility = `(pBackupRecord->value==0)?0:1`;
+    foregroundColour = `COLOR_PICTURE_BACKGROUND`;
+    backgroundColour = `COLOR_ACTIVE_ON_OPEN`;
+    theFont = `font13`;
+    xReference = 655;
+    yReference = 54;
+    xScaleFactor = 1.1;
+    yScaleFactor = 1.1;
+    rotationAngle = 0;
+  }
+
+  text LockedText
+  {
+    x = 490;
+    y = 80;
+    format = "%s";
+    theText = "LOCKED";
+    alignment = 0;
+    visibility = `DisplayBlock || CAL_Active  ||  BDL_Active  ||  ORL_Active`;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font0`;
+    xReference = 490;
+    yReference = 80;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text FDDIText
+  {
+    x = 655;
+    y = 81;
+    format = "%s";
+    theText = `SetFDDIText()`;
+    alignment = 0;
+    visibility = `SetFDDIVisibility()`;
+    foregroundColour = `COLOR_PICTURE_BACKGROUND`;
+    backgroundColour = `COLOR_BAD_OOR_ACK`;
+    theFont = `font13`;
+    xReference = 655;
+    yReference = 81;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  line
+  {
+    numberOfPoints = 2;
+    point[0] = ( 0, 0 );
+    point[1] = ( 650, 0 );
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    lineStyle = 1;
+    lineWidth = 3;
+    xReference = 30;
+    yReference = 0;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+}

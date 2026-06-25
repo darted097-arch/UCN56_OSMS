@@ -1,0 +1,107 @@
+/*
+ * PICASSO-3 CONFIGURATION LANGUAGE FILE
+ *
+ *
+ * Picture name: PicYGN_RCS1
+ *
+ *
+ * Documented by  : ygn56
+ * Host           : y5maint1
+ * Date           : 16/11-06 at 14:42:10
+ *
+ *
+ * Generate with:
+ *    pcc PicYGN_RCS1.Tdoc
+ *
+ */
+
+
+picture PicYGN_RCS1
+{
+
+  int Curr_mode = `PointId->value`;
+  char PictureNumber[50] = "673";
+  char PictureTitle[50] = "RCS LOOP 2 LEVEL";
+  RECORD *PointId = `&RCL0115`;
+
+  function `void Initialize()
+{
+  Current_Page = 673;
+
+  execute ("{ manageTempShopList(TEMP_SHOP_INIT_ADD,\\"RCL0115\\"); }");
+
+  update();
+}`
+
+
+
+  rectangle 
+  {
+    x = 1234;
+    y = 612;
+    width = -1194;
+    height = -460;
+
+    visibility = 1;
+    foregroundFillColour = `COLOR_PICTURE_BACKGROUND`;
+    backgroundFillColour = -1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    lineWidth = 9;
+    linePattern = `SolidStyle`;
+    fillPattern = `SolidPattern`;
+    xReference = 1234;
+    yReference = 650;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  instance TrendLibrary.Digits 
+  {
+    attribute Number = `(PointId->value<101.67)?101.75:PointId->value`;
+    attribute Digit1.number = `(Number<0)?0:(Number>=100)?(int)Number/100:0`;
+    attribute Digit2.number = `(Number<0)?0:(int)Number/10-Digit1.number*10`;
+    attribute Digit3.number = `(Number<0)?0:(int)(Number-Digit1.number*100-Digit2.number*10)`;
+    attribute Digit4.number = `(Number<0)?0:(int)(Number*10 - Digit1.number*1000 - Digit2.number*100 - Digit3.number*10)`;
+    attribute Digit5.number = `(Number<0)?0:(int)(Number*100 - Digit1.number*10000 - Digit2.number*1000 - Digit3.number*100 - Digit4.number*10)`;
+    x = -70;
+    y = 200;
+    visibility = 1;
+    xReference = -70;
+    yReference = 200;
+    xScaleFactor = 1.5;
+    yScaleFactor = 1.5;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+// The picture's other attributes:
+
+  backgroundColour    = 0;
+  xSnap               = -4;
+  ySnap               = -4;
+  angleSnap           = 0;
+  radiusSnap          = 0;
+  worldX              = 0;
+  worldY              = 0;
+  worldWidth          = 1280;
+  worldHeight         = 824;
+  oneToOne            = 1;
+  resizeMode          = 0;
+  updateMode          = 2;
+  crosshairStyle      = 1;
+  crosshairLength     = 0;
+  crosshairFollowSnap = `isInEditMode()`;
+  crosshairVisibility = `isInEditMode()`;
+  xReference = 500;
+  yReference = 500;
+  xScaleFactor = 1;
+  yScaleFactor = 1;
+  rotationAngle = 0;
+
+
+}  // end of picture PicYGN_RCS1

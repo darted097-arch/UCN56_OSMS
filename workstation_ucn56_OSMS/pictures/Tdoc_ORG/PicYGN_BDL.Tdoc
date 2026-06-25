@@ -1,0 +1,685 @@
+/*
+ * PICASSO-3 CONFIGURATION LANGUAGE FILE
+ *
+ *
+ * Picture name: PicYGN_BDL
+ *
+ *
+ * Documented by  : runtime
+ * Host           : y6tsc2
+ * Date           : 03/12-97 at 14:30:42
+ *
+ *
+ * Generate with:
+ *    pcc PicYGN_BDL.Tdoc
+ *
+ */
+
+
+picture PicYGN_BDL
+{
+
+  char *PictureTitle = "BAD DATA LIST";
+  char PictureNumber[50] = "155";
+  char *dummy_arg = " ";
+
+  function `void Initialize()
+{
+   CFMLevel = 0;
+   Current_Page = 155;
+   BdlPageOn = TRUE;
+   execute("{sendMessageToHost(REQUEST_BDL_DATA);}");
+}`
+
+
+
+  function `int SetpRECORDs()
+{
+// If the string compare is not equal to 8 blanks and the string length is 8 characters long
+// then set pRECORD equal to the PID sent from the CCUR
+   if ( (0 != strcmp (Interface->BDL_Data.BDLine1.AlarmProb,"    ")) && 
+        (4 == strlen(Interface->BDL_Data.BDLine1.AlarmProb)) )
+      {
+        execute ("{BLine1.pRECORD = \\\`&%s\\\`;}", Interface->BDL_Data.BDLine1.AlarmPid);
+
+      }
+   else
+        {BLine1.pRECORD = 0;}
+
+   if ( (0 != strcmp (Interface->BDL_Data.BDLine2.AlarmProb,"    ")) && 
+        (4 == strlen(Interface->BDL_Data.BDLine2.AlarmProb)) )
+      {
+       execute ("{BLine2.pRECORD = \\\`&%s\\\`;}", Interface->BDL_Data.BDLine2.AlarmPid);
+      }
+   else
+        {BLine2.pRECORD = 0;}
+
+   if ( (0 != strcmp (Interface->BDL_Data.BDLine3.AlarmProb,"    ")) && 
+        (4 == strlen(Interface->BDL_Data.BDLine3.AlarmProb)) )
+      {
+       execute ("{BLine3.pRECORD = \\\`&%s\\\`;}", Interface->BDL_Data.BDLine3.AlarmPid);
+      }
+   else
+        {BLine3.pRECORD = 0;}
+
+   if ( (0 != strcmp (Interface->BDL_Data.BDLine4.AlarmProb,"    ")) && 
+        (4 == strlen(Interface->BDL_Data.BDLine4.AlarmProb)) )
+      {
+       execute ("{BLine4.pRECORD = \\\`&%s\\\`;}", Interface->BDL_Data.BDLine4.AlarmPid);
+      }
+   else
+       {BLine4.pRECORD = 0;}
+
+   if ( (0 != strcmp (Interface->BDL_Data.BDLine5.AlarmProb,"    ")) && 
+        (4 == strlen(Interface->BDL_Data.BDLine5.AlarmProb)) )
+      {
+       execute ("{BLine5.pRECORD = \\\`&%s\\\`;}", Interface->BDL_Data.BDLine5.AlarmPid);
+      }
+   else
+       {BLine5.pRECORD = 0;}
+
+   if ( (0 != strcmp (Interface->BDL_Data.BDLine6.AlarmProb,"    ")) && 
+        (4 == strlen(Interface->BDL_Data.BDLine6.AlarmProb)) )
+      {
+       execute ("{BLine6.pRECORD = \\\`&%s\\\`;}", Interface->BDL_Data.BDLine6.AlarmPid);
+      }
+   else
+       {BLine6.pRECORD = 0;}
+
+   if ( (0 != strcmp (Interface->BDL_Data.BDLine7.AlarmProb,"    ")) && 
+        (4 == strlen(Interface->BDL_Data.BDLine7.AlarmProb)) )
+      {
+       execute ("{BLine7.pRECORD = \\\`&%s\\\`;}", Interface->BDL_Data.BDLine7.AlarmPid);
+      }
+   else
+       {BLine7.pRECORD = 0;}
+
+   if ( (0 != strcmp (Interface->BDL_Data.BDLine8.AlarmProb,"    ")) && 
+        (4 == strlen(Interface->BDL_Data.BDLine8.AlarmProb)) )
+      {
+       execute ("{BLine8.pRECORD = \\\`&%s\\\`;}", Interface->BDL_Data.BDLine8.AlarmPid);
+      }
+   else
+       {BLine8.pRECORD = 0;}
+
+   if ( (0 != strcmp (Interface->BDL_Data.BDLine9.AlarmProb,"    ")) && 
+        (4 == strlen(Interface->BDL_Data.BDLine9.AlarmProb)) )
+      {
+       execute ("{BLine9.pRECORD = \\\`&%s\\\`;}", Interface->BDL_Data.BDLine9.AlarmPid);
+      }
+   else
+       {BLine9.pRECORD = 0;}
+
+   if ( (0 != strcmp (Interface->BDL_Data.BDLine10.AlarmProb,"    ")) && 
+        (4 == strlen(Interface->BDL_Data.BDLine10.AlarmProb)) )
+      {
+       execute ("{BLine10.pRECORD = \\\`&%s\\\`;}", Interface->BDL_Data.BDLine10.AlarmPid);
+      }
+   else
+       {BLine10.pRECORD = 0;}
+
+   if ( (0 != strcmp (Interface->BDL_Data.BDLine11.AlarmProb,"    ")) && 
+        (4 == strlen(Interface->BDL_Data.BDLine11.AlarmProb)) )
+      {
+       execute ("{BLine11.pRECORD = \\\`&%s\\\`;}", Interface->BDL_Data.BDLine11.AlarmPid);
+      }
+   else
+       {BLine11.pRECORD = 0;}
+
+   if ( (0 != strcmp (Interface->BDL_Data.BDLine12.AlarmProb,"    ")) && 
+        (4 == strlen(Interface->BDL_Data.BDLine12.AlarmProb)) )
+      {
+       execute ("{BLine12.pRECORD = \\\`&%s\\\`;}", Interface->BDL_Data.BDLine12.AlarmPid);
+      }
+   else
+       {BLine12.pRECORD = 0;}
+
+   if ( (0 != strcmp (Interface->BDL_Data.BDLine13.AlarmProb,"    ")) && 
+        (4 == strlen(Interface->BDL_Data.BDLine13.AlarmProb)) )
+      {
+       execute ("{BLine13.pRECORD = \\\`&%s\\\`;}", Interface->BDL_Data.BDLine13.AlarmPid);
+      }
+   else
+       {BLine13.pRECORD = 0;}
+
+   if ( (0 != strcmp (Interface->BDL_Data.BDLine14.AlarmProb,"    ")) && 
+        (4 == strlen(Interface->BDL_Data.BDLine14.AlarmProb)) )
+      {
+       execute ("{BLine14.pRECORD = \\\`&%s\\\`;}", Interface->BDL_Data.BDLine14.AlarmPid);
+      }
+      else
+       {BLine14.pRECORD = 0;}
+
+   if ( (0 != strcmp (Interface->BDL_Data.BDLine15.AlarmProb,"    ")) && 
+        (4 == strlen(Interface->BDL_Data.BDLine15.AlarmProb)) )
+      {
+       execute ("{BLine15.pRECORD = \\\`&%s\\\`;}", Interface->BDL_Data.BDLine15.AlarmPid);
+      }
+   else
+       {BLine15.pRECORD = 0;}
+}
+`
+
+
+
+/*------------------------------- CORENET -------------
+  line 
+  {
+    numberOfPoints = 2;
+
+    point[0] = (85, 266);
+    point[1] = (85, 266);
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineWidth = 0;
+    lineStyle = `SolidPattern`;
+    xReference = 85;
+    yReference = 266;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  line 
+  {
+    numberOfPoints = 2;
+
+    point[0] = (74, 451);
+    point[1] = (74, 451);
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineWidth = 0;
+    lineStyle = `SolidPattern`;
+    xReference = 74;
+    yReference = 451;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+---------------------------------------*/
+
+
+  rectangle 
+  {
+    x = 485;
+    y = 51;
+    width = 0;
+    height = 0;
+
+    visibility = 1;
+    foregroundFillColour = `COLOR_NON_ESSENTIAL`;
+    backgroundFillColour = -1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineWidth = 0;
+    linePattern = `SolidPattern`;
+    fillPattern = `SolidPattern`;
+    xReference = 485;
+    yReference = 51;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 662;
+    y = 26;
+    format = "%d";
+    //theText = `&Interface->BDL_Data.BdlPage`;
+    theText = `Interface->BDL_Data.BdlPage`;	// CORENET
+
+    visibility =  `SetpRECORDs()`;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font15`;
+    xReference = 662;
+    yReference = 26;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 564;
+    y = 26;
+    format = "%s";
+    theText = "PAGE";
+
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font15`;
+    xReference = 564;
+    yReference = 26;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  instance DialogueSymbols.BdlLine BLine2
+  {
+    attribute ChassisText = `pRECORD == 0 ? " " : 
+                             Interface->BDL_Data.BDLine2.Chassis`;
+    attribute Format = `pRECORD == 0 ? "%s" : pRECORD->disfmt`;
+    attribute ProblemText = `pRECORD == 0 ? " " : 
+                              Interface->BDL_Data.BDLine2.AlarmProb`;
+    attribute LineNumber = 2;
+    attribute pRECORD = 0;
+    attribute value.PointId = `pRECORD`;
+    attribute value.DisplayUnits = 1;
+    x = 10;
+    y = 120;
+    visibility = 1;
+    xReference = 89;
+    yReference = 123;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance BLine2
+
+
+
+  instance DialogueSymbols.BdlLine BLine3
+  {
+    attribute ChassisText = `pRECORD == 0 ? " " : 
+                  Interface->BDL_Data.BDLine3.Chassis`;
+    attribute Format = `pRECORD == 0 ? "%s" : pRECORD->disfmt`;
+    attribute ProblemText = `pRECORD == 0 ? " " :
+                             Interface->BDL_Data.BDLine3.AlarmProb`;
+    attribute LineNumber = 3;
+    attribute pRECORD = 0;
+    attribute value.PointId = `pRECORD`;
+    attribute value.DisplayUnits = 1;
+    x = 10;
+    y = 160;
+    visibility = 1;
+    xReference = 84;
+    yReference = 160;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance BLine3
+
+
+
+  instance DialogueSymbols.BdlLine BLine4
+  {
+    attribute ChassisText = `pRECORD == 0 ? " " : 
+                              Interface->BDL_Data.BDLine4.Chassis`;
+    attribute Format = `pRECORD == 0 ? "%s" : pRECORD->disfmt`;
+    attribute ProblemText = `pRECORD == 0 ? " " : 
+                             Interface->BDL_Data.BDLine4.AlarmProb`;
+    attribute LineNumber = 4;
+    attribute pRECORD = 0;
+    attribute value.PointId = `pRECORD`;
+    attribute value.DisplayUnits = 1;
+    x = 10;
+    y = 200;
+    visibility = 1;
+    xReference = 30;
+    yReference = 200;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance BLine4
+
+
+
+  instance DialogueSymbols.BdlLine BLine5
+  {
+    attribute ChassisText = `pRECORD == 0 ? " " : 
+                          Interface->BDL_Data.BDLine5.Chassis`;
+    attribute Format = `pRECORD == 0 ? "%s" : pRECORD->disfmt`;
+    attribute ProblemText = `pRECORD == 0 ? " " : 
+                              Interface->BDL_Data.BDLine5.AlarmProb`;
+    attribute LineNumber = 5;
+    attribute pRECORD = 0;
+    attribute value.PointId = `pRECORD`;
+    attribute value.DisplayUnits = 1;
+    x = 10;
+    y = 240;
+    visibility = 1;
+    xReference = 124;
+    yReference = 246;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance BLine5
+
+
+
+  instance DialogueSymbols.BdlLine BLine1
+  {
+    attribute ChassisText = `pRECORD == 0 ? " " : 
+                             Interface->BDL_Data.BDLine1.Chassis`;
+    attribute Format = `pRECORD == 0 ? "%s" : pRECORD->disfmt`;
+    attribute ProblemText = `pRECORD == 0 ? " " : 
+                             Interface->BDL_Data.BDLine1.AlarmProb`;
+    attribute LineNumber = 1;
+    attribute pRECORD = 0;
+    attribute value.PointId = `pRECORD`;
+    attribute value.DisplayUnits = 1;
+    x = 10;
+    y = 80;
+    visibility = 1;
+    xReference = 106;
+    yReference = 88;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance BLine1
+
+
+
+  instance DialogueSymbols.BdlLine BLine6
+  {
+    attribute ChassisText = `pRECORD == 0 ? " " : 
+                             Interface->BDL_Data.BDLine6.Chassis`;
+    attribute Format = `pRECORD == 0 ? "%s" : pRECORD->disfmt`;
+    attribute ProblemText = `pRECORD == 0 ? " " : 
+                              Interface->BDL_Data.BDLine6.AlarmProb`;
+    attribute LineNumber = 6;
+    attribute pRECORD = 0;
+    attribute value.PointId = `pRECORD`;
+    attribute value.DisplayUnits = 1;
+    x = 10;
+    y = 300;
+    visibility = 1;
+    xReference = 61;
+    yReference = 313;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance BLine6
+
+
+
+  instance DialogueSymbols.BdlLine BLine7
+  {
+    attribute ChassisText = `pRECORD == 0 ? " " : 
+                          Interface->BDL_Data.BDLine7.Chassis`;
+    attribute Format = `pRECORD == 0 ? "%s" : pRECORD->disfmt`;
+    attribute ProblemText = `pRECORD == 0 ? " " : 
+                              Interface->BDL_Data.BDLine7.AlarmProb`;
+    attribute LineNumber = 7;
+    attribute pRECORD = 0;
+    attribute value.PointId = `pRECORD`;
+    attribute value.DisplayUnits = 1;
+    x = 10;
+    y = 340;
+    visibility = 1;
+    xReference = 53;
+    yReference = 354;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance BLine7
+
+
+
+  instance DialogueSymbols.BdlLine BLine8
+  {
+    attribute ChassisText = `pRECORD == 0 ? " " : 
+                          Interface->BDL_Data.BDLine8.Chassis`;
+    attribute Format = `pRECORD == 0 ? "%s" : pRECORD->disfmt`;
+    attribute ProblemText = `pRECORD == 0 ? " " : 
+                             Interface->BDL_Data.BDLine8.AlarmProb`;
+    attribute LineNumber = 8;
+    attribute pRECORD = 0;
+    attribute value.PointId = `pRECORD`;
+    attribute value.DisplayUnits = 1;
+    x = 10;
+    y = 380;
+    visibility = 1;
+    xReference = 57;
+    yReference = 399;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance BLine8
+
+
+
+  instance DialogueSymbols.BdlLine BLine9
+  {
+    attribute ChassisText = `pRECORD == 0 ? " " : 
+                              Interface->BDL_Data.BDLine9.Chassis`;
+    attribute Format = `pRECORD == 0 ? "%s" : pRECORD->disfmt`;
+    attribute ProblemText = `pRECORD == 0 ? " " : 
+                             Interface->BDL_Data.BDLine9.AlarmProb`;
+    attribute LineNumber = 9;
+    attribute pRECORD = 0;
+    attribute value.PointId = `pRECORD`;
+    attribute value.DisplayUnits = 1;
+    x = 10;
+    y = 420;
+    visibility = 1;
+    xReference = 99;
+    yReference = 459;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance BLine9
+
+
+
+  instance DialogueSymbols.BdlLine BLine10
+  {
+    attribute ChassisText = `pRECORD == 0 ? " " : 
+                             Interface->BDL_Data.BDLine10.Chassis`;
+    attribute Format = `pRECORD == 0 ? "%s" : pRECORD->disfmt`;
+    attribute ProblemText = `pRECORD == 0 ? " " : 
+                             Interface->BDL_Data.BDLine10.AlarmProb`;
+    attribute LineNumber = 10;
+    attribute pRECORD = 0;
+    attribute value.PointId = `pRECORD`;
+    attribute value.DisplayUnits = 1;
+    x = 10;
+    y = 460;
+    visibility = 1;
+    xReference = 133;
+    yReference = 514;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance BLine10
+
+
+
+  line 
+  {
+    numberOfPoints = 2;
+
+    point[0] = (58, 281);
+    point[1] = (1125, 281);
+
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    lineWidth = 5;
+    lineStyle = `SolidPattern`;
+    xReference = 41;
+    yReference = 285;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  line bar2
+  {
+    numberOfPoints = 2;
+
+    point[0] = (53, 502);
+    point[1] = (1120, 502);
+
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    lineWidth = 5;
+    lineStyle = `SolidPattern`;
+    xReference = 53;
+    yReference = 479;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  instance DialogueSymbols.BdlLine BLine11
+  {
+    attribute ChassisText = `pRECORD == 0 ? " " : 
+                             Interface->BDL_Data.BDLine11.Chassis`;
+    attribute Format = `pRECORD == 0 ? "%s" : pRECORD->disfmt`;
+    attribute ProblemText = `pRECORD == 0 ? " " : 
+                             Interface->BDL_Data.BDLine11.AlarmProb`;
+    attribute LineNumber = 11;
+    attribute pRECORD = 0;
+    attribute value.PointId = `pRECORD`;
+    attribute value.DisplayUnits = 1;
+    x = 10;
+    y = 520;
+    visibility = 1;
+    xReference = 52;
+    yReference = 555;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance BLine11
+
+
+
+  instance DialogueSymbols.BdlLine BLine12
+  {
+    attribute ChassisText = `pRECORD == 0 ? " " : 
+                             Interface->BDL_Data.BDLine12.Chassis`;
+    attribute Format = `pRECORD == 0 ? "%s" : pRECORD->disfmt`;
+    attribute ProblemText = `pRECORD == 0 ? " " : 
+                             Interface->BDL_Data.BDLine12.AlarmProb`;
+    attribute LineNumber = 13;
+    attribute pRECORD = 0;
+    attribute value.PointId = `pRECORD`;
+    attribute value.DisplayUnits = 1;
+    x = 10;
+    y = 560;
+    visibility = 1;
+    xReference = 61;
+    yReference = 592;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance BLine12
+
+
+
+  instance DialogueSymbols.BdlLine BLine13
+  {
+    attribute ChassisText = `pRECORD == 0 ? " " : 
+                             Interface->BDL_Data.BDLine13.Chassis`;
+    attribute Format = `pRECORD == 0 ? "%s" : pRECORD->disfmt`;
+    attribute ProblemText = `pRECORD == 0 ? " " : 
+                              Interface->BDL_Data.BDLine13.AlarmProb`;
+    attribute LineNumber = 13;
+    attribute pRECORD = 0;
+    attribute value.PointId = `pRECORD`;
+    attribute value.DisplayUnits = 1;
+    x = 10;
+    y = 600;
+    visibility = 1;
+    xReference = 67;
+    yReference = 633;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance BLine13
+
+
+
+  instance DialogueSymbols.BdlLine BLine15
+  {
+    attribute ChassisText = `pRECORD == 0 ? " " : 
+                             Interface->BDL_Data.BDLine15.Chassis`;
+    attribute Format = `pRECORD == 0 ? "%s" : pRECORD->disfmt`;
+    attribute ProblemText = `pRECORD == 0 ? " " : 
+                              Interface->BDL_Data.BDLine15.AlarmProb`;
+    attribute LineNumber = 15;
+    attribute pRECORD = 0;
+    attribute value.PointId = `pRECORD`;
+    attribute value.DisplayUnits = 1;
+    x = 10;
+    y = 680;
+    visibility = 1;
+    xReference = 127;
+    yReference = 712;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance BLine15
+
+
+
+  instance DialogueSymbols.BdlLine BLine14
+  {
+    attribute ChassisText = `pRECORD == 0 ? " " : 
+                             Interface->BDL_Data.BDLine14.Chassis`;
+    attribute Format = `pRECORD == 0 ? "%s" : pRECORD->disfmt`;
+    attribute ProblemText = `pRECORD == 0 ? " " :  
+                             Interface->BDL_Data.BDLine14.AlarmProb`;
+    attribute LineNumber = 14;
+    attribute pRECORD = 0;
+    attribute value.PointId = `pRECORD`;
+    attribute value.DisplayUnits = 1;
+    x = 10;
+    y = 640;
+    visibility = 1;
+    xReference = 118;
+    yReference = 683;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance BLine14
+
+
+
+// The picture's other attributes:
+
+  backgroundColour    = 0;
+  xSnap               = 0;
+  ySnap               = 0;
+  angleSnap           = 0;
+  radiusSnap          = 0;
+  worldX              = 0;
+  worldY              = 0;
+  worldWidth          = 1280;
+  worldHeight         = 1024;
+  oneToOne            = 1;
+  resizeMode          = 0;
+  updateMode          = 2;
+  crosshairStyle      = 1;
+  crosshairLength     = 0;
+  crosshairFollowSnap = `isInEditMode()`;
+  crosshairVisibility = `isInEditMode()`;
+  xReference = 500;
+  yReference = 500;
+  xScaleFactor = 1;
+  yScaleFactor = 1;
+  rotationAngle = 0;
+
+
+}  // end of picture PicYGN_BDL

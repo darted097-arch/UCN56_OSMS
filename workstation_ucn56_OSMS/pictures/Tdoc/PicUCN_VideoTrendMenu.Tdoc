@@ -1,0 +1,3231 @@
+/*
+ * ProcSee CONFIGURATION LANGUAGE FILE
+ *
+ *
+ * User : ucn56
+ * Host : y6cr02
+ * Date : 2017-05-25
+ * Time : 16:55:22
+ *
+ * ProcSee version : ProcSee 3.10.1 (June 2016)
+ * File version    : 1.26
+ *
+ *
+ */
+
+
+picture PicUCN_VideoTrendMenu
+{
+  worldX = 0;
+  worldY = 0;
+  worldWidth = 1280;
+  worldHeight = 824;
+  oneToOne = 1;
+  backgroundColour = 0;
+  updateMode = 2;
+  resizeMode = 0;
+  xSnap = 5;
+  ySnap = 5;
+  radiusSnap = 0;
+  angleSnap = 0;
+  crosshairStyle = 1;
+  crosshairLength = 0;
+  crosshairFollowSnap = `isInEditMode()`;
+  crosshairVisibility = `isInEditMode()`;
+  xReference = 500;
+  yReference = 500;
+  xScaleFactor = 1;
+  yScaleFactor = 1;
+  rotationAngle = 0;
+
+  float DB_HiER = 0.7;
+
+  float DB_LoER = 0;
+
+  int DisRate = 1;
+
+  char* dummy_arg = " ";
+
+  int FULL_TYPE_CHECK = 1;
+
+  int isSet1Display = 0;
+
+  int isSet2Display = 0;
+
+  int NO_RANGE_TYPE_CHECK = 3;
+
+  int NUM_VIDEO_PER_SET = 4;
+
+  //int NUM_VIDEO_SETS = 5;	// 20170308 CORENET by Philkyu Kwon
+  // 20170308 CORENET by Philkyu Kwon
+  int NUM_VIDEO_SETS = 2;
+
+  char OldPid[200] = "CET04";
+
+  int OldPriority = 0;
+
+  int OldSetno = 2;
+
+  char* PageBack = "";
+
+  char* PageForward1 = "PicUCN_VideoTrendView1";
+
+  char* PageForward2 = "PicUCN_VideoTrendView2";
+
+  char* PageForward3 = "PicUCN_VideoTrendView3";
+
+  char* PageForward4 = "PicUCN_VideoTrendView4";
+
+  char* PageForward5 = "PicUCN_VideoTrendView5";
+
+  char* PictureNumber = "810";
+
+  char* PictureTitle = "SETUP / VIEW  VIDEO  TRENDS";
+
+  DialogueSymbols.InputDialogueNumber* poBasValue = `&::UCN5and6.PicUCN_VideoTrendMenu.VideoTrend4Base`;
+
+  DialogueSymbols.InputDialogueNumber* poMaxValue = `&::UCN5and6.PicUCN_VideoTrendMenu.VideoTrend4MaxValue`;
+
+  DialogueSymbols.InputDialogueNumber* poMinValue = `&::UCN5and6.PicUCN_VideoTrendMenu.VideoTrend4MinValue`;
+
+  DialogueSymbols.InputDialogueNumber* poPID = `&::UCN5and6.PicUCN_VideoTrendMenu.VideoTrend4PID`;
+
+  char* ppid = `&::UCN5and6.InterfaceToGUI.Interface.VideoTrendData.Set5Point4.VideoTrendId[0]`;
+
+  RECORD* pPID1 = `&ERRORPID`;
+
+  RECORD* pPID2 = `&ERRORPID`;
+
+  RECORD* pPID3 = `&ERRORPID`;
+
+  RECORD* pPID4 = `&ERRORPID`;
+
+  RECORD* pRECORD = `&::UCN5and6.UCN5and6.ERRORPID`;
+
+  int Priority = `!Interface->VTFlagMessage.data.flipflop2`;
+
+  int ProcessERROR = 0;
+
+  int Protect = `procMsg.visibility`;
+
+  VIDEO_DATA* pVideoTrendData = `Interface.VideoTrendData`;
+
+  int SETUP = 0;
+
+  char StrHiER[40] = "CET14   .erange_hi";
+
+  char StrLoER[40] = "CET14   .erange_lo";
+
+  int Temp = 0;
+
+  char temp[12] = "   0.3";
+
+  int TEMPINT = 5;
+
+  char TEMPSTR[40] = "IAP0012.sig_type";
+
+  char TheDisplayPage[50] = "PicUCN_SetupViewMenu.ppic";
+
+  float xx = 0;
+
+  float yy = 0;
+
+  int ZERO_OR_ONE_TYPE_CHECK = 2;
+
+  float zz = 0;
+
+  function `void AssignPid()
+  {
+     if (strlen(VideoTrend1PID.TheOriginalText)<1) execute("{pPID1=\\\`&%s\\\`;}","ERRORPID") ;
+     else execute("{pPID1=\\\`&%s\\\`;}",VideoTrend1PID.TheOriginalText) ;
+  
+     if (strlen(VideoTrend2PID.TheOriginalText)<1) execute("{pPID2=\\\`&%s\\\`;}","ERRORPID") ;
+     else execute("{pPID2=\\\`&%s\\\`;}",VideoTrend2PID.TheOriginalText) ;
+  
+     if (strlen(VideoTrend3PID.TheOriginalText)<1) execute("{pPID3=\\\`&%s\\\`;}","ERRORPID") ;
+     else execute("{pPID3=\\\`&%s\\\`;}",VideoTrend3PID.TheOriginalText) ;
+  
+     if (strlen(VideoTrend4PID.TheOriginalText)<1) execute("{pPID4=\\\`&%s\\\`;}","ERRORPID") ;
+     else execute("{pPID4=\\\`&%s\\\`;}",VideoTrend4PID.TheOriginalText) ;
+  }`
+
+  function `void CancelSetup()
+  {
+    SETUP = 0 ;
+    execute("{DisRate = VT_ScanRate%d;}",VideoSetno);
+    printf("DisRate=%d, VT_ScanRate=%d",DisRate,VT_ScanRate4);
+    Reset() ;
+    execute("{disRate%03d.Select();}",DisRate) ;
+    strcpy(SetupButton.Label,SetupButton.StaticLabel) ; //2016.11.11 CORENET by Philkyu Kwon
+    update() ;
+  }`
+
+  function `void Escape()
+  {
+  
+    if(SETUP == 1)
+    {
+       CancelSetup() ;
+    }
+    else
+    {
+  //  if(Priority)
+       FlagReset(VideoSetno) ;
+       strcpy(SetupButton.Label,SetupButton.StaticLabel);   //2016.11.21 CORENET by Philkyu Kwon
+       execute("{DisplayPage(\\"%s\\");}",TheDisplayPage);
+    }
+  }`
+
+  function `void EscapeOutside()
+  {
+  //   if(Priority)
+       strcpy(SetupButton.Label,SetupButton.StaticLabel);   //2016.11.21 CORENET by Philkyu Kwon
+       FlagReset(VideoSetno) ;
+  }`
+
+  function `void FlagReset(int Sel)
+  {
+      Interface->VTFlagMessage.data.requestOption = Sel;     // flag set...setup page.
+      Interface->VTFlagMessage.data.flipflop1 = 0;
+      execute("{sendMessageToHost(REQUEST_VTREND_DATA);}");
+      //printf("------------------------\\nVideoTrend%d Flag = Off\\n------------------------",Sel) ;
+  
+  }`
+
+  function `void FlagResetAll()       // THIS ROUTINE TO BE REMOVED AFTER DEVELOPMENT....
+  {
+     int i ;
+  
+     for (i=1 ; i<=5 ; i++)
+     {
+        FlagReset(i) ;
+     }
+  }`
+
+  function `void FlagSet(int Sel)
+  {
+      Interface->VTFlagMessage.data.requestOption = Sel;     // flag set...setup page.
+      Interface->VTFlagMessage.data.flipflop1 = 1;
+      execute("{sendMessageToHost(REQUEST_VTREND_DATA);}");
+  
+      //printf("------------------------\\nVideoTrend%d Flag = ON\\n------------------------",Sel) ;
+  
+  }`
+
+  function `float GetDB_HiER(int trenD)
+  {
+  // Returns the database High Engineering Range for the PID in trenD #
+  
+  
+     execute ("{pRECORD = \`&%s\`;}",GetstrPID(trenD));
+     DB_HiER = EngRangeHi(pRECORD) ;
+  
+  //  execute("{DB_HiER = %s;}",GetstrDB_HiER(trenD));
+     return(DB_HiER);
+  }`
+
+  function `float GetDB_LoER(int trenD)
+  {
+  // Returns the Low Engineering Range for the PID in trenD #
+  
+     execute ("{pRECORD = \`&%s\`;}",GetstrPID(trenD));
+  
+     DB_LoER = EngRangeLo(pRECORD) ;
+  
+  //   execute("{DB_LoER = %s;}",GetstrDB_LoER(trenD));
+     return(DB_LoER);
+  }`
+
+  function `int GetPID_CheckType(char * PID)
+  {
+    int point_type;
+    int retval = FULL_TYPE_CHECK;
+  
+    strcpy(TEMPSTR, PID);
+    strcat(TEMPSTR, ".sig_type");
+    execute("{TEMPINT = %s;}",TEMPSTR);
+    point_type = TEMPINT;
+  
+    switch (point_type)
+    {
+      case AI:
+      case PI:
+      case FI:
+      case ROD:
+        retval = FULL_TYPE_CHECK;
+        break;
+  
+      case CI:
+      case DI:
+      case SOE:
+      case BCI:
+      case DL:
+      case QD:
+      case XD:
+      case CO:
+      case BCO:
+        retval = ZERO_OR_ONE_TYPE_CHECK;
+        break;
+  
+      case XA:
+      case QA:
+        retval = NO_RANGE_TYPE_CHECK;
+        break;
+  
+      case AO:
+      case KO:
+        strcpy(TEMPSTR, PID);
+        strcat(TEMPSTR, ".erange_lo");
+        execute("{DB_LoER = %s;}",TEMPSTR);
+        strcpy(TEMPSTR, PID);
+        strcat(TEMPSTR, ".erange_hi");
+        execute("{DB_HiER = %s;}",TEMPSTR);
+        if ((0.0 == DB_LoER)  &&  (0.0 == DB_HiER))
+          retval = NO_RANGE_TYPE_CHECK;
+        else
+          retval = FULL_TYPE_CHECK;
+        break;
+  
+      default:
+        //printf("%s GetPID_CheckType() ERROR: Point type not found", PictureTitle);
+        retval = FULL_TYPE_CHECK;
+        break;
+    }
+    return(retval);
+  }`
+
+  function `InputDialogueNumber *GetpoBaseValue(int trenD)
+  {
+  // Returns a pointer to the BaseValue object for trenD #
+     execute("{poBasValue = &VideoTrend%dBase;}", trenD);
+     return(poBasValue);
+  }`
+
+  function `InputDialogueNumber * GetpoMaxValue(int trenD)
+  {
+  // Returns a pointer to the MaxValue object for trenD #
+  
+    execute("{poMaxValue = &VideoTrend%dMaxValue;}", trenD);
+  
+    return(poMaxValue);
+  }`
+
+  function `InputDialogueNumber * GetpoMinValue(int trenD)
+  {
+   // Returns a pointer to the MinValue object for trenD #
+  
+    execute("{poMinValue = &VideoTrend%dMinValue;}",trenD);
+    return(poMinValue);
+  }`
+
+  function `InputDialogueText * GetpoPID(int trenD)
+  {
+    // Returns a pointer to the object that holds the PID
+    // for trenD #
+  
+    execute("{poPID = &VideoTrend%dPID;}", trenD);
+    return(poPID);
+  
+  }`
+
+  function `char * GetstrBasNumberFormat(int trenD)
+  {
+    execute("{poBasValue = &VideoTrend%dBase;}", trenD);
+    return(poBasValue->TheNumberFormat);
+  }`
+
+  function `char * GetstrDB_HiER(int trenD)
+  {
+  // Returns pointer to char string that contains
+  // the name of the variable that contains the
+  // database High Engineering Value
+    strcpy(StrHiER,GetstrPID(trenD));
+    strcat(StrHiER,".erange_hi");
+    return(StrHiER);
+  }`
+
+  function `char * GetstrDB_LoER(int trenD)
+  {
+  // Returns pointer to string that contains the variable
+  // name that contains the database Low Engineering Value
+    strcpy(StrLoER, GetstrPID(trenD));
+    strcat(StrLoER, ".erange_lo");
+    return(StrLoER);
+  }`
+
+  function `char * GetstrMaxNumberFormat(int trenD)
+  {
+    execute("{poMaxValue = &VideoTrend%dMaxValue;}", trenD);
+    return(poMaxValue->TheNumberFormat);
+  }`
+
+  function `char * GetstrMinNumberFormat(int trenD)
+  {
+    execute("{poMinValue = &VideoTrend%dMinValue;}", trenD);
+    return(poMinValue->TheNumberFormat);
+  }`
+
+  function `char * GetstrPID(int trenD)
+  {
+  // Returns the string of the PID for trenD #
+    InputDialogueText * idt = 0;
+  
+    idt = GetpoPID(trenD);
+    return(idt->TheNewText);
+  }`
+
+  function `void InitButtons(int Sel)
+  {
+     OldPriority = Priority ;
+     OldSetno = VideoSetno;
+     VideoSetno = Sel;
+  
+     if(OldSetno!=VideoSetno)
+        InitButtons_SetNo();
+  }`
+
+  function `void InitButtons_DisRate()
+  {
+  
+   if (DisRate!=1)   disRate001.UnSelect();
+   if (DisRate!=2)   disRate002.UnSelect();
+   if (DisRate!=5)   disRate005.UnSelect();
+   if (DisRate!=10)  disRate010.UnSelect();
+   if (DisRate!=30)  disRate030.UnSelect();
+   if (DisRate!=60)  disRate060.UnSelect();
+   if (DisRate!=600) disRate600.UnSelect();
+  
+   update();
+  
+  }`
+
+  function `void InitButtons_SetNo()
+  {
+     int i;
+  
+     procMsg.visibility = 1;
+  
+  // Data Request
+     Interface->VTFlagMessage.data.requestOption = VideoSetno;
+     execute("{sendMessageToHost(VTREND_RESET_REQUEST);}");
+     printf("########### REQUEST VTREND DATA... ##########") ;
+  
+     if (VideoSetno!=1) setNo1.UnSelect();
+     if (VideoSetno!=2) setNo2.UnSelect();
+  
+    // 20170308 CORENET by Philkyu Kwon *******************
+    // if (VideoSetno!=3) setNo3.UnSelect();
+    // if (VideoSetno!=4) setNo4.UnSelect();
+    // if (VideoSetno!=5) setNo5.UnSelect();
+    // ****************************************************
+  
+  // ChooseSetup.UnSelect();
+  // execute("{setNo%d.Select();}",button);
+  // VideoSetno = SetNo ;
+  
+     for(i=1;i<=4;i++)
+        execute("{VideoTrend%dPID.ERROR=0;}",i);
+  
+  // DisRate = VT_ScanRate1 ;
+  
+     switch(VideoSetno)
+     {
+        case 1 : DisRate = VT_ScanRate1 ; break;
+        case 2 : DisRate = VT_ScanRate2 ; break;
+  	// 20170308 CORENET by Philkyu Kwon *******************
+       // case 3 : DisRate = VT_ScanRate3 ; break;
+       // case 4 : DisRate = VT_ScanRate4 ; break;
+       // case 5 : DisRate = VT_ScanRate5 ; break;
+       // ************************************************
+        default: DisRate = 1 ; break;
+     }
+  
+  // DisplayRate Button Reset
+     execute("{disRate%03d.Select();}",DisRate) ;
+  
+     if(OldPriority)
+     {
+        FlagReset(OldSetno) ;
+     }
+  
+     FlagSet(VideoSetno) ;
+  
+     update();
+  }`
+
+// ***CORENET 20170601 by Philkyu Kwon ************
+  function `void DummyProcess()
+  {
+    printf("Button Select OR Button Unselected");
+  }`
+// ***************************************************
+
+
+  function `void Initialize()
+  {
+     CFMLevel =0;
+     Current_Page = 810;
+     CascadeMenuActive = 0 ;
+  
+     int i,j;      // loop variables
+  
+     //printf("VideoSetno = %d\\n",VideoSetno) ;
+  
+     DisplayAdvisoryMessage(" ");
+     DisplayAdvisoryMessage1(" ");
+     DisplayAdvisoryMessage2(" ");
+     DisplayAdvisoryMessage3(" ");
+  
+     SETUP = 0;
+     strcpy(SetupButton.Label,SetupButton.StaticLabel);   //20161121 CORENET by Philkyu Kwon
+     Interface->VTFlagMessage.data.flipflop2 = 0;
+     ProcessError2Msg.visibility = 0;
+  
+     procMsg.visibility = 1;
+  
+        for(j=1;j<=4;j++)
+           execute("{VideoTrend%dPID.ERROR=0;}",j);
+  
+  // Save Old PID for Startinf Time Update
+  
+     SaveOldPid() ;
+  
+  // Request vtrend data to CCUR
+     Interface->VTFlagMessage.data.requestOption = 6; //dummy option..
+     execute("{sendMessageToHost(VTREND_RESET_REQUEST);}");
+  
+  
+  // Video visibility for request message
+  // RequestTrendDataMsg.visibility = 1;
+  
+  // SetNo = VideoSetno ;
+  // Priority = 0 ;
+  
+    // if ((1<=VideoSetno)&&(VideoSetno<=5))	// 20170308 CORENET by Philkyu Kwon
+     if ((1<=VideoSetno)&&(VideoSetno<=2))	// 20170308 CORENET by Philkyu Kwon
+     {
+         i = VideoSetno ;
+         VideoSetno = 0 ;
+         execute("{setNo%d.Select();}",i) ;
+     }
+     else { VideoSetno = 0;  setNo1.Select(); }
+  
+  // DisRate = VT_ScanRate1 ;
+  
+     if (DisRate==1)        disRate001.Select();
+     else if (DisRate==2)   disRate002.Select();
+     else if (DisRate==5)   disRate005.Select();
+     else if (DisRate==10)  disRate010.Select();
+     else if (DisRate==30)  disRate030.Select();
+     else if (DisRate==60)  disRate060.Select();
+     else if (DisRate==600) disRate600.Select();
+     else { DisRate = 1;    disRate001.Select(); }
+  
+    update();
+  }`
+
+  function `int IsAllBlank(char * cptr)
+  {
+    // Return 0 if one non-blank character is found, 1 otherwise
+    int blank = 1;
+    int i;
+  
+    for (i=0; i<strlen(cptr); i++, cptr++)
+    {
+      if (*cptr != ' ')
+      {
+        blank = 0;
+        break;
+      }//endif
+    }//endfor
+    return (blank);
+  }`
+
+  function `int IsDigital(char * PID)
+  {
+    int retval, sigtype;
+  
+    // get a pointer to the record for the PID
+    execute("{pRECORD = &%s;}",PID);
+  
+    sigtype = pRECORD->sig_type;
+    switch(sigtype)
+    {
+      case CI:
+      case DI:
+      case SOE:
+      case BCI:
+      case DL:
+      case QD:
+      case XD:
+      case CO:
+      case BCO:
+        retval = 1;
+        break;
+      default:
+        retval = 0;
+        break;
+    }//endswitch
+    return(retval);
+  }`
+
+  function `int isDigital(RECORD *PID)
+  {
+    int retval, sigtype;
+  
+    // get a pointer to the record for the PID
+    pRECORD = PID ;
+  
+    sigtype = pRECORD->sig_type;
+  
+    switch(sigtype)
+    {
+      case CI:
+      case DI:
+      case SOE:
+      case BCI:
+      case DL:
+      case QD:
+      case XD:
+      case CO:
+      case BCO:
+        retval = 1;
+        break;
+      default:
+        retval = 0;
+        break;
+    }//endswitch
+    return(retval);
+  }`
+
+  function `void ProcessThis(int Sel)
+  {
+  
+     if (SETUP)
+     {
+        SettingUp(Sel) ;
+        strcpy(SetupButton.Label,SetupButton.StaticLabel) ;
+     } //20161111 CORENET by Philkyu Kwon
+     else ViewTrend(Sel) ;
+  
+  }`
+
+  function `void Reset()
+  {
+  //  printf("%s Resetting", PictureTitle);
+    UpdateLocalsFromInterface();
+  }`
+
+  function `void SaveOldPid()
+  {
+     int i,j ;
+  
+     for(i=1; i<=NUM_VIDEO_SETS; i++)
+        for (j=1;j<=NUM_VIDEO_PER_SET;j++)
+        {
+              execute("{strcpy(&OldPid[%d*40+%d*10-50], pVideoTrendData->Set%dPoint%d.VideoTrendId) ;}",i,j,i,j) ;
+        }
+  
+  }`
+
+  function `void SettingUp(int Sel)
+  {
+    int i,j;
+    InputDialogueNumber * poMinValue;
+    InputDialogueNumber * poMaxValue;
+    InputDialogueNumber * poBasValue;
+    InputDialogueText   * poPID;
+  
+  // Error Check...
+  
+    if(SETUP == 1)
+    {
+  
+         for (j=1; j<=NUM_VIDEO_PER_SET; j++)
+         {
+           execute("{ProcessERROR = VideoTrend%dPID.ERROR;}",j);
+           if (1 == ProcessERROR) break;
+           execute("{ProcessERROR = VideoTrend%dMinValue.ERROR;}",j);
+           if (1 == ProcessERROR) break;
+           execute("{ProcessERROR = VideoTrend%dMaxValue.ERROR;}",j);
+           if (1 == ProcessERROR) break;
+           execute("{ProcessERROR = VideoTrend%dBase.ERROR;}",j);
+           if (1 == ProcessERROR) break;
+  
+         } //endfor
+  
+  
+  // Checking for being setup/modify
+  
+         if (!ProcessERROR)
+         {
+            Interface->VideoTrendSetupData.Setupno = Sel;
+  
+  //          printf(" selected no. === %d ",Interface->VideoTrendSetupData.Setupno);
+  
+  
+  // Display Rate Setting...
+  
+            for (j=1;j<=NUM_VIDEO_PER_SET;j++)
+            {
+  
+               execute("{strcpy(Interface->VideoTrendSetupData.Point%d.VideoTrendId, VideoTrend%dPID.TheNewText);}" ,j,j);
+  
+               if (IsAllBlank(GetstrPID(j)))
+                  execute ("{pRECORD = \`&ERRORPID\`;}");
+               else if (IsDigital(GetstrPID(j)))		  // For Digital PID
+               {
+                     execute("{Interface->VideoTrendSetupData.Point%d.Minimum  = VideoTrend%dMinValue.TheNewNumber;}",j,j);
+                     execute("{Interface->VideoTrendSetupData.Point%d.Maximum  = VideoTrend%dMaxValue.TheNewNumber;}",j,j);
+                     execute("{Interface->VideoTrendSetupData.Point%d.Baseline = VideoTrend%dBase.TheNewNumber;}",j,j);
+               }
+               else
+               {
+                  execute ("{pRECORD = \`&%s\`;}",GetstrPID(j));
+
+		  /***********CORENET 20170620**********************
+  
+                  if ( (Interface->System.displayedUnits) && (!(pRECORD->pipbitmap & bMETUNIT)) )
+                  {
+                     execute("{Interface->VideoTrendSetupData.Point%d.Minimum  = (VideoTrend%dMinValue.TheNewNumber - pRECORD->moffset) / pRECORD->mfactor;}",j,j);
+                     execute("{Interface->VideoTrendSetupData.Point%d.Maximum  = (VideoTrend%dMaxValue.TheNewNumber - pRECORD->moffset) / pRECORD->mfactor;}",j,j);
+                     execute("{Interface->VideoTrendSetupData.Point%d.Baseline = (VideoTrend%dBase.TheNewNumber     - pRECORD->moffset) / pRECORD->mfactor;}",j,j);
+                  }
+                  else if ( (!Interface->System.displayedUnits) && (pRECORD->pipbitmap & bMETUNIT) )
+                  {
+                     execute("{Interface->VideoTrendSetupData.Point%d.Minimum  = VideoTrend%dMinValue.TheNewNumber * pRECORD->mfactor + pRECORD->moffset;}",j,j);
+                     execute("{Interface->VideoTrendSetupData.Point%d.Maximum  = VideoTrend%dMaxValue.TheNewNumber * pRECORD->mfactor + pRECORD->moffset;}",j,j);
+                     execute("{Interface->VideoTrendSetupData.Point%d.Baseline = VideoTrend%dBase.TheNewNumber     * pRECORD->mfactor + pRECORD->moffset;}",j,j);
+                  }
+                  else */
+                  {
+                     execute("{Interface->VideoTrendSetupData.Point%d.Minimum  = VideoTrend%dMinValue.TheNewNumber;}",j,j);
+                     execute("{Interface->VideoTrendSetupData.Point%d.Maximum  = VideoTrend%dMaxValue.TheNewNumber;}",j,j);
+                     execute("{Interface->VideoTrendSetupData.Point%d.Baseline = VideoTrend%dBase.TheNewNumber;}",j,j);
+                  }
+               }
+            }
+  
+            procMsg.visibility = 1;
+  
+            execute("{sendMessageToHost(PROCESS_VTREND_DATA);}");
+            ProcessError2Msg.visibility = 0;
+  
+  //        Request vtrend data to CCUR
+  
+            Interface->VTFlagMessage.data.requestOption = 6; //dummy option..
+            execute("{sendMessageToHost(VTREND_RESET_REQUEST);}");
+  
+  //        Return to Main VTREND Menu
+  
+            SETUP = 0 ;
+  
+  //        VT_ScanRate1 = DisRate ;
+            execute("{VT_ScanRate%d = DisRate;}",VideoSetno);
+  
+            execute( "{setNo%d.Select();}",Sel ) ;
+  
+       } // endif (1 != error)
+       else
+       {
+            ProcessError2Msg.visibility = 1;
+       }
+  
+    }
+  
+  }`
+
+  function `void SetupNcancel()
+  {
+     if (!SETUP)         // For SETUP
+     {
+        if(Priority)
+        {
+             SETUP = 1 ;
+  //         printf("VideoTrend%d SetupMode...",VideoSetno) ;
+  //         FlagSet(VideoSetno) ;
+        }
+     }
+     else                     // For CANCEL
+     {
+        SETUP = 0 ;
+        CancelSetup() ;
+        execute("{setNo%d.Select();}",VideoSetno) ;
+  //      DisRate = VT_ScanRate1 ;
+  //      execute("{disRate%03d.Select();}",DisRate) ;
+  
+     }
+     update() ;
+  }`
+
+  function `void TimeUpdate()
+  {
+     int i,j,k;
+        for(i=0 ;i<200;i++)
+        {
+           if(OldPid[i]==' ') OldPid[i] = '\\0' ;
+  //         if((i%10==8) ||(i%10==9)) OldPid[i] = '\\0' ;
+        }
+  
+  //      i = VideoSetno ;
+  
+        execute("{ manageTempShopList(INIT_TEMP_SHOP_LIST,dummy_arg);}");
+  
+        for(i=1; i<=NUM_VIDEO_SETS; i++) {
+           for (j=1;j<=NUM_VIDEO_PER_SET;j++)
+           {
+               for(k=0; k<10 ;k++)
+                  execute("{if(pVideoTrendData->Set%dPoint%d.VideoTrendId[%d]==\\' \\') pVideoTrendData->Set%dPoint%d.VideoTrendId[%d] = \\'\\\\0\\';}",i,j,k,i,j,k) ;
+  
+               execute("{ppid = Interface->VideoTrendData.Set%dPoint%d.VideoTrendId ;}",i,j) ;
+               if((strlen(ppid)==0)||(ppid[0]==' ')) ppid = "ERRORPID" ;
+  
+               execute("{ if ( strcmp(pVideoTrendData->Set%dPoint%d.VideoTrendId,&OldPid[%d*40+%d*10-50] ) ) { manageTempShopList(TEMP_SHOP_LIST_ADD,pVideoTrendData->Set%dPoint%d.VideoTrendId); ::UCN5and6.VideoSet%dTr%d = \\\`%s->value\\\`; strcpy(VideoSet%d->Trend%d.Time, Interface->System.timeString) ; strcpy(VideoSet%d->Trend%d.Date, Interface->System.dateString) ; time(&VideoSet%d->Trend%d.Counts) ; } }",i,j,i,j,i,j,i,j,ppid, i,j,i,j,i,j) ;
+           }
+        }
+  
+        execute("{ manageTempShopList(TEMP_SHOP_LIST_SEND,dummy_arg);}");
+  
+  //    execute("{::UCN5and6.PicUCN_VideoTrendView1.StaPID1 = \\\`&%s\\\`;}",Interface->VideoTrendData.Set1Point1.VideoTrendId);
+  //    ::UCN5and6.PicUCN_VideoTrendView1.vtrpid1.ThePointId = \`::UCN5and6.PicUCN_VideoTrendView1.StaPID1\`;
+  //    ::UCN5and6.PicUCN_VideoTrendView1.Trend1.TheVariable = \`::UCN5and6.PicUCN_VideoTrendView1.StaPID1\`;
+  //    execute("{VideoSet%dTr%d = \\\`Interface->VideoTrendData.Set%dPoint%d.VideoTrendId->value\\\`;}",i,j);
+  
+  /*
+            //printf("%s|",pVideoTrendData->Set1Point1.VideoTrendId);
+            //printf("%s|",pVideoTrendData->Set1Point2.VideoTrendId);
+            //printf("%s|",pVideoTrendData->Set1Point3.VideoTrendId);
+            //printf("%s|",pVideoTrendData->Set1Point4.VideoTrendId);
+            //printf("%s|",pVideoTrendData->Set2Point1.VideoTrendId);
+            //printf("%s|",pVideoTrendData->Set2Point2.VideoTrendId);
+            //printf("%s|",pVideoTrendData->Set2Point3.VideoTrendId);
+            //printf("%s|",pVideoTrendData->Set2Point4.VideoTrendId);
+            //printf("%s|",pVideoTrendData->Set3Point1.VideoTrendId);
+            //printf("%s|",pVideoTrendData->Set3Point2.VideoTrendId);
+            //printf("%s|",pVideoTrendData->Set3Point3.VideoTrendId);
+            //printf("%s|",pVideoTrendData->Set3Point4.VideoTrendId);
+            //printf("%s|",pVideoTrendData->Set4Point1.VideoTrendId);
+            //printf("%s|",pVideoTrendData->Set4Point2.VideoTrendId);
+            //printf("%s|",pVideoTrendData->Set4Point3.VideoTrendId);
+            //printf("%s|",pVideoTrendData->Set4Point4.VideoTrendId);
+            //printf("%s|",pVideoTrendData->Set5Point1.VideoTrendId);
+            //printf("%s|",pVideoTrendData->Set5Point2.VideoTrendId);
+            //printf("%s|",pVideoTrendData->Set5Point3.VideoTrendId);
+            //printf("%s|",pVideoTrendData->Set5Point4.VideoTrendId);
+  */
+  
+  }`
+
+  function `void UpdateLocalsFromInterface()
+  {
+     int i,j;
+  //   float a;
+  //   char *temp;
+  
+     i = VideoSetno ;
+  //  for (i=1; i<=NUM_VIDEO_SETS; i++)
+     for (j=1; j<=NUM_VIDEO_PER_SET; j++)
+     {
+  //    Get the PID stuff
+        execute("{strcpy(VideoTrend%dPID.TheOriginalText,pVideoTrendData->Set%dPoint%d.VideoTrendId);}",j,i,j);
+        execute("{strcpy(VideoTrend%dPID.TheNewText,VideoTrend%dPID.TheOriginalText);}",j,j);
+        execute("{VideoTrend%dPID.ERROR = 0;}",j);
+  //      execute("{printf(\\"%s\\",VideoTrend%dPID.TheNewText);}","%s",j);
+  
+  
+  // Metric/English Conversion
+  
+     if (IsAllBlank(GetstrPID(j)))
+        execute ("{pRECORD = \`&ERRORPID\`;}");
+     else if (IsDigital(GetstrPID(j)))		  // For Digital PID
+     {
+        execute("{VideoTrend%dMinValue.TheNewNumber = pVideoTrendData->Set%dPoint%d.Minimum;}",j,i,j);
+        execute("{VideoTrend%dBase.TheNewNumber =     pVideoTrendData->Set%dPoint%d.Baseline;}",j,i,j);
+        execute("{VideoTrend%dMaxValue.TheNewNumber = pVideoTrendData->Set%dPoint%d.Maximum;}",j,i,j);
+     }
+     else                                           // For Analog PID
+     {
+        execute ("{pRECORD = \`&%s\`;}",GetstrPID(j));
+
+	/************************ CORENET 20170629*********************
+  
+        if ( (Interface->System.displayedUnits) && (!(pRECORD->pipbitmap & bMETUNIT)) )
+        {
+           execute("{VideoTrend%dMinValue.TheNewNumber = pVideoTrendData->Set%dPoint%d.Minimum  * pRECORD->mfactor + pRECORD->moffset ;}",j,i,j);
+           execute("{VideoTrend%dBase.TheNewNumber =     pVideoTrendData->Set%dPoint%d.Baseline * pRECORD->mfactor + pRECORD->moffset ;}",j,i,j);
+           execute("{VideoTrend%dMaxValue.TheNewNumber = pVideoTrendData->Set%dPoint%d.Maximum  * pRECORD->mfactor + pRECORD->moffset ;}",j,i,j);
+        }
+        else if ( (!Interface->System.displayedUnits) && (pRECORD->pipbitmap & bMETUNIT) )
+        {
+           execute("{VideoTrend%dMinValue.TheNewNumber = (pVideoTrendData->Set%dPoint%d.Minimum  - pRECORD->moffset) / pRECORD->mfactor ;}",j,i,j);
+           execute("{VideoTrend%dBase.TheNewNumber =     (pVideoTrendData->Set%dPoint%d.Baseline - pRECORD->moffset) / pRECORD->mfactor ;}",j,i,j);
+           execute("{VideoTrend%dMaxValue.TheNewNumber = (pVideoTrendData->Set%dPoint%d.Maximum  - pRECORD->moffset) / pRECORD->mfactor ;}",j,i,j);
+        }
+        else
+	*/
+        {
+           execute("{VideoTrend%dMinValue.TheNewNumber = pVideoTrendData->Set%dPoint%d.Minimum;}",j,i,j);
+           execute("{VideoTrend%dBase.TheNewNumber =     pVideoTrendData->Set%dPoint%d.Baseline;}",j,i,j);
+           execute("{VideoTrend%dMaxValue.TheNewNumber = pVideoTrendData->Set%dPoint%d.Maximum;}",j,i,j);
+        }
+  
+     }
+  
+  //    Get the MinValue stuff
+  
+        execute("{VideoTrend%dMinValue.TheOriginalNumber = VideoTrend%dMinValue.TheNewNumber;}",j,j);
+        execute("{sprintf(VideoTrend%dMinValue.TheNewText, \\"%s\\", VideoTrend%dMinValue.TheNewNumber);}",j,GetstrMinNumberFormat(j),j);
+        execute("{sprintf(VideoTrend%dMinValue.TheOriginalText, \\"%s\\", VideoTrend%dMinValue.TheOriginalNumber);}",j,GetstrMinNumberFormat(j),j);
+        execute("{VideoTrend%dMinValue.ERROR = 0;}",j);
+  
+  //    Get the Base stuff
+  
+        execute("{VideoTrend%dBase.TheOriginalNumber = VideoTrend%dBase.TheNewNumber;}",j,j);
+        execute("{sprintf(VideoTrend%dBase.TheNewText, \\"%s\\", VideoTrend%dBase.TheNewNumber);}",j,GetstrBasNumberFormat(j),j);
+        execute("{sprintf(VideoTrend%dBase.TheOriginalText, \\"%s\\", VideoTrend%dBase.TheOriginalNumber);}",j,GetstrBasNumberFormat(j),j);
+        execute("{VideoTrend%dBase.ERROR = 0;}",j);
+  
+  //    Get the MaxValue stuff
+  
+        execute("{VideoTrend%dMaxValue.TheOriginalNumber = VideoTrend%dMaxValue.TheNewNumber;}",j,j);
+        execute("{sprintf(VideoTrend%dMaxValue.TheNewText, \\"%s\\", VideoTrend%dMaxValue.TheNewNumber);}",j,GetstrMaxNumberFormat(j),j);
+        execute("{sprintf(VideoTrend%dMaxValue.TheOriginalText, \\"%s\\", VideoTrend%dMaxValue.TheOriginalNumber);}",j,GetstrMaxNumberFormat(j),j);
+        execute("{VideoTrend%dMaxValue.ERROR = 0;}",j);
+     }
+  
+     AssignPid() ;
+  
+  
+  //ProcessError1Msg.visibility = 0;
+  
+    ProcessError2Msg.visibility = 0;
+    procMsg.visibility = 0;
+  
+  //RequestTrendDataMsg.visibility = 0;
+  
+    update();
+  }`
+
+  function `void ValueErrorReset(int i)
+  {
+     switch(i)
+     {
+        case 1 : VideoTrend1MinValue.ERROR = 0 ;
+                 VideoTrend1Base.ERROR = 0 ;
+                 VideoTrend1MaxValue.ERROR = 0 ;
+                 break ;
+        case 2 : VideoTrend2MinValue.ERROR = 0 ;
+                 VideoTrend2Base.ERROR = 0 ;
+                 VideoTrend2MaxValue.ERROR = 0 ;
+                 break ;
+        case 3 : VideoTrend3MinValue.ERROR = 0 ;
+                 VideoTrend3Base.ERROR = 0 ;
+                 VideoTrend3MaxValue.ERROR = 0 ;
+                 break ;
+        case 4 : VideoTrend4MinValue.ERROR = 0 ;
+                 VideoTrend4Base.ERROR = 0 ;
+                 VideoTrend4MaxValue.ERROR = 0 ;
+                 break ;
+     }
+  }
+  
+  
+  `
+
+  function `void VerifyBase(int trenD)
+  {
+  // Verify valid input for the Min Value entered for trenD #
+  
+    int error = 0;
+  
+    execute("{xx = VideoTrend%dMinValue.TheNewNumber;}",trenD);
+    execute("{yy = VideoTrend%dBase.TheNewNumber;}",trenD);
+    execute("{zz = VideoTrend%dMaxValue.TheNewNumber;}",trenD);
+  
+    if ( !((xx <= yy)&&(yy <= zz)) ) error = 1;
+  
+    if (error)
+      execute("{VideoTrend%dBase.ERROR = 1;}",trenD);
+    else
+    {
+      execute("{VideoTrend%dBase.ERROR = 0;}",trenD);
+      ProcessError2Msg.visibility = 0 ;
+    }
+  }`
+
+  function `void VerifyMaxValue(int trenD)
+  {
+  // Verify valid input for the Max Value entered for trenD #
+    InputDialogueNumber * poMax = 0;
+    InputDialogueNumber * poMin = 0;
+  //  float x,y,z;
+    int error = 0;
+    int check_type;
+  
+    poMax = GetpoMaxValue(trenD);
+    poMin = GetpoMinValue(trenD);
+  
+    // Determine the type of checking that is needed and do it.
+    check_type = GetPID_CheckType(GetstrPID(trenD));
+    switch(check_type)
+    {
+      case NO_RANGE_TYPE_CHECK:
+        error = 0;
+        break;
+  
+      case ZERO_OR_ONE_TYPE_CHECK:
+        if (1.0 != poMax->TheNewNumber) error = 1;
+        break;
+  
+      case FULL_TYPE_CHECK:
+      default:
+  
+        xx = GetDB_LoER(trenD);
+        yy = poMax->TheNewNumber;
+        zz = GetDB_HiER(trenD);
+  
+        execute("{sprintf(temp,\\"%s\\",xx);}",poMax->TheNumberFormat); xx = atof(temp);
+        execute("{sprintf(temp,\\"%s\\",yy);}",poMax->TheNumberFormat); yy = atof(temp);
+        execute("{sprintf(temp,\\"%s\\",zz);}",poMax->TheNumberFormat); zz = atof(temp);
+  
+        // if the entered value is not between the hi and lo engineering range,
+        // we have an error
+        if ( !((xx <= yy) && (yy <= zz)) ) error = 1;
+  
+        if (poMax->TheNewNumber <= poMin->TheNewNumber) error = 1;
+        break;
+    }//endswitch
+  
+    if (0 == error)
+      execute("{VideoTrend%dMaxValue.ERROR = 0;}",trenD);
+    else
+      execute("{VideoTrend%dMaxValue.ERROR = 1;}",trenD);
+  
+  }`
+
+  function `void VerifyMinMaxValues(int trenD)
+  {
+  
+    execute("{pRECORD = \`&%s\`;}",GetstrPID(trenD));
+  
+    execute("{sprintf(temp,\\"%s\\",VideoTrend%dMaxValue.TheNewNumber);}",pRECORD->disfmt,trenD);
+    execute("{VideoTrend%dMaxValue.TheNewNumber = atof(temp);}",trenD);
+    execute("{VideoTrend%dMaxValue.TheOriginalNumber = VideoTrend%dMaxValue.TheNewNumber;}",trenD,trenD);
+  
+    execute("{sprintf(temp,\\"%s\\",VideoTrend%dMinValue.TheNewNumber);}",pRECORD->disfmt,trenD);
+    execute("{VideoTrend%dMinValue.TheNewNumber = atof(temp);}",trenD);
+    execute("{VideoTrend%dMinValue.TheOriginalNumber = VideoTrend%dMinValue.TheNewNumber;}",trenD,trenD);
+  
+    execute("{sprintf(temp,\\"%s\\",VideoTrend%dBase.TheNewNumber);}",pRECORD->disfmt,trenD);
+    execute("{VideoTrend%dBase.TheNewNumber = atof(temp);}",trenD);
+    execute("{VideoTrend%dBase.TheOriginalNumber = VideoTrend%dBase.TheNewNumber;}",trenD,trenD);
+  
+  
+  
+    execute("{Temp = VideoTrend%dPID.ERROR;}", trenD);
+  
+    if ( (!IsAllBlank(GetstrPID(trenD))) || (0 == Temp) )
+    {
+      VerifyMinValue(trenD);
+      VerifyMaxValue(trenD);
+      VerifyBase(trenD) ;
+    }
+    ProcessError2Msg.visibility=0 ;
+  }`
+
+  function `void VerifyMinValue(int trenD)
+  {
+  // Verify valid input for the Min Value entered for trenD #
+    InputDialogueNumber * poMin = 0;
+    InputDialogueNumber * poMax = 0;
+    int error = 0;
+    int check_type;
+  
+    poMin = GetpoMinValue(trenD);
+    poMax = GetpoMaxValue(trenD);
+  
+    // Determine the type of checking that is needed and do it.
+    check_type = GetPID_CheckType(GetstrPID(trenD));
+    switch(check_type)
+    {
+      case NO_RANGE_TYPE_CHECK:
+        error = 0;
+        break;
+  
+      case ZERO_OR_ONE_TYPE_CHECK:
+        if (0.0 != poMin->TheNewNumber) error = 1;
+        break;
+  
+      case FULL_TYPE_CHECK:
+      default:
+        xx = GetDB_LoER(trenD);
+        yy = poMin->TheNewNumber;
+        zz = GetDB_HiER(trenD);
+  
+        execute("{sprintf(temp,\\"%s\\",xx);}",poMin->TheNumberFormat); xx = atof(temp);
+        execute("{sprintf(temp,\\"%s\\",yy);}",poMin->TheNumberFormat); yy = atof(temp);
+        execute("{sprintf(temp,\\"%s\\",zz);}",poMin->TheNumberFormat); zz = atof(temp);
+  
+        // if the entered value is not between the hi and lo engineering values,
+        // we have an error.
+        if ( !((xx <= yy) &&  (yy <= zz)) ) error = 1;
+  
+        if (poMin->TheNewNumber >= poMax->TheNewNumber) error = 1;
+        break;
+    }//endswitch
+  
+  //   printf("VideoTrend%dMinValue.ERROR = %d",trenD,error) ;
+  
+    if (0 == error)
+      execute("{VideoTrend%dMinValue.ERROR = 0;}",trenD);
+    else
+      execute("{VideoTrend%dMinValue.ERROR = 1;}",trenD);
+  }`
+
+  function `void VideoMinMaxFromPID(int trenD)
+  {
+  
+  // set Min and Max values from the database for VALID PIDs.
+  // Action for INVALID PIDs is not defined
+  
+      // Set the Numbers in the Min and Max fields.
+    if (1 == IsAllBlank(GetstrPID(trenD)))
+    {
+      execute("{VideoTrend%dMinValue.TheNewNumber = 0.0;}",trenD);
+      execute("{VideoTrend%dMinValue.TheOriginalNumber = 0.0;}",trenD);
+  
+      execute("{VideoTrend%dMaxValue.TheNewNumber = 0.0;}",trenD);
+      execute("{VideoTrend%dMaxValue.TheOriginalNumber = 0.0;}",trenD);
+  
+      execute("{VideoTrend%dBase.TheNewNumber = 0.0;}",trenD);
+      execute("{VideoTrend%dBase.TheOriginalNumber = 0.0;}",trenD);
+  
+    }//endif PID is all blanks
+    else
+    {
+  
+      if (IsDigital(GetstrPID(trenD)))		// For Digital PID
+      {
+         execute("{VideoTrend%dMinValue.TheNewNumber = 0.0;}",trenD);
+         execute("{VideoTrend%dMinValue.TheOriginalNumber = 0.0;}",trenD);
+         execute("{VideoTrend%dMaxValue.TheNewNumber = 1.0;}",trenD);
+         execute("{VideoTrend%dMaxValue.TheOriginalNumber = 1.0;}",trenD);
+         execute("{VideoTrend%dBase.TheNewNumber = 0.5;}",trenD);
+         execute("{VideoTrend%dBase.TheOriginalNumber = 0.5;}",trenD);
+      }
+      else					// For Analog PID
+      {
+         execute("{pRECORD = \`&%s\`;}",GetstrPID(trenD));
+  
+         if ((EngRangeLo(pRECORD)==0) && (EngRangeHi(pRECORD)==0))
+         {                                                              // for constant & calculated PID (yrlee 990223)
+            execute("{VideoTrend%dMinValue.TheNewNumber = pRECORD->value -100;}",trenD);
+            execute("{VideoTrend%dMinValue.TheOriginalNumber = VideoTrend%dMinValue.TheNewNumber;}",trenD,trenD);
+            execute("{VideoTrend%dMaxValue.TheNewNumber = pRECORD->value +100;}",trenD);
+            execute("{VideoTrend%dMaxValue.TheOriginalNumber = VideoTrend%dMaxValue.TheNewNumber;}",trenD,trenD);
+            execute("{VideoTrend%dBase.TheNewNumber = pRECORD->value;}",trenD);
+            execute("{VideoTrend%dBase.TheOriginalNumber = VideoTrend%dBase.TheNewNumber;}",trenD,trenD);
+         }
+         else
+         {
+            execute("{VideoTrend%dMinValue.TheNewNumber = EngRangeLo(pRECORD);}",trenD);
+            execute("{VideoTrend%dMinValue.TheOriginalNumber = VideoTrend%dMinValue.TheNewNumber;}",trenD,trenD);
+            execute("{VideoTrend%dMaxValue.TheNewNumber = EngRangeHi(pRECORD);}",trenD);
+            execute("{VideoTrend%dMaxValue.TheOriginalNumber = VideoTrend%dMaxValue.TheNewNumber;}",trenD,trenD);
+  
+            execute("{VideoTrend%dBase.TheNewNumber = (VideoTrend%dMinValue.TheNewNumber + VideoTrend%dMaxValue.TheNewNumber)/2;}",trenD,trenD,trenD);
+            execute("{sprintf(temp,\\"%s\\",VideoTrend%dBase.TheNewNumber);}",pRECORD->disfmt,trenD);
+            execute("{VideoTrend%dBase.TheNewNumber = atof(temp);}",trenD);
+            execute("{VideoTrend%dBase.TheOriginalNumber = VideoTrend%dBase.TheNewNumber;}",trenD,trenD);
+  
+         }
+      }//endelse not all blank
+    }
+  
+    execute("{sprintf(VideoTrend%dMinValue.TheNewText, \\"%s\\", VideoTrend%dMinValue.TheNewNumber);}",trenD,GetstrMinNumberFormat(trenD),trenD);
+    execute("{sprintf(VideoTrend%dMinValue.TheOriginalText, \\"%s\\", VideoTrend%dMinValue.TheOriginalNumber);}",trenD,GetstrMinNumberFormat(trenD),trenD);
+    execute("{VideoTrend%dMinValue.ERROR = 0;}",trenD);
+  
+    execute("{sprintf(VideoTrend%dMaxValue.TheNewText, \\"%s\\", VideoTrend%dMaxValue.TheNewNumber);}",trenD,GetstrMinNumberFormat(trenD),trenD);
+    execute("{sprintf(VideoTrend%dMaxValue.TheOriginalText, \\"%s\\", VideoTrend%dMaxValue.TheOriginalNumber);}",trenD,GetstrMinNumberFormat(trenD),trenD);
+    execute("{VideoTrend%dMaxValue.ERROR = 0;}",trenD);
+  
+    execute("{sprintf(VideoTrend%dBase.TheNewText, \\"%s\\", VideoTrend%dBase.TheNewNumber);}",trenD,GetstrMinNumberFormat(trenD),trenD);
+    execute("{sprintf(VideoTrend%dBase.TheOriginalText, \\"%s\\", VideoTrend%dBase.TheOriginalNumber);}",trenD,GetstrMinNumberFormat(trenD),trenD);
+    execute("{VideoTrend%dBase.ERROR = 0;}",trenD);
+  
+  }//end routine`
+
+  function `void ViewTrend(int Sel)
+    {
+       int i,j,k;
+       InputDialogueNumber * poMinValue;
+       InputDialogueNumber * poMaxValue;
+       InputDialogueNumber * poBasValue;
+       InputDialogueText   * poPID;
+  
+    /*      for (j=1; j<=NUM_VIDEO_PER_SET; j++)
+          {
+             execute("{ProcessERROR = VideoTrend%dPID.ERROR;}",j);
+             if (1 == ProcessERROR) break;
+             execute("{ProcessERROR = VideoTrend%dMinValue.ERROR;}",j);
+             if (1 == ProcessERROR) break;
+             execute("{ProcessERROR = VideoTrend%dMaxValue.ERROR;}",j);
+             if (1 == ProcessERROR) break;
+             execute("{ProcessERROR = VideoTrend%dBase.ERROR;}",j);
+             if (1 == ProcessERROR) break;
+  
+             poMinValue = GetpoMinValue(j);
+             poMaxValue = GetpoMaxValue(j);
+             poBasValue = GetpoBaseValue(j);
+             poPID = GetpoPID(j);
+  
+             if ( ((poMaxValue->TheNewNumber <= poMinValue->TheNewNumber) ||
+               (poMinValue->TheNewNumber >= poMaxValue->TheNewNumber) ||
+              (poBasValue->TheNewNumber > poMaxValue->TheNewNumber))
+               && (0 == IsAllBlank(poPID->TheNewText)) )
+             {
+               ProcessERROR = 1;
+               poMinValue.ERROR = 1;
+               poMaxValue.ERROR = 1;
+               break;
+             } //endif
+          } //endfor
+  
+  
+       if (1 != ProcessERROR)
+    */
+    //   {
+  
+          Interface->VTFlagMessage.data.requestOption = Sel;  // yrlee 19990915
+          execute("{sendMessageToHost(VTREND_RESET_REQUEST);}");
+  
+          ProcessError2Msg.visibility = 0;
+  
+          if (Sel == 1)
+          {
+             execute ("{load(\\"%s.ppic\\");}",PageForward1);
+             execute ("{displayPicture(\\"Main\\",\\"%s.ppic\\");}",PageForward1);
+          }
+          else if (Sel == 2)
+          {
+             execute ("{load(\\"%s.ppic\\");}",PageForward2);
+             execute ("{displayPicture(\\"Main\\",\\"%s.ppic\\");}",PageForward2);
+          }
+  // ****************20170308 CORENET by Philkyu Kwon ***********************************
+  /*
+          else if (Sel == 3)
+          {
+             execute ("{load(\\"%s.ppic\\");}",PageForward3);
+             execute ("{displayPicture(\\"Main\\",\\"%s.ppic\\");}",PageForward3);
+          }
+          else if (Sel == 4)
+          {
+             execute ("{load(\\"%s.ppic\\");}",PageForward4);
+             execute ("{displayPicture(\\"Main\\",\\"%s.ppic\\");}",PageForward4);
+          }
+          else if (Sel == 5)
+          {
+             execute ("{load(\\"%s.ppic\\");}",PageForward5);
+             execute ("{displayPicture(\\"Main\\",\\"%s.ppic\\");}",PageForward5);
+          }
+  */
+  // **************************************************************************************
+  
+    //   } // endif (1 != error)
+  
+  
+    //   PicUCN_VideoTrendView1.Trend1.TheTrend.setTrigger(-1) ;
+    //   printf("------------") ;
+    //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> CORENET
+    	ProcessButton.UnSelect();
+    //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+       update();
+    }`
+
+  dialogue
+  {
+    event = `keyPressed(0xFF1B) || buttonPressed(3)`;
+    action = `{
+    //   Temp_Set_No = 1;
+    //   execute("{DisplayPage(\\"%s\\");}",TheDisplayPage);
+    
+       if(SETUP) CancelSetup() ;
+       else Escape() ;
+    }`;
+  }
+
+  text PID_Title
+  {
+    x = 312;
+    y = 167;
+    format = "%s";
+    theText = "POINT ID";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 312;
+    yReference = 167;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text MINVAL_Title
+  {
+    x = 537;
+    y = 167;
+    format = "%s";
+    theText = "MIN VALUE";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 537;
+    yReference = 167;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text MAXVAL_Title
+  {
+    x = 842;
+    y = 167;
+    format = "%s";
+    theText = "MAX VALUE";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 842;
+    yReference = 167;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text VideoTrend1NotFoundMsg
+  {
+    x = 322;
+    y = 271;
+    format = "%s";
+    theText = "INVALID PID";
+    alignment = 0;
+    visibility = `VideoTrend1PID.ERROR`;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 322;
+    yReference = 271;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text VideoTrend2NotFoundMsg
+  {
+    x = 322;
+    y = 331;
+    format = "%s";
+    theText = "INVALID PID";
+    alignment = 0;
+    visibility = `VideoTrend2PID.ERROR`;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 322;
+    yReference = 331;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text VideoTrend3NotFoundMsg
+  {
+    x = 322;
+    y = 396;
+    format = "%s";
+    theText = "INVALID PID";
+    alignment = 0;
+    visibility = `VideoTrend3PID.ERROR`;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 322;
+    yReference = 396;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text VideoTrend4NotFoundMsg
+  {
+    x = 322;
+    y = 456;
+    format = "%s";
+    theText = "INVALID PID";
+    alignment = 0;
+    visibility = `VideoTrend4PID.ERROR`;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 322;
+    yReference = 456;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  instance DialogueSymbols.InputDialogueNumber VideoTrend1MinValue
+  {
+    x = 538;
+    y = 220;
+    visibility = `SETUP && strlen(VideoTrend1PID.TheOriginalText) && !VideoTrend1PID.ERROR && !isDigital(pPID1)`;
+    xReference = 538;
+    yReference = 220;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Active = 1;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "DummyProcess()";	//CORENET 0628
+    ExecuteUnSelect = "DummyProcess()";	//CORENET 0628
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxDigits = 10;
+    ReturnAction = "{PicUCN_VideoTrendMenu.VerifyMinMaxValues(1);}";
+    Scope = "PicUCN_VideoTrendMenu";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewNumber = 0;
+    TheNewText = "    0.00";
+    TheNumberFormat = `(isDigital(pPID1))? "%5d":pPID1->disfmt`;
+    TheOriginalNumber = 0;
+    TheOriginalText = "    0.00";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 125;
+  }
+
+  instance DialogueSymbols.InputDialogueNumber VideoTrend1MaxValue
+  {
+    x = 843;
+    y = 220;
+    visibility = `VideoTrend1MinValue.visibility`;
+    xReference = 843;
+    yReference = 220;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Active = 1;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "DummyProcess()";	//CORENET 0628
+    ExecuteUnSelect = "DummyProcess()";	//CORENET 0628
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxDigits = 10;
+    ReturnAction = "{PicUCN_VideoTrendMenu.VerifyMinMaxValues(1);}";
+    Scope = "PicUCN_VideoTrendMenu";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewNumber = 1260;
+    TheNewText = " 1260.00";
+    TheNumberFormat = `(isDigital(pPID1))? "%5d":pPID1->disfmt`;
+    TheOriginalNumber = 1260;
+    TheOriginalText = " 1260.00";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 125;
+  }
+
+  text ProcessError2Msg
+  {
+    x = 254;
+    y = 703;
+    format = "%s";
+    theText = "FIX ALL ERRORS BEFORE PROCESSING";
+    alignment = 0;
+    visibility = 0;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 254;
+    yReference = 703;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  instance DialogueSymbols.InputDialogueNumber VideoTrend2MinValue
+  {
+    x = 538;
+    y = 281;
+    visibility = `SETUP && strlen(VideoTrend2PID.TheOriginalText) && !VideoTrend2PID.ERROR && !isDigital(pPID2)`;
+    xReference = 538;
+    yReference = 281;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Active = 1;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "DummyProcess()";	//CORENET 0628
+    ExecuteUnSelect = "DummyProcess()";	//CORENET 0628
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxDigits = 10;
+    ReturnAction = "{PicUCN_VideoTrendMenu.VerifyMinMaxValues(2);}";
+    Scope = "PicUCN_VideoTrendMenu";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewNumber = 0;
+    TheNewText = "    0.00";
+    TheNumberFormat = `(isDigital(pPID2))? "%5d":pPID2->disfmt`;
+    TheOriginalNumber = 0;
+    TheOriginalText = "    0.00";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 125;
+  }
+
+  instance DialogueSymbols.InputDialogueNumber VideoTrend3MinValue
+  {
+    x = 537;
+    y = 346;
+    visibility = `SETUP && strlen(VideoTrend3PID.TheOriginalText) && !VideoTrend3PID.ERROR && !isDigital(pPID3)`;
+    xReference = 537;
+    yReference = 346;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Active = 1;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "DummyProcess()";	//CORENET 0628
+    ExecuteUnSelect = "DummyProcess()";	//CORENET 0628
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxDigits = 10;
+    ReturnAction = "{PicUCN_VideoTrendMenu.VerifyMinMaxValues(3);}";
+    Scope = "PicUCN_VideoTrendMenu";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewNumber = 0;
+    TheNewText = "    0.00";
+    TheNumberFormat = `(isDigital(pPID3))? "%5d":pPID3->disfmt`;
+    TheOriginalNumber = 0;
+    TheOriginalText = "    0.00";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 125;
+  }
+
+  instance DialogueSymbols.InputDialogueNumber VideoTrend4MinValue
+  {
+    x = 537;
+    y = 406;
+    visibility = `SETUP && strlen(VideoTrend4PID.TheOriginalText) && !VideoTrend4PID.ERROR && !isDigital(pPID4)`;
+    xReference = 537;
+    yReference = 406;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Active = 1;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "DummyProcess()";   //CORENET 0628;
+    ExecuteUnSelect = "DummyProcess()";   //CORENET 0628;
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxDigits = 10;
+    ReturnAction = "{PicUCN_VideoTrendMenu.VerifyMinMaxValues(4);}";
+    Scope = "PicUCN_VideoTrendMenu";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewNumber = 0;
+    TheNewText = "    0.00";
+    TheNumberFormat = `(isDigital(pPID4))? "%5d":pPID4->disfmt`;
+    TheOriginalNumber = 0;
+    TheOriginalText = "    0.00";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 125;
+  }
+
+  instance DialogueSymbols.InputDialogueNumber VideoTrend2MaxValue
+  {
+    x = 843;
+    y = 281;
+    visibility = `VideoTrend2MinValue.visibility`;
+    xReference = 843;
+    yReference = 281;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Active = 1;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "DummyProcess()";   //CORENET 0628;
+    ExecuteUnSelect = "DummyProcess()";   //CORENET 0628;
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxDigits = 10;
+    ReturnAction = "{PicUCN_VideoTrendMenu.VerifyMinMaxValues(2);}";
+    Scope = "PicUCN_VideoTrendMenu";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewNumber = 1260;
+    TheNewText = " 1260.00";
+    TheNumberFormat = `(isDigital(pPID2))? "%5d":pPID2->disfmt`;
+    TheOriginalNumber = 1260;
+    TheOriginalText = " 1260.00";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 125;
+  }
+
+  instance DialogueSymbols.InputDialogueNumber VideoTrend3MaxValue
+  {
+    x = 843;
+    y = 346;
+    visibility = `VideoTrend3MinValue.visibility`;
+    xReference = 843;
+    yReference = 346;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Active = 1;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "DummyProcess()";   //CORENET 0628;
+    ExecuteUnSelect = "DummyProcess()";   //CORENET 0628;
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxDigits = 10;
+    ReturnAction = "{PicUCN_VideoTrendMenu.VerifyMinMaxValues(3);}";
+    Scope = "PicUCN_VideoTrendMenu";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewNumber = 1260;
+    TheNewText = " 1260.00";
+    TheNumberFormat = `(isDigital(pPID3))? "%5d":pPID3->disfmt`;
+    TheOriginalNumber = 1260;
+    TheOriginalText = " 1260.00";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 125;
+  }
+
+  instance DialogueSymbols.InputDialogueNumber VideoTrend4MaxValue
+  {
+    x = 843;
+    y = 406;
+    visibility = `VideoTrend4MinValue.visibility`;
+    xReference = 843;
+    yReference = 406;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Active = 1;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "DummyProcess()";   //CORENET 0628;
+    ExecuteUnSelect = "DummyProcess()";   //CORENET 0628;
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxDigits = 10;
+    ReturnAction = "{PicUCN_VideoTrendMenu.VerifyMinMaxValues(4);}";
+    Scope = "PicUCN_VideoTrendMenu";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewNumber = 1260;
+    TheNewText = " 1260.00";
+    TheNumberFormat = `(isDigital(pPID4))? "%5d":pPID4->disfmt`;
+    TheOriginalNumber = 1260;
+    TheOriginalText = " 1260.00";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 125;
+  }
+
+  text VideoTrend1BadMinMsg
+  {
+    x = 527;
+    y = 271;
+    format = "%s";
+    theText = "INVALID VALUE";
+    alignment = 0;
+    visibility = `VideoTrend1MinValue.ERROR`;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 527;
+    yReference = 271;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text VideoTrend1BadMaxMsg
+  {
+    x = 840;
+    y = 271;
+    format = "%s";
+    theText = "INVALID VALUE";
+    alignment = 0;
+    visibility = `VideoTrend1MaxValue.ERROR`;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 840;
+    yReference = 271;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text VideoTrend2BadMinMsg
+  {
+    x = 527;
+    y = 331;
+    format = "%s";
+    theText = "INVALID VALUE";
+    alignment = 0;
+    visibility = `VideoTrend2MinValue.ERROR`;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 527;
+    yReference = 331;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text VideoTrend2BadMaxMsg
+  {
+    x = 840;
+    y = 331;
+    format = "%s";
+    theText = "INVALID VALUE";
+    alignment = 0;
+    visibility = `VideoTrend2MaxValue.ERROR`;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 840;
+    yReference = 331;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text VideoTrend3BadMinMsg
+  {
+    x = 527;
+    y = 396;
+    format = "%s";
+    theText = "INVALID VALUE";
+    alignment = 0;
+    visibility = `VideoTrend3MinValue.ERROR`;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 527;
+    yReference = 396;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text VideoTrend4BadMinMsg
+  {
+    x = 527;
+    y = 456;
+    format = "%s";
+    theText = "INVALID VALUE";
+    alignment = 0;
+    visibility = `VideoTrend4MinValue.ERROR`;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 527;
+    yReference = 456;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text VideoTrend3BadMaxMsg
+  {
+    x = 840;
+    y = 396;
+    format = "%s";
+    theText = "INVALID VALUE";
+    alignment = 0;
+    visibility = `VideoTrend3MaxValue.ERROR`;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 840;
+    yReference = 396;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text VideoTrend4BadMaxMsg
+  {
+    x = 840;
+    y = 456;
+    format = "%s";
+    theText = "INVALID VALUE";
+    alignment = 0;
+    visibility = `VideoTrend4MaxValue.ERROR`;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 840;
+    yReference = 456;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 688;
+    y = 166;
+    format = "%s";
+    theText = "BASELINE";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 688;
+    yReference = 166;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  instance DialogueSymbols.InputDialogueNumber VideoTrend1Base
+  {
+    x = 690;
+    y = 220;
+    visibility = `VideoTrend1MinValue.visibility`;
+    xReference = 690;
+    yReference = 220;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Active = 1;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "DummyProcess()";   //CORENET 0628;
+    ExecuteUnSelect = "DummyProcess()";   //CORENET 0628;
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxDigits = 10;
+    ReturnAction = "{VerifyMinMaxValues(1);}";
+    Scope = "PicUCN_VideoTrendMenu";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewNumber = 630;
+    TheNewText = "  630.00";
+    TheNumberFormat = `(isDigital(pPID1))? "%5d":pPID1->disfmt`;
+    TheOriginalNumber = 630;
+    TheOriginalText = "  630.00";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 125;
+  }
+
+  instance DialogueSymbols.InputDialogueNumber VideoTrend2Base
+  {
+    x = 690;
+    y = 281;
+    visibility = `VideoTrend2MinValue.visibility`;
+    xReference = 690;
+    yReference = 281;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Active = 1;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "DummyProcess()";   //CORENET 0628;
+    ExecuteUnSelect = "DummyProcess()";   //CORENET 0628;
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxDigits = 10;
+    ReturnAction = "{VerifyMinMaxValues(2);}";
+    Scope = "PicUCN_VideoTrendMenu";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewNumber = 630;
+    TheNewText = "  630.00";
+    TheNumberFormat = `(isDigital(pPID2))? "%5d":pPID2->disfmt`;
+    TheOriginalNumber = 630;
+    TheOriginalText = "  630.00";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 125;
+  }
+
+  instance DialogueSymbols.InputDialogueNumber VideoTrend3Base
+  {
+    x = 691;
+    y = 346;
+    visibility = `VideoTrend3MinValue.visibility`;
+    xReference = 691;
+    yReference = 346;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Active = 1;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "DummyProcess()";   //CORENET 0628;
+    ExecuteUnSelect = "DummyProcess()";   //CORENET 0628;
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxDigits = 10;
+    ReturnAction = "{VerifyMinMaxValues(3);}";
+    Scope = "PicUCN_VideoTrendMenu";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewNumber = 630;
+    TheNewText = "  630.00";
+    TheNumberFormat = `(isDigital(pPID3))? "%5d":pPID3->disfmt`;
+    TheOriginalNumber = 630;
+    TheOriginalText = "  630.00";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 125;
+  }
+
+  instance DialogueSymbols.InputDialogueNumber VideoTrend4Base
+  {
+    x = 691;
+    y = 406;
+    visibility = `VideoTrend4MinValue.visibility`;
+    xReference = 691;
+    yReference = 406;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Active = 1;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "DummyProcess()";   //CORENET 0628;
+    ExecuteUnSelect = "DummyProcess()";   //CORENET 0628;
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxDigits = 10;
+    ReturnAction = "{VerifyMinMaxValues(4);}";
+    Scope = "PicUCN_VideoTrendMenu";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewNumber = 630;
+    TheNewText = "  630.00";
+    TheNumberFormat = `(isDigital(pPID4))? "%5d":pPID4->disfmt`;
+    TheOriginalNumber = 630;
+    TheOriginalText = "  630.00";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 125;
+  }
+
+  text
+  {
+    x = 278;
+    y = 518;
+    format = "%s";
+    theText = "DISPLAY RATE (SEC)";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 278;
+    yReference = 518;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  instance DialogueSymbols.PidInputButton VideoTrend1PID
+  {
+    x = 315;
+    y = 222;
+    visibility = `SETUP`;
+    xReference = 315;
+    yReference = 222;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "DummyProcess()";   //CORENET 0628;
+    ExecuteUnSelect = "DummyProcess()";   //CORENET 0628;
+    FindPidScope = "::UCN5and6.PicUCN_VideoTrendMenu.VideoTrend1PID.InputArea";
+    Found = "{VideoTrend1PID.ERROR=0; AssignPid(); VideoMinMaxFromPID(1);}";
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxCharacters = 8;
+    NotFound = "{VideoTrend1PID.ERROR=1; ValueErrorReset(1);}";
+    ReturnAction = "";
+    Scope = "::UCN5and6.PicUCN_VideoTrendMenu";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewText = "";
+    TheOriginalText = "";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 200;
+  }
+
+  instance DialogueSymbols.PidInputButton VideoTrend3PID
+  {
+    x = 313;
+    y = 348;
+    visibility = `SETUP`;
+    xReference = 313;
+    yReference = 348;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "DummyProcess()";   //CORENET 0628;
+    ExecuteUnSelect = "DummyProcess()";   //CORENET 0628;
+    FindPidScope = "::UCN5and6.PicUCN_VideoTrendMenu.VideoTrend3PID.InputArea";
+    Found = "{VideoTrend3PID.ERROR=0; AssignPid(); VideoMinMaxFromPID(3);}";
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxCharacters = 8;
+    NotFound = "{VideoTrend3PID.ERROR=1;ValueErrorReset(3);}";
+    ReturnAction = "";
+    Scope = "::UCN5and6.PicUCN_VideoTrendMenu";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewText = "";
+    TheOriginalText = "";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 200;
+  }
+
+  instance DialogueSymbols.PidInputButton VideoTrend2PID
+  {
+    x = 315;
+    y = 283;
+    visibility = `SETUP`;
+    xReference = 315;
+    yReference = 283;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "DummyProcess()";   //CORENET 0628;
+    ExecuteUnSelect = "DummyProcess()";   //CORENET 0628;
+    FindPidScope = "::UCN5and6.PicUCN_VideoTrendMenu.VideoTrend2PID.InputArea";
+    Found = "{VideoTrend2PID.ERROR=0; AssignPid(); VideoMinMaxFromPID(2);}";
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxCharacters = 8;
+    NotFound = "{VideoTrend2PID.ERROR=1;ValueErrorReset(2);}";
+    ReturnAction = "";
+    Scope = "::UCN5and6.PicUCN_VideoTrendMenu";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewText = "";
+    TheOriginalText = "";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 200;
+  }
+
+  instance DialogueSymbols.PidInputButton VideoTrend4PID
+  {
+    x = 313;
+    y = 408;
+    visibility = `SETUP`;
+    xReference = 313;
+    yReference = 408;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "DummyProcess()";   //CORENET 0628;
+    ExecuteUnSelect = "DummyProcess()";   //CORENET 0628;
+    FindPidScope = "::UCN5and6.PicUCN_VideoTrendMenu.VideoTrend4PID.InputArea";
+    Found = "{VideoTrend4PID.ERROR=0; AssignPid(); VideoMinMaxFromPID(4);}";
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxCharacters = 8;
+    NotFound = "{VideoTrend4PID.ERROR=1;ValueErrorReset(4);}";
+    ReturnAction = "";
+    Scope = "::UCN5and6.PicUCN_VideoTrendMenu";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewText = "";
+    TheOriginalText = "";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 200;
+  }
+
+  text
+  {
+    x = 347;
+    y = 77;
+    format = "%s";
+    theText = "TREND SET NUMBER :";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 347;
+    yReference = 77;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text UsedMsg
+  {
+    x = 647;
+    y = 703;
+    format = "%s";
+    theText = "CAN NOT MODIFY IT NOW(BEING USED)";
+    alignment = 0;
+    visibility = `Interface->VTFlagMessage.data.flipflop2`;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 647;
+    yReference = 703;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  instance DialogueSymbols.PushButton ProcessButton
+  {
+    x = 252;
+    y = 646;
+    visibility = 1;
+    xReference = 252;
+    yReference = 646;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ButtonState = 0;
+    DynamicLabel = "PROCESS";
+    ExecuteString = "{if(!Protect) ProcessThis(VideoSetno);}";
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    Label = "PROCESS";
+    Scope = "PicUCN_VideoTrendMenu";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    StaticLabel = "PROCESS";
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextFontDynamic = `font2`;
+    TextFontStatic = `font4`;
+    TextX = 17;
+    TextXDynamic = 15;
+    TextXStatic = 17;
+    TextY = 22;
+    TextYDynamic = 21;
+    TextYStatic = 22;
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    Width = 125;
+  }
+
+  text procMsg
+  {
+    x = 533;
+    y = 667;
+    format = "%s";
+    theText = "PROCESSING... WAIT";
+    alignment = 0;
+    visibility = 0;
+    foregroundColour = `COLOR_POPUP_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 533;
+    yReference = 667;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  instance DialogueSymbols.OptionButton setNo1
+  {
+    x = 570;
+    y = 55;
+    visibility = `(VideoSetno==1)||(!SETUP)`;
+    xReference = 570;
+    yReference = 55;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ButtonState = 1;
+    DisplayText = 1;
+    DynamicLabel = "1";
+    ExecuteSelect = "{InitButtons(1);}";
+    ExecuteUnSelect = "";
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    Label = "1";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    StaticLabel = "1";
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextFontDynamic = `font4`;
+    TextFontStatic = `font4`;
+    TextX = 12;
+    TextXDynamic = 12;
+    TextXStatic = 14;
+    TextY = 22;
+    TextYDynamic = `TextY`;
+    TextYStatic = `TextY`;
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    Width = 40;
+  }
+
+  instance DialogueSymbols.OptionButton setNo2
+  {
+    x = 645;
+    y = 55;
+    visibility = `(VideoSetno==2)||(!SETUP)`;
+    xReference = 645;
+    yReference = 55;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ButtonState = 0;
+    DisplayText = 1;
+    DynamicLabel = "2";
+    ExecuteSelect = "{InitButtons(2);}";
+    ExecuteUnSelect = "";
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    Label = "2";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    StaticLabel = "2";
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextFontDynamic = `font4`;
+    TextFontStatic = `font4`;
+    TextX = 14;
+    TextXDynamic = 12;
+    TextXStatic = 14;
+    TextY = 22;
+    TextYDynamic = `TextY`;
+    TextYStatic = `TextY`;
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    Width = 40;
+  }
+
+  //************ START 20170308 CORENET by Philkyu Kwon ************
+  //
+  //  instance DialogueSymbols.OptionButton setNo3
+  //  {
+  //    x = 720;
+  //    y = 55;
+  //    visibility = `(VideoSetno==3)||(!SETUP)`;
+  //    xReference = 720;
+  //    yReference = 55;
+  //    xScaleFactor = 1;
+  //    yScaleFactor = 1;
+  //    rotationAngle = 0;
+  //    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+  //    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+  //    ButtonState = 0;
+  //    DisplayText = 1;
+  //    DynamicLabel = "3";
+  //    ExecuteSelect = "{InitButtons(3);}";
+  //    ExecuteUnSelect = "";
+  //    Height = 30;
+  //    isDown = 0;
+  //    isInside = 1;
+  //    Label = "3";
+  //    SelectColour = `COLOR_BUTTON_SELECTED`;
+  //    StaticLabel = "3";
+  //    TextColour = `COLOR_PICTURE_BACKGROUND`;
+  //    TextFont = 4;
+  //    TextFontDynamic = `font4`;
+  //    TextFontStatic = `font4`;
+  //    TextX = 14;
+  //    TextXDynamic = 12;
+  //    TextXStatic = 14;
+  //    TextY = 22;
+  //    TextYDynamic = `TextY`;
+  //    TextYStatic = `TextY`;
+  //    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+  //    Width = 40;
+  //  }
+  //
+  //  instance DialogueSymbols.OptionButton setNo4
+  //  {
+  //    x = 795;
+  //    y = 55;
+  //    visibility = `(VideoSetno==4)||(!SETUP)`;
+  //    xReference = 795;
+  //    yReference = 55;
+  //    xScaleFactor = 1;
+  //    yScaleFactor = 1;
+  //    rotationAngle = 0;
+  //    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+  //    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+  //    ButtonState = 0;
+  //    DisplayText = 1;
+  //    DynamicLabel = "4";
+  //    ExecuteSelect = "{InitButtons(4);}";
+  //    ExecuteUnSelect = "";
+  //    Height = 30;
+  //    isDown = 0;
+  //    isInside = 1;
+  //    Label = "4";
+  //    SelectColour = `COLOR_BUTTON_SELECTED`;
+  //    StaticLabel = "4";
+  //    TextColour = `COLOR_PICTURE_BACKGROUND`;
+  //    TextFont = 4;
+  //    TextFontDynamic = `font4`;
+  //    TextFontStatic = `font4`;
+  //    TextX = 14;
+  //    TextXDynamic = 12;
+  //    TextXStatic = 14;
+  //    TextY = 22;
+  //    TextYDynamic = `TextY`;
+  //    TextYStatic = `TextY`;
+  //    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+  //    Width = 40;
+  //  }
+  //
+  //  instance DialogueSymbols.OptionButton setNo5
+  //  {
+  //    x = 870;
+  //    y = 55;
+  //    visibility = `(VideoSetno==5)||(!SETUP)`;
+  //    xReference = 870;
+  //    yReference = 55;
+  //    xScaleFactor = 1;
+  //    yScaleFactor = 1;
+  //    rotationAngle = 0;
+  //    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+  //    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+  //    ButtonState = 0;
+  //    DisplayText = 1;
+  //    DynamicLabel = "5";
+  //    ExecuteSelect = "{InitButtons(5);}";
+  //    ExecuteUnSelect = "";
+  //    Height = 30;
+  //    isDown = 0;
+  //    isInside = 1;
+  //    Label = "5";
+  //    SelectColour = `COLOR_BUTTON_SELECTED`;
+  //    StaticLabel = "5";
+  //    TextColour = `COLOR_PICTURE_BACKGROUND`;
+  //    TextFont = 4;
+  //    TextFontDynamic = `font4`;
+  //    TextFontStatic = `font4`;
+  //    TextX = 14;
+  //    TextXDynamic = 12;
+  //    TextXStatic = 14;
+  //    TextY = 22;
+  //    TextYDynamic = `TextY`;
+  //    TextYStatic = `TextY`;
+  //    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+  //    Width = 40;
+  //  }
+  //
+  //*************** END 20170308 CORENET by Philkyu Kwon ******************
+  rectangle
+  {
+    x = 259;
+    y = 180;
+    width = 746;
+    height = 360;
+    visibility = 1;
+    foregroundColour = `COLOR_LINE_BOUNDARY_6`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 2;
+    foregroundFillColour = -1;
+    backgroundFillColour = -1;
+    fillPattern = `NoPattern`;
+    xReference = 280;
+    yReference = 180;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  line
+  {
+    numberOfPoints = 2;
+    point[0] = ( 490, 180 );
+    point[1] = ( 490, 540 );
+    visibility = 1;
+    foregroundColour = `COLOR_LINE_BOUNDARY_6`;
+    backgroundColour = -1;
+    lineStyle = `SolidPattern`;
+    lineWidth = 2;
+    xReference = 490;
+    yReference = 180;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  line
+  {
+    numberOfPoints = 2;
+    point[0] = ( 260, 480 );
+    point[1] = ( 1005, 480 );
+    visibility = 1;
+    foregroundColour = `COLOR_LINE_BOUNDARY_6`;
+    backgroundColour = -1;
+    lineStyle = `SolidPattern`;
+    lineWidth = 2;
+    xReference = 280;
+    yReference = 482;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  instance DialogueSymbols.OptionButton disRate001
+  {
+    x = 545;
+    y = 497;
+    visibility = `( SETUP || ((!SETUP)&&(DisRate==1)) )? 1:0`;
+    xReference = 545;
+    yReference = 497;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ButtonState = 1;
+    DisplayText = 1;
+    DynamicLabel = "1";
+    ExecuteSelect = "{DisRate=1; InitButtons_DisRate();}";
+    ExecuteUnSelect = "";
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    Label = "1";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    StaticLabel = "1";
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextFontDynamic = `font4`;
+    TextFontStatic = `font4`;
+    TextX = 12;
+    TextXDynamic = 12;
+    TextXStatic = 14;
+    TextY = 22;
+    TextYDynamic = `TextY`;
+    TextYStatic = `TextY`;
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    Width = 40;
+  }
+
+  instance DialogueSymbols.OptionButton disRate002
+  {
+    x = 609;
+    y = 497;
+    visibility = `( SETUP || ((!SETUP)&&(DisRate==2)) )? 1:0`;
+    xReference = 609;
+    yReference = 497;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ButtonState = 0;
+    DisplayText = 1;
+    DynamicLabel = "2";
+    ExecuteSelect = "{DisRate=2; InitButtons_DisRate();}";
+    ExecuteUnSelect = "";
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    Label = "2";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    StaticLabel = "2";
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextFontDynamic = `font4`;
+    TextFontStatic = `font4`;
+    TextX = 14;
+    TextXDynamic = 12;
+    TextXStatic = 14;
+    TextY = 22;
+    TextYDynamic = `TextY`;
+    TextYStatic = `TextY`;
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    Width = 40;
+  }
+
+  instance DialogueSymbols.OptionButton disRate005
+  {
+    x = 673;
+    y = 497;
+    visibility = `( SETUP || ((!SETUP)&&(DisRate==5)) )? 1:0`;
+    xReference = 673;
+    yReference = 497;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ButtonState = 0;
+    DisplayText = 1;
+    DynamicLabel = "5";
+    ExecuteSelect = "{DisRate=5; InitButtons_DisRate();}";
+    ExecuteUnSelect = "";
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    Label = "5";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    StaticLabel = "5";
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextFontDynamic = `font4`;
+    TextFontStatic = `font4`;
+    TextX = 14;
+    TextXDynamic = 12;
+    TextXStatic = 14;
+    TextY = 22;
+    TextYDynamic = `TextY`;
+    TextYStatic = `TextY`;
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    Width = 40;
+  }
+
+  instance DialogueSymbols.OptionButton disRate010
+  {
+    x = 737;
+    y = 497;
+    visibility = `( SETUP || ((!SETUP)&&(DisRate==10)) )? 1:0`;
+    xReference = 737;
+    yReference = 497;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ButtonState = 0;
+    DisplayText = 1;
+    DynamicLabel = "10";
+    ExecuteSelect = "{DisRate=10; InitButtons_DisRate();}";
+    ExecuteUnSelect = "";
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    Label = "10";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    StaticLabel = "10";
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextFontDynamic = `font4`;
+    TextFontStatic = `font4`;
+    TextX = 9;
+    TextXDynamic = 7;
+    TextXStatic = 9;
+    TextY = 22;
+    TextYDynamic = `TextY`;
+    TextYStatic = `TextY`;
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    Width = 40;
+  }
+
+  instance DialogueSymbols.OptionButton disRate030
+  {
+    x = 796;
+    y = 497;
+    visibility = `( SETUP || ((!SETUP)&&(DisRate==30)) )? 1:0`;
+    xReference = 796;
+    yReference = 497;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ButtonState = 0;
+    DisplayText = 1;
+    DynamicLabel = "30";
+    ExecuteSelect = "{DisRate=30; InitButtons_DisRate();}";
+    ExecuteUnSelect = "";
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    Label = "30";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    StaticLabel = "30";
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextFontDynamic = `font4`;
+    TextFontStatic = `font4`;
+    TextX = 9;
+    TextXDynamic = 7;
+    TextXStatic = 9;
+    TextY = 22;
+    TextYDynamic = `TextY`;
+    TextYStatic = `TextY`;
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    Width = 40;
+  }
+
+  instance DialogueSymbols.OptionButton disRate060
+  {
+    x = 860;
+    y = 497;
+    visibility = `( SETUP || ((!SETUP)&&(DisRate==60)) )? 1:0`;
+    xReference = 860;
+    yReference = 497;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ButtonState = 0;
+    DisplayText = 1;
+    DynamicLabel = "60";
+    ExecuteSelect = "{DisRate=60; InitButtons_DisRate();}";
+    ExecuteUnSelect = "";
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    Label = "60";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    StaticLabel = "60";
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextFontDynamic = `font4`;
+    TextFontStatic = `font4`;
+    TextX = 9;
+    TextXDynamic = 7;
+    TextXStatic = 9;
+    TextY = 22;
+    TextYDynamic = `TextY`;
+    TextYStatic = `TextY`;
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    Width = 40;
+  }
+
+  instance DialogueSymbols.OptionButton disRate600
+  {
+    x = 923;
+    y = 497;
+    visibility = `( SETUP || ((!SETUP)&&(DisRate==600)) )? 1:0`;
+    xReference = 923;
+    yReference = 497;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ButtonState = 0;
+    DisplayText = 1;
+    DynamicLabel = "600";
+    ExecuteSelect = "{DisRate=600; InitButtons_DisRate();}";
+    ExecuteUnSelect = "";
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    Label = "600";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    StaticLabel = "600";
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextFontDynamic = `font4`;
+    TextFontStatic = `font4`;
+    TextX = 6;
+    TextXDynamic = 4;
+    TextXStatic = 6;
+    TextY = 22;
+    TextYDynamic = `TextY`;
+    TextYStatic = `TextY`;
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    Width = 40;
+  }
+
+  text VT1PID
+  {
+    x = 322;
+    y = 241;
+    format = "%s";
+    theText = `VideoTrend1PID.TheOriginalText`;
+    alignment = 0;
+    visibility = `!SETUP`;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 322;
+    yReference = 241;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text VT2PID
+  {
+    x = 322;
+    y = 302;
+    format = "%s";
+    theText = `VideoTrend2PID.TheOriginalText`;
+    alignment = 0;
+    visibility = `!SETUP`;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 322;
+    yReference = 252;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text VT3PID
+  {
+    x = 322;
+    y = 367;
+    format = "%s";
+    theText = `VideoTrend3PID.TheOriginalText`;
+    alignment = 0;
+    visibility = `!SETUP`;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 322;
+    yReference = 267;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text VT4PID
+  {
+    x = 322;
+    y = 427;
+    format = "%s";
+    theText = `VideoTrend4PID.TheOriginalText`;
+    alignment = 0;
+    visibility = `!SETUP`;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 322;
+    yReference = 277;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text VT1MinValue
+  {
+    x = 548;
+    y = 241;
+    format = `(isDigital(pPID1))? "%5d":pPID1->disfmt`;
+    theText = `VideoTrend1MinValue.TheOriginalNumber`;
+    alignment = 0;
+    visibility = `(!SETUP)&&(0 != strncmp(VT1PID.theText, " ", 1))&&strlen(VT1PID.theText) && !isDigital(pPID1)`;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 548;
+    yReference = 241;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text VT2MinValue
+  {
+    x = 548;
+    y = 302;
+    format = `(isDigital(pPID2))? "%5d":pPID2->disfmt`;
+    theText = `VideoTrend2MinValue.TheOriginalNumber`;
+    alignment = 0;
+    visibility = `(!SETUP)&&(0 != strncmp(VT2PID.theText, " ", 1))&&strlen(VT2PID.theText) && !isDigital(pPID2)`;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 548;
+    yReference = 302;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text VT3MinValue
+  {
+    x = 547;
+    y = 367;
+    format = `(isDigital(pPID3))? "%5d":pPID3->disfmt`;
+    theText = `VideoTrend3MinValue.TheOriginalNumber`;
+    alignment = 0;
+    visibility = `(!SETUP)&&(0 != strncmp(VT3PID.theText, " ", 1))&&strlen(VT3PID.theText) && !isDigital(pPID3)`;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 547;
+    yReference = 367;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text VT4MinValue
+  {
+    x = 547;
+    y = 427;
+    format = `(isDigital(pPID4))? "%5d":pPID4->disfmt`;
+    theText = `VideoTrend4MinValue.TheOriginalNumber`;
+    alignment = 0;
+    visibility = `(!SETUP)&&(0 != strncmp(VT4PID.theText, " ", 1))&&strlen(VT4PID.theText) && !isDigital(pPID4)`;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 547;
+    yReference = 427;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text VT1Base
+  {
+    x = 700;
+    y = 241;
+    format = `(isDigital(pPID1))? "%5d":pPID1->disfmt`;
+    theText = `VideoTrend1Base.TheOriginalNumber`;
+    alignment = 0;
+    visibility = `VT1MinValue.visibility`;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 700;
+    yReference = 241;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text VT2Base
+  {
+    x = 700;
+    y = 302;
+    format = `(isDigital(pPID2))? "%5d":pPID2->disfmt`;
+    theText = `VideoTrend2Base.TheOriginalNumber`;
+    alignment = 0;
+    visibility = `VT2MinValue.visibility`;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 700;
+    yReference = 302;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text VT3Base
+  {
+    x = 700;
+    y = 367;
+    format = `(isDigital(pPID3))? "%5d":pPID3->disfmt`;
+    theText = `VideoTrend3Base.TheOriginalNumber`;
+    alignment = 0;
+    visibility = `VT3MinValue.visibility`;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 700;
+    yReference = 367;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text VT4Base
+  {
+    x = 701;
+    y = 427;
+    format = `(isDigital(pPID4))? "%5d":pPID4->disfmt`;
+    theText = `VideoTrend4Base.TheOriginalNumber`;
+    alignment = 0;
+    visibility = `VT4MinValue.visibility`;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 701;
+    yReference = 427;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text VT1MaxValue
+  {
+    x = 853;
+    y = 241;
+    format = `(isDigital(pPID1))? "%5d":pPID1->disfmt`;
+    theText = `VideoTrend1MaxValue.TheOriginalNumber`;
+    alignment = 0;
+    visibility = `VT1MinValue.visibility`;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 853;
+    yReference = 241;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text VT2MaxValue
+  {
+    x = 853;
+    y = 302;
+    format = `(isDigital(pPID2))? "%5d":pPID2->disfmt`;
+    theText = `VideoTrend2MaxValue.TheOriginalNumber`;
+    alignment = 0;
+    visibility = `VT2MinValue.visibility`;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 853;
+    yReference = 302;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text VT3MaxValue
+  {
+    x = 853;
+    y = 367;
+    format = `(isDigital(pPID3))? "%5d":pPID3->disfmt`;
+    theText = `VideoTrend3MaxValue.TheOriginalNumber`;
+    alignment = 0;
+    visibility = `VT3MinValue.visibility`;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 853;
+    yReference = 367;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text VT4MaxValue
+  {
+    x = 853;
+    y = 427;
+    format = `(isDigital(pPID4))? "%5d":pPID4->disfmt`;
+    theText = `VideoTrend4MaxValue.TheOriginalNumber`;
+    alignment = 0;
+    visibility = `VT4MinValue.visibility`;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 853;
+    yReference = 427;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  circleArc
+  {
+    x = 854;
+    y = 235;
+    radius = 0;
+    startAngle = `font0`;
+    openingAngle = 90;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 0;
+    foregroundFillColour = `COLOR_NON_ESSENTIAL`;
+    backgroundFillColour = -1;
+    fillPattern = `SolidPattern`;
+    xReference = 854;
+    yReference = 235;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  instance DialogueSymbols.PushButton SetupButton
+  {
+    x = 905;
+    y = 646;
+    visibility = 1;
+    xReference = 905;
+    yReference = 646;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ButtonState = 0;
+    DynamicLabel = `(SETUP)? "CANCEL":" SETUP"`;
+    ExecuteString = "{ if(!Protect) SetupNcancel(); }";
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    Label = " SETUP";
+    Scope = "PicUCN_VideoTrendMenu";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    StaticLabel = `(SETUP)? "CANCEL":" SETUP"`;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextFontDynamic = `font2`;
+    TextFontStatic = `font4`;
+    TextX = 17;
+    TextXDynamic = 25;
+    TextXStatic = 17;
+    TextY = 22;
+    TextYDynamic = 21;
+    TextYStatic = 22;
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    Width = 110;
+  }
+
+  text
+  {
+    x = 387;
+    y = 667;
+    format = "%s";
+    theText = `(SETUP)?"SETUP":"VIEW"`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 387;
+    yReference = 667;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 1022;
+    y = 667;
+    format = "%s";
+    theText = "SETUP";
+    alignment = 0;
+    visibility = `SETUP`;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 1022;
+    yReference = 667;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text VideoTrend1BadBaseMsg
+  {
+    x = 682;
+    y = 271;
+    format = "%s";
+    theText = "INVALID VALUE";
+    alignment = 0;
+    visibility = `VideoTrend1Base.ERROR`;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 682;
+    yReference = 271;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text VideoTrend2BadBaseMsg
+  {
+    x = 682;
+    y = 331;
+    format = "%s";
+    theText = "INVALID VALUE";
+    alignment = 0;
+    visibility = `VideoTrend2Base.ERROR`;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 682;
+    yReference = 331;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text VideoTrend3BadBaseMsg
+  {
+    x = 682;
+    y = 396;
+    format = "%s";
+    theText = "INVALID VALUE";
+    alignment = 0;
+    visibility = `VideoTrend3Base.ERROR`;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 682;
+    yReference = 396;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text VideoTrend4BadBaseMsg
+  {
+    x = 682;
+    y = 456;
+    format = "%s";
+    theText = "INVALID VALUE";
+    alignment = 0;
+    visibility = `VideoTrend4Base.ERROR`;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 682;
+    yReference = 456;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+}

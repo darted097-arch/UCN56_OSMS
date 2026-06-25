@@ -1,0 +1,233 @@
+// ***************************************************************************
+// *									     *
+// *	Copyright (C) 1997, KOPEC(N), All rights reserved.		     *
+// *	Proprietary information, KOPEC(N)        			     *
+// *									     *
+// ***************************************************************************
+//
+// ***** HIGH LEVEL DESCRIPTION **********************************************
+//
+// This pdat file contains the variables used by the CSL displays.
+//
+// **** REVISION HISTORY *****************************************************
+//
+// $Header: /PMSArchive/ucn56/workstation/pictures/pdat/cslStructure.pdat 1.2 1997/11/03 21:32:26 jws Exp $
+// $Log: cslStructure.pdat,v $
+// Revision 1.2  1997/11/03 21:32:26  jws
+// Author: jws@y6maint1.usnus.abb.com (John Soisson)
+// Kopec NSSS Phase1 Status1. Modified to support delivery.
+//
+// Revision 1.1  2097/05/13 15:24:46  kn1
+// Author: kn1@y6maint1.usnus.abb.com (Kopec NSSS 1)
+// Initial revision
+//
+//
+//
+// ***************************************************************************
+// System Include Files: NONE
+//
+//
+// User Defined Include Files: NONE
+//
+//
+// External Variables: NONE
+//
+//
+// Local Constant Definitions: NONE
+//
+//
+// Function Prototypes: NONE
+//
+//
+// ***************************************************************************
+//
+struct CSL_CACHE{
+	char	Cache1[90];
+	char	Cache2[90];
+	char	Cache3[90];
+	char	Cache4[90];
+	char	Cache5[90];
+	char	Cache6[90];
+	char	Cache7[90];
+	char	Cache8[90];
+	char	Cache9[90];
+	char	Cache10[90];
+	char	Cache11[90];
+	char	Cache12[90];
+	char	Cache13[90];
+	char	Cache14[90];
+	char	Cache15[90];
+	char	Cache16[90];
+	char	Cache17[90];
+	char	Cache18[90];
+	char	Cache19[90];
+	char	Cache20[90];
+	char	Cache21[90];
+	char	Cache22[90];
+	char	Cache23[90];
+	char	Cache24[90];
+	char	Cache25[90];
+	char	Cache26[90];
+	char	Cache27[90];
+	char	Cache28[90];
+	char	Cache29[90];
+	char	Cache30[90];
+	char	Cache31[90];
+	char	Cache32[90];
+	char	Cache33[90];
+};
+struct CSL_DATIM{
+//	char	Datim1[19];
+//	char	Datim2[19];
+//	char	Datim3[19];
+//	char	Datim4[19];
+//	char	Datim5[19];
+//	char	Datim6[19];
+//	char	Datim7[19];
+//	char	Datim8[19];
+//	char	Datim9[19];
+//	char	Datim10[19];
+//	char	Datim11[19];
+//	char	Datim12[19];
+//	char	Datim13[19];
+//	char	Datim14[19];
+//	char	Datim15[19];
+//	char	Datim16[19];
+//	char	Datim17[19];
+//	char	Datim18[19];
+//	char	Datim19[19];
+//	char	Datim20[19];
+//	char	Datim21[19];
+//	char	Datim22[19];
+//	char	Datim23[19];
+//	char	Datim24[19];
+//	char	Datim25[19];
+//	char	Datim26[19];
+//	char	Datim27[19];
+//	char	Datim28[19];
+//	char	Datim29[19];
+//	char	Datim30[19];
+//	char	Datim31[19];
+//	char	Datim32[19];	
+//	char	Datim33[19];	
+	char	Datim1[21];
+	char	Datim2[21];
+	char	Datim3[21];
+	char	Datim4[21];
+	char	Datim5[21];
+	char	Datim6[21];
+	char	Datim7[21];
+	char	Datim8[21];
+	char	Datim9[21];
+	char	Datim10[21];
+	char	Datim11[21];
+	char	Datim12[21];
+	char	Datim13[21];
+	char	Datim14[21];
+	char	Datim15[21];
+	char	Datim16[21];
+	char	Datim17[21];
+	char	Datim18[21];
+	char	Datim19[21];
+	char	Datim20[21];
+	char	Datim21[21];
+	char	Datim22[21];
+	char	Datim23[21];
+	char	Datim24[21];
+	char	Datim25[21];
+	char	Datim26[21];
+	char	Datim27[21];
+	char	Datim28[21];
+	char	Datim29[21];
+	char	Datim30[21];
+	char	Datim31[21];
+	char	Datim32[21];	
+	char	Datim33[21];	
+
+};	
+//	
+struct CSL_TSKID{
+	char	Tskid1[9];
+	char	Tskid2[9];	
+	char	Tskid3[9];
+	char	Tskid4[9];		
+	char	Tskid5[9];
+	char	Tskid6[9];	
+	char	Tskid7[9];
+	char	Tskid8[9];		
+	char	Tskid9[9];
+	char	Tskid10[9];	
+	char	Tskid11[9];
+	char	Tskid12[9];		
+	char	Tskid13[9];
+	char	Tskid14[9];	
+	char	Tskid15[9];
+	char	Tskid16[9];	
+	char	Tskid17[9];
+	char	Tskid18[9];	
+	char	Tskid19[9];
+	char	Tskid20[9];		
+	char	Tskid21[9];
+	char	Tskid22[9];	
+	char	Tskid23[9];
+	char	Tskid24[9];		
+	char	Tskid25[9];
+	char	Tskid26[9];	
+	char	Tskid27[9];
+	char	Tskid28[9];		
+	char	Tskid29[9];
+	char	Tskid30[9];	
+	char	Tskid31[9];
+	char	Tskid32[9];		
+	char	Tskid33[9];		
+};
+//
+struct	CSL_MSG{
+        char    CslMsg1[64];
+        char    CslMsg2[64];        
+        char    CslMsg3[64];
+        char    CslMsg4[64];         
+        char    CslMsg5[64];
+        char    CslMsg6[64];        
+        char    CslMsg7[64];
+        char    CslMsg8[64];           
+        char    CslMsg9[64];
+        char    CslMsg10[64];        
+        char    CslMsg11[64];
+        char    CslMsg12[64];         
+        char    CslMsg13[64];
+        char    CslMsg14[64];        
+        char    CslMsg15[64];
+        char    CslMsg16[64];         
+        char    CslMsg17[64];
+        char    CslMsg18[64];        
+        char    CslMsg19[64];
+        char    CslMsg20[64];         
+        char    CslMsg21[64];
+        char    CslMsg22[64];        
+        char    CslMsg23[64];
+        char    CslMsg24[64];           
+        char    CslMsg25[64];
+        char    CslMsg26[64];        
+        char    CslMsg27[64];
+        char    CslMsg28[64];         
+        char    CslMsg29[64];
+        char    CslMsg30[64];        
+        char    CslMsg31[64];
+        char    CslMsg32[64];          
+        char    CslMsg33[64];        
+};
+//
+struct CSL_TEMPLATE{
+	CSL_CACHE	Csl_cache;
+	CSL_DATIM	Csl_datim;
+	CSL_TSKID	Csl_tskid;
+	CSL_MSG		Csl_msg;
+};
+//>>>>>>>>>>>>>>>>>>> Workstation csl Message Template
+//
+struct WScslCacheMessage {
+   WSmessageHeader	header;				// message information		(  24)
+   CSL_TEMPLATE 	data;				// data portion			
+};
+

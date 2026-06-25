@@ -1,0 +1,34 @@
+#!/bin/sh
+
+namekill()
+{
+   case $ARCH in
+     sun4)
+        psArg=aux;;
+     sgi)
+        psArg=aef;;
+     hp*)
+        psArg=ef;;
+   esac
+   for name in $* ; do
+      echo "Killing $name ..."
+      processNr=`ps -$psArg | grep " $name"|fgrep -v 'grep' | awk '{print $2}'`
+      [ -z "$processNr" ] || kill -9 $processNr > /dev/null 2>&1
+   done
+}
+
+
+sleepAndStart()
+{
+   sleep $1
+   shift
+   echo "Starting $* ..."
+   $*
+}
+
+sleepAndStart  0 control &
+sleepAndStart  1 rtm -r YGN5and6.pctx &
+#sleepAndStart 10 ged
+
+#namekill ged rtm control Timer
+#namekill ged rtm

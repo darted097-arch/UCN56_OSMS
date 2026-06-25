@@ -1,0 +1,853 @@
+/*
+ * ProcSee CONFIGURATION LANGUAGE FILE
+ *
+ *
+ * User : ucn56
+ * Host : y4cr01
+ * Date : 2017-06-29
+ * Time : 11:02:27
+ *
+ * ProcSee version : ProcSee 3.10.1 (June 2016)
+ * File version    : 1.26
+ *
+ *
+ */
+
+
+picture PicUCN_SoeReports
+{
+  worldX = 0;
+  worldY = 0;
+  worldWidth = 1280;
+  worldHeight = 824;
+  oneToOne = 1;
+  backgroundColour = 0;
+  updateMode = 2;
+  resizeMode = 0;
+  xSnap = 5;
+  ySnap = 5;
+  radiusSnap = 0;
+  angleSnap = 0;
+  crosshairStyle = 1;
+  crosshairLength = 0;
+  crosshairFollowSnap = `isInEditMode()`;
+  crosshairVisibility = `isInEditMode()`;
+  xReference = 500;
+  yReference = 500;
+  xScaleFactor = 1;
+  yScaleFactor = 1;
+  rotationAngle = 0;
+
+  int option = 1;
+
+  char PictureNumber[50] = "157";
+
+  char PictureTitle[50] = "SOE REPORTS";
+
+  int SOE_RECORD_NO = 10;
+
+  int soeno = 10;
+
+  function `void Escape()
+  {
+     displayPicture("Main","::UCN5and6.PicUCN_PrintReports.ppic");
+     update();
+  }`
+
+  function `void Initialize()
+  {
+     CFMLevel =0;
+     Current_Page = 157;
+  //
+     int i;
+        for(i=1;i<=SOE_RECORD_NO;i++)
+          {
+               execute("{soeRecord%d.TheTitle = \\\`Interface->SoeRecord.SoeRecord%d\\\`;}",i,i);
+           }
+             execute("{soeno=Interface->SoeRecord.SoeNo;}");
+             DisplayAdvisoryMessage("");
+             DisplayAdvisoryMessage1("");
+             DisplayAdvisoryMessage2("");
+             DisplayAdvisoryMessage3("");
+  //           ExitButton.UnSelect();
+             update();
+  }`
+
+  function `void Option1()
+  {
+     option=1;
+     ProcessThis();
+     update();
+  }`
+
+  function `void Option2()
+  {
+     option=2;
+     ProcessThis();
+     update();
+  }`
+
+  function `void Option3()
+  {
+     option=3;
+     ProcessThis();
+     update();
+  }`
+
+  function `void Option4()
+  {
+     option=4;
+     ProcessThis();
+     update();
+  }`
+
+  function `void Option5()
+  {
+     option=5;
+     ProcessThis();
+     update();
+  }`
+
+  function `void Option6()
+  {
+     option=6;
+     ProcessThis();
+     update();
+  }`
+
+  function `void Option7()
+  {
+     option=7;
+     ProcessThis();
+     update();
+  }`
+
+  function `void Option8()
+  {
+     option=8;
+     ProcessThis();
+     update();
+  }`
+
+  function `void Option9()
+  {
+     option=9;
+     ProcessThis();
+     update();
+  }`
+
+  function `void Option10()
+  {
+     option=10;
+     ProcessThis();
+     update();
+  }`
+
+  function `void ProcessThis()
+  {
+     if(option<=soeno) {
+        DisplayAdvisoryMessage("COPYING SOE REPORT TO PRINTER FILE");
+        DisplayAdvisoryMessage1("");
+        Interface->GenericRequestMessage.data.requestOption=option;
+        execute("{sendMessageToHost(REQUEST_SOE_PRINT);}");
+     }
+  else {
+  DisplayAdvisoryMessage("NO SOE REPORT");
+  DisplayAdvisoryMessage1("");
+  };
+  }
+  `
+
+  function `void PrreptDynMsg()
+  {
+        //DisplayAdvisoryMessage(&Interface->PrreptDynMsg.PrreptDynMsg1);
+        DisplayAdvisoryMessage(Interface->PrreptDynMsg.PrreptDynMsg1);	// CORENET 2012.07.19
+        //DisplayAdvisoryMessage1(&Interface->PrreptDynMsg.PrreptDynMsg2);
+        DisplayAdvisoryMessage1(Interface->PrreptDynMsg.PrreptDynMsg2);	// CORENET 2012.07.19
+  }`
+
+  dialogue
+  {
+    event = `keyReleased(0x30) || keyReleased(0xFFB0)`;
+    action = `{
+    soeRecord1.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+    soeRecord1.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+    
+    soeRecord1.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+    soeRecord1.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+    soeRecord1.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+    soeRecord1.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+    
+    soeRecord1.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    soeRecord1.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    soeRecord1.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    soeRecord1.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    
+       if ( strlen(soeRecord1.ExecuteString) > 0)
+           execute(soeRecord1.ExecuteString);
+    }`;
+  }
+
+  dialogue
+  {
+    event = `keyReleased(0x31) || keyReleased(0xFFB1)`;
+    action = `{
+    soeRecord2.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+    soeRecord2.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+    
+    soeRecord2.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+    soeRecord2.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+    soeRecord2.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+    soeRecord2.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+    
+    soeRecord2.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    soeRecord2.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    soeRecord2.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    soeRecord2.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    
+       if ( strlen(soeRecord2.ExecuteString) > 0)
+           execute(soeRecord2.ExecuteString);
+    }`;
+  }
+
+  dialogue
+  {
+    event = `keyReleased(0x32) || keyReleased(0xFFB2)`;
+    action = `{
+    soeRecord3.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+    soeRecord3.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+    
+    soeRecord3.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+    soeRecord3.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+    soeRecord3.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+    soeRecord3.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+    
+    soeRecord3.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    soeRecord3.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    soeRecord3.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    soeRecord3.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    
+       if ( strlen(soeRecord3.ExecuteString) > 0)
+           execute(soeRecord3.ExecuteString);
+    }`;
+  }
+
+  dialogue
+  {
+    event = `keyReleased(0x33) || keyReleased(0xFFB3)`;
+    action = `{
+    soeRecord4.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+    soeRecord4.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+    
+    soeRecord4.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+    soeRecord4.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+    soeRecord4.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+    soeRecord4.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+    
+    soeRecord4.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    soeRecord4.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    soeRecord4.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    soeRecord4.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    
+       if ( strlen(soeRecord4.ExecuteString) > 0)
+           execute(soeRecord4.ExecuteString);
+    }`;
+  }
+
+  dialogue
+  {
+    event = `keyReleased(0x34) || keyReleased(0xFFB4)`;
+    action = `{
+    soeRecord5.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+    soeRecord5.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+    
+    soeRecord5.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+    soeRecord5.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+    soeRecord5.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+    soeRecord5.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+    
+    soeRecord5.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    soeRecord5.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    soeRecord5.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    soeRecord5.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    
+       if ( strlen(soeRecord5.ExecuteString) > 0)
+           execute(soeRecord5.ExecuteString);
+    }`;
+  }
+
+  dialogue
+  {
+    event = `keyReleased(0x35) || keyReleased(0xFFB5)`;
+    action = `{
+    soeRecord6.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+    soeRecord6.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+    
+    soeRecord6.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+    soeRecord6.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+    soeRecord6.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+    soeRecord6.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+    
+    soeRecord6.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    soeRecord6.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    soeRecord6.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    soeRecord6.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    
+       if ( strlen(soeRecord6.ExecuteString) > 0)
+           execute(soeRecord6.ExecuteString);
+    }`;
+  }
+
+  dialogue
+  {
+    event = `keyReleased(0x36) || keyReleased(0xFFB6)`;
+    action = `{
+    soeRecord7.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+    soeRecord7.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+    
+    soeRecord7.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+    soeRecord7.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+    soeRecord7.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+    soeRecord7.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+    
+    soeRecord7.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    soeRecord7.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    soeRecord7.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    soeRecord7.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    
+       if ( strlen(soeRecord7.ExecuteString) > 0)
+           execute(soeRecord7.ExecuteString);
+    }`;
+  }
+
+  dialogue
+  {
+    event = `keyReleased(0x37) || keyReleased(0xFFB7)`;
+    action = `{
+    soeRecord8.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+    soeRecord8.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+    
+    soeRecord8.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+    soeRecord8.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+    soeRecord8.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+    soeRecord8.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+    
+    soeRecord8.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    soeRecord8.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    soeRecord8.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    soeRecord8.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    
+       if ( strlen(soeRecord8.ExecuteString) > 0)
+           execute(soeRecord8.ExecuteString);
+    }`;
+  }
+
+  dialogue
+  {
+    event = `keyReleased(0x38) || keyReleased(0xFFB8)`;
+    action = `{
+    soeRecord9.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+    soeRecord9.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+    
+    soeRecord9.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+    soeRecord9.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+    soeRecord9.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+    soeRecord9.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+    
+    soeRecord9.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    soeRecord9.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    soeRecord9.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    soeRecord9.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    
+       if ( strlen(soeRecord9.ExecuteString) > 0)
+           execute(soeRecord9.ExecuteString);
+    }`;
+  }
+
+  dialogue
+  {
+    event = `keyReleased(0x39) || keyReleased(0xFFB9)`;
+    action = `{
+    soeRecord10.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+    soeRecord10.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+    
+    soeRecord10.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+    soeRecord10.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+    soeRecord10.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+    soeRecord10.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+    
+    soeRecord10.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    soeRecord10.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    soeRecord10.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    soeRecord10.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    
+       if ( strlen(soeRecord10.ExecuteString) > 0)
+           execute(soeRecord10.ExecuteString);
+    }`;
+  }
+
+  rectangle
+  {
+    x = 355;
+    y = 200;
+    width = 490;
+    height = 480;
+    visibility = 1;
+    foregroundColour = `COLOR_LINE_BOUNDARY_6`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 3;
+    foregroundFillColour = `COLOR_PICTURE_BACKGROUND`;
+    backgroundFillColour = -1;
+    fillPattern = `SolidPattern`;
+    xReference = 406;
+    yReference = 304;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  instance DialogueSymbols.LargeMenuSelect soeRecord1
+  {
+    x = 544;
+    y = 219;
+    visibility = 1;
+    xReference = 544;
+    yReference = 219;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Cascade = 0;
+    CascadeX = 400;
+    CascadeY = 400;
+    ExecuteString = "Option1()";
+    TheFontColor = 2;
+    TheOption = "";
+    TheTextFont = `font6`;
+    TheTitle = `Interface->SoeRecord.SoeRecord1`;
+    Width = 230;
+  }
+
+  instance DialogueSymbols.LargeMenuSelect soeRecord2
+  {
+    x = 544;
+    y = 263;
+    visibility = 1;
+    xReference = 544;
+    yReference = 263;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Cascade = 0;
+    CascadeX = 400;
+    CascadeY = 400;
+    ExecuteString = "Option2()";
+    TheFontColor = 2;
+    TheOption = "";
+    TheTextFont = `font6`;
+    TheTitle = `Interface->SoeRecord.SoeRecord2`;
+    Width = 230;
+  }
+
+  instance DialogueSymbols.LargeMenuSelect soeRecord3
+  {
+    x = 544;
+    y = 307;
+    visibility = 1;
+    xReference = 544;
+    yReference = 307;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Cascade = 0;
+    CascadeX = 400;
+    CascadeY = 400;
+    ExecuteString = "Option3()";
+    TheFontColor = 2;
+    TheOption = "";
+    TheTextFont = `font6`;
+    TheTitle = `Interface->SoeRecord.SoeRecord3`;
+    Width = 230;
+  }
+
+  instance DialogueSymbols.LargeMenuSelect soeRecord4
+  {
+    x = 544;
+    y = 351;
+    visibility = 1;
+    xReference = 544;
+    yReference = 351;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Cascade = 0;
+    CascadeX = 400;
+    CascadeY = 400;
+    ExecuteString = "Option4()";
+    TheFontColor = 2;
+    TheOption = "";
+    TheTextFont = `font6`;
+    TheTitle = `Interface->SoeRecord.SoeRecord4`;
+    Width = 230;
+  }
+
+  instance DialogueSymbols.LargeMenuSelect soeRecord5
+  {
+    x = 544;
+    y = 395;
+    visibility = 1;
+    xReference = 544;
+    yReference = 395;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Cascade = 0;
+    CascadeX = 400;
+    CascadeY = 400;
+    ExecuteString = "Option5()";
+    TheFontColor = 2;
+    TheOption = "";
+    TheTextFont = `font6`;
+    TheTitle = `Interface->SoeRecord.SoeRecord5`;
+    Width = 230;
+  }
+
+  instance DialogueSymbols.LargeMenuSelect soeRecord6
+  {
+    x = 544;
+    y = 438;
+    visibility = 1;
+    xReference = 544;
+    yReference = 438;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Cascade = 0;
+    CascadeX = 400;
+    CascadeY = 400;
+    ExecuteString = "Option6()";
+    TheFontColor = 2;
+    TheOption = "";
+    TheTextFont = `font6`;
+    TheTitle = `Interface->SoeRecord.SoeRecord6`;
+    Width = 230;
+  }
+
+  instance DialogueSymbols.LargeMenuSelect soeRecord7
+  {
+    x = 544;
+    y = 482;
+    visibility = 1;
+    xReference = 544;
+    yReference = 482;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Cascade = 0;
+    CascadeX = 400;
+    CascadeY = 400;
+    ExecuteString = "Option7()";
+    TheFontColor = 2;
+    TheOption = "";
+    TheTextFont = `font6`;
+    TheTitle = `Interface->SoeRecord.SoeRecord7`;
+    Width = 230;
+  }
+
+  instance DialogueSymbols.LargeMenuSelect soeRecord8
+  {
+    x = 544;
+    y = 526;
+    visibility = 1;
+    xReference = 544;
+    yReference = 526;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Cascade = 0;
+    CascadeX = 400;
+    CascadeY = 400;
+    ExecuteString = "Option8()";
+    TheFontColor = 2;
+    TheOption = "";
+    TheTextFont = `font6`;
+    TheTitle = `Interface->SoeRecord.SoeRecord8`;
+    Width = 230;
+  }
+
+  instance DialogueSymbols.LargeMenuSelect soeRecord9
+  {
+    x = 544;
+    y = 570;
+    visibility = 1;
+    xReference = 544;
+    yReference = 570;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Cascade = 0;
+    CascadeX = 400;
+    CascadeY = 400;
+    ExecuteString = "Option9()";
+    TheFontColor = 2;
+    TheOption = "";
+    TheTextFont = `font6`;
+    TheTitle = `Interface->SoeRecord.SoeRecord9`;
+    Width = 230;
+  }
+
+  instance DialogueSymbols.LargeMenuSelect soeRecord10
+  {
+    x = 544;
+    y = 614;
+    visibility = 1;
+    xReference = 544;
+    yReference = 614;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Cascade = 0;
+    CascadeX = 400;
+    CascadeY = 400;
+    ExecuteString = "Option10()";
+    TheFontColor = 2;
+    TheOption = "";
+    TheTextFont = `font6`;
+    TheTitle = `Interface->SoeRecord.SoeRecord10`;
+    Width = 230;
+  }
+
+  text
+  {
+    x = 174;
+    y = 140;
+    format = "%s";
+    theText = "SELECT (1-10) FOR SOE REPORT";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 174;
+    yReference = 140;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 430;
+    y = 249;
+    format = "%s";
+    theText = "0.";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 430;
+    yReference = 249;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 376;
+    y = 192;
+    format = "%s";
+    theText = "REPORT NO.";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 376;
+    yReference = 192;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 536;
+    y = 192;
+    format = "%s";
+    theText = "DATE  AND TIME OF REPORT";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 536;
+    yReference = 192;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 430;
+    y = 336;
+    format = "%s";
+    theText = "2.";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 430;
+    yReference = 336;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 430;
+    y = 380;
+    format = "%s";
+    theText = "3.";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 430;
+    yReference = 380;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 430;
+    y = 423;
+    format = "%s";
+    theText = "4.";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 430;
+    yReference = 423;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 430;
+    y = 467;
+    format = "%s";
+    theText = "5.";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 430;
+    yReference = 467;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 430;
+    y = 509;
+    format = "%s";
+    theText = "6.";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 430;
+    yReference = 509;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 430;
+    y = 553;
+    format = "%s";
+    theText = "7.";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 430;
+    yReference = 553;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 430;
+    y = 598;
+    format = "%s";
+    theText = "8.";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 430;
+    yReference = 598;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 430;
+    y = 642;
+    format = "%s";
+    theText = "9.";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 430;
+    yReference = 642;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 430;
+    y = 292;
+    format = "%s";
+    theText = "1.";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 430;
+    yReference = 292;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+}

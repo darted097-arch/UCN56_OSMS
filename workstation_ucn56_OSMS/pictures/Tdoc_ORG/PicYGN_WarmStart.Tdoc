@@ -1,0 +1,190 @@
+/*
+ * PICASSO-3 CONFIGURATION LANGUAGE FILE
+ *
+ *
+ * Picture name: PicYGN_WarmStart
+ *
+ *
+ * Documented by  : runtime
+ * Host           : y6cr03
+ * Date           : 13/05-99 at 13:00:31
+ *
+ *
+ * Generate with:
+ *    pcc PicYGN_WarmStart.Tdoc
+ *
+ */
+
+
+picture PicYGN_WarmStart
+{
+
+  int MAXprogress = 1100;
+  char PictureNumber[50] = "";
+  char PictureTitle[50] = "START UP PAGE";
+  int ProgressIndicator = 0;
+
+  function `void Initialize() 
+{
+   ProgressIndicator = 0;
+   Logon = 0;
+
+// PT_CURVE Initialization Routine by yrlee
+
+   PT_Plot_Active = 0;      
+   PT_Trend_Active = 0;
+   PT_Plot_CurrentTime = 50 ;
+   PT_Trend_CurrentTime = 10 ;
+   PT_DBpointer = 0 ;
+   PT_DBcomplete = 0 ;
+
+   update();
+}   `
+
+
+
+  function `void ShowProgress()
+{
+   if (MAXprogress > ProgressIndicator)
+   {
+       ProgressIndicator += 35;
+   }
+   else
+   {
+       ProgressIndicator = 1;
+   }
+//   printf("   PicYGN_WarmStart::ShowProgress() ProgressIndicator = %d", ProgressIndicator);
+}`
+
+
+
+  text 
+  {
+    x = 420;
+    y = 406;
+    format = "%s";
+    theText = "WARM START IN PROGRESS...";
+
+    visibility = 1;
+    foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = `font7`;
+    xReference = 420;
+    yReference = 406;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  rectangle StatusBar
+  {
+    x = 28;
+    y = 700;
+    width = `ProgressIndicator`;
+    height = 35;
+
+    visibility = 1;
+    foregroundFillColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundFillColour = `COLOR_BAD_OOR_ACK`;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineWidth = 0;
+    linePattern = `DefaultPattern3`;
+    fillPattern = `DefaultPattern3`;
+    xReference = 28;
+    yReference = 653;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text DisplayManagerMsg
+  {
+    x = 466;
+    y = 464;
+    format = "%s";
+    theText = "LOADING DISPLAY MANAGER";
+
+    visibility = `ProgressIndicator == 0 ? 1 : 0`;
+    foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 466;
+    yReference = 464;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 31;
+    y = 685;
+    format = "%s";
+    theText = "PROGRESS INDICATOR";
+
+    visibility = 1;
+    foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = `font0`;
+    xReference = 31;
+    yReference = 685;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text PCSMsg
+  {
+    x = 367;
+    y = 513;
+    format = "%s";
+    theText = "LOADING PLANT COMPUTER SYSTEM SOFTWARE";
+
+    visibility = `DisplayManagerMsg.visibility == 0 ? 1 : 0`;
+    foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 367;
+    yReference = 513;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+// The picture's other attributes:
+
+  backgroundColour    = 0;
+  xSnap               = 0;
+  ySnap               = 0;
+  angleSnap           = 0;
+  radiusSnap          = 0;
+  worldX              = 0;
+  worldY              = 0;
+  worldWidth          = 1280;
+  worldHeight         = 1124;
+  oneToOne            = 1;
+  resizeMode          = 0;
+  updateMode          = 2;
+  crosshairStyle      = 1;
+  crosshairLength     = 0;
+  crosshairFollowSnap = `isInEditMode()`;
+  crosshairVisibility = `isInEditMode()`;
+  xReference = 500;
+  yReference = 500;
+  xScaleFactor = 1;
+  yScaleFactor = 1;
+  rotationAngle = 0;
+
+
+}  // end of picture PicYGN_WarmStart

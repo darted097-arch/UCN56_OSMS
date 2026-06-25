@@ -1,0 +1,1151 @@
+/*
+ * ProcSee CONFIGURATION LANGUAGE FILE
+ *
+ *
+ * User : ygn34
+ * Host : y6cr02
+ * Date : 2017-05-24
+ * Time : 17:38:08
+ *
+ * ProcSee version : ProcSee 3.10.1 (June 2016)
+ * File version    : 1.26
+ *
+ *
+ */
+
+
+picture Pic325_CoreExitTempCh1B
+{
+  worldX = 0;
+  worldY = 0;
+  worldWidth = 1280;
+  worldHeight = 824;
+  oneToOne = 1;
+  backgroundColour = 0;
+  updateMode = 2;
+  resizeMode = 0;
+  xSnap = 5;
+  ySnap = 5;
+  radiusSnap = 0;
+  angleSnap = 0;
+  crosshairStyle = 1;
+  crosshairLength = 0;
+  crosshairFollowSnap = `isInEditMode()`;
+  crosshairVisibility = `isInEditMode()`;
+  xReference = 500;
+  yReference = 500;
+  xScaleFactor = 1;
+  yScaleFactor = 1;
+  rotationAngle = 0;
+
+  int DisplayTCNumbers = 1;
+
+  char* PageBack = "Page324";
+
+  char* PageForward = "Page321";
+
+  char* PictureNumber = "325";
+
+  char* PictureTitle = "CORE EXIT TEMP CHANNEL B";
+
+  function `void Initialize()
+  {
+  CFMLevel = 3;
+  SectoringPage = 2;
+  Current_Page = 325;
+  }`
+
+  dialogue
+  {
+    event = `keyPressed(0x1000FF72)`;
+    action = `{
+       DisplayPage(Page321);
+    }`;
+  }
+
+  dialogue
+  {
+    event = `keyPressed(0x1000FF70)`;
+    action = `{
+       DisplayPage(Page324);
+    }`;
+  }
+
+  dialogue
+  {
+    event = `keyPressed(0x1000FF73)`;
+    action = `{
+    DisplayPopUpMenu();
+    update();
+    //printf("Display: DisplayPagePopUp");
+    }`;
+  }
+
+  dialogue
+  {
+    event = `keyPressed(0x1000FF71)`;
+    action = `{
+    DisplaySectorPopUpMenu();
+    update();
+    //printf("Display: DisplayPagePopUp");
+    }`;
+  }
+
+  instance cfmsSymbols.coreStaticLarge
+  {
+    x = 316;
+    y = 75;
+    visibility = 1;
+    xReference = 316;
+    yReference = 75;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    LineVisible = `DisplayTCNumbers`;
+  }
+
+  instance cfmsSymbols.ThermocoupleSquare
+  {
+    x = 650;
+    y = 199;
+    visibility = 1;
+    xReference = 714;
+    yReference = 198;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    DisplayTCNumber = `DisplayTCNumbers`;
+    PointId = `&IMT22`;
+    ThermocoupleNumber = "22";
+  }
+
+  instance cfmsSymbols.ThermocoupleSquare
+  {
+    x = 590;
+    y = 259;
+    visibility = 1;
+    xReference = 624;
+    yReference = 228;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    DisplayTCNumber = `DisplayTCNumbers`;
+    PointId = `&IMT28`;
+    ThermocoupleNumber = "28";
+  }
+
+  instance cfmsSymbols.ThermocoupleSquare
+  {
+    x = 830;
+    y = 319;
+    visibility = 1;
+    xReference = 774;
+    yReference = 288;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    DisplayTCNumber = `DisplayTCNumbers`;
+    PointId = `&IMT03`;
+    ThermocoupleNumber = " 3";
+  }
+
+  instance cfmsSymbols.ThermocoupleSquare
+  {
+    x = 500;
+    y = 259;
+    visibility = 1;
+    xReference = 624;
+    yReference = 198;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    DisplayTCNumber = `DisplayTCNumbers`;
+    PointId = `&IMT38`;
+    ThermocoupleNumber = "38";
+  }
+
+  instance cfmsSymbols.ThermocoupleSquare
+  {
+    x = 740;
+    y = 259;
+    visibility = 1;
+    xReference = 594;
+    yReference = 198;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    DisplayTCNumber = `DisplayTCNumbers`;
+    PointId = `&IMT12`;
+    ThermocoupleNumber = "12";
+  }
+
+  instance cfmsSymbols.ThermocoupleSquare
+  {
+    x = 560;
+    y = 319;
+    visibility = 1;
+    xReference = 654;
+    yReference = 228;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    DisplayTCNumber = `DisplayTCNumbers`;
+    PointId = `&IMT32`;
+    ThermocoupleNumber = "32";
+  }
+
+  instance cfmsSymbols.ThermocoupleSquare
+  {
+    x = 770;
+    y = 319;
+    visibility = 1;
+    xReference = 684;
+    yReference = 198;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    DisplayTCNumber = `DisplayTCNumbers`;
+    PointId = `&IMT08`;
+    ThermocoupleNumber = " 8";
+  }
+
+  instance cfmsSymbols.ThermocoupleSquare
+  {
+    x = 560;
+    y = 409;
+    visibility = 1;
+    xReference = 714;
+    yReference = 223;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    DisplayTCNumber = `DisplayTCNumbers`;
+    PointId = `&IMT33`;
+    ThermocoupleNumber = "33";
+  }
+
+  instance cfmsSymbols.ThermocoupleSquare TC29
+  {
+    x = 830;
+    y = 379;
+    visibility = 1;
+    xReference = 864;
+    yReference = 198;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    DisplayTCNumber = `DisplayTCNumbers`;
+    PointId = `&IMT04`;
+    ThermocoupleNumber = " 4";
+  }
+
+  instance cfmsSymbols.ThermocoupleSquare
+  {
+    x = 680;
+    y = 349;
+    visibility = 1;
+    xReference = 534;
+    yReference = 198;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    DisplayTCNumber = `DisplayTCNumbers`;
+    PointId = `&IMT20`;
+    ThermocoupleNumber = "20";
+  }
+
+  instance cfmsSymbols.ThermocoupleSquare
+  {
+    x = 440;
+    y = 469;
+    visibility = 1;
+    xReference = 594;
+    yReference = 198;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    DisplayTCNumber = `DisplayTCNumbers`;
+    PointId = `&IMT45`;
+    ThermocoupleNumber = "45";
+  }
+
+  instance cfmsSymbols.ThermocoupleSquare
+  {
+    x = 470;
+    y = 349;
+    visibility = 1;
+    xReference = 474;
+    yReference = 228;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    DisplayTCNumber = `DisplayTCNumbers`;
+    PointId = `&IMT41`;
+    ThermocoupleNumber = "41";
+  }
+
+  instance cfmsSymbols.ThermocoupleSquare
+  {
+    x = 620;
+    y = 439;
+    visibility = 1;
+    xReference = 564;
+    yReference = 198;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    DisplayTCNumber = `DisplayTCNumbers`;
+    PointId = `&IMT26`;
+    ThermocoupleNumber = "26";
+  }
+
+  instance cfmsSymbols.ThermocoupleSquare
+  {
+    x = 470;
+    y = 439;
+    visibility = 1;
+    xReference = 534;
+    yReference = 168;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    DisplayTCNumber = `DisplayTCNumbers`;
+    PointId = `&IMT42`;
+    ThermocoupleNumber = "42";
+  }
+
+  instance cfmsSymbols.ThermocoupleSquare
+  {
+    x = 770;
+    y = 469;
+    visibility = 1;
+    xReference = 624;
+    yReference = 168;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    DisplayTCNumber = `DisplayTCNumbers`;
+    PointId = `&IMT10`;
+    ThermocoupleNumber = "10";
+  }
+
+  instance cfmsSymbols.ThermocoupleSquare
+  {
+    x = 530;
+    y = 499;
+    visibility = 1;
+    xReference = 594;
+    yReference = 168;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    DisplayTCNumber = `DisplayTCNumbers`;
+    PointId = `&IMT37`;
+    ThermocoupleNumber = "37";
+  }
+
+  instance cfmsSymbols.ThermocoupleSquare
+  {
+    x = 500;
+    y = 529;
+    visibility = 1;
+    xReference = 624;
+    yReference = 138;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    DisplayTCNumber = `DisplayTCNumbers`;
+    PointId = `&IMT39`;
+    ThermocoupleNumber = "39";
+  }
+
+  instance cfmsSymbols.ThermocoupleSquare
+  {
+    x = 710;
+    y = 469;
+    visibility = 1;
+    xReference = 624;
+    yReference = 138;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    DisplayTCNumber = `DisplayTCNumbers`;
+    PointId = `&IMT17`;
+    ThermocoupleNumber = "17";
+  }
+
+  instance cfmsSymbols.ThermocoupleSquare
+  {
+    x = 830;
+    y = 529;
+    visibility = 1;
+    xReference = 744;
+    yReference = 138;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    DisplayTCNumber = `DisplayTCNumbers`;
+    PointId = `&IMT06`;
+    ThermocoupleNumber = " 6";
+  }
+
+  instance cfmsSymbols.ThermocoupleSquare
+  {
+    x = 620;
+    y = 559;
+    visibility = 1;
+    xReference = 654;
+    yReference = 138;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    DisplayTCNumber = `DisplayTCNumbers`;
+    PointId = `&IMT27`;
+    ThermocoupleNumber = "27";
+  }
+
+  instance cfmsSymbols.ThermocoupleSquare
+  {
+    x = 710;
+    y = 559;
+    visibility = 1;
+    xReference = 684;
+    yReference = 168;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    DisplayTCNumber = `DisplayTCNumbers`;
+    PointId = `&IMT18`;
+    ThermocoupleNumber = "18";
+  }
+
+  text
+  {
+    x = 119;
+    y = 103;
+    format = "%s";
+    theText = "QUADRANT  1";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_STATIC_TEXT`;
+    backgroundColour = -1;
+    theFont = `font7`;
+    xReference = 119;
+    yReference = 103;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  line
+  {
+    numberOfPoints = 2;
+    point[0] = ( 74, 108 );
+    point[1] = ( 334, 108 );
+    visibility = 1;
+    foregroundColour = `COLOR_STATIC_TEXT`;
+    backgroundColour = -1;
+    lineStyle = `SolidPattern`;
+    lineWidth = 2;
+    xReference = 74;
+    yReference = 108;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 80;
+    y = 138;
+    format = "%s";
+    theText = "T/C #";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_STATIC_TEXT`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 80;
+    yReference = 138;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  instance cfmsSymbols.ThermocoupleValueAndSquare
+  {
+    x = 85;
+    y = 153;
+    visibility = 1;
+    xReference = 85;
+    yReference = 153;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    DisplayTCNumber = 1;
+    ThePointId = `&IMT22`;
+    ThermocoupleNumber = "22";
+  }
+
+  instance cfmsSymbols.ThermocoupleValueAndSquare
+  {
+    x = 85;
+    y = 188;
+    visibility = 1;
+    xReference = 85;
+    yReference = 188;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    DisplayTCNumber = 1;
+    ThePointId = `&IMT28`;
+    ThermocoupleNumber = "28";
+  }
+
+  instance cfmsSymbols.ThermocoupleValueAndSquare
+  {
+    x = 85;
+    y = 223;
+    visibility = 1;
+    xReference = 85;
+    yReference = 223;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    DisplayTCNumber = 1;
+    ThePointId = `&IMT32`;
+    ThermocoupleNumber = "32";
+  }
+
+  instance cfmsSymbols.ThermocoupleValueAndSquare
+  {
+    x = 85;
+    y = 258;
+    visibility = 1;
+    xReference = 85;
+    yReference = 223;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    DisplayTCNumber = 1;
+    ThePointId = `&IMT33`;
+    ThermocoupleNumber = "33";
+  }
+
+  instance cfmsSymbols.ThermocoupleValueAndSquare
+  {
+    x = 85;
+    y = 293;
+    visibility = 1;
+    xReference = 85;
+    yReference = 223;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    DisplayTCNumber = 1;
+    ThePointId = `&IMT38`;
+    ThermocoupleNumber = "38";
+  }
+
+  text
+  {
+    x = 170;
+    y = 138;
+    format = "%s";
+    theText = "TEMP (DEG  C)";
+    alignment = 0;
+    visibility = `Interface->System.displayedUnits`;
+    foregroundColour = `COLOR_STATIC_TEXT`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 145;
+    yReference = 138;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  instance cfmsSymbols.ThermocoupleValueAndSquare
+  {
+    x = 85;
+    y = 328;
+    visibility = 1;
+    xReference = 85;
+    yReference = 223;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    DisplayTCNumber = 1;
+    ThePointId = `&IMT41`;
+    ThermocoupleNumber = "41";
+  }
+
+  text
+  {
+    x = 1020;
+    y = 482;
+    format = "%s";
+    theText = "QUADRANT  3";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_STATIC_TEXT`;
+    backgroundColour = -1;
+    theFont = `font7`;
+    xReference = 1020;
+    yReference = 482;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  line
+  {
+    numberOfPoints = 2;
+    point[0] = ( 975, 487 );
+    point[1] = ( 1240, 487 );
+    visibility = 1;
+    foregroundColour = `COLOR_STATIC_TEXT`;
+    backgroundColour = -1;
+    lineStyle = `SolidPattern`;
+    lineWidth = 2;
+    xReference = 975;
+    yReference = 487;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 980;
+    y = 517;
+    format = "%s";
+    theText = "T/C #";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_STATIC_TEXT`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 980;
+    yReference = 517;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  instance cfmsSymbols.ThermocoupleValueAndSquare
+  {
+    x = 985;
+    y = 532;
+    visibility = 1;
+    xReference = 985;
+    yReference = 532;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    DisplayTCNumber = 1;
+    ThePointId = `&IMT02`;
+    ThermocoupleNumber = "  2";
+  }
+
+  instance cfmsSymbols.ThermocoupleValueAndSquare
+  {
+    x = 985;
+    y = 567;
+    visibility = 1;
+    xReference = 985;
+    yReference = 567;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    DisplayTCNumber = 1;
+    ThePointId = `&IMT06`;
+    ThermocoupleNumber = "  6";
+  }
+
+  instance cfmsSymbols.ThermocoupleValueAndSquare
+  {
+    x = 985;
+    y = 602;
+    visibility = 1;
+    xReference = 985;
+    yReference = 602;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    DisplayTCNumber = 1;
+    ThePointId = `&IMT10`;
+    ThermocoupleNumber = "10";
+  }
+
+  instance cfmsSymbols.ThermocoupleValueAndSquare
+  {
+    x = 985;
+    y = 637;
+    visibility = 1;
+    xReference = 985;
+    yReference = 602;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    DisplayTCNumber = 1;
+    ThePointId = `&IMT17`;
+    ThermocoupleNumber = "17";
+  }
+
+  instance cfmsSymbols.ThermocoupleValueAndSquare
+  {
+    x = 985;
+    y = 672;
+    visibility = 1;
+    xReference = 985;
+    yReference = 602;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    DisplayTCNumber = 1;
+    ThePointId = `&IMT18`;
+    ThermocoupleNumber = "18";
+  }
+
+  text
+  {
+    x = 1070;
+    y = 517;
+    format = "%s";
+    theText = "TEMP (DEG  C)";
+    alignment = 0;
+    visibility = `Interface->System.displayedUnits`;
+    foregroundColour = `COLOR_STATIC_TEXT`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 1045;
+    yReference = 517;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 1020;
+    y = 102;
+    format = "%s";
+    theText = "QUADRANT  2";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_STATIC_TEXT`;
+    backgroundColour = -1;
+    theFont = `font7`;
+    xReference = 1020;
+    yReference = 102;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  line
+  {
+    numberOfPoints = 2;
+    point[0] = ( 975, 107 );
+    point[1] = ( 1235, 107 );
+    visibility = 1;
+    foregroundColour = `COLOR_STATIC_TEXT`;
+    backgroundColour = -1;
+    lineStyle = `SolidPattern`;
+    lineWidth = 2;
+    xReference = 975;
+    yReference = 107;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 980;
+    y = 137;
+    format = "%s";
+    theText = "T/C #";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_STATIC_TEXT`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 980;
+    yReference = 137;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  instance cfmsSymbols.ThermocoupleValueAndSquare
+  {
+    x = 985;
+    y = 152;
+    visibility = 1;
+    xReference = 985;
+    yReference = 152;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    DisplayTCNumber = 1;
+    ThePointId = `&IMT03`;
+    ThermocoupleNumber = "  3";
+  }
+
+  instance cfmsSymbols.ThermocoupleValueAndSquare
+  {
+    x = 985;
+    y = 187;
+    visibility = 1;
+    xReference = 985;
+    yReference = 187;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    DisplayTCNumber = 1;
+    ThePointId = `&IMT04`;
+    ThermocoupleNumber = "  4";
+  }
+
+  instance cfmsSymbols.ThermocoupleValueAndSquare
+  {
+    x = 985;
+    y = 222;
+    visibility = 1;
+    xReference = 985;
+    yReference = 222;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    DisplayTCNumber = 1;
+    ThePointId = `&IMT08`;
+    ThermocoupleNumber = "  8";
+  }
+
+  instance cfmsSymbols.ThermocoupleValueAndSquare
+  {
+    x = 985;
+    y = 257;
+    visibility = 1;
+    xReference = 985;
+    yReference = 222;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    DisplayTCNumber = 1;
+    ThePointId = `&IMT12`;
+    ThermocoupleNumber = "12";
+  }
+
+  instance cfmsSymbols.ThermocoupleValueAndSquare
+  {
+    x = 985;
+    y = 292;
+    visibility = 1;
+    xReference = 985;
+    yReference = 222;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    DisplayTCNumber = 1;
+    ThePointId = `&IMT20`;
+    ThermocoupleNumber = "20";
+  }
+
+  text
+  {
+    x = 1070;
+    y = 137;
+    format = "%s";
+    theText = "TEMP (DEG  C)";
+    alignment = 0;
+    visibility = `Interface->System.displayedUnits`;
+    foregroundColour = `COLOR_STATIC_TEXT`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 1045;
+    yReference = 137;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  instance cfmsSymbols.ThermocoupleSquare
+  {
+    x = 860;
+    y = 439;
+    visibility = 1;
+    xReference = 654;
+    yReference = 228;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    DisplayTCNumber = `DisplayTCNumbers`;
+    PointId = `&IMT02`;
+    ThermocoupleNumber = " 2";
+  }
+
+  rectangle
+  {
+    x = 950;
+    y = 436;
+    width = 300;
+    height = 330;
+    visibility = 1;
+    foregroundColour = `COLOR_LINE_BOUNDARY_6`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 2;
+    foregroundFillColour = `COLOR_NON_ESSENTIAL`;
+    backgroundFillColour = -1;
+    fillPattern = `NoPattern`;
+    xReference = 950;
+    yReference = 436;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle
+  {
+    x = 50;
+    y = 58;
+    width = 300;
+    height = 330;
+    visibility = 1;
+    foregroundColour = `COLOR_LINE_BOUNDARY_6`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 2;
+    foregroundFillColour = `COLOR_NON_ESSENTIAL`;
+    backgroundFillColour = -1;
+    fillPattern = `NoPattern`;
+    xReference = 50;
+    yReference = 58;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle
+  {
+    x = 950;
+    y = 58;
+    width = 300;
+    height = 330;
+    visibility = 1;
+    foregroundColour = `COLOR_LINE_BOUNDARY_6`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 2;
+    foregroundFillColour = `COLOR_NON_ESSENTIAL`;
+    backgroundFillColour = -1;
+    fillPattern = `NoPattern`;
+    xReference = 950;
+    yReference = 58;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 119;
+    y = 480;
+    format = "%s";
+    theText = "QUADRANT  4";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_STATIC_TEXT`;
+    backgroundColour = -1;
+    theFont = `font7`;
+    xReference = 119;
+    yReference = 480;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  line
+  {
+    numberOfPoints = 2;
+    point[0] = ( 74, 485 );
+    point[1] = ( 339, 485 );
+    visibility = 1;
+    foregroundColour = `COLOR_STATIC_TEXT`;
+    backgroundColour = -1;
+    lineStyle = `SolidPattern`;
+    lineWidth = 2;
+    xReference = 74;
+    yReference = 485;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 80;
+    y = 515;
+    format = "%s";
+    theText = "T/C #";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_STATIC_TEXT`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 80;
+    yReference = 515;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  instance cfmsSymbols.ThermocoupleValueAndSquare
+  {
+    x = 85;
+    y = 530;
+    visibility = 1;
+    xReference = 85;
+    yReference = 530;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    DisplayTCNumber = 1;
+    ThePointId = `&IMT26`;
+    ThermocoupleNumber = "26";
+  }
+
+  instance cfmsSymbols.ThermocoupleValueAndSquare
+  {
+    x = 85;
+    y = 565;
+    visibility = 1;
+    xReference = 85;
+    yReference = 565;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    DisplayTCNumber = 1;
+    ThePointId = `&IMT27`;
+    ThermocoupleNumber = "27";
+  }
+
+  instance cfmsSymbols.ThermocoupleValueAndSquare
+  {
+    x = 85;
+    y = 600;
+    visibility = 1;
+    xReference = 85;
+    yReference = 600;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    DisplayTCNumber = 1;
+    ThePointId = `&IMT37`;
+    ThermocoupleNumber = "37";
+  }
+
+  instance cfmsSymbols.ThermocoupleValueAndSquare
+  {
+    x = 85;
+    y = 635;
+    visibility = 1;
+    xReference = 85;
+    yReference = 600;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    DisplayTCNumber = 1;
+    ThePointId = `&IMT39`;
+    ThermocoupleNumber = "39";
+  }
+
+  instance cfmsSymbols.ThermocoupleValueAndSquare
+  {
+    x = 85;
+    y = 670;
+    visibility = 1;
+    xReference = 85;
+    yReference = 600;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    DisplayTCNumber = 1;
+    ThePointId = `&IMT42`;
+    ThermocoupleNumber = "42";
+  }
+
+  text
+  {
+    x = 170;
+    y = 515;
+    format = "%s";
+    theText = "TEMP (DEG  C)";
+    alignment = 0;
+    visibility = `Interface->System.displayedUnits`;
+    foregroundColour = `COLOR_STATIC_TEXT`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 145;
+    yReference = 515;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  instance cfmsSymbols.ThermocoupleValueAndSquare
+  {
+    x = 85;
+    y = 705;
+    visibility = 1;
+    xReference = 85;
+    yReference = 600;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    DisplayTCNumber = 1;
+    ThePointId = `&IMT45`;
+    ThermocoupleNumber = "45";
+  }
+
+  rectangle
+  {
+    x = 50;
+    y = 435;
+    width = 300;
+    height = 330;
+    visibility = 1;
+    foregroundColour = `COLOR_LINE_BOUNDARY_6`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 2;
+    foregroundFillColour = `COLOR_NON_ESSENTIAL`;
+    backgroundFillColour = -1;
+    fillPattern = `NoPattern`;
+    xReference = 50;
+    yReference = 435;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  line
+  {
+    numberOfPoints = 2;
+    point[0] = ( 330, 20 );
+    point[1] = ( 330, 20 );
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineStyle = `SolidPattern`;
+    lineWidth = 0;
+    xReference = 330;
+    yReference = 20;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+}

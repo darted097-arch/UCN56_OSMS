@@ -1,0 +1,23 @@
+
+# this script removes shared memory and message queues
+
+iprmem()
+{
+   for name in $* ; do
+      echo "removing $name ..."
+      processNr=`ipcs | grep "$name"| awk '{print $2}'`
+      [ -z "$processNr" ] || ipcrm -m $processNr
+   done
+}
+
+iprque()
+{
+   for name in $* ; do
+      echo "removing $name ..."
+      processNr=`ipcs | grep "$name"| awk '{print $2}'`
+      [ -z "$processNr" ] || ipcrm -q $processNr
+   done
+}
+
+iprmem dadabace edaaface
+iprque 1c2eface 1badface 2c2eface

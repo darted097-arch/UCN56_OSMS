@@ -1,0 +1,69 @@
+// ***************************************************************************
+// *									     *
+// *	Copyright (C) 1996, ABB-CE Inc., All rights reserved.		     *
+// *	Proprietary information, ABB-CE Incorporated			     *
+// *									     *
+// ***************************************************************************
+//
+// ***** HIGH LEVEL DESCRIPTION **********************************************
+//
+// This pdat file contains the variables used by the CSL displays.
+//
+// **** REVISION HISTORY *****************************************************
+//
+// Author: GCS
+//
+// $Header: /PMSArchive/ucn56/workstation/pictures/pdat/BDLStructure.pdat 1.2 1998/05/19 21:40:32 gcs Exp $
+// $Log: BDLStructure.pdat,v $
+// Revision 1.2  1998/05/19 21:40:32  gcs
+// Author: gcs@y6maint1 (Gail Sibley)
+// Removed display  message structure
+//
+// Revision 1.1  1997/10/10 18:55:55  gcs
+// Author: gcs@y6maint1.usnus.abb.com (Gail Sibley)
+// Initial revision
+//
+//
+// ***************************************************************************
+// System Include Files: NONE
+//
+//
+// User Defined Include Files: NONE
+//
+//
+// External Variables: NONE
+//
+//
+// Local Constant Definitions: NONE
+//
+//
+// Function Prototypes: NONE
+//
+//
+// ***************************************************************************
+//
+struct BDL_MEMBER{
+
+   char    AlarmProb[8];
+   char    AlarmPid[12];
+   char    Chassis[8];
+};
+
+struct BDL_DATA{
+	int		BdlPage;
+	BDL_MEMBER	BDLine1;
+	BDL_MEMBER	BDLine2;
+	BDL_MEMBER	BDLine3;
+	BDL_MEMBER	BDLine4;
+	BDL_MEMBER	BDLine5;
+	BDL_MEMBER	BDLine6;
+	BDL_MEMBER	BDLine7;
+	BDL_MEMBER	BDLine8;
+	BDL_MEMBER	BDLine9;
+	BDL_MEMBER	BDLine10;
+	BDL_MEMBER	BDLine11;
+	BDL_MEMBER	BDLine12;
+	BDL_MEMBER	BDLine13;
+	BDL_MEMBER	BDLine14;
+	BDL_MEMBER	BDLine15;
+	};

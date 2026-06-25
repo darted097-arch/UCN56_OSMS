@@ -1,0 +1,333 @@
+/*
+ * PICASSO-3 CONFIGURATION LANGUAGE FILE
+ *
+ *
+ * Picture name: PicUCN_CEAPdilTest
+ *
+ *
+ * Documented by  : ucn56
+ * Host           : ice2
+ * Date           : 05/06-01 at 00:27:12
+ *
+ *
+ * Generate with:
+ *    pcc PicUCN_CEAPdilTest.Tdoc
+ *
+ */
+
+
+picture PicUCN_CEAPdilTest
+{
+
+  int Option = 1;
+  char PictureNumber[50] = "135";
+  char PictureTitle[50] = "PDIL SURVEILLANCE TEST";
+  CEAAlarmLimitMsg *pCEAAlarmData = `Interface.CEAAlarmLimitData`;
+
+  function `void Initialize()
+{
+   CFMLevel =0;
+//   CEA_ALARM_RESET = 1;
+   Current_Page = 135;
+//   GetAlarmData();
+//   EscapeButton.UnSelect();
+}`
+
+
+
+  function `void selectedShape(int selectedNo)
+{
+   switch(selectedNo){
+      case 1: {
+       text1_box.foregroundFillColour=1;
+       text1.foregroundColour=0;
+       text2_box.foregroundFillColour=0;
+       text2.foregroundColour=1;
+       text3_box.foregroundFillColour=0;
+       text3.foregroundColour=1;
+       update();
+       break;
+     }
+      case 2: {
+       text1_box.foregroundFillColour=0;
+       text1.foregroundColour=1;
+       text2_box.foregroundFillColour=1;
+       text2.foregroundColour=0;
+       text3_box.foregroundFillColour=0;
+       text3.foregroundColour=1;
+       update();
+       break;
+      }
+      case 3: {
+       text1_box.foregroundFillColour=0;
+       text1.foregroundColour=1;
+       text2_box.foregroundFillColour=0;
+       text2.foregroundColour=1;
+       text3_box.foregroundFillColour=1;
+       text3.foregroundColour=0;
+       update();
+       break;
+      }
+      default: {
+       text1_box.foregroundFillColour=0;
+       text1.foregroundColour=1;
+       text2_box.foregroundFillColour=0;
+       text2.foregroundColour=1;
+       text3_box.foregroundFillColour=0;
+       text3.foregroundColour=1;
+       update();
+       break;
+      }
+
+
+   }
+}`
+
+
+
+  function `void escape() 
+{
+   DisplayPage("PicUCN_CEAMenu.ppic");
+   update(); 
+}`
+
+
+
+  function `void ProcessPdil()
+{
+// Send data request message to the host
+   Interface->GenericRequestMessage.data.requestOption = 2; //Pdil Surveillance Test
+   execute("{sendMessageToHost(CEA_ALM_LIMIT_REQUEST);}");
+
+   PdilTest.UnSelect();
+   update();
+}`
+
+
+
+  dialogue
+  {
+    event = `keyPressed(0xFF0D)`;
+    action = statement `{
+//   initConfirmMessages();
+   // ClearFeedbackMessage(); 
+   //set option number to Option
+//   execute("{Interface->GenericRequestMessage.data.requestOption = %d;}",Option);
+   // Send data request message to the host
+//   execute("{sendMessageToHost(RPCCEA_PROCESS_REQUEST);}");
+}`;
+  }
+
+  dialogue
+  {
+    event = `keyPressed(0xFF09)`;
+    action = statement `{ 
+  // ClearFeedbackMessage();               // clear any previous feedback messages
+//  MenuInput.edit(ON);			// put into edit mode
+//  CurrentOption[0] = '\\0';		// reset the input field
+//  strcat (CurrentOption,"_");		// copy something to the field
+//  MenuInput.theText = \`CurrentOption\`;	// display something into the field
+ // MenuInput.edit(OFF);
+//  update();
+//  MenuInput.edit(ON);
+//  MenuInput.moveToHome();		// move to the leftmost position in the entry area
+//  update(); 				// update and go
+}`;
+  }
+
+  dialogue
+  {
+    event = `buttonPressed(3)`;
+    action = statement `{
+//   DisplayPage(Page130);
+}`;
+  }
+
+  rectangle 
+  {
+    x = 407;
+    y = 199;
+    width = 503;
+    height = 179;
+
+    visibility = 1;
+    foregroundFillColour = `COLOR_PICTURE_BACKGROUND`;
+    backgroundFillColour = -1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineWidth = 3;
+    linePattern = `SolidPattern`;
+    fillPattern = `SolidPattern`;
+    xReference = 125;
+    yReference = 205;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 476;
+    y = 243;
+    format = "%s";
+    theText = "PPDIL ALARM";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 476;
+    yReference = 243;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 724;
+    y = 243;
+    format = "%s";
+    theText = "PDIL ALARM";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 724;
+    yReference = 243;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  rectangle 
+  {
+    x = 409;
+    y = 263;
+    width = 500;
+    height = 2;
+
+    visibility = 1;
+    foregroundFillColour = `COLOR_NON_ESSENTIAL`;
+    backgroundFillColour = -1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineWidth = 1;
+    linePattern = `SolidPattern`;
+    fillPattern = `SolidPattern`;
+    xReference = 142;
+    yReference = 263;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  instance cfmsSymbols.CEAStatePhrase1 
+  {
+    attribute PointId = `&CNYXAL6`;
+    attribute ChangedText = "BD -";
+    attribute newsta = 4;
+    attribute curval = 9;
+    x = 500;
+    y = 296;
+    visibility = 1;
+    xReference = 500;
+    yReference = 296;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.CEAStatePhrase1 
+  {
+    attribute PointId = `&CNYXAL7`;
+    attribute ChangedText = "BD -";
+    attribute newsta = 4;
+    attribute curval = 9;
+    x = 739;
+    y = 296;
+    visibility = 1;
+    xReference = 739;
+    yReference = 296;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance DialogueSymbols.PushButton PdilTest
+  {
+    attribute Scope = "PicUCN_CEAPdilTest";
+    attribute TextFontDynamic = `font2`;
+    attribute TextFontStatic = `font4`;
+    attribute StaticLabel = "PDIL SURVEILLANCE TEST";
+    attribute DynamicLabel = "PDIL SURVEILLANCE TEST";
+    attribute TextYDynamic = 21;
+    attribute TextYStatic = 22;
+    attribute TextXDynamic = 15;
+    attribute TextXStatic = 17;
+    attribute TextFont = 4;
+    attribute TextColour = `COLOR_PICTURE_BACKGROUND`;
+    attribute Label = "PDIL SURVEILLANCE TEST";
+    attribute TextY = 22;
+    attribute TextX = 17;
+    attribute TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    attribute BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    attribute BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    attribute SelectColour = `COLOR_BUTTON_SELECTED`;
+    attribute ButtonState = 0;
+    attribute Width = 280;
+    attribute Height = 30;
+    attribute isDown = 0;
+    attribute isInside = 1;
+    attribute ExecuteString = "{ProcessPdil();}";
+    x = 526;
+    y = 402;
+    visibility = 1;
+    xReference = 526;
+    yReference = 402;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance PdilTest
+
+
+
+// The picture's other attributes:
+
+  backgroundColour    = 0;
+  xSnap               = 5;
+  ySnap               = 5;
+  angleSnap           = 0;
+  radiusSnap          = 0;
+  worldX              = 0;
+  worldY              = 0;
+  worldWidth          = 1280;
+  worldHeight         = 824;
+  oneToOne            = 1;
+  resizeMode          = 0;
+  updateMode          = 2;
+  crosshairStyle      = 1;
+  crosshairLength     = 0;
+  crosshairFollowSnap = `isInEditMode()`;
+  crosshairVisibility = `isInEditMode()`;
+  xReference = 500;
+  yReference = 500;
+  xScaleFactor = 1;
+  yScaleFactor = 1;
+  rotationAngle = 0;
+
+
+}  // end of picture PicUCN_CEAPdilTest

@@ -1,0 +1,65 @@
+// ***************************************************************************
+// *									     *
+// *	Copyright (C) 1997, KOPEC(N), All rights reserved.		     *
+// *	Proprietary information, KOPEC(N)        			     *
+// *									     *
+// ***************************************************************************
+//
+// ***** HIGH LEVEL DESCRIPTION **********************************************
+//
+// This pdat file contains the variables used by the Bar Chart displays.
+//
+// **** REVISION HISTORY *****************************************************
+// BarChartStructure.pdat
+// kysohn@ns.kopec.co.kr(Kwang-Young Sohn)
+//
+//
+// ***************************************************************************
+// System Include Files: NONE
+//
+//
+// User Defined Include Files: NONE
+//
+//
+// External Variables: NONE
+//
+//
+// Local Constant Definitions: NONE
+//
+//
+// Function Prototypes: NONE
+//
+//
+// ******************* BARCHART VARIABLES 	 ****************************************
+//
+// attributes for each displayed point
+//
+struct BarChartMember {
+   char		BarChartId[12];			// point id to view
+   float	Minimum;			// low axis value(4-byte)
+   float	Baseline;			// reference value(4-byte)
+   float	Maximum;			// high axis value(4-byte)
+};
+//
+// 
+//
+struct BAR_DATA {
+
+	BarChartMember Group1Point1;            // Group-1, Chart pointID-1(24-byte)
+	BarChartMember Group1Point2;            // Group-1, Chart pointID-2(24-byte)
+	BarChartMember Group1Point3;            // Group-1, Chart pointID-3(24-byte)
+	BarChartMember Group1Point4;            // Group-1, Chart pointID-4(24-byte)
+	BarChartMember Group2Point1;            // Group-2, Chart pointID-1(24-byte)
+	BarChartMember Group2Point2;            // Group-2, Chart pointID-2(24-byte)
+	BarChartMember Group2Point3;            // Group-2, Chart pointID-3(24-byte)
+	BarChartMember Group2Point4;            // Group-2, Chart pointID-4(24-byte)
+};
+//
+struct WSBarChartMessage {
+  WSmessageHeader	header;				// message information		(  24-byte)
+  BAR_DATA		data;				// data portion			( 192-byte)
+  char			spareData[808];			//				( 808-byte)
+};
+// ******************* END BARCHART DEFINITION *************************************
+//
+//

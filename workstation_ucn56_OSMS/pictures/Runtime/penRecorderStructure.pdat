@@ -1,0 +1,72 @@
+// ***************************************************************************
+// *									     *
+// *	Copyright (C) 1996, ABB-CE Inc., All rights reserved.		     *
+// *	Proprietary information, ABB-CE Incorporated			     *
+// *									     *
+// ***************************************************************************
+//
+// ***** HIGH LEVEL DESCRIPTION **********************************************
+//
+// This pdat file contains the variables used by the Pen Recorder displays.
+//
+// **** REVISION HISTORY *****************************************************
+//
+// $Header: /PMSArchive/ucn56/workstation/pictures/pdat/penRecorderStructure.pdat 1.1 1996/11/23 12:15:56 asn Exp $
+// $Log: penRecorderStructure.pdat,v $
+// Revision 1.1  1996/11/23 12:15:56  asn
+// Author: asn@y6maint1.usnus.abb.com (Arthur Nowell)
+// Initial revision
+//
+//
+// ***************************************************************************
+// System Include Files: NONE
+//
+//
+// User Defined Include Files: NONE
+//
+//
+// External Variables: NONE
+//
+//
+// Local Constant Definitions: NONE
+//
+//
+// Function Prototypes: NONE
+//
+//
+// ***************************************************************************
+//
+//
+// Pen Recorder variables data structures
+// 
+// Each Member:
+struct PEN_MEMBER {
+   char			Pid[12];			// Point Id		
+   float		Minimum;			// Minimum Value	
+   float		Maximum;			// Maximum Value
+};							// 	
+//
+// All Pens:
+struct PEN_DATA {
+   PEN_MEMBER   	trend1Pen1;  			// Trend 1, Pen 1, 	 
+   PEN_MEMBER   	trend1Pen2;  			// Trend 1, Pen 2, 	 
+   PEN_MEMBER   	trend2Pen1;  			// Trend 2, Pen 1, 	 
+   PEN_MEMBER   	trend2Pen2;  			// Trend 2, Pen 2, 	 
+   PEN_MEMBER  		trend3Pen1;  			// Trend 3, Pen 1, 	 
+   PEN_MEMBER   	trend3Pen2;  			// Trend 3, Pen 2, 	 
+   PEN_MEMBER   	trend4Pen1;  			// Trend 4, Pen 1, 	 
+   PEN_MEMBER   	trend4Pen2;  			// Trend 4, Pen 2, 	 
+   PEN_MEMBER   	trend5Pen1;  			// Trend 5, Pen 1, 	 
+   PEN_MEMBER   	trend5Pen2;  			// Trend 5, Pen 2, 	  
+};
+
+//
+//  >>>>>>>>>>>>>>>>>>>	Workstation Pen Recorder Message Template
+
+struct WSPenRecorderMessage {
+   WSmessageHeader	header;				// message information		(  24)
+   PEN_DATA		data;				// data portion			( 200)
+   char			spareData[800];			//				( 800)
+};
+
+

@@ -1,0 +1,921 @@
+/*
+ * ProcSee CONFIGURATION LANGUAGE FILE
+ *
+ *
+ * Library name   : HDSRLib 
+ *
+ *
+ * Documented by  : ygn34
+ * Host           : RP4440
+ * Date           : 19/08-08 at 13:38:56
+ * File version   : 1.19
+ *
+ *
+ * Generate with:
+ *    pcc HDSRLib.Tdoc
+ *
+ */
+
+
+library HDSRLib
+{
+
+
+
+
+
+
+
+
+  class graphTrend
+  {
+    float* AnalogValues = 0;
+
+    float* Baseline = 0;
+
+    char* Description = "RECTOR PUMP";
+
+    int* DigitalValues = 0;
+
+    float* Maximum = 0;
+
+    float* Minimum = 0;
+
+    char Off[10] = "OPEN";
+
+    char On[10] = "CLOSE";
+
+    char* PointID = "RCXX1234";
+
+    float Tval[20] = {10, 23, 34, 45, 56, 67, 78
+, 89, 20, 90, 10, 23, 34, 45, 56
+, 67, 78, 89, 20, 90};
+
+    function `int CreateInitialTrend()
+{
+   float minX, maxX, minY, maxY;
+   float x,y;
+   int i;
+
+   maxX = r_trend.x + r_trend.width;
+   minX = r_trend.x;
+
+   maxY = r_trend.y + r_trend.height;
+   minY = r_trend.y;
+
+   x = 180;
+   y = 80;
+   for( i=0; i<254; i++ ) {
+      l_trend.addPoint( 186+3*i, y);
+   }
+   update();
+}`
+
+    function `int DrawAnalogTrend()
+{
+   float baseX, baseY, bline, x, y;
+   float factor, aValue;
+   int  i;
+
+// disappear digital text
+   t_on.visibility = 0;
+   t_off.visibility = 0;
+
+// appear analog text
+   l_trend.visibility =1;
+   l_trend.foregroundColour = COLOR_FEEDBACK_MESSAGES;
+   t_max.visibility = 1;
+   t_maxText.visibility = 1;
+   t_min.visibility = 1;
+   t_minText.visibility = 1;
+   t_baseline.visibility = 1;
+   t_baseText.visibility = 1;
+
+   factor = 100 / (*Maximum-*Minimum);
+   baseX = r_trend.x;
+   baseY = r_trend.y + r_trend.height;
+
+   for( i=0; i<256; i++ ) {
+        aValue = (*(AnalogValues+i) - *Minimum) * factor;
+        if( *(AnalogValues+i) == -9991 ) {
+             aValue = 0;
+        }
+        else if( aValue > 100 )
+              aValue = 100;
+        else if( aValue < 0 )
+           aValue = 0;
+
+        l_trend.setY( i, baseY - aValue);
+   }
+
+   bline = factor * (*Baseline - *Minimum);
+   l_baseline.setY( 0, baseY - bline);
+   l_baseline.setY( 1, baseY - bline);
+
+   update();
+   return 0;
+}`
+
+    function `int DrawDigitalTrend()
+{
+   float baseX, baseY;
+   int i;
+
+// appear digital text
+   t_on.visibility = 1;
+   t_off.visibility = 1;
+   l_trend.visibility = 1;
+   l_trend.foregroundColour = COLOR_FEEDBACK_MESSAGES;
+
+// disappear analog text
+   t_max.visibility = 0;
+   t_maxText.visibility = 0;
+   t_min.visibility = 0;
+   t_minText.visibility = 0;
+   t_baseline.visibility = 0;
+   t_baseText.visibility = 0;
+
+   baseX = r_trend.x;
+   baseY = r_trend.y + r_trend.height;
+
+   for( i=0; i<256; i++ ) {
+        if( *(DigitalValues + i) == -1 )
+           l_trend.setY( i, baseY);
+        else if( *(DigitalValues + i) == 1 )
+           l_trend.setY( i, baseY - 70);
+        else
+           l_trend.setY( i, baseY - 30);
+   }
+
+   l_baseline.setY( 0, baseY - 50);
+   l_baseline.setY( 1, baseY - 50);
+
+   update();
+   return 0;
+}`
+
+    function `void Reset()
+{
+   t_max.visibility = 0;
+   t_maxText.visibility = 0;
+   t_min.visibility = 0;
+   t_minText.visibility = 0;
+   t_baseline.visibility = 0;
+   t_baseText.visibility = 0;
+   t_on.visibility = 0;
+   t_off.visibility = 0;
+   l_trend.visibility =0;
+}`
+
+    function `void ResetTrend()
+{
+   l_trend.foregroundColour = 2;
+   update();
+}`
+
+    rectangle r_trend
+    {
+      x = 180;
+      y = 10;
+      width = 766;
+      height = 100;
+      visibility = 1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      linePattern = `SolidPattern`;
+      lineWidth = 2;
+      foregroundFillColour = `COLOR_DARK_GRAY`;
+      backgroundFillColour = -1;
+      fillPattern = `SolidPattern`;
+      xReference = 180;
+      yReference = 10;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    line 
+    {
+      numberOfPoints = 3;
+      point[0] = (162, 10);
+      point[1] = (180, 10);
+      point[2] = (180, 10);
+
+      visibility = 1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      lineStyle = `SolidPattern`;
+      lineWidth = 0;
+      xReference = 162;
+      yReference = 10;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    line 
+    {
+      numberOfPoints = 3;
+      point[0] = (162, 110);
+      point[1] = (180, 110);
+      point[2] = (180, 110);
+
+      visibility = 1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      lineStyle = `SolidPattern`;
+      lineWidth = 0;
+      xReference = 162;
+      yReference = 110;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    line 
+    {
+      numberOfPoints = 5;
+      point[0] = (168, 80);
+      point[1] = (180, 80);
+      point[2] = (180, 80);
+      point[3] = (180, 80);
+      point[4] = (180, 80);
+
+      visibility = 1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      lineStyle = `SolidPattern`;
+      lineWidth = 0;
+      xReference = 168;
+      yReference = 80;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    line 
+    {
+      numberOfPoints = 5;
+      point[0] = (168, 40);
+      point[1] = (180, 40);
+      point[2] = (180, 40);
+      point[3] = (180, 40);
+      point[4] = (180, 40);
+
+      visibility = 1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      lineStyle = `SolidPattern`;
+      lineWidth = 0;
+      xReference = 168;
+      yReference = 40;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    line l_baseline
+    {
+      numberOfPoints = 2;
+      point[0] = (180, 60);
+      point[1] = (948, 60);
+
+      visibility = 1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      lineStyle = `DefaultPattern3`;
+      lineWidth = 0;
+      xReference = 180;
+      yReference = 60;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    text t_minText
+    {
+      x = 68;
+      y = 110;
+      format = "%s";
+      theText = "MIN :";
+      visibility = 1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font0`;
+      alignment = 0;
+      xReference = 68;
+      yReference = 110;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    text t_maxText
+    {
+      x = 67;
+      y = 25;
+      format = "%s";
+      theText = "MAX :";
+      visibility = 1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font0`;
+      alignment = 0;
+      xReference = 67;
+      yReference = 25;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    text t_max
+    {
+      x = 112;
+      y = 25;
+      format = "%8.2f";
+      theText = `*Maximum`;
+      visibility = 1;
+      foregroundColour = `COLOR_DATA_NORMAL`;
+      backgroundColour = -1;
+      theFont = `font0`;
+      alignment = 0;
+      xReference = 112;
+      yReference = 25;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    text t_min
+    {
+      x = 115;
+      y = 110;
+      format = "%8.2f";
+      theText = `*Minimum`;
+      visibility = 1;
+      foregroundColour = `COLOR_DATA_NORMAL`;
+      backgroundColour = -1;
+      theFont = `font0`;
+      alignment = 0;
+      xReference = 115;
+      yReference = 110;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    text t_baseText
+    {
+      x = 960;
+      y = 65;
+      format = "%s";
+      theText = "BASE :";
+      visibility = 1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font0`;
+      alignment = 0;
+      xReference = 960;
+      yReference = 65;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    text t_baseline
+    {
+      x = 1013;
+      y = 65;
+      format = "%8.2f";
+      theText = `*Baseline`;
+      visibility = 1;
+      foregroundColour = `COLOR_DATA_NORMAL`;
+      backgroundColour = -1;
+      theFont = `font0`;
+      alignment = 0;
+      xReference = 1013;
+      yReference = 65;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    text t_on
+    {
+      x = 93;
+      y = 46;
+      format = "%s";
+      theText = `On`;
+      visibility = 1;
+      foregroundColour = `COLOR_DATA_NORMAL`;
+      backgroundColour = -1;
+      theFont = `font0`;
+      alignment = 0;
+      xReference = 93;
+      yReference = 46;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    text t_off
+    {
+      x = 93;
+      y = 85;
+      format = "%s";
+      theText = `Off`;
+      visibility = 1;
+      foregroundColour = `COLOR_DATA_NORMAL`;
+      backgroundColour = -1;
+      theFont = `font0`;
+      alignment = 0;
+      xReference = 93;
+      yReference = 85;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    line l_trend
+    {
+      numberOfPoints = 256;
+      point[0] = (180, 80);
+      point[1] = (183, 80);
+      point[2] = (186, 80);
+      point[3] = (189, 80);
+      point[4] = (192, 80);
+      point[5] = (195, 80);
+      point[6] = (198, 80);
+      point[7] = (201, 80);
+      point[8] = (204, 80);
+      point[9] = (207, 80);
+      point[10] = (210, 80);
+      point[11] = (213, 80);
+      point[12] = (216, 80);
+      point[13] = (219, 80);
+      point[14] = (222, 80);
+      point[15] = (225, 80);
+      point[16] = (228, 80);
+      point[17] = (231, 80);
+      point[18] = (234, 80);
+      point[19] = (237, 80);
+      point[20] = (240, 80);
+      point[21] = (243, 80);
+      point[22] = (246, 80);
+      point[23] = (249, 80);
+      point[24] = (252, 80);
+      point[25] = (255, 80);
+      point[26] = (258, 80);
+      point[27] = (261, 80);
+      point[28] = (264, 80);
+      point[29] = (267, 80);
+      point[30] = (270, 80);
+      point[31] = (273, 80);
+      point[32] = (276, 80);
+      point[33] = (279, 80);
+      point[34] = (282, 80);
+      point[35] = (285, 80);
+      point[36] = (288, 80);
+      point[37] = (291, 80);
+      point[38] = (294, 80);
+      point[39] = (297, 80);
+      point[40] = (300, 80);
+      point[41] = (303, 80);
+      point[42] = (306, 80);
+      point[43] = (309, 80);
+      point[44] = (312, 80);
+      point[45] = (315, 80);
+      point[46] = (318, 80);
+      point[47] = (321, 80);
+      point[48] = (324, 80);
+      point[49] = (327, 80);
+      point[50] = (330, 80);
+      point[51] = (333, 80);
+      point[52] = (336, 80);
+      point[53] = (339, 80);
+      point[54] = (342, 80);
+      point[55] = (345, 80);
+      point[56] = (348, 80);
+      point[57] = (351, 80);
+      point[58] = (354, 80);
+      point[59] = (357, 80);
+      point[60] = (360, 80);
+      point[61] = (363, 80);
+      point[62] = (366, 80);
+      point[63] = (369, 80);
+      point[64] = (372, 80);
+      point[65] = (375, 80);
+      point[66] = (378, 80);
+      point[67] = (381, 80);
+      point[68] = (384, 80);
+      point[69] = (387, 80);
+      point[70] = (390, 80);
+      point[71] = (393, 80);
+      point[72] = (396, 80);
+      point[73] = (399, 80);
+      point[74] = (402, 80);
+      point[75] = (405, 80);
+      point[76] = (408, 80);
+      point[77] = (411, 80);
+      point[78] = (414, 80);
+      point[79] = (417, 80);
+      point[80] = (420, 80);
+      point[81] = (423, 80);
+      point[82] = (426, 80);
+      point[83] = (429, 80);
+      point[84] = (432, 80);
+      point[85] = (435, 80);
+      point[86] = (438, 80);
+      point[87] = (441, 80);
+      point[88] = (444, 80);
+      point[89] = (447, 80);
+      point[90] = (450, 80);
+      point[91] = (453, 80);
+      point[92] = (456, 80);
+      point[93] = (459, 80);
+      point[94] = (462, 80);
+      point[95] = (465, 80);
+      point[96] = (468, 80);
+      point[97] = (471, 80);
+      point[98] = (474, 80);
+      point[99] = (477, 80);
+      point[100] = (480, 80);
+      point[101] = (483, 80);
+      point[102] = (486, 80);
+      point[103] = (489, 80);
+      point[104] = (492, 80);
+      point[105] = (495, 80);
+      point[106] = (498, 80);
+      point[107] = (501, 80);
+      point[108] = (504, 80);
+      point[109] = (507, 80);
+      point[110] = (510, 80);
+      point[111] = (513, 80);
+      point[112] = (516, 80);
+      point[113] = (519, 80);
+      point[114] = (522, 80);
+      point[115] = (525, 80);
+      point[116] = (528, 80);
+      point[117] = (531, 80);
+      point[118] = (534, 80);
+      point[119] = (537, 80);
+      point[120] = (540, 80);
+      point[121] = (543, 80);
+      point[122] = (546, 80);
+      point[123] = (549, 80);
+      point[124] = (552, 80);
+      point[125] = (555, 80);
+      point[126] = (558, 80);
+      point[127] = (561, 80);
+      point[128] = (564, 80);
+      point[129] = (567, 80);
+      point[130] = (570, 80);
+      point[131] = (573, 80);
+      point[132] = (576, 80);
+      point[133] = (579, 80);
+      point[134] = (582, 80);
+      point[135] = (585, 80);
+      point[136] = (588, 80);
+      point[137] = (591, 80);
+      point[138] = (594, 80);
+      point[139] = (597, 80);
+      point[140] = (600, 80);
+      point[141] = (603, 80);
+      point[142] = (606, 80);
+      point[143] = (609, 80);
+      point[144] = (612, 80);
+      point[145] = (615, 80);
+      point[146] = (618, 80);
+      point[147] = (621, 80);
+      point[148] = (624, 80);
+      point[149] = (627, 80);
+      point[150] = (630, 80);
+      point[151] = (633, 80);
+      point[152] = (636, 80);
+      point[153] = (639, 80);
+      point[154] = (642, 80);
+      point[155] = (645, 80);
+      point[156] = (648, 80);
+      point[157] = (651, 80);
+      point[158] = (654, 80);
+      point[159] = (657, 80);
+      point[160] = (660, 80);
+      point[161] = (663, 80);
+      point[162] = (666, 80);
+      point[163] = (669, 80);
+      point[164] = (672, 80);
+      point[165] = (675, 80);
+      point[166] = (678, 80);
+      point[167] = (681, 80);
+      point[168] = (684, 80);
+      point[169] = (687, 80);
+      point[170] = (690, 80);
+      point[171] = (693, 80);
+      point[172] = (696, 80);
+      point[173] = (699, 80);
+      point[174] = (702, 80);
+      point[175] = (705, 80);
+      point[176] = (708, 80);
+      point[177] = (711, 80);
+      point[178] = (714, 80);
+      point[179] = (717, 80);
+      point[180] = (720, 80);
+      point[181] = (723, 80);
+      point[182] = (726, 80);
+      point[183] = (729, 80);
+      point[184] = (732, 80);
+      point[185] = (735, 80);
+      point[186] = (738, 80);
+      point[187] = (741, 80);
+      point[188] = (744, 80);
+      point[189] = (747, 80);
+      point[190] = (750, 80);
+      point[191] = (753, 80);
+      point[192] = (756, 80);
+      point[193] = (759, 80);
+      point[194] = (762, 80);
+      point[195] = (765, 80);
+      point[196] = (768, 80);
+      point[197] = (771, 80);
+      point[198] = (774, 80);
+      point[199] = (777, 80);
+      point[200] = (780, 80);
+      point[201] = (783, 80);
+      point[202] = (786, 80);
+      point[203] = (789, 80);
+      point[204] = (792, 80);
+      point[205] = (795, 80);
+      point[206] = (798, 80);
+      point[207] = (801, 80);
+      point[208] = (804, 80);
+      point[209] = (807, 80);
+      point[210] = (810, 80);
+      point[211] = (813, 80);
+      point[212] = (816, 80);
+      point[213] = (819, 80);
+      point[214] = (822, 80);
+      point[215] = (825, 80);
+      point[216] = (828, 80);
+      point[217] = (831, 80);
+      point[218] = (834, 80);
+      point[219] = (837, 80);
+      point[220] = (840, 80);
+      point[221] = (843, 80);
+      point[222] = (846, 80);
+      point[223] = (849, 80);
+      point[224] = (852, 80);
+      point[225] = (855, 80);
+      point[226] = (858, 80);
+      point[227] = (861, 80);
+      point[228] = (864, 80);
+      point[229] = (867, 80);
+      point[230] = (870, 80);
+      point[231] = (873, 80);
+      point[232] = (876, 80);
+      point[233] = (879, 80);
+      point[234] = (882, 80);
+      point[235] = (885, 80);
+      point[236] = (888, 80);
+      point[237] = (891, 80);
+      point[238] = (894, 80);
+      point[239] = (897, 80);
+      point[240] = (900, 80);
+      point[241] = (903, 80);
+      point[242] = (906, 80);
+      point[243] = (909, 80);
+      point[244] = (912, 80);
+      point[245] = (915, 80);
+      point[246] = (918, 80);
+      point[247] = (921, 80);
+      point[248] = (924, 80);
+      point[249] = (927, 80);
+      point[250] = (930, 80);
+      point[251] = (933, 80);
+      point[252] = (936, 80);
+      point[253] = (939, 80);
+      point[254] = (942, 80);
+      point[255] = (945, 80);
+
+      visibility = 1;
+      foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+      backgroundColour = -1;
+      lineStyle = `SolidPattern`;
+      lineWidth = 1;
+      xReference = 180;
+      yReference = 80;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    line 
+    {
+      numberOfPoints = 3;
+      point[0] = (372, 10);
+      point[1] = (372, 110.5);
+      point[2] = (372, 110.5);
+
+      visibility = 1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      lineStyle = `NoPattern`;
+      lineWidth = 0;
+      xReference = 372;
+      yReference = -4.5;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    line 
+    {
+      numberOfPoints = 3;
+      point[0] = (564, 10);
+      point[1] = (564, 110.5);
+      point[2] = (564, 110.5);
+
+      visibility = 1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      lineStyle = `NoPattern`;
+      lineWidth = 0;
+      xReference = 564;
+      yReference = -4.5;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    line 
+    {
+      numberOfPoints = 3;
+      point[0] = (756, 10);
+      point[1] = (756, 110.5);
+      point[2] = (756, 110.5);
+
+      visibility = 1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      lineStyle = `NoPattern`;
+      lineWidth = 0;
+      xReference = 756;
+      yReference = -4.5;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+  // The class' other attributes:
+
+    xSnap             = 3;
+    ySnap             = 5;
+    angleSnap         = 0;
+    radiusSnap        = 0;
+    worldX            = 0;
+    worldY            = 0;
+    worldWidth        = 1140;
+    worldHeight       = 130;
+    oneToOne          = 1;
+    backgroundColour  = 0;
+    xReference = 500;
+    yReference = 500;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+
+  } // end of class graphTrend
+
+
+
+  class popupSector
+  {
+    int Sector = 0;
+
+    function `void Process2()
+{
+   int no;
+
+   no = atoi( b_sector.TheNewText );
+   if( no >= 1 && no <= 4 )
+      Sector = no;
+   else
+      Sector = -1;
+}
+`
+
+
+    text 
+    {
+      x = 25;
+      y = 35;
+      format = "%s";
+      theText = "SECTOR NO: ";
+      visibility = 1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font4`;
+      alignment = 0;
+      xReference = 25;
+      yReference = 35;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    instance DialogueSymbols.InputDialogueText50 b_sector
+    {
+      attribute BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+      attribute BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+      attribute ERROR = 0;
+      attribute ExecuteSelect = "";
+      attribute ExecuteUnSelect = "";
+      attribute Height = 30;
+      attribute MaxCharacters = 3;
+      attribute ReturnAction = "";
+      attribute Scope = "";
+      attribute SelectColour = `COLOR_BUTTON_SELECTED`;
+      attribute Selected = 0;
+      attribute TextColour = `COLOR_PICTURE_BACKGROUND`;
+      attribute TextFont = 4;
+      attribute TextX = 10;
+      attribute TextY = 21;
+      attribute TheNewText = "   ";
+      attribute TheOriginalText = "   ";
+      attribute TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+      attribute Width = 200;
+      attribute isDown = 0;
+      attribute isInside = 1;
+      attribute vis = `visibility`;
+      x = 170;
+      y = 10;
+      visibility = 1;
+      xReference = 170;
+      yReference = 10;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+      classElementFlag = "BackgroundColour, BottomShadow, ERROR, ExecuteSelect, ExecuteUnSelect, Height, MaxCharacters, ReturnAction, Scope, SelectColour, Selected, TextColour, TextFont, TextX, TextY, TheNewText, TheOriginalText, TopShadow, Width, isDown, isInside, vis";
+    }  // end of instance b_sector
+
+
+
+  // The class' other attributes:
+
+    xSnap             = 5;
+    ySnap             = 5;
+    angleSnap         = 0;
+    radiusSnap        = 0;
+    worldX            = 0;
+    worldY            = 0;
+    worldWidth        = 300;
+    worldHeight       = 100;
+    oneToOne          = 1;
+    backgroundColour  = 0;
+    xReference = 500;
+    yReference = 500;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+
+  } // end of class popupSector
+
+
+}  // end of library HDSRLib

@@ -1,0 +1,380 @@
+/*
+ * ProcSee CONFIGURATION LANGUAGE FILE
+ *
+ *
+ * User : ucn56
+ * Host : y6cr02
+ * Date : 2017-01-09
+ * Time : 22:00:00
+ *
+ * ProcSee version : ProcSee 3.10.1 (June 2016)
+ * File version    : 1.26
+ *
+ *
+ */
+
+
+picture PicUCN_SetupViewMenu
+{
+  worldX = 0;
+  worldY = 0;
+  worldWidth = 1280;
+  worldHeight = 824;
+  oneToOne = 1;
+  backgroundColour = 46;
+  updateMode = 2;
+  resizeMode = 0;
+  xSnap = 5;
+  ySnap = 5;
+  radiusSnap = 0;
+  angleSnap = 0;
+  crosshairStyle = 1;
+  crosshairLength = 0;
+  crosshairFollowSnap = `isInEditMode()`;
+  crosshairVisibility = `isInEditMode()`;
+  xReference = 500;
+  yReference = 500;
+  xScaleFactor = 1;
+  yScaleFactor = 1;
+  rotationAngle = 0;
+
+  char* PictureNumber = "151";
+
+  char* PictureTitle = "SETUP  /  VIEW  PARAMETERS  MENU";
+
+  function `void Initialize()
+  {
+     CFMLevel = 0;
+     Current_Page = 151;
+  
+  //   CascadeEnterActive = 0;
+  //   CascadeMenuActive = 1;
+  
+     //SetupViewData.Active = 0;
+     //ModifyDatabase.Active = 0;
+     //update();
+  }`
+
+  dialogue
+  {
+    event = `keyReleased(0x31) || keyReleased(0xFFB1)`;
+    action = `{
+    SetupViewData.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+    SetupViewData.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+    
+    SetupViewData.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+    SetupViewData.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+    SetupViewData.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+    SetupViewData.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+    
+    SetupViewData.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    SetupViewData.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    SetupViewData.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    SetupViewData.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    
+       execute("{DisplayPage(\\"%s\\");}",SetupViewData.TheDisplayPage);
+    }`;
+  }
+
+  dialogue
+  {
+    event = `keyReleased(0x32) || keyReleased(0xFFB2)`;
+    action = `{
+    ModifyDatabase.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+    ModifyDatabase.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+    
+    ModifyDatabase.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+    ModifyDatabase.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+    ModifyDatabase.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+    ModifyDatabase.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+    
+    ModifyDatabase.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    ModifyDatabase.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    ModifyDatabase.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    ModifyDatabase.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    
+       execute("{DisplayPage(\\"%s\\");}",ModifyDatabase.TheDisplayPage);
+    }`;
+  }
+
+  dialogue
+  {
+    event = `keyReleased(0x33) || keyReleased(0xFFB3)`;
+    action = `{
+    m3.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+    m3.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+    
+    m3.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+    m3.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+    m3.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+    m3.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+    
+    m3.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    m3.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    m3.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    m3.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    
+       execute("{DisplayPage(\\"%s\\");}",m3.TheDisplayPage);
+    }`;
+  }
+
+  dialogue
+  {
+    event = `keyReleased(0x34) || keyReleased(0xFFB4)`;
+    action = `{
+    m4.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+    m4.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+    
+    m4.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+    m4.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+    m4.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+    m4.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+    
+    m4.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    m4.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    m4.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    m4.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    //
+       execute("{DisplayPage(\\"%s\\");}",m4.TheDisplayPage);
+    }`;
+  }
+
+  dialogue
+  {
+    event = `keyReleased(0x35) || keyReleased(0xFFB5)`;
+    action = `{
+    m5.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+    m5.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+    
+    m5.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+    m5.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+    m5.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+    m5.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+    
+    m5.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    m5.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    m5.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    m5.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    
+       execute("{DisplayPage(\\"%s\\");}",m5.TheDisplayPage);
+    }`;
+  }
+
+  dialogue
+  {
+    event = `keyReleased(0x36) || keyReleased(0xFFB6)`;
+    action = `{
+    m6.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+    m6.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+    
+    m6.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+    m6.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+    m6.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+    m6.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+    
+    m6.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    m6.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    m6.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    m6.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    
+       execute("{DisplayPage(\\"%s\\");}",m6.TheDisplayPage);
+    }`;
+  }
+
+  dialogue
+  {
+    event = `keyReleased(0x37) || keyReleased(0xFFB7)`;
+    action = `{
+    m7.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+    m7.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+    
+    m7.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+    m7.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+    m7.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+    m7.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+    
+    m7.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    m7.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    m7.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    m7.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    
+       execute("{DisplayPage(\\"%s\\");}",m7.TheDisplayPage);
+    }`;
+  }
+
+  instance DialogueSymbols.LargeMenuSelection SetupViewData
+  {
+    x = 386;
+    y = 167;
+    visibility = 1;
+    xReference = 386;
+    yReference = 157;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Cascade = 0;
+    CascadeX = 200;
+    CascadeY = 275;
+    TheDisplayPage = "PicUCN_VideoTrendMenu.ppic";
+    TheFontColor = 2;
+    TheOption = "1.";
+    TheTextFont = `font6`;
+    TheTitle = "VIDEO  TREND";
+  }
+
+  instance DialogueSymbols.LargeMenuSelection ModifyDatabase
+  {
+    x = 386;
+    y = 204;
+    visibility = 1;
+    xReference = 386;
+    yReference = 199;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Cascade = 0;
+    CascadeX = 200;
+    CascadeY = 320;
+    TheDisplayPage = "PicUCN_DigitalTrendMenu.ppic";
+    TheFontColor = 2;
+    TheOption = "2.";
+    TheTextFont = `font6`;
+    TheTitle = "DIGITAL  TREND";
+  }
+
+  instance DialogueSymbols.LargeMenuSelection m3
+  {
+    x = 386;
+    y = 241;
+    visibility = 1;
+    xReference = 391;
+    yReference = 431;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Cascade = 0;
+    CascadeX = 400;
+    CascadeY = 400;
+    TheDisplayPage = "PicUCN_GroupDisplayMenu.ppic";
+    TheFontColor = 2;
+    TheOption = "3.";
+    TheTextFont = `font6`;
+    TheTitle = "GROUP  DISPLAY";
+  }
+
+  instance DialogueSymbols.LargeMenuSelection m4
+  {
+    x = 386;
+    y = 278;
+    visibility = 1;
+    xReference = 391;
+    yReference = 473;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Cascade = 0;
+    CascadeX = 800;
+    CascadeY = 400;
+    TheDisplayPage = "PicUCN_SinglePointDisplay.ppic";
+    TheFontColor = 2;
+    TheOption = "4.";
+    TheTextFont = `font6`;
+    TheTitle = "SINGLE  POINT  DISPLAY";
+  }
+
+  instance DialogueSymbols.LargeMenuSelection m5
+  {
+    x = 386;
+    y = 315;
+    visibility = 1;
+    xReference = 391;
+    yReference = 450;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Cascade = 0;
+    CascadeX = 400;
+    CascadeY = 400;
+    TheDisplayPage = "PicUCN_BarChartMenu.ppic";
+    TheFontColor = 2;
+    TheOption = "5.";
+    TheTextFont = `font6`;
+    TheTitle = "BAR  CHART";
+  }
+
+  instance DialogueSymbols.LargeMenuSelection m7
+  {
+    x = 386;
+    y = 494;
+    visibility = 1;
+    xReference = 391;
+    yReference = 649;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Cascade = 0;
+    CascadeX = 400;
+    CascadeY = 400;
+    TheDisplayPage = "PicUCN_PenRecorderMenu.ppic";
+    TheFontColor = 2;
+    TheOption = "7.";
+    TheTextFont = `font6`;
+    TheTitle = "PEN  RECORDER";
+  }
+
+  text
+  {
+    x = 393;
+    y = 151;
+    format = "%s";
+    theText = "CRT  DISPLAYS";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 403;
+    yReference = 156;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 393;
+    y = 479;
+    format = "%s";
+    theText = "OTHER  DEVICE";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 398;
+    yReference = 284;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  instance DialogueSymbols.LargeMenuSelection m6
+  {
+    x = 386;
+    y = 352;
+    visibility = 1;
+    xReference = 391;
+    yReference = 487;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Cascade = 0;
+    CascadeX = 400;
+    CascadeY = 400;
+    TheDisplayPage = "PicUCN_PRINT_PID_TEST.ppic";
+    TheFontColor = 2;
+    TheOption = "6.";
+    TheTextFont = `font6`;
+    TheTitle = "PRINT  PID  FOR  TEST";
+  }
+}

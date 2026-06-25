@@ -1,0 +1,536 @@
+/*
+ * PICASSO-3 CONFIGURATION LANGUAGE FILE
+ *
+ *
+ * Picture name: PicUCN_ChgAlmStatusDisplay
+ *
+ *
+ * Documented by  : ucn56
+ * Host           : ucn5
+ * Date           : 19/11-98 at 16:27:36
+ *
+ *
+ * Generate with:
+ *    pcc PicUCN_ChgAlmStatusDisplay.Tdoc
+ *
+ */
+
+
+picture PicUCN_ChgAlmStatusDisplay
+{
+
+  char TheDisplayPage[50] = "PicUCN_DBChangeMenu";
+  DB_CHANGE_DATA *pDBC_DATA = `&::UCN5and6.InterfaceToGUI.Interface.DatabaseDisplaysData`;
+  int ChangeSelected = 0;
+  RECORD *PicturePointId = `&RCT111X`;
+  char *PageBack = "";
+  char *PageForward = "";
+  char *PictureNumber = "541";
+  char *PictureTitle = "CHANGE ALARM STATUS";
+  RECORD *PictureHighAlarmPID = 0;
+  RECORD *PictureLowAlarmPID = 0;
+
+  function `void Initialize()
+{
+   Current_Page = 541;
+   CFMLevel = 0;
+   DisplayAdvisoryMessage(" ");
+   DisplayAdvisoryMessage1(" ");
+   DisplayAdvisoryMessage2(" ");
+   DisplayAdvisoryMessage3(" ");
+   ProcessingMsg.visibility = 0;
+   ChangeSelected = 0;
+   CheckButton.UnSelect();
+   DBCinfo.pPID = PicturePointId;
+   strcpy(pDBC_DATA->PID,PicturePointId->pid);
+   
+   if(PicturePointId->sig_type==KO)
+   {
+      Text1.visibility = 0 ;
+      CheckButton.visibility = 0 ;
+      Text2.visibility = 0 ;
+      AlarmStatus.visibility = 0 ;
+  
+      ProcessBtn.visibility = 0 ;
+      CurPointInfo.visibility = 0 ;      
+
+      ChangeProtected.visibility = 0 ;
+      NoAlarm.visibility = 0 ;
+      NotApplyMsg.visibility = 1 ;
+   }
+   else if((PicturePointId->pipbitmap&bCHGPROT)||(PicturePointId->sig_type==SOE))
+   {
+      Text1.visibility = 0 ;
+      CheckButton.visibility = 0 ;
+      Text2.visibility = 0 ;
+      AlarmStatus.visibility = 0 ;
+  
+      ProcessBtn.visibility = 0 ;
+      CurPointInfo.visibility = 0 ;      
+
+      ChangeProtected.visibility = 1 ;
+      NoAlarm.visibility = 0 ;
+      NotApplyMsg.visibility = 0 ;
+   }
+   else if(!((PicturePointId->pipbitmap&bALMTYP)||(PicturePointId->pipbitmap&(bLLE|bLE|bHE|bHHE))))
+   {
+      Text1.visibility = 0 ;
+      CheckButton.visibility = 0 ;
+      Text2.visibility = 0 ;
+      AlarmStatus.visibility = 0 ;
+  
+      ProcessBtn.visibility = 0 ;
+      CurPointInfo.visibility = 0 ;      
+
+      ChangeProtected.visibility = 0 ;
+      NoAlarm.visibility = 1 ;
+      NotApplyMsg.visibility = 0 ;
+   }
+   else 
+   {
+      Text1.visibility = 1 ;
+      CheckButton.visibility = 1 ;
+      Text2.visibility = 1 ;
+      AlarmStatus.visibility = 1 ;
+  
+      ProcessBtn.visibility = 1 ;
+      CurPointInfo.visibility = 1 ;      
+
+      ChangeProtected.visibility = 0 ;
+      NoAlarm.visibility = 0 ;
+      NotApplyMsg.visibility = 0 ;
+   }
+
+   if(IsAnalog(PicturePointId))
+   {
+      if(0 != PicturePointId->lIPN)
+      {
+         execute ("{PictureLowAlarmPID = \`&::UCN5and6.InterfaceToGUI.%s\`;}",PicturePointId->message1);
+      }
+      else
+      {
+         PictureLowAlarmPID = 0;
+      }
+
+      if(0 != PicturePointId->hIPN)
+      {
+         execute ("{PictureHighAlarmPID = \`&::UCN5and6.InterfaceToGUI.%s\`;}",PicturePointId->message2);
+      }
+      else
+      {
+         PictureHighAlarmPID = 0;
+      }
+   }
+
+ update();
+}`
+
+
+
+  function `void Process1()
+{
+  if (1 == ChangeSelected)
+  {
+    ProcessingMsg.visibility = 1;
+    // If the alarm state is being checked, indicate
+    // to take it out of alarm checking
+    // else indicate to put it into alarm checking.
+    if((PicturePointId->pisabitmap&bOCHEK)>0)
+      pDBC_DATA->ChgAlmStatus = 0;
+    else pDBC_DATA->ChgAlmStatus = 1;
+    execute("{sendMessageToHost(PROCESS_CHGALM_DATA);}");
+  } // endif
+  else
+  {
+    PressMsg.visibility = 1;
+  }
+  update();
+}`
+
+
+
+  function `void ProcessingConfirmed()
+{
+  ProcessingMsg.visibility = 0;
+  ChangeSelected = 0;
+  CheckButton.UnSelect();
+  update();
+}`
+
+
+
+  dialogue
+  {
+    event = `buttonPressed(Right)`;
+    action = statement `{
+  Initialize();
+}`;
+  }
+
+  dialogue
+  {
+    event = `keyPressed(0xFF1B)`;
+    action = statement `{
+ //  isSet1Display = 0;
+ execute("{DisplayPage(\\"%s\\");}",TheDisplayPage);
+}`;
+  }
+
+  instance DialogueSymbols.PushButton ProcessBtn
+  {
+    attribute Scope = "PicUCN_ChgAlmStatusDisplay";
+    attribute TextFontDynamic = `font2`;
+    attribute TextFontStatic = `font4`;
+    attribute StaticLabel = "PROCESS";
+    attribute DynamicLabel = "PROCESSING";
+    attribute TextYDynamic = 21;
+    attribute TextYStatic = 22;
+    attribute TextXDynamic = 5;
+    attribute TextXStatic = 7;
+    attribute TextFont = 4;
+    attribute TextColour = `COLOR_PICTURE_BACKGROUND`;
+    attribute Label = "PROCESS";
+    attribute TextY = 22;
+    attribute TextX = 7;
+    attribute TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    attribute BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    attribute BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    attribute SelectColour = `COLOR_BUTTON_SELECTED`;
+    attribute ButtonState = 0;
+    attribute Width = 110;
+    attribute Height = 30;
+    attribute isDown = 0;
+    attribute isInside = 1;
+    attribute ExecuteString = "{Process1();}";
+    x = 103;
+    y = 718;
+    visibility = 1;
+    xReference = 103;
+    yReference = 718;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance ProcessBtn
+
+
+
+  instance DialogueSymbols.PushButton 
+  {
+    attribute Scope = "PicUCN_ChgAlmStatusDisplay";
+    attribute TextFontDynamic = `font2`;
+    attribute TextFontStatic = `font4`;
+    attribute StaticLabel = "SELECT";
+    attribute DynamicLabel = "SELECTING";
+    attribute TextYDynamic = 21;
+    attribute TextYStatic = 22;
+    attribute TextXDynamic = 15;
+    attribute TextXStatic = 18;
+    attribute TextFont = 4;
+    attribute TextColour = `COLOR_PICTURE_BACKGROUND`;
+    attribute Label = "SELECT";
+    attribute TextY = 22;
+    attribute TextX = 18;
+    attribute TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    attribute BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    attribute BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    attribute SelectColour = `COLOR_BUTTON_SELECTED`;
+    attribute ButtonState = 0;
+    attribute Width = 110;
+    attribute Height = 30;
+    attribute isDown = 0;
+    attribute isInside = 1;
+    attribute ExecuteString = "{CascadeEnterActive=1;DisplayCascadeEnter(\"PicUCN_ChgAlmStatusCascade.ppic\",550,400,200,220);}";
+    x = 653;
+    y = 718;
+    visibility = 1;
+    xReference = 863;
+    yReference = 718;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  text 
+  {
+    x = 778;
+    y = 740;
+    format = "%s";
+    theText = "A NEW POINT ID";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 198;
+    yReference = 740;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text Text2
+  {
+    x = 237;
+    y = 393;
+    format = "%s";
+    theText = "TO SET THE ALARM STATUS TO:";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 637;
+    yReference = -195;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text AlarmStatus
+  {
+    x = 540;
+    y = 393;
+    format = "%s";
+    theText = `(PicturePointId->pisabitmap&bOCHEK)?"ALARM CHECKING ON":"ALARM CHECKING OFF"`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 604;
+    yReference = -395;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  instance DialogueSymbols.CheckButton CheckButton
+  {
+    attribute DisplayText = 1;
+    attribute isInside = 1;
+    attribute isDown = 0;
+    attribute Height = 30;
+    attribute Width = 30;
+    attribute ButtonState = 0;
+    attribute SelectColour = `COLOR_BUTTON_SELECTED`;
+    attribute BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    attribute BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    attribute TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    attribute TextX = 10;
+    attribute TextY = 22;
+    attribute Label = " ";
+    attribute TextColour = `COLOR_PICTURE_BACKGROUND`;
+    attribute TextFont = 4;
+    attribute TextXStatic = 10;
+    attribute TextXDynamic = 10;
+    attribute TextYStatic = `TextY`;
+    attribute TextYDynamic = `TextY`;
+    attribute DynamicLabel = "X";
+    attribute StaticLabel = " ";
+    attribute TextFontStatic = `font4`;
+    attribute TextFontDynamic = `font4`;
+    attribute ExecuteSelect = "{ChangeSelected = 1;PressMsg.visibility = 0;}";
+    attribute ExecuteUnSelect = "{ChangeSelected = 0;PressMsg.visibility = 0;}";
+    x = 192;
+    y = 370;
+    visibility = 1;
+    xReference = 192;
+    yReference = 370;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance CheckButton
+
+
+
+  text Text1
+  {
+    x = 112;
+    y = 393;
+    format = "%s";
+    theText = "PRESS";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 752;
+    yReference = -195;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  instance DialogueSymbols.DatabaseDisplayInfo DBCinfo
+  {
+    attribute pLoAlmPID = `PictureLowAlarmPID`;
+    attribute pHiAlmPID = `PictureHighAlarmPID`;
+    attribute pPID = `&::UCN5and6.InterfaceToGUI.RCT111X`;
+    x = 0;
+    y = 0;
+    visibility = 1;
+    xReference = 0;
+    yReference = 0;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance DBCinfo
+
+
+
+  text ProcessingMsg
+  {
+    x = 103;
+    y = 698;
+    format = "%s";
+    theText = "PROCESSING... WAIT";
+
+    visibility = 0;
+    foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 103;
+    yReference = 698;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text PressMsg
+  {
+    x = 113;
+    y = 427;
+    format = "%s";
+    theText = "PRESS BUTTON TO CHANGE THE ALARM STATUS";
+
+    visibility = 0;
+    foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 113;
+    yReference = 427;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text CurPointInfo
+  {
+    x = 230;
+    y = 740;
+    format = "%s";
+    theText = "CURRENT POINT INFORMATION";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 230;
+    yReference = 740;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text ChangeProtected
+  {
+    x = 113;
+    y = 449;
+    format = "%s";
+    theText = "DATABASE CHANGES NOT ALLOWED";
+
+    visibility = 0;
+    foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 113;
+    yReference = 449;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text NoAlarm
+  {
+    x = 113;
+    y = 470;
+    format = "%s";
+    theText = "CURRENT POINT HAS NO ALARM FUNCTION";
+
+    visibility = 0;
+    foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 113;
+    yReference = 470;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text NotApplyMsg
+  {
+    x = 113;
+    y = 490;
+    format = "%s";
+    theText = "ALARM CHECK STATUS DOES NOT APPLY";
+
+    visibility = 0;
+    foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 113;
+    yReference = 490;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+// The picture's other attributes:
+
+  backgroundColour    = 0;
+  xSnap               = 5;
+  ySnap               = 5;
+  angleSnap           = 0;
+  radiusSnap          = 0;
+  worldX              = 0;
+  worldY              = 0;
+  worldWidth          = 1280;
+  worldHeight         = 824;
+  oneToOne            = 1;
+  resizeMode          = 0;
+  updateMode          = 2;
+  crosshairStyle      = 1;
+  crosshairLength     = 0;
+  crosshairFollowSnap = `isInEditMode()`;
+  crosshairVisibility = `isInEditMode()`;
+  xReference = 500;
+  yReference = 500;
+  xScaleFactor = 1;
+  yScaleFactor = 1;
+  rotationAngle = 0;
+
+
+}  // end of picture PicUCN_ChgAlmStatusDisplay

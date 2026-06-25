@@ -1,0 +1,245 @@
+// ***************************************************************************
+// *									     *
+// *	Copyright (C) 1996, ABB-CE Inc., All rights reserved.		     *
+// *	Proprietary information, ABB-CE Incorporated			     *
+// *									     *
+// ***************************************************************************
+//
+// ***** HIGH LEVEL DESCRIPTION **********************************************
+//
+// This pdat file contains the variables used by UTDV Tasks.
+//
+// **** REVISION HISTORY *****************************************************
+//
+// Author: dykim
+//
+// $Header: /PMSArchive/ucn56/workstation/pictures/pdat/UTDVStructure.pdat 1.2 1997/09/24 18:20:05 kn1 Exp $
+// $Log: UTDVStructure.pdat,v $
+// Revision 1.2  1997/09/24 18:20:05  kn1
+// Author: kn1@y6maint1.usnus.abb.com (Kopec NSSS 1)
+// Kopec NSSS Phase 3 Status 2. Modified to support UTDV delivery.
+//
+// Revision 1.1  1997/05/13 15:24:39  kn1
+// Author: kn1@y6maint1.usnus.abb.com (Kopec NSSS 1)
+// Initial revision
+//
+//
+// ***************************************************************************
+// System Include Files: NONE
+//
+//
+// User Defined Include Files: NONE
+//
+//
+// External Variables: NONE
+//
+//
+// Local Constant Definitions: NONE
+//
+//
+// Function Prototypes: NONE
+//
+//
+// ***************************************************************************
+//
+//
+// UTDV data structures
+//
+
+// Each CEA subgroup displayed on UTDV page 658 or 694
+struct UTDV_CEA_SUBGROUP{
+//
+   int		SubGrpNumber;		// ( 4)
+//
+   int		row1CeaNumber;		// ( 4)
+   int		row2CeaNumber;		// ( 4)
+   int		row3CeaNumber;		// ( 4)
+   int		row4CeaNumber;		// ( 4) 
+//
+   float	row1CeaValue;		// ( 4)
+   float	row2CeaValue;		// ( 4)
+   float	row3CeaValue;		// ( 4)
+   float	row4CeaValue;		// ( 4)
+//   
+   int		row1CeaQuality;		// ( 4)
+   int		row2CeaQuality;		// ( 4)
+   int		row3CeaQuality;		// ( 4)
+   int		row4CeaQuality;		// ( 4)
+//              
+}; 					// (52)   
+// 
+// When in a message, as in the Concurrent, all byte counts will 
+// increase by header bytes (i.e. 24 bytes).
+//
+struct UTDV_DIALOGUE_DATA {
+   int          current_page;    // ( 4) current page displayed on workstation  
+   int          option;          // ( 4) most pages  
+   int		new_page_request;// ( 4) (no new page=-1, active=new Utdv page desired) 
+   char		password[8];     // ( 8) page 650
+   float        entered_EFPH;    // ( 4) page 653 (increment or present value for EFPH)   
+//				 // (24) 
+//
+   float        cea_average;     //      page 658,694 (group average cea position)
+// float        cea[73];         //      page 658,694 (individual cea position)
+                                 // (4)
+//
+   char         cea_with[12];    // (12) page 657,692 (cea withdrawal)
+   char         cea_group[12];   // (12) page 658,694 (cea group position)
+   char         type_of_EFPH[2]; // ( 2) page 653 (increment or present)
+   char         change[2];       // ( 2) page 658,694 (change required or not)
+   char         cea_modify[2];   // ( 2) page 658,694 (group or individual)
+   char         next_group[2];   // ( 2) page 658,694 (next group to be processed) 
+//				    (32)
+//
+   UTDV_CEA_SUBGROUP 	col1; 	 // (52) page 658,694 (column1 individual cea position)
+   UTDV_CEA_SUBGROUP 	col2; 	 // (52) page 658,694 (column2 individual cea position)  
+   UTDV_CEA_SUBGROUP 	col3;	 // (52) page 658,694 (column3 individual cea position)   
+   UTDV_CEA_SUBGROUP 	col4;	 // (52) page 658,694 (column4 individual cea position)
+   UTDV_CEA_SUBGROUP 	col5;	 // (52) page 658,694 (column4 individual cea position)
+   UTDV_CEA_SUBGROUP 	col6;	 // (52) page 658,694 (column4 individual cea position)
+//			            (312)
+//
+   char         filename1[24];   // (24) page 652
+   char         filename2[24];   // (24) page 652
+   char         filename3[24];	 // (24) page 652
+//				 // (72) 
+// 
+   char         message1[52];	 // (52) most pages
+   char         message2[52];	 // (52) most pages
+   char         message3[52];	 // (52) most pages
+//				 //(156)      			
+};						 	
+
+//  >>>>>>>>>>>>>>>>>>>	Workstation UTDV Message Template
+//  24 + 24+4+32+(6*52)+(3*24)+(3*52) == 624
+struct WSUtdvDialogueMessage {
+   WSmessageHeader	header; // ( 24)  message information		
+   UTDV_DIALOGUE_DATA   data;	// (600)  data portion	
+   char		spareData[400]; // (400)			
+};			        //(1024)
+
+//
+//struct UTDV_RECEIVE {
+//   int		page;		// 
+//   char         message1[52];	// 
+//   char         message2[52];
+//   char         message3[52];
+//   float        cea_group[18];	// 
+//   float        cea[73];   
+//};
+//
+//struct WSUTDVReceiveMessage {
+//   WSmessageHeader	header;			
+//   UTDV_RECEIVE 	data;		
+//};
+
+
+
+// UTDV Midnight File Data (EFPHs, Dates & Times)
+struct UTDV_MIDNIGHT_FILE_DATA {
+   // filename 
+   char         filename[24];   // (24) page 652 and other pages
+   //
+   // data available flag (1=data available, 0=data not avaiable)
+   int		data_available;
+   //
+   // efphs from midnight file 
+   float	efphFile;
+   float	efphRpcb;
+   float	efphColss;
+   float	efphIncore;
+   float	efphCeaExposure;
+   //
+   // rpcb burnup from midnight file 
+   float	rpcbBurnup;
+   //
+   // dates from midnight file 
+   char		dateFile[12];
+   char		dateRpcb[12];
+   char		dateColss[12];
+   char		dateIncore[12];
+   char		dateCeaExposure[12];
+   char		dateCeaPosition[12];
+   //
+   // times from midnight file 
+   char		timeFile[12];
+   char		timeRpcb[12];
+   char		timeColss[12];
+   char		timeIncore[12];
+   char		timeCeaExposure[12];
+   char		timeCeaPosition[12];
+};
+// UTDV HOURLY CEA File Data (EFPHs, Dates & Times)
+struct UTDV_HOURLY_CEA_FILE_DATA {
+   // filename 
+   char         filename[24];   // (24) page 652 and other pages 
+   //
+   // data available flag (1=data available, 0=data not avaiable)
+   int		data_available;
+   //
+   // efphs from hourly cea file 
+   float	efphFile;
+   float	efphRpcb;
+   float	efphCeaExposure;
+   //
+   // rpcb burnup from hourly cea file 
+   float	rpcbBurnup;
+   //
+   // dates from hourly cea file 
+   char		dateFile[12];
+   char		dateRpcb[12];
+   char		dateCeaExposure[12];
+   char		dateCeaPosition[12];
+   //
+   // times from hourly cea file 
+   char		timeFile[12];
+   char		timeRpcb[12];
+   char		timeCeaExposure[12];
+   char		timeCeaPosition[12];
+};
+// UTDV EFPH Deltas (Delta EFPHs)
+struct UTDV_EFPH_DELTAS {
+   //
+   // efph deltas between file 1 and file 2 
+   float	efphDeltaFile12;
+   float	efphDeltaColss12;
+   float	efphDeltaIncore12;
+   //
+   // efph deltas between file 2 and present efph 
+   float	efphDeltaFile2;
+   float	efphDeltaRpcb2;
+   float	efphDeltaColss2;
+   float	efphDeltaIncore2;
+   float	efphDeltaCeaExposure2;
+   //
+   // efph deltas between file 3 and present efph 
+   float	efphDeltaFile3;
+   float	efphDeltaRpcb3;
+   float	efphDeltaCeaExposure3;
+};
+// UTDV Most Recent and Present EFPHs (EFPHs)
+struct UTDV_PRESENT_EFPHS {
+   //
+   //  Most Recent and Present EFPHs
+   float	mostRecentEfphFile;
+   float	oldPresentEfph;
+   float	pendingPresentEfph;
+};
+
+// UTDV Data (file dates, times, efphs), efph deltas, present efphs
+struct UTDV_DATA {
+   //
+   UTDV_MIDNIGHT_FILE_DATA	nextToLastMidnight;	 // (172)	
+   UTDV_MIDNIGHT_FILE_DATA	lastMidnight;		 // (172)
+   UTDV_HOURLY_CEA_FILE_DATA	latestHourly;		 // (140)
+   UTDV_PRESENT_EFPHS		present;		 // ( 12)
+   UTDV_EFPH_DELTAS		calc;			 // ( 44)
+   };							 // (540)
+
+// UTDV File Data Message
+struct WSUtdvDataMessage {
+   WSmessageHeader	header;	// ( 24)			
+   UTDV_DATA	  	data;	// (540)
+   char		spareData[460]; // (460)	  
+};			        //(1024)
+

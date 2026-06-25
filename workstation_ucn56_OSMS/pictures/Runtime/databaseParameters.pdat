@@ -1,0 +1,186 @@
+// ***************************************************************************
+// *									     *
+// *	Copyright (C) 1996, ABB-CE Inc., All rights reserved.		     *
+// *	Proprietary information, ABB-CE Incorporated			     *
+// *									     *
+// ***************************************************************************
+//
+// ***** HIGH LEVEL DESCRIPTION **********************************************
+//
+//  Variables Contained in databaseParameters.h
+//  Any changes here should be coordinated in databaseParameters.h
+//
+// **** REVISION HISTORY *****************************************************
+//
+// $Header: /PMSArchive/ucn56/workstation/pictures/pdat/databaseParameters.pdat 1.7 1999/04/13 19:10:39 kn1 Exp $
+// $Log: databaseParameters.pdat,v $
+// Revision 1.7  1999/04/13 19:10:39  kn1
+// Author: kn1@y6maint1 (Kopec NSSS 1)
+// KOPEC FAT Support April 99
+//
+// Revision 1.6  1999/03/11 21:21:24  leo
+// Author: leo@y6maint1 (Leo Olbrych)
+// Added BAD_VALUE constant to support setting the value of UNRELIable points to
+// a constant value.
+//
+// Revision 1.5  1998/09/02 15:48:22  leo
+// Author: leo@y6maint1 (Leo Olbrych)
+// Added bALSTAT to pipbitmap.  This bit indicates alarm on 0 or alarm on 1 for
+// digital points.  Added UNRELI and QUES bits to pisabitmap.
+//
+// Revision 1.4  1998/05/11 22:38:13  kn2
+// Author: kn2@y6maint1 (Kopec NSSS 2)
+// Kopec NSSS Phase 3 Status 1.  Corrected parameters for CACK and CNAK.
+//
+// Revision 1.3  1996/12/16 12:26:30  asn
+// Author: asn@y6maint1.usnus.abb.com (Arthur Nowell)
+//
+//
+// ***************************************************************************
+// System Include Files: NONE
+//
+//
+// User Defined Include Files: NONE
+//
+//
+// External Variables: NONE
+//
+//
+// Local Constant Definitions: NONE
+//
+//
+// Function Prototypes: NONE
+//
+//
+// ***************************************************************************
+//
+// >>>>>>>>>>>>>>>>>>>>>>>>> 
+//
+// *******************************************************************
+//   bitmap fields
+// *******************************************************************				
+//
+// pip bitmap: note 1 (CCUR bit ordering)
+// 00|01|02|03|04|05|06|07|08|09|10|11|12|13|14|15
+//
+// bits 00:02 unused
+// bit  03:   Alarm State (digital only, 0 = alarm on 0, 1 = alarm on 1)
+// bit  04:   lolo alarm exits (analog only)
+// bit  05:   low alarm exists (analog only)
+// bit  06:   high alarm exists (analog only)
+// bit  07:   hihi alarm exists (analog only)
+// bit  08:   change protected
+// bit  09:   alarm type (1=alarm, digital only)
+// bit  10:   metunit (1=metric, analog only)
+// bits 11:15 point type
+
+					// bits 0:3 unused
+int bALSTAT     =       0x1000;         // bit 3 AlarmState (dig only)
+int bLLE	=	0x0800;		// bit 4 lolo exists
+int bLE	 	=	0x0400;		// bit 5 low exists
+int bHE	 	=	0x0200;		// bit 6 high exists
+int bHHE     	=	0x0100;		// bit 7 hihi exists
+int bCHGPROT 	=	0x0080;		// bit 8 change protected
+int bALMTYP  	=	0x0040;		// bit 9 alarm type
+int bMETUNIT 	=	0x0020;		// bit 10 metric unit 
+int bTYPE	=	0x001f;		// bits 11:15 point type
+//
+
+//
+// pisa bitmap: note 2  (CCUR bit ordering)
+// 00|01|02|03|04|05|06|07|08|09|10|11|12|13|14|15
+// bit 00: unused
+// bit 01: out of scan
+// bit 02: out of alarm check
+// bit 03: enable insert value
+// bit 04: alarmed last scan
+// bit 05: failed last scan
+// bit 06: bad last scan
+// bit 07: current digital state
+// bit 08: unreliable
+// bit 09: questionable
+// bit 10: unused
+// bits 11:15 new alarm status
+
+int	bOOSCAN	 = 0x4000;		// bit 1 out of scan 
+int	bOCHEK 	 = 0x2000;		// bit 2 out of alarm check
+int	bENVAL 	 = 0x1000;		// bit 3 enable inserted value 
+int	bALSCAN	 = 0x0800;		// bit 4 alarmed last scan 
+int	bFLSCAN	 = 0x0400;		// bit 5 failed last scan 
+int	bBLSCAN	 = 0x0200;		// bit 6 bad last scan
+int	bCURSTT  = 0x0100;		// bit 7 current digital state
+int	bCUR_DIG = 0x0100;		// bit 7 current digital state
+int	bUNRELI  = 0x0080; 		// bit 8 unreliable
+int	bQUES    = 0x0040; 		// bit 9 questionable
+                                        // bit 10 unused
+int	bNEWSTA	 = 0x001F;		// bits 11:15 for alarm state (0 - 20)
+//
+float	BAD_VALUE = -99999.0;
+
+// *******************************************************************
+//   			alarm states 
+// *******************************************************************
+
+// NAK = unacknowledged alarm condition, ACK = acknowledged 
+
+int NORMAL	= 0;
+int RALACK 	= 1;	  	// return from alarm, out-of-range, bad
+int RORACK 	= 2;
+int RBDACK 	= 3;
+int RALNAK 	= 4;
+int RORNAK 	= 5;
+int RBDNAK 	= 6;
+int ORHACK 	= 7;	  	// out of range high, low, bad
+int ORLACK 	= 8;
+int BDACK  	= 9;
+int ORHNAK 	= 10;
+int ORLNAK 	= 11;
+int BDNAK  	= 12;
+int HACK   	= 13;	  	//setpoint alarms
+int LACK   	= 14;
+int HHACK  	= 15;
+int LLACK  	= 16;
+int HNAK   	= 17;
+int LNAK   	= 18;
+int HHNAK  	= 19;
+int LLNAK  	= 20;
+int CACK   	= 15;  		// Matches HHACK contact alarm 
+int CNAK   	= 19;		// Matches HHNAK NOTE:  contact index = HH index on ccur 
+int BADSTA 	= 23;		// NOTE:  "bad state" index = -1 on ccur 
+int UNKNOWN	= 30;		// A catch all
+int OSCAN       = 31;           // Out of scan sets newsta to -1.  This masked with
+				// bNEWSTA will give 31
+int NALARMSTATES  = 31;
+
+// *******************************************************************
+//		   point types (a.k.a. signal types) 
+// *******************************************************************
+
+		// analog 
+int AO	= 1;	// analog outputs 				
+int QA	= 2;	// non-input analogs (composed, calculated, constant) 
+int XA	= 3;
+int KO	= 4;
+int AL  = 5;	// analog link inputs (non-PDAS) 	
+int AI	= 6;	// analog inputs (regular, pulse, frequency, rod up/dn)
+int PI	= 7;
+int FI	= 8;
+int ROD = 9;
+		// digital
+//  Minimum Digital Type:
+//#define MINDIGTYPE 10
+int MinimumDigitalType = 10;		
+
+int CI	= 10;	// digital inputs (regular, interrupt, SOE, bin coded)
+int DI	= 11;
+int SOE	= 12;
+int BCI = 13;
+int DL  = 14;	// digital link inputs (non-PDAS) 
+int QD  = 15;	// non-input digitals (composed, calculated) 
+int XD  = 16;
+int CO  = 17;	// digital outputs (regular, binary-coded-decimal) 
+int BCO = 18;
+int NPTYPES = 19;
+//
+//
+// >>END>>>>>>>>>>>>>>>>>>>> Variables Contained in databaseParameters.h 

@@ -1,0 +1,62 @@
+// ***************************************************************************
+// *									     *
+// *	Copyright (C) 1998, ABB-CE Inc., All rights reserved.		     *
+// *	Proprietary information, ABB-CE Incorporated			     *
+// *									     *
+// ***************************************************************************
+//
+// ***** HIGH LEVEL DESCRIPTION **********************************************
+//
+// This pdat file contains the variables used by the Link Status displays.
+//
+// **** REVISION HISTORY *****************************************************
+//
+// Author: GCS
+//
+// $Header: /PMSArchive/ygn56/workstation/pictures/pdat/LinkStructure.pdat 1.1 1998/06/10 21:03:50 gcs Exp $
+// $Log: LinkStructure.pdat,v $
+// Revision 1.1  1998/06/10 21:03:50  gcs
+// Author: gcs@y6maint1 (Gail Sibley)
+// Initial revision
+//
+//
+// ***************************************************************************
+// System Include Files: NONE
+//
+//
+// User Defined Include Files: NONE
+//
+//
+// External Variables: NONE
+//
+//
+// Local Constant Definitions: NONE
+//
+//
+// Function Prototypes: NONE
+//
+//
+// ***************************************************************************
+//
+   struct StatusLine
+   {
+	char   status1[8];
+	char   status2[8];
+	char   status3[8];
+	char   status4[8];
+	char   status5[8];
+	char   status6[8];
+	char   status7[8];
+   
+   };
+   
+   struct LINK_DATA
+   {
+   	StatusLine  Sline1;
+   	StatusLine  Sline2;
+   	StatusLine  Sline3;
+   	StatusLine  Sline4;
+   	StatusLine  Sline5;
+   	StatusLine  Sline6;
+   	StatusLine  Sline7;
+   };

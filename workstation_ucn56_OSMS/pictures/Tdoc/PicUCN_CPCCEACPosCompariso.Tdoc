@@ -1,0 +1,2989 @@
+/*
+ * ProcSee CONFIGURATION LANGUAGE FILE
+ *
+ *
+ * User : ucn56
+ * Host : y6cr02
+ * Date : 2017-05-25
+ * Time : 14:34:03
+ *
+ * ProcSee version : ProcSee 3.10.1 (June 2016)
+ * File version    : 1.26
+ *
+ *
+ */
+
+
+picture PicUCN_CPCCEACPosCompariso
+{
+  worldX = 0;
+  worldY = 0;
+  worldWidth = 1280;
+  worldHeight = 8024;
+  oneToOne = 1;
+  backgroundColour = 0;
+  updateMode = 2;
+  resizeMode = 0;
+  xSnap = 0;
+  ySnap = 0;
+  radiusSnap = 0;
+  angleSnap = 0;
+  crosshairStyle = 1;
+  crosshairLength = 0;
+  crosshairFollowSnap = `isInEditMode()`;
+  crosshairVisibility = `isInEditMode()`;
+  xReference = 500;
+  yReference = 500;
+  xScaleFactor = 1;
+  yScaleFactor = 1;
+  rotationAngle = 0;
+
+  char PictureNumber[50] = "435";
+
+  char PictureTitle[50] = "CPC/CEAC CEA POS COMPARISON(FOM)";
+
+  RECORD* PointId = `&RCT111X`;
+
+  float SP = 3;
+
+  function `void Initialize()
+  {
+     CFMLevel =0;
+     Current_Page = 435;
+  //   GetAlarmData();
+  //   EscapeButton.UnSelect();
+     execute("{sendMessageToHost(REQUEST_CEA_TRACK_MONITOR5);}");
+     DisplayAdvisoryMessage("DATA REQUESTED");
+  
+      int i;
+  
+        for (i=1 ; i<=36 ; i++)
+        {
+           execute("{ceac%d.TheNewNumber=0;}",i) ;
+           execute("{cpc%d.TheNewNumber=0;}",i) ;
+           execute("{delta%d.TheNewNumber=0;}",i) ;
+        }
+  
+  
+  }`
+
+  function `void ProcessingConfirmed(int opcode)
+  {
+  
+     int  i;
+  
+     for (i=1;i<=36;i++)
+           {
+          execute ("{ceac%d.TheNewNumber = Interface->CEATrackingMonitor5.cediff_pos_val[%d];}",i,i-1);
+          }
+     for (i=1;i<=36;i++)
+           {
+          execute ("{cpc%d.TheNewNumber = Interface->CEATrackingMonitor5.cdiff_pos_val[%d];}",i,i-1);
+          }
+    for (i=1;i<=36;i++)
+           {
+          execute ("{delta%d.TheNewNumber = ceac%d.TheNewNumber - cpc%d.TheNewNumber;}",i,i,i);
+          }
+  }`
+
+  function `void Update()
+  {
+     int i;
+  
+     DisplayAdvisoryMessage("             ");
+  
+  
+        for (i=1 ; i<=18 ; i++)
+        {
+           execute("{ceac%d.TheNewNumber=Interface->CEATrackingMonitor5.CEAPosComparisionData.ceac1diff[%d];}",i,i-1) ;
+           execute("{cpc%d.TheNewNumber=Interface->CEATrackingMonitor5.CEAPosComparisionData.cpc1diff[%d];}",i,i-1) ;
+           execute("{delta%d.TheNewNumber=ceac%d.TheNewNumber-cpc%d.TheNewNumber;}",i,i,i) ;
+           execute("{if(delta%d.TheNewNumber<0) delta%d.TheNewNumber = delta%d.TheNewNumber * (-1);}",i,i,i) ;
+        }
+        for (i=19 ; i<=36 ; i++)
+        {
+           execute("{ceac%d.TheNewNumber=Interface->CEATrackingMonitor5.CEAPosComparisionData.ceac2diff[%d];}",i,i-19) ;
+           execute("{cpc%d.TheNewNumber=Interface->CEATrackingMonitor5.CEAPosComparisionData.cpc2diff[%d];}",i,i-19) ;
+           execute("{delta%d.TheNewNumber=ceac%d.TheNewNumber-cpc%d.TheNewNumber;}",i,i,i) ;
+           execute("{if(delta%d.TheNewNumber<0) delta%d.TheNewNumber = delta%d.TheNewNumber * (-1);}",i,i,i) ;
+        }
+  
+  }
+  `
+
+  rectangle
+  {
+    x = 114;
+    y = 65;
+    width = 515;
+    height = 691;
+    visibility = 1;
+    foregroundColour = `COLOR_LINE_BOUNDARY_6`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 0;
+    foregroundFillColour = `COLOR_PICTURE_BACKGROUND`;
+    backgroundFillColour = -1;
+    fillPattern = `SolidPattern`;
+    xReference = 114;
+    yReference = 6;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle
+  {
+    x = 664;
+    y = 64;
+    width = 515;
+    height = 693;
+    visibility = 1;
+    foregroundColour = `COLOR_LINE_BOUNDARY_6`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 0;
+    foregroundFillColour = `COLOR_PICTURE_BACKGROUND`;
+    backgroundFillColour = -1;
+    fillPattern = `SolidPattern`;
+    xReference = 664;
+    yReference = 5;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 273;
+    y = 40;
+    format = "%s";
+    theText = "CEAC #1 / CPC A";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font6`;
+    xReference = 273;
+    yReference = 40;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 138;
+    y = 111;
+    format = "%s";
+    theText = "CEA";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 138;
+    yReference = 111;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 207;
+    y = 111;
+    format = "%s";
+    theText = "CEAC 1 DIFF";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 207;
+    yReference = 111;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 354;
+    y = 109;
+    format = "%s";
+    theText = "CPC A DIFF";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 354;
+    yReference = 109;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 496;
+    y = 111;
+    format = "%s";
+    theText = "DELTA DIFF";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 496;
+    yReference = 111;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 518;
+    y = 653;
+    format = "%s";
+    theText = "DIFF POS";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 518;
+    yReference = 653;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 370;
+    y = 654;
+    format = "%s";
+    theText = "CPC A POS";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 370;
+    yReference = 654;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 207;
+    y = 655;
+    format = "%s";
+    theText = "CEAC 1 POS";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 207;
+    yReference = 655;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 148;
+    y = 147;
+    format = "%s";
+    theText = "04";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 148;
+    yReference = 147;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 148;
+    y = 175;
+    format = "%s";
+    theText = "10";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 148;
+    yReference = 175;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 148;
+    y = 199;
+    format = "%s";
+    theText = "11";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 148;
+    yReference = 199;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 148;
+    y = 227;
+    format = "%s";
+    theText = "16";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 148;
+    yReference = 227;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 148;
+    y = 254;
+    format = "%s";
+    theText = "20";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 148;
+    yReference = 254;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 148;
+    y = 299;
+    format = "%s";
+    theText = "26";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 148;
+    yReference = 299;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 148;
+    y = 325;
+    format = "%s";
+    theText = "27";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 148;
+    yReference = 325;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 148;
+    y = 350;
+    format = "%s";
+    theText = "32";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 148;
+    yReference = 350;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 148;
+    y = 374;
+    format = "%s";
+    theText = "38";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 148;
+    yReference = 374;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 148;
+    y = 400;
+    format = "%s";
+    theText = "39";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 148;
+    yReference = 400;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 148;
+    y = 449;
+    format = "%s";
+    theText = "44";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 148;
+    yReference = 449;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 148;
+    y = 503;
+    format = "%s";
+    theText = "51";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 148;
+    yReference = 503;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 148;
+    y = 477;
+    format = "%s";
+    theText = "50";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 148;
+    yReference = 477;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 148;
+    y = 530;
+    format = "%s";
+    theText = "60";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 148;
+    yReference = 530;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 148;
+    y = 560;
+    format = "%s";
+    theText = "62";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 148;
+    yReference = 560;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 148;
+    y = 602;
+    format = "%s";
+    theText = "61";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 148;
+    yReference = 602;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 148;
+    y = 695;
+    format = "%s";
+    theText = "70";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 148;
+    yReference = 695;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 148;
+    y = 726;
+    format = "%s";
+    theText = "71";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 148;
+    yReference = 726;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  instance DialogueSymbols.TextNumber ceac1
+  {
+    x = 207;
+    y = 120;
+    visibility = 1;
+    xReference = 207;
+    yReference = 120;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    f_color = 1;
+    NumberFormat = "%-6.1f";
+    Scope = "";
+    TheNewNumber = 0.476318;
+  }
+
+  instance DialogueSymbols.TextNumber ceac2
+  {
+    x = 207;
+    y = 148;
+    visibility = 1;
+    xReference = 207;
+    yReference = 148;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    f_color = 1;
+    NumberFormat = "%-6.1f";
+    Scope = "";
+    TheNewNumber = 0;
+  }
+
+  instance DialogueSymbols.TextNumber ceac3
+  {
+    x = 207;
+    y = 175;
+    visibility = 1;
+    xReference = 207;
+    yReference = 175;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    f_color = 1;
+    NumberFormat = "%-6.1f";
+    Scope = "";
+    TheNewNumber = 0.19043;
+  }
+
+  instance DialogueSymbols.TextNumber ceac4
+  {
+    x = 207;
+    y = 202;
+    visibility = 1;
+    xReference = 207;
+    yReference = 202;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    f_color = 1;
+    NumberFormat = "%-6.1f";
+    Scope = "";
+    TheNewNumber = 0;
+  }
+
+  instance DialogueSymbols.TextNumber ceac5
+  {
+    x = 207;
+    y = 228;
+    visibility = 1;
+    xReference = 207;
+    yReference = 228;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    f_color = 1;
+    NumberFormat = "%-6.1f";
+    Scope = "";
+    TheNewNumber = 0;
+  }
+
+  instance DialogueSymbols.TextNumber ceac6
+  {
+    x = 207;
+    y = 271;
+    visibility = 1;
+    xReference = 207;
+    yReference = 271;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    f_color = 1;
+    NumberFormat = "%-6.1f";
+    Scope = "";
+    TheNewNumber = 0;
+  }
+
+  instance DialogueSymbols.TextNumber ceac7
+  {
+    x = 207;
+    y = 299;
+    visibility = 1;
+    xReference = 207;
+    yReference = 299;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    f_color = 1;
+    NumberFormat = "%-6.1f";
+    Scope = "";
+    TheNewNumber = 0.0952148;
+  }
+
+  instance DialogueSymbols.TextNumber ceac8
+  {
+    x = 207;
+    y = 324;
+    visibility = 1;
+    xReference = 207;
+    yReference = 324;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    f_color = 1;
+    NumberFormat = "%-6.1f";
+    Scope = "";
+    TheNewNumber = 0.095459;
+  }
+
+  instance DialogueSymbols.TextNumber ceac9
+  {
+    x = 207;
+    y = 349;
+    visibility = 1;
+    xReference = 207;
+    yReference = 349;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    f_color = 1;
+    NumberFormat = "%-6.1f";
+    Scope = "";
+    TheNewNumber = 0;
+  }
+
+  instance DialogueSymbols.TextNumber ceac10
+  {
+    x = 207;
+    y = 373;
+    visibility = 1;
+    xReference = 207;
+    yReference = 373;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    f_color = 1;
+    NumberFormat = "%-6.1f";
+    Scope = "";
+    TheNewNumber = 0;
+  }
+
+  instance DialogueSymbols.TextNumber ceac11
+  {
+    x = 207;
+    y = 426;
+    visibility = 1;
+    xReference = 207;
+    yReference = 426;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    f_color = 1;
+    NumberFormat = "%-6.1f";
+    Scope = "";
+    TheNewNumber = 375.856;
+  }
+
+  instance DialogueSymbols.TextNumber ceac12
+  {
+    x = 207;
+    y = 452;
+    visibility = 1;
+    xReference = 207;
+    yReference = 452;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    f_color = 1;
+    NumberFormat = "%-6.1f";
+    Scope = "";
+    TheNewNumber = 373.856;
+  }
+
+  instance DialogueSymbols.TextNumber ceac13
+  {
+    x = 207;
+    y = 479;
+    visibility = 1;
+    xReference = 207;
+    yReference = 479;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    f_color = 1;
+    NumberFormat = "%-6.1f";
+    Scope = "";
+    TheNewNumber = 0;
+  }
+
+  instance DialogueSymbols.TextNumber ceac14
+  {
+    x = 207;
+    y = 508;
+    visibility = 1;
+    xReference = 207;
+    yReference = 508;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    f_color = 1;
+    NumberFormat = "%-6.1f";
+    Scope = "";
+    TheNewNumber = 0.0952148;
+  }
+
+  instance DialogueSymbols.TextNumber ceac16
+  {
+    x = 207;
+    y = 578;
+    visibility = 1;
+    xReference = 207;
+    yReference = 578;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    f_color = 1;
+    NumberFormat = "%-6.1f";
+    Scope = "";
+    TheNewNumber = 44.1958;
+  }
+
+  instance DialogueSymbols.TextNumber ceac17
+  {
+    x = 207;
+    y = 671;
+    visibility = 1;
+    xReference = 207;
+    yReference = 671;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    f_color = 1;
+    NumberFormat = "%-6.1f";
+    Scope = "";
+    TheNewNumber = 0;
+  }
+
+  instance DialogueSymbols.TextNumber ceac15
+  {
+    x = 207;
+    y = 535;
+    visibility = 1;
+    xReference = 207;
+    yReference = 535;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    f_color = 1;
+    NumberFormat = "%-6.1f";
+    Scope = "";
+    TheNewNumber = 0;
+  }
+
+  instance DialogueSymbols.TextNumber ceac18
+  {
+    x = 207;
+    y = 703;
+    visibility = 1;
+    xReference = 207;
+    yReference = 703;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    f_color = 1;
+    NumberFormat = "%-6.1f";
+    Scope = "";
+    TheNewNumber = 0;
+  }
+
+  line
+  {
+    numberOfPoints = 2;
+    point[0] = ( 131, 119 );
+    point[1] = ( 630, 119 );
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineStyle = `SolidPattern`;
+    lineWidth = 0;
+    xReference = 131;
+    yReference = 119;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  line
+  {
+    numberOfPoints = 2;
+    point[0] = ( 125, 666 );
+    point[1] = ( 624, 666 );
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineStyle = `SolidPattern`;
+    lineWidth = 0;
+    xReference = 125;
+    yReference = 666;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  instance DialogueSymbols.TextNumber cpc1
+  {
+    x = 368;
+    y = 124;
+    visibility = 1;
+    xReference = 368;
+    yReference = 124;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    f_color = 1;
+    NumberFormat = "%-6.1f";
+    Scope = "";
+    TheNewNumber = 0;
+  }
+
+  instance DialogueSymbols.TextNumber cpc2
+  {
+    x = 368;
+    y = 152;
+    visibility = 1;
+    xReference = 368;
+    yReference = 152;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    f_color = 1;
+    NumberFormat = "%-6.1f";
+    Scope = "";
+    TheNewNumber = 0;
+  }
+
+  instance DialogueSymbols.TextNumber cpc3
+  {
+    x = 368;
+    y = 179;
+    visibility = 1;
+    xReference = 368;
+    yReference = 179;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    f_color = 1;
+    NumberFormat = "%-6.1f";
+    Scope = "";
+    TheNewNumber = 0;
+  }
+
+  instance DialogueSymbols.TextNumber cpc4
+  {
+    x = 368;
+    y = 206;
+    visibility = 1;
+    xReference = 368;
+    yReference = 206;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    f_color = 1;
+    NumberFormat = "%-6.1f";
+    Scope = "";
+    TheNewNumber = 0;
+  }
+
+  instance DialogueSymbols.TextNumber cpc5
+  {
+    x = 368;
+    y = 232;
+    visibility = 1;
+    xReference = 368;
+    yReference = 232;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    f_color = 1;
+    NumberFormat = "%-6.1f";
+    Scope = "";
+    TheNewNumber = 0.0952148;
+  }
+
+  instance DialogueSymbols.TextNumber cpc6
+  {
+    x = 368;
+    y = 275;
+    visibility = 1;
+    xReference = 368;
+    yReference = 275;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    f_color = 1;
+    NumberFormat = "%-6.1f";
+    Scope = "";
+    TheNewNumber = 0;
+  }
+
+  instance DialogueSymbols.TextNumber cpc7
+  {
+    x = 368;
+    y = 303;
+    visibility = 1;
+    xReference = 368;
+    yReference = 303;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    f_color = 1;
+    NumberFormat = "%-6.1f";
+    Scope = "";
+    TheNewNumber = 0.0952148;
+  }
+
+  instance DialogueSymbols.TextNumber cpc8
+  {
+    x = 368;
+    y = 328;
+    visibility = 1;
+    xReference = 368;
+    yReference = 328;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    f_color = 1;
+    NumberFormat = "%-6.1f";
+    Scope = "";
+    TheNewNumber = 0;
+  }
+
+  instance DialogueSymbols.TextNumber cpc9
+  {
+    x = 368;
+    y = 353;
+    visibility = 1;
+    xReference = 368;
+    yReference = 353;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    f_color = 1;
+    NumberFormat = "%-6.1f";
+    Scope = "";
+    TheNewNumber = 0;
+  }
+
+  instance DialogueSymbols.TextNumber cpc10
+  {
+    x = 368;
+    y = 377;
+    visibility = 1;
+    xReference = 368;
+    yReference = 377;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    f_color = 1;
+    NumberFormat = "%-6.1f";
+    Scope = "";
+    TheNewNumber = 0;
+  }
+
+  instance DialogueSymbols.TextNumber cpc11
+  {
+    x = 368;
+    y = 426;
+    visibility = 1;
+    xReference = 368;
+    yReference = 426;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    f_color = 1;
+    NumberFormat = "%-6.1f";
+    Scope = "";
+    TheNewNumber = 376.237;
+  }
+
+  instance DialogueSymbols.TextNumber cpc12
+  {
+    x = 368;
+    y = 455;
+    visibility = 1;
+    xReference = 368;
+    yReference = 455;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    f_color = 1;
+    NumberFormat = "%-6.1f";
+    Scope = "";
+    TheNewNumber = 373.951;
+  }
+
+  instance DialogueSymbols.TextNumber cpc13
+  {
+    x = 368;
+    y = 483;
+    visibility = 1;
+    xReference = 368;
+    yReference = 483;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    f_color = 1;
+    NumberFormat = "%-6.1f";
+    Scope = "";
+    TheNewNumber = 0;
+  }
+
+  instance DialogueSymbols.TextNumber cpc14
+  {
+    x = 368;
+    y = 512;
+    visibility = 1;
+    xReference = 368;
+    yReference = 512;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    f_color = 1;
+    NumberFormat = "%-6.1f";
+    Scope = "";
+    TheNewNumber = 0;
+  }
+
+  instance DialogueSymbols.TextNumber cpc16
+  {
+    x = 368;
+    y = 582;
+    visibility = 1;
+    xReference = 368;
+    yReference = 582;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    f_color = 1;
+    NumberFormat = "%-6.1f";
+    Scope = "";
+    TheNewNumber = 45.72;
+  }
+
+  instance DialogueSymbols.TextNumber cpc15
+  {
+    x = 368;
+    y = 539;
+    visibility = 1;
+    xReference = 368;
+    yReference = 539;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    f_color = 1;
+    NumberFormat = "%-6.1f";
+    Scope = "";
+    TheNewNumber = 0;
+  }
+
+  instance DialogueSymbols.TextNumber delta1
+  {
+    x = 513;
+    y = 126;
+    visibility = 1;
+    xReference = 513;
+    yReference = 126;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    f_color = `(TheNewNumber<SP)?1:14`;
+    NumberFormat = "%-6.1f";
+    Scope = "";
+    TheNewNumber = 0.476318;
+  }
+
+  instance DialogueSymbols.TextNumber delta2
+  {
+    x = 513;
+    y = 155;
+    visibility = 1;
+    xReference = 513;
+    yReference = 155;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    f_color = `(TheNewNumber<SP)?1:14`;
+    NumberFormat = "%-6.1f";
+    Scope = "";
+    TheNewNumber = 0;
+  }
+
+  instance DialogueSymbols.TextNumber delta3
+  {
+    x = 513;
+    y = 182;
+    visibility = 1;
+    xReference = 513;
+    yReference = 182;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    f_color = `(TheNewNumber<SP)?1:14`;
+    NumberFormat = "%-6.1f";
+    Scope = "";
+    TheNewNumber = 0.19043;
+  }
+
+  instance DialogueSymbols.TextNumber delta4
+  {
+    x = 513;
+    y = 209;
+    visibility = 1;
+    xReference = 513;
+    yReference = 209;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    f_color = `(TheNewNumber<SP)?1:14`;
+    NumberFormat = "%-6.1f";
+    Scope = "";
+    TheNewNumber = 0;
+  }
+
+  instance DialogueSymbols.TextNumber delta5
+  {
+    x = 513;
+    y = 235;
+    visibility = 1;
+    xReference = 513;
+    yReference = 235;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    f_color = `(TheNewNumber<SP)?1:14`;
+    NumberFormat = "%-6.1f";
+    Scope = "";
+    TheNewNumber = 0.0952148;
+  }
+
+  instance DialogueSymbols.TextNumber delta6
+  {
+    x = 513;
+    y = 278;
+    visibility = 1;
+    xReference = 513;
+    yReference = 278;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    f_color = `(TheNewNumber<SP)?1:14`;
+    NumberFormat = "%-6.1f";
+    Scope = "";
+    TheNewNumber = 0;
+  }
+
+  instance DialogueSymbols.TextNumber delta7
+  {
+    x = 513;
+    y = 306;
+    visibility = 1;
+    xReference = 513;
+    yReference = 306;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    f_color = `(TheNewNumber<SP)?1:14`;
+    NumberFormat = "%-6.1f";
+    Scope = "";
+    TheNewNumber = 0;
+  }
+
+  instance DialogueSymbols.TextNumber delta8
+  {
+    x = 513;
+    y = 331;
+    visibility = 1;
+    xReference = 513;
+    yReference = 331;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    f_color = `(TheNewNumber<SP)?1:14`;
+    NumberFormat = "%-6.1f";
+    Scope = "";
+    TheNewNumber = 0.095459;
+  }
+
+  instance DialogueSymbols.TextNumber delta9
+  {
+    x = 513;
+    y = 356;
+    visibility = 1;
+    xReference = 513;
+    yReference = 356;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    f_color = `(TheNewNumber<SP)?1:14`;
+    NumberFormat = "%-6.1f";
+    Scope = "";
+    TheNewNumber = 0;
+  }
+
+  instance DialogueSymbols.TextNumber delta10
+  {
+    x = 513;
+    y = 380;
+    visibility = 1;
+    xReference = 513;
+    yReference = 380;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    f_color = `(TheNewNumber<SP)?1:14`;
+    NumberFormat = "%-6.1f";
+    Scope = "";
+    TheNewNumber = 0;
+  }
+
+  instance DialogueSymbols.TextNumber delta11
+  {
+    x = 513;
+    y = 426;
+    visibility = 1;
+    xReference = 513;
+    yReference = 426;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    f_color = `(TheNewNumber<SP)?1:14`;
+    NumberFormat = "%-6.1f";
+    Scope = "";
+    TheNewNumber = 0.380859;
+  }
+
+  instance DialogueSymbols.TextNumber delta12
+  {
+    x = 513;
+    y = 454;
+    visibility = 1;
+    xReference = 513;
+    yReference = 454;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    f_color = `(TheNewNumber<SP)?1:14`;
+    NumberFormat = "%-6.1f";
+    Scope = "";
+    TheNewNumber = 0.0952148;
+  }
+
+  instance DialogueSymbols.TextNumber delta13
+  {
+    x = 513;
+    y = 486;
+    visibility = 1;
+    xReference = 513;
+    yReference = 486;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    f_color = `(TheNewNumber<SP)?1:14`;
+    NumberFormat = "%-6.1f";
+    Scope = "";
+    TheNewNumber = 0;
+  }
+
+  instance DialogueSymbols.TextNumber delta14
+  {
+    x = 513;
+    y = 515;
+    visibility = 1;
+    xReference = 513;
+    yReference = 515;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    f_color = `(TheNewNumber<SP)?1:14`;
+    NumberFormat = "%-6.1f";
+    Scope = "";
+    TheNewNumber = 0.0952148;
+  }
+
+  instance DialogueSymbols.TextNumber delta16
+  {
+    x = 513;
+    y = 582;
+    visibility = 1;
+    xReference = 513;
+    yReference = 582;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    f_color = `(TheNewNumber<SP)?1:14`;
+    NumberFormat = "%-6.1f";
+    Scope = "";
+    TheNewNumber = 1.52417;
+  }
+
+  instance DialogueSymbols.TextNumber delta15
+  {
+    x = 513;
+    y = 542;
+    visibility = 1;
+    xReference = 513;
+    yReference = 542;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    f_color = `(TheNewNumber<SP)?1:14`;
+    NumberFormat = "%-6.1f";
+    Scope = "";
+    TheNewNumber = 0;
+  }
+
+  instance DialogueSymbols.TextNumber cpc17
+  {
+    x = 368;
+    y = 673;
+    visibility = 1;
+    xReference = 368;
+    yReference = 673;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    f_color = 1;
+    NumberFormat = "%-6.1f";
+    Scope = "";
+    TheNewNumber = 0;
+  }
+
+  instance DialogueSymbols.TextNumber delta17
+  {
+    x = 513;
+    y = 672;
+    visibility = 1;
+    xReference = 513;
+    yReference = 672;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    f_color = `(TheNewNumber<SP)?1:14`;
+    NumberFormat = "%-6.1f";
+    Scope = "";
+    TheNewNumber = 0;
+  }
+
+  instance DialogueSymbols.TextNumber delta18
+  {
+    x = 513;
+    y = 701;
+    visibility = 1;
+    xReference = 513;
+    yReference = 701;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    f_color = `(TheNewNumber<SP)?1:14`;
+    NumberFormat = "%-6.1f";
+    Scope = "";
+    TheNewNumber = 0;
+  }
+
+  instance DialogueSymbols.TextNumber cpc18
+  {
+    x = 368;
+    y = 704;
+    visibility = 1;
+    xReference = 368;
+    yReference = 704;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    f_color = 1;
+    NumberFormat = "%-6.1f";
+    Scope = "";
+    TheNewNumber = 0;
+  }
+
+  line
+  {
+    numberOfPoints = 2;
+    point[0] = ( 129, 268 );
+    point[1] = ( 627, 268 );
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineStyle = `SolidPattern`;
+    lineWidth = 0;
+    xReference = 129;
+    yReference = 268;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  line
+  {
+    numberOfPoints = 2;
+    point[0] = ( 127, 416 );
+    point[1] = ( 626, 416 );
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineStyle = `SolidPattern`;
+    lineWidth = 0;
+    xReference = 127;
+    yReference = 416;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  line
+  {
+    numberOfPoints = 2;
+    point[0] = ( 125, 576 );
+    point[1] = ( 623, 576 );
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineStyle = `SolidPattern`;
+    lineWidth = 0;
+    xReference = 125;
+    yReference = 576;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 825;
+    y = 40;
+    format = "%s";
+    theText = "CEAC #2 / CPC D";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font6`;
+    xReference = 825;
+    yReference = 40;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 686;
+    y = 111;
+    format = "%s";
+    theText = "CEA";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 686;
+    yReference = 111;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 755;
+    y = 111;
+    format = "%s";
+    theText = "CEAC 2 DIFF";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 755;
+    yReference = 111;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 902;
+    y = 109;
+    format = "%s";
+    theText = "CPC D DIFF";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 902;
+    yReference = 109;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 1044;
+    y = 111;
+    format = "%s";
+    theText = "DELTA DIFF";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 1044;
+    yReference = 111;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 1066;
+    y = 653;
+    format = "%s";
+    theText = "DIFF POS";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 1066;
+    yReference = 653;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 918;
+    y = 654;
+    format = "%s";
+    theText = "CPC D POS";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 918;
+    yReference = 654;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 754;
+    y = 653;
+    format = "%s";
+    theText = "CEAC 2 POS";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 754;
+    yReference = 653;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 696;
+    y = 147;
+    format = "%s";
+    theText = "02";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 696;
+    yReference = 147;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 696;
+    y = 175;
+    format = "%s";
+    theText = "06";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 696;
+    yReference = 175;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 696;
+    y = 199;
+    format = "%s";
+    theText = "07";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 696;
+    yReference = 199;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 696;
+    y = 227;
+    format = "%s";
+    theText = "14";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 696;
+    yReference = 227;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 696;
+    y = 254;
+    format = "%s";
+    theText = "18";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 696;
+    yReference = 254;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 696;
+    y = 299;
+    format = "%s";
+    theText = "22";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 696;
+    yReference = 299;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 696;
+    y = 325;
+    format = "%s";
+    theText = "23";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 696;
+    yReference = 325;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 696;
+    y = 350;
+    format = "%s";
+    theText = "30";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 696;
+    yReference = 350;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 696;
+    y = 374;
+    format = "%s";
+    theText = "34";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 696;
+    yReference = 374;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 696;
+    y = 400;
+    format = "%s";
+    theText = "35";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 696;
+    yReference = 400;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 696;
+    y = 449;
+    format = "%s";
+    theText = "42";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 696;
+    yReference = 449;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 696;
+    y = 503;
+    format = "%s";
+    theText = "47";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 696;
+    yReference = 503;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 696;
+    y = 477;
+    format = "%s";
+    theText = "46";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 696;
+    yReference = 477;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 696;
+    y = 530;
+    format = "%s";
+    theText = "54";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 696;
+    yReference = 530;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 696;
+    y = 560;
+    format = "%s";
+    theText = "56";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 696;
+    yReference = 560;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 696;
+    y = 602;
+    format = "%s";
+    theText = "55";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 696;
+    yReference = 602;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 696;
+    y = 695;
+    format = "%s";
+    theText = "66";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 696;
+    yReference = 695;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 696;
+    y = 726;
+    format = "%s";
+    theText = "67";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 696;
+    yReference = 726;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  instance DialogueSymbols.TextNumber ceac19
+  {
+    x = 755;
+    y = 120;
+    visibility = 1;
+    xReference = 755;
+    yReference = 120;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    f_color = 1;
+    NumberFormat = "%-6.1f";
+    Scope = "";
+    TheNewNumber = 0;
+  }
+
+  instance DialogueSymbols.TextNumber ceac20
+  {
+    x = 755;
+    y = 148;
+    visibility = 1;
+    xReference = 755;
+    yReference = 148;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    f_color = 1;
+    NumberFormat = "%-6.1f";
+    Scope = "";
+    TheNewNumber = 0;
+  }
+
+  instance DialogueSymbols.TextNumber ceac21
+  {
+    x = 755;
+    y = 175;
+    visibility = 1;
+    xReference = 755;
+    yReference = 175;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    f_color = 1;
+    NumberFormat = "%-6.1f";
+    Scope = "";
+    TheNewNumber = 0;
+  }
+
+  instance DialogueSymbols.TextNumber ceac22
+  {
+    x = 755;
+    y = 202;
+    visibility = 1;
+    xReference = 755;
+    yReference = 202;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    f_color = 1;
+    NumberFormat = "%-6.1f";
+    Scope = "";
+    TheNewNumber = 0;
+  }
+
+  instance DialogueSymbols.TextNumber ceac23
+  {
+    x = 755;
+    y = 228;
+    visibility = 1;
+    xReference = 755;
+    yReference = 228;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    f_color = 1;
+    NumberFormat = "%-6.1f";
+    Scope = "";
+    TheNewNumber = 0;
+  }
+
+  instance DialogueSymbols.TextNumber ceac24
+  {
+    x = 755;
+    y = 271;
+    visibility = 1;
+    xReference = 755;
+    yReference = 271;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    f_color = 1;
+    NumberFormat = "%-6.1f";
+    Scope = "";
+    TheNewNumber = 0;
+  }
+
+  instance DialogueSymbols.TextNumber ceac25
+  {
+    x = 755;
+    y = 299;
+    visibility = 1;
+    xReference = 755;
+    yReference = 299;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    f_color = 1;
+    NumberFormat = "%-6.1f";
+    Scope = "";
+    TheNewNumber = 0;
+  }
+
+  instance DialogueSymbols.TextNumber ceac26
+  {
+    x = 755;
+    y = 324;
+    visibility = 1;
+    xReference = 755;
+    yReference = 324;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    f_color = 1;
+    NumberFormat = "%-6.1f";
+    Scope = "";
+    TheNewNumber = 0;
+  }
+
+  instance DialogueSymbols.TextNumber ceac27
+  {
+    x = 755;
+    y = 350;
+    visibility = 1;
+    xReference = 755;
+    yReference = 350;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    f_color = 1;
+    NumberFormat = "%-6.1f";
+    Scope = "";
+    TheNewNumber = 0;
+  }
+
+  instance DialogueSymbols.TextNumber ceac28
+  {
+    x = 755;
+    y = 372;
+    visibility = 1;
+    xReference = 755;
+    yReference = 372;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    f_color = 1;
+    NumberFormat = "%-6.1f";
+    Scope = "";
+    TheNewNumber = 0;
+  }
+
+  instance DialogueSymbols.TextNumber ceac29
+  {
+    x = 755;
+    y = 426;
+    visibility = 1;
+    xReference = 755;
+    yReference = 426;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    f_color = 1;
+    NumberFormat = "%-6.1f";
+    Scope = "";
+    TheNewNumber = 373.856;
+  }
+
+  instance DialogueSymbols.TextNumber ceac30
+  {
+    x = 755;
+    y = 452;
+    visibility = 1;
+    xReference = 755;
+    yReference = 452;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    f_color = 1;
+    NumberFormat = "%-6.1f";
+    Scope = "";
+    TheNewNumber = 373.76;
+  }
+
+  instance DialogueSymbols.TextNumber ceac31
+  {
+    x = 755;
+    y = 479;
+    visibility = 1;
+    xReference = 755;
+    yReference = 479;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    f_color = 1;
+    NumberFormat = "%-6.1f";
+    Scope = "";
+    TheNewNumber = 1.00148e-32;
+  }
+
+  instance DialogueSymbols.TextNumber ceac32
+  {
+    x = 755;
+    y = 508;
+    visibility = 1;
+    xReference = 755;
+    yReference = 508;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    f_color = 1;
+    NumberFormat = "%-6.1f";
+    Scope = "";
+    TheNewNumber = 46.166;
+  }
+
+  instance DialogueSymbols.TextNumber ceac34
+  {
+    x = 755;
+    y = 578;
+    visibility = 1;
+    xReference = 755;
+    yReference = 578;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    f_color = 1;
+    NumberFormat = "%-6.1f";
+    Scope = "";
+    TheNewNumber = 302.409;
+  }
+
+  instance DialogueSymbols.TextNumber ceac35
+  {
+    x = 755;
+    y = 671;
+    visibility = 1;
+    xReference = 755;
+    yReference = 671;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    f_color = 1;
+    NumberFormat = "%-6.1f";
+    Scope = "";
+    TheNewNumber = 9.43706e-33;
+  }
+
+  instance DialogueSymbols.TextNumber ceac33
+  {
+    x = 755;
+    y = 535;
+    visibility = 1;
+    xReference = 755;
+    yReference = 535;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    f_color = 1;
+    NumberFormat = "%-6.1f";
+    Scope = "";
+    TheNewNumber = 9.91854e-33;
+  }
+
+  instance DialogueSymbols.TextNumber ceac36
+  {
+    x = 755;
+    y = 703;
+    visibility = 1;
+    xReference = 755;
+    yReference = 703;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    f_color = 1;
+    NumberFormat = "%-6.1f";
+    Scope = "";
+    TheNewNumber = 100;
+  }
+
+  line
+  {
+    numberOfPoints = 2;
+    point[0] = ( 679, 119 );
+    point[1] = ( 1178, 119 );
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineStyle = `SolidPattern`;
+    lineWidth = 0;
+    xReference = 679;
+    yReference = 119;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  line
+  {
+    numberOfPoints = 2;
+    point[0] = ( 673, 666 );
+    point[1] = ( 1172, 666 );
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineStyle = `SolidPattern`;
+    lineWidth = 0;
+    xReference = 673;
+    yReference = 666;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  instance DialogueSymbols.TextNumber cpc19
+  {
+    x = 919;
+    y = 124;
+    visibility = 1;
+    xReference = 919;
+    yReference = 124;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    f_color = 1;
+    NumberFormat = "%-6.1f";
+    Scope = "";
+    TheNewNumber = 9.38891e-33;
+  }
+
+  instance DialogueSymbols.TextNumber cpc20
+  {
+    x = 919;
+    y = 152;
+    visibility = 1;
+    xReference = 919;
+    yReference = 152;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    f_color = 1;
+    NumberFormat = "%-6.1f";
+    Scope = "";
+    TheNewNumber = 0;
+  }
+
+  instance DialogueSymbols.TextNumber cpc21
+  {
+    x = 919;
+    y = 179;
+    visibility = 1;
+    xReference = 919;
+    yReference = 179;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    f_color = 1;
+    NumberFormat = "%-6.1f";
+    Scope = "";
+    TheNewNumber = 0;
+  }
+
+  instance DialogueSymbols.TextNumber cpc22
+  {
+    x = 919;
+    y = 206;
+    visibility = 1;
+    xReference = 919;
+    yReference = 206;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    f_color = 1;
+    NumberFormat = "%-6.1f";
+    Scope = "";
+    TheNewNumber = 0;
+  }
+
+  instance DialogueSymbols.TextNumber cpc23
+  {
+    x = 919;
+    y = 232;
+    visibility = 1;
+    xReference = 919;
+    yReference = 232;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    f_color = 1;
+    NumberFormat = "%-6.1f";
+    Scope = "";
+    TheNewNumber = 0;
+  }
+
+  instance DialogueSymbols.TextNumber cpc24
+  {
+    x = 919;
+    y = 275;
+    visibility = 1;
+    xReference = 919;
+    yReference = 275;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    f_color = 1;
+    NumberFormat = "%-6.1f";
+    Scope = "";
+    TheNewNumber = 0;
+  }
+
+  instance DialogueSymbols.TextNumber cpc25
+  {
+    x = 919;
+    y = 303;
+    visibility = 1;
+    xReference = 919;
+    yReference = 303;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    f_color = 1;
+    NumberFormat = "%-6.1f";
+    Scope = "";
+    TheNewNumber = 0;
+  }
+
+  instance DialogueSymbols.TextNumber cpc26
+  {
+    x = 919;
+    y = 328;
+    visibility = 1;
+    xReference = 919;
+    yReference = 328;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    f_color = 1;
+    NumberFormat = "%-6.1f";
+    Scope = "";
+    TheNewNumber = 0;
+  }
+
+  instance DialogueSymbols.TextNumber cpc27
+  {
+    x = 919;
+    y = 354;
+    visibility = 1;
+    xReference = 919;
+    yReference = 354;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    f_color = 1;
+    NumberFormat = "%-6.1f";
+    Scope = "";
+    TheNewNumber = 0;
+  }
+
+  instance DialogueSymbols.TextNumber cpc28
+  {
+    x = 919;
+    y = 377;
+    visibility = 1;
+    xReference = 919;
+    yReference = 377;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    f_color = 1;
+    NumberFormat = "%-6.1f";
+    Scope = "";
+    TheNewNumber = 0;
+  }
+
+  instance DialogueSymbols.TextNumber cpc29
+  {
+    x = 919;
+    y = 426;
+    visibility = 1;
+    xReference = 919;
+    yReference = 426;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    f_color = 1;
+    NumberFormat = "%-6.1f";
+    Scope = "";
+    TheNewNumber = 0;
+  }
+
+  instance DialogueSymbols.TextNumber cpc30
+  {
+    x = 919;
+    y = 456;
+    visibility = 1;
+    xReference = 919;
+    yReference = 456;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    f_color = 1;
+    NumberFormat = "%-6.1f";
+    Scope = "";
+    TheNewNumber = 0;
+  }
+
+  instance DialogueSymbols.TextNumber cpc31
+  {
+    x = 919;
+    y = 483;
+    visibility = 1;
+    xReference = 919;
+    yReference = 483;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    f_color = 1;
+    NumberFormat = "%-6.1f";
+    Scope = "";
+    TheNewNumber = 0;
+  }
+
+  instance DialogueSymbols.TextNumber cpc32
+  {
+    x = 919;
+    y = 512;
+    visibility = 1;
+    xReference = 919;
+    yReference = 512;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    f_color = 1;
+    NumberFormat = "%-6.1f";
+    Scope = "";
+    TheNewNumber = 0;
+  }
+
+  instance DialogueSymbols.TextNumber cpc34
+  {
+    x = 919;
+    y = 582;
+    visibility = 1;
+    xReference = 919;
+    yReference = 582;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    f_color = 1;
+    NumberFormat = "%-6.1f";
+    Scope = "";
+    TheNewNumber = 0;
+  }
+
+  instance DialogueSymbols.TextNumber cpc33
+  {
+    x = 919;
+    y = 539;
+    visibility = 1;
+    xReference = 919;
+    yReference = 539;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    f_color = 1;
+    NumberFormat = "%-6.1f";
+    Scope = "";
+    TheNewNumber = 0;
+  }
+
+  instance DialogueSymbols.TextNumber delta19
+  {
+    x = 1061;
+    y = 127;
+    visibility = 1;
+    xReference = 1061;
+    yReference = 127;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    f_color = `(TheNewNumber<SP)?1:14`;
+    NumberFormat = "%-6.1f";
+    Scope = "";
+    TheNewNumber = 9.38891e-33;
+  }
+
+  instance DialogueSymbols.TextNumber delta20
+  {
+    x = 1061;
+    y = 155;
+    visibility = 1;
+    xReference = 1061;
+    yReference = 155;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    f_color = `(TheNewNumber<SP)?1:14`;
+    NumberFormat = "%-6.1f";
+    Scope = "";
+    TheNewNumber = 0;
+  }
+
+  instance DialogueSymbols.TextNumber delta21
+  {
+    x = 1061;
+    y = 182;
+    visibility = 1;
+    xReference = 1061;
+    yReference = 182;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    f_color = `(TheNewNumber<SP)?1:14`;
+    NumberFormat = "%-6.1f";
+    Scope = "";
+    TheNewNumber = 0;
+  }
+
+  instance DialogueSymbols.TextNumber delta22
+  {
+    x = 1061;
+    y = 209;
+    visibility = 1;
+    xReference = 1061;
+    yReference = 209;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    f_color = `(TheNewNumber<SP)?1:14`;
+    NumberFormat = "%-6.1f";
+    Scope = "";
+    TheNewNumber = 0;
+  }
+
+  instance DialogueSymbols.TextNumber delta23
+  {
+    x = 1061;
+    y = 235;
+    visibility = 1;
+    xReference = 1061;
+    yReference = 235;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    f_color = `(TheNewNumber<SP)?1:14`;
+    NumberFormat = "%-6.1f";
+    Scope = "";
+    TheNewNumber = 0;
+  }
+
+  instance DialogueSymbols.TextNumber delta24
+  {
+    x = 1061;
+    y = 278;
+    visibility = 1;
+    xReference = 1061;
+    yReference = 278;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    f_color = `(TheNewNumber<SP)?1:14`;
+    NumberFormat = "%-6.1f";
+    Scope = "";
+    TheNewNumber = 0;
+  }
+
+  instance DialogueSymbols.TextNumber delta25
+  {
+    x = 1061;
+    y = 306;
+    visibility = 1;
+    xReference = 1061;
+    yReference = 306;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    f_color = `(TheNewNumber<SP)?1:14`;
+    NumberFormat = "%-6.1f";
+    Scope = "";
+    TheNewNumber = 0;
+  }
+
+  instance DialogueSymbols.TextNumber delta26
+  {
+    x = 1061;
+    y = 331;
+    visibility = 1;
+    xReference = 1061;
+    yReference = 331;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    f_color = `(TheNewNumber<SP)?1:14`;
+    NumberFormat = "%-6.1f";
+    Scope = "";
+    TheNewNumber = 0;
+  }
+
+  instance DialogueSymbols.TextNumber delta27
+  {
+    x = 1061;
+    y = 357;
+    visibility = 1;
+    xReference = 1061;
+    yReference = 357;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    f_color = `(TheNewNumber<SP)?1:14`;
+    NumberFormat = "%-6.1f";
+    Scope = "";
+    TheNewNumber = 0;
+  }
+
+  instance DialogueSymbols.TextNumber delta28
+  {
+    x = 1061;
+    y = 380;
+    visibility = 1;
+    xReference = 1061;
+    yReference = 380;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    f_color = `(TheNewNumber<SP)?1:14`;
+    NumberFormat = "%-6.1f";
+    Scope = "";
+    TheNewNumber = 0;
+  }
+
+  instance DialogueSymbols.TextNumber delta29
+  {
+    x = 1061;
+    y = 426;
+    visibility = 1;
+    xReference = 1061;
+    yReference = 426;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    f_color = `(TheNewNumber<SP)?1:14`;
+    NumberFormat = "%-6.1f";
+    Scope = "";
+    TheNewNumber = 373.856;
+  }
+
+  instance DialogueSymbols.TextNumber delta30
+  {
+    x = 1061;
+    y = 455;
+    visibility = 1;
+    xReference = 1061;
+    yReference = 455;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    f_color = `(TheNewNumber<SP)?1:14`;
+    NumberFormat = "%-6.1f";
+    Scope = "";
+    TheNewNumber = 373.76;
+  }
+
+  instance DialogueSymbols.TextNumber delta31
+  {
+    x = 1061;
+    y = 486;
+    visibility = 1;
+    xReference = 1061;
+    yReference = 486;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    f_color = `(TheNewNumber<SP)?1:14`;
+    NumberFormat = "%-6.1f";
+    Scope = "";
+    TheNewNumber = 1.00148e-32;
+  }
+
+  instance DialogueSymbols.TextNumber delta32
+  {
+    x = 1061;
+    y = 515;
+    visibility = 1;
+    xReference = 1061;
+    yReference = 515;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    f_color = `(TheNewNumber<SP)?1:14`;
+    NumberFormat = "%-6.1f";
+    Scope = "";
+    TheNewNumber = 46.166;
+  }
+
+  instance DialogueSymbols.TextNumber delta34
+  {
+    x = 1061;
+    y = 582;
+    visibility = 1;
+    xReference = 1061;
+    yReference = 582;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    f_color = `(TheNewNumber<SP)?1:14`;
+    NumberFormat = "%-6.1f";
+    Scope = "";
+    TheNewNumber = 302.409;
+  }
+
+  instance DialogueSymbols.TextNumber delta33
+  {
+    x = 1061;
+    y = 542;
+    visibility = 1;
+    xReference = 1061;
+    yReference = 542;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    f_color = `(TheNewNumber<SP)?1:14`;
+    NumberFormat = "%-6.1f";
+    Scope = "";
+    TheNewNumber = 9.91854e-33;
+  }
+
+  instance DialogueSymbols.TextNumber cpc35
+  {
+    x = 919;
+    y = 673;
+    visibility = 1;
+    xReference = 919;
+    yReference = 673;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    f_color = 1;
+    NumberFormat = "%-6.1f";
+    Scope = "";
+    TheNewNumber = 0;
+  }
+
+  instance DialogueSymbols.TextNumber delta35
+  {
+    x = 1061;
+    y = 672;
+    visibility = 1;
+    xReference = 1061;
+    yReference = 672;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    f_color = `(TheNewNumber<SP)?1:14`;
+    NumberFormat = "%-6.1f";
+    Scope = "";
+    TheNewNumber = 9.43706e-33;
+  }
+
+  instance DialogueSymbols.TextNumber delta36
+  {
+    x = 1061;
+    y = 701;
+    visibility = 1;
+    xReference = 1061;
+    yReference = 701;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    f_color = `(TheNewNumber<SP)?1:14`;
+    NumberFormat = "%-6.1f";
+    Scope = "";
+    TheNewNumber = 100;
+  }
+
+  instance DialogueSymbols.TextNumber cpc36
+  {
+    x = 919;
+    y = 699;
+    visibility = 1;
+    xReference = 919;
+    yReference = 699;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    f_color = 1;
+    NumberFormat = "%-6.1f";
+    Scope = "";
+    TheNewNumber = 0;
+  }
+
+  line
+  {
+    numberOfPoints = 2;
+    point[0] = ( 677, 268 );
+    point[1] = ( 1175, 268 );
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineStyle = `SolidPattern`;
+    lineWidth = 0;
+    xReference = 677;
+    yReference = 268;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  line
+  {
+    numberOfPoints = 2;
+    point[0] = ( 675, 416 );
+    point[1] = ( 1174, 416 );
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineStyle = `SolidPattern`;
+    lineWidth = 0;
+    xReference = 675;
+    yReference = 416;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  line
+  {
+    numberOfPoints = 2;
+    point[0] = ( 673, 576 );
+    point[1] = ( 1171, 576 );
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineStyle = `SolidPattern`;
+    lineWidth = 0;
+    xReference = 673;
+    yReference = 576;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+}

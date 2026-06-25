@@ -1,0 +1,291 @@
+/*
+ * PICASSO-3 CONFIGURATION LANGUAGE FILE
+ *
+ *
+ * Picture name: PicUCN_SinglePointCascade
+ *
+ *
+ * Documented by  : ucn56
+ * Host           : ucn5
+ * Date           : 25/01-00 at 13:33:21
+ *
+ *
+ * Generate with:
+ *    pcc PicUCN_SinglePointCascade.Tdoc
+ *
+ */
+
+
+picture PicUCN_SinglePointCascade
+{
+
+  int ERROR = 0;
+  char *PageBack = "";
+  char *PageForward = "PicUCN_SinglePointDisplay";
+  char *PictureNumber = "MENU";
+  char *PictureTitle = "SINGLE POINT DISPLAY";
+
+  function `void Initialize()
+{
+   InputArea.ERROR = 0;
+   CascadeEnterActive = 1 ;
+   strcpy(InputArea.TheNewText,InputArea.TheOriginalText);
+}`
+
+
+
+  function `void GoToDisplay()
+{
+// Add point to temporary shopping list
+   execute ("{ manageTempShopList(TEMP_SHOP_INIT_ADD,InputArea.TheOriginalText); }");
+
+   execute ("{load(\\"%s.ppic\\");}",PageForward);
+   execute ("{%s.PicturePointId = \`&%s\`;}",PageForward,InputArea.TheOriginalText);
+
+   execute ("{displayPicture(\\"Main\\",\\"%s.ppic\\");}",PageForward);
+}`
+
+
+
+  rectangle 
+  {
+    x = 3;
+    y = 2;
+    width = 410;
+    height = 300;
+
+    visibility = 1;
+    foregroundFillColour = `COLOR_PICTURE_BACKGROUND`;
+    backgroundFillColour = -1;
+    foregroundColour = `(CascadeEnterActive)?COLOR_DATA_NORMAL:COLOR_STATIC_TEXT`;
+    backgroundColour = -1;
+    lineWidth = 7;
+    linePattern = `SolidPattern`;
+    fillPattern = `SolidPattern`;
+    xReference = 10;
+    yReference = 9;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 100;
+    y = 29;
+    format = "%s";
+    theText = "SINGLE POINT DISPLAY";
+
+    visibility = 1;
+    foregroundColour = `(CascadeEnterActive)?COLOR_DATA_NORMAL:COLOR_STATIC_TEXT`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 100;
+    yReference = 29;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  line 
+  {
+    dialogue
+    {
+      event = `buttonPressed(Right) || keyPressed(ESC)`;
+      action = statement `{
+   CascadeEnterActive = 0;
+   CascadeEnter.unmap();
+   update();
+}`;
+    }
+    numberOfPoints = 2;
+
+    point[0] = (10, 46);
+    point[1] = (408, 46);
+
+    visibility = 1;
+    foregroundColour = `(CascadeEnterActive)?COLOR_DATA_NORMAL:COLOR_STATIC_TEXT`;
+    backgroundColour = -1;
+    lineWidth = 4;
+    lineStyle = `SolidPattern`;
+    xReference = 10;
+    yReference = 46;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 25;
+    y = 86;
+    format = "%s";
+    theText = "The Single Point Display provides a summary of the";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font2`;
+    xReference = 25;
+    yReference = 91;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 25;
+    y = 111;
+    format = "%s";
+    theText = "chosen Point Id.  ";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font2`;
+    xReference = 25;
+    yReference = 121;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 25;
+    y = 146;
+    format = "%s";
+    theText = "The user can also obtain a printed report of the ";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font2`;
+    xReference = 25;
+    yReference = 156;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 25;
+    y = 171;
+    format = "%s";
+    theText = "point summary from this display.";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font2`;
+    xReference = 20;
+    yReference = 181;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 25;
+    y = 261;
+    format = "%s";
+    theText = "ENTER THE POINT ID:";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font2`;
+    xReference = 20;
+    yReference = 216;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text ErrorText
+  {
+    x = 25;
+    y = 286;
+    format = "%s";
+    theText = "ERROR: THE POINT ID WAS NOT FOUND";
+
+    visibility = `InputArea.ERROR`;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font2`;
+    xReference = 25;
+    yReference = 281;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  instance DialogueSymbols.EnterSmallPointId InputArea
+  {
+    attribute FindPidScope = "::UCN5and6.PicUCN_SinglePointCascade.InputArea";
+    attribute ERROR = 0;
+    attribute Scope = "PicUCN_SinglePointCascade";
+    attribute NotFoundAction = "{ERROR=1;}";
+    attribute FoundAction = "{GoToDisplay();}";
+    attribute TheNewText = "CET03";
+    attribute TheOriginalText = "CET03";
+    attribute Selected = 0;
+    x = 190;
+    y = 237;
+    visibility = 1;
+    xReference = 195;
+    yReference = 189;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance InputArea
+
+
+
+// The picture's other attributes:
+
+  backgroundColour    = 0;
+  xSnap               = 5;
+  ySnap               = 5;
+  angleSnap           = 0;
+  radiusSnap          = 0;
+  worldX              = 0;
+  worldY              = 0;
+  worldWidth          = 417;
+  worldHeight         = 307;
+  oneToOne            = 1;
+  resizeMode          = 0;
+  updateMode          = 2;
+  crosshairStyle      = 1;
+  crosshairLength     = 0;
+  crosshairFollowSnap = `isInEditMode()`;
+  crosshairVisibility = `isInEditMode()`;
+  xReference = 500;
+  yReference = 500;
+  xScaleFactor = 1;
+  yScaleFactor = 1;
+  rotationAngle = 0;
+
+
+}  // end of picture PicUCN_SinglePointCascade

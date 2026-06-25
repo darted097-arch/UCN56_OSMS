@@ -1,0 +1,750 @@
+/*
+ * ProcSee CONFIGURATION LANGUAGE FILE
+ *
+ *
+ * User : ucn56
+ * Host : y6cr02
+ * Date : 2017-05-25
+ * Time : 14:07:21
+ *
+ * ProcSee version : ProcSee 3.10.1 (June 2016)
+ * File version    : 1.26
+ *
+ *
+ */
+
+
+picture PicUCN_VideoTrendView2
+{
+  worldX = 0;
+  worldY = 0;
+  worldWidth = 1280;
+  worldHeight = 824;
+  oneToOne = 1;
+  backgroundColour = 0;
+  updateMode = 2;
+  resizeMode = 0;
+  xSnap = 5;
+  ySnap = 5;
+  radiusSnap = 0;
+  angleSnap = 0;
+  crosshairStyle = 1;
+  crosshairLength = 0;
+  crosshairFollowSnap = `isInEditMode()`;
+  crosshairVisibility = `isInEditMode()`;
+  xReference = 500;
+  yReference = 500;
+  xScaleFactor = 1;
+  yScaleFactor = 1;
+  rotationAngle = 0;
+
+  char* PageBack = "";
+
+  char* PageForward = "";
+
+  char* PictureNumber = "812";
+
+  char* PictureTitle = "TREND  SET  2";
+
+  int Priority = 1;
+
+  RECORD* StaPID1 = `&CET01`;
+
+  RECORD* StaPID2 = `&CET02`;
+
+  RECORD* StaPID3 = `&CET03`;
+
+  RECORD* StaPID4 = `&CET04`;
+
+  char TheDisplayPage[50] = "PicUCN_VideoTrendMenu.ppic";
+
+  int ThePictureFrequency = 1;
+
+  int TimeCounts = 1495688782;
+
+  function `void escape()
+  {
+     ProcMsg.visibility = 1 ;
+  
+     if(Priority)   // Set flipflop by yrlee
+     {
+        Interface->VTFlagMessage.data.requestOption = 2;
+        Interface->VTFlagMessage.data.flipflop1 = 0;
+        execute("{sendMessageToHost(REQUEST_VTREND_DATA);}");
+     }
+     execute("{::UCN5and6.PicUCN_VideoTrendMenu.SaveOldPid();}") ;
+  }`
+
+  function `void escapeToMenu()
+  {
+     ProcMsg.visibility = 1 ;
+  
+     if(Priority)   // Set flipflop by yrlee
+     {
+        Interface->VTFlagMessage.data.requestOption = 2;
+        Interface->VTFlagMessage.data.flipflop1 = 0;
+        execute("{sendMessageToHost(REQUEST_VTREND_DATA);}");
+     }
+  
+     VideoSetno = 2;
+     execute("{::UCN5and6.PicUCN_VideoTrendMenu.SaveOldPid();}") ;
+     execute("{DisplayPage(\\"%s\\");}",TheDisplayPage);
+  }
+  `
+
+  function `void Initialize()
+  {
+     int i;
+     CFMLevel = 0 ;
+     Current_Page = 812;
+  
+  // Display Rate
+  
+     ProcMsg.visibility = 0 ;
+     ThePictureFrequency = VT_ScanRate2;
+     DisplayAdvisoryMessage(" ");
+     DisplayAdvisoryMessage1(" ");
+     DisplayAdvisoryMessage2(" ");
+     DisplayAdvisoryMessage3(" ");
+  
+  //   strcpy(changedLog,Interface->System.timeString);
+  //   printf("changedLog .... %s",changedLog);
+  //   strcpy(LogPID1.TempTime,changedLog);
+  //   strcpy(LogPID2.TempTime,changedLog);
+  //   strcpy(LogPID3.TempTime,changedLog);
+  //   strcpy(LogPID4.TempTime,changedLog);
+  
+  
+     // Trend #1
+  
+      if(strlen(Interface->VideoTrendData.Set2Point1.VideoTrendId) < 2)
+      {
+         execute("{StaPID1 = \\\`&ERRORPID\\\`;}");
+         execute("{vtrpid1.ThePointId = \\\`&ERRORPID\\\`;}");
+         execute("{Trend1.TheVariable = \\\`&ERRORPID\\\`;}");
+         execute("{VideoSet2Tr1 = \\\`ERRORPID->value\\\`;}");
+      }
+      else
+      {
+         execute("{StaPID1 = \\\`&%s\\\`;}",Interface->VideoTrendData.Set2Point1.VideoTrendId);
+         execute("{vtrpid1.ThePointId = \\\`&%s\\\`;}",Interface->VideoTrendData.Set2Point1.VideoTrendId);
+         execute("{Trend1.TheVariable = \\\`&%s\\\`;}",Interface->VideoTrendData.Set2Point1.VideoTrendId);
+         execute("{VideoSet2Tr1 = \\\`%s->value\\\`;}",Interface->VideoTrendData.Set2Point1.VideoTrendId);
+  
+         if (IsDigital(StaPID1))		  // For Digital PID               // yrlee981216
+         {
+            Trend1.Baseline =  Interface->VideoTrendData.Set2Point1.Baseline;
+            Trend1.BASE =      Interface->VideoTrendData.Set2Point1.Baseline;
+            Trend1.LowLimit =  Interface->VideoTrendData.Set2Point1.Minimum;
+            Trend1.HighLimit = Interface->VideoTrendData.Set2Point1.Maximum;
+         }
+         else                               // For Analog PID
+         {
+	 /* *****************CORENET 20170620*******************************
+            if ( (Interface->System.displayedUnits) && (!(StaPID1->pipbitmap & bMETUNIT)) )
+            {
+               Trend1.Baseline =  Interface->VideoTrendData.Set2Point1.Baseline * StaPID1->mfactor + StaPID1->moffset;
+               Trend1.BASE =      Interface->VideoTrendData.Set2Point1.Baseline * StaPID1->mfactor + StaPID1->moffset;
+               Trend1.LowLimit =  Interface->VideoTrendData.Set2Point1.Minimum  * StaPID1->mfactor + StaPID1->moffset;
+               Trend1.HighLimit = Interface->VideoTrendData.Set2Point1.Maximum  * StaPID1->mfactor + StaPID1->moffset;
+            }
+            else if ( (!Interface->System.displayedUnits) && (StaPID1->pipbitmap & bMETUNIT) )
+            {
+               Trend1.Baseline =  (Interface->VideoTrendData.Set2Point1.Baseline - StaPID1->moffset) / StaPID1->mfactor;
+               Trend1.BASE =      (Interface->VideoTrendData.Set2Point1.Baseline - StaPID1->moffset) / StaPID1->mfactor;
+               Trend1.LowLimit =  (Interface->VideoTrendData.Set2Point1.Minimum  - StaPID1->moffset) / StaPID1->mfactor;
+               Trend1.HighLimit = (Interface->VideoTrendData.Set2Point1.Maximum  - StaPID1->moffset) / StaPID1->mfactor;
+            }
+            else
+	    */
+
+            {
+               Trend1.Baseline =  Interface->VideoTrendData.Set2Point1.Baseline;
+               Trend1.BASE =      Interface->VideoTrendData.Set2Point1.Baseline;
+               Trend1.LowLimit =  Interface->VideoTrendData.Set2Point1.Minimum;
+               Trend1.HighLimit = Interface->VideoTrendData.Set2Point1.Maximum;
+            }
+         }
+      }
+  
+  
+     Trend1.ComputeBaseline();
+  
+  //   if(strcmp(VTset2Temp1,Interface->VideoTrendData.Set2Point1.VideoTrendId) == 0)
+  //         LogPID1.visibility = 0;
+  //       else
+  //         LogPID1.visibility = 1;
+  
+     // Trend #2
+  
+  
+      if(strlen(Interface->VideoTrendData.Set2Point2.VideoTrendId) < 2)
+      {
+         execute("{StaPID2 = \\\`&ERRORPID\\\`;}");
+         execute("{vtrpid2.ThePointId = \\\`&ERRORPID\\\`;}");
+         execute("{Trend2.TheVariable = \\\`&ERRORPID\\\`;}");
+         execute("{VideoSet2Tr2 = \\\`ERRORPID->value\\\`;}");
+      }
+      else
+      {
+         execute("{StaPID2 = \\\`&%s\\\`;}",Interface->VideoTrendData.Set2Point2.VideoTrendId);
+         execute("{vtrpid2.ThePointId = \\\`&%s\\\`;}",Interface->VideoTrendData.Set2Point2.VideoTrendId);
+         execute("{Trend2.TheVariable = \\\`&%s\\\`;}",Interface->VideoTrendData.Set2Point2.VideoTrendId);
+         execute("{VideoSet2Tr2 = \\\`%s->value\\\`;}",Interface->VideoTrendData.Set2Point2.VideoTrendId);
+  
+  
+         if (IsDigital(StaPID2))		  // For Digital PID               // yrlee981216
+         {
+            Trend2.Baseline =  Interface->VideoTrendData.Set2Point2.Baseline;
+            Trend2.BASE =      Interface->VideoTrendData.Set2Point2.Baseline;
+            Trend2.LowLimit =  Interface->VideoTrendData.Set2Point2.Minimum;
+            Trend2.HighLimit = Interface->VideoTrendData.Set2Point2.Maximum;
+         }
+         else                               // For Analog PID
+         {
+	 /* **********CORENET 20170620******************************I
+            if ( (Interface->System.displayedUnits) && (!(StaPID2->pipbitmap & bMETUNIT)) )      // by yrlee
+            {
+               Trend2.Baseline =  Interface->VideoTrendData.Set2Point2.Baseline * StaPID2->mfactor + StaPID2->moffset;
+               Trend2.BASE =      Interface->VideoTrendData.Set2Point2.Baseline * StaPID2->mfactor + StaPID2->moffset;
+               Trend2.LowLimit =  Interface->VideoTrendData.Set2Point2.Minimum  * StaPID2->mfactor + StaPID2->moffset;
+               Trend2.HighLimit = Interface->VideoTrendData.Set2Point2.Maximum  * StaPID2->mfactor + StaPID2->moffset;
+            }
+            else if ( (!Interface->System.displayedUnits) && (StaPID2->pipbitmap & bMETUNIT) )
+            {
+               Trend2.Baseline =  (Interface->VideoTrendData.Set2Point2.Baseline - StaPID2->moffset) / StaPID2->mfactor;
+               Trend2.BASE =      (Interface->VideoTrendData.Set2Point2.Baseline - StaPID2->moffset) / StaPID2->mfactor;
+               Trend2.LowLimit =  (Interface->VideoTrendData.Set2Point2.Minimum  - StaPID2->moffset) / StaPID2->mfactor;
+               Trend2.HighLimit = (Interface->VideoTrendData.Set2Point2.Maximum  - StaPID2->moffset) / StaPID2->mfactor;
+            }
+            else
+	    */
+
+            {
+               Trend2.Baseline =  Interface->VideoTrendData.Set2Point2.Baseline;
+               Trend2.BASE =      Interface->VideoTrendData.Set2Point2.Baseline;
+               Trend2.LowLimit =  Interface->VideoTrendData.Set2Point2.Minimum;
+               Trend2.HighLimit = Interface->VideoTrendData.Set2Point2.Maximum;
+            }
+        }
+     }
+  
+  
+     Trend2.ComputeBaseline();
+  
+  //   if(strcmp(VTset2Temp2,Interface->VideoTrendData.Set2Point2.VideoTrendId) == 0)
+  //         LogPID2.visibility = 0;
+  //       else
+  //         LogPID2.visibility = 1;
+  
+     // Trend #3
+  
+  
+      if(strlen(Interface->VideoTrendData.Set2Point3.VideoTrendId) < 2)
+      {
+         execute("{StaPID3 = \\\`&ERRORPID\\\`;}");
+         execute("{vtrpid3.ThePointId = \\\`&ERRORPID\\\`;}");
+         execute("{Trend3.TheVariable = \\\`&ERRORPID\\\`;}");
+         execute("{VideoSet2Tr3 = \\\`ERRORPID->value\\\`;}");
+      }
+      else
+      {
+         execute("{StaPID3 = \\\`&%s\\\`;}",Interface->VideoTrendData.Set2Point3.VideoTrendId);
+         execute("{vtrpid3.ThePointId = \\\`&%s\\\`;}",Interface->VideoTrendData.Set2Point3.VideoTrendId);
+         execute("{Trend3.TheVariable = \\\`&%s\\\`;}",Interface->VideoTrendData.Set2Point3.VideoTrendId);
+         execute("{VideoSet2Tr3 = \\\`%s->value\\\`;}",Interface->VideoTrendData.Set2Point3.VideoTrendId);
+  
+         if (IsDigital(StaPID3))		  // For Digital PID               // yrlee981216
+         {
+            Trend3.Baseline =  Interface->VideoTrendData.Set2Point3.Baseline;
+            Trend3.BASE =      Interface->VideoTrendData.Set2Point3.Baseline;
+            Trend3.LowLimit =  Interface->VideoTrendData.Set2Point3.Minimum;
+            Trend3.HighLimit = Interface->VideoTrendData.Set2Point3.Maximum;
+         }
+         else                               // For Analog PID
+         {
+	 /* ************CORENET 20170620******************************
+            if ( (Interface->System.displayedUnits) && (!(StaPID3->pipbitmap & bMETUNIT)) )      // by yrlee
+            {
+               Trend3.Baseline =  Interface->VideoTrendData.Set2Point3.Baseline * StaPID3->mfactor + StaPID3->moffset;
+               Trend3.BASE =      Interface->VideoTrendData.Set2Point3.Baseline * StaPID3->mfactor + StaPID3->moffset;
+               Trend3.LowLimit =  Interface->VideoTrendData.Set2Point3.Minimum  * StaPID3->mfactor + StaPID3->moffset;
+               Trend3.HighLimit = Interface->VideoTrendData.Set2Point3.Maximum  * StaPID3->mfactor + StaPID3->moffset;
+            }
+            else if ( (!Interface->System.displayedUnits) && (StaPID3->pipbitmap & bMETUNIT) )
+            {
+               Trend3.Baseline =  (Interface->VideoTrendData.Set2Point3.Baseline - StaPID3->moffset) / StaPID3->mfactor;
+               Trend3.BASE =      (Interface->VideoTrendData.Set2Point3.Baseline - StaPID3->moffset) / StaPID3->mfactor;
+               Trend3.LowLimit =  (Interface->VideoTrendData.Set2Point3.Minimum  - StaPID3->moffset) / StaPID3->mfactor;
+               Trend3.HighLimit = (Interface->VideoTrendData.Set2Point3.Maximum  - StaPID3->moffset) / StaPID3->mfactor;
+            }
+            else
+	    */
+
+            {
+               Trend3.Baseline =  Interface->VideoTrendData.Set2Point3.Baseline;
+               Trend3.BASE =      Interface->VideoTrendData.Set2Point3.Baseline;
+               Trend3.LowLimit =  Interface->VideoTrendData.Set2Point3.Minimum;
+               Trend3.HighLimit = Interface->VideoTrendData.Set2Point3.Maximum;
+            }
+        }
+     }
+  
+     Trend3.ComputeBaseline();
+  
+  //   if(strcmp(VTset2Temp3,Interface->VideoTrendData.Set2Point3.VideoTrendId) == 0)
+  //         LogPID3.visibility = 0;
+  //       else
+  //        LogPID3.visibility = 1;
+  
+     // Trend #4
+  
+                                                                              // yrlee981113
+      if(strlen(Interface->VideoTrendData.Set2Point4.VideoTrendId) < 2)
+      {
+         execute("{StaPID4 = \\\`&ERRORPID\\\`;}");
+         execute("{vtrpid4.ThePointId = \\\`&ERRORPID\\\`;}");
+         execute("{Trend4.TheVariable = \\\`&ERRORPID\\\`;}");
+         execute("{VideoSet2Tr4 = \\\`ERRORPID->value\\\`;}");
+      }
+      else
+      {
+         execute("{StaPID4 = \\\`&%s\\\`;}",Interface->VideoTrendData.Set2Point4.VideoTrendId);
+         execute("{vtrpid4.ThePointId = \\\`&%s\\\`;}",Interface->VideoTrendData.Set2Point4.VideoTrendId);
+         execute("{Trend4.TheVariable = \\\`&%s\\\`;}",Interface->VideoTrendData.Set2Point4.VideoTrendId);
+         execute("{VideoSet2Tr4 = \\\`%s->value\\\`;}",Interface->VideoTrendData.Set2Point4.VideoTrendId);
+  
+         if (IsDigital(StaPID4))		  // For Digital PID               // yrlee981216
+         {
+            Trend4.Baseline =  Interface->VideoTrendData.Set2Point4.Baseline;
+            Trend4.BASE =      Interface->VideoTrendData.Set2Point4.Baseline;
+            Trend4.LowLimit =  Interface->VideoTrendData.Set2Point4.Minimum;
+            Trend4.HighLimit = Interface->VideoTrendData.Set2Point4.Maximum;
+         }
+         else                               // For Analog PID
+         {
+	 /* *****************CORENET 20170620****************************
+            if ( (Interface->System.displayedUnits) && (!(StaPID4->pipbitmap & bMETUNIT)) )      // by yrlee
+            {
+               Trend4.Baseline =  Interface->VideoTrendData.Set2Point4.Baseline * StaPID4->mfactor + StaPID4->moffset;
+               Trend4.BASE =      Interface->VideoTrendData.Set2Point4.Baseline * StaPID4->mfactor + StaPID4->moffset;
+               Trend4.LowLimit =  Interface->VideoTrendData.Set2Point4.Minimum  * StaPID4->mfactor + StaPID4->moffset;
+               Trend4.HighLimit = Interface->VideoTrendData.Set2Point4.Maximum  * StaPID4->mfactor + StaPID4->moffset;
+            }
+            else if ( (!Interface->System.displayedUnits) && (StaPID4->pipbitmap & bMETUNIT) )
+            {
+               Trend4.Baseline =  (Interface->VideoTrendData.Set2Point4.Baseline - StaPID4->moffset) / StaPID4->mfactor;
+               Trend4.BASE =      (Interface->VideoTrendData.Set2Point4.Baseline - StaPID4->moffset) / StaPID4->mfactor;
+               Trend4.LowLimit =  (Interface->VideoTrendData.Set2Point4.Minimum  - StaPID4->moffset) / StaPID4->mfactor;
+               Trend4.HighLimit = (Interface->VideoTrendData.Set2Point4.Maximum  - StaPID4->moffset) / StaPID4->mfactor;
+            }
+            else
+	    */
+
+            {
+               Trend4.Baseline =  Interface->VideoTrendData.Set2Point4.Baseline;
+               Trend4.BASE =      Interface->VideoTrendData.Set2Point4.Baseline;
+               Trend4.LowLimit =  Interface->VideoTrendData.Set2Point4.Minimum;
+               Trend4.HighLimit = Interface->VideoTrendData.Set2Point4.Maximum;
+            }
+        }
+     }
+  
+     Trend4.ComputeBaseline();
+  
+  //   if(strcmp(VTset2Temp4,Interface->VideoTrendData.Set2Point4.VideoTrendId) == 0)
+  //         LogPID4.visibility = 0;
+  //       else
+  //         LogPID4.visibility = 1;
+  //
+     for (i=1; i<5; i++)
+     {
+       execute("{strcpy(VTset2Temp%d,Interface->VideoTrendData.Set2Point%d.VideoTrendId);}",i,i);
+     }
+  
+     Priority = \`!Interface->VTFlagMessage.data.flipflop2\` ;
+  
+     if(Priority)   // Set flipflop by yrlee
+     {
+        Interface->VTFlagMessage.data.requestOption = 2;
+        Interface->VTFlagMessage.data.flipflop1 = 1;
+        execute("{sendMessageToHost(REQUEST_VTREND_DATA);}");
+     }
+  
+     ProcMsg.visibility = 0 ;
+  
+     update();
+  }`
+
+  function `int IsDigital(RECORD *pRECORD)
+  {
+    int retval, sigtype;
+  
+  // get a pointer to the record for the PID
+  //  execute("{pRECORD = &%s;}",PID);
+  
+  
+    sigtype = pRECORD->sig_type;
+    switch(sigtype)
+    {
+      case CI:
+      case DI:
+      case SOE:
+      case BCI:
+      case DL:
+      case QD:
+      case XD:
+      case CO:
+      case BCO:
+        retval = 1;
+        break;
+      default:
+        retval = 0;
+        break;
+    }//endswitch
+    return(retval);
+  }`
+
+  dialogue
+  {
+    event = `keyPressed(0xFF1B)`;
+    action = `{escapeToMenu();}`;
+  }
+
+  rectangle
+  {
+    x = 880;
+    y = 16;
+    width = 230;
+    height = 25;
+    visibility = 1;
+    foregroundColour = `COLOR_LINE_BOUNDARY_6`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 0;
+    foregroundFillColour = -1;
+    backgroundFillColour = -1;
+    fillPattern = `SolidPattern`;
+    xReference = 880;
+    yReference = 16;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  instance TrendLibrary.VideoTrend Trend1
+  {
+    x = 72;
+    y = 31;
+    visibility = 1;
+    xReference = 92;
+    yReference = 13;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BASE = 630;
+    Baseline = 630;
+    DigitalOnePhrase = `TheVariable->message2`;
+    DigitalZeroPhrase = `TheVariable->message1`;
+    HighLimit = 1260;
+    LowLimit = 0;
+    OORH_VALUE = 99998;
+    OORL_VALUE = -99998;
+    TheFrequency = `ThePictureFrequency`;
+    TheTrackTime = "13:59:37";
+    TheTrendVariable = "::UCN5and6.VideoSet2Tr1";
+    TheVariable = `&CET01`;
+  }
+
+  instance DialogueSymbols.StatusLine vtrpid1
+  {
+    x = 125;
+    y = 46;
+    visibility = `strcmp(Trend1.TheVariable->pid,"ERRORPID")`;
+    xReference = 52;
+    yReference = 40;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    ThePointId = `&CET01`;
+  }
+
+  instance TrendLibrary.VideoTrend Trend2
+  {
+    x = 72;
+    y = 205;
+    visibility = 1;
+    xReference = 92;
+    yReference = -4;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BASE = 630;
+    Baseline = 630;
+    DigitalOnePhrase = `TheVariable->message2`;
+    DigitalZeroPhrase = `TheVariable->message1`;
+    HighLimit = 1260;
+    LowLimit = 0;
+    OORH_VALUE = 99998;
+    OORL_VALUE = -99998;
+    TheFrequency = `ThePictureFrequency`;
+    TheTrackTime = "14:00:38";
+    TheTrendVariable = "::UCN5and6.VideoSet2Tr2";
+    TheVariable = `&CET02`;
+  }
+
+  instance DialogueSymbols.StatusLine vtrpid2
+  {
+    x = 125;
+    y = 220;
+    visibility = `strcmp(Trend2.TheVariable->pid,"ERRORPID")`;
+    xReference = 152;
+    yReference = 513;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    ThePointId = `&CET02`;
+  }
+
+  instance TrendLibrary.VideoTrend Trend3
+  {
+    x = 72;
+    y = 381;
+    visibility = 1;
+    xReference = 92;
+    yReference = -18;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BASE = 630;
+    Baseline = 630;
+    DigitalOnePhrase = `TheVariable->message2`;
+    DigitalZeroPhrase = `TheVariable->message1`;
+    HighLimit = 1260;
+    LowLimit = 0;
+    OORH_VALUE = 99998;
+    OORL_VALUE = -99998;
+    TheFrequency = `ThePictureFrequency`;
+    TheTrackTime = "09:00:00";
+    TheTrendVariable = "::UCN5and6.VideoSet2Tr3";
+    TheVariable = `&CET03`;
+  }
+
+  instance DialogueSymbols.StatusLine vtrpid3
+  {
+    x = 125;
+    y = 395;
+    visibility = `strcmp(Trend3.TheVariable->pid,"ERRORPID")`;
+    xReference = 107;
+    yReference = 394;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    ThePointId = `&CET03`;
+  }
+
+  instance TrendLibrary.VideoTrend Trend4
+  {
+    x = 72;
+    y = 557;
+    visibility = 1;
+    xReference = 92;
+    yReference = -33;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BASE = 630;
+    Baseline = 630;
+    DigitalOnePhrase = `TheVariable->message2`;
+    DigitalZeroPhrase = `TheVariable->message1`;
+    HighLimit = 1260;
+    LowLimit = 0;
+    OORH_VALUE = 99998;
+    OORL_VALUE = -99998;
+    TheFrequency = `ThePictureFrequency`;
+    TheTrackTime = "09:00:00";
+    TheTrendVariable = "::UCN5and6.VideoSet2Tr4";
+    TheVariable = `&CET04`;
+  }
+
+  instance DialogueSymbols.StatusLine vtrpid4
+  {
+    x = 125;
+    y = 571;
+    visibility = `strcmp(Trend4.TheVariable->pid,"ERRORPID")`;
+    xReference = 77;
+    yReference = 589;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    ThePointId = `&CET04`;
+  }
+
+  text
+  {
+    x = 893;
+    y = 35;
+    format = "%s";
+    theText = " TIMEBASE:";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font2`;
+    xReference = 932;
+    yReference = 15;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 1023;
+    y = 35;
+    format = "%s";
+    theText = "SECONDS ";
+    alignment = 0;
+    visibility = `(ThePictureFrequency > 1)`;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font2`;
+    xReference = 932;
+    yReference = 15;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 1023;
+    y = 35;
+    format = "%s";
+    theText = "SECOND ";
+    alignment = 0;
+    visibility = `(ThePictureFrequency <= 1)`;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font2`;
+    xReference = 932;
+    yReference = 15;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 998;
+    y = 35;
+    format = "%d";
+    theText = `ThePictureFrequency`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font2`;
+    xReference = 927;
+    yReference = 15;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  instance DialogueSymbols.StatusLineVT2 LogPID1
+  {
+    x = 856;
+    y = 47;
+    visibility = `( ((time(&TimeCounts)-VideoSet2->Trend1.Counts)<=(ThePictureFrequency*600)) && strcmp(Trend1.TheVariable->pid,"ERRORPID") )? 1:0`;
+    xReference = 791;
+    yReference = 36;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    TempDate = `VideoSet2.Trend1.Date`;
+    TempTime = `VideoSet2.Trend1.Time`;
+    ThePointId = `StaPID1`;
+  }
+
+  instance DialogueSymbols.StatusLineVT2 LogPID2
+  {
+    x = 854;
+    y = 221;
+    visibility = `( ((time(&TimeCounts)-VideoSet2->Trend2.Counts)<=(ThePictureFrequency*600)) && strcmp(Trend2.TheVariable->pid,"ERRORPID") )? 1:0`;
+    xReference = 792;
+    yReference = 219;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    TempDate = `VideoSet2.Trend2.Date`;
+    TempTime = `VideoSet2.Trend2.Time`;
+    ThePointId = `StaPID2`;
+  }
+
+  instance DialogueSymbols.StatusLineVT2 LogPID3
+  {
+    x = 856;
+    y = 396;
+    visibility = `( ((time(&TimeCounts)-VideoSet2->Trend3.Counts)<=(ThePictureFrequency*600)) && strcmp(Trend3.TheVariable->pid,"ERRORPID") )? 1:0`;
+    xReference = 856;
+    yReference = 396;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    TempDate = `VideoSet2.Trend3.Date`;
+    TempTime = `VideoSet2.Trend3.Time`;
+    ThePointId = `StaPID3`;
+  }
+
+  instance DialogueSymbols.StatusLineVT2 LogPID4
+  {
+    x = 856;
+    y = 572;
+    visibility = `( ((time(&TimeCounts)-VideoSet2->Trend4.Counts)<=(ThePictureFrequency*600)) && strcmp(Trend4.TheVariable->pid,"ERRORPID") )? 1:0`;
+    xReference = 854;
+    yReference = 572;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    TempDate = `VideoSet2.Trend4.Date`;
+    TempTime = `VideoSet2.Trend4.Time`;
+    ThePointId = `StaPID4`;
+  }
+
+  text ProcMsg
+  {
+    x = 535;
+    y = 766;
+    format = "%s";
+    theText = "PROCESSING... WAIT";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 627;
+    yReference = 780;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 860;
+    y = 766;
+    format = "%s";
+    theText = "(BEING USED BY OTHERS)";
+    alignment = 0;
+    visibility = `!Priority`;
+    foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 952;
+    yReference = 780;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+}

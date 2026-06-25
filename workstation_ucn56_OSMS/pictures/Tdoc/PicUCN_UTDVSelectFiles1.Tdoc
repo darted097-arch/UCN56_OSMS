@@ -1,0 +1,1012 @@
+/*
+ * ProcSee CONFIGURATION LANGUAGE FILE
+ *
+ *
+ * User : ucn56
+ * Host : y6cr02
+ * Date : 2017-05-25
+ * Time : 16:31:34
+ *
+ * ProcSee version : ProcSee 3.10.1 (June 2016)
+ * File version    : 1.26
+ *
+ *
+ */
+
+
+picture PicUCN_UTDVSelectFiles1
+{
+  worldX = 0;
+  worldY = 0;
+  worldWidth = 1280;
+  worldHeight = 824;
+  oneToOne = 1;
+  backgroundColour = 0;
+  updateMode = 2;
+  resizeMode = 0;
+  xSnap = 5;
+  ySnap = 5;
+  radiusSnap = 0;
+  angleSnap = 0;
+  crosshairStyle = 1;
+  crosshairLength = 0;
+  crosshairFollowSnap = `isInEditMode()`;
+  crosshairVisibility = `isInEditMode()`;
+  xReference = 500;
+  yReference = 500;
+  xScaleFactor = 1;
+  yScaleFactor = 1;
+  rotationAngle = 0;
+
+  char ascOption[2] = "3";
+
+  int Current_page = 652;
+
+  int option = -99;
+
+  char PictureNumber[50] = "652";
+
+  char PictureTitle[50] = "UTDV  :  SELECT  FILES";
+
+  int receivedCheck = 0;
+
+  int SELECTED = 0;
+
+  function `void escape()
+  {
+  DisplayPage(Page650);
+  }`
+
+  function `void Initialize()
+  {
+     int i;
+  
+  // for ESC navigation
+     Current_Page = 652;
+     CFMLevel =0;
+  
+     UnselectAllButton();
+  // UTDV page navigation
+     Current_page = 652;
+     SELECTED = 0;
+  
+    option=-99;
+    MakeVisible();
+  //
+     OP1.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+     OP1.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+  
+     OP1.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+     OP1.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+     OP1.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+     OP1.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+  
+     OP1.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     OP1.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     OP1.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     OP1.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     OP1.TheFontColor = COLOR_STATIC_TEXT;
+  
+     OP2.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+     OP2.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+  
+     OP2.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+     OP2.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+     OP2.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+     OP2.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+  
+     OP2.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     OP2.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     OP2.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     OP2.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     OP2.TheFontColor = COLOR_STATIC_TEXT;
+  
+     OP3.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+     OP3.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+  
+     OP3.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+     OP3.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+     OP3.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+     OP3.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+  
+     OP3.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     OP3.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     OP3.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     OP3.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     OP3.TheFontColor = COLOR_STATIC_TEXT;
+  
+  //6.19
+     i = Interface->System.cpuNum;
+  
+     if(i == 1) {
+        strcpy(selectfile1.TheNewText,"LOG1:UTNLMID.DAT");
+        strcpy(selectfile2.TheNewText,"LOG1:UTLMID.DAT");
+        strcpy(selectfile3.TheNewText,"LOG1:UTLHCEA.DAT");
+        strcpy(selectfile1.TheOriginalText,"LOG1:UTNLMID.DAT");
+        strcpy(selectfile2.TheOriginalText,"LOG1:UTLMID.DAT");
+        strcpy(selectfile3.TheOriginalText,"LOG1:UTLHCEA.DAT");
+        }
+      else {
+        strcpy(selectfile1.TheNewText,"LOG2:UTNLMID.DAT");
+        strcpy(selectfile2.TheNewText,"LOG2:UTLMID.DAT");
+        strcpy(selectfile3.TheNewText,"LOG2:UTLHCEA.DAT");
+        strcpy(selectfile1.TheOriginalText,"LOG2:UTNLMID.DAT");
+        strcpy(selectfile2.TheOriginalText,"LOG2:UTLMID.DAT");
+        strcpy(selectfile3.TheOriginalText,"LOG2:UTLHCEA.DAT");
+        }
+  
+     processfiles.UnSelect(); //jsk
+     update();
+  }
+  `
+
+  function `void KeepSelected()
+  {
+     if (1 == option)
+     {
+     OP2.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+     OP2.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+  
+     OP2.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+     OP2.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+     OP2.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+     OP2.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+  
+     OP2.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     OP2.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     OP2.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     OP2.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     OP2.TheFontColor = COLOR_STATIC_TEXT;
+  
+     OP3.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+     OP3.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+  
+     OP3.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+     OP3.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+     OP3.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+     OP3.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+  
+     OP3.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     OP3.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     OP3.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     OP3.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     OP3.TheFontColor = COLOR_STATIC_TEXT;
+     }
+     if (2 == option)
+     {
+     OP3.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+     OP3.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+  
+     OP3.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+     OP3.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+     OP3.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+     OP3.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+  
+     OP3.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     OP3.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     OP3.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     OP3.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     OP3.TheFontColor = COLOR_STATIC_TEXT;
+  
+     OP1.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+     OP1.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+  
+     OP1.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+     OP1.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+     OP1.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+     OP1.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+  
+     OP1.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     OP1.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     OP1.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     OP1.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     OP1.TheFontColor = COLOR_STATIC_TEXT;
+  
+     }
+     if (3 == option)
+     {
+  
+     OP1.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+     OP1.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+  
+     OP1.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+     OP1.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+     OP1.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+     OP1.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+  
+     OP1.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     OP1.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     OP1.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     OP1.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     OP1.TheFontColor = COLOR_STATIC_TEXT;
+  
+     OP2.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+     OP2.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+  
+     OP2.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+     OP2.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+     OP2.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+     OP2.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+  
+     OP2.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     OP2.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     OP2.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     OP2.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     OP2.TheFontColor = COLOR_STATIC_TEXT;
+  
+     }
+  //
+     SELECTED = 1;
+  }`
+
+  function `void MakeInvisible()
+  {
+    text1.visibility=0;
+    text2.visibility=0;
+    text3.visibility=0;
+    text4.visibility=0;
+    text5.visibility=0;
+    text6.visibility=0;
+    text7.visibility=0;
+    text8.visibility=0;
+    selectfile1.visibility=0;
+    selectfile1.vis=0;
+    selectfile2.visibility=0;
+    selectfile2.vis=0;
+    selectfile3.visibility=0;
+    selectfile3.vis=0;
+    processfiles.visibility=0;
+    update();
+  }`
+
+  function `void MakeVisible()
+  {
+    text1.visibility=1;
+    text2.visibility=1;
+    text3.visibility=1;
+    text4.visibility=1;
+    text5.visibility=1;
+    text6.visibility=1;
+    text7.visibility=1;
+    text8.visibility=1;
+    selectfile1.visibility=1;
+    selectfile2.visibility=1;
+    selectfile3.visibility=1;
+    processfiles.visibility=1;
+    update();
+  }`
+
+  function `void Option1()
+  {
+     option=1;
+     UTDV652_option=1;
+  //   printf(" option 1 is selected ");
+      strcpy(ascOption,"1");
+     KeepSelected();
+     update();
+  }`
+
+  function `void Option2()
+  {
+      UTDV652_option=2;
+      option=2;
+  //    printf(" option 2 is selected ");
+      strcpy(ascOption,"2");
+     KeepSelected();
+     update();
+  }`
+
+  function `void Option3()
+  {
+      UTDV652_option=3;
+      option=3;
+  //    printf(" option 3 is selected ");
+      strcpy(ascOption,"3");
+     KeepSelected();
+     update();
+  }`
+
+  function `void Process1()
+  {
+  if (SELECTED == 0) DisplayAdvisoryMessage("SELECT 1 - 3 FIRST BEFORE PROCESS ");
+  else if (SELECTED == 1)
+  {
+    Interface->UtdvDialogue.option=option;
+    Interface->UtdvDialogue.current_page=Current_page;
+    execute("{strcpy(Interface->UtdvDialogue.filename1, selectfile1.TheNewText);}");
+    execute("{strcpy(Interface->UtdvDialogue.filename2, selectfile2.TheNewText);}");
+    execute("{strcpy(Interface->UtdvDialogue.filename3, selectfile3.TheNewText);}");
+  
+    // printf(" Filename1 = %s", Interface->UtdvDialogue.filename1);
+    // printf(" Filename2 = %s", Interface->UtdvDialogue.filename2);
+    // printf(" Filename3 = %s", Interface->UtdvDialogue.filename3);
+  
+     execute("{strcpy(utnlmid652, selectfile1.TheNewText);}");
+     execute("{strcpy(utlmid652, selectfile2.TheNewText);}");
+     execute("{strcpy(utlhcea652, selectfile3.TheNewText);}");
+  
+    execute("{sendMessageToHost(PROCESS_UTDV_SEND);}");
+    // printf("Process(): SendMessageToHost(PROCESS_UTDV_SEND) done ....");
+  }
+  }
+  `
+
+  function `void UnselectAllButton()
+  {
+  
+     OP1.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+     OP1.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+  
+     OP1.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+     OP1.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+     OP1.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+     OP1.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+  
+     OP1.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     OP1.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     OP1.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     OP1.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     OP1.TheFontColor = COLOR_STATIC_TEXT;
+  
+     OP2.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+     OP2.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+  
+     OP2.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+     OP2.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+     OP2.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+     OP2.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+  
+     OP2.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     OP2.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     OP2.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     OP2.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     OP2.TheFontColor = COLOR_STATIC_TEXT;
+  
+     OP3.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+     OP3.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+  
+     OP3.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+     OP3.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+     OP3.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+     OP3.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+  
+     OP3.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     OP3.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     OP3.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     OP3.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     OP3.TheFontColor = COLOR_STATIC_TEXT;
+  }`
+
+  dialogue
+  {
+    event = `keyPressed(ESC)`;
+    action = `{
+    DisplayPage(Page650);
+    }`;
+  }
+
+  rectangle
+  {
+    x = 194;
+    y = 69;
+    width = 919;
+    height = 235;
+    visibility = 1;
+    foregroundColour = `COLOR_LINE_BOUNDARY_6`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 3;
+    foregroundFillColour = `COLOR_NON_ESSENTIAL`;
+    backgroundFillColour = -1;
+    fillPattern = `NoPattern`;
+    xReference = 295;
+    yReference = 57;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 18;
+    y = 197;
+    format = "%s";
+    theText = "SELECT OPTION";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 18;
+    yReference = 197;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 452;
+    y = 31;
+    format = "%s";
+    theText = "UPDATE  AND  INITIALIZE  CPU  MODE";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 452;
+    yReference = 31;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle
+  {
+    x = 194;
+    y = 324;
+    width = 919;
+    height = 84;
+    visibility = 1;
+    foregroundColour = `COLOR_LINE_BOUNDARY_6`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 3;
+    foregroundFillColour = `COLOR_NON_ESSENTIAL`;
+    backgroundFillColour = -1;
+    fillPattern = `NoPattern`;
+    xReference = 295;
+    yReference = 312;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 291;
+    y = 388;
+    format = "%s";
+    theText = "( UPDATE  PRESENT  EFPHS,  RPCB  BURNUP,  AND / OR  CEA  EXPOSURE )";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 291;
+    yReference = 388;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  instance DialogueSymbols.LargeMenuSelectTest OP3
+  {
+    x = 285;
+    y = 326;
+    visibility = 1;
+    xReference = 285;
+    yReference = 326;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Cascade = 0;
+    CascadeX = 400;
+    CascadeY = 400;
+    ExecuteString = "Option3()";
+    TheFontColor = 2;
+    TheOption = "3.";
+    TheTextFont = `font6`;
+    TheTitle = "ENTER HOURLY CEA FILE BELOW";
+  }
+
+  text
+  {
+    x = 292;
+    y = 105;
+    format = "%s";
+    theText = "PRIMARY  CPU  STARTUP,  UPDATE  ALL : ";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 292;
+    yReference = 105;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 290;
+    y = 283;
+    format = "%s";
+    theText = "( CEA  DATA  FROM  LAST  MIDNIGHT  FILE )";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 290;
+    yReference = 283;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  line
+  {
+    numberOfPoints = 2;
+    point[0] = ( 290, 173 );
+    point[1] = ( 1000, 173 );
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineStyle = `SolidPattern`;
+    lineWidth = 3;
+    xReference = 290;
+    yReference = 173;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  instance DialogueSymbols.LargeMenuSelectTest OP1
+  {
+    x = 285;
+    y = 183;
+    visibility = 1;
+    xReference = 285;
+    yReference = 183;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Cascade = 0;
+    CascadeX = 400;
+    CascadeY = 400;
+    ExecuteString = "Option1()";
+    TheFontColor = 2;
+    TheOption = "1.";
+    TheTextFont = `font6`;
+    TheTitle = "ENTER 3 FILES BELOW";
+  }
+
+  instance DialogueSymbols.LargeMenuSelectTest OP2
+  {
+    x = 285;
+    y = 223;
+    visibility = 1;
+    xReference = 285;
+    yReference = 223;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Cascade = 0;
+    CascadeX = 400;
+    CascadeY = 400;
+    ExecuteString = "Option2()";
+    TheFontColor = 2;
+    TheOption = "2.";
+    TheTextFont = `font6`;
+    TheTitle = "ENTER 2 MIDNIGHT FILES BELOW";
+  }
+
+  group
+  {
+    visibility = 1;
+    xReference = 331;
+    yReference = 114;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+
+    text
+    {
+      x = 332;
+      y = 131;
+      format = "%s";
+      theText = "PRESENT  EFPHS,  RPCB  BURNNP,  COLSS  BURNUP,";
+      alignment = 0;
+      visibility = 1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font4`;
+      xReference = 332;
+      yReference = 131;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+    text
+    {
+      x = 332;
+      y = 157;
+      format = "%s";
+      theText = "INCORE  DETECTOR  CHARGE,  AND / OR  CEA  EXPOSURE";
+      alignment = 0;
+      visibility = 1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font4`;
+      xReference = 332;
+      yReference = 157;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+  }
+
+  ellipseArc
+  {
+    x = 933;
+    y = 511;
+    xRadius = 0;
+    yRadius = 0;
+    startAngle = `font4`;
+    openingAngle = 90;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 0;
+    foregroundFillColour = `COLOR_NON_ESSENTIAL`;
+    backgroundFillColour = -1;
+    fillPattern = `SolidPattern`;
+    xReference = 933;
+    yReference = 511;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  ellipseArc
+  {
+    x = 933;
+    y = 511;
+    xRadius = 0;
+    yRadius = 0;
+    startAngle = 0;
+    openingAngle = 90;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = `4`;
+    foregroundFillColour = `COLOR_NON_ESSENTIAL`;
+    backgroundFillColour = -1;
+    fillPattern = `NoPattern`;
+    xReference = 933;
+    yReference = 511;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  circleArc
+  {
+    x = 933;
+    y = 516;
+    radius = 0;
+    startAngle = `font4`;
+    openingAngle = 90;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 0;
+    foregroundFillColour = `COLOR_NON_ESSENTIAL`;
+    backgroundFillColour = -1;
+    fillPattern = `SolidPattern`;
+    xReference = 933;
+    yReference = 516;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text text1
+  {
+    x = 194;
+    y = 513;
+    format = "%s";
+    theText = "ENTER  FILENAMES  OR  USE  ( DEFAULTS )  PROVIDED.";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 194;
+    yReference = 513;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text text2
+  {
+    x = 533;
+    y = 551;
+    format = "%s";
+    theText = "( NEXT  TO  LAST )  MIDNIGHT  FILE";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 533;
+    yReference = 551;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text text3
+  {
+    x = 627;
+    y = 606;
+    format = "%s";
+    theText = "( LAST )  MIDNIGHT  FILE";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 627;
+    yReference = 606;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text text4
+  {
+    x = 568;
+    y = 661;
+    format = "%s";
+    theText = "( LATEST )  HOURLY  CEA  FILE";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 568;
+    yReference = 661;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text text5
+  {
+    x = 1168;
+    y = 554;
+    format = "%s";
+    theText = "FILE  1";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 1168;
+    yReference = 554;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text text6
+  {
+    x = 1168;
+    y = 607;
+    format = "%s";
+    theText = "FILE  2";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 1168;
+    yReference = 607;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text text7
+  {
+    x = 1167;
+    y = 661;
+    format = "%s";
+    theText = "FILE  3";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 1167;
+    yReference = 661;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  instance DialogueSymbols.UTDVDialogueText selectfile1
+  {
+    x = 884;
+    y = 528;
+    visibility = 1;
+    xReference = 617;
+    yReference = 528;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Active = 1;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "";
+    ExecuteUnSelect = "";
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxCharacters = 21;
+    ReturnAction = "";
+    Scope = "";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewText = "LOG2:UTNLMID.DAT";
+    TheOriginalText = "LOG2:UTNLMID.DAT";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    Width = 250;
+  }
+
+  instance DialogueSymbols.UTDVDialogueText selectfile2
+  {
+    x = 886;
+    y = 585;
+    visibility = 1;
+    xReference = 886;
+    yReference = 585;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Active = 1;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "";
+    ExecuteUnSelect = "";
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxCharacters = 21;
+    ReturnAction = "";
+    Scope = "";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewText = "LOG2:UTLMID.DAT";
+    TheOriginalText = "LOG2:UTLMID.DAT";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    Width = 250;
+  }
+
+  instance DialogueSymbols.UTDVDialogueText selectfile3
+  {
+    x = 886;
+    y = 640;
+    visibility = 1;
+    xReference = 886;
+    yReference = 640;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Active = 1;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "";
+    ExecuteUnSelect = "";
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxCharacters = 21;
+    ReturnAction = "";
+    Scope = "";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewText = "LOG2:UTLHCEA.DAT";
+    TheOriginalText = "LOG2:UTLHCEA.DAT";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    Width = 250;
+  }
+
+  instance DialogueSymbols.PushButton processfiles
+  {
+    x = 122;
+    y = 715;
+    visibility = 1;
+    xReference = 196;
+    yReference = 712;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ButtonState = 0;
+    DynamicLabel = "PROCESSING";
+    ExecuteString = "{Process1();}";
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    Label = "PROCESS";
+    Scope = "PicUCN_UTDVSelectFiles1";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    StaticLabel = "PROCESS";
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextFontDynamic = `font2`;
+    TextFontStatic = `font4`;
+    TextX = 17;
+    TextXDynamic = 15;
+    TextXStatic = 17;
+    TextY = 22;
+    TextYDynamic = 21;
+    TextYStatic = 22;
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    Width = 128;
+  }
+
+  text text8
+  {
+    x = 346;
+    y = 733;
+    format = "%s";
+    theText = "SELECTED FILES";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 346;
+    yReference = 733;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  polygon
+  {
+    numberOfPoints = 2;
+    point[0] = ( 0, 477 );
+    point[1] = ( 1305, 477 );
+    visibility = 1;
+    foregroundColour = `COLOR_LINE_BOUNDARY_6`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 3;
+    foregroundFillColour = `COLOR_NON_ESSENTIAL`;
+    backgroundFillColour = -1;
+    fillPattern = `SolidPattern`;
+    xReference = 0;
+    yReference = 477;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+}

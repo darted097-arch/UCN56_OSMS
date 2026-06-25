@@ -1,0 +1,1908 @@
+/*
+ * ProcSee CONFIGURATION LANGUAGE FILE
+ *
+ *
+ * User : ucn56
+ * Host : y4cr01
+ * Date : 2017-06-29
+ * Time : 13:30:24
+ *
+ * ProcSee version : ProcSee 3.10.1 (June 2016)
+ * File version    : 1.26
+ *
+ *
+ */
+
+
+picture PicUCN_COLSSModeSelection
+{
+  worldX = 0;
+  worldY = 0;
+  worldWidth = 1280;
+  worldHeight = 824;
+  oneToOne = 1;
+  backgroundColour = 0;
+  updateMode = 2;
+  resizeMode = 0;
+  xSnap = 1;
+  ySnap = 1;
+  radiusSnap = 0;
+  angleSnap = 0;
+  crosshairStyle = 1;
+  crosshairLength = 0;
+  crosshairFollowSnap = `isInEditMode()`;
+  crosshairVisibility = `isInEditMode()`;
+  xReference = 500;
+  yReference = 500;
+  xScaleFactor = 1;
+  yScaleFactor = 1;
+  rotationAngle = 0;
+
+  int BurnupStatus = 0;
+
+  int colss_current_mode = `pColssData->ModeData->colss_current_mode`;
+
+  int IsMenuSelected = 1;
+
+  int MaxTime = 0;
+
+  int OptionSelected = 3;
+
+  Colss_Data* pColssData = `&Interface->ColssData`;
+
+  char PictureNumber[50] = "121";
+
+  char PictureTitle[50] = "COLSS   MODES";
+
+  int PrintOptionStatus = 0;
+
+  int run_status = 1;
+
+  int SelectedBurnupOption = -1;
+
+  int SelectedMenu = 2;
+
+  int SelectedPrintOption = -1;
+
+  int SelectedTestCaseOption = -1;
+
+  int TestCaseNumStatus = 0;
+
+  int TestInputStatus = 0;
+
+  int TheFontColor = 4;
+
+  int TheTextFont = `font7`;
+
+  function `void ChangeColssMode(int mode)
+  {
+     switch(mode)
+     {
+        case COLSS_SCHEDULED_MODE:
+  
+         TestInputBox_Visible(0);
+  //     SelectedMenu = 1;
+         scheduledMode.IsOptionSelected = TRUE;
+         scheduledMode.TheFontColor = 0;
+  //       scheduledMode.backgroundTextColour = 1;
+         unscheduledMode.IsOptionSelected = FALSE;
+         unscheduledMode.TheFontColor = 1;
+  //       unscheduledMode.backgroundTextColour = 0;
+         testMode.IsOptionSelected =  FALSE;
+         testMode.TheFontColor = 1;
+  //       testMode.backgroundTextColour = 0;
+         break;
+  
+        case COLSS_UNSCHEDULED_MODE:
+  
+         TestInputBox_Visible(0);
+  //     SelectedMenu = 2;
+         scheduledMode.IsOptionSelected = FALSE;
+         scheduledMode.TheFontColor = 1;
+  //       scheduledMode.backgroundTextColour = 0;
+         unscheduledMode.IsOptionSelected = TRUE;
+         unscheduledMode.TheFontColor = 0;
+  //       unscheduledMode.backgroundTextColour = 1;
+         testMode.IsOptionSelected =  FALSE;
+         testMode.TheFontColor = 1;
+  //       testMode.backgroundTextColour = 0;
+         break;
+  
+        case COLSS_TEST_MODE:
+  
+         TestInputBox_Visible(1);
+  //     SelectedMenu = 3;
+         scheduledMode.IsOptionSelected = FALSE;
+         scheduledMode.TheFontColor = 1;
+  //       scheduledMode.backgroundTextColour = 0;
+         unscheduledMode.IsOptionSelected = FALSE;
+         unscheduledMode.TheFontColor = 1;
+  //       unscheduledMode.backgroundTextColour = 0;
+         testMode.IsOptionSelected =  TRUE;
+         testMode.TheFontColor = 0;
+  //       testMode.backgroundTextColour = 1;
+         break;
+    }
+    SelectedMenu = mode ;
+    update();
+  }`
+
+  function `void DisplayModeChanged(int mode)
+  {
+     switch(mode)
+     {
+        case COLSS_SCHEDULED_MODE:
+         text1_box.foregroundFillColour = \`COLOR_ACTIVE_ON_OPEN\`;
+         text2_box.foregroundFillColour = 0;
+         text3_box.foregroundFillColour = 0;
+         scheduledMode.TheTitle = "SCHEDULED MODE (ON)";
+         unscheduledMode.TheTitle = "UNSCHEDULED MODE (OFF)";
+         DisplayAdvisoryMessage("COLSS IN SCHEDULED MODE");
+         break;
+  
+        case COLSS_UNSCHEDULED_MODE:
+         text1_box.foregroundFillColour = 0;
+         text2_box.foregroundFillColour = \`COLOR_ACTIVE_ON_OPEN\`;
+         text3_box.foregroundFillColour = 0;
+         scheduledMode.TheTitle = "SCHEDULED MODE (OFF)";
+         unscheduledMode.TheTitle = "UNSCHEDULED MODE (ON)";
+         testMode.TheTitle = "TEST CASE (OFF)";
+         DisplayAdvisoryMessage("COLSS IN UNSCHEDULED MODE");
+         break;
+  
+  //      case COLSS_TEST_MODE:
+  //       text1_box.foregroundFillColour = 0;
+  //       text2_box.foregroundFillColour = 0;
+  //       text3_box.foregroundFillColour = \`COLOR_ACTIVE_ON_OPEN\`;
+  //       unscheduledMode.TheTitle = "UNSCHEDULED MODE (OFF)";
+  //       testMode.TheTltle = "TEST CASE (ON)";
+  //       break;
+       } // end of switch statement
+  
+    update();
+  }`
+
+  // ***CORENET 20170601 by Philkyu Kwon ************
+  //
+  // ***************************************************
+  function `void DummyProcess()
+  {
+    printf("Button Select OR Button Unselected");
+  }`
+
+  function `void Initialize()
+  {
+  //
+     Current_Page = 121;
+     CFMLevel = 0;
+  //
+     KeepSelected();
+  //
+     run_status = TRUE;
+  //  For Test Case Inputs
+     InitTestInput();
+     TestInputBox_Visible(0);
+  //
+     IsMenuSelected = FALSE;
+     scheduledMode.IsOptionSelected = FALSE;
+     unscheduledMode.IsOptionSelected = FALSE;
+     testMode.IsOptionSelected =  FALSE;
+     DisplayAdvisoryMessage3("REQUESTING COLSS CURRENT MODE");
+     pColssData->message_type = REQUEST_COLSS_CURRENT_MODE;
+     pColssData->ModeData->ws_to_host_mode = -1;
+     pColssData->ModeData->colss_current_mode = -1;
+     pColssData->ModeData->test_case = 0;
+     pColssData->ModeData->use_burnup_file = 0;
+     pColssData->ModeData->print_option=0;
+  
+     text1_box.foregroundFillColour = 0;
+     text2_box.foregroundFillColour = 0;
+     text3_box.foregroundFillColour = 0;
+  
+     execute("{sendMessageToHost(REQUEST_COLSS_PROCESSING);}");
+  
+     ProcessText.Initialize();
+  //   CancelText.Initialize();
+     update();
+  }`
+
+  function `void InitTestInput()
+  {
+  //  For Test Case Inputs
+  //    TestInputBox_Visible(0);
+       strcpy(InputArea.TheNewText," ");
+       strcpy(InputArea.TheOriginalText," ");
+       InputArea.TheNewNumber = 0.0;
+       InputArea.TheOriginalNumber = 0.0;
+        YesButton.Initialize();
+        NoButton.Initialize();
+        SelectedBurnupOption = -1;
+        SelectedPrintOption = -1;
+        SelectedTestCaseOption = -1;
+        BurnupStatus = FALSE;
+        TestCaseNumStatus = FALSE;
+        PrintOptionStatus = FALSE;
+  
+        UnKeepSelected();
+  
+  //       text11.TheFontColor = 1;
+  //       text11.backgroundTextColour = 0;
+  //       text12.TheFontColor = 1;
+  //       text12.backgroundTextColour = 0;
+  //       text13.TheFontColor = 1;
+  //       text13.backgroundTextColour = 0;
+     update();
+  }`
+
+  function `void InputVerify()
+  {
+  ProcessProcessButton();
+  }`
+
+  function `void KeepSelected()
+  {
+     if (OptionSelected==1)
+     {
+     OP32.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+     OP32.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+  
+     OP32.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+     OP32.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+     OP32.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+     OP32.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+  
+     OP32.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     OP32.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     OP32.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     OP32.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     OP32.TheFontColor = COLOR_STATIC_TEXT;
+  
+     OP33.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+     OP33.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+  
+     OP33.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+     OP33.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+     OP33.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+     OP33.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+  
+     OP33.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     OP33.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     OP33.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     OP33.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     OP33.TheFontColor = COLOR_STATIC_TEXT;
+     }
+     if (OptionSelected==2)
+     {
+     OP33.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+     OP33.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+  
+     OP33.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+     OP33.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+     OP33.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+     OP33.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+  
+     OP33.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     OP33.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     OP33.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     OP33.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     OP33.TheFontColor = COLOR_STATIC_TEXT;
+  
+     OP31.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+     OP31.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+  
+     OP31.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+     OP31.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+     OP31.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+     OP31.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+  
+     OP31.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     OP31.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     OP31.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     OP31.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     OP31.TheFontColor = COLOR_STATIC_TEXT;
+  
+     }
+     if (OptionSelected==3)
+     {
+  
+     OP31.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+     OP31.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+  
+     OP31.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+     OP31.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+     OP31.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+     OP31.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+  
+     OP31.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     OP31.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     OP31.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     OP31.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     OP31.TheFontColor = COLOR_STATIC_TEXT;
+  
+     OP32.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+     OP32.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+  
+     OP32.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+     OP32.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+     OP32.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+     OP32.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+  
+     OP32.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     OP32.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     OP32.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     OP32.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     OP32.TheFontColor = COLOR_STATIC_TEXT;
+  
+     }
+  }`
+
+  function `void KeepSelected1()
+  {
+     if (OptionSelected==COLSS_SCHEDULED_MODE)
+     {
+     unscheduledMode.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+     unscheduledMode.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+  
+     unscheduledMode.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+     unscheduledMode.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+     unscheduledMode.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+     unscheduledMode.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+  
+     unscheduledMode.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     unscheduledMode.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     unscheduledMode.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     unscheduledMode.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     unscheduledMode.TheFontColor = COLOR_STATIC_TEXT;
+  //
+  //   scheduledMode.mbox.foregroundColour = COLOR_BUTTON_SELECTED;
+  //   scheduledMode.mbox.foregroundFillColour = COLOR_BUTTON_SELECTED;
+  
+  //   scheduledMode.upleft.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+  //   scheduledMode.upleft.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+  //   scheduledMode.up.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+  //   scheduledMode.up.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+  
+  //   scheduledMode.downright.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+  //   scheduledMode.downright.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+  //   scheduledMode.down.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+  //   scheduledMode.down.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+  //   scheduledMode.TheFontColor = COLOR_DATA_NORMAL;
+  //
+     testMode.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+     testMode.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+  
+     testMode.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+     testMode.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+     testMode.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+     testMode.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+  
+     testMode.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     testMode.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     testMode.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     testMode.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     testMode.TheFontColor = COLOR_STATIC_TEXT;
+     }
+     if (OptionSelected==COLSS_UNSCHEDULED_MODE)
+     {
+     scheduledMode.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+     scheduledMode.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+  
+     scheduledMode.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+     scheduledMode.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+     scheduledMode.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+     scheduledMode.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+  
+     scheduledMode.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     scheduledMode.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     scheduledMode.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     scheduledMode.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     scheduledMode.TheFontColor = COLOR_STATIC_TEXT;
+  //
+  //   unscheduledMode.mbox.foregroundColour = COLOR_BUTTON_SELECTED;
+  //   unscheduledMode.mbox.foregroundFillColour = COLOR_BUTTON_SELECTED;
+  //
+  //   unscheduledMode.upleft.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+  //   unscheduledMode.upleft.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+  //   unscheduledMode.up.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+  //   unscheduledMode.up.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+  
+  //   unscheduledMode.downright.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+  //   unscheduledMode.downright.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+  //   unscheduledMode.down.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+  //   unscheduledMode.down.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+  //   unscheduledMode.TheFontColor = COLOR_DATA_NORMAL;
+  //
+     testMode.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+     testMode.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+  
+     testMode.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+     testMode.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+     testMode.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+     testMode.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+  
+     testMode.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     testMode.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     testMode.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     testMode.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     testMode.TheFontColor = COLOR_STATIC_TEXT;
+  
+     }
+     if (OptionSelected==COLSS_TEST_MODE)
+     {
+     unscheduledMode.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+     unscheduledMode.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+  
+     unscheduledMode.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+     unscheduledMode.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+     unscheduledMode.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+     unscheduledMode.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+  
+     unscheduledMode.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     unscheduledMode.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     unscheduledMode.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     unscheduledMode.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     unscheduledMode.TheFontColor = COLOR_STATIC_TEXT;
+  //
+     scheduledMode.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+     scheduledMode.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+  
+     scheduledMode.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+     scheduledMode.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+     scheduledMode.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+     scheduledMode.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+  
+     scheduledMode.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     scheduledMode.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     scheduledMode.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     scheduledMode.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     scheduledMode.TheFontColor = COLOR_STATIC_TEXT;
+  //
+  //   testMode.mbox.foregroundColour = COLOR_BUTTON_SELECTED;
+  //   testMode.mbox.foregroundFillColour = COLOR_BUTTON_SELECTED;
+  
+  //   testMode.upleft.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+  //   testMode.upleft.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+  //   testMode.up.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+  //   testMode.up.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+  
+  //   testMode.downright.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+  //   testMode.downright.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+  //   testMode.down.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+  //   testMode.down.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+  //   testMode.TheFontColor = COLOR_DATA_NORMAL;
+     }
+  }`
+
+  function `void KeepSelectedAfter()
+  {
+     if (OptionSelected==COLSS_SCHEDULED_MODE)
+     {
+     unscheduledMode.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+     unscheduledMode.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+  
+     unscheduledMode.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+     unscheduledMode.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+     unscheduledMode.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+     unscheduledMode.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+  
+     unscheduledMode.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     unscheduledMode.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     unscheduledMode.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     unscheduledMode.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     unscheduledMode.TheFontColor = COLOR_STATIC_TEXT;
+  //
+     scheduledMode.mbox.foregroundColour = COLOR_BUTTON_SELECTED;
+     scheduledMode.mbox.foregroundFillColour = COLOR_BUTTON_SELECTED;
+  
+     scheduledMode.upleft.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     scheduledMode.upleft.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     scheduledMode.up.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     scheduledMode.up.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+  
+     scheduledMode.downright.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+     scheduledMode.downright.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+     scheduledMode.down.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+     scheduledMode.down.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+     scheduledMode.TheFontColor = COLOR_DATA_NORMAL;
+  //
+     testMode.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+     testMode.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+  
+     testMode.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+     testMode.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+     testMode.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+     testMode.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+  
+     testMode.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     testMode.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     testMode.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     testMode.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     testMode.TheFontColor = COLOR_STATIC_TEXT;
+     }
+     if (OptionSelected==COLSS_UNSCHEDULED_MODE)
+     {
+     scheduledMode.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+     scheduledMode.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+  
+     scheduledMode.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+     scheduledMode.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+     scheduledMode.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+     scheduledMode.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+  
+     scheduledMode.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     scheduledMode.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     scheduledMode.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     scheduledMode.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     scheduledMode.TheFontColor = COLOR_STATIC_TEXT;
+  //
+     unscheduledMode.mbox.foregroundColour = COLOR_BUTTON_SELECTED;
+     unscheduledMode.mbox.foregroundFillColour = COLOR_BUTTON_SELECTED;
+  
+     unscheduledMode.upleft.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     unscheduledMode.upleft.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     unscheduledMode.up.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     unscheduledMode.up.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+  
+     unscheduledMode.downright.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+     unscheduledMode.downright.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+     unscheduledMode.down.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+     unscheduledMode.down.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+     unscheduledMode.TheFontColor = COLOR_DATA_NORMAL;
+  //
+     testMode.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+     testMode.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+  
+     testMode.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+     testMode.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+     testMode.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+     testMode.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+  
+     testMode.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     testMode.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     testMode.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     testMode.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     testMode.TheFontColor = COLOR_STATIC_TEXT;
+  
+     }
+     if (OptionSelected==COLSS_TEST_MODE)
+     {
+     unscheduledMode.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+     unscheduledMode.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+  
+     unscheduledMode.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+     unscheduledMode.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+     unscheduledMode.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+     unscheduledMode.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+  
+     unscheduledMode.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     unscheduledMode.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     unscheduledMode.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     unscheduledMode.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     unscheduledMode.TheFontColor = COLOR_STATIC_TEXT;
+  //
+     scheduledMode.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+     scheduledMode.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+  
+     scheduledMode.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+     scheduledMode.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+     scheduledMode.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+     scheduledMode.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+  
+     scheduledMode.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     scheduledMode.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     scheduledMode.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     scheduledMode.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     scheduledMode.TheFontColor = COLOR_STATIC_TEXT;
+  //
+     testMode.mbox.foregroundColour = COLOR_BUTTON_SELECTED;
+     testMode.mbox.foregroundFillColour = COLOR_BUTTON_SELECTED;
+  
+     testMode.upleft.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     testMode.upleft.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     testMode.up.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     testMode.up.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+  
+     testMode.downright.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+     testMode.downright.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+     testMode.down.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+     testMode.down.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+     testMode.TheFontColor = COLOR_DATA_NORMAL;
+     }
+  }`
+
+  function `void Option1()
+  {
+     OptionSelected = COLSS_SCHEDULED_MODE;
+     KeepSelected1();
+     ProcessModeChange(OptionSelected);
+  
+  }`
+
+  function `void Option2()
+  {
+     OptionSelected = COLSS_UNSCHEDULED_MODE;
+     KeepSelected1();
+     ProcessModeChange(OptionSelected);
+  }`
+
+  function `void Option3()
+  {
+     OptionSelected = COLSS_TEST_MODE;
+     KeepSelected1();
+     ProcessModeChange(OptionSelected);
+  }`
+
+  function `void ProcessBurnupOption(int selection)
+  {
+     SelectedBurnupOption = selection ;
+     BurnupStatus=TRUE;
+  
+     switch (selection)
+     {
+        case 1 :   // Yes Button Pressed
+           NoButton.UnSelect();
+           break;
+        case 0 :   // No Button Pressed
+           YesButton.UnSelect();
+           break;
+     }
+     update();
+  }`
+
+  function `void ProcessingConfirmed(int mode)
+  {
+     colss_current_mode=\`pColssData->ModeData->colss_current_mode\`;
+  //
+     OptionSelected = colss_current_mode;
+  // printf("COLSS selected = %d", colss_current_mode );
+  // printf("option selected = %d", OptionSelected);
+     KeepSelectedAfter();
+  //
+     update();
+  
+     printf("### colss_current_mode = %4X",colss_current_mode);
+  
+     switch(mode)
+     {
+        case CONFIRM_COLSS_CURRENT_MODE:
+        case CONFIRM_COLSS_MODE_CHANGE:
+             ChangeColssMode(colss_current_mode);
+             DisplayModeChanged(colss_current_mode);
+             break;
+        case CONFIRM_COLSS_TEST_CASE:
+             InitTestInput();
+             ChangeColssMode(colss_current_mode );
+             DisplayModeChanged(colss_current_mode ); // Mode should be current_colss_mode from ccur
+             break;
+     }
+     update();
+  }`
+
+  function `void ProcessModeChange(int mode)
+  {
+     int   goModeChange;
+  
+     goModeChange = Request_Mode_Change(mode);
+  
+     if(goModeChange)
+     {  IsMenuSelected = TRUE;
+        ChangeColssMode(mode);
+     }
+  }`
+
+  function `void ProcessPrintOption(int OptionSelected)
+  {
+     SelectedPrintOption = OptionSelected;
+     PrintOptionStatus=TRUE;
+  
+     switch(OptionSelected)
+     {
+        case 1:
+           OP31.IsPrintOptionSelected = TRUE;
+           OP32.IsPrintOptionSelected = FALSE;
+           OP33.IsPrintOptionSelected = FALSE;
+           OP31.TheFontColor = 0;
+  //         OP31.backgroundTextColour = 1;
+           OP32.TheFontColor = 1;
+  //         OP32.backgroundTextColour = 0;
+           OP33.TheFontColor = 1;
+  //         OP33.backgroundTextColour = 0;
+           break;
+        case 2:
+           OP31.IsPrintOptionSelected = FALSE;
+           OP32.IsPrintOptionSelected = TRUE;
+           OP33.IsPrintOptionSelected = FALSE;
+           OP31.TheFontColor = 1;
+  //         OP31.backgroundTextColour = 0;
+           OP32.TheFontColor = 0;
+  //         OP32.backgroundTextColour = 1;
+           OP33.TheFontColor = 1;
+  //         OP33.backgroundTextColour = 0;
+           break;
+        case 3:
+           OP31.IsPrintOptionSelected = FALSE;
+           OP32.IsPrintOptionSelected = FALSE;
+           OP33.IsPrintOptionSelected = TRUE;
+           OP31.TheFontColor = 1;
+  //         OP31.backgroundTextColour = 0;
+           OP32.TheFontColor = 1;
+  //         OP32.backgroundTextColour = 0;
+           OP33.TheFontColor = 0;
+  //         OP33.backgroundTextColour = 1;
+           break;
+     }
+     update();
+  }`
+
+  function `void ProcessProcessButton()
+  {
+  //
+     OptionSelected = SelectedMenu;
+  //
+     if (IsMenuSelected == TRUE)
+     {
+     switch(SelectedMenu)
+     {
+        case COLSS_SCHEDULED_MODE:
+              if (colss_current_mode == COLSS_UNSCHEDULED_MODE){
+  
+         KeepSelected1();
+         pColssData->ModeData->ws_to_host_mode = COLSS_SCHEDULED_MODE;
+         pColssData->message_type = REQUEST_COLSS_MODE_CHANGE;
+         DisplayAdvisoryMessage3("REQUESTING COLSS SCHEDULED MODE CHANGE");
+         execute("{sendMessageToHost(REQUEST_COLSS_PROCESSING);}");
+         }	// CORENET 20170511 by Philkyu Kwon
+         else
+                 DisplayAdvisoryMessage("MODE MUST BE UNSCHED");
+  
+         break;
+  
+        case COLSS_UNSCHEDULED_MODE:
+  
+         KeepSelected1();
+         pColssData->ModeData->ws_to_host_mode = COLSS_UNSCHEDULED_MODE;
+         pColssData->message_type = REQUEST_COLSS_MODE_CHANGE;
+         DisplayAdvisoryMessage3("REQUESTING COLSS UNSCHEDULED MODE CHANGE");
+         execute("{sendMessageToHost(REQUEST_COLSS_PROCESSING);}");
+	 
+         break;
+  
+        case 3:
+  
+	//CORENET 20170629 by Philkyu Kwon
+         if (colss_current_mode != COLSS_UNSCHEDULED_MODE)
+                 DisplayAdvisoryMessage("MODE MUST BE UNSCHED");
+	 else
+	 {
+         	KeepSelected1();
+         	if( TestInputVerify() == TRUE)
+         	{
+            		pColssData->ModeData->ws_to_host_mode = COLSS_TEST_MODE;
+            		pColssData->message_type = REQUEST_COLSS_TEST_CASE;
+            		pColssData->ModeData->test_case = SelectedTestCaseOption;
+            		pColssData->ModeData->use_burnup_file = SelectedBurnupOption ;
+            		pColssData->ModeData->print_option = SelectedPrintOption ;
+            		DisplayAdvisoryMessage3("REQUESTING COLSS TEST");
+            		execute("{sendMessageToHost(REQUEST_COLSS_PROCESSING);}");
+            		text1_box.foregroundFillColour = 0;
+            		text2_box.foregroundFillColour = 0;
+            		text3_box.foregroundFillColour = \`COLOR_ACTIVE_ON_OPEN\`;
+            		unscheduledMode.TheTitle = "UNSCHEDULED MODE (OFF)";
+            		testMode.TheTitle = "TEST CASE (ON)";
+            		DisplayAdvisoryMessage2("COLSS IN TEST MODE");
+         	}
+	 }
+  
+         break;
+       } // end of switch statement
+     } else DisplayAdvisoryMessage("SELECT MODE AND/OR TEST INPUT");
+      ProcessText.Initialize();
+  //    CancelText.Initialize();
+  
+    update();
+  }`
+
+  function `void ProcessTestCase(char *str)
+  {
+      SelectedTestCaseOption =  atoi(str);
+     if (SelectedTestCaseOption == 99)
+     {
+        DisplayAdvisoryMessage("41 TEST CASES ARE SELECTED");
+        YesButton.Select();
+     }
+     else
+     if (SelectedTestCaseOption < 1 || SelectedTestCaseOption > 46)
+     {
+        DisplayAdvisoryMessage("TEST CASE INPUT MUST BE 1 TO 46");
+        TestCaseNumStatus = FALSE;
+        return;
+     }
+     TestCaseNumStatus = TRUE;
+     return;
+   }`
+
+  function `int Request_Mode_Change(int mode)
+  {
+     int changeMode = FALSE ;
+  //colss_current_mode= \`pColssData->ModeData->colss_current_mode\`;update();
+  
+     switch(mode)
+     {
+         case COLSS_TEST_MODE:
+              if (colss_current_mode == COLSS_UNSCHEDULED_MODE)
+                  changeMode=TRUE;
+              else
+                  DisplayAdvisoryMessage("MODE MUST BE UNSCHED");
+              break;
+        case COLSS_SCHEDULED_MODE:
+              if (colss_current_mode == COLSS_UNSCHEDULED_MODE)
+                 changeMode=TRUE;
+              else
+              {
+                 ChangeColssMode(COLSS_SCHEDULED_MODE);
+                 DisplayAdvisoryMessage("MODE MUST BE UNSCHED");
+              }
+              break;
+  
+        case COLSS_UNSCHEDULED_MODE:
+              if (colss_current_mode != COLSS_UNSCHEDULED_MODE)
+                 changeMode=TRUE;
+              else
+              {
+                 ChangeColssMode(COLSS_UNSCHEDULED_MODE);
+                 DisplayAdvisoryMessage("MODE MUST BE SCHED");
+              }
+              break;
+  
+     }
+     return(changeMode);
+  }`
+
+  function `void selectOption(int selectedValue)
+  {
+     Option = selectedValue;
+     displayOptionSelected(selectedValue);
+     SetupReadInputValue(selectedValue);
+     update();
+  }`
+
+  function `void TestInputBox_Visible(int isActive)
+  {
+     InputArea.Active = isActive ;
+     YesButton.Active  = isActive;
+     NoButton.Active  =isActive ;
+  //   text11.Active  = isActive ;
+  //   text12.Active  = isActive ;
+  //   text13.Active  = isActive ;
+  
+     update();
+  }`
+
+  function `int TestInputVerify()
+  {
+     int return_status = FALSE;
+  
+     if(TestCaseNumStatus == FALSE) DisplayAdvisoryMessage("ENTER TEST CASE NUMBER");
+  
+     if(BurnupStatus == FALSE) DisplayAdvisoryMessage2("SELECT IF USE OF BURNUP FILE");
+  
+     if(PrintOptionStatus == FALSE) DisplayAdvisoryMessage3("ENTER PRINT OPTION NUMBER");
+  
+     if ((TestCaseNumStatus == TRUE) &&
+         (BurnupStatus == TRUE )&&
+         (PrintOptionStatus == TRUE ))
+          return_status = TRUE;
+  
+     if(44<=SelectedTestCaseOption && SelectedTestCaseOption<=46)
+        if(SelectedPrintOption==3)
+        { DisplayAdvisoryMessage2("SUMMART PAGES OPTION IS NOT AVAILABLE");
+          DisplayAdvisoryMessage3("FOR TEST CASES 44, 45 AND 46");
+          return_status = FALSE;
+         }
+     update();
+     return(return_status);
+  }`
+
+  function `void TestOption1()
+  {
+     OptionSelected = 1;
+     KeepSelected();
+     ProcessPrintOption(OptionSelected);
+  
+  }`
+
+  function `void TestOption2()
+  {
+     OptionSelected = 2;
+     KeepSelected();
+     ProcessPrintOption(OptionSelected);
+  
+  }`
+
+  function `void TestOption3()
+  {
+     OptionSelected = 3;
+     KeepSelected();
+     ProcessPrintOption(OptionSelected);
+  
+  }`
+
+  function `void UnKeepSelected()
+  {
+  
+     OP31.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+     OP31.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+  
+     OP31.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+     OP31.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+     OP31.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+     OP31.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+  
+     OP31.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     OP31.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     OP31.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     OP31.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     OP31.TheFontColor = COLOR_STATIC_TEXT;
+  
+     OP32.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+     OP32.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+  
+     OP32.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+     OP32.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+     OP32.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+     OP32.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+  
+     OP32.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     OP32.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     OP32.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     OP32.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     OP32.TheFontColor = COLOR_STATIC_TEXT;
+  
+     OP33.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+     OP33.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+  
+     OP33.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+     OP33.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+     OP33.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+     OP33.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+  
+     OP33.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     OP33.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     OP33.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     OP33.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+     OP33.TheFontColor = COLOR_STATIC_TEXT;
+     update();
+  }`
+
+  dialogue
+  {
+    event = `buttonPressed(0) &&  !run_status`;
+    action = `{ DisplayAdvisoryMessage2("Waiting Confirm from Host");
+    }`;
+  }
+
+  rectangle text3_box
+  {
+    x = 853;
+    y = 538;
+    width = 169;
+    height = 55;
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 2;
+    foregroundFillColour = 0;
+    backgroundFillColour = -1;
+    fillPattern = `SolidPattern`;
+    xReference = 853;
+    yReference = 538;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle text2_box
+  {
+    x = 541;
+    y = 537;
+    width = 246;
+    height = 57;
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 2;
+    foregroundFillColour = `COLOR_ACTIVE_ON_OPEN`;
+    backgroundFillColour = -1;
+    fillPattern = `SolidPattern`;
+    xReference = 541;
+    yReference = 537;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle
+  {
+    x = 130;
+    y = 0;
+    width = 0;
+    height = 0;
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = 0;
+    linePattern = `SolidPattern`;
+    lineWidth = 0;
+    foregroundFillColour = 0;
+    backgroundFillColour = -1;
+    fillPattern = `NoPattern`;
+    xReference = 130;
+    yReference = 0;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle ChoiceBox
+  {
+    x = 142;
+    y = 498;
+    width = 926;
+    height = 140;
+    visibility = 1;
+    foregroundColour = `COLOR_LINE_BOUNDARY_6`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 3;
+    foregroundFillColour = -1;
+    backgroundFillColour = -1;
+    fillPattern = `NoPattern`;
+    xReference = 341;
+    yReference = 263;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  line
+  {
+    numberOfPoints = 2;
+    point[0] = ( 175, 263 );
+    point[1] = ( 175, 263 );
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineStyle = `SolidPattern`;
+    lineWidth = 0;
+    xReference = 175;
+    yReference = 263;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  line
+  {
+    numberOfPoints = 2;
+    point[0] = ( 485, 501 );
+    point[1] = ( 485, 638 );
+    visibility = 1;
+    foregroundColour = `COLOR_LINE_BOUNDARY_6`;
+    backgroundColour = -1;
+    lineStyle = `SolidPattern`;
+    lineWidth = 3;
+    xReference = 530;
+    yReference = 173;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle text1_box
+  {
+    x = 189;
+    y = 537;
+    width = 245;
+    height = 55;
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 2;
+    foregroundFillColour = 0;
+    backgroundFillColour = -1;
+    fillPattern = `SolidPattern`;
+    xReference = 189;
+    yReference = 537;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text text1
+  {
+    x = 224;
+    y = 572;
+    format = "%s";
+    theText = "SCHEDULED MODE";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 224;
+    yReference = 572;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text text2
+  {
+    x = 564;
+    y = 575;
+    format = "%s";
+    theText = "UNSCHEDULED MODE";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 564;
+    yReference = 575;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text text3
+  {
+    x = 897;
+    y = 576;
+    format = "%s";
+    theText = "TEST CASE";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 897;
+    yReference = 576;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  group
+  {
+    visibility = 1;
+    xReference = 436;
+    yReference = 541;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+
+    line
+    {
+      numberOfPoints = 2;
+      point[0] = ( 438, 551 );
+      point[1] = ( 518, 551 );
+      visibility = 1;
+      foregroundColour = `COLOR_THROTTLING`;
+      backgroundColour = -1;
+      lineStyle = `SolidPattern`;
+      lineWidth = 3;
+      xReference = 468;
+      yReference = 351;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+    instance StaticSymbols.Arrow
+    {
+      x = 508;
+      y = 541;
+      visibility = 1;
+      xReference = 508;
+      yReference = 541;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+  }
+
+  group
+  {
+    visibility = 1;
+    xReference = 530;
+    yReference = 590;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 180;
+
+    line
+    {
+      numberOfPoints = 2;
+      point[0] = ( 532, 600 );
+      point[1] = ( 612, 600 );
+      visibility = 1;
+      foregroundColour = `COLOR_THROTTLING`;
+      backgroundColour = -1;
+      lineStyle = `SolidPattern`;
+      lineWidth = 3;
+      xReference = 562;
+      yReference = 400;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+    instance StaticSymbols.Arrow
+    {
+      x = 602;
+      y = 590;
+      visibility = 1;
+      xReference = 602;
+      yReference = 590;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+  }
+
+  line
+  {
+    numberOfPoints = 2;
+    point[0] = ( 788, 582 );
+    point[1] = ( 881, 582 );
+    visibility = 1;
+    foregroundColour = `COLOR_THROTTLING`;
+    backgroundColour = -1;
+    lineStyle = `SolidPattern`;
+    lineWidth = 3;
+    xReference = 818;
+    yReference = 382;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  line
+  {
+    numberOfPoints = 2;
+    point[0] = ( 881, 583 );
+    point[1] = ( 881, 551 );
+    visibility = 1;
+    foregroundColour = `COLOR_THROTTLING`;
+    backgroundColour = -1;
+    lineStyle = `SolidPattern`;
+    lineWidth = 3;
+    xReference = 911;
+    yReference = 431;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 411;
+    y = 629;
+    format = "%s";
+    theText = "ON                 OFF";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 411;
+    yReference = 629;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 502;
+    y = 537;
+    format = "%s";
+    theText = "U";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 502;
+    yReference = 537;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 458;
+    y = 604;
+    format = "%s";
+    theText = "S";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 458;
+    yReference = 604;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 836;
+    y = 604;
+    format = "%s";
+    theText = "T";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 836;
+    yReference = 604;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  circleArc
+  {
+    x = 176;
+    y = 186;
+    radius = 0;
+    startAngle = `font0`;
+    openingAngle = 90;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 0;
+    foregroundFillColour = `COLOR_NON_ESSENTIAL`;
+    backgroundFillColour = -1;
+    fillPattern = `SolidPattern`;
+    xReference = 176;
+    yReference = 186;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 259;
+    y = 155;
+    format = "%s";
+    theText = "SELECT NEW MODE";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 259;
+    yReference = 155;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 518;
+    y = 475;
+    format = "%s";
+    theText = "CURRENT COLSS MODE";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 518;
+    yReference = 475;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle
+  {
+    x = 612;
+    y = 52;
+    width = 457;
+    height = 355;
+    visibility = 1;
+    foregroundColour = `COLOR_LINE_BOUNDARY_6`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 3;
+    foregroundFillColour = `COLOR_PICTURE_BACKGROUND`;
+    backgroundFillColour = -1;
+    fillPattern = `SolidPattern`;
+    xReference = 619;
+    yReference = 65;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text cascadeText1
+  {
+    x = 747;
+    y = 90;
+    format = "%s";
+    theText = "COLSS  TEST MODE";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `(CascadeEnterActive)?COLOR_DATA_NORMAL:COLOR_STATIC_TEXT`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 747;
+    yReference = 90;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  line
+  {
+    numberOfPoints = 2;
+    point[0] = ( 614, 112 );
+    point[1] = ( 1070, 112 );
+    visibility = 1;
+    foregroundColour = `COLOR_LINE_BOUNDARY_6`;
+    backgroundColour = -1;
+    lineStyle = `SolidPattern`;
+    lineWidth = 3;
+    xReference = 616;
+    yReference = 115;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+
+    dialogue
+    {
+      event = `buttonPressed(Right) || keyPressed(ESC)`;
+      action = `{
+         CascadeEnterActive = 0;
+         CascadeEnter.unmap();
+         update();
+      }`;
+    }
+  }
+
+  text
+  {
+    x = 638;
+    y = 151;
+    format = "%s";
+    theText = "1  . . .  ENTER TEST CASE # : ";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 628;
+    yReference = 121;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text cascadeText2
+  {
+    x = 638;
+    y = 201;
+    format = "%s";
+    theText = "2  . . .  USE TEST BURNUP FILE ? : ";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 628;
+    yReference = 171;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 638;
+    y = 251;
+    format = "%s";
+    theText = "3  . . .  SELECT TEST CASE PRINT OPTION : ";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 628;
+    yReference = 221;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 692;
+    y = 172;
+    format = "%s";
+    theText = "(INPUT FILE = COLSTC##.IN or <01 ~ 46> or 99 for all)";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    theFont = `font2`;
+    xReference = 682;
+    yReference = 142;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  instance DialogueSymbols.ProcessText ProcessText
+  {
+    x = 58;
+    y = 677;
+    visibility = 1;
+    xReference = 58;
+    yReference = 677;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    process_button.BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    process_button.BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    process_button.ButtonState = 0;
+    process_button.DisplayText = 1;
+    process_button.DynamicLabel = "Processing";
+    process_button.ExecuteSelect = "{process_buttonPressed();}";
+    process_button.ExecuteUnSelect = "";
+    process_button.Height = 30;
+    process_button.Label = "PROCESS";
+    process_button.SelectColour = `COLOR_BUTTON_SELECTED`;
+    process_button.StaticLabel = "PROCESS";
+    process_button.TextColour = `COLOR_PICTURE_BACKGROUND`;
+    process_button.TextFont = 4;
+    process_button.TextFontDynamic = `font2`;
+    process_button.TextFontStatic = `font4`;
+    process_button.TextX = 17;
+    process_button.TextXDynamic = 15;
+    process_button.TextXStatic = 17;
+    process_button.TextY = 22;
+    process_button.TextYDynamic = `TextY`;
+    process_button.TextYStatic = `TextY`;
+    process_button.TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    process_button.Width = 100;
+    process_button.isDown = 0;
+    process_button.isInside = 1;
+  }
+
+  //ExecuteSelect:
+  //CORENET 0628
+  //ExecuteUnSelect:
+  //CORENET 0628
+  instance DialogueSymbols.InputDialogueNumber InputArea
+  {
+    x = 895;
+    y = 127;
+    visibility = 1;
+    xReference = 895;
+    yReference = 127;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Active = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "DummyProcess()";
+    ExecuteUnSelect = "DummyProcess()";
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxDigits = 8;
+    ReturnAction = "{ProcessTestCase(InputArea.TheNewText);}";
+    Scope = "::UCN5and6.PicUCN_COLSSModeSelection";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewNumber = 0;
+    TheNewText = " ";
+    TheNumberFormat = "%-2d";
+    TheOriginalNumber = 0;
+    TheOriginalText = " ";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 150;
+  }
+
+  instance DialogueSymbols.YesButton YesButton
+  {
+    x = 940;
+    y = 183;
+    visibility = 1;
+    xReference = 940;
+    yReference = 183;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Active = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ButtonState = 0;
+    DisplayText = 1;
+    DynamicLabel = "Yes";
+    ExecuteSelect = "{ProcessBurnupOption(1);}";
+    ExecuteUnSelect = "";
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    Label = "Yes";
+    Scope = "PicUCN_COLSSModeSelection";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    StaticLabel = "Yes";
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextFontDynamic = `font4`;
+    TextFontStatic = `font4`;
+    TextX = 17;
+    TextXDynamic = 15;
+    TextXStatic = 17;
+    TextY = 22;
+    TextYDynamic = `TextY`;
+    TextYStatic = `TextY`;
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    Width = 100;
+  }
+
+  instance DialogueSymbols.YesButton NoButton
+  {
+    x = 1002;
+    y = 182;
+    visibility = 1;
+    xReference = 1002;
+    yReference = 182;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Active = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ButtonState = 0;
+    DisplayText = 1;
+    DynamicLabel = " No";
+    ExecuteSelect = "{ProcessBurnupOption(0);}";
+    ExecuteUnSelect = "";
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    Label = " No";
+    Scope = "PicUCN_COLSSModeSelection";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    StaticLabel = " No";
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextFontDynamic = `font4`;
+    TextFontStatic = `font4`;
+    TextX = 17;
+    TextXDynamic = 15;
+    TextXStatic = 17;
+    TextY = 22;
+    TextYDynamic = `TextY`;
+    TextYStatic = `TextY`;
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    Width = 100;
+  }
+
+  group
+  {
+    visibility = 1;
+    xReference = 882;
+    yReference = 561;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 180;
+
+    line
+    {
+      numberOfPoints = 2;
+      point[0] = ( 884, 571 );
+      point[1] = ( 964, 571 );
+      visibility = 1;
+      foregroundColour = `COLOR_THROTTLING`;
+      backgroundColour = -1;
+      lineStyle = `SolidPattern`;
+      lineWidth = 3;
+      xReference = 914;
+      yReference = 371;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+    instance StaticSymbols.Arrow
+    {
+      x = 954;
+      y = 561;
+      visibility = 1;
+      xReference = 954;
+      yReference = 561;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+  }
+
+  instance DialogueSymbols.LargeMenuSelectTest3 scheduledMode
+  {
+    x = 189;
+    y = 167;
+    visibility = 1;
+    xReference = 189;
+    yReference = 167;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Active = 0;
+    Cascade = 0;
+    CascadeX = 400;
+    CascadeY = 400;
+    ExecuteString = "Option1()";
+    IsOptionSelected = 0;
+    IsPrintOptionSelected = 1;
+    IsSelectedOption = 1;
+    OtionSelected = 1;
+    TheFontColor = 1;
+    TheOption = "S =";
+    TheOption1 = "?";
+    TheTextFont = `font6`;
+    TheTitle = "SCHEDULED MODE (ON)";
+  }
+
+  instance DialogueSymbols.LargeMenuSelectTest3 unscheduledMode
+  {
+    x = 189;
+    y = 204;
+    visibility = 1;
+    xReference = 189;
+    yReference = 204;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Active = 0;
+    Cascade = 0;
+    CascadeX = 400;
+    CascadeY = 400;
+    ExecuteString = "Option2()";
+    IsOptionSelected = 1;
+    IsPrintOptionSelected = 1;
+    IsSelectedOption = 1;
+    OtionSelected = 1;
+    TheFontColor = 0;
+    TheOption = "U =";
+    TheOption1 = "?";
+    TheTextFont = `font6`;
+    TheTitle = "UNSCHEDULED MODE (OFF)";
+  }
+
+  instance DialogueSymbols.LargeMenuSelectTest3 testMode
+  {
+    x = 189;
+    y = 242;
+    visibility = 1;
+    xReference = 189;
+    yReference = 242;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Active = 0;
+    Cascade = 0;
+    CascadeX = 400;
+    CascadeY = 400;
+    ExecuteString = "Option3()";
+    IsOptionSelected = 0;
+    IsPrintOptionSelected = 1;
+    IsSelectedOption = 1;
+    OtionSelected = 1;
+    TheFontColor = 1;
+    TheOption = "T =";
+    TheOption1 = "?";
+    TheTextFont = `font6`;
+    TheTitle = "TEST CASE (OFF)";
+  }
+
+  instance DialogueSymbols.LargeMenuSelectTest3 OP31
+  {
+    x = 687;
+    y = 268;
+    visibility = 1;
+    xReference = 687;
+    yReference = 268;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Active = 0;
+    Cascade = 0;
+    CascadeX = 400;
+    CascadeY = 400;
+    ExecuteString = "TestOption1()";
+    IsOptionSelected = 1;
+    IsPrintOptionSelected = 0;
+    IsSelectedOption = 1;
+    OtionSelected = 1;
+    TheFontColor = 1;
+    TheOption = "1)";
+    TheOption1 = "?";
+    TheTextFont = `font6`;
+    TheTitle = "COMPLETE PRINTOUT";
+  }
+
+  instance DialogueSymbols.LargeMenuSelectTest3 OP32
+  {
+    x = 687;
+    y = 307;
+    visibility = 1;
+    xReference = 687;
+    yReference = 307;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Active = 0;
+    Cascade = 0;
+    CascadeX = 400;
+    CascadeY = 400;
+    ExecuteString = "TestOption2()";
+    IsOptionSelected = 1;
+    IsPrintOptionSelected = 0;
+    IsSelectedOption = 1;
+    OtionSelected = 1;
+    TheFontColor = 1;
+    TheOption = "2)";
+    TheOption1 = "?";
+    TheTextFont = `font6`;
+    TheTitle = "DETAILED RESULTS/SUMMARY";
+  }
+
+  instance DialogueSymbols.LargeMenuSelectTest3 OP33
+  {
+    x = 687;
+    y = 347;
+    visibility = 1;
+    xReference = 687;
+    yReference = 347;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Active = 0;
+    Cascade = 0;
+    CascadeX = 400;
+    CascadeY = 400;
+    ExecuteString = "TestOption3()";
+    IsOptionSelected = 1;
+    IsPrintOptionSelected = 1;
+    IsSelectedOption = 1;
+    OtionSelected = 1;
+    TheFontColor = 0;
+    TheOption = "3)";
+    TheOption1 = "?";
+    TheTextFont = `font6`;
+    TheTitle = "SUMMARY PAGES";
+  }
+}

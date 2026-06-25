@@ -1,0 +1,943 @@
+/*
+ * ProcSee CONFIGURATION LANGUAGE FILE
+ *
+ *
+ * User : ucn56
+ * Host : y6cr02
+ * Date : 2017-02-08
+ * Time : 11:10:03
+ *
+ * ProcSee version : ProcSee 3.10.1 (June 2016)
+ * File version    : 1.26
+ *
+ *
+ */
+
+
+picture PicUCN_DisplayPagePopUp
+{
+  worldX = 0;
+  worldY = 0;
+  worldWidth = 442;
+  worldHeight = 122;
+  oneToOne = 1;
+  backgroundColour = 0;
+  updateMode = 2;
+  resizeMode = 0;
+  xSnap = 5;
+  ySnap = 5;
+  radiusSnap = 0;
+  angleSnap = 0;
+  crosshairStyle = 1;
+  crosshairLength = 0;
+  crosshairFollowSnap = `isInEditMode()`;
+  crosshairVisibility = `isInEditMode()`;
+  xReference = 452;
+  yReference = 131;
+  xScaleFactor = 1;
+  yScaleFactor = 1;
+  rotationAngle = 0;
+
+  char DesiredPage[9] = "Page673";
+
+  char HDSR_PageNumber[50] = "PicUCN_HDSR74Xview.ppic";
+
+  char InputField[20] = "673";
+
+  int Option = 0;
+ /*
+  char Page41[50] = "PicUCN_COLSSPOLimit.ppic";
+
+  char Page42[50] = "PicUCN_COLSSRcpData.ppic";
+
+  char Page43[50] = "PicUCN_COLSSPSLoop.ppic";
+
+  char Page44[50] = "PicUCN_COLSSCeaGPD.ppic";
+
+  char Page45[50] = "PicUCN_COLSSCoreAAP.ppic";
+
+  char Page46[50] = "PicUCN_COLSSPowerDP.ppic";
+
+  char Page47[50] = "PicUCN_COLSSCPUComparison.ppic";
+
+  char Page61[50] = "PicUCN_HDSR74Xview1.ppic";
+
+  char Page62[50] = "PicUCN_HDSR74Xview2.ppic";
+
+  char Page63[50] = "PicUCN_HDSR74Xview3.ppic";
+
+  char Page64[50] = "PicUCN_HDSR74Xview4.ppic";
+
+  char Page65[50] = "PicUCN_HDSR74Xview5.ppic";
+
+  char Page66[50] = "PicUCN_HDSR74Xview6.ppic";
+
+  char Page67[50] = "PicUCN_HDSR74Xview7.ppic";
+
+  char Page68[50] = "PicUCN_HDSR74Xview8.ppic";
+*/
+  char Page100[50] = "PicUCN_Mainmenu.ppic";
+
+  char Page110[50] = "PicUCN_CFMmatrix.ppic";
+
+  char Page111[50] = "Pic111_CFM_Directory.ppic";
+/*
+  char Page120[50] = "PicUCN_COLSSMenu.ppic";
+
+  char Page121[50] = "PicUCN_COLSSModeSelection.ppic";
+
+  char Page122[50] = "PicUCN_COLSSReports.ppic";
+
+  char Page123[50] = "PicUCN_COLSSInit7.ppic";
+
+  char Page124[50] = "PicUCN_COLSSSurveillance.ppic";
+
+  char Page130[50] = "PicUCN_CEAMenu.ppic";
+
+  char Page131[50] = "PicUCN_CEAAlmLimitDisp.ppic";
+
+  char Page132[50] = "PicUCN_CEACEDMCSXfer.ppic";
+
+  char Page133[50] = "PicUCN_CEADropTest.ppic";
+
+  char Page134[50] = "PicUCN_RPCCEASelection.ppic";
+
+  char Page140[50] = "PicUCN_CAL.ppic";
+
+  char Page150[50] = "PicUCN_CurrentParamsMenu.ppic";
+
+  char Page151[50] = "PicUCN_SetupViewMenu.ppic";
+
+  char Page152[50] = "PicUCN_DBChangeMenu.ppic";
+
+  char Page153[50] = "PicUCN_PointSummaries.ppic";
+
+  char Page154[50] = "PicUCN_PrintReports.ppic";
+
+  char Page155[50] = "PicUCN_BDL.ppic";
+
+  char Page156[50] = "PicUCN_ORL.ppic";
+
+  char Page157[50] = "PicUCN_SoeReports.ppic";
+
+  char Page158[50] = "PicUCN_PostTripReports.ppic";
+
+  char Page160[50] = "PicUCN_NSSSBOPApplication.ppic";
+
+  char Page170[50] = "PicUCN_HDSR.ppic";
+
+  char Page171[50] = "PicUCN_HDSR710.ppic";
+
+  char Page172[50] = "PicUCN_HDSR720.ppic";
+
+  char Page173[50] = "PicUCN_HDSR730.ppic";
+
+  char Page174[50] = "PicUCN_HDSR740.ppic";
+
+  char Page175[50] = "PicUCN_HDSR74Xsetup.ppic";
+
+  char Page176[50] = "PicUCN_HDSR74Xview.ppic";
+
+  char Page177[50] = "PicUCN_HDSR750.ppic";
+
+  char Page180[50] = "PicUCN_CSL.ppic";
+
+  char Page190[50] = "PicUCN_Security.ppic";
+*/
+  char Page210[50] = "Pic210_CoreReactivity.ppic";
+
+  char Page220[50] = "Pic220_CoreHeatRemoval.ppic";
+
+  char Page230[50] = "Pic230_Primary.ppic";
+
+  char Page240[50] = "Pic240_Secondary.ppic";
+
+  char Page250[50] = "Pic250_Containment.ppic";
+
+  char Page260[50] = "Pic260_Environment.ppic";
+
+  char Page270[50] = "Pic270_VitalAuxiliaries.ppic";
+
+  char Page321[50] = "Pic321_SaturationMargin.ppic";
+
+  char Page322[50] = "Pic322_ReactorVesselLevel.ppic";
+
+  char Page323[50] = "Pic323_CoreExitTemperature.ppic";
+
+  char Page324[50] = "Pic324_CoreExitTempCh1A.ppic";
+
+  char Page325[50] = "Pic325_CoreExitTempCh1B.ppic";
+
+  char Page331[50] = "Pic331_siPumps.ppic";
+
+  char Page332[50] = "Pic332_siTanks.ppic";
+
+  char Page333[50] = "Pic333_letdownCharging.ppic";
+
+  char Page334[50] = "Pic334_BorationDilution.ppic";
+
+  char Page335[50] = "Pic335_Pressurizer.ppic";
+
+  char Page336[50] = "Pic336_ShutdownCooling.ppic";
+
+  char Page341[50] = "Pic341_MainSteamSystem.ppic";
+
+  char Page342[50] = "Pic342_MainFeedwaterSystem.ppic";
+
+  char Page343[50] = "Pic343_AuxiliaryFeedwater.ppic";
+
+  char Page351[50] = "Pic351_CntmtSprayCooling.ppic";
+
+  char Page352[50] = "Pic352_CntmtPurgeGasCtrl.ppic";
+
+  char Page353[50] = "Pic353_CntmtIsolation1.ppic";
+
+  char Page354[50] = "Pic354_CntmtIsolation2.ppic";
+
+  char Page355[50] = "Pic355_CntmtIsolation3.ppic";
+
+  char Page356[50] = "Pic356_CntmtIsolation4.ppic";
+
+  char Page361[50] = "Pic361_FuelBuildingHVAC.ppic";
+
+  char Page362[50] = "Pic362_ControlRoomHVAC.ppic";
+
+  char Page367[50] = "PicUCN_DisplayPagePopUp.ppic";
+
+  char Page368[50] = "PicUCN_DisplaySectorPopUp.ppic";
+
+  char Page371[50] = "Pic371_ESFpowerA.ppic";
+
+  char Page372[50] = "Pic372_ESFpowerB.ppic";
+
+  char Page373[50] = "Pic373_AlternateAC_Power.ppic";
+
+  char Page374[50] = "Pic374_CompCoolingWtrTrnA.ppic";
+
+  char Page375[50] = "Pic375_CompCoolingWtrTrnB.ppic";
+/*
+  char Page430[50] = "PicUCN_CEATrackingMenu.ppic";
+
+  char Page431[50] = "PicUCN_CEAMonitorCeac1.ppic";
+
+  char Page432[50] = "PicUCN_CEAMonitorCeac2.ppic";
+
+  char Page433[50] = "PicUCN_CEASubDeviationMoni.ppic";
+
+  char Page434[50] = "PicUCN_CPCTargetCEAMonitor.ppic";
+
+  char Page435[50] = "PicUCN_CPCCEACPosCompariso.ppic";
+
+  char Page511[50] = "PicUCN_MajorDbChange.ppic";
+
+  char Page550[50] = "PicUCN_SensorCalibCascade.ppic";
+
+  char Page551[50] = "PicUCN_SensorCalibDisplay.ppic";
+
+  char Page560[50] = "PicUCN_LSFCascade.ppic";
+
+  char Page561[50] = "PicUCN_LSFDisplay.ppic";
+
+  char Page562[50] = "PicUCN_LSFPrint.ppic";
+
+  char Page610[50] = "PicUCN_INCOREMenu.ppic";
+
+  char Page611[50] = "PicUCN_INCOREReports.ppic";
+
+  char Page612[50] = "PicUCN_INCOREUpdate.ppic";
+
+  char Page620[50] = "PicUCN_XRBPSelection.ppic";
+
+  char Page621[50] = "PicUCN_XRBP_Off.ppic";
+
+  char Page622[50] = "PicUCN_XRBP_On.ppic";
+
+  char Page623[50] = "PicUCN_XRBP_Off2.ppic";
+
+  char Page630[50] = "PicUCN_DSPM.ppic";
+
+  char Page635[50] = "PicUCN_EQUIP_RUNTIME_MENU.ppic";
+
+  char Page636[50] = "PicUCN_EQUIP_CAL_VALUE.ppic";
+
+  char Page637[50] = "PicUCN_EQUIP_RUN_STATUS.ppic";
+
+  char Page640[50] = "PicUCN_BOPCalculation.ppic";
+
+  char Page641[50] = "PicUCN_RCSLeak_OnLine.ppic";
+
+  char Page642[50] = "PicUCN_RCSLeak_OffLineInput.ppic";
+
+  char* Page643 = "PicUCN_RCSLeak_OffLine.ppic";
+
+  char Page644[50] = "PicUCN_RCSLeak.ppic";
+
+  char Page645[50] = "PicUCN_RCS_MASS_FLOW.ppic";
+
+  char Page650[50] = "PicUCN_UTDVMain.ppic";
+
+  char Page651[50] = "PicUCN_UTDVReports.ppic";
+
+  char Page652[50] = "PicUCN_UTDVSelectFiles1.ppic";
+
+  char Page653[50] = "PicUCN_UTDVEnterEFPH1.ppic";
+
+  char Page654[50] = "PicUCN_UTDVConfirmEFPH1.ppic";
+
+  char Page655[50] = "PicUCN_UTDVRPCBBurnup1.ppic";
+
+  char Page657[50] = "PicUCN_UTDVCEADataUpdate.ppic";
+
+  char Page658[50] = "PicUCN_UTDVVerifyCEAUpdate.ppic";
+
+  char Page659[50] = "PicUCN_UTDVPerformUpdate.ppic";
+
+  char Page660[50] = "PicUCN_Cecor.ppic";
+
+  char Page670[50] = "PicUCN_MIDLOOP.ppic";
+
+  char Page671[50] = "PicUCN_Midloop1.ppic";
+
+  char Page672[50] = "PicUCN_Midloop2.ppic";
+
+  char Page673[50] = "PicUCN_RCS1.ppic";
+
+  char Page674[50] = "PicUCN_RCS2.ppic";
+
+  char Page675[50] = "PicUCN_PtPlotNormal.ppic";
+
+  char Page676[50] = "PicUCN_PtPlotEmergency.ppic";
+
+  char Page681[50] = "PicUCN_UTDVSelectFiles2.ppic";
+
+  char Page682[50] = "PicUCN_UTDVVerifyFile.ppic";
+
+  char Page683[50] = "PicUCN_UTDVEnterEFPH2.ppic";
+
+  char Page684[50] = "PicUCN_UTDVEnterEFPH3.ppic";
+
+  char Page685[50] = "PicUCN_UTDVConfirmEFPH2.ppic";
+
+  char Page686[50] = "PicUCN_UTDVConfirmEFPH3.ppic";
+
+  char Page687[50] = "PicUCN_UTDVRPCBBurnup2.ppic";
+
+  char Page688[50] = "PicUCN_UTDVRPCBBurnup3.ppic";
+
+  char Page691[50] = "PicUCN_UTDVPerformInit.ppic";
+
+  char Page692[50] = "PicUCN_UTDVCEADataCEDMCS.ppic";
+
+  char Page693[50] = "PicUCN_UTDVCEAFileCEDMCS.ppic";
+
+  char Page694[50] = "PicUCN_UTDVVerifyCEACEDMCS.ppic";
+
+  char Page695[50] = "PicUCN_UTDVDownloadCEA.ppic";
+
+  char Page696[50] = "PicUCN_UTDVRestoreCount.ppic";
+
+  char Page697[50] = "PicUCN_UTDVWriteValue.ppic";
+
+  char Page810[50] = "PicUCN_VideoTrendMenu.ppic";
+
+  char Page811[50] = "PicUCN_VideoTrendView1.ppic";
+
+  char Page812[50] = "PicUCN_VideoTrendView2.ppic";
+
+  char Page813[50] = "PicUCN_VideoTrendView3.ppic";
+
+  char Page814[50] = "PicUCN_VideoTrendView4.ppic";
+
+  char Page815[50] = "PicUCN_VideoTrendView5.ppic";
+
+  char Page820[50] = "PicUCN_DigitalTrendMenu.ppic";
+
+  char Page821[50] = "PicUCN_DigitalTrendView.ppic";
+
+  char Page822[50] = "PicUCN_DigitalTrendView.ppic";
+
+  char Page830[50] = "PicUCN_GroupDisplayMenu.ppic";
+
+  char Page831[50] = "PicUCN_GroupDisplaySetup.ppic";
+
+  char Page832[50] = "PicUCN_GroupDisplayView.ppic";
+
+  char Page840[50] = "PicUCN_SinglePointCascade.ppic";
+*/
+  char Page841[50] = "PicUCN_SinglePointDisplay.ppic";
+/*
+  char Page850[50] = "PicUCN_BarChartMenu.ppic";
+
+  char Page851[50] = "PicUCN_BarChartView1.ppic";
+
+  char Page852[50] = "PicUCN_BarChartView2.ppic";
+
+  char Page860[50] = "PicUCN_PenRecorderMenu.ppic";
+
+  char Page870[50] = "PicUCN_PRINT_PID_TEST.ppic";
+*/
+  char PageNumber[50] = "PicUCN_RCS1.ppic";
+
+  char PopUpTitle[40] = "DISPLAY PAGE";
+
+  float PopUpTitle_x = 300.2;
+
+  int ReturnLevel = 0;
+
+  int ReturnPage = 670;
+
+  function `void ClearPopUpErrorMessage()
+  {
+  // no need to clear the text; just make it invisible
+     PopUpErrorField.visibility = INVISIBLE;
+  // and update the display
+  //   update();
+  }`
+
+  function `void DisplayPopUpErrorMessage (char *theMessage)
+  {
+  // put the text into the error field
+     PopUpErrorField.theText    = theMessage;
+  // vous avez un beau visage
+     PopUpErrorField.visibility = VISIBLE;
+     update();
+  }   `
+
+  function `void escape()
+  {
+         Current_Page = ReturnPage;
+         CFMLevel = ReturnLevel;
+  
+     if (popup.isMapped()) popup.unmap();
+         update();
+  
+        win0.moveCursor(500, 400);
+  
+  
+  }`
+
+  function `void Initialize()
+  {
+     ReturnPage = Current_Page;
+     Current_Page = 367;
+     ReturnLevel = CFMLevel;
+     CFMLevel = 0;
+  //
+  //
+    ClearPopUpErrorMessage();		// Don't display previous error messages
+  //
+    strcpy(InputField,"");		// initialize to the null string
+    strcat(InputField,"___\\0");		// set up the prompt in the input area
+    PopUpInput.edit(ON);			// set into edit mode
+    PopUpInput.edit(OFF);			// you must toggle this to initialize the display
+    PopUpInput.edit(ON); 			// do not remove
+    PopUpInput.moveToHome();		// set cursor at beginning of the field
+  }`
+
+  dialogue
+  {
+    event = `buttonPressed(Right) `;
+    action = `{ escape(); }`;
+  }
+
+  rectangle
+  {
+    x = 0;
+    y = 0.5;
+    width = 440.5;
+    height = 121;
+    visibility = 1;
+    foregroundColour = `Colour45`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 0;
+    foregroundFillColour = `Colour50`;
+    backgroundFillColour = -1;
+    fillPattern = `SolidPattern`;
+    xReference = -4;
+    yReference = -2;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text TheTitle
+  {
+    x = 13;
+    y = 26;
+    format = "%s";
+    theText = "DISPLAY PAGE";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = `Colour50`;
+    theFont = 4;
+    xReference = 73;
+    yReference = 26;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 9;
+    y = 58;
+    format = "%s";
+    theText = "ENTER THE PAGE NUMBER AND PRESS RETURN";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_STATIC_TEXT`;
+    backgroundColour = -1;
+    theFont = 2;
+    xReference = 9;
+    yReference = 58;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 9;
+    y = 81;
+    format = "%s";
+    theText = "PRESS ESCAPE OR CLICK THE RIGHT BUTTON TO CANCEL";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_STATIC_TEXT`;
+    backgroundColour = -1;
+    theFont = `font2`;
+    xReference = 9;
+    yReference = 81;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text PopUpErrorField
+  {
+    x = 9;
+    y = 108;
+    format = "%s";
+    theText = "NO INPUT, RE-ENTER PAGE NUMBER";
+    alignment = 0;
+    visibility = 0;
+    foregroundColour = 17;
+    backgroundColour = 18;
+    theFont = 0;
+    xReference = 9;
+    yReference = 108;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle InputBackground
+  {
+    x = 170;
+    y = 8;
+    width = 67;
+    height = 19;
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = `Colour50`;
+    linePattern = 1;
+    lineWidth = 0;
+    foregroundFillColour = `Colour50`;
+    backgroundFillColour = 1;
+    fillPattern = 1;
+    xReference = 190;
+    yReference = 7;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+
+    dialogue
+    {
+      event = `isInEditMode() && buttonPressed(Right) `;
+      action = `{
+        ClearPopUpErrorMessage();	// clear existing messages
+        PopUpInput.edit(OFF); 	// and get out of edit mode
+      }`;
+    }
+
+    dialogue
+    {
+      event = `!isInEditMode() && buttonPressed(1) `;
+      action = `{
+        strcpy(InputField,"");		// initialize to the null strin
+        strcat(InputField,"___\\0");	  	// set up the prompt in the input area
+        PopUpInput.edit(ON);			// set into edit mode
+        PopUpInput.edit(OFF);			// you must toggle this to initialize the display
+        PopUpInput.edit(ON); 			// do not remove
+        PopUpInput.moveToHome();		// set cursor at beginning of the field
+      //
+        ClearPopUpErrorMessage();             // clear any previous feedback messages
+        update();				// and update the display
+      }`;
+    }
+  }
+
+  text PopUpInput
+  {
+    x = 179;
+    y = 23;
+    format = "%-3s";
+    theText = `InputField`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = `Colour50`;
+    theFont = 2;
+    xReference = 179;
+    yReference = 23;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+
+    dialogue
+    {
+      event = `isInEditMode() && (keyPressed(RETURN) || keyPressed(0xFF8D))`;
+      action = `{
+         int   NumberOfChars;					// number of characters from the input buffer
+      
+      //--------------------------------------------------------------------------
+      // Keep display page navigation from working !!!
+         if (0 == Interface->System.connected)
+         {
+            DisplayAdvisoryMessage("CONNECTION LOST. NO PAGING ALLOWED");
+            DisplayProcessing = 0 ;
+            return;
+         }
+      //--------------------------------------------------------------------------
+      //
+         NumberOfChars = strlen(buffer());			// see how long the input string was
+      //
+             Current_Page = ReturnPage;
+             CFMLevel = ReturnLevel;
+      
+      //
+      // The prompt starts as 3 underscore characters (_).  The input buffer adds
+      // to this string and does not overwrite it.  Therefore, if the user enters
+      // a 3 character page number, the number of characters will equal 6.  A page number
+      // of 4 characters is too long and therefore illegal.
+      //
+         if (6 < NumberOfChars)				// Page number > 3 characters
+         {
+            DisplayPopUpErrorMessage("ILLEGAL PAGE NUMBER\\0");
+         }
+         else if (3 >= NumberOfChars)				// Nothing entered
+         {
+            DisplayPopUpErrorMessage("NO INPUT, RE-ENTER PAGE NUMBER\\0");
+         }
+         else							// Something valid entered
+         {
+            strcpy(InputField,"");				// Initialize to the null string
+            strncpy(InputField,buffer(),(NumberOfChars-3));	// copy just the inputted characters
+            InputField[NumberOfChars-3] = '\\0';		// and terminate with the null char
+      //
+            strcpy(DesiredPage,"");				// Initialize
+            strcat(DesiredPage,"Page");			// Start with Page
+            strcat(DesiredPage,InputField);			// and add ### i.e Page331
+      //
+            edit(OFF);					// turn the edit mode off
+      
+      //    if the variable/page exists, then display it
+            if (containsName("::UCN5and6.PicUCN_DisplayPagePopUp",DesiredPage) > 0)
+            {
+      // for escaoe Key function
+               Last_Page = Current_Page;
+      //
+      //******* To prevent from entering dialogue page directly *****
+      //       printf("page number = %d", atoi(InputField));
+                  if   (atoi(InputField) == 367       // PicUCN_DisplayPagePopUp
+                     || atoi(InputField) == 368       // PicUCN_DisplaySectorPopUp
+                     || atoi(InputField) == 135       // PicUCN_PDILTEST IS NO USE UCN34, CORENET
+      //             || atoi(InputField) == 171       // PicUCN_HDSR721
+      //             || atoi(InputField) == 172       // PicUCN_HDSR720
+      //             || atoi(InputField) == 173       // PicUCN_HDSR730
+      //             || atoi(InputField) == 174       // PicUCN_HDSR740
+                     || atoi(InputField) == 175       // PicUCN_HDSR750
+                     || atoi(InputField) == 176       // PicUCN_HDSR74Xview
+      //             || atoi(InputField) == 177       // PicUCN_HDSR750
+                     || atoi(InputField) == 123       // PicUCN_ColssInit
+                     || atoi(InputField) == 510       // PicUCN_ChgScanCascade
+                     || atoi(InputField) == 511       // PicUCN_ChgScanDisplay
+                     || atoi(InputField) == 520       // PicUCN_ChgAlarmLimitCascade
+                     || atoi(InputField) == 521       // PicUCN_ChgAlarmLimitDisplay
+                     || atoi(InputField) == 530       // PicUCN_InsertValueCascade
+                     || atoi(InputField) == 531       // PicUCN_InsertValueDisplay
+                     || atoi(InputField) == 540       // PicUCN_ChgAlarmStatusCascade
+                     || atoi(InputField) == 541       // PicUCN_ChgAlarmStatusDisplay
+                     || atoi(InputField) == 550       // PicUCN_SensorCalibrationCascade
+                     || atoi(InputField) == 551       // PicUCN_SensorCalibrationDisplay
+                     || atoi(InputField) == 560       // PicUCN_LSFCascade
+                     || atoi(InputField) == 561       // PicUCN_LSFDisplay
+                     || atoi(InputField) == 562       // PicUCN_LSFPrint
+                     || atoi(InputField) == 623       // PicUCN_LSFPrint
+                     || atoi(InputField) == 637       // PicUCN_EQUIP_RUN_STATUS // CORENET 2017 by Philkyu Kwon 
+                     || atoi(InputField) == 643       // PicUCN_RCSLeak_OffLine // CORENET 2017 by Philkyu Kwon               
+                     || ( (atoi(InputField) >= 651) && ( atoi(InputField) <= 659) ) // UTDV 65x series
+                     || ( (atoi(InputField) >= 681) && ( atoi(InputField) <= 688) ) // UTDV 68x series
+                     || ( (atoi(InputField) >= 691) && ( atoi(InputField) <= 697) ) // UTDV 69x series
+      //             || ( (atoi(InputField) >= 621) && ( atoi(InputField) <= 623) ) // XRBP series
+                     || atoi(InputField) == 821       // PicUCN_DigitalTrendView1
+                     || atoi(InputField) == 822       // PicUCN_DigitalTrendView2
+                     || atoi(InputField) == 832       // PicUCN_GroupDisplayView
+                     || atoi(InputField) == 840       // PicUCN_SinglePointCascade
+      //             || atoi(InputField) == 841       // PicUCN_SinglePointDisplay
+                     || atoi(InputField) == 851       // PicUCN_BarChartView1
+                     || atoi(InputField) == 852       // PicUCN_BarChartView2
+      
+                     )
+                        {
+                           DisplayAdvisoryMessage("NO DIRECT PAGING IS ALLOWED");
+                           return;
+                        }
+      //******* To prevent from entering dialogue page directly *****
+      
+      
+            execute ("{strcpy(PageNumber,%s); }",DesiredPage);
+      
+            if (!(atoi(InputField) >= 61 &&  atoi(InputField) <= 68 )) // For Direct HDSR Paging
+            {
+               execute( "{ load( \\"./%s\\" ); }",PageNumber);
+            }
+      
+      //
+      //*************************************************************
+               GeneralEscape();
+      //         printf("--- General Exit Done --- ");
+      //*************************************************************
+      //
+      //         execute( "{ displayPicture( \\"Main\\", \\"%s\\" ); }",PageNumber);
+               DisplayPage(PageNumber);
+            }
+            else
+            {   			                        // otherwise, output an error message
+               DisplayPopUpErrorMessage("DISPLAY PAGE NOT FOUND\\0");
+            }
+         }
+      //   edit(OFF);						// turn the edit off
+      //   update();						// and update the display
+      }`;
+    }
+
+    dialogue
+    {
+      event = `isInEditMode() && buttonPressed(Right) `;
+      action = `{
+        ClearPopUpErrorMessage();	// clear existing messages
+        edit(OFF);			// and get out of edit mode
+      //  update();
+        escape() ;
+      }`;
+    }
+
+    dialogue
+    {
+      event = `!isInEditMode() && buttonPressed(Left) `;
+      action = `{
+        strcpy(InputField,"");		// initialize to the null string
+        strcat(InputField,"___\\0");		// set up the prompt in the input area
+        PopUpInput.edit(ON);			// set into edit mode
+        PopUpInput.edit(OFF);			// you must toggle this to initialize the display
+        PopUpInput.edit(ON); 			// do not remove
+        PopUpInput.moveToHome();		// set cursor at beginning of the field
+      //
+        ClearPopUpErrorMessage();             // clear any previous feedback messages
+        update();
+      }`;
+    }
+
+    dialogue
+    {
+      event = `keyPressed(0xFF1B)`;
+      action = `{escape();}`;
+    }
+
+    dialogue
+    {
+   // event = `isInEditMode() && keyPressed(0x31)`;
+      event = `isInEditMode() && keyPressed(0xFFB1)`;
+      action = `{
+         put("1");
+      }`;
+    }
+
+    dialogue
+    {
+      event = `isInEditMode() && keyPressed(0xFFB2)`; 
+      action = `{
+         put("2");
+      }`;
+    }
+
+    dialogue
+    {
+      event = `isInEditMode() && keyPressed(0xFFB3)`; 
+      action = `{
+         put("3");
+      }`;
+    }
+
+    dialogue
+    {
+      event = `isInEditMode() && keyPressed(0xFFB4)`;
+      action = `{
+         put("4");
+      }`;
+    }
+
+    dialogue
+    {
+      event = `isInEditMode() && keyPressed(0xFFB5)`; 
+      action = `{
+         put("5");
+      }`;
+    }
+
+    dialogue
+    {
+      event = `isInEditMode() && keyPressed(0xFFB6)`; 
+      action = `{
+         put("6");
+      }`;
+    }
+
+    dialogue
+    {
+      event = `isInEditMode() && keyPressed(0xFFB7)`; 
+      action = `{
+         put("7");
+      }`;
+    }
+
+    dialogue
+    {
+      event = `isInEditMode() && keyPressed(0xFFB8)`;  
+      action = `{
+         put("8");
+      }`;
+    }
+
+    dialogue
+    {
+      event = `isInEditMode() && keyPressed(0xFFB9)`;
+      action = `{
+         put("9");
+      }`;
+    }
+
+    dialogue
+    {
+      event = `isInEditMode() && keyPressed(0xFFB0)`; 
+      action = `{
+         put("0");
+      }`;
+    }
+  }
+
+  text
+  {
+    x = 150;
+    y = 25;
+    format = "%s";
+    theText = ":";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 150;
+    yReference = 25;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle
+  {
+    x = 1;
+    y = 0;
+    width = 440;
+    height = 1;
+    visibility = 1;
+    foregroundColour = `Colour33`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 0;
+    foregroundFillColour = `Colour45`;
+    backgroundFillColour = -1;
+    fillPattern = `SolidPattern`;
+    xReference = 1;
+    yReference = 0;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle
+  {
+    x = 1;
+    y = 1;
+    width = -1;
+    height = 120;
+    visibility = 1;
+    foregroundColour = `Colour33`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 0;
+    foregroundFillColour = `Colour45`;
+    backgroundFillColour = -1;
+    fillPattern = `SolidPattern`;
+    xReference = 6;
+    yReference = 1;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle
+  {
+    x = 441.5;
+    y = 1;
+    width = -1;
+    height = 120;
+    visibility = 1;
+    foregroundColour = `Colour51`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 0;
+    foregroundFillColour = `Colour51`;
+    backgroundFillColour = -1;
+    fillPattern = `SolidPattern`;
+    xReference = 446.5;
+    yReference = 1;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle
+  {
+    x = 1;
+    y = 121;
+    width = 440;
+    height = 1;
+    visibility = 1;
+    foregroundColour = `Colour49`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 0;
+    foregroundFillColour = `Colour51`;
+    backgroundFillColour = -1;
+    fillPattern = `SolidPattern`;
+    xReference = 1;
+    yReference = 121;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+}

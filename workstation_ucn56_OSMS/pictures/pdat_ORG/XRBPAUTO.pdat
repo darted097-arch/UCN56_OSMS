@@ -1,0 +1,56 @@
+// ***************************************************************************
+// *                                                                         *
+// *    Copyright (C) 1996, KOPEC Inc., All rights reserved.                 *
+// *    Proprietary information, KOPEC Incorporated                          *
+// *                                                                         *
+// ***************************************************************************
+//
+// ***** HIGH LEVEL DESCRIPTION **********************************************
+//
+// File Name: XRBPAUTO.pdat
+//
+// This pdat file contains the variables used by the XRBP Displays.
+//
+// **** REVISION HISTORY *****************************************************
+//
+// Revision 0  1997/3/07 
+//             Author: S.M.Baek (smbaek@kopec.co.kr)
+//
+// $Header: /PMSArchive/ygn56/workstation/pictures/pdat/XRBPAUTO.pdat 1.1 1997/05/13 15:24:41 kn1 Exp $
+// $Log: XRBPAUTO.pdat,v $
+// Revision 1.1  1997/05/13 15:24:41  kn1
+// Author: kn1@y6maint1.usnus.abb.com (Kopec NSSS 1)
+// Initial revision
+//
+//
+// ***************************************************************************
+// System Include Files: NONE
+//
+//
+// User Defined Include Files: NONE
+//
+//
+// External Variables: NONE
+//
+//
+// Local Constant Definitions: NONE
+//
+//
+// Function Prototypes: NONE
+//
+//
+// ***************************************************************************
+//
+//
+// Define the structure for XRBPAUTO Data
+struct XRBP_AUTO_TEMPLATE {
+   int      error_code;
+   float    output_val[13];
+   int      daytime[6];
+};
+struct XRBPAUTO_DATA {
+   WSmessageHeader            header;            //message information
+   XRBP_AUTO_TEMPLATE       outputs;
+};
+//
+//********************************************************************

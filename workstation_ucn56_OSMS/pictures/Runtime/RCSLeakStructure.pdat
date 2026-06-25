@@ -1,0 +1,251 @@
+// ***************************************************************************
+// *									     *
+// *	Copyright (C) 1999, KEPCO(N), All rights reserved.		     *
+// *	Proprietary information, KEPCO(N)        			     *
+// *									     *
+// ***************************************************************************
+//
+// ***** HIGH LEVEL DESCRIPTION **********************************************
+//
+// This pdat file contains the variables used by the Bar Chart displays.
+//
+// **** REVISION HISTORY *****************************************************
+// RCSLeakStructure.pdat
+// changst@dava.kepco.co.kr(Soon-Taeg Chang)
+//
+//
+// ***************************************************************************
+// System Include Files: NONE
+//
+//
+// User Defined Include Files: NONE
+//
+//
+// External Variables: NONE
+//
+//
+// Local Constant Definitions: NONE
+//
+//
+// Function Prototypes: NONE
+//
+//
+// ******************* RCSLEAK(ON-LINE,OFF-LINE) VARIABLES ********************
+//
+//
+struct CCUR_On_Data {
+// CALCULATION TIME
+   int   NEWTIME;    // 1: 10 MIN, 2: 30 MIN, 3: 1 HOUR, 4: 2 HOURS
+// EVENT STATUS - FALSE:0, TRUE: 1 (!=0)
+   int   SITEVENT;   // IF SITEVENT != 0 THEN CRT DISPLAY: 'VCT MAKEUP'
+   int   VCTEVENT;   // IF VCTEVENT != 0 THEN CRT DISPLAY: 'VCT DIVERT' 
+   int   HPSION;     // IF HPSION != 0 THEN CRT DISPLAY: 'HPSIP START'
+   int   INPUTSTS;   // IF INPUTSTS = 0 THEN CRT DISPLAY: 'BAD DATA CALC.'
+// TOTAL 20 BYTES
+};
+//
+struct CCUR_Off_Data {  
+// INPUT VALUES	        
+  float		RXPWRI;         
+  float		RXPWRF;         
+  float		VCTLVLI;         
+  float		VCTLVLF;         
+  float		VCTTEMPI;         
+  float		VCTTEMPF;         
+  float		PZRLVLI;         
+  float		PZRLVLF;         
+  float		PZRTEMPI;         
+  float		PZRTEMPF;
+  float		PZRPRI; // NEW
+  float		PZRPRF; // NEW
+  float		RCSHOT1I;         
+  float		RCSHOT1F;         
+  float		RCSCLD1I;         
+  float		RCSCLD1F;         
+  float		RDTLVLI;         
+  float		RDTLVLF;         
+  float		RDTTEMPI;         
+  float		RDTTEMPF;         
+  float		EDTLVLI;
+  float		EDTLVLF;
+  float		EDTTEMPI;         
+  float		EDTTEMPF;         
+  float		SI1ALVLI;         
+  float		SI1ALVLF; 
+  float		SI1APRI; // NEW
+  float		SI1APRF; // NEW
+  float		SI1BLVLI;         
+  float		SI1BLVLF; 
+  float		SI1BPRI; // NEW
+  float		SI1BPRF; // NEW
+  float		SI2ALVLI;         
+  float		SI2ALVLF;   
+  float		SI2APRI; // NEW     
+  float		SI2APRF; // NEW     
+  float		SI2BLVLI;         
+  float		SI2BLVLF;    
+  float		SI2BPRI; // NEW
+  float		SI2BPRF; // NEW
+  float		CMTAVGI;         
+  float		CMTAVGF;
+// CALCULATION RESULTS
+  float		VCTDIFF;         
+  float		PZRDIFF;         
+  float		RDTDIFF;         
+  float		EDTDIFF;         
+  float		DIFFSIT;         
+  float		RCSDIFF;         
+  float		OFDVOL;     //SYS CHANGE(GAL)    
+  float		OFLEAK;     //SYS LR(GPM)         
+  float		OFIDVOL;    //IDENTI LEAK(GAL)       
+  float		OFIDLEAK;   //IDENTI LR(GPM)         
+  float		OFUNLEAK;   //UNIDENTI LR(GPM)      
+  char		INITIME[6];
+  char		FINTIME[6];
+  char		tmp[10];
+// TOTAL 234 BYTES  
+};            
+//
+struct WS_On_Data {
+  int           TIME;
+};
+
+struct WS_Off_Data {  
+// INPUT VALUES	 
+  int		CURPAGE; 
+  char		INITIME[6];
+  char		FINTIME[6];      
+  float		RXPWRI;         
+  float		RXPWRF;         
+  float		VCTLVLI;         
+  float		VCTLVLF;         
+  float		VCTTEMPI;         
+  float		VCTTEMPF;         
+  float		PZRLVLI;         
+  float		PZRLVLF;         
+  float		PZRTEMPI;         
+  float		PZRTEMPF;
+  float		PZRPRI; // NEW
+  float		PZRPRF; // NEW
+  float		RCSHOT1I;         
+  float		RCSHOT1F;         
+  float		RCSCLD1I;         
+  float		RCSCLD1F;         
+  float		RDTLVLI;         
+  float		RDTLVLF;         
+  float		RDTTEMPI;         
+  float		RDTTEMPF;         
+  float		EDTLVLI;
+  float		EDTLVLF;
+  float		EDTTEMPI;         
+  float		EDTTEMPF;         
+  float		SI1ALVLI;         
+  float		SI1ALVLF; 
+  float		SI1APRI; // NEW
+  float		SI1APRF; // NEW
+  float		SI1BLVLI;         
+  float		SI1BLVLF; 
+  float		SI1BPRI; // NEW
+  float		SI1BPRF; // NEW
+  float		SI2ALVLI;         
+  float		SI2ALVLF;   
+  float		SI2APRI; // NEW     
+  float		SI2APRF; // NEW     
+  float		SI2BLVLI;         
+  float		SI2BLVLF;    
+  float		SI2BPRI; // NEW
+  float		SI2BPRF; // NEW
+  float		CMTAVGI;         
+  float		CMTAVGF;
+// TOTAL 184 BYTES  
+};            
+//  
+struct WS_PRN_Data {
+  int 		PAGENUM;
+  char	 	WSNAME[12];
+};
+//
+struct CCUR_ON_Message {
+  WSmessageHeader	header;		// message information	    (24-byte)
+  CCUR_On_Data          HostOnData;     // online host information  (20-byte)         
+};
+//
+struct CCUR_Off_Message {
+  WSmessageHeader	header;		// message information	    (24-byte)
+  CCUR_Off_Data         HostOffData;    // offline host information (190-byte)
+};
+//
+struct WS_On_Message {
+  WSmessageHeader       header;         // message information      (24-byte)
+  WS_On_Data            WSOnData;
+};
+//
+
+struct WS_Off_Message {
+  WSmessageHeader	header;		// message information	    (24-byte)
+  WS_Off_Data           WSOffData;      // offline ws information   (148-byte)
+};
+//
+struct WS_Prn_Message {
+  WSmessageHeader	header;		// message information	    (24-byte)
+  WS_PRN_Data           WSPrnData;      // ws prnit information     (10-byte)
+};
+
+
+//
+// CORENET 2017.02.16 for RCS MASS FLOW CALCULATION by Philkyu Kwon.============================
+//
+struct WS_Mass_Calc_Data {
+  int		PAGENUM;		// PAGENUM : 645
+  char		WSNAME[12];
+};
+//
+struct CCUR_Mass_Calc_Msg {
+  char	message1[40];
+  char	message2[40];
+  char	message3[40];
+};
+//
+struct CCUR_Mass_Calc_Data {
+  // CALCULATION VALUE
+  float		minDesignMF;		// MINIMUM DESIGN MASS FLOW
+  float		maxDesignMF;		// MAXIMUM DESIGN MASS FLOW
+  float		minCorrMF;		// MINIMUM CORR. MASS FLOW
+  float		maxCorrMF;		// MAXIMUM CORR. MASS FLOW
+  float		rcsVolF;		// MEASURED RCS VOLUMETRIC FLOW
+  float		colssVolF;		// COLSS VOLUMETRIC FLOW
+  float		colssMassF;		// COLSS MASS FLOW VALUE
+  float		cpcCHA;			// CPC CH.A MDBAR VALUE
+  float		cpcCHB;			// CPC CH.B MDBAR VALUE
+  float		cpcCHC;			// CPC CH.C MDBAR VALUE
+  float		cpcCHD;			// CPC CH.D MDBAR VALUE
+  // CALCULATION RESULT
+  float		techResult;		// TECHNICAL SPEC. ACCEPTANCE RESULT
+  float		rcsResult;		// RCS VOLUMETRIC ACCEPTANCE RESULT
+  float		cpcCHAResult;		// CPC CH.A MDBAR RESULT
+  float		cpcCHBResult;		// CPC CH.B MDBAR RESULT
+  float		cpcCHCResult;		// CPC CH.C MDBAR RESULT
+  float		cpcCHDResult;		// CPC CH.D MDBAR RESULT
+  // MESSAGE
+  // CCUR_Mass_Calc_Msg 	hostMassCalcMsg;
+};
+//
+struct WS_Mass_Calc_Message {
+  WSmessageHeader	header;		// message information		(24-bit)
+  WS_Mass_Calc_Data	wsMassCalcData;	// ws start calc. message	(16-bit)
+};
+//
+struct CCUR_Mass_Calc_Message {
+  WSmessageHeader		header;		// message information		(24-bit)
+  CCUR_Mass_Calc_Data		hostMassCalcData;	// host calc. information (192-bit)
+};
+
+struct CCUR_Mass_Calc_Message1 {
+  WSmessageHeader		header;		// message information		(24-bit)
+  CCUR_Mass_Calc_Msg		hostMassCalcMsg;	// host calc. information (192-bit)
+};
+
+//
+// ******************* END RCS LEAK DEFINITION *************************************
+//
+//

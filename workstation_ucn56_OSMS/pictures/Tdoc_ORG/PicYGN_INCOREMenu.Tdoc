@@ -1,0 +1,197 @@
+/*
+ * PICASSO-3 CONFIGURATION LANGUAGE FILE
+ *
+ *
+ * Picture name: PicYGN_INCOREMenu
+ *
+ *
+ * Documented by  : ygn56
+ * Host           : ucn5
+ * Date           : 24/02-99 at 16:42:10
+ *
+ *
+ * Generate with:
+ *    pcc PicYGN_INCOREMenu.Tdoc
+ *
+ */
+
+
+picture PicYGN_INCOREMenu
+{
+
+  char PictureNumber[50] = "610";
+  char PictureTitle[50] = "INCORE DETECTOR";
+  int Option = 2;
+  char Choice[4] = "2";
+
+  function `void Initialize() 
+{
+   Current_Page = 610;
+   CFMLevel = 0;
+//
+//   Group1Select.UnSelect();
+}`
+
+
+
+  function `void escape() 
+{
+   displayPicture("Main","PicYGN_NSSSBOPApplication.ppic");
+   update(); 
+}`
+
+
+
+  function `void Option_1()
+{
+
+   Option = 1;
+   strcpy(Choice,"1\\0");
+//
+   ProcessOption();
+   update();
+}`
+
+
+
+  function `void Option_2()
+{
+
+   Option = 2;
+   strcpy(Choice,"2\\0");
+//
+   ProcessOption();
+   update();
+}`
+
+
+
+  function `void ProcessOption()
+{
+//   if (1 == Option) displayPicture("Main","PicYGN_INCOREReports.ppic");
+   if (1 == Option) DisplayPage(Page611);
+//   if (2 == Option) displayPicture("Main","PicYGN_INCOREUpdate.ppic");
+   if (2 == Option) DisplayPage(Page612);
+
+}`
+
+
+
+  dialogue
+  {
+    event = `keyReleased(0x31) || keyReleased(0xFFB1)`;
+    action = statement `{
+m1.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+m1.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+
+m1.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+m1.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+m1.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+m1.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+
+m1.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+m1.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+m1.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+m1.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+
+   if ( strlen(m1.ExecuteString) > 0)
+       execute(m1.ExecuteString);
+
+//   execute("{DisplayPage(\\"%s\\");}",TheDisplayPage);
+}`;
+  }
+
+  dialogue
+  {
+    event = `keyReleased(0x32) || keyReleased(0xFFB2)`;
+    action = statement `{
+m2.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+m2.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+
+m2.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+m2.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+m2.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+m2.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+
+m2.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+m2.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+m2.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+m2.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+
+   if ( strlen(m2.ExecuteString) > 0)
+       execute(m2.ExecuteString);
+
+//   execute("{DisplayPage(\\"%s\\");}",TheDisplayPage);
+}`;
+  }
+
+  instance DialogueSymbols.LargeMenuSelect m1
+  {
+    attribute TheOption = "1.";
+    attribute TheFontColor = 2;
+    attribute TheTitle = "INCORE DETECTOR REPORTS";
+    attribute TheTextFont = `font6`;
+    attribute Cascade = 0;
+    attribute CascadeX = 400;
+    attribute CascadeY = 400;
+    attribute ExecuteString = "Option_1()";
+    x = 350;
+    y = 278;
+    visibility = 1;
+    xReference = 350;
+    yReference = 278;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance m1
+
+
+
+  instance DialogueSymbols.LargeMenuSelect m2
+  {
+    attribute TheOption = "2.";
+    attribute TheFontColor = 2;
+    attribute TheTitle = "UPDATE INCORE DETECTOR CHARGE";
+    attribute TheTextFont = `font6`;
+    attribute Cascade = 0;
+    attribute CascadeX = 400;
+    attribute CascadeY = 400;
+    attribute ExecuteString = "Option_2()";
+    x = 350;
+    y = 315;
+    visibility = 1;
+    xReference = 350;
+    yReference = 315;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance m2
+
+
+
+// The picture's other attributes:
+
+  backgroundColour    = 0;
+  xSnap               = 1;
+  ySnap               = 1;
+  angleSnap           = 0;
+  radiusSnap          = 0;
+  worldX              = 0;
+  worldY              = 0;
+  worldWidth          = 1280;
+  worldHeight         = 824;
+  oneToOne            = 1;
+  resizeMode          = 0;
+  updateMode          = 2;
+  crosshairStyle      = 1;
+  crosshairLength     = 0;
+  crosshairFollowSnap = `isInEditMode()`;
+  crosshairVisibility = `isInEditMode()`;
+  xReference = 500;
+  yReference = 500;
+  xScaleFactor = 1;
+  yScaleFactor = 1;
+  rotationAngle = 0;
+
+
+}  // end of picture PicYGN_INCOREMenu

@@ -1,0 +1,843 @@
+/*
+ * ProcSee CONFIGURATION LANGUAGE FILE
+ *
+ *
+ * User : ygn34
+ * Host : y6cr02
+ * Date : 2017-02-10
+ * Time : 11:08:51
+ *
+ * ProcSee version : ProcSee 3.10.1 (June 2016)
+ * File version    : 1.26
+ *
+ *
+ */
+
+
+picture PicYGN_INCOREReports
+{
+  worldX = 0;
+  worldY = 0;
+  worldWidth = 1280;
+  worldHeight = 824;
+  oneToOne = 1;
+  backgroundColour = 0;
+  updateMode = 2;
+  resizeMode = 0;
+  xSnap = 1;
+  ySnap = 1;
+  radiusSnap = 0;
+  angleSnap = 0;
+  crosshairStyle = 1;
+  crosshairLength = 0;
+  crosshairFollowSnap = `isInEditMode()`;
+  crosshairVisibility = `isInEditMode()`;
+  xReference = 500;
+  yReference = 500;
+  xScaleFactor = 1;
+  yScaleFactor = 1;
+  rotationAngle = 0;
+
+  char CurrentOption[4] = "2";
+
+  int defaultOptionFlag2_1 = 0;
+
+  int defaultOptionFlag2_2 = 0;
+
+  int defaultOptionFlag2_3 = 0;
+
+  int DetectorLevel = 2;
+
+  int DetectorNo = 21;
+
+  char Field3Input[8] = " 10";
+
+  int MaxTime = 300;
+
+  int Option = 2;
+
+  int OptionERR1 = 0;
+
+  int OptionERR2 = 0;
+
+  int OptionERR3 = 0;
+
+  char PictureNumber[50] = "611";
+
+  char PictureTitle[50] = "INCORE DETECTOR REPORTS";
+
+  function `void escape()
+  {
+     displayPicture("Main","PicYGN_INCOREMenu.ppic");
+     update();
+  }`
+
+  function `void initConfirmMessages()
+  {
+     //Initialize Confirm Messages in Interface Shared Memory
+     strcpy(Interface->GenericConfirmMessage.data.message1," ");
+     strcpy(Interface->GenericConfirmMessage.data.message2," ");
+     strcpy(Interface->GenericConfirmMessage.data.message3," ");
+  }`
+
+  function `void initFields()
+  {
+  //   Initialize Input Fields
+  //   strcpy(Field1.theText,"   ");
+  //   strcpy(Field2.theText,"   ");
+  //   strcpy(Field3.theText,"   ");
+  //   Initialize Input Field Value
+  //   DetectorNo=0;
+  //   DetectorLevel=0;
+  //   MaxTime=0;
+  }`
+
+  function `void Initialize()
+  {
+     CFMLevel =0;
+     Current_Page = 611;
+  //
+     defaultOptionFlag2_1 = 1;
+     defaultOptionFlag2_2 = 1;
+     defaultOptionFlag2_3 = 1;
+     OptionERR1 = 0;
+     OptionERR2 = 0;
+     OptionERR3 = 0;
+  //
+     op2_description.visibility = 0;
+     field1.visibility = 0;
+     field1.InputArea.visibility = 0;
+     field1.TheNumber.visibility = 0;
+     field2.visibility = 0;
+     field2.InputArea.visibility = 0;
+     field2.TheNumber.visibility = 0;
+     field3.visibility = 0;
+     field3.InputArea.visibility = 0;
+     field3.TheNumber.visibility = 0;
+     initConfirmMessages();
+     processCollect.visibility = 0;
+  
+  //   initFields();
+  //   Default Selected Item = 1
+  //    text1_box.foregroundFillColour=1;
+  //    text1.foregroundColour=0;
+      strcpy(CurrentOption,"1\\0");
+  //
+      update();
+  //   EscapeButton.UnSelect();
+      processCollect.UnSelect();
+  }`
+
+// ***CORENET 20170601 by Philkyu Kwon ************
+  function `void DummyProcess()
+  {
+    //printf("Button Select OR Button Unselected");
+  }`
+// ***************************************************
+
+
+  function `void keepShape()
+  {
+     switch(Option){
+        case 1: {
+         text1_box.foregroundFillColour=0;
+         text1.foregroundColour=1;
+  
+         text2_box.foregroundFillColour=0;
+         text2.foregroundColour=1;
+         text2_1.foregroundColour=1;
+  
+         text3_box.foregroundFillColour=0;
+         text3.foregroundColour=1;
+         text3_1.foregroundColour=1;
+         update();
+         break;
+       }
+        case 2: {
+         text1_box.foregroundFillColour=0;
+         text1.foregroundColour=1;
+         text2_box.foregroundFillColour=0;
+         text2.foregroundColour=1;
+         text2_1.foregroundColour=1;
+         text3_box.foregroundFillColour=0;
+         text3.foregroundColour=1;
+         text3_1.foregroundColour=1;
+         update();
+         break;
+        }
+        case 3: {
+         text1_box.foregroundFillColour=0;
+         text1.foregroundColour=1;
+         text2_box.foregroundFillColour=0;
+         text2.foregroundColour=1;
+         text2_1.foregroundColour=1;
+         text3_box.foregroundFillColour=0;
+         text3.foregroundColour=1;
+         text3_1.foregroundColour=1;
+         update();
+         break;
+        }
+     }
+  }`
+
+  function `void Option1()
+  {
+     op2_description.visibility = 0;
+     field1.visibility = 0;
+     field1.InputArea.visibility = 0;
+     field1.TheNumber.visibility = 0;
+     field2.visibility = 0;
+     field2.InputArea.visibility = 0;
+     field2.TheNumber.visibility = 0;
+     field3.visibility = 0;
+     field3.InputArea.visibility = 0;
+     field3.TheNumber.visibility = 0;
+     processCollect.visibility = 0;
+     Option=1;
+  //
+        DisplayAdvisoryMessage("SENDING A REQUEST TO THE HOST");
+           // Send data request message to the host
+           Interface->IncoreData.option = Option;
+           execute("{sendMessageToHost(INCORE_PROCESS_REQUEST);}");
+  //
+     strcpy(CurrentOption,"1\\0");
+  //   MenuInput.theText = \`CurrentOption\`;	// display something into the field
+     initFields();
+  //
+     update();
+  }`
+
+  function `void Option2()
+  {
+     op2_description.visibility = 1;
+     field1.visibility = 1;
+     field1.InputArea.visibility = 1;
+     field1.TheNumber.visibility = 1;
+     field2.visibility = 1;
+     field2.InputArea.visibility = 1;
+     field2.TheNumber.visibility = 1;
+     field3.visibility = 1;
+     field3.InputArea.visibility = 1;
+     field3.TheNumber.visibility = 1;
+     strcpy(CurrentOption,"2\\0");
+     processCollect.visibility = 1;
+     Option=2;
+  //
+  //   Process();
+  //
+  //  MenuInput.theText = \`CurrentOption\`;	// display something into the field
+  //  initFields();
+  //
+    update();
+  }`
+
+  function `void Option3()
+  {
+     op2_description.visibility = 0;
+     field1.InputArea.visibility = 0;
+     field1.visibility = 0;
+     field1.TheNumber.visibility = 0;
+     field2.InputArea.visibility = 0;
+     field2.TheNumber.visibility = 0;
+     field2.visibility = 0;
+     field3.InputArea.visibility = 0;
+     field3.TheNumber.visibility = 0;
+     field3.visibility = 0;
+     strcpy(CurrentOption,"3\\0");
+     processCollect.visibility = 0;
+     Option=3;
+        DisplayAdvisoryMessage("SENDING A REQUEST TO THE HOST");
+           // Send data request message to the host
+           Interface->IncoreData.option = Option;
+           execute("{sendMessageToHost(INCORE_PROCESS_REQUEST);}");
+  //
+  //  MenuInput.theText = \`CurrentOption\`;
+  // display something into the field
+  //  initFields();
+  //
+    update();
+  }`
+
+  function `void Process1()
+  {
+     int OptionStatus;
+     initConfirmMessages();
+     // ClearFeedbackMessage();
+  //
+  //
+           if (1 == defaultOptionFlag2_1)
+           {
+              ProcessDetectNo();
+              defaultOptionFlag2_1 = 1;
+           }
+  
+           if (1 == defaultOptionFlag2_2)
+           {
+             ProcessDetectLvl();
+             defaultOptionFlag2_2 = 1;
+           }
+  
+           if (1 == defaultOptionFlag2_3)
+           {
+             ProcessMaxTime();
+             defaultOptionFlag2_3 = 1;
+           }
+             OptionStatus = OptionERR1 + OptionERR2 + OptionERR3;
+  //
+           if (0 == OptionStatus)
+           {
+  	    DisplayAdvisoryMessage("SENDING A REQUEST TO THE HOST");
+              // Send data request message to the host
+              Interface->IncoreData.option = 2;
+              Interface->IncoreData.detectorNumber = DetectorNo;
+              Interface->IncoreData.detectorLevel  = DetectorLevel;
+              Interface->IncoreData.maxTime        = MaxTime;
+              execute("{sendMessageToHost(INCORE_PROCESS_REQUEST);}");
+           }
+           else
+           {
+  	    DisplayAdvisoryMessage("INVALID FIELD VALUE ");
+           }
+  
+  //
+  }`
+
+  function `void ProcessDetectLvl()
+  {
+     defaultOptionFlag2_2 = 0;
+  
+     DetectorLevel = atoi(field2.TheNewText);
+  
+     if (DetectorLevel < 1 || DetectorLevel > 5)
+     {
+     DisplayAdvisoryMessage("INVALID DETECTOR LEVEL: MUST BE 1-5");
+     strcpy(field2.TheNewText,"???");
+     OptionERR2 = 1;
+     }
+     else OptionERR2 = 0;
+  
+  }`
+
+  function `void ProcessDetectNo()
+  {
+     defaultOptionFlag2_1 = 0;
+  
+     DetectorNo = atoi(field1.TheNewText);
+     if (DetectorNo <1 || DetectorNo > 45)
+     {
+     DisplayAdvisoryMessage("INVALID DETECTOR NUMBER: MUST BE 1-45");
+     strcpy(field1.TheNewText,"???");
+  //   strcpy(field1.TheNewNumber,"???");
+  //   strcpy(field1.TheOriginalText,"???");
+  //   strcpy(field1.TheOriginalNumber,"???");
+     OptionERR1 = 1;
+     }
+     else   OptionERR1 = 0;
+  }`
+
+  function `void ProcessMaxTime()
+  {
+     defaultOptionFlag2_3 = 0;
+  
+     MaxTime = atoi(field3.TheNewText);
+     if (MaxTime <1 || MaxTime > 300)
+     {
+     DisplayAdvisoryMessage("INVALID MAXIMUM TIME: MUST BE 1-300");
+     strcpy(field3.TheNewText,"???");
+     OptionERR3 = 1;
+     }
+     else OptionERR3 = 0;
+  }`
+
+  function `void test()
+  {
+     printf("buff   : %s", Field2.buffer());
+  }`
+
+  dialogue
+  {
+    event = `(keyReleased(0x31) || keyReleased(0xFFB1)) && !field1.Selected && !field2.Selected && !field3.Selected`;
+    action = `{
+    m1.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+    m1.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+    
+    m1.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+    m1.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+    m1.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+    m1.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+    
+    m1.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    m1.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    m1.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    m1.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    
+       if ( strlen(m1.ExecuteString) > 0)
+           execute(m1.ExecuteString);
+    
+    //   execute("{DisplayPage(\\"%s\\");}",TheDisplayPage);
+    }`;
+  }
+
+  dialogue
+  {
+    event = `(keyReleased(0x32) || keyReleased(0xFFB2)) && !field1.Selected && !field2.Selected && !field3.Selected`;
+    action = `{
+    m2.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+    m2.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+    
+    m2.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+    m2.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+    m2.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+    m2.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+    
+    m2.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    m2.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    m2.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    m2.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    
+       if ( strlen(m2.ExecuteString) > 0)
+           execute(m2.ExecuteString);
+    
+    //   execute("{DisplayPage(\\"%s\\");}",TheDisplayPage);
+    }`;
+  }
+
+  dialogue
+  {
+    event = `(keyReleased(0x33) || keyReleased(0xFFB3)) && !field1.Selected && !field2.Selected && !field3.Selected`;
+    action = `{
+    m3.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+    m3.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+    
+    m3.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+    m3.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+    m3.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+    m3.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+    
+    m3.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    m3.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    m3.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    m3.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    
+       if ( strlen(m3.ExecuteString) > 0)
+           execute(m3.ExecuteString);
+    
+    //   execute("{DisplayPage(\\"%s\\");}",TheDisplayPage);
+    }`;
+  }
+
+  rectangle
+  {
+    x = 585;
+    y = 310;
+    width = 0;
+    height = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 0;
+    foregroundFillColour = `COLOR_NON_ESSENTIAL`;
+    backgroundFillColour = -1;
+    fillPattern = `SolidPattern`;
+    xReference = 585;
+    yReference = 310;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text text2_1
+  {
+    x = 410;
+    y = 274;
+    format = "%s";
+    theText = " ( FOR A MAXIMUM OF 300 SECONDS )";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 410;
+    yReference = 274;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  group op2_description
+  {
+    visibility = 1;
+    xReference = 314;
+    yReference = 415;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+
+    text
+    {
+      x = 488;
+      y = 439;
+      format = "%s";
+      theText = "ENTER DETECTOR NUMBER :";
+      alignment = 0;
+      visibility = 1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font4`;
+      xReference = 488;
+      yReference = 439;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+    text
+    {
+      x = 488;
+      y = 525;
+      format = "%s";
+      theText = "ENTER     MAXIMUM      TIME  :";
+      alignment = 0;
+      visibility = 1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font4`;
+      xReference = 488;
+      yReference = 525;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+    line
+    {
+      numberOfPoints = 3;
+      point[0] = ( 473, 417 );
+      point[1] = ( 473, 532 );
+      point[2] = ( 473, 532 );
+      visibility = 1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      lineStyle = `SolidPattern`;
+      lineWidth = 3;
+      xReference = 473;
+      yReference = 417;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+    text
+    {
+      x = 315;
+      y = 480;
+      format = "%s";
+      theText = "FOR CHOICE 2";
+      alignment = 0;
+      visibility = 1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font4`;
+      xReference = 315;
+      yReference = 480;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+    text
+    {
+      x = 897;
+      y = 437;
+      format = "%s";
+      theText = "(1 TO   45)";
+      alignment = 0;
+      visibility = 1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font4`;
+      xReference = 897;
+      yReference = 437;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+    text
+    {
+      x = 897;
+      y = 478;
+      format = "%s";
+      theText = "(1 TO     5) CORE TOP = 5";
+      alignment = 0;
+      visibility = 1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font4`;
+      xReference = 897;
+      yReference = 478;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+    text
+    {
+      x = 897;
+      y = 524;
+      format = "%s";
+      theText = "(1 TO 300) SECONDS";
+      alignment = 0;
+      visibility = 1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font4`;
+      xReference = 897;
+      yReference = 524;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+    text
+    {
+      x = 490;
+      y = 480;
+      format = "%s";
+      theText = "ENTER DETECTOR LEVEL     :";
+      alignment = 0;
+      visibility = 1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font4`;
+      xReference = 490;
+      yReference = 480;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+  }
+
+  instance DialogueSymbols.InputDialogueNumberSmall field1
+  {
+    x = 795;
+    y = 421;
+    visibility = 1;
+    xReference = 795;
+    yReference = 421;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    ExecuteUnSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxDigits = 4;
+    ReturnAction = "ProcessDetectNo()";
+    Scope = "::YGN3and4.PicYGN_INCOREReports";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewNumber = 21;
+    TheNewText = "21";
+    TheNumberFormat = "%-3d";
+    TheOriginalNumber = 34.5;
+    TheOriginalText = "21";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    Width = 150;
+  }
+
+  instance DialogueSymbols.InputDialogueNumberSmall field2
+  {
+    x = 795;
+    y = 461;
+    visibility = 1;
+    xReference = 795;
+    yReference = 461;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    ExecuteUnSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxDigits = 4;
+    ReturnAction = "ProcessDetectLvl()";
+    Scope = "::YGN3and4.PicYGN_INCOREReports";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewNumber = 2;
+    TheNewText = "2";
+    TheNumberFormat = "%-3d";
+    TheOriginalNumber = 34.5;
+    TheOriginalText = "2";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    Width = 150;
+  }
+
+  instance DialogueSymbols.InputDialogueNumberSmall field3
+  {
+    x = 795;
+    y = 502;
+    visibility = 1;
+    xReference = 795;
+    yReference = 502;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    ExecuteUnSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxDigits = 4;
+    ReturnAction = "ProcessMaxTime()";
+    Scope = "::YGN3and4.PicYGN_INCOREReports";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewNumber = 30;
+    TheNewText = "30";
+    TheNumberFormat = "%-3d";
+    TheOriginalNumber = 34.5;
+    TheOriginalText = "30";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    Width = 150;
+  }
+
+  instance DialogueSymbols.PushButton processCollect
+  {
+    x = 797;
+    y = 599;
+    visibility = 1;
+    xReference = 797;
+    yReference = 599;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ButtonState = 0;
+    DynamicLabel = "PROCESS";
+    ExecuteString = "Process1()";
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    Label = "PROCESS";
+    Scope = "PicYGN_INCOREReports";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    StaticLabel = "PROCESS";
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextFontDynamic = `font2`;
+    TextFontStatic = `font4`;
+    TextX = 17;
+    TextXDynamic = 15;
+    TextXStatic = 17;
+    TextY = 22;
+    TextYDynamic = 21;
+    TextYStatic = 22;
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    Width = 125;
+  }
+
+  instance DialogueSymbols.LargeMenuSelectMid m2
+  {
+    x = 405;
+    y = 210;
+    visibility = 1;
+    xReference = 405;
+    yReference = 210;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Cascade = 0;
+    CascadeX = 400;
+    CascadeY = 400;
+    ExecuteString = "Option2()";
+    TheFontColor = 2;
+    TheOption = "2.";
+    TheTextFont = `font6`;
+    TheTitle = "COLLECT DATA FOR INDIVIDUAL DETECTORS";
+  }
+
+  instance DialogueSymbols.LargeMenuSelectMid m3
+  {
+    x = 405;
+    y = 310;
+    visibility = 1;
+    xReference = 405;
+    yReference = 310;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Cascade = 0;
+    CascadeX = 400;
+    CascadeY = 400;
+    ExecuteString = "Option3()";
+    TheFontColor = 2;
+    TheOption = "3.";
+    TheTextFont = `font6`;
+    TheTitle = "END DATA COLLECTION AND PRINT REPORT";
+  }
+
+  instance DialogueSymbols.LargeMenuSelectMid m1
+  {
+    x = 405;
+    y = 173;
+    visibility = 1;
+    xReference = 405;
+    yReference = 173;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Cascade = 0;
+    CascadeX = 400;
+    CascadeY = 400;
+    ExecuteString = "Option1()";
+    TheFontColor = 2;
+    TheOption = "1.";
+    TheTextFont = `font6`;
+    TheTitle = "PRINT REPORT FOR ALL INCORE DETECTORS";
+  }
+
+  text
+  {
+    x = 410;
+    y = 375;
+    format = "%s";
+    theText = " ( FOR INDIVIDUAL DETECTORS )";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 410;
+    yReference = 375;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+}

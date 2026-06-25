@@ -1,0 +1,1282 @@
+/*
+ * PICASSO-3 CONFIGURATION LANGUAGE FILE
+ *
+ *
+ * Picture name: PicUCN_CFMmatrix
+ *
+ *
+ * Documented by  : ucn56
+ * Host           : pcs2
+ * Date           : 19/05-03 at 16:25:05
+ *
+ *
+ * Generate with:
+ *    pcc PicUCN_CFMmatrix.Tdoc
+ *
+ */
+
+
+picture PicUCN_CFMmatrix
+{
+
+  char PictureNumber[50] = "110";
+  char PictureTitle[50] = "CRITICAL FUNCTION MONITOR";
+
+    function `void Initialize()
+{
+CFMLevel = 1;
+Current_Page = 110;
+}`
+
+
+
+  dialogue
+  {
+    event = `keyPressed(0x1000FF71)`;
+    action = statement `{
+DisplaySectorPopUpMenu();
+update();
+//printf("Display: DisplayPagePopUp");
+}`;
+  }
+
+  dialogue
+  {
+    event = `keyPressed(0x1000FF73)`;
+    action = statement `{
+DisplayPopUpMenu();
+update();
+//printf("Display: DisplayPagePopUp");
+}`;
+  }
+
+  instance cfmsSymbols.CFM_MatrixBox 
+  {
+    attribute PointId = `&CFAX9TOP`;
+    x = 843;
+    y = 511;
+    visibility = 1;
+    xReference = 842;
+    yReference = -26;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.CFM_MatrixBox 
+  {
+    attribute PointId = `&CFAX6TOP`;
+    x = 843;
+    y = 259;
+    visibility = 1;
+    xReference = 842;
+    yReference = -9;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.CFM_MatrixBox 
+  {
+    attribute PointId = `&CFAX8TOP`;
+    x = 442;
+    y = 511;
+    visibility = 1;
+    xReference = 441;
+    yReference = -26;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.CFM_MatrixBox 
+  {
+    attribute PointId = `&CFAX5TOP`;
+    x = 442;
+    y = 259;
+    visibility = 1;
+    xReference = 441;
+    yReference = -9;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.CFM_MatrixBox 
+  {
+    attribute PointId = `&CFAX7TOP`;
+    x = 41;
+    y = 511;
+    visibility = 1;
+    xReference = 46;
+    yReference = 244;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.CFM_MatrixBox 
+  {
+    attribute PointId = `&CFAX4TOP`;
+    x = 41;
+    y = 259;
+    visibility = 1;
+    xReference = 46;
+    yReference = 261;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.CFM_MatrixBox 
+  {
+    attribute PointId = `&CFAX3TOP`;
+    x = 843;
+    y = 8;
+    visibility = 1;
+    xReference = 842;
+    yReference = 10;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.CFM_MatrixBox 
+  {
+    attribute PointId = `&CFAX2TOP`;
+    x = 442;
+    y = 8;
+    visibility = 1;
+    xReference = 441;
+    yReference = 10;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.CFM_MatrixBox 
+  {
+    attribute PointId = `&CFAX1TOP`;
+    x = 41;
+    y = 8;
+    visibility = 1;
+    xReference = 46;
+    yReference = 10;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.CFM_MatrixLabel 
+  {
+    attribute TheLabel = "CORE REACTIVITY";
+    attribute PointId = `&CFAX1TOP`;
+    x = 124;
+    y = 23;
+    visibility = 1;
+    xReference = 106;
+    yReference = 23;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.CFM_MatrixText 
+  {
+    attribute TheText = "CEA DROP MALFUNCTION";
+    attribute PointId = `&CFAX1LG1`;
+    x = 56;
+    y = 58;
+    visibility = 1;
+    xReference = 66;
+    yReference = 68;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.CFM_MatrixLabel 
+  {
+    attribute TheLabel = "RCS INVENTORY";
+    attribute PointId = `&CFAX2TOP`;
+    x = 531;
+    y = 23;
+    visibility = 1;
+    xReference = 566;
+    yReference = 33;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.CFM_MatrixText 
+  {
+    attribute TheText = "LO PZR LEVEL";
+    attribute PointId = `&CFAX2LG1`;
+    x = 457;
+    y = 58;
+    visibility = 1;
+    xReference = 532;
+    yReference = 62;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.CFM_MatrixText 
+  {
+    attribute TheText = "HI RDT LEVEL";
+    attribute PointId = `&CFAX2LG2`;
+    x = 457;
+    y = 83;
+    visibility = 1;
+    xReference = 532;
+    yReference = 88;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.CFM_MatrixText 
+  {
+    attribute TheText = "HI RDT PRESSURE";
+    attribute PointId = `&CFAX2LG3`;
+    x = 457;
+    y = 108;
+    visibility = 1;
+    xReference = 532;
+    yReference = 113;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.CFM_MatrixText 
+  {
+    attribute TheText = "HI RDT TEMP";
+    attribute PointId = `&CFAX2LG4`;
+    x = 457;
+    y = 133;
+    visibility = 1;
+    xReference = 532;
+    yReference = 138;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.CFM_MatrixText 
+  {
+    attribute TheText = "SAFETY VLV DISCHARGE";
+    attribute PointId = `&CFAX2LG5`;
+    x = 457;
+    y = 158;
+    visibility = 1;
+    xReference = 532;
+    yReference = 163;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.CFM_MatrixText 
+  {
+    attribute TheText = "RCS LEAKAGE";
+    attribute PointId = `&CFAX2LG6`;
+    x = 457;
+    y = 183;
+    visibility = 1;
+    xReference = 532;
+    yReference = 173;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.CFM_MatrixText 
+  {
+    attribute TheText = "SDS VLV DISCHARGE";
+    attribute PointId = `&CFAX2LG7`;
+    x = 457;
+    y = 215;
+    visibility = 1;
+    xReference = 532;
+    yReference = 215;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.CFM_MatrixLabel 
+  {
+    attribute TheLabel = "RCS PRESSURE";
+    attribute PointId = `&CFAX3TOP`;
+    x = 940;
+    y = 23;
+    visibility = 1;
+    xReference = 962;
+    yReference = 38;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.CFM_MatrixText 
+  {
+    attribute TheText = "COLD STRESS TEMP";
+    attribute PointId = `&CFAX3LG1`;
+    x = 857;
+    y = 58;
+    visibility = 1;
+    xReference = 867;
+    yReference = 73;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.CFM_MatrixText 
+  {
+    attribute TheText = "HI PZR PRESSURE/RATE";
+    attribute PointId = `&CFAX3LG2`;
+    x = 857;
+    y = 83;
+    visibility = 1;
+    xReference = 867;
+    yReference = 73;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.CFM_MatrixText 
+  {
+    attribute TheText = "LO SUBCOOLED MARGIN";
+    attribute PointId = `&CFAX3LG3`;
+    x = 857;
+    y = 108;
+    visibility = 1;
+    xReference = 867;
+    yReference = 73;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.CFM_MatrixText 
+  {
+    attribute TheText = "HI POST TRIP POWER";
+    attribute PointId = `&CFAX1LG2`;
+    x = 56;
+    y = 83;
+    visibility = 1;
+    xReference = 66;
+    yReference = 68;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.CFM_MatrixText 
+  {
+    attribute TheText = "THERMAL REACT ADDITION";
+    attribute PointId = `&CFAX1LG3`;
+    x = 56;
+    y = 108;
+    visibility = 1;
+    xReference = 66;
+    yReference = 68;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.CFM_MatrixText 
+  {
+    attribute TheText = "LO BORON CONC";
+    attribute PointId = `&CFAX1LG4`;
+    x = 56;
+    y = 158;
+    visibility = 1;
+    xReference = 66;
+    yReference = 68;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.CFM_MatrixLabel 
+  {
+    attribute TheLabel = "CORE HEAT REMOVAL";
+    attribute PointId = `&CFAX4TOP`;
+    x = 94;
+    y = 275;
+    visibility = 1;
+    xReference = 136;
+    yReference = 295;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.CFM_MatrixText 
+  {
+    attribute TheText = "LO RX VESS LEVEL";
+    attribute PointId = `&CFAX4LG2`;
+    x = 56;
+    y = 310;
+    visibility = 1;
+    xReference = 81;
+    yReference = 310;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.CFM_MatrixText 
+  {
+    attribute TheText = "HI CORE EXIT TEMP";
+    attribute PointId = `&CFAX4LG3`;
+    x = 56;
+    y = 335;
+    visibility = 1;
+    xReference = 81;
+    yReference = 310;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.CFM_MatrixText 
+  {
+    attribute TheText = "CORE SATN MARGIN";
+    attribute PointId = `&CFAX4LG4`;
+    x = 56;
+    y = 360;
+    visibility = 1;
+    xReference = 81;
+    yReference = 310;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.CFM_MatrixText 
+  {
+    attribute TheText = "HI CORE DELTA T";
+    attribute PointId = `&CFAX4LG1`;
+    x = 56;
+    y = 410;
+    visibility = 1;
+    xReference = 81;
+    yReference = 310;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.CFM_MatrixText 
+  {
+    attribute TheText = "LO RCP LOAD";
+    attribute PointId = `&CFAX4LG5`;
+    x = 56;
+    y = 435;
+    visibility = 1;
+    xReference = 81;
+    yReference = 310;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.CFM_MatrixLabel 
+  {
+    attribute TheLabel = "RCS HEAT REMOVAL";
+    attribute PointId = `&CFAX5TOP`;
+    x = 501;
+    y = 275;
+    visibility = 1;
+    xReference = 566;
+    yReference = 285;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.CFM_MatrixText 
+  {
+    attribute TheText = "SDCS NOT COOLING";
+    attribute PointId = `&CFAX5LG1`;
+    x = 457;
+    y = 310;
+    visibility = 1;
+    xReference = 472;
+    yReference = 305;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.CFM_MatrixText 
+  {
+    attribute TheText = "LO SIS PUMP FLOW";
+    attribute PointId = `&CFAX5LG2`;
+    x = 457;
+    y = 335;
+    visibility = 1;
+    xReference = 472;
+    yReference = 305;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.CFM_MatrixText 
+  {
+    attribute TheText = "ECCS NOT COOLING";
+    attribute PointId = `&CFAX5LG3`;
+    x = 457;
+    y = 360;
+    visibility = 1;
+    xReference = 472;
+    yReference = 305;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.CFM_MatrixText 
+  {
+    attribute TheText = "SG NOT COOLING";
+    attribute PointId = `&CFAX5LG4`;
+    x = 457;
+    y = 410;
+    visibility = 1;
+    xReference = 472;
+    yReference = 305;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.CFM_MatrixText 
+  {
+    attribute TheText = "LO SI/FW COOLING";
+    attribute PointId = `&CFAX5LG5`;
+    x = 457;
+    y = 435;
+    visibility = 1;
+    xReference = 472;
+    yReference = 305;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.CFM_MatrixLabel 
+  {
+    attribute TheLabel = "CNMT ISOLATION";
+    attribute PointId = `&CFAX6TOP`;
+    x = 927;
+    y = 275;
+    visibility = 1;
+    xReference = 912;
+    yReference = 295;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.CFM_MatrixText 
+  {
+    attribute TheText = "CNMT ISOLATION";
+    attribute PointId = `&CFAX6LG1`;
+    x = 857;
+    y = 310;
+    visibility = 1;
+    xReference = 872;
+    yReference = 315;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.CFM_MatrixText 
+  {
+    attribute TheText = "CNMT PURGE ISOLATION";
+    attribute PointId = `&CFAX6LG2`;
+    x = 857;
+    y = 335;
+    visibility = 1;
+    xReference = 872;
+    yReference = 315;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.CFM_MatrixText 
+  {
+    attribute TheText = "SAFETY INJ ISOLATION";
+    attribute PointId = `&CFAX6LG3`;
+    x = 857;
+    y = 360;
+    visibility = 1;
+    xReference = 872;
+    yReference = 315;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.CFM_MatrixText 
+  {
+    attribute TheText = "MAIN STEAM ISOLATION";
+    attribute PointId = `&CFAX6LG4`;
+    x = 857;
+    y = 385;
+    visibility = 1;
+    xReference = 872;
+    yReference = 315;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.CFM_MatrixText 
+  {
+    attribute TheText = "CNMT SPRAY ACTUATION";
+    attribute PointId = `&CFAX6LG5`;
+    x = 857;
+    y = 410;
+    visibility = 1;
+    xReference = 872;
+    yReference = 315;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.CFM_MatrixLabel 
+  {
+    attribute TheLabel = "CNMT INTEGRITY";
+    attribute PointId = `&CFAX7TOP`;
+    x = 129;
+    y = 526;
+    visibility = 1;
+    xReference = 111;
+    yReference = 531;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.CFM_MatrixText 
+  {
+    attribute TheText = "LO SPRAY FLOW";
+    attribute PointId = `&CFAX7LG2`;
+    x = 56;
+    y = 562;
+    visibility = 1;
+    xReference = 156;
+    yReference = 507;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.CFM_MatrixText 
+  {
+    attribute TheText = "CNMT PRESSURE CHANGE";
+    attribute PointId = `&CFAX7LG3`;
+    x = 56;
+    y = 587;
+    visibility = 1;
+    xReference = 156;
+    yReference = 507;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.CFM_MatrixText 
+  {
+    attribute TheText = "HI CNMT PRESSURE";
+    attribute PointId = `&CFAX7LG4`;
+    x = 56;
+    y = 612;
+    visibility = 1;
+    xReference = 156;
+    yReference = 507;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.CFM_MatrixText 
+  {
+    attribute TheText = "LO CNMT PRESSURE";
+    attribute PointId = `&CFAX7LG5`;
+    x = 56;
+    y = 637;
+    visibility = 1;
+    xReference = 156;
+    yReference = 507;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.CFM_MatrixText 
+  {
+    attribute TheText = "HI CNMT TEMP";
+    attribute PointId = `&CFAX7LG6`;
+    x = 56;
+    y = 662;
+    visibility = 1;
+    xReference = 156;
+    yReference = 507;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.CFM_MatrixText 
+  {
+    attribute TheText = "HI CNMT HYDROGEN";
+    attribute PointId = `&CFAX7LG7`;
+    x = 56;
+    y = 687;
+    visibility = 1;
+    xReference = 156;
+    yReference = 507;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.CFM_MatrixLabel 
+  {
+    attribute TheLabel = "RADIATION EMISSIONS";
+    attribute PointId = `&CFAX8TOP`;
+    x = 486;
+    y = 526;
+    visibility = 1;
+    xReference = 521;
+    yReference = 526;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.CFM_MatrixText 
+  {
+    attribute TheText = "HI CNMT AREA RAD";
+    attribute PointId = `&CFAX8LG4`;
+    x = 456;
+    y = 562;
+    visibility = 1;
+    xReference = 471;
+    yReference = 562;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.CFM_MatrixText 
+  {
+    attribute TheText = "HI CNMT AIR RAD";
+    attribute PointId = `&CFAX8LG3`;
+    x = 456;
+    y = 587;
+    visibility = 1;
+    xReference = 471;
+    yReference = 562;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.CFM_MatrixText 
+  {
+    attribute TheText = "HI CNMT PURGE EFLU RAD";
+    attribute PointId = `&CFAX8LG5`;
+    x = 456;
+    y = 612;
+    visibility = 1;
+    xReference = 471;
+    yReference = 562;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.CFM_MatrixText 
+  {
+    attribute TheText = "HI SECONDARY SYS RAD";
+    attribute PointId = `&CFAX8LG1`;
+    x = 456;
+    y = 662;
+    visibility = 1;
+    xReference = 471;
+    yReference = 562;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.CFM_MatrixText 
+  {
+    attribute TheText = "HI HVAC EFLU RAD";
+    attribute PointId = `&CFAX8LG2`;
+    x = 456;
+    y = 687;
+    visibility = 1;
+    xReference = 471;
+    yReference = 562;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.CFM_MatrixText 
+  {
+    attribute TheText = "HI RADWASTE DSCH RAD";
+    attribute PointId = `&CFAX8LG6`;
+    x = 456;
+    y = 712;
+    visibility = 1;
+    xReference = 471;
+    yReference = 562;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.CFM_MatrixLabel 
+  {
+    attribute TheLabel = "VITAL AUXILIARIES";
+    attribute PointId = `&CFAX9TOP`;
+    x = 917;
+    y = 526;
+    visibility = 1;
+    xReference = 932;
+    yReference = 526;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.CFM_MatrixText 
+  {
+    attribute TheText = "LOSS OF CLASS 1E AC";
+    attribute PointId = `&CFAX9LG1`;
+    x = 857;
+    y = 562;
+    visibility = 1;
+    xReference = 897;
+    yReference = 577;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.CFM_MatrixText 
+  {
+    attribute TheText = "LOSS OF CLASS 1E DC";
+    attribute PointId = `&CFAX9LG2`;
+    x = 857;
+    y = 587;
+    visibility = 1;
+    xReference = 897;
+    yReference = 577;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.CFM_MatrixText 
+  {
+    attribute TheText = "LOSS OF CCW";
+    attribute PointId = `&CFAX9LG4`;
+    x = 857;
+    y = 612;
+    visibility = 1;
+    xReference = 897;
+    yReference = 577;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.CSFBarSize1 
+  {
+    attribute SectoringPage = "230";
+    attribute SectorNumber = " 3";
+    attribute PointId = `&DSL1103D`;
+    x = 364;
+    y = 137;
+    visibility = 1;
+    xReference = 364;
+    yReference = 137;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.CSFBarSize3 
+  {
+    attribute SectoringPage = "210";
+    attribute SectorNumber = " 1";
+    attribute PointId = `&DSL1101`;
+    x = 364;
+    y = 43;
+    visibility = 1;
+    xReference = 364;
+    yReference = 43;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.CSFBarSize3 
+  {
+    attribute SectoringPage = "220";
+    attribute SectorNumber = " 2";
+    attribute PointId = `&DSL1102`;
+    x = 364;
+    y = 291;
+    visibility = 1;
+    xReference = 364;
+    yReference = 291;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.CSFBarSize2 
+  {
+    attribute SectoringPage = "230";
+    attribute SectorNumber = " 3";
+    attribute PointId = `&DSL1103E`;
+    x = 364;
+    y = 386;
+    visibility = 1;
+    xReference = 364;
+    yReference = 386;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.CSFBarSize6 
+  {
+    attribute SectoringPage = "250";
+    attribute SectorNumber = " 5";
+    attribute PointId = `&DSL1105A`;
+    x = 365;
+    y = 540;
+    visibility = 1;
+    xReference = 365;
+    yReference = 540;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.CSFBarSize7 
+  {
+    attribute SectoringPage = "230";
+    attribute SectorNumber = " 3";
+    attribute PointId = `&DSL1103A`;
+    x = 766;
+    y = 45;
+    visibility = 1;
+    xReference = 766;
+    yReference = 45;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.CSFBarSize2 
+  {
+    attribute SectoringPage = "240";
+    attribute SectorNumber = " 4";
+    attribute PointId = `&DSL1104`;
+    x = 766;
+    y = 390;
+    visibility = 1;
+    xReference = 766;
+    yReference = 390;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.CSFBarSize3 
+  {
+    attribute SectoringPage = "230";
+    attribute SectorNumber = " 3";
+    attribute PointId = `&DSL1103C`;
+    x = 766;
+    y = 295;
+    visibility = 1;
+    xReference = 766;
+    yReference = 295;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.CSFBarSize3 
+  {
+    attribute SectoringPage = "250";
+    attribute SectorNumber = " 5";
+    attribute PointId = `&DSL1105B`;
+    x = 766;
+    y = 545;
+    visibility = 1;
+    xReference = 766;
+    yReference = 545;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.CSFBarSize3 
+  {
+    attribute SectoringPage = "260";
+    attribute SectorNumber = " 6";
+    attribute PointId = `&DSL1106`;
+    x = 766;
+    y = 645;
+    visibility = 1;
+    xReference = 766;
+    yReference = 645;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.CSFBarSize3 
+  {
+    attribute SectoringPage = "230";
+    attribute SectorNumber = " 3";
+    attribute PointId = `&DSL1103B`;
+    x = 1165;
+    y = 40;
+    visibility = 1;
+    xReference = 1165;
+    yReference = 40;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.CSFBarSize3 
+  {
+    attribute SectoringPage = "270";
+    attribute SectorNumber = " 7";
+    attribute PointId = `&DSL1107`;
+    x = 1165;
+    y = 545;
+    visibility = 1;
+    xReference = 1165;
+    yReference = 545;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.CSFBarSize5 
+  {
+    attribute SectoringPage = "250";
+    attribute SectorNumber = " 5";
+    attribute PointId = `&DSL1105C`;
+    x = 1165;
+    y = 295;
+    visibility = 1;
+    xReference = 1165;
+    yReference = 295;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+// The picture's other attributes:
+
+  backgroundColour    = 0;
+  xSnap               = 5;
+  ySnap               = 5;
+  angleSnap           = 0;
+  radiusSnap          = 0;
+  worldX              = 0;
+  worldY              = 0;
+  worldWidth          = 1280;
+  worldHeight         = 824;
+  oneToOne            = 1;
+  resizeMode          = 0;
+  updateMode          = 1;
+  crosshairStyle      = 1;
+  crosshairLength     = 0;
+  crosshairFollowSnap = `isInEditMode()`;
+  crosshairVisibility = `isInEditMode()`;
+  xReference = 500;
+  yReference = 500;
+  xScaleFactor = 1;
+  yScaleFactor = 1;
+  rotationAngle = 0;
+
+
+}  // end of picture PicUCN_CFMmatrix

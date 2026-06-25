@@ -1,0 +1,41 @@
+	aCC +O2 -Dhpi32Arch  -L/usr/local/procsee/lib  \
+				-L /usr/local/procsee/lib/hpi32Arch ../obj/mainInterfaceToGUI.o  ../obj/messageObject.o  ../obj/DataQueueObject.o  ../obj/DatabaseObject.o  ../obj/InterProcSMObject.o  ../obj/IntListObject.o  ../obj/PermShoppingListObject.o  ../obj/PidListItemObject.o  ../obj/PictureListItemObject.o  ../obj/PicPidListObject.o  ../obj/createPicturePidLists.o  ../obj/buildPermanentShoppingList.o  ../obj/initInterfaceToGUI.o  ../obj/cyclicProcessing.o  ../obj/connectToGUI.o  ../obj/defineDatabase.o  ../obj/defineMessages.o  ../obj/defineInterface.o  ../obj/defineFunctions.o  ../obj/manageTempShopList.o  ../obj/parseSinglePointMessages.o  ../obj/parsePenMessages.o  ../obj/parseBarMessages.o  ../obj/parseCALMessages.o  ../obj/parseCPCSMessages.o  ../obj/parseBDLMessages.o  ../obj/parseORLMessages.o  ../obj/parseCslMessages.o  ../obj/parseCecorMessages.o  ../obj/parseColssMessages.o  ../obj/parseDTrendMessages.o  ../obj/parseDspmMessages.o  ../obj/parseDBC_Messages.o  ../obj/parseGroupMessages.o  ../obj/parseBOPDMDMessages.o  ../obj/parseIncoreMessages.o  ../obj/parseLinkMessages.o  ../obj/parsePRTSUMMessages.o  ../obj/parsePrreptMessages.o  ../obj/parseRPCCEAMessages.o  ../obj/parseSecureMessages.o  ../obj/parseUTDVMessages.o  ../obj/parseHDSRMessages.o  ../obj/parseVTRENDMessages.o  ../obj/parseXRBPMessages.o  ../obj/parseXRBPAMessages.o  ../obj/parseRcsLeakMessages.o  ../obj/parsePidForTestMessages.o  ../obj/parseEquipmentMessages.o  ../obj/parseCEATrackMonitorMessages.o  ../obj/findPidForGUI.o  ../obj/sendPictureNameToInterfaceToGUI.o  ../obj/sendMessageToHost.o  ../obj/disconnectFromGUI.o  ../obj/find_pid.o  ../obj/messageQueueObject.o  ../obj/parsePictureMessages.o  ../obj/sharedMemoryObject.o  ../obj/TempShoppingListObject.o 		 -lm -lProcSeeApiC  \
+				-o ../bin/InterfaceToGUI
+	aCC +O2 -Dhpi32Arch -c -I.  -I/usr/include/Motif2.1  -I/usr/include/X11R6  -I/usr/local/procsee  -I../include  -I../pictures/pdat  ../src/CommLinkObject.C \
+				      -o ../obj/CommLinkObject.o
+"../include/CommLinkObject.h", line 92: warning #2375-D: declaration requires a typedef name
+  };
+   ^
+
+"../src/CommLinkObject.C", line 403: error #2020: identifier "failCount" is undefined
+  		cout<<getname()<<"mainLoop : CommFunc FAIL count =" << dec << failCount << endl;
+  		                                                              ^
+
+"../src/CommLinkObject.C", line 405: error #2020: identifier "MAX_FAIL_COUNT" is undefined
+  		if(failCount >= MAX_FAIL_COUNT)
+  		                ^
+
+"../src/CommLinkObject.C", line 412: error #2127: expected a statement
+  	else{
+  	^
+
+"../src/CommLinkObject.C", line 416: warning #2012-D: parsing restarts here after previous syntax error
+     }//End of while
+     ^
+
+"../src/CommLinkObject.C", line 462: error #2018: expected a ")"
+  		setWriteSocket();
+  		^
+
+"../src/CommLinkObject.C", line 463: error #2127: expected a statement
+  }
+  ^
+
+"../src/CommLinkObject.C", line 706: error #2065: expected a ";"
+  	 }
+  	 ^
+
+6 errors detected in the compilation of "../src/CommLinkObject.C".
+*** Error exit code 2
+
+Stop.

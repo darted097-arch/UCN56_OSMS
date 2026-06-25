@@ -1,0 +1,426 @@
+/*
+ * ProcSee CONFIGURATION LANGUAGE FILE
+ *
+ *
+ * User : ucn56
+ * Host : y6cr02
+ * Date : 2017-05-25
+ * Time : 15:40:26
+ *
+ * ProcSee version : ProcSee 3.10.1 (June 2016)
+ * File version    : 1.26
+ *
+ *
+ */
+
+
+picture PicUCN_HDSR750
+{
+  worldX = 0;
+  worldY = 0;
+  worldWidth = 1280;
+  worldHeight = 824;
+  oneToOne = 1;
+  backgroundColour = 0;
+  updateMode = 2;
+  resizeMode = 0;
+  xSnap = 5;
+  ySnap = 5;
+  radiusSnap = 0;
+  angleSnap = 0;
+  crosshairStyle = 1;
+  crosshairLength = 0;
+  crosshairFollowSnap = `isInEditMode()`;
+  crosshairVisibility = `isInEditMode()`;
+  xReference = 500;
+  yReference = 500;
+  xScaleFactor = 1;
+  yScaleFactor = 1;
+  rotationAngle = 0;
+
+  char PictureNumber[50] = "177";
+
+  char PictureTitle[50] = "READ HDSR TAPE HEADER";
+
+  function `void Initialize()
+  {
+     bProcess.UnSelect();
+  //   bExit.UnSelect();
+  
+     Current_Page = 177;
+     CFMLevel = 0;
+  
+     strcpy(gPage750.informationText, "LOW RESOLUTION DATES TAPE");
+     InitializeInput();
+  }`
+
+  function `void InitializeInput()
+  {
+     strcpy(gPage750.resolution, "---");
+     strcpy(gPage750.startDate, "--/--/--");
+     strcpy(gPage750.startTime, "--:--:--");
+     strcpy(gPage750.endDate, "--/--/--");
+     strcpy(gPage750.endTime, "--:--:--");
+  //   strcpy(gPage750.informationText, "");
+     strcpy(gPage750.wDate_1, "");
+     strcpy(gPage750.wDate_2, "");
+     strcpy(gPage750.wDate_3, "");
+     strcpy(gPage750.wDate_4, "");
+     strcpy(gPage750.wDate_5, "");
+     strcpy(gPage750.wDate_6, "");
+     strcpy(gPage750.wDate_7, "");
+  }`
+
+  function `int Process1()
+  {
+     sendMessageToHost(TAPE_HEADER_750);
+     TheTimer.atTimeDo(50,0,0,1,0, "::UCN5and6.PicUCN_HDSR750", "{bProcess.UnSelect();}" );
+     InitializeInput();
+  }`
+
+  text Text_3
+  {
+    x = 425;
+    y = 190;
+    format = "%s";
+    theText = "TAPE RESOLUTION";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font14`;
+    xReference = 425;
+    yReference = 190;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text Text_4
+  {
+    x = 435;
+    y = 240;
+    format = "%s";
+    theText = "START DATE TIME";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font14`;
+    xReference = 435;
+    yReference = 240;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text Text_5
+  {
+    x = 450;
+    y = 295;
+    format = "%s";
+    theText = "END DATE TIME";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font14`;
+    xReference = 450;
+    yReference = 295;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle
+  {
+    x = 298;
+    y = 140;
+    width = 851;
+    height = 194;
+    visibility = 1;
+    foregroundColour = `COLOR_LINE_BOUNDARY_6`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 3;
+    foregroundFillColour = `COLOR_NON_ESSENTIAL`;
+    backgroundFillColour = -1;
+    fillPattern = `NoPattern`;
+    xReference = 500;
+    yReference = 140;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text t_startDate
+  {
+    x = 685;
+    y = 245;
+    format = "%s";
+    theText = `gPage750.startDate`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font14`;
+    xReference = 685;
+    yReference = 245;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text t_endDate
+  {
+    x = 685;
+    y = 295;
+    format = "%s";
+    theText = `gPage750.endDate`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font14`;
+    xReference = 685;
+    yReference = 295;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text t_startTime
+  {
+    x = 830;
+    y = 245;
+    format = "%s";
+    theText = `gPage750.startTime`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font14`;
+    xReference = 830;
+    yReference = 245;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text endTime
+  {
+    x = 830;
+    y = 290;
+    format = "%s";
+    theText = `gPage750.endTime`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font14`;
+    xReference = 830;
+    yReference = 290;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text t_resolution
+  {
+    x = 705;
+    y = 190;
+    format = "%s";
+    theText = `gPage750.resolution`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font14`;
+    xReference = 705;
+    yReference = 190;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 460;
+    y = 410;
+    format = "%s";
+    theText = `gPage750.informationText`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font15`;
+    xReference = 460;
+    yReference = 410;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text t_endDate3
+  {
+    x = 530;
+    y = 545;
+    format = "%s";
+    theText = `gPage750.wDate_3`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font14`;
+    xReference = 530;
+    yReference = 545;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text t_endDate7
+  {
+    x = 1100;
+    y = 545;
+    format = "%s";
+    theText = `gPage750.wDate_7`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font14`;
+    xReference = 1100;
+    yReference = 545;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text t_endDate6
+  {
+    x = 955;
+    y = 545;
+    format = "%s";
+    theText = `gPage750.wDate_6`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font14`;
+    xReference = 955;
+    yReference = 545;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text t_endDate4
+  {
+    x = 665;
+    y = 545;
+    format = "%s";
+    theText = `gPage750.wDate_4`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font14`;
+    xReference = 665;
+    yReference = 545;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text t_endDate5
+  {
+    x = 800;
+    y = 545;
+    format = "%s";
+    theText = `gPage750.wDate_5`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font14`;
+    xReference = 800;
+    yReference = 545;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text t_endDate2
+  {
+    x = 380;
+    y = 545;
+    format = "%s";
+    theText = `gPage750.wDate_2`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font14`;
+    xReference = 380;
+    yReference = 545;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text t_endDate1
+  {
+    x = 230;
+    y = 545;
+    format = "%s";
+    theText = `gPage750.wDate_1`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font14`;
+    xReference = 230;
+    yReference = 545;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  instance DialogueSymbols.ProcessButton bProcess
+  {
+    x = 95;
+    y = 660;
+    visibility = 1;
+    xReference = 95;
+    yReference = 660;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ButtonState = 0;
+    DisplayText = 1;
+    DynamicLabel = "PROCESS";
+    ExecuteSelect = "{ Process1(); }";
+    ExecuteUnSelect = "";
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    Label = "PROCESS";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    StaticLabel = "PROCESS";
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextFontDynamic = `font4`;
+    TextFontStatic = `font4`;
+    TextX = 17;
+    TextXDynamic = 15;
+    TextXStatic = 17;
+    TextY = 22;
+    TextYDynamic = `TextY`;
+    TextYStatic = `TextY`;
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    Width = 100;
+  }
+}

@@ -1,0 +1,843 @@
+/*
+ * PICASSO-3 CONFIGURATION LANGUAGE FILE
+ *
+ *
+ * Picture name: Pic111_CFM_Directory
+ *
+ *
+ * Documented by  : ygn34
+ * Host           : ice2
+ * Date           : 16/07-01 at 15:30:56
+ *
+ *
+ * Generate with:
+ *    pcc Pic111_CFM_Directory.Tdoc
+ *
+ */
+
+
+picture Pic111_CFM_Directory
+{
+
+  char *PictureNumber = "111";
+  char *PictureTitle = "CFM DIRECTORY";
+
+  function `void Initialize()
+{
+CFMLevel = 1;
+Current_Page = 111;
+}`
+
+
+
+  dialogue
+  {
+    event = `buttonPressed(3)`;
+    action = statement `{
+   DisplayPage(Page100);
+}`;
+  }
+
+  dialogue
+  {
+    event = `keyPressed(0x1000FF73)`;
+    action = statement `{ 
+DisplayPopUpMenu(); 
+update();
+//printf("Display: DisplayPagePopUp");
+}`;
+  }
+
+  dialogue
+  {
+    event = `keyPressed(0x1000FF71)`;
+    action = statement `{ 
+DisplaySectorPopUpMenu(); 
+update();
+//printf("Display: DisplayPagePopUp");
+}`;
+  }
+
+  instance cfmsSymbols.CFM_MainSectorTitle 
+  {
+    attribute TheFontColor = 2;
+    attribute TheTitle = "CORE  REACTIVITY";
+    attribute ThePageNumber = "210";
+    attribute TheSectorNumber = " ";
+    attribute TheTextFont = `font4`;
+    x = 196;
+    y = 43;
+    visibility = 1;
+    xReference = 296;
+    yReference = 88;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.CFM_MainSectorTitle 
+  {
+    attribute TheFontColor = 2;
+    attribute TheTitle = "CORE  HEAT  REMOVAL";
+    attribute ThePageNumber = "220";
+    attribute TheSectorNumber = " ";
+    attribute TheTextFont = `font4`;
+    x = 196;
+    y = 80;
+    visibility = 1;
+    xReference = 296;
+    yReference = 110;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.CFM_SubSectorTitle 
+  {
+    attribute TheFontColor = 2;
+    attribute TheTitle = "SATURATION  MARGIN";
+    attribute ThePageNumber = "321";
+    attribute TheTextFont = `font4`;
+    x = 675;
+    y = 80;
+    visibility = 1;
+    xReference = 675;
+    yReference = 80;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.CFM_SubSectorTitle 
+  {
+    attribute TheFontColor = 2;
+    attribute TheTitle = "REACTOR  VESSEL  LEVEL";
+    attribute ThePageNumber = "322";
+    attribute TheTextFont = `font4`;
+    x = 675;
+    y = 102;
+    visibility = 1;
+    xReference = 675;
+    yReference = 109;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.CFM_SubSectorTitle 
+  {
+    attribute TheFontColor = 2;
+    attribute TheTitle = "CORE  EXIT  TEMPERATURE";
+    attribute ThePageNumber = "323";
+    attribute TheTextFont = `font4`;
+    x = 675;
+    y = 124;
+    visibility = 1;
+    xReference = 675;
+    yReference = 144;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.CFM_SubSectorTitle 
+  {
+    attribute TheFontColor = 2;
+    attribute TheTitle = "CORE  EXIT  TEMP  CHANNEL  A";
+    attribute ThePageNumber = "324";
+    attribute TheTextFont = `font4`;
+    x = 675;
+    y = 146;
+    visibility = 1;
+    xReference = 675;
+    yReference = 201;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.CFM_SubSectorTitle 
+  {
+    attribute TheFontColor = 2;
+    attribute TheTitle = "CORE  EXIT  TEMP  CHANNEL  B";
+    attribute ThePageNumber = "325";
+    attribute TheTextFont = `font4`;
+    x = 675;
+    y = 168;
+    visibility = 1;
+    xReference = 675;
+    yReference = 248;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.CFM_MainSectorTitle 
+  {
+    attribute TheFontColor = 2;
+    attribute TheTitle = "PRIMARY";
+    attribute ThePageNumber = "230";
+    attribute TheSectorNumber = " ";
+    attribute TheTextFont = `font4`;
+    x = 196;
+    y = 201;
+    visibility = 1;
+    xReference = 301;
+    yReference = 246;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.CFM_MainSectorTitle 
+  {
+    attribute TheFontColor = 2;
+    attribute TheTitle = "SECONDARY";
+    attribute ThePageNumber = "240";
+    attribute TheSectorNumber = " ";
+    attribute TheTextFont = `font4`;
+    x = 196;
+    y = 350;
+    visibility = 1;
+    xReference = 296;
+    yReference = 380;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.CFM_MainSectorTitle 
+  {
+    attribute TheFontColor = 2;
+    attribute TheTitle = "CONTAINMENT";
+    attribute ThePageNumber = "250";
+    attribute TheSectorNumber = " ";
+    attribute TheTextFont = `font4`;
+    x = 196;
+    y = 432;
+    visibility = 1;
+    xReference = 296;
+    yReference = 492;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.CFM_MainSectorTitle 
+  {
+    attribute TheFontColor = 2;
+    attribute TheTitle = "ENVIRONMENT";
+    attribute ThePageNumber = "260";
+    attribute TheSectorNumber = " ";
+    attribute TheTextFont = `font4`;
+    x = 196;
+    y = 575;
+    visibility = 1;
+    xReference = 296;
+    yReference = 585;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.CFM_MainSectorTitle 
+  {
+    attribute TheFontColor = 2;
+    attribute TheTitle = "VITAL  AUXILIARY";
+    attribute ThePageNumber = "270";
+    attribute TheSectorNumber = " ";
+    attribute TheTextFont = `font4`;
+    x = 196;
+    y = 630;
+    visibility = 1;
+    xReference = 296;
+    yReference = 720;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.CFM_SubSectorTitle 
+  {
+    attribute TheFontColor = 2;
+    attribute TheTitle = "SAFETY  INJECTION  PUMPS";
+    attribute ThePageNumber = "331";
+    attribute TheTextFont = `font4`;
+    x = 675;
+    y = 201;
+    visibility = 1;
+    xReference = 670;
+    yReference = 286;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.CFM_SubSectorTitle 
+  {
+    attribute TheFontColor = 2;
+    attribute TheTitle = "SAFETY  INJECTION  TANKS";
+    attribute ThePageNumber = "332";
+    attribute TheTextFont = `font4`;
+    x = 675;
+    y = 223;
+    visibility = 1;
+    xReference = 670;
+    yReference = 318;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.CFM_SubSectorTitle 
+  {
+    attribute TheFontColor = 2;
+    attribute TheTitle = "LETDOWN/CHARGING";
+    attribute ThePageNumber = "333";
+    attribute TheTextFont = `font4`;
+    x = 675;
+    y = 245;
+    visibility = 1;
+    xReference = 190;
+    yReference = 330;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.CFM_SubSectorTitle 
+  {
+    attribute TheFontColor = 2;
+    attribute TheTitle = "BORATION/DILUTION";
+    attribute ThePageNumber = "334";
+    attribute TheTextFont = `font4`;
+    x = 675;
+    y = 267;
+    visibility = 1;
+    xReference = 670;
+    yReference = 312;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.CFM_SubSectorTitle 
+  {
+    attribute TheFontColor = 2;
+    attribute TheTitle = "PRESSURIZER";
+    attribute ThePageNumber = "335";
+    attribute TheTextFont = `font4`;
+    x = 675;
+    y = 289;
+    visibility = 1;
+    xReference = 670;
+    yReference = 309;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.CFM_SubSectorTitle 
+  {
+    attribute TheFontColor = 2;
+    attribute TheTitle = "SHUTDOWN  COOLING";
+    attribute ThePageNumber = "336";
+    attribute TheTextFont = `font4`;
+    x = 675;
+    y = 311;
+    visibility = 1;
+    xReference = 670;
+    yReference = 306;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.CFM_SubSectorTitle 
+  {
+    attribute TheFontColor = 2;
+    attribute TheTitle = "MAIN  STEAM  SYSTEM";
+    attribute ThePageNumber = "341";
+    attribute TheTextFont = `font4`;
+    x = 675;
+    y = 350;
+    visibility = 1;
+    xReference = 670;
+    yReference = 250;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.CFM_SubSectorTitle 
+  {
+    attribute TheFontColor = 2;
+    attribute TheTitle = "MAIN  FEEDWATER  SYSTEM";
+    attribute ThePageNumber = "342";
+    attribute TheTextFont = `font4`;
+    x = 675;
+    y = 372;
+    visibility = 1;
+    xReference = 670;
+    yReference = 247;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.CFM_SubSectorTitle 
+  {
+    attribute TheFontColor = 2;
+    attribute TheTitle = "AUXILIARY  FEEDWATER";
+    attribute ThePageNumber = "343";
+    attribute TheTextFont = `font4`;
+    x = 675;
+    y = 394;
+    visibility = 1;
+    xReference = 670;
+    yReference = 244;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.CFM_SubSectorTitle 
+  {
+    attribute TheFontColor = 2;
+    attribute TheTitle = "CONTAINMENT  SPRAY/COOLING";
+    attribute ThePageNumber = "351";
+    attribute TheTextFont = `font4`;
+    x = 675;
+    y = 432;
+    visibility = 1;
+    xReference = 670;
+    yReference = 222;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.CFM_SubSectorTitle 
+  {
+    attribute TheFontColor = 2;
+    attribute TheTitle = "CONTAINMENT  PURGE/GAS  CONTROL";
+    attribute ThePageNumber = "352";
+    attribute TheTextFont = `font4`;
+    x = 675;
+    y = 454;
+    visibility = 1;
+    xReference = 670;
+    yReference = 219;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.CFM_SubSectorTitle 
+  {
+    attribute TheFontColor = 2;
+    attribute TheTitle = "CONTAINMENT  ISOLATION 3";
+    attribute ThePageNumber = "355";
+    attribute TheTextFont = `font4`;
+    x = 676;
+    y = 516;
+    visibility = 1;
+    xReference = 671;
+    yReference = 256;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.CFM_SubSectorTitle 
+  {
+    attribute TheFontColor = 2;
+    attribute TheTitle = "CONTAINMENT  ISOLATION 2";
+    attribute ThePageNumber = "354";
+    attribute TheTextFont = `font4`;
+    x = 675;
+    y = 496;
+    visibility = 1;
+    xReference = 670;
+    yReference = 211;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.CFM_SubSectorTitle 
+  {
+    attribute TheFontColor = 2;
+    attribute TheTitle = "FUEL  BUILDING  HVAC";
+    attribute ThePageNumber = "361";
+    attribute TheTextFont = `font4`;
+    x = 675;
+    y = 575;
+    visibility = 1;
+    xReference = 670;
+    yReference = 245;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.CFM_SubSectorTitle 
+  {
+    attribute TheFontColor = 2;
+    attribute TheTitle = "CONTROL  ROOM  HVAC";
+    attribute ThePageNumber = "362";
+    attribute TheTextFont = `font4`;
+    x = 675;
+    y = 596;
+    visibility = 1;
+    xReference = 670;
+    yReference = 241;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.CFM_SubSectorTitle 
+  {
+    attribute TheFontColor = 2;
+    attribute TheTitle = "ESF  MAIN/AUXILIARY  POWER  (TRAIN  A)";
+    attribute ThePageNumber = "371";
+    attribute TheTextFont = `font4`;
+    x = 675;
+    y = 630;
+    visibility = 1;
+    xReference = 670;
+    yReference = 230;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.CFM_SubSectorTitle 
+  {
+    attribute TheFontColor = 2;
+    attribute TheTitle = "ESF  MAIN/AUXILIARY  POWER  (TRAIN  E)";
+    attribute ThePageNumber = "373";
+    attribute TheTextFont = `font4`;
+    x = 675;
+    y = 674;
+    visibility = 1;
+    xReference = 670;
+    yReference = 224;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.CFM_SubSectorTitle 
+  {
+    attribute TheFontColor = 2;
+    attribute TheTitle = "COMPONENT  COOLING  WATER  (TRAIN  A)";
+    attribute ThePageNumber = "374";
+    attribute TheTextFont = `font4`;
+    x = 675;
+    y = 696;
+    visibility = 1;
+    xReference = 670;
+    yReference = 221;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.CFM_SubSectorTitle 
+  {
+    attribute TheFontColor = 2;
+    attribute TheTitle = "COMPONENT  COOLING  WATER  (TRAIN  B)";
+    attribute ThePageNumber = "375";
+    attribute TheTextFont = `font4`;
+    x = 675;
+    y = 718;
+    visibility = 1;
+    xReference = 670;
+    yReference = 218;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.CFM_SubSectorTitle 
+  {
+    attribute TheFontColor = 2;
+    attribute TheTitle = "ESF  MAIN/AUXILIARY  POWER  (TRAIN  B)";
+    attribute ThePageNumber = "372";
+    attribute TheTextFont = `font4`;
+    x = 675;
+    y = 652;
+    visibility = 1;
+    xReference = 670;
+    yReference = 227;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.CSFBarSize1 
+  {
+    attribute PointId = `&DSL1101`;
+    attribute SectorNumber = " 1";
+    attribute SectoringPage = "210";
+    x = 120;
+    y = 30;
+    visibility = 1;
+    xReference = 120;
+    yReference = 30;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.CSFBarSize1 
+  {
+    attribute PointId = `&DSL1102`;
+    attribute SectorNumber = " 2";
+    attribute SectoringPage = "220";
+    x = 120;
+    y = 67;
+    visibility = 1;
+    xReference = 120;
+    yReference = 67;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.CSFBarSize1 
+  {
+    attribute PointId = `&DSL1113`;
+    attribute SectorNumber = " 3";
+    attribute SectoringPage = "230";
+    x = 120;
+    y = 188;
+    visibility = 1;
+    xReference = 120;
+    yReference = 188;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.CSFBarSize1 
+  {
+    attribute PointId = `&DSL1104`;
+    attribute SectorNumber = " 4";
+    attribute SectoringPage = "240";
+    x = 120;
+    y = 338;
+    visibility = 1;
+    xReference = 120;
+    yReference = 338;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.CSFBarSize1 
+  {
+    attribute PointId = `&DSL1115`;
+    attribute SectorNumber = " 5";
+    attribute SectoringPage = "250";
+    x = 120;
+    y = 419;
+    visibility = 1;
+    xReference = 120;
+    yReference = 419;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.CSFBarSize1 
+  {
+    attribute PointId = `&DSL1106`;
+    attribute SectorNumber = " 6";
+    attribute SectoringPage = "260";
+    x = 120;
+    y = 562;
+    visibility = 1;
+    xReference = 120;
+    yReference = 562;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.CSFBarSize1 
+  {
+    attribute PointId = `&DSL1107`;
+    attribute SectorNumber = " 7";
+    attribute SectoringPage = "270";
+    x = 120;
+    y = 618;
+    visibility = 1;
+    xReference = 120;
+    yReference = 618;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.CFM_MainSectorTitle 
+  {
+    attribute TheFontColor = 2;
+    attribute TheTitle = "CRITICAL FUNCTION MONITOR";
+    attribute ThePageNumber = "110";
+    attribute TheSectorNumber = " ";
+    attribute TheTextFont = `font4`;
+    x = 195;
+    y = 10;
+    visibility = 1;
+    xReference = 195;
+    yReference = 10;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.CFM_SubSectorTitle 
+  {
+    attribute TheFontColor = 2;
+    attribute TheTitle = "CONTAINMENT  ISOLATION 1";
+    attribute ThePageNumber = "353";
+    attribute TheTextFont = `font4`;
+    x = 675;
+    y = 475;
+    visibility = 1;
+    xReference = 670;
+    yReference = 215;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.CFM_SubSectorTitle 
+  {
+    attribute TheFontColor = 2;
+    attribute TheTitle = "CONTAINMENT  ISOLATION 4";
+    attribute ThePageNumber = "356";
+    attribute TheTextFont = `font4`;
+    x = 675;
+    y = 538;
+    visibility = 1;
+    xReference = 670;
+    yReference = 253;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+// The picture's other attributes:
+
+  backgroundColour    = 0;
+  xSnap               = 5;
+  ySnap               = 5;
+  angleSnap           = 0;
+  radiusSnap          = 0;
+  worldX              = 0;
+  worldY              = 0;
+  worldWidth          = 1280;
+  worldHeight         = 824;
+  oneToOne            = 1;
+  resizeMode          = 0;
+  updateMode          = 2;
+  crosshairStyle      = 1;
+  crosshairLength     = 0;
+  crosshairFollowSnap = `isInEditMode()`;
+  crosshairVisibility = `isInEditMode()`;
+  xReference = 500;
+  yReference = 500;
+  xScaleFactor = 1;
+  yScaleFactor = 1;
+  rotationAngle = 0;
+
+
+}  // end of picture Pic111_CFM_Directory

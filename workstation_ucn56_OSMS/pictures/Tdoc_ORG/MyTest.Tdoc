@@ -1,0 +1,1266 @@
+/*
+ * PICASSO-3 CONFIGURATION LANGUAGE FILE
+ *
+ *
+ * Picture name: MyTest
+ *
+ *
+ * Documented by  : asn
+ * Host           : y5maint1
+ * Date           : 16/12-96 at 06:42:58
+ *
+ *
+ * Generate with:
+ *    pcc MyTest.Tdoc
+ *
+ */
+
+
+picture MyTest
+{
+
+  char *PictureTitle = "My Test Picture";
+  char *PictureNumber = "";
+  RECORD *MyTestPid = `ERRORPID`;
+
+  dialogue
+  {
+    event = `buttonPressed(3)`;
+    action = statement `{
+ DisplayAdvisoryMessage ("This is a new Test");
+ DisplayFeedbackMessage ("This is a feedback message");
+}`;
+  }
+
+  dialogue
+  {
+    event = `keyPressed(0xFFB1)`;
+    action = statement `{ 
+   if(TESTPID.newsta > BADSTA)
+      TESTPID.newsta = NORMAL;
+   else
+      TESTPID.newsta++;
+   update();
+}`;
+  }
+
+  dialogue
+  {
+    event = `keyPressed(0xFF8D)`;
+    action = statement `{
+   strcpy (Interface->System.tripTimeString,"12:34:56");
+   strcpy (Interface->System.dateString,"11/12/96");
+   strcpy (Interface->System.timeString,"23:22:21");
+   update();
+}`;
+  }
+
+  instance cfmsSymbols.Pressurizer 
+  {
+    attribute PointId = `&TESTPID`;
+    x = 165;
+    y = 80;
+    visibility = 1;
+    xReference = 165;
+    yReference = 80;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  text 
+  {
+    x = 90;
+    y = 208;
+    format = "%s";
+    theText = "TESTPID->newsta = ";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font2`;
+    xReference = 90;
+    yReference = 208;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 235;
+    y = 208;
+    format = "%d";
+    theText = `TESTPID.newsta`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font2`;
+    xReference = 235;
+    yReference = 208;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    dialogue
+    {
+      event = `buttonPressed(2)`;
+      action = statement `{
+if (EFYQCIAS->value > 0.0)
+    EFYQCIAS->value = 0.0;
+else
+    EFYQCIAS->value = 1.0;
+update();
+}`;
+    }
+    x = 350;
+    y = 60;
+    format = "%f";
+    theText = `EFYQCIAS->value`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font0`;
+    xReference = 350;
+    yReference = 60;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 365;
+    y = 40;
+    format = "%s";
+    theText = "CIAS";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font0`;
+    xReference = 365;
+    yReference = 40;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    dialogue
+    {
+      event = `buttonPressed(2)`;
+      action = statement `{
+if (EFYQCSAS->value > 0.0)
+    EFYQCSAS->value = 0.0;
+else
+    EFYQCSAS->value = 1.0;
+update();
+}`;
+    }
+    x = 450;
+    y = 60;
+    format = "%f";
+    theText = `EFYQCSAS->value`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font0`;
+    xReference = 450;
+    yReference = 60;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 465;
+    y = 40;
+    format = "%s";
+    theText = "CSAS";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font0`;
+    xReference = 465;
+    yReference = 40;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    dialogue
+    {
+      event = `buttonPressed(2)`;
+      action = statement `{
+if (EFYQMSIS->value > 0.0)
+    EFYQMSIS->value = 0.0;
+else
+    EFYQMSIS->value = 1.0;
+update();
+}`;
+    }
+    x = 550;
+    y = 60;
+    format = "%f";
+    theText = `EFYQMSIS->value`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font0`;
+    xReference = 550;
+    yReference = 60;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 565;
+    y = 40;
+    format = "%s";
+    theText = "MSIS";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font0`;
+    xReference = 565;
+    yReference = 40;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    dialogue
+    {
+      event = `buttonPressed(2)`;
+      action = statement `{
+if (EFYQSIAS->value > 0.0)
+    EFYQSIAS->value = 0.0;
+else
+    EFYQSIAS->value = 1.0;
+update();
+}`;
+    }
+    x = 645;
+    y = 60;
+    format = "%f";
+    theText = `EFYQSIAS->value`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font0`;
+    xReference = 645;
+    yReference = 60;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 660;
+    y = 40;
+    format = "%s";
+    theText = "SIAS";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font0`;
+    xReference = 660;
+    yReference = 40;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    dialogue
+    {
+      event = `buttonPressed(2)`;
+      action = statement `{
+if (EFYQRAS->value > 0.0)
+    EFYQRAS->value = 0.0;
+else
+    EFYQRAS->value = 1.0;
+update();
+}`;
+    }
+    x = 750;
+    y = 55;
+    format = "%f";
+    theText = `EFYQRAS->value`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font0`;
+    xReference = 750;
+    yReference = 55;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 765;
+    y = 35;
+    format = "%s";
+    theText = "RAS";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font0`;
+    xReference = 765;
+    yReference = 35;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    dialogue
+    {
+      event = `buttonPressed(2)`;
+      action = statement `{
+if (EFYQAFA1->value > 0.0)
+    EFYQAFA1->value = 0.0;
+else
+    EFYQAFA1->value = 1.0;
+update();
+}`;
+    }
+    x = 355;
+    y = 130;
+    format = "%f";
+    theText = `EFYQAFA1->value`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font0`;
+    xReference = 355;
+    yReference = 130;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 370;
+    y = 110;
+    format = "%s";
+    theText = "AFAS1";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font0`;
+    xReference = 370;
+    yReference = 110;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    dialogue
+    {
+      event = `buttonPressed(2)`;
+      action = statement `{
+if (EFYQAFA2->value > 0.0)
+    EFYQAFA2->value = 0.0;
+else
+    EFYQAFA2->value = 1.0;
+update();
+}`;
+    }
+    x = 450;
+    y = 125;
+    format = "%f";
+    theText = `EFYQAFA2->value`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font0`;
+    xReference = 450;
+    yReference = 125;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 465;
+    y = 105;
+    format = "%s";
+    theText = "AFAS2";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font0`;
+    xReference = 465;
+    yReference = 105;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    dialogue
+    {
+      event = `buttonPressed(2)`;
+      action = statement `{
+if (EFYQFBEV->value > 0.0)
+    EFYQFBEV->value = 0.0;
+else
+    EFYQFBEV->value = 1.0;
+update();
+}`;
+    }
+    x = 550;
+    y = 125;
+    format = "%f";
+    theText = `EFYQFBEV->value`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font0`;
+    xReference = 550;
+    yReference = 125;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 565;
+    y = 105;
+    format = "%s";
+    theText = "FBEVAS";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font0`;
+    xReference = 565;
+    yReference = 105;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    dialogue
+    {
+      event = `buttonPressed(2)`;
+      action = statement `{
+if (EFYQCPIA->value > 0.0)
+    EFYQCPIA->value = 0.0;
+else
+    EFYQCPIA->value = 1.0;
+update();
+}`;
+    }
+    x = 640;
+    y = 125;
+    format = "%f";
+    theText = `EFYQCPIA->value`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font0`;
+    xReference = 640;
+    yReference = 125;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 655;
+    y = 105;
+    format = "%s";
+    theText = "CPIAS";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font0`;
+    xReference = 655;
+    yReference = 105;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    dialogue
+    {
+      event = `buttonPressed(2)`;
+      action = statement `{
+if (EFYQCREV->value > 0.0)
+    EFYQCREV->value = 0.0;
+else
+    EFYQCREV->value = 1.0;
+update();
+}`;
+    }
+    x = 750;
+    y = 130;
+    format = "%f";
+    theText = `EFYQCREV->value`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font0`;
+    xReference = 750;
+    yReference = 130;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 765;
+    y = 110;
+    format = "%s";
+    theText = "CREVAS";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font0`;
+    xReference = 765;
+    yReference = 110;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    dialogue
+    {
+      event = `buttonPressed(2)`;
+      action = statement `{
+if (Interface->System.displayedUnits)
+     Interface->System.displayedUnits= 0;
+else
+     Interface->System.displayedUnits= 1;
+update();
+}`;
+    }
+    x = 360;
+    y = 230;
+    format = "%d";
+    theText = `Interface->System.displayedUnits`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font0`;
+    xReference = 360;
+    yReference = 230;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 310;
+    y = 205;
+    format = "%s";
+    theText = "System.displayedUnits";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font0`;
+    xReference = 310;
+    yReference = 205;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    dialogue
+    {
+      event = `buttonPressed(2)`;
+      action = statement `{
+if (Interface->System.slaveUpdating)
+     Interface->System.slaveUpdating= 0;
+else
+     Interface->System.slaveUpdating= 1;
+update();
+}`;
+    }
+    x = 570;
+    y = 225;
+    format = "%d";
+    theText = `Interface->System.slaveUpdating`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font0`;
+    xReference = 570;
+    yReference = 225;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 520;
+    y = 200;
+    format = "%s";
+    theText = "System.slaveUpdating";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font0`;
+    xReference = 520;
+    yReference = 200;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    dialogue
+    {
+      event = `buttonPressed(2)`;
+      action = statement `{
+if (Interface->System.processByException)
+     Interface->System.processByException= 0;
+else
+     Interface->System.processByException= 1;
+update();
+}`;
+    }
+    x = 785;
+    y = 220;
+    format = "%d";
+    theText = `Interface->System.processByException`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font0`;
+    xReference = 785;
+    yReference = 220;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 735;
+    y = 195;
+    format = "%s";
+    theText = "System.processByException";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font0`;
+    xReference = 735;
+    yReference = 195;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    dialogue
+    {
+      event = `buttonPressed(2)`;
+      action = statement `{
+if (Interface->System.plantTripped)
+     Interface->System.plantTripped= 0;
+else
+     Interface->System.plantTripped= 1;
+update();
+}`;
+    }
+    x = 1020;
+    y = 215;
+    format = "%d";
+    theText = `Interface->System.plantTripped`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font0`;
+    xReference = 1020;
+    yReference = 215;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 970;
+    y = 190;
+    format = "%s";
+    theText = "System.plantTripped";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font0`;
+    xReference = 970;
+    yReference = 190;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    dialogue
+    {
+      event = `buttonPressed(2)`;
+      action = statement `{
+if (Interface->System.diskProtected)
+     Interface->System.diskProtected= 0;
+else
+     Interface->System.diskProtected= 1;
+update();
+}`;
+    }
+    x = 360;
+    y = 325;
+    format = "%d";
+    theText = `Interface->System.diskProtected`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font0`;
+    xReference = 360;
+    yReference = 325;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 310;
+    y = 300;
+    format = "%s";
+    theText = "System.diskProtected";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font0`;
+    xReference = 310;
+    yReference = 300;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    dialogue
+    {
+      event = `buttonPressed(2)`;
+      action = statement `{
+if (Interface->System.newAlarmFlag)
+     Interface->System.newAlarmFlag= 0;
+else
+     Interface->System.newAlarmFlag= 1;
+update();
+}`;
+    }
+    x = 580;
+    y = 325;
+    format = "%d";
+    theText = `Interface->System.newAlarmFlag`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font0`;
+    xReference = 580;
+    yReference = 325;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 530;
+    y = 300;
+    format = "%s";
+    theText = "System.newAlarmFlag";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font0`;
+    xReference = 530;
+    yReference = 300;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    dialogue
+    {
+      event = `buttonPressed(2)`;
+      action = statement `{
+if (Interface->System.newBadDataFlag)
+     Interface->System.newBadDataFlag= 0;
+else
+     Interface->System.newBadDataFlag= 1;
+update();
+}`;
+    }
+    x = 780;
+    y = 330;
+    format = "%d";
+    theText = `Interface->System.newBadDataFlag`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font0`;
+    xReference = 780;
+    yReference = 330;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 730;
+    y = 305;
+    format = "%s";
+    theText = "System.newBadDataFlag";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font0`;
+    xReference = 730;
+    yReference = 305;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    dialogue
+    {
+      event = `buttonPressed(2)`;
+      action = statement `{
+if (Interface->System.newCEAMessageFlag)
+     Interface->System.newCEAMessageFlag= 0;
+else
+     Interface->System.newCEAMessageFlag= 1;
+update();
+}`;
+    }
+    x = 1005;
+    y = 320;
+    format = "%d";
+    theText = `Interface->System.newCEAMessageFlag`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font0`;
+    xReference = 1005;
+    yReference = 320;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 955;
+    y = 295;
+    format = "%s";
+    theText = "System.newCEAMessageFlag";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font0`;
+    xReference = 955;
+    yReference = 295;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    dialogue
+    {
+      event = `buttonPressed(2)`;
+      action = statement `{
+if (Interface->System.highResBackupRequired)
+     Interface->System.highResBackupRequired= 0;
+else
+     Interface->System.highResBackupRequired= 1;
+update();
+}`;
+    }
+    x = 360;
+    y = 455;
+    format = "%d";
+    theText = `Interface->System.highResBackupRequired`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font0`;
+    xReference = 360;
+    yReference = 455;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 310;
+    y = 430;
+    format = "%s";
+    theText = "System.highResBackupRequired";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font0`;
+    xReference = 310;
+    yReference = 430;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    dialogue
+    {
+      event = `buttonPressed(2)`;
+      action = statement `{
+if (Interface->System.lowResBackupRequired)
+     Interface->System.lowResBackupRequired= 0;
+else
+     Interface->System.lowResBackupRequired= 1;
+update();
+}`;
+    }
+    x = 570;
+    y = 450;
+    format = "%d";
+    theText = `Interface->System.lowResBackupRequired`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font0`;
+    xReference = 570;
+    yReference = 450;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 520;
+    y = 425;
+    format = "%s";
+    theText = "System.lowResBackupRequired";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font0`;
+    xReference = 520;
+    yReference = 425;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  instance cfmsSymbols.ValueAndState 
+  {
+    attribute DisplayUnits = 1;
+    attribute PointId = `&TESTPID`;
+    x = 25;
+    y = 275;
+    visibility = 1;
+    xReference = 25;
+    yReference = 275;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.DSLTextPhrase 
+  {
+    attribute PointId = `&TESTPID`;
+    attribute TheText = "DSL TEXT PHRASE";
+    x = 145;
+    y = 555;
+    visibility = 1;
+    xReference = 145;
+    yReference = 555;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.DynamicTextPhrase 
+  {
+    attribute PointId = `&TESTPID`;
+    attribute TheText = "DYNAMIC TEXT";
+    x = 155;
+    y = 660;
+    visibility = 1;
+    xReference = 155;
+    yReference = 660;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  text 
+  {
+    x = 65;
+    y = 380;
+    format = "%s";
+    theText = "RCLQBE\n";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font0`;
+    xReference = 65;
+    yReference = 380;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 140;
+    y = 380;
+    format = "%d";
+    theText = `RCLQBE->newsta`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font0`;
+    xReference = 140;
+    yReference = 380;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 140;
+    y = 410;
+    format = "%d";
+    theText = `RCLQBE->pisabitmap`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font0`;
+    xReference = 140;
+    yReference = 410;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+// The picture's other attributes:
+
+  backgroundColour    = 0;
+  xSnap               = 5;
+  ySnap               = 5;
+  angleSnap           = 0;
+  radiusSnap          = 0;
+  worldX              = 0;
+  worldY              = 0;
+  worldWidth          = 1280;
+  worldHeight         = 824;
+  oneToOne            = 1;
+  resizeMode          = 0;
+  updateMode          = 2;
+  crosshairStyle      = 1;
+  crosshairLength     = 0;
+  crosshairFollowSnap = `isInEditMode()`;
+  crosshairVisibility = `isInEditMode()`;
+  xReference = 500;
+  yReference = 500;
+  xScaleFactor = 1;
+  yScaleFactor = 1;
+  rotationAngle = 0;
+
+
+}  // end of picture MyTest

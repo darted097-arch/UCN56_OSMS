@@ -1,0 +1,562 @@
+/*
+ * PICASSO-3 CONFIGURATION LANGUAGE FILE
+ *
+ *
+ * Picture name: PicYGN_Mainmenu
+ *
+ *
+ * Documented by  : ygn56
+ * Host           : pcs2
+ * Date           : 05/06-01 at 14:24:20
+ *
+ *
+ * Generate with:
+ *    pcc PicYGN_Mainmenu.Tdoc
+ *
+ */
+
+
+picture PicYGN_Mainmenu
+{
+
+  char PictureNumber[50] = "100";
+  char PictureTitle[50] = "MAIN MENU";
+  int ChangeScanStatus = 1;
+  int ChangeAlarmStatus = 2;
+  int InsertValue = 3;
+  int ChangeAlarmLimits = 4;
+  int SensorCalibration = 5;
+  int LeastSquaresFit = 6;
+  char Option[4] = "1";
+
+  function `void Initialize()
+{ 
+   CFMLevel = 0;
+   Current_Page = 100;
+   Last_Page = Current_Page;
+//  Option[0] = '\\0';
+//  strcat (Option,"_");
+//  selectShape(1,"MenuInput");
+//  MenuInput.edit(ON);
+//  MenuInput.theText = \`Option\`;
+//  MenuInput.edit(OFF);
+//  MenuInput.edit(ON);   
+//  MenuInput.moveToHome();
+//  update();
+}`
+
+
+
+  dialogue
+  {
+    event = `keyReleased(0x35) || keyReleased(0xFFB5)`;
+    action = statement `{
+//   displayPicture("header","PicYGN_header.ppic");
+//   displayPicture("footer","PicYGN_footer.ppic");
+//   displayPicture("Main","PicYGN_CurrentParamsMenu.ppic");
+m5.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+m5.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+
+m5.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+m5.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+m5.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+m5.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+
+m5.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+m5.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+m5.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+m5.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+
+   execute("{DisplayPage(\\"%s\\");}",m5.TheDisplayPage);
+
+}
+
+`;
+  }
+
+  dialogue
+  {
+    event = `keyReleased(0x36) || keyReleased(0xFFB6)`;
+    action = statement `{
+//   displayPicture("header","PicYGN_header.ppic");
+//   displayPicture("footer","PicYGN_footer.ppic");
+//   displayPicture("Main","PicYGN_NSSSBOPApplication.ppic");
+m6.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+m6.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+
+m6.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+m6.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+m6.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+m6.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+
+m6.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+m6.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+m6.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+m6.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+
+   execute("{DisplayPage(\\"%s\\");}",m6.TheDisplayPage);
+
+}`;
+  }
+
+  dialogue
+  {
+    event = `keyReleased(0x31) || keyReleased(0xFFB1)`;
+    action = statement `{
+//   displayPicture("header","PicYGN_header.ppic");
+//   displayPicture("footer","PicYGN_footer.ppic");
+//   displayPicture("Main","Pic111_CFM_Directory.ppic");
+m1.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+m1.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+
+m1.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+m1.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+m1.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+m1.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+
+m1.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+m1.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+m1.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+m1.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+
+   execute("{DisplayPage(\\"%s\\");}",m1.TheDisplayPage);
+}`;
+  }
+
+  dialogue
+  {
+    event = `keyReleased(0x39) || keyReleased(0xFFB9)`;
+    action = statement `{
+//   displayPicture("header","PicYGN_header.ppic");
+//   displayPicture("footer","PicYGN_footer.ppic");
+//   displayPicture("Main","PicYGN_Security.ppic");
+m9.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+m9.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+
+m9.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+m9.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+m9.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+m9.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+
+m9.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+m9.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+m9.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+m9.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+
+   execute("{DisplayPage(\\"%s\\");}",m9.TheDisplayPage);}`;
+  }
+
+  dialogue
+  {
+    event = `keyReleased(0x32) || keyReleased(0xFFB2)`;
+    action = statement `{
+m2.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+m2.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+
+m2.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+m2.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+m2.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+m2.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+
+m2.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+m2.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+m2.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+m2.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+
+   execute("{DisplayPage(\\"%s\\");}",m2.TheDisplayPage);
+}`;
+  }
+
+  dialogue
+  {
+    event = `keyReleased(0x33) || keyReleased(0xFFB3)`;
+    action = statement `{
+m3.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+m3.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+
+m3.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+m3.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+m3.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+m3.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+
+m3.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+m3.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+m3.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+m3.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+
+   execute("{DisplayPage(\\"%s\\");}",m3.TheDisplayPage);
+}`;
+  }
+
+  dialogue
+  {
+    event = `keyReleased(0x34) || keyReleased(0xFFB4)`;
+    action = statement `{
+m4.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+m4.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+
+m4.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+m4.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+m4.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+m4.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+
+m4.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+m4.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+m4.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+m4.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+
+   execute("{DisplayPage(\\"%s\\");}",m4.TheDisplayPage);
+
+}
+`;
+  }
+
+  dialogue
+  {
+    event = `keyReleased(0x37) || keyReleased(0xFFB7)`;
+    action = statement `{
+m7.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+m7.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+
+m7.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+m7.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+m7.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+m7.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+
+m7.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+m7.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+m7.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+m7.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+
+   execute("{DisplayPage(\\"%s\\");}",m7.TheDisplayPage);
+
+}
+
+`;
+  }
+
+  dialogue
+  {
+    event = `keyReleased(0x38) || keyReleased(0xFFB8)`;
+    action = statement `{
+m8.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+m8.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+
+m8.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+m8.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+m8.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+m8.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+
+m8.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+m8.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+m8.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+m8.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+
+   execute("{DisplayPage(\\"%s\\");}",m8.TheDisplayPage);
+}`;
+  }
+
+  text 
+  {
+    x = 761;
+    y = 239;
+    format = "%s";
+    theText = "CRITICAL  APPLICATIONS";
+
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 761;
+    yReference = 239;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 761;
+    y = 364;
+    format = "%s";
+    theText = "LISTS/ DISPLAYS/ REPORTS";
+
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 761;
+    yReference = 364;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 761;
+    y = 470;
+    format = "%s";
+    theText = "OTHERS  APPLICATIONS";
+
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 761;
+    yReference = 470;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 761;
+    y = 579;
+    format = "%s";
+    theText = "MISCELLANEOUS";
+
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 761;
+    yReference = 579;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  instance DialogueSymbols.LargeMenuSelection m1
+  {
+    attribute CascadeY = 400;
+    attribute CascadeX = 400;
+    attribute Cascade = 0;
+    attribute TheTextFont = `font6`;
+    attribute TheDisplayPage = "Pic111_CFM_Directory.ppic";
+    attribute TheTitle = "CFM  DIRECTORY";
+    attribute TheFontColor = 2;
+    attribute TheOption = "1.";
+    x = 255;
+    y = 174;
+    visibility = 1;
+    xReference = 255;
+    yReference = 174;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance m1
+
+
+
+  instance DialogueSymbols.LargeMenuSelection m2
+  {
+    attribute CascadeY = 400;
+    attribute CascadeX = 400;
+    attribute Cascade = 0;
+    attribute TheTextFont = `font6`;
+    attribute TheDisplayPage = "PicYGN_COLSSMenu.ppic";
+    attribute TheTitle = "COLSS  MENU";
+    attribute TheFontColor = 2;
+    attribute TheOption = "2.";
+    x = 255;
+    y = 210;
+    visibility = 1;
+    xReference = 255;
+    yReference = 210;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance m2
+
+
+
+  instance DialogueSymbols.LargeMenuSelection m3
+  {
+    attribute CascadeY = 400;
+    attribute CascadeX = 400;
+    attribute Cascade = 0;
+    attribute TheTextFont = `font6`;
+    attribute TheDisplayPage = "PicYGN_CEAMenu.ppic";
+    attribute TheTitle = "CEA  FUNCTIONS";
+    attribute TheFontColor = 2;
+    attribute TheOption = "3.";
+    x = 255;
+    y = 246;
+    visibility = 1;
+    xReference = 255;
+    yReference = 246;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance m3
+
+
+
+  instance DialogueSymbols.LargeMenuSelection m4
+  {
+    attribute CascadeY = 400;
+    attribute CascadeX = 400;
+    attribute Cascade = 0;
+    attribute TheTextFont = `font6`;
+    attribute TheDisplayPage = "PicYGN_CAL.ppic";
+    attribute TheTitle = "CURRENT  ALARMS";
+    attribute TheFontColor = 2;
+    attribute TheOption = "4.";
+    x = 255;
+    y = 317;
+    visibility = 1;
+    xReference = 255;
+    yReference = 317;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance m4
+
+
+
+  instance DialogueSymbols.LargeMenuSelection m5
+  {
+    attribute CascadeY = 400;
+    attribute CascadeX = 400;
+    attribute Cascade = 0;
+    attribute TheTextFont = `font6`;
+    attribute TheDisplayPage = "PicYGN_CurrentParamsMenu.ppic";
+    attribute TheTitle = "CURRENT  PARAMETERS  MENU";
+    attribute TheFontColor = 2;
+    attribute TheOption = "5.";
+    x = 255;
+    y = 353;
+    visibility = 1;
+    xReference = 255;
+    yReference = 353;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance m5
+
+
+
+  instance DialogueSymbols.LargeMenuSelection m6
+  {
+    attribute CascadeY = 400;
+    attribute CascadeX = 400;
+    attribute Cascade = 0;
+    attribute TheTextFont = `font6`;
+    attribute TheDisplayPage = "PicYGN_NSSSBOPApplication.ppic";
+    attribute TheTitle = "NSSS & BOP  APPLICATIONS  MENU";
+    attribute TheFontColor = 2;
+    attribute TheOption = "6.";
+    x = 255;
+    y = 424;
+    visibility = 1;
+    xReference = 259;
+    yReference = 424;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance m6
+
+
+
+  instance DialogueSymbols.LargeMenuSelection m7
+  {
+    attribute CascadeY = 400;
+    attribute CascadeX = 400;
+    attribute Cascade = 0;
+    attribute TheTextFont = `font6`;
+    attribute TheDisplayPage = "PicYGN_HDSR.ppic";
+    attribute TheTitle = "HISTORICAL  FUNCTIONS  MENU";
+    attribute TheFontColor = 2;
+    attribute TheOption = "7.";
+    x = 255;
+    y = 460;
+    visibility = 1;
+    xReference = 255;
+    yReference = 460;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance m7
+
+
+
+  instance DialogueSymbols.LargeMenuSelection m8
+  {
+    attribute CascadeY = 400;
+    attribute CascadeX = 400;
+    attribute Cascade = 0;
+    attribute TheTextFont = `font6`;
+    attribute TheDisplayPage = "PicYGN_CSL.ppic";
+    attribute TheTitle = "COMPUTER  STATUS";
+    attribute TheFontColor = 2;
+    attribute TheOption = "8.";
+    x = 255;
+    y = 533;
+    visibility = 1;
+    xReference = 255;
+    yReference = 533;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance m8
+
+
+
+  instance DialogueSymbols.LargeMenuSelection m9
+  {
+    attribute CascadeY = 400;
+    attribute CascadeX = 400;
+    attribute Cascade = 0;
+    attribute TheTextFont = `font6`;
+    attribute TheDisplayPage = "PicYGN_Security.ppic";
+    attribute TheTitle = "SECURITY";
+    attribute TheFontColor = 2;
+    attribute TheOption = "9.";
+    x = 255;
+    y = 569;
+    visibility = 1;
+    xReference = 255;
+    yReference = 569;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance m9
+
+
+
+// The picture's other attributes:
+
+  backgroundColour    = 0;
+  xSnap               = 5;
+  ySnap               = 5;
+  angleSnap           = 0;
+  radiusSnap          = 0;
+  worldX              = 0;
+  worldY              = 0;
+  worldWidth          = 1280;
+  worldHeight         = 824;
+  oneToOne            = 1;
+  resizeMode          = 0;
+  updateMode          = 2;
+  crosshairStyle      = 1;
+  crosshairLength     = 0;
+  crosshairFollowSnap = `isInEditMode()`;
+  crosshairVisibility = `isInEditMode()`;
+  xReference = 500;
+  yReference = 500;
+  xScaleFactor = 1;
+  yScaleFactor = 1;
+  rotationAngle = 0;
+
+
+}  // end of picture PicYGN_Mainmenu

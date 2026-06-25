@@ -1,0 +1,431 @@
+/*
+ * PICASSO-3 CONFIGURATION LANGUAGE FILE
+ *
+ *
+ * Picture name: PicUCN_CEADropTest
+ *
+ *
+ * Documented by  : runtime
+ * Host           : y6tsc1
+ * Date           : 21/10-98 at 16:51:21
+ *
+ *
+ * Generate with:
+ *    pcc PicUCN_CEADropTest.Tdoc
+ *
+ */
+
+
+picture PicUCN_CEADropTest
+{
+
+  char PictureTitle[50] = "CEA DROP TEST";
+  char PictureNumber[50] = "133";
+  int Option = 1;
+  char CurrentOption[4] = "1\\0";
+
+  function `void Initialize()
+{
+
+   CFMLevel = 0;
+   Current_Page = 133;
+
+
+// assign blank to message fields
+   initConfirmMessages();
+// Default Selected Item = 1
+   strcpy(CurrentOption,"1\\\\0");
+   update();
+// Send data request message to the host
+// execute("{sendMessageToHost(RPCCEA_MODE_REQUEST);}");
+
+
+//   This part should be activated whenever pressing ESC button
+
+//   CEAMessage1.visibility = 0;
+   CEAMessage1.theText = " ";
+//   CEAMessage2.visibility = 0;
+   CEAMessage2.theText = " ";
+//   CEAMessage3.visibility = 0;
+   CEAMessage3.theText = " ";
+//   CEAMessage4.visibility = 0;
+   CEAMessage4.theText = " ";
+//   CEAMessage5.visibility = 0;
+   CEAMessage5.theText = " ";
+//   EscapeButton.UnSelect();
+//
+}`
+
+
+// ***CORENET 20170601 by Philkyu Kwon ************
+  function `void DummyProcess()
+  {
+    printf("Button Select OR Button Unselected");
+  }`
+// ***************************************************
+
+
+  function `void CEADropTest()
+{
+   if(CEASelect.TheNewNumber < 1 || CEASelect.TheNewNumber > 73)
+   {
+	DisplayAdvisoryMessage("CEA NO. INPUT MUST BE 1 TO 73");
+   }
+   else
+   {
+   	Interface->GenericRequestMessage.data.requestOption = CEASelect.TheNewNumber;
+   	execute("{sendMessageToHost(CEA_DROPNO_REQUEST);}");
+   	printf(" CEA drop testing in progress .......");
+	//update();
+   }
+}`
+
+
+
+  function `void keepShape(){
+   switch(Option){
+      case 1: {
+       text1_box.foregroundFillColour=1;
+       text1.foregroundColour=0;
+       text2_box.foregroundFillColour=0;
+       text2.foregroundColour=1;
+       text3_box.foregroundFillColour=0;
+       text3.foregroundColour=1;
+       update();
+       break;
+     }
+      case 2: {
+       text1_box.foregroundFillColour=0;
+       text1.foregroundColour=1;
+       text2_box.foregroundFillColour=1;
+       text2.foregroundColour=0;
+       text3_box.foregroundFillColour=0;
+       text3.foregroundColour=1;
+       update();
+       break;
+      }
+      case 3: {
+       text1_box.foregroundFillColour=0;
+       text1.foregroundColour=1;
+       text2_box.foregroundFillColour=0;
+       text2.foregroundColour=1;
+       text3_box.foregroundFillColour=1;
+       text3.foregroundColour=0;
+       update();
+       break;
+      }
+   }
+}`
+
+
+
+  function `void initConfirmMessages()
+{
+strcpy(Interface->GenericConfirmMessage.data.message1," ");
+strcpy(Interface->GenericConfirmMessage.data.message2," ");
+strcpy(Interface->GenericConfirmMessage.data.message3," ");
+}`
+
+
+
+  function `void selectedShape(int selectedNo)
+{
+   switch(selectedNo){
+      case 1: {
+       text1_box.foregroundFillColour=1;
+       text1.foregroundColour=0;
+       text2_box.foregroundFillColour=0;
+       text2.foregroundColour=1;
+       text3_box.foregroundFillColour=0;
+       text3.foregroundColour=1;
+       update();
+       break;
+     }
+      case 2: {
+       text1_box.foregroundFillColour=0;
+       text1.foregroundColour=1;
+       text2_box.foregroundFillColour=1;
+       text2.foregroundColour=0;
+       text3_box.foregroundFillColour=0;
+       text3.foregroundColour=1;
+       update();
+       break;
+      }
+      case 3: {
+       text1_box.foregroundFillColour=0;
+       text1.foregroundColour=1;
+       text2_box.foregroundFillColour=0;
+       text2.foregroundColour=1;
+       text3_box.foregroundFillColour=1;
+       text3.foregroundColour=0;
+       update();
+       break;
+      }
+      default: {
+       text1_box.foregroundFillColour=0;
+       text1.foregroundColour=1;
+       text2_box.foregroundFillColour=0;
+       text2.foregroundColour=1;
+       text3_box.foregroundFillColour=0;
+       text3.foregroundColour=1;
+       update();
+       break;
+      }
+
+
+   }
+}`
+
+
+
+  function `void escape() 
+{
+   displayPicture("Main","PicUCN_CEAMenu.ppic");
+   update(); 
+}`
+
+
+
+  text 
+  {
+    x = 459;
+    y = 213;
+    format = "%s";
+    theText = "SELECT A CEA TO BE TESTED :";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 459;
+    yReference = 213;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 815;
+    y = 213;
+    format = "%s";
+    theText = "(1 - 73)";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 815;
+    yReference = 213;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  instance DialogueSymbols.InputDialogueNumber_GR CEASelect
+  {
+    attribute isInside = 1;
+    attribute isDown = 0;
+    attribute Height = 30;
+    attribute Width = 150;
+    attribute SelectColour = `COLOR_BUTTON_SELECTED`;
+    attribute BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    attribute BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    attribute TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    attribute TextX = 10;
+    attribute TextY = 21;
+    attribute TextColour = `COLOR_PICTURE_BACKGROUND`;
+    attribute TextFont = 4;
+    attribute ExecuteSelect = "DummyProcess()";		//CORENET 0628
+    attribute ExecuteUnSelect = "DummyProcess()";	//CORENET 0628
+    attribute TheNewText = "11";
+    attribute TheOriginalText = "11";
+    attribute ERROR = 0;
+    attribute TheNumberFormat = "%-3d";
+    attribute Selected = 0;
+    attribute ReturnAction = "";
+    attribute TheOriginalNumber = 34;
+    attribute MaxDigits = 4;
+    attribute TheNewNumber = 11;
+    attribute Scope = "::UCN5and6.PicUCN_CEADropTest";
+    attribute vis = `visibility`;
+    x = 754;
+    y = 191;
+    visibility = 1;
+    xReference = 754;
+    yReference = 191;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance CEASelect
+
+
+
+  text CEAMessage1
+  {
+    x = 480;
+    y = 370;
+    format = "%s";
+    theText = "CEA 1  DROP TESTING                    ";
+
+    visibility = 1;
+    foregroundColour = `COLOR_BAD_OOR_ACK`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 480;
+    yReference = 370;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text CEAMessage2
+  {
+    x = 480;
+    y = 416;
+    format = "%s";
+    theText = "...WAITING DROP INITIATE SIGNAL...     ";
+
+    visibility = 1;
+    foregroundColour = `COLOR_BAD_OOR_ACK`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 480;
+    yReference = 416;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text CEAMessage5
+  {
+    x = 480;
+    y = 554;
+    format = "%s";
+    theText = "                                       ";
+
+    visibility = 1;
+    foregroundColour = `COLOR_BAD_OOR_ACK`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 480;
+    yReference = 554;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text CEAMessage4
+  {
+    x = 480;
+    y = 508;
+    format = "%s";
+    theText = "                                       ";
+
+    visibility = 1;
+    foregroundColour = `COLOR_BAD_OOR_ACK`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 480;
+    yReference = 508;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text CEAMessage3
+  {
+    x = 480;
+    y = 462;
+    format = "%s";
+    theText = "                                       ";
+
+    visibility = 1;
+    foregroundColour = `COLOR_BAD_OOR_ACK`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 480;
+    yReference = 462;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  instance DialogueSymbols.PushButton 
+  {
+    attribute ExecuteString = "{CEADropTest();}";
+    attribute isInside = 1;
+    attribute isDown = 0;
+    attribute Height = 30;
+    attribute Width = 130;
+    attribute ButtonState = 0;
+    attribute SelectColour = `COLOR_BUTTON_SELECTED`;
+    attribute BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    attribute BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    attribute TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    attribute TextX = 17;
+    attribute TextY = 22;
+    attribute Label = "PROCESS";
+    attribute TextColour = `COLOR_PICTURE_BACKGROUND`;
+    attribute TextFont = 4;
+    attribute TextXStatic = 17;
+    attribute TextXDynamic = 15;
+    attribute TextYStatic = 22;
+    attribute TextYDynamic = 21;
+    attribute DynamicLabel = "PROCESS";
+    attribute StaticLabel = "PROCESS";
+    attribute TextFontStatic = `font4`;
+    attribute TextFontDynamic = `font2`;
+    attribute Scope = "PicUCN_CEADropTest";
+    x = 825;
+    y = 665;
+    visibility = 1;
+    xReference = 825;
+    yReference = 665;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+// The picture's other attributes:
+
+  backgroundColour    = 0;
+  xSnap               = 5;
+  ySnap               = 5;
+  angleSnap           = 0;
+  radiusSnap          = 0;
+  worldX              = 0;
+  worldY              = 0;
+  worldWidth          = 1280;
+  worldHeight         = 824;
+  oneToOne            = 1;
+  resizeMode          = 0;
+  updateMode          = 2;
+  crosshairStyle      = 1;
+  crosshairLength     = 0;
+  crosshairFollowSnap = `isInEditMode()`;
+  crosshairVisibility = `isInEditMode()`;
+  xReference = 500;
+  yReference = 500;
+  xScaleFactor = 1;
+  yScaleFactor = 1;
+  rotationAngle = 0;
+
+
+}  // end of picture PicUCN_CEADropTest

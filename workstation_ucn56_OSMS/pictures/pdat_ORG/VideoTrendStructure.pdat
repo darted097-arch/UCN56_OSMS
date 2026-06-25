@@ -1,0 +1,141 @@
+// ***************************************************************************
+// *									     *
+// *	Copyright (C) 1997, KOPEC(N), All rights reserved.		     *
+// *	Proprietary information, KOPEC(N)        			     *
+// *									     *
+// ***************************************************************************
+//
+// ***** HIGH LEVEL DESCRIPTION **********************************************
+//
+// This pdat file contains the variables used by the Video Trend displays.
+//
+// **** REVISION HISTORY *****************************************************
+//
+// VideoTrendStructure.pdat
+//
+// Author : Y.W. JUNG
+//
+// $Header: /PMSArchive/ygn56/workstation/pictures/pdat/VideoTrendStructure.pdat 1.3 1998/10/21 16:43:20 kn1 Exp $
+// $Log: VideoTrendStructure.pdat,v $
+// Revision 1.3  1998/10/21 16:43:20  kn1
+// Author: kn1@y6maint1 (Kopec NSSS 1)
+// KOPEC NSSS FAT Delivery 3.
+//
+// Revision 1.2  1997/11/03 21:32:24  jws
+// Author: jws@y6maint1.usnus.abb.com (John Soisson)
+// Kopec NSSS Phase1 Status1. Modified to support delivery.
+//
+// Revision 1.1  1997/05/13 15:24:40  kn1
+// Author: kn1@y6maint1.usnus.abb.com (Kopec NSSS 1)
+// Initial revision
+//
+//
+// ***************************************************************************
+// System Include Files: NONE
+//
+//
+// User Defined Include Files: NONE
+//
+//
+// External Variables: NONE
+//
+//
+// Local Constant Definitions: NONE
+//
+//
+// Function Prototypes: NONE
+//
+//
+// ******************* VIDEOTREND VARIABLES  ****************************************
+//
+// attributes for each displayed point
+//
+struct VideoTrendMember {
+   char		VideoTrendId[12];		// point id 
+   float	Minimum;			// low axis value(4-byte)
+   float	Baseline;			// reference value(4-byte)
+   float	Maximum;			// high axis value(4-byte)
+};
+//
+struct VIDEO_DATA {
+	VideoTrendMember Set1Point1;            // Set-1, VTREND pointID-1(24-byte)
+	VideoTrendMember Set1Point2;            // Set-1, VTREND pointID-2(24-byte)
+	VideoTrendMember Set1Point3;            // Set-1, VTREND pointID-3(24-byte)
+	VideoTrendMember Set1Point4;            // Set-1, VTREND pointID-4(24-byte)
+	VideoTrendMember Set2Point1;            // Set-2, VTREND pointID-1(24-byte)
+	VideoTrendMember Set2Point2;            // Set-2, VTREND pointID-2(24-byte)
+	VideoTrendMember Set2Point3;            // Set-2, VTREND pointID-3(24-byte)
+	VideoTrendMember Set2Point4;            // Set-2, VTREND pointID-4(24-byte)
+	VideoTrendMember Set3Point1;            // Set-3, VTREND pointID-1(24-byte)
+	VideoTrendMember Set3Point2;            // Set-3, VTREND pointID-2(24-byte)
+	VideoTrendMember Set3Point3;            // Set-3, VTREND pointID-3(24-byte)
+	VideoTrendMember Set3Point4;            // Set-3, VTREND pointID-4(24-byte)
+	VideoTrendMember Set4Point1;            // Set-4, VTREND pointID-1(24-byte)
+	VideoTrendMember Set4Point2;            // Set-4, VTREND pointID-2(24-byte)
+	VideoTrendMember Set4Point3;            // Set-4, VTREND pointID-3(24-byte)
+	VideoTrendMember Set4Point4;            // Set-4, VTREND pointID-4(24-byte)
+	VideoTrendMember Set5Point1;            // Set-5, VTREND pointID-1(24-byte)
+	VideoTrendMember Set5Point2;            // Set-5, VTREND pointID-2(24-byte)
+	VideoTrendMember Set5Point3;            // Set-5, VTREND pointID-3(24-byte)
+	VideoTrendMember Set5Point4;            // Set-5, VTREND pointID-4(24-byte)
+};
+//
+struct WSVideoTrendMessage {
+  WSmessageHeader	header;				// message information		(  24-byte)
+  VIDEO_DATA		data;				// data portion			( 480-byte)
+  char			spareData[520];			// spare			( 520-byte)
+};
+struct VIDEO_SETUP_DATA {
+        int              Setupno;	    // setup no.       (4)		
+	VideoTrendMember Point1;            // VTREND pointID-1(24-byte)
+	VideoTrendMember Point2;            // VTREND pointID-2(24-byte)
+	VideoTrendMember Point3;            // VTREND pointID-3(24-byte)
+	VideoTrendMember Point4;            // VTREND pointID-4(24-byte)
+};
+// workstation flag set/reset request data
+// This data is for messages from the client to the host.
+struct VTflagMessageData {
+  	 int			requestOption;		// requested option	 	(   4)
+ 	 int                    flipflop1;              // 		                (   4)
+ 	 int                    flipflop2;              //                              (   4)    
+  	 int                    flipflop3;              //                              (   4)    
+  	 int                    flipflop4;              //                              (   4)    
+  	 int                    flipflop5;              //                              (   4)    
+  	 char			requestMessage[976];	// data portion			( 976)
+};
+//
+// workstation flag set/reset request message
+// This message is for messages from the client to the host / server
+struct VTflagMessage {
+   WSmessageHeader		header;			// message information		(  24)
+   VTflagMessageData		data;			// requested option and data	(1000)
+};
+
+// **************
+// from this line...by yrlee
+// This structures are used for Starting Time Display
+struct VT_DT
+{
+   char Date[12] ;
+   char Time[12] ;
+   int Counts ;
+};
+
+
+struct VT_DateTime 
+{
+   VT_DT Trend1 ;
+   VT_DT Trend2 ;
+   VT_DT Trend3 ;
+   VT_DT Trend4 ;
+};
+
+// The following was moved to justPicasso.pdat because this pdat file is 
+//included in messages.h and caused multiply defined variable for the C
+//files.
+//VT_DateTime videoSet1;
+//VT_DateTime videoSet2;
+//VT_DateTime videoSet3;
+//VT_DateTime videoSet4;
+//VT_DateTime videoSet5;
+

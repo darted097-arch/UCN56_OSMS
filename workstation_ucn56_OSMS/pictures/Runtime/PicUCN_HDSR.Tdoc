@@ -1,0 +1,257 @@
+/*
+ * PICASSO-3 CONFIGURATION LANGUAGE FILE
+ *
+ *
+ * Picture name: PicUCN_HDSR
+ *
+ *
+ * Documented by  : ucn56
+ * Host           : pcs5
+ * Date           : 02/03-99 at 09:50:31
+ *
+ *
+ * Generate with:
+ *    pcc PicUCN_HDSR.Tdoc
+ *
+ */
+
+
+picture PicUCN_HDSR
+{
+
+  char PictureTitle[50] = "HISTORICAL FUNCTION";
+  char PictureNumber[50] = "170";
+
+  function `void Initialize()
+{
+   CFMLevel =0;
+   Current_Page = 170;
+//   cancelButton.UnSelect();
+}`
+
+
+
+  dialogue
+  {
+    event = `keyReleased(0xFF1B) && !keyReleased(0x31) && !keyReleased(0x32) && !keyReleased(0x33) && !keyReleased(0x34) && !keyReleased(0x35)`;
+    action = statement `{
+   displayPicture("Main", "./PicUCN_Mainmenu.ppic");
+}`;
+  }
+
+  dialogue
+  {
+    event = `keyReleased(0x31) || keyReleased(0xFFB1)`;
+    action = statement `{
+DisplayPage(Page171);
+}`;
+  }
+
+  dialogue
+  {
+    event = `keyReleased(0x32)|| keyReleased(0xFFB2)`;
+    action = statement `{
+DisplayPage(Page172);
+}`;
+  }
+
+  dialogue
+  {
+    event = `keyReleased(0x33)|| keyReleased(0xFFB3)`;
+    action = statement `{
+DisplayPage("PicUCN_HDSR730.ppic");
+}`;
+  }
+
+  dialogue
+  {
+    event = `keyReleased(0x34)|| keyReleased(0xFFB4)`;
+    action = statement `{
+DisplayPage(Page174);
+}`;
+  }
+
+  dialogue
+  {
+    event = `keyReleased(0x35)|| keyReleased(0xFFB5)`;
+    action = statement `{
+DisplayPage(Page177);
+}`;
+  }
+
+  text 
+  {
+    x = 800;
+    y = 270;
+    format = "%s";
+    theText = "DATA STORAGE";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font14`;
+    xReference = 800;
+    yReference = 270;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 800;
+    y = 415;
+    format = "%s";
+    theText = "DATA RETRIEVAL";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font14`;
+    xReference = 800;
+    yReference = 415;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  instance DialogueSymbols.LargeMenuSelect 
+  {
+    attribute ExecuteString = "{ DisplayPage(Page171); } ";
+    attribute CascadeY = 400;
+    attribute CascadeX = 400;
+    attribute Cascade = 0;
+    attribute TheTextFont = `font6`;
+    attribute TheTitle = "CHANGE HDSR DISK PROTECT";
+    attribute TheFontColor = 2;
+    attribute TheOption = "1.";
+    x = 295;
+    y = 228;
+    visibility = 1;
+    xReference = 295;
+    yReference = 228;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance DialogueSymbols.LargeMenuSelect 
+  {
+    attribute ExecuteString = "{ DisplayPage(Page172); } ";
+    attribute CascadeY = 400;
+    attribute CascadeX = 400;
+    attribute Cascade = 0;
+    attribute TheTextFont = `font6`;
+    attribute TheTitle = "BACKUP HDSR DATA TO TAPE";
+    attribute TheFontColor = 2;
+    attribute TheOption = "2.";
+    x = 295;
+    y = 265;
+    visibility = 1;
+    xReference = 295;
+    yReference = 265;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance DialogueSymbols.LargeMenuSelect 
+  {
+    attribute ExecuteString = "{ DisplayPage(\"PicUCN_HDSR730.ppic\"); }";
+    attribute CascadeY = 400;
+    attribute CascadeX = 400;
+    attribute Cascade = 0;
+    attribute TheTextFont = `font6`;
+    attribute TheTitle = "REQUEST HDSR LOG PRINTOUT";
+    attribute TheFontColor = 2;
+    attribute TheOption = "3.";
+    x = 295;
+    y = 355;
+    visibility = 1;
+    xReference = 295;
+    yReference = 355;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance DialogueSymbols.LargeMenuSelect 
+  {
+    attribute ExecuteString = "{ DisplayPage(Page174); } ";
+    attribute CascadeY = 400;
+    attribute CascadeX = 400;
+    attribute Cascade = 0;
+    attribute TheTextFont = `font6`;
+    attribute TheTitle = "SETUP/VIEW HDSR GRAPH";
+    attribute TheFontColor = 2;
+    attribute TheOption = "4.";
+    x = 295;
+    y = 392;
+    visibility = 1;
+    xReference = 295;
+    yReference = 392;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance DialogueSymbols.LargeMenuSelect 
+  {
+    attribute ExecuteString = "{ DisplayPage(Page177); } ";
+    attribute CascadeY = 400;
+    attribute CascadeX = 400;
+    attribute Cascade = 0;
+    attribute TheTextFont = `font6`;
+    attribute TheTitle = "READ HDSR TAPE HEADER";
+    attribute TheFontColor = 2;
+    attribute TheOption = "5.";
+    x = 294;
+    y = 429;
+    visibility = 1;
+    xReference = 294;
+    yReference = 429;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+// The picture's other attributes:
+
+  backgroundColour    = 0;
+  xSnap               = 1;
+  ySnap               = 1;
+  angleSnap           = 0;
+  radiusSnap          = 0;
+  worldX              = 0;
+  worldY              = 0;
+  worldWidth          = 1280;
+  worldHeight         = 824;
+  oneToOne            = 1;
+  resizeMode          = 0;
+  updateMode          = 2;
+  crosshairStyle      = 1;
+  crosshairLength     = 0;
+  crosshairFollowSnap = `isInEditMode()`;
+  crosshairVisibility = `isInEditMode()`;
+  xReference = 500;
+  yReference = 500;
+  xScaleFactor = 1;
+  yScaleFactor = 1;
+  rotationAngle = 0;
+
+
+}  // end of picture PicUCN_HDSR

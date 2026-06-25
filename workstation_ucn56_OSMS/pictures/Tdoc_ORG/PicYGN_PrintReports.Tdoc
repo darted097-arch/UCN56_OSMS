@@ -1,0 +1,446 @@
+/*
+ * PICASSO-3 CONFIGURATION LANGUAGE FILE
+ *
+ *
+ * Picture name: PicYGN_PrintReports
+ *
+ *
+ * Documented by  : ygn56
+ * Host           : ucn5
+ * Date           : 24/02-99 at 17:02:32
+ *
+ *
+ * Generate with:
+ *    pcc PicYGN_PrintReports.Tdoc
+ *
+ */
+
+
+picture PicYGN_PrintReports
+{
+
+  int option = 4;
+  char PictureTitle[50] = "PRINT REPORTS";
+  char PictureNumber[50] = "154";
+
+  function `void Initialize()
+{
+   Current_Page = 154;
+   CFMLevel = 0;
+// 
+   DisplayAdvisoryMessage(" ");
+   DisplayAdvisoryMessage1(" ");
+   DisplayAdvisoryMessage2(" ");
+   DisplayAdvisoryMessage3(" ");
+//   ExitButton.UnSelect();
+   update();
+}`
+
+
+
+  function `void SoeRecordDisplay()
+{
+   if(Interface->SoeRecord.SoeNo>0) 
+    displayPicture("Main","PicYGN_SoeReports.ppic");
+   else
+    DisplayAdvisoryMessage("NO SOE REPORT");
+    DisplayAdvisoryMessage1("");
+}
+`
+
+
+
+  function `void PrreptDynMsg()
+{
+DisplayAdvisoryMessage(Interface->PrreptDynMsg.PrreptDynMsg1);
+DisplayAdvisoryMessage1(Interface->PrreptDynMsg.PrreptDynMsg2);
+}`
+
+
+
+  function `void PostripRecordDisplay()
+{
+   if(Interface->TripRecord.TripNo>0) 
+    displayPicture("Main","PicYGN_PostTripReports.ppic");
+   else
+    DisplayAdvisoryMessage("NO POST-TRIP REPORT");
+    DisplayAdvisoryMessage1("");
+}`
+
+
+
+  function `void ProcessThis()
+{
+   switch(option) {
+      case 1:
+         DisplayAdvisoryMessage("POST-TRIP REPORT REQUESTED");
+         DisplayAdvisoryMessage1("SEARCH FOR REPORT");
+         Interface->GenericRequestMessage.data.requestOption=1;
+         execute("{sendMessageToHost(REQUEST_PRREPT);}");
+         break;
+      case 2:
+         DisplayAdvisoryMessage("SOE REPORT REQUESTED");
+         DisplayAdvisoryMessage1("SEARCH FOR REPORT");
+         Interface->GenericRequestMessage.data.requestOption=2;
+         execute("{sendMessageToHost(REQUEST_PRREPT);}");
+         break;
+      case 3:
+         DisplayAdvisoryMessage("DEMAND LOG REQUESTED .... PLEASE WAIT");
+         DisplayAdvisoryMessage1("");
+         Interface->GenericRequestMessage.data.requestOption=3;
+         execute("{sendMessageToHost(REQUEST_PRREPT);}");
+         break;
+      case 4:
+         DisplayAdvisoryMessage("POST-TRIP REPORT REQUESTED");
+         DisplayAdvisoryMessage1("SEARCH FOR REPORT");
+         Interface->GenericRequestMessage.data.requestOption=4;
+         execute("{sendMessageToHost(REQUEST_PRREPT);}");
+         break;
+      case 5:
+         DisplayAdvisoryMessage("SOE REPORT REQUESTED");
+         DisplayAdvisoryMessage1("SEARCH FOR REPORT");
+         Interface->GenericRequestMessage.data.requestOption=5;
+         execute("{sendMessageToHost(REQUEST_PRREPT);}");
+         break;
+
+}
+}`
+
+
+
+  function `void escape()
+{
+   displayPicture("Main","PicYGN_CurrentParamsMenu.ppic");
+}`
+
+
+
+  function `void Option1()
+{
+      option=1;
+      ProcessThis();
+      update();
+}`
+
+
+
+  function `void Option2()
+{
+      option=2;
+      ProcessThis();
+      update();
+}`
+
+
+
+  function `void Option3()
+{
+      option=3;
+      ProcessThis();
+      update();
+}`
+
+
+
+  function `void Option5()
+{
+      option=5;
+      ProcessThis();
+      update();
+}`
+
+
+
+  function `void Option4()
+{
+      option=4;
+      ProcessThis();
+      update();
+}`
+
+
+
+  dialogue
+  {
+    event = `keyReleased(0x35) || keyReleased(0xFFB5)`;
+    action = statement `{
+m5.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+m5.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+
+m5.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+m5.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+m5.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+m5.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+
+m5.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+m5.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+m5.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+m5.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+
+   if ( strlen(m5.ExecuteString) > 0)
+       execute(m5.ExecuteString);
+//   execute("{DisplayPage(\\"%s\\");}",m5.TheDisplayPage);
+
+}
+
+`;
+  }
+
+  dialogue
+  {
+    event = `keyReleased(0x31) || keyReleased(0xFFB1)`;
+    action = statement `{
+//   displayPicture("header","PicYGN_header.ppic");
+//   displayPicture("footer","PicYGN_footer.ppic");
+//   displayPicture("Main","Pic111_CFM_Directory.ppic");
+m1.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+m1.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+
+m1.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+m1.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+m1.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+m1.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+
+m1.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+m1.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+m1.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+m1.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+
+   if ( strlen(m1.ExecuteString) > 0)
+       execute(m1.ExecuteString);
+//   execute("{DisplayPage(\\"%s\\");}",m1.TheDisplayPage);
+}`;
+  }
+
+  dialogue
+  {
+    event = `keyReleased(0x32) || keyReleased(0xFFB2)`;
+    action = statement `{
+m2.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+m2.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+
+m2.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+m2.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+m2.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+m2.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+
+m2.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+m2.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+m2.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+m2.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+
+   if ( strlen(m2.ExecuteString) > 0)
+       execute(m2.ExecuteString);
+//   execute("{DisplayPage(\\"%s\\");}",m2.TheDisplayPage);
+}`;
+  }
+
+  dialogue
+  {
+    event = `keyReleased(0x33) || keyReleased(0xFFB3)`;
+    action = statement `{
+m3.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+m3.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+
+m3.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+m3.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+m3.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+m3.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+
+m3.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+m3.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+m3.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+m3.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+
+   if ( strlen(m3.ExecuteString) > 0)
+       execute(m3.ExecuteString);
+//   execute("{DisplayPage(\\"%s\\");}",m3.TheDisplayPage);
+}`;
+  }
+
+  dialogue
+  {
+    event = `keyReleased(0x34) || keyReleased(0xFFB4)`;
+    action = statement `{
+m4.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+m4.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+
+m4.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+m4.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+m4.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+m4.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+
+m4.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+m4.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+m4.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+m4.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+
+   if ( strlen(m4.ExecuteString) > 0)
+       execute(m4.ExecuteString);
+//   execute("{DisplayPage(\\"%s\\");}",m4.TheDisplayPage);
+
+}
+`;
+  }
+
+  text 
+  {
+    x = 145;
+    y = 199;
+    format = "%s";
+    theText = "SELECT (1-5) :  FOR PRINT REPORT";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 145;
+    yReference = 199;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  instance DialogueSymbols.LargeMenuSelect2 m3
+  {
+    attribute TheDisplayPage = "";
+    attribute TheOption = "3.";
+    attribute TheFontColor = 2;
+    attribute TheTitle = "PRINT DEMAND LOG";
+    attribute TheTextFont = `font6`;
+    attribute Cascade = 0;
+    attribute CascadeX = 400;
+    attribute CascadeY = 400;
+    attribute ExecuteString = "Option3()";
+    x = 400;
+    y = 324;
+    visibility = 1;
+    xReference = 400;
+    yReference = 324;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance m3
+
+
+
+  instance DialogueSymbols.LargeMenuSelect2 m2
+  {
+    attribute TheDisplayPage = "";
+    attribute TheOption = "2.";
+    attribute TheFontColor = 2;
+    attribute TheTitle = "PRINT LAST SOE TRIP";
+    attribute TheTextFont = `font6`;
+    attribute Cascade = 0;
+    attribute CascadeX = 400;
+    attribute CascadeY = 400;
+    attribute ExecuteString = "Option2()";
+    x = 400;
+    y = 287;
+    visibility = 1;
+    xReference = 400;
+    yReference = 287;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance m2
+
+
+
+  instance DialogueSymbols.LargeMenuSelect2 m1
+  {
+    attribute TheDisplayPage = "";
+    attribute TheOption = "1.";
+    attribute TheFontColor = 2;
+    attribute TheTitle = "PRINT LAST POST-TRIP REPORT";
+    attribute TheTextFont = `font6`;
+    attribute Cascade = 0;
+    attribute CascadeX = 400;
+    attribute CascadeY = 400;
+    attribute ExecuteString = "Option1()";
+    x = 400;
+    y = 250;
+    visibility = 1;
+    xReference = 400;
+    yReference = 250;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance m1
+
+
+
+  instance DialogueSymbols.LargeMenuSelect2 m4
+  {
+    attribute TheDisplayPage = "";
+    attribute TheOption = "4.";
+    attribute TheFontColor = 2;
+    attribute TheTitle = "PRINT SELECTED POST-TRIP REPORT";
+    attribute TheTextFont = `font6`;
+    attribute Cascade = 0;
+    attribute CascadeX = 400;
+    attribute CascadeY = 400;
+    attribute ExecuteString = "Option4()";
+    x = 400;
+    y = 391;
+    visibility = 1;
+    xReference = 400;
+    yReference = 391;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance m4
+
+
+
+  instance DialogueSymbols.LargeMenuSelect2 m5
+  {
+    attribute TheDisplayPage = "";
+    attribute TheOption = "5.";
+    attribute TheFontColor = 2;
+    attribute TheTitle = "PRINT SELECTED SOE REPORT";
+    attribute TheTextFont = `font6`;
+    attribute Cascade = 0;
+    attribute CascadeX = 400;
+    attribute CascadeY = 400;
+    attribute ExecuteString = "Option5()";
+    x = 400;
+    y = 428;
+    visibility = 1;
+    xReference = 400;
+    yReference = 428;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance m5
+
+
+
+// The picture's other attributes:
+
+  backgroundColour    = 0;
+  xSnap               = 5;
+  ySnap               = 5;
+  angleSnap           = 0;
+  radiusSnap          = 0;
+  worldX              = 0;
+  worldY              = 0;
+  worldWidth          = 1280;
+  worldHeight         = 824;
+  oneToOne            = 1;
+  resizeMode          = 0;
+  updateMode          = 2;
+  crosshairStyle      = 1;
+  crosshairLength     = 0;
+  crosshairFollowSnap = `isInEditMode()`;
+  crosshairVisibility = `isInEditMode()`;
+  xReference = 500;
+  yReference = 500;
+  xScaleFactor = 1;
+  yScaleFactor = 1;
+  rotationAngle = 0;
+
+
+}  // end of picture PicYGN_PrintReports

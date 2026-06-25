@@ -1,0 +1,1165 @@
+/*
+ * ProcSee CONFIGURATION LANGUAGE FILE
+ *
+ *
+ * User : ygn34
+ * Host : y6cr02
+ * Date : 2017-05-25
+ * Time : 15:49:32
+ *
+ * ProcSee version : ProcSee 3.10.1 (June 2016)
+ * File version    : 1.26
+ *
+ *
+ */
+
+
+picture PicYGN_UTDVCEADataUpdate
+{
+  worldX = 0;
+  worldY = 0;
+  worldWidth = 1280;
+  worldHeight = 824;
+  oneToOne = 1;
+  backgroundColour = 0;
+  updateMode = 2;
+  resizeMode = 0;
+  xSnap = 5;
+  ySnap = 5;
+  radiusSnap = 0;
+  angleSnap = 0;
+  crosshairStyle = 1;
+  crosshairLength = 0;
+  crosshairFollowSnap = `isInEditMode()`;
+  crosshairVisibility = `isInEditMode()`;
+  xReference = 500;
+  yReference = 500;
+  xScaleFactor = 1;
+  yScaleFactor = 1;
+  rotationAngle = 0;
+
+  int Current_page = 657;
+
+  int option = 3;
+
+  char PictureNumber[50] = "657";
+
+  char PictureTitle[50] = "UTDV: CEA POSITION DATA SELECTION";
+
+  int receivedCheck = 0;
+
+  function `void DisplayCEAUpdateData()
+  {
+  //   execute ("{strcpy(file1.TheNewText, Interface->UtdvData.lastMidnight.filename);}");
+     execute ("{strcpy(file1.TheNewText, utlmid652);}");
+     efph1.TheNewNumber = Interface->UtdvData.lastMidnight.efphCeaExposure;
+     execute ("{strcpy(date11.TheNewText, Interface->UtdvData.lastMidnight.dateCeaExposure);}");
+     execute ("{strcpy(date12.TheNewText, Interface->UtdvData.lastMidnight.dateCeaPosition);}");
+     execute ("{strcpy(time11.TheNewText, Interface->UtdvData.lastMidnight.timeCeaExposure);}");
+     execute ("{strcpy(time12.TheNewText, Interface->UtdvData.lastMidnight.timeCeaPosition);}");
+  //
+     execute ("{strcpy(file2.TheNewText, utlhcea652);}");
+  //   execute ("{strcpy(file2.TheNewText, Interface->UtdvData.lastMidnight.filename);}");
+     efph2.TheNewNumber = Interface->UtdvData.latestHourly.efphCeaExposure;
+     execute ("{strcpy(date21.TheNewText, Interface->UtdvData.latestHourly.dateCeaExposure);}");
+     execute ("{strcpy(date22.TheNewText, Interface->UtdvData.latestHourly.dateCeaPosition);}");
+     execute ("{strcpy(time21.TheNewText, Interface->UtdvData.latestHourly.timeCeaExposure);}");
+     execute ("{strcpy(time22.TheNewText, Interface->UtdvData.latestHourly.timeCeaPosition);}");
+  //
+     TextProcessing.visibility = 0;
+  
+  }`
+
+  function `void escape()
+  {
+  DisplayPage(Page652);
+  }`
+
+  function `int get_Vis_Hour()
+  {
+    if ( (UTDV652_option == 1) || (UTDV652_option == 3))
+       return(1);
+    else
+       return(0);
+  }`
+
+  function `int get_Vis_Mid()
+  {
+    if ( (UTDV652_option == 1) || (UTDV652_option == 2))
+       return(1);
+    else
+       return(0);
+  }`
+
+  function `void GettingData()
+  {
+     if (0 == UTDVDataWaitingTime)
+     {
+        TextProcessing.visibility = 0;
+        WaitingUTDVData657 = 0;
+        DisplayCEAUpdateData();
+     }
+     else
+     {
+        UTDVDataWaitingTime = UTDVDataWaitingTime - 1;
+     }
+  }`
+
+  function `void Initialize()
+  {
+  // cfms page navifation
+     Current_Page = 657;
+     CFMLevel = 0;
+  
+  // utdv page navifation
+     Current_page = 657;
+  //
+  
+     int i,j;
+  
+     for(i=1 ; i<=2 ; i++)
+     for(j=1 ; j<=2 ; j++)               // yrlee 990426
+     {
+        execute ("{strcpy(date%d%d.TheNewText,\\" \\\\0\\");}",i,j);
+        execute ("{strcpy(time%d%d.TheNewText,\\" \\\\0\\");}",i,j);
+     }
+  
+     cea_withrawl.Flag = 2;
+     strcpy(cea_withrawl.TheNewText, "1");
+     Text1.foregroundColour = \`COLOR_DATA_NORMAL\`; //JHC 990419
+     Text2.foregroundColour = \`COLOR_NON_ESSENTIAL\`;  //JHC 990419
+     Text3.foregroundColour = \`COLOR_NON_ESSENTIAL\`;  //JHC 990419
+     Text4.foregroundColour = \`COLOR_NON_ESSENTIAL\`;  //JHC 990419
+     strcpy(cea_withrawl.TheOriginalText, cea_withrawl.TheNewText);
+     execute("{enterNoButton.TheNumber.visibility = 0;}");
+  //
+  // For Dynamic Description (JHC 990419)
+     Mid.visibility = get_Vis_Mid();
+     Hour.visibility = get_Vis_Hour();
+  //
+     enterText1.visibility = 0;
+     enterText2.visibility = 0;
+     enterText2E.visibility = 0;   //JHC 990418
+     enterNoButton.visibility = 0;
+     TextProcessing.visibility = 0;
+  //
+     TextProcessing.visibility = 1;
+  //
+  // 9 for just send display data
+     Interface->UtdvDialogue.option = 9;
+     Interface->UtdvDialogue.current_page = Current_page;
+     Interface->UtdvDialogue.new_page_request = 0;
+     execute("{sendMessageToHost(PROCESS_UTDV_SEND);}");
+  //
+  //   execute("{DisplayCEAUpdateData();}");
+  //
+  //
+  //   printf("sendMessageToHost() done in 657 zzzzzzzzzz");
+     WaitingUTDVData657 = 1;
+     UTDVDataWaitingTime = 5;
+     processfiles.UnSelect(); //jsk
+  }`
+
+  function `void MakeVis()
+  {
+     Text1.foregroundColour = \`COLOR_NON_ESSENTIAL\`;  //JHC 990419
+     Text2.foregroundColour = \`COLOR_NON_ESSENTIAL\`;  //JHC 990419
+     Text3.foregroundColour = \`COLOR_NON_ESSENTIAL\`;  //JHC 990419
+     Text4.foregroundColour = \`COLOR_NON_ESSENTIAL\`;  //JHC 990419
+  
+     if (0 == strcmp(cea_withrawl.TheNewText, "3"))
+     {
+        enterText1.visibility = 1;
+        enterNoButton.visibility = 1;
+        Text3.foregroundColour = \`COLOR_DATA_NORMAL\`;  //JHC 990419
+  
+        //JHC 990418
+        if(Interface->System.displayedUnits==ENGLISH)
+          { enterText2E.visibility=1;enterText2.visibility=0; update();}
+        else
+          { enterText2E.visibility=0;enterText2.visibility=1; update();}
+     }
+     else
+     {
+        enterText1.visibility = 0;
+        enterNoButton.visibility = 0;
+        enterNoButton.TheNumber.visibility = 0;
+        enterText2.visibility = 0;
+        enterText2E.visibility = 0;  // JHC 990418
+        if (0 == strcmp(cea_withrawl.TheNewText, "1"))
+           Text1.foregroundColour = \`COLOR_DATA_NORMAL\`;  //JHC 990419
+        else if (0 == strcmp(cea_withrawl.TheNewText, "2"))
+           Text2.foregroundColour = \`COLOR_DATA_NORMAL\`;  //JHC 990419
+        else if (0 == strcmp(cea_withrawl.TheNewText, "4"))
+           Text4.foregroundColour = \`COLOR_DATA_NORMAL\`;  //JHC 990419
+    }
+  
+  }
+  `
+
+  function `void Process1()
+  {
+  //
+  //   execute("{strcpy(Interface->UtdvDialogue.option, cea_withrawl.TheNewText);}");
+  //   printf(" opcode = %s", cea_withrawl.TheNewText);
+     option = atoi(cea_withrawl.TheNewText);
+     if (3 == option)
+     {
+     Interface->UtdvDialogue.current_page = Current_page;
+     Interface->UtdvDialogue.option = option;
+     if ( (0==strcmp(enterNoButton.TheNewText,"bd")) || (0==strcmp(enterNoButton.TheNewText,"BD")) )
+        Interface->UtdvDialogue.cea_average = -1;
+     else
+        Interface->UtdvDialogue.cea_average = enterNoButton.TheNewNumber;
+  
+     execute("{sendMessageToHost(PROCESS_UTDV_SEND);}");
+     }
+  
+  //
+     else if ((1 == option) || (2 == option) || (4 == option))
+     {
+     Interface->UtdvDialogue.current_page = Current_page;
+     Interface->UtdvDialogue.option = option;
+  
+     execute("{sendMessageToHost(PROCESS_UTDV_SEND);}");
+  //   printf("sending 657 (option 1, 2, 4) message .....");
+     }
+  
+  
+  }`
+
+  function `void ProcessingConfirmed()
+  {
+  }`
+
+  function `void ValidateCEAValue()
+  {
+  if (enterNoButton.ERROR == 1)
+     DisplayAdvisoryMessage1("INVALID CEA VALUE ENTERED");
+  else
+     return;
+  }`
+
+  rectangle
+  {
+    x = 227;
+    y = 79;
+    width = 805;
+    height = 176;
+    visibility = 1;
+    foregroundColour = `COLOR_LINE_BOUNDARY_6`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 3;
+    foregroundFillColour = `COLOR_NON_ESSENTIAL`;
+    backgroundFillColour = -1;
+    fillPattern = `NoPattern`;
+    xReference = 328;
+    yReference = 107;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  ellipseArc
+  {
+    x = 166;
+    y = 428;
+    xRadius = 0;
+    yRadius = 0;
+    startAngle = `font4`;
+    openingAngle = 90;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 0;
+    foregroundFillColour = `COLOR_NON_ESSENTIAL`;
+    backgroundFillColour = -1;
+    fillPattern = `SolidPattern`;
+    xReference = 166;
+    yReference = 428;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  circleArc
+  {
+    x = 166;
+    y = 469;
+    radius = 0;
+    startAngle = `font4`;
+    openingAngle = 90;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 0;
+    foregroundFillColour = `COLOR_NON_ESSENTIAL`;
+    backgroundFillColour = -1;
+    fillPattern = `SolidPattern`;
+    xReference = 166;
+    yReference = 469;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  ellipseArc
+  {
+    x = 223;
+    y = 230;
+    xRadius = 0;
+    yRadius = 0;
+    startAngle = `font4`;
+    openingAngle = 90;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 0;
+    foregroundFillColour = `COLOR_NON_ESSENTIAL`;
+    backgroundFillColour = -1;
+    fillPattern = `SolidPattern`;
+    xReference = 228;
+    yReference = 230;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  line
+  {
+    numberOfPoints = 2;
+    point[0] = ( 228, 230 );
+    point[1] = ( 228, 230 );
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineStyle = `SolidPattern`;
+    lineWidth = 0;
+    xReference = 228;
+    yReference = 230;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  line
+  {
+    numberOfPoints = 2;
+    point[0] = ( 228, 166 );
+    point[1] = ( 1033, 166 );
+    visibility = 1;
+    foregroundColour = `COLOR_LINE_BOUNDARY_6`;
+    backgroundColour = -1;
+    lineStyle = `SolidPattern`;
+    lineWidth = 3;
+    xReference = 228;
+    yReference = 166;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  line
+  {
+    numberOfPoints = 2;
+    point[0] = ( 433, 120 );
+    point[1] = ( 433, 120 );
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineStyle = `SolidPattern`;
+    lineWidth = 0;
+    xReference = 433;
+    yReference = 120;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  group Mid
+  {
+    visibility = 1;
+    xReference = 1049;
+    yReference = 98;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+
+    text
+    {
+      x = 1050;
+      y = 115;
+      format = "%s";
+      theText = "CEA  EXP  DATA";
+      alignment = 0;
+      visibility = 1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font4`;
+      xReference = 1050;
+      yReference = 115;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+    text
+    {
+      x = 1050;
+      y = 149;
+      format = "%s";
+      theText = "CEA  POS  DATA";
+      alignment = 0;
+      visibility = 1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font4`;
+      xReference = 1050;
+      yReference = 149;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+  }
+
+  line
+  {
+    numberOfPoints = 2;
+    point[0] = ( 470, 80 );
+    point[1] = ( 470, 255 );
+    visibility = 1;
+    foregroundColour = `COLOR_LINE_BOUNDARY_6`;
+    backgroundColour = -1;
+    lineStyle = `SolidPattern`;
+    lineWidth = 3;
+    xReference = 470;
+    yReference = 80;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 49;
+    y = 115;
+    format = "%s";
+    theText = "LAST";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 49;
+    yReference = 115;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 49;
+    y = 136;
+    format = "%s";
+    theText = "MIDNIGHT  FILE";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 49;
+    yReference = 136;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 47;
+    y = 205;
+    format = "%s";
+    theText = "LATEST  HOURLY";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 47;
+    yReference = 205;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 47;
+    y = 226;
+    format = "%s";
+    theText = "CEA  FILE";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 47;
+    yReference = 226;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 309;
+    y = 64;
+    format = "%s";
+    theText = "NAME";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 309;
+    yReference = 64;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 569;
+    y = 65;
+    format = "%s";
+    theText = "EFPHS";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 569;
+    yReference = 65;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 775;
+    y = 65;
+    format = "%s";
+    theText = "DATE";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 775;
+    yReference = 65;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 915;
+    y = 66;
+    format = "%s";
+    theText = "TIME";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 915;
+    yReference = 66;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  group Hour
+  {
+    visibility = 1;
+    xReference = 1049;
+    yReference = 183;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+
+    text
+    {
+      x = 1050;
+      y = 200;
+      format = "%s";
+      theText = "CEA  EXP  DATA";
+      alignment = 0;
+      visibility = 1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font4`;
+      xReference = 1050;
+      yReference = 200;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+    text
+    {
+      x = 1050;
+      y = 234;
+      format = "%s";
+      theText = "CEA  POS  DATA";
+      alignment = 0;
+      visibility = 1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font4`;
+      xReference = 1050;
+      yReference = 234;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+  }
+
+  text
+  {
+    x = 101;
+    y = 328;
+    format = "%s";
+    theText = "FOR  CEA  EXPOSURE  UPDATE,";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 101;
+    yReference = 328;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 101;
+    y = 352;
+    format = "%s";
+    theText = "ENTER  CEA  POSITION  DATA  CLOSEST  TO";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 101;
+    yReference = 352;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 101;
+    y = 376;
+    format = "%s";
+    theText = "CEA  POSITION  DURING  PMS  OUTAGE  ( 1 - 4 ) :";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 101;
+    yReference = 376;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text enterText1
+  {
+    x = 184;
+    y = 528;
+    format = "%s";
+    theText = "ENTER  CEA  WITHDRAWAL  ( FOR  CHOICE  3 )  :";
+    alignment = 0;
+    visibility = 0;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 184;
+    yReference = 528;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 170;
+    y = 635;
+    format = "%s";
+    theText = "AFTER  SELECTING  CHOICE  1  -  3,  CEA  DATA  CAN  BE  VERIFIED / MODIFIED  ( GROUP / INDIVIDUAL )";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 170;
+    yReference = 635;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text enterText2
+  {
+    x = 830;
+    y = 529;
+    format = "%s";
+    theText = "(  0  TO  381  CM. )";
+    alignment = 0;
+    visibility = 0;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 830;
+    yReference = 529;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  instance DialogueSymbols.UTDVDataDisp efph1
+  {
+    x = 556;
+    y = 90;
+    visibility = `get_Vis_Mid()`;
+    xReference = 556;
+    yReference = 90;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Active = 1;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "";
+    ExecuteUnSelect = "";
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxDigits = 8;
+    ReturnAction = "";
+    Scope = "";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewNumber = 57.1656;
+    TheNewText = "";
+    TheNumberFormat = "%-8.2f";
+    TheOriginalNumber = 34.5;
+    TheOriginalText = "45";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    Width = 150;
+  }
+
+  instance DialogueSymbols.UTDVDataDisp efph2
+  {
+    x = 556;
+    y = 175;
+    visibility = `get_Vis_Hour()`;
+    xReference = 556;
+    yReference = 175;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Active = 1;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "";
+    ExecuteUnSelect = "";
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxDigits = 8;
+    ReturnAction = "";
+    Scope = "";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewNumber = 66.0405;
+    TheNewText = "";
+    TheNumberFormat = "%-8.2f";
+    TheOriginalNumber = 34.5;
+    TheOriginalText = "45";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    Width = 150;
+  }
+
+  instance cfmsSymbols.YesNo date11
+  {
+    x = 764;
+    y = 89;
+    visibility = `get_Vis_Mid()`;
+    xReference = 764;
+    yReference = 89;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    TheNewText = "04/26/99";
+  }
+
+  instance cfmsSymbols.YesNo date12
+  {
+    x = 764;
+    y = 130;
+    visibility = `get_Vis_Mid()`;
+    xReference = 764;
+    yReference = 130;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    TheNewText = "04/26/99";
+  }
+
+  instance cfmsSymbols.YesNo date21
+  {
+    x = 764;
+    y = 176;
+    visibility = `get_Vis_Hour()`;
+    xReference = 764;
+    yReference = 176;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    TheNewText = "04/26/99";
+  }
+
+  instance cfmsSymbols.YesNo date22
+  {
+    x = 764;
+    y = 209;
+    visibility = `get_Vis_Hour()`;
+    xReference = 764;
+    yReference = 209;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    TheNewText = "04/26/99";
+  }
+
+  instance cfmsSymbols.YesNo time11
+  {
+    x = 909;
+    y = 90;
+    visibility = `get_Vis_Mid()`;
+    xReference = 909;
+    yReference = 90;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    TheNewText = "00:00:12";
+  }
+
+  instance cfmsSymbols.YesNo time12
+  {
+    x = 909;
+    y = 130;
+    visibility = `get_Vis_Mid()`;
+    xReference = 909;
+    yReference = 130;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    TheNewText = "00:00:12";
+  }
+
+  instance cfmsSymbols.YesNo time21
+  {
+    x = 909;
+    y = 176;
+    visibility = `get_Vis_Hour()`;
+    xReference = 909;
+    yReference = 176;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    TheNewText = "09:00:10";
+  }
+
+  instance cfmsSymbols.YesNo time22
+  {
+    x = 909;
+    y = 209;
+    visibility = `get_Vis_Hour()`;
+    xReference = 909;
+    yReference = 209;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    TheNewText = "09:00:10";
+  }
+
+  text TextProcessing
+  {
+    x = 542;
+    y = 735;
+    format = "%s";
+    theText = "PROCESSING.. WAIT";
+    alignment = 0;
+    visibility = 0;
+    foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 542;
+    yReference = 735;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  instance cfmsSymbols.UTDVText file1
+  {
+    x = 255;
+    y = 90;
+    visibility = `get_Vis_Mid()`;
+    xReference = 255;
+    yReference = 90;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    TheNewText = "LOG2:UTLMID.DAT";
+  }
+
+  instance cfmsSymbols.UTDVText file2
+  {
+    x = 255;
+    y = 175;
+    visibility = `get_Vis_Hour()`;
+    xReference = 255;
+    yReference = 175;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    TheNewText = "LOG2:UTLHCEA.DAT";
+  }
+
+  text Text1
+  {
+    x = 630;
+    y = 375;
+    format = "%s";
+    theText = "1  . . . .    USE LAST MIDNIGHT FILE";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 630;
+    yReference = 375;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text Text2
+  {
+    x = 630;
+    y = 406;
+    format = "%s";
+    theText = "2  . . . .    USE LATEST HOURLY CEA FILE";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 630;
+    yReference = 406;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text Text3
+  {
+    x = 630;
+    y = 437;
+    format = "%s";
+    theText = "3  . . . .    SET ALL CEA POSITION TO A VALUE";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 630;
+    yReference = 437;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text Text4
+  {
+    x = 630;
+    y = 468;
+    format = "%s";
+    theText = "4  . . . .    RESELECT FILES";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 630;
+    yReference = 468;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  instance DialogueSymbols.ToggleButton_1234 cea_withrawl
+  {
+    x = 565;
+    y = 355;
+    visibility = 1;
+    xReference = 565;
+    yReference = 355;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "MakeVis()";
+    ExecuteUnSelect = "";
+    Flag = 2;
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxCharacters = 3;
+    ReturnAction = "";
+    Scope = "::YGN3and4.PicYGN_UTDVCEADataUpdate";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 10;
+    TheNewText = "1";
+    TheOriginalText = "1";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 200;
+  }
+
+  instance DialogueSymbols.PushButton processfiles
+  {
+    x = 122;
+    y = 715;
+    visibility = 1;
+    xReference = 106;
+    yReference = 712;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ButtonState = 0;
+    DynamicLabel = "PROCESSING";
+    ExecuteString = "{Process1();}";
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    Label = "PROCESS";
+    Scope = "PicYGN_UTDVCEADataUpdate";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    StaticLabel = "PROCESS";
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextFontDynamic = `font2`;
+    TextFontStatic = `font4`;
+    TextX = 17;
+    TextXDynamic = 15;
+    TextXStatic = 17;
+    TextY = 22;
+    TextYDynamic = 21;
+    TextYStatic = 22;
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    Width = 128;
+  }
+
+  instance DialogueSymbols.InputDialogueNumberActBad enterNoButton
+  {
+    x = 645;
+    y = 507;
+    visibility = 0;
+    xReference = 645;
+    yReference = 507;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    ActionFlag = 0;
+    Active = 1;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 1;
+    ExecuteSelect = "";
+    ExecuteUnSelect = "";
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxDigits = 8;
+    ReturnAction = `ValidateCEAValue()`;
+    Scope = "";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewNumber = -1;
+    TheNewText = "bd";
+    TheNumberFormat = "%-8.2f";
+    TheOriginalNumber = -1;
+    TheOriginalText = "bd";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 150;
+  }
+
+  text enterText2E
+  {
+    x = 830;
+    y = 529;
+    format = "%s";
+    theText = "(  0  TO  150  IN. )";
+    alignment = 0;
+    visibility = 0;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 830;
+    yReference = 529;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+}

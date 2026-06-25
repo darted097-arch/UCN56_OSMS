@@ -1,0 +1,1613 @@
+/*
+ * ProcSee CONFIGURATION LANGUAGE FILE
+ *
+ *
+ * User : ygn34
+ * Host : y6cr02
+ * Date : 2017-05-25
+ * Time : 14:59:43
+ *
+ * ProcSee version : ProcSee 3.10.1 (June 2016)
+ * File version    : 1.26
+ *
+ *
+ */
+
+
+picture PicYGN_HDSR730
+{
+  worldX = 0;
+  worldY = 0;
+  worldWidth = 1280;
+  worldHeight = 824;
+  oneToOne = 1;
+  backgroundColour = 0;
+  updateMode = 2;
+  resizeMode = 0;
+  xSnap = 5;
+  ySnap = 5;
+  radiusSnap = 0;
+  angleSnap = 0;
+  crosshairStyle = 1;
+  crosshairLength = 0;
+  crosshairFollowSnap = `isInEditMode()`;
+  crosshairVisibility = `isInEditMode()`;
+  xReference = 500;
+  yReference = 500;
+  xScaleFactor = 1;
+  yScaleFactor = 1;
+  rotationAngle = 0;
+
+  char PictureNumber[50] = "173";
+
+  char PictureTitle[50] = "HDSR LOG";
+
+  int SigType = 12;
+
+  char TempPid[10] = "RCYS01AL";
+
+  char TempString[50] = "INVALID PID TYPE: RCYS01AL";
+
+  int validInput = 0;
+
+  int what = 0;
+
+  function `int Checkup( int position)
+  {
+     int step, rest;
+  
+     switch( position ) {
+        case 1:      // t_dataSource
+  
+           if( strcmp( gPage730.dataSource, "C") != 0 &&
+               strcmp( gPage730.dataSource, "D") != 0  &&
+               strcmp( gPage730.dataSource, "T") != 0 ) {
+              DisplayAdvisoryMessage1("DATA SOURCE CHOICES: (D, T, C)");
+              return -1;
+           }
+  
+           if( strcmp( gPage730.resolution, "L") != 0 &&
+               strcmp( gPage730.resolution, "H") != 0 &&
+               strcmp( gPage730.resolution, "R") != 0) {
+              DisplayAdvisoryMessage1("RESOLUTION CHOICES: (H, L, R)");
+              return -1;
+           }
+           break;
+  
+        case 2:      // t_resolution
+  
+           if( strcmp( gPage730.resolution, "L") != 0 &&
+               strcmp( gPage730.resolution, "H") != 0 &&
+               strcmp( gPage730.resolution, "R") != 0) {
+              DisplayAdvisoryMessage1("RESOLUTION CHOICES: (H, L, R)");
+              return -1;
+           }
+  
+           if( strcmp( gPage730.dataSource, "C") != 0 &&
+               strcmp( gPage730.dataSource, "D") != 0  &&
+               strcmp( gPage730.dataSource, "T") != 0 ) {
+              DisplayAdvisoryMessage1("DATA SOURCE CHOICES: (D, T, C)");
+              return -1;
+           }
+     }
+  //
+  // update validate start/end date if disk high/low resoultion
+  //
+           if( strcmp( gPage730.dataSource, "D") == 0 && strcmp( gPage730.resolution, "H") == 0 ) {
+              strcpy( gPage730.validStartDate, gPage730.highDiskDate_1);
+              strcpy( gPage730.validEndDate, gPage730.highDiskDate_2);
+              strcpy( gPage730.validStartTime, gPage730.highDiskTime_1);
+              strcpy( gPage730.validEndTime, gPage730.highDiskTime_2);
+           }
+           else if( strcmp( gPage730.dataSource, "D") == 0 && strcmp( gPage730.resolution, "L") == 0 ) {
+              strcpy( gPage730.validStartDate, gPage730.lowDiskDate_1);
+              strcpy( gPage730.validEndDate, gPage730.lowDiskDate_2);
+              strcpy( gPage730.validStartTime, gPage730.lowDiskTime_1);
+              strcpy( gPage730.validEndTime, gPage730.lowDiskTime_2);
+           }
+            else if( strcmp( gPage730.dataSource, "T") == 0  ) {
+  // Update tape saving time
+              if( strcmp(gPage730.resolution, "R") == 0 ) {
+  //            if( (strcmp(gPage730.resolution, "H") == 0 && gPage750.iResolution == 1 ) ||
+  //                (strcmp(gPage730.resolution, "L") == 0 && gPage750.iResolution == 2 ) ) {
+  //                strcpy( gPage730.validStartDate, gPage750.startDate);
+  //               strcpy( gPage730.validEndDate, gPage750.endDate);
+  //               strcpy( gPage730.validStartTime, gPage750.startTime);
+  //               strcpy( gPage730.validEndTime, gPage750.endTime);
+  //            }
+  //            else {
+                 strcpy( gPage750.startDate, "--/--/--");
+                 strcpy( gPage750.endDate, "--/--/--");
+                 strcpy( gPage750.startTime, "--:--:--");
+                 strcpy( gPage750.endTime, "--:--:--");
+              }
+                  strcpy( gPage730.validStartDate, gPage750.startDate);
+                 strcpy( gPage730.validEndDate, gPage750.endDate);
+                 strcpy( gPage730.validStartTime, gPage750.startTime);
+                 strcpy( gPage730.validEndTime, gPage750.endTime);
+           }
+          update();
+     return 0;
+  }`
+
+  function `void Finished()
+  {
+     gPage730.enablePage = 0;
+     TheTimer.cancel(200);
+  }`
+
+  function `void Initialize()
+  {
+     Current_Page = 173;
+     CFMLevel = 0;
+     ClearAdvisoryMessage();
+     bProcess.UnSelect();
+  
+     gPage730.enablePage = 1;
+     sendMessageToHost(HDSR_PAGE_730);
+     TheTimer.atIntervalDo(200,0,0,5,0, "::YGN3and4.PicYGN_HDSR730", "{ sendMessageToHost(HDSR_PAGE_730); UpdateDataRange();}" );
+  
+     InitializeInput();
+     executeAsync("::YGN3and4.PicYGN_HDSR750","{InitializeInput();}");
+     DisplayAdvisoryMessage1("PLEASE, WAIT...");
+  }
+  `
+
+// ***CORENET 20170601 by Philkyu Kwon ************
+  function `void DummyProcess()
+  {
+      //printf("Button Select OR Button Unselected");
+  }`
+// ***************************************************
+
+  function `void InitializeInput()
+  {
+     strcpy( gPage730.dataSource, "D" );
+     strcpy( gPage730.resolution, "H" );
+     strcpy( gPage730.timeStep, "10" );
+  
+     strcpy( gPage730.startDate, gPage730.highDiskDate_1);
+     strcpy( gPage730.endDate, gPage730.highDiskDate_2);
+     strcpy( gPage730.startTime, gPage730.highDiskTime_1);
+     strcpy( gPage730.endTime, gPage730.highDiskTime_2);
+  
+     strcpy(bDataSource.TheNewText, gPage730.dataSource);
+     strcpy(bDataSource.TheOriginalText, gPage730.dataSource);
+     bDataSource.UnSelectButton();
+     strcpy(bResolution.TheNewText, gPage730.resolution);
+     strcpy(bResolution.TheOriginalText, gPage730.resolution);
+     bResolution.UnSelectButton();
+     strcpy(bTimeStep.TheNewText, gPage730.timeStep);
+     strcpy(bTimeStep.TheOriginalText, gPage730.timeStep);
+     bTimeStep.UnSelectButton();
+  
+     strcpy(bStartDate.TheNewText, gPage730.startDate);
+     strcpy(bStartDate.TheOriginalText, gPage730.startDate);
+     bStartDate.UnSelectButton();
+     strcpy(bStartTime.TheNewText, gPage730.startTime);
+     strcpy(bStartTime.TheOriginalText, gPage730.startTime);
+     bStartTime.UnSelectButton();
+     strcpy(bEndDate.TheNewText, gPage730.endDate);
+     strcpy(bEndDate.TheOriginalText, gPage730.endDate);
+     bEndDate.UnSelectButton();
+     strcpy(bEndTime.TheNewText, gPage730.endTime);
+     strcpy(bEndTime.TheOriginalText, gPage730.endTime);
+     bEndTime.UnSelectButton();
+  
+     strcpy(bPoint_1.TheNewText, gPage730.point_1);
+     strcpy(bPoint_1.TheOriginalText, gPage730.point_1);
+     bPoint_1.UnSelectButton();
+     strcpy(bPoint_2.TheNewText, gPage730.point_2);
+     strcpy(bPoint_2.TheOriginalText, gPage730.point_2);
+     bPoint_2.UnSelectButton();
+     strcpy(bPoint_3.TheNewText, gPage730.point_3);
+     strcpy(bPoint_3.TheOriginalText, gPage730.point_3);
+     bPoint_3.UnSelectButton();
+     strcpy(bPoint_4.TheNewText, gPage730.point_4);
+     strcpy(bPoint_4.TheOriginalText, gPage730.point_4);
+     bPoint_4.UnSelectButton();
+     strcpy(bPoint_5.TheNewText, gPage730.point_5);
+     strcpy(bPoint_5.TheOriginalText, gPage730.point_5);
+     bPoint_5.UnSelectButton();
+     strcpy(bPoint_6.TheNewText, gPage730.point_6);
+     strcpy(bPoint_6.TheOriginalText, gPage730.point_6);
+     bPoint_6.UnSelectButton();
+     strcpy(bPoint_7.TheNewText, gPage730.point_7);
+     strcpy(bPoint_7.TheOriginalText, gPage730.point_7);
+     bPoint_7.UnSelectButton();
+     strcpy(bPoint_8.TheNewText, gPage730.point_8);
+     strcpy(bPoint_8.TheOriginalText, gPage730.point_8);
+     bPoint_8.UnSelectButton();
+  
+           if( strcmp( gPage730.dataSource, "C") != 0 &&
+               strcmp( gPage730.dataSource, "D") != 0 &&
+               strcmp( gPage730.dataSource, "T") != 0 )
+              return ;
+  
+           if( strcmp( gPage730.resolution, "L") != 0 &&
+               strcmp( gPage730.resolution, "H") != 0 &&
+               strcmp( gPage730.resolution, "R") != 0)
+              return;
+  //
+  // update validate start/end date if disk high/low resoultion
+  //
+           if( strcmp( gPage730.dataSource, "D") == 0 && strcmp( gPage730.resolution, "H") == 0 ) {
+              strcpy( gPage730.validStartDate, gPage730.highDiskDate_1);
+              strcpy( gPage730.validEndDate, gPage730.highDiskDate_2);
+              strcpy( gPage730.validStartTime, gPage730.highDiskTime_1);
+              strcpy( gPage730.validEndTime, gPage730.highDiskTime_2);
+           }
+           else if( strcmp( gPage730.dataSource, "D") == 0 && strcmp( gPage730.resolution, "L") == 0 ) {
+              strcpy( gPage730.validStartDate, gPage730.lowDiskDate_1);
+              strcpy( gPage730.validEndDate, gPage730.lowDiskDate_2);
+              strcpy( gPage730.validStartTime, gPage730.lowDiskTime_1);
+              strcpy( gPage730.validEndTime, gPage730.lowDiskTime_2);
+           }
+            else if( strcmp( gPage730.dataSource, "T") == 0  ) {
+  // Update tape saving time
+  //            if( (strcmp(gPage730.resolution, "H") == 0 && gPage750.iResolution == 1 ) ||
+  //                (strcmp(gPage730.resolution, "L") == 0 && gPage750.iResolution == 2 ) ) {
+                 strcpy( gPage730.validStartDate, gPage750.startDate);
+                 strcpy( gPage730.validEndDate, gPage750.endDate);
+                 strcpy( gPage730.validStartTime, gPage750.startTime);
+                 strcpy( gPage730.validEndTime, gPage750.endTime);
+  //            }
+  //            else {
+  //               strcpy( gPage730.validStartDate, "--/--/--");
+  //               strcpy( gPage730.validEndDate, "--/--/--");
+  //               strcpy( gPage730.validStartTime, "--:--:--");
+  //               strcpy( gPage730.validEndTime, "--:--:--");
+  //            }
+           }
+          update();
+  }`
+
+  function `int Process1()
+  {
+     // ************* CORENET 201705 by Philkyu Kwon ****************
+   //  if( ValidateDateTime() == -1 ) {
+   //  TheTimer.atTimeDo( 50,0,0,1,0, "::YGN3and4.PicYGN_HDSR730", "{ bProcess.UnSelect(); }");
+   //     return -1;
+   //  }
+  
+     int x = -1;
+  
+     x = ValidateDateTime();
+     if( x == -1 ) {
+     TheTimer.atTimeDo( 50,0,0,1,0, "::YGN3and4.PicYGN_HDSR730", "{ bProcess.UnSelect(); }");
+        return -1;
+     }
+  
+  // ******************************************************************
+  
+     if( Checkup(1) == 0 ) {
+        if( strcmp( gPage730.dataSource, "C") == 0 )
+           sendMessageToHost(HDSR_CANCEL_LOG);
+        else if( strcmp( gPage730.dataSource, "T") == 0 &&
+                 strcmp( gPage730.resolution, "R") == 0 )
+           sendMessageToHost(HDSR_TAPE_HEADER);
+        else
+           sendMessageToHost(HDSR_LOG);
+     }
+  
+     TheTimer.atTimeDo( 50,0,0,1,0, "::YGN3and4.PicYGN_HDSR730", "{ bProcess.UnSelect(); }");
+     return 0;
+  }`
+
+  function `void ReturnAction(int no)
+  {
+     int i;
+  
+     execute("{ strcpy(TempString, bPoint_%d.TheOriginalText); }", no);
+           for( i=0; i< 8; i++ ) {
+             if( TempString[i] == ' ' )
+                break;
+  
+                 TempPid[i] = TempString[i];
+           }
+          TempPid[i] =  '\\0';
+  
+     if( strcmp(TempPid,"") == 0 ) {
+              execute("{ strcpy(gPage730.point_%d, \\"\\"); }", no);
+              execute("{ strcpy(bPoint_%d.TheOriginalText, \\"\\"); }", no);
+              execute("{ strcpy(bPoint_%d.TheNewText, \\"\\"); }", no);
+              update();
+              return;
+     }
+  
+     if( FindPointId(TempString) == 0 ) {
+          execute("{ SigType = %s->sig_type; }", TempPid);
+  
+  
+           if( SigType == AI || SigType == CI ||SigType == PI ||SigType == FI ||SigType == AL ||SigType == DL ||SigType == SOE ) {
+              execute("{ strcpy(gPage730.point_%d, bPoint_%d.TheOriginalText); }", no, no);
+           }
+           else {
+              sprintf( TempString, "INVALID PID TYPE: %s", TempPid);
+              DisplayAdvisoryMessage1(TempString);
+              execute("{ strcpy(gPage730.point_%d, \\"\\"); }", no);
+              execute("{ strcpy(bPoint_%d.TheOriginalText, \\"\\"); }", no);
+              execute("{ strcpy(bPoint_%d.TheNewText, \\"\\"); }", no);
+           }
+     }
+     else {
+              sprintf( TempString, "INVALID PID: %s", TempPid);
+              DisplayAdvisoryMessage1(TempString);
+  
+              execute("{ strcpy(bPoint_%d.TheOriginalText, gPage730.point_%d); }", no, no);
+              execute("{ strcpy(bPoint_%d.TheNewText, gPage730.point_%d); }", no, no);
+     }
+     update();
+  }`
+
+  function `void ReturnActionForEndDate()
+  {
+     int i;
+  
+     strcpy(TempString, bEndDate.TheOriginalText);
+           for( i=0; i< 8; i++ ) {
+             if( TempString[i] == ' ' )
+                break;
+  
+                 TempPid[i] = TempString[i];
+           }
+          TempPid[i] =  '\\0';
+  
+     if( TempPid[2] == '/' && TempPid[5] == '/' && strcmp(TempPid,"") != 0 )
+        strcpy(gPage730.endDate, bEndDate.TheOriginalText);
+     else {
+              strcpy(gPage730.endDate, "");
+              strcpy(bEndDate.TheOriginalText, "");
+              strcpy(bEndDate.TheNewText, "");
+            DisplayAdvisoryMessage1("INVALID FORMAT FOR END DATE");
+             update();
+     }
+     return;
+  }`
+
+  function `void ReturnActionForEndTime()
+  {
+     int i;
+  
+     strcpy(TempString, bEndTime.TheOriginalText);
+           for( i=0; i< 8; i++ ) {
+             if( TempString[i] == ' ' )
+                break;
+  
+                 TempPid[i] = TempString[i];
+           }
+          TempPid[i] =  '\\0';
+  
+     if( TempPid[2] == ':' && TempPid[5] == ':' && strcmp(TempPid,"") != 0 )
+        strcpy(gPage730.endTime, bEndTime.TheOriginalText);
+     else {
+              strcpy(gPage730.endTime, "");
+              strcpy(bEndTime.TheOriginalText, "");
+              strcpy(bEndTime.TheNewText, "");
+            DisplayAdvisoryMessage1("INVALID FORMAT FOR END TIME");
+             update();
+     }
+      return;
+  }`
+
+  function `void ReturnActionForStartDate()
+  {
+     int i;
+  
+     strcpy(TempString, bStartDate.TheOriginalText);
+           for( i=0; i< 8; i++ ) {
+             if( TempString[i] == ' ' )
+                break;
+  
+                 TempPid[i] = TempString[i];
+           }
+          TempPid[i] =  '\\0';
+  
+     if( TempPid[2] == '/' && TempPid[5] == '/' && strcmp(TempPid,"") != 0 )
+        strcpy(gPage730.startDate, bStartDate.TheOriginalText);
+     else {
+              strcpy(gPage730.startDate, "");
+              strcpy(bStartDate.TheOriginalText, "");
+              strcpy(bStartDate.TheNewText, "");
+            DisplayAdvisoryMessage1("INVALID FORMAT FOR START DATE");
+             update();
+     }
+     return;
+  }`
+
+  function `void ReturnActionForStartTime()
+  {
+     int i;
+  
+     strcpy(TempString, bStartTime.TheOriginalText);
+           for( i=0; i< 8; i++ ) {
+             if( TempString[i] == ' ' )
+                break;
+  
+                 TempPid[i] = TempString[i];
+           }
+          TempPid[i] =  '\\0';
+  
+     if( TempPid[2] == ':' && TempPid[5] == ':' && strcmp(TempPid,"") != 0 )
+        strcpy(gPage730.startTime, bStartTime.TheOriginalText);
+     else {
+              strcpy(gPage730.startTime, "");
+              strcpy(bStartTime.TheOriginalText, "");
+              strcpy(bStartTime.TheNewText, "");
+            DisplayAdvisoryMessage1("INVALID FORMAT FOR START TIME");
+             update();
+     }
+     return;
+  }`
+
+  function `void UpdateDataRange()
+  {
+  //
+  // update validate start/end date if disk high/low resoultion
+  //
+           if( strcmp( gPage730.dataSource, "D") == 0 && strcmp( gPage730.resolution, "H") == 0 ) {
+              strcpy( gPage730.validStartDate, gPage730.highDiskDate_1);
+              strcpy( gPage730.validEndDate, gPage730.highDiskDate_2);
+              strcpy( gPage730.validStartTime, gPage730.highDiskTime_1);
+              strcpy( gPage730.validEndTime, gPage730.highDiskTime_2);
+           }
+           else if( strcmp( gPage730.dataSource, "D") == 0 && strcmp( gPage730.resolution, "L") == 0 ) {
+              strcpy( gPage730.validStartDate, gPage730.lowDiskDate_1);
+              strcpy( gPage730.validEndDate, gPage730.lowDiskDate_2);
+              strcpy( gPage730.validStartTime, gPage730.lowDiskTime_1);
+              strcpy( gPage730.validEndTime, gPage730.lowDiskTime_2);
+           }
+            else if( strcmp( gPage730.dataSource, "T") == 0  ) {
+  // Update tape saving time
+              if( (strcmp(gPage730.resolution, "H") == 0 && gPage750.iResolution == 1 ) ||
+                  (strcmp(gPage730.resolution, "L") == 0 && gPage750.iResolution == 2 ) ||
+                  strcmp(gPage730.resolution, "R") == 0 ) {
+                  strcpy( gPage730.validStartDate, gPage750.startDate);
+                 strcpy( gPage730.validEndDate, gPage750.endDate);
+                 strcpy( gPage730.validStartTime, gPage750.startTime);
+                 strcpy( gPage730.validEndTime, gPage750.endTime);
+              }
+              else {
+                 strcpy( gPage730.validStartDate, "--/--/--");
+                 strcpy( gPage730.validEndDate, "--/--/--");
+                 strcpy( gPage730.validStartTime, "--:--:--");
+                 strcpy( gPage730.validEndTime, "--:--:--");
+              }
+           }
+          update();
+  }`
+
+  function `int ValidateDateTime()
+  {
+     int i = 0;
+  
+        if( gPage730.startTime[2] == ':' && gPage730.startTime[5] == ':' && strcmp(gPage730.startTime,"") != 0 )
+           i = 1;
+        else {
+           DisplayAdvisoryMessage1("INVALID FORMAT FOR START TIME");
+           i = -1;
+        }
+  
+        if( gPage730.endTime[2] == ':' && gPage730.endTime[5] == ':' && strcmp(gPage730.endTime,"") != 0 )
+           i = 1;
+        else {
+           DisplayAdvisoryMessage1("INVALID FORMAT FOR END TIME");
+           i = -1;
+        }
+  
+        if( gPage730.startDate[2] == '/' && gPage730.startDate[5] == '/' && strcmp(gPage730.startDate,"") != 0 )
+           i = 1;
+        else {
+           DisplayAdvisoryMessage1("INVALID FORMAT FOR START DATE");
+           i = -1;
+        }
+  
+        if( gPage730.endDate[2] == '/' && gPage730.endDate[5] == '/' && strcmp(gPage730.endDate,"") != 0 )
+           i = 1;
+        else {
+           DisplayAdvisoryMessage1("INVALID FORMAT FOR END DATE");
+           i = -1;
+        }
+  
+        if( i == -1 )
+           return -1;
+        else
+           return 1;
+  }`
+
+  text Text_4
+  {
+    x = 670;
+    y = 340;
+    format = "%s";
+    theText = "START";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font14`;
+    xReference = 670;
+    yReference = 340;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text Text_5
+  {
+    x = 680;
+    y = 385;
+    format = "%s";
+    theText = "END";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font14`;
+    xReference = 680;
+    yReference = 385;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle
+  {
+    x = 302;
+    y = 455;
+    width = 797;
+    height = 234;
+    visibility = 1;
+    foregroundColour = `COLOR_LINE_BOUNDARY_6`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 3;
+    foregroundFillColour = `COLOR_NON_ESSENTIAL`;
+    backgroundFillColour = -1;
+    fillPattern = `NoPattern`;
+    xReference = 370;
+    yReference = 455;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text Text_1
+  {
+    x = 315;
+    y = 140;
+    format = "%s";
+    theText = "RESOLUTION :";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font14`;
+    xReference = 315;
+    yReference = 140;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 690;
+    y = 135;
+    format = "%s";
+    theText = "H = HIGH, L = LOW";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font14`;
+    xReference = 690;
+    yReference = 135;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 690;
+    y = 185;
+    format = "%s";
+    theText = "SECONDS (HIGH)";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font14`;
+    xReference = 690;
+    yReference = 185;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 370;
+    y = 280;
+    format = "%s";
+    theText = "MM/DD/YY";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font14`;
+    xReference = 370;
+    yReference = 280;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 500;
+    y = 280;
+    format = "%s";
+    theText = "HH:MM:SS";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font14`;
+    xReference = 500;
+    yReference = 280;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle
+  {
+    x = 303;
+    y = 300;
+    width = 346;
+    height = 124;
+    visibility = 1;
+    foregroundColour = `COLOR_LINE_BOUNDARY_6`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 3;
+    foregroundFillColour = `COLOR_NON_ESSENTIAL`;
+    backgroundFillColour = -1;
+    fillPattern = `NoPattern`;
+    xReference = 350;
+    yReference = 300;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 300;
+    y = 95;
+    format = "%s";
+    theText = "DATA SOURCE :";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font14`;
+    xReference = 300;
+    yReference = 95;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 340;
+    y = 185;
+    format = "%s";
+    theText = "TIME STEP :";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font14`;
+    xReference = 340;
+    yReference = 185;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 690;
+    y = 110;
+    format = "%s";
+    theText = "C = CANCEL LOG IN PROGRESS";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font14`;
+    xReference = 690;
+    yReference = 110;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 690;
+    y = 90;
+    format = "%s";
+    theText = "D = DISK, T = TAPE (SCSI TAPE)";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font14`;
+    xReference = 690;
+    yReference = 90;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 690;
+    y = 155;
+    format = "%s";
+    theText = "R = READ TAPE START/END DATES";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font14`;
+    xReference = 690;
+    yReference = 155;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 690;
+    y = 210;
+    format = "%s";
+    theText = "MINUTES (LOW)";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font14`;
+    xReference = 690;
+    yReference = 210;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text t_validStartDate
+  {
+    x = 835;
+    y = 345;
+    format = "%s";
+    theText = `gPage730.validStartDate`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font14`;
+    xReference = 835;
+    yReference = 345;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text t_validStartTime
+  {
+    x = 955;
+    y = 345;
+    format = "%s";
+    theText = `gPage730.validStartTime`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font14`;
+    xReference = 955;
+    yReference = 345;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 835;
+    y = 280;
+    format = "%s";
+    theText = "VALID DATA RANGE";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font14`;
+    xReference = 835;
+    yReference = 280;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text t_validEndDate
+  {
+    x = 835;
+    y = 390;
+    format = "%s";
+    theText = `gPage730.validEndDate`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font14`;
+    xReference = 835;
+    yReference = 390;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text t_validEndTime
+  {
+    x = 955;
+    y = 390;
+    format = "%s";
+    theText = `gPage730.validEndTime`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font14`;
+    xReference = 955;
+    yReference = 390;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle
+  {
+    x = 754;
+    y = 300;
+    width = 345;
+    height = 126;
+    visibility = 1;
+    foregroundColour = `COLOR_LINE_BOUNDARY_6`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 3;
+    foregroundFillColour = `COLOR_NON_ESSENTIAL`;
+    backgroundFillColour = -1;
+    fillPattern = `NoPattern`;
+    xReference = 800;
+    yReference = 300;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 155;
+    y = 555;
+    format = "%s";
+    theText = "POINT ID :";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font14`;
+    xReference = 155;
+    yReference = 555;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 425;
+    y = 500;
+    format = "%s";
+    theText = "1 :";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font14`;
+    xReference = 425;
+    yReference = 500;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 785;
+    y = 500;
+    format = "%s";
+    theText = "5 :";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font14`;
+    xReference = 785;
+    yReference = 500;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 425;
+    y = 650;
+    format = "%s";
+    theText = "4 :";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font14`;
+    xReference = 425;
+    yReference = 650;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 425;
+    y = 600;
+    format = "%s";
+    theText = "3 :";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font14`;
+    xReference = 425;
+    yReference = 600;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 425;
+    y = 550;
+    format = "%s";
+    theText = "2 :";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font14`;
+    xReference = 425;
+    yReference = 550;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 785;
+    y = 550;
+    format = "%s";
+    theText = "6 :";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font14`;
+    xReference = 785;
+    yReference = 550;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 785;
+    y = 650;
+    format = "%s";
+    theText = "8 :";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font14`;
+    xReference = 785;
+    yReference = 650;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 785;
+    y = 600;
+    format = "%s";
+    theText = "7 :";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font14`;
+    xReference = 785;
+    yReference = 600;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  instance DialogueSymbols.InputDialogueText150 bPoint_1
+  {
+    x = 475;
+    y = 485;
+    visibility = 1;
+    xReference = 475;
+    yReference = 485;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    ExecuteUnSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxCharacters = 10;
+    ReturnAction = "{ ReturnAction(1); }";
+    Scope = "::YGN3and4.PicYGN_HDSR730";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewText = "RCYS01AH";
+    TheOriginalText = "RCYS01AH";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 200;
+  }
+
+  instance DialogueSymbols.InputDialogueText150 bPoint_2
+  {
+    x = 475;
+    y = 535;
+    visibility = 1;
+    xReference = 475;
+    yReference = 535;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    ExecuteUnSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxCharacters = 10;
+    ReturnAction = "{ ReturnAction(2); }";
+    Scope = "::YGN3and4.PicYGN_HDSR730";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewText = "";
+    TheOriginalText = "";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 200;
+  }
+
+  instance DialogueSymbols.InputDialogueText150 bPoint_3
+  {
+    x = 475;
+    y = 585;
+    visibility = 1;
+    xReference = 475;
+    yReference = 585;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    ExecuteUnSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxCharacters = 10;
+    ReturnAction = "{ ReturnAction(3); }";
+    Scope = "::YGN3and4.PicYGN_HDSR730";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewText = "";
+    TheOriginalText = "";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 200;
+  }
+
+  instance DialogueSymbols.InputDialogueText150 bPoint_4
+  {
+    x = 475;
+    y = 635;
+    visibility = 1;
+    xReference = 475;
+    yReference = 635;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    ExecuteUnSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxCharacters = 10;
+    ReturnAction = "{ ReturnAction(4); }";
+    Scope = "::YGN3and4.PicYGN_HDSR730";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewText = "";
+    TheOriginalText = "";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 200;
+  }
+
+  instance DialogueSymbols.InputDialogueText150 bPoint_5
+  {
+    x = 835;
+    y = 485;
+    visibility = 1;
+    xReference = 835;
+    yReference = 485;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    ExecuteUnSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxCharacters = 10;
+    ReturnAction = "{ ReturnAction(5); }";
+    Scope = "::YGN3and4.PicYGN_HDSR730";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewText = "";
+    TheOriginalText = "";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 200;
+  }
+
+  instance DialogueSymbols.InputDialogueText150 bPoint_6
+  {
+    x = 835;
+    y = 535;
+    visibility = 1;
+    xReference = 835;
+    yReference = 535;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    ExecuteUnSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxCharacters = 10;
+    ReturnAction = "{ ReturnAction(6); }";
+    Scope = "::YGN3and4.PicYGN_HDSR730";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewText = "";
+    TheOriginalText = "";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 200;
+  }
+
+  instance DialogueSymbols.InputDialogueText150 bPoint_7
+  {
+    x = 835;
+    y = 585;
+    visibility = 1;
+    xReference = 835;
+    yReference = 585;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    ExecuteUnSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxCharacters = 10;
+    ReturnAction = "{ ReturnAction(7); }";
+    Scope = "::YGN3and4.PicYGN_HDSR730";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewText = "";
+    TheOriginalText = "";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 200;
+  }
+
+  instance DialogueSymbols.InputDialogueText150 bPoint_8
+  {
+    x = 835;
+    y = 635;
+    visibility = 1;
+    xReference = 835;
+    yReference = 635;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    ExecuteUnSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxCharacters = 10;
+    ReturnAction = "{ ReturnAction(8); }";
+    Scope = "::YGN3and4.PicYGN_HDSR730";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewText = "";
+    TheOriginalText = "";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 200;
+  }
+
+  instance DialogueSymbols.ProcessButton bProcess
+  {
+    x = 50;
+    y = 710;
+    visibility = 1;
+    xReference = 50;
+    yReference = 710;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ButtonState = 0;
+    DisplayText = 1;
+    DynamicLabel = "PROCESS";
+    ExecuteSelect = "{ Process1(); }";
+    ExecuteUnSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    Label = "PROCESS";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    StaticLabel = "PROCESS";
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextFontDynamic = `font4`;
+    TextFontStatic = `font4`;
+    TextX = 17;
+    TextXDynamic = 15;
+    TextXStatic = 17;
+    TextY = 22;
+    TextYDynamic = `TextY`;
+    TextYStatic = `TextY`;
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    Width = 100;
+  }
+
+  instance DialogueSymbols.InputDialogueText100 bStartDate
+  {
+    x = 340;
+    y = 320;
+    visibility = 1;
+    xReference = 340;
+    yReference = 320;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    ExecuteUnSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxCharacters = 8;
+    ReturnAction = "{ ReturnActionForStartDate(); }";
+    Scope = "::YGN3and4.PicYGN_HDSR730";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewText = "06/06/01";
+    TheOriginalText = "06/06/01";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 200;
+  }
+
+  instance DialogueSymbols.InputDialogueText100 bStartTime
+  {
+    x = 500;
+    y = 320;
+    visibility = 1;
+    xReference = 500;
+    yReference = 320;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    ExecuteUnSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxCharacters = 8;
+    ReturnAction = "{ ReturnActionForStartTime(); }";
+    Scope = "::YGN3and4.PicYGN_HDSR730";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewText = "13:45:00";
+    TheOriginalText = "13:45:00";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 200;
+  }
+
+  instance DialogueSymbols.InputDialogueText100 bEndDate
+  {
+    x = 340;
+    y = 370;
+    visibility = 1;
+    xReference = 340;
+    yReference = 370;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    ExecuteUnSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxCharacters = 8;
+    ReturnAction = "{ ReturnActionForEndDate(); }";
+    Scope = "::YGN3and4.PicYGN_HDSR730";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewText = "06/08/01";
+    TheOriginalText = "06/08/01";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 200;
+  }
+
+  instance DialogueSymbols.InputDialogueText100 bEndTime
+  {
+    x = 500;
+    y = 370;
+    visibility = 1;
+    xReference = 500;
+    yReference = 370;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    ExecuteUnSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxCharacters = 8;
+    ReturnAction = "{ ReturnActionForEndTime(); }";
+    Scope = "::YGN3and4.PicYGN_HDSR730";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewText = "13:44:55";
+    TheOriginalText = "13:44:55";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 200;
+  }
+
+  instance DialogueSymbols.InputDialogueText100 bTimeStep
+  {
+    x = 490;
+    y = 165;
+    visibility = 1;
+    xReference = 490;
+    yReference = 165;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    ExecuteUnSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxCharacters = 8;
+    ReturnAction = "{ strcpy(gPage730.timeStep, bTimeStep.TheOriginalText); }";
+    Scope = "::YGN3and4.PicYGN_HDSR730";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewText = "10";
+    TheOriginalText = "10";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 200;
+  }
+
+  instance DialogueSymbols.InputDialogueText50 bDataSource
+  {
+    x = 525;
+    y = 75;
+    visibility = 1;
+    xReference = 525;
+    yReference = 75;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    ExecuteUnSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxCharacters = 3;
+    ReturnAction = "{ strcpy(gPage730.dataSource, bDataSource.TheOriginalText); Checkup(1);}";
+    Scope = "::YGN3and4.PicYGN_HDSR730";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewText = "D";
+    TheOriginalText = "D";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 200;
+  }
+
+  instance DialogueSymbols.InputDialogueText50 bResolution
+  {
+    x = 525;
+    y = 120;
+    visibility = 1;
+    xReference = 525;
+    yReference = 120;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    ExecuteUnSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxCharacters = 3;
+    ReturnAction = "{ strcpy(gPage730.resolution, bResolution.TheOriginalText); Checkup(2);}";
+    Scope = "::YGN3and4.PicYGN_HDSR730";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewText = "H";
+    TheOriginalText = "H";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 200;
+  }
+}

@@ -1,0 +1,2440 @@
+/*
+ * PICASSO-3 CONFIGURATION LANGUAGE FILE
+ *
+ *
+ * Picture name: PicYGN_LSFDisplay
+ *
+ *
+ * Documented by  : runtime
+ * Host           : y6cr03
+ * Date           : 24/11-98 at 15:39:35
+ *
+ *
+ * Generate with:
+ *    pcc PicYGN_LSFDisplay.Tdoc
+ *
+ */
+
+
+picture PicYGN_LSFDisplay
+{
+
+  RECORD *PictureLowAlarmPID = 0;
+  RECORD *PictureHighAlarmPID = 0;
+  int LoCountLimit = 0;
+  int HiCountLimit = 8000;
+  float TempVal = -9999;
+  float TempCnt = -9999;
+  int ERROR = 32;
+  char TheDisplayPage[50] = "PicYGN_DBChangeMenu";
+  RECORD *PicturePointId = `&RCT111X`;	
+  char *PageBack = "";
+  char *PageForward = "";
+  char *PictureNumber = "561";
+  char *PictureTitle = "LEAST SQUARES FIT";
+  DB_CHANGE_DATA *pDBC_DATA = `&::YGN3and4.InterfaceToGUI.Interface.DatabaseDisplaysData`;
+  int MasterCpu = 1;	//CORENET 20170706
+  //int MasterCpu = `(Interface->System.slaveUpdating==0)?1:0`;
+  float Range_hi = `EngRangeHi(PicturePointId)`;
+  float Range_lo = `EngRangeLo(PicturePointId)`;
+
+  function `void Initialize()
+{
+
+   Current_Page = 561;
+   CFMLevel = 0;
+   int i;
+
+   //CORENET 20170516 by Philkyu Kwon
+   CascadeEnterActive = 0;
+   CascadeEnter.unmap();
+   
+   HiCountLimit = 0 ;
+   LoCountLimit = 0 ;
+
+   DisplayAdvisoryMessage(" ");
+   DisplayAdvisoryMessage1(" ");
+   DisplayAdvisoryMessage2(" ");
+   DisplayAdvisoryMessage3(" ");
+
+// Initialize DB info block
+   DBCinfo.pPID = PicturePointId;
+   strcpy(pDBC_DATA->PID,PicturePointId->pid);   
+
+   ERROR = 0 ;
+
+// Turn off processing message
+   ProcessingErrorMsg.visibility = 0;
+   DataPairErrorMsg.visibility = 0 ;
+   ProcessingMsg.visibility = 0;
+   PointIDErrorMsg.visibility = 0;
+   MinPairsMessage.visibility = 0 ;
+   MinPairsNumber.visibility = 0 ;
+   DegreeErrorMessage.visibility = 0 ;
+
+   CountsLabel1.visibility = 0 ;
+   CountsLabel2.visibility = 0 ;
+   ValueLabel1.visibility = 0 ;
+   ValueLabel2.visibility = 0 ;
+
+   ChangeProtected.visibility = 0 ;
+
+
+   for(i=1;i<=16;i++)
+   {
+      execute("{ Counts%d.visibility=0; }",i);
+      execute("{ Counts%d.TheNumber.visibility=0; }",i);
+      execute("{ Value%d.visibility=0; }",i);
+      execute("{ Value%d.TheNumber.visibility=0; }",i);
+      execute("{ ItemNum%d.visibility=0; }",i);
+      execute("{ Counts%d.ERROR=0; }",i);                //Clear Limits Errors
+      execute("{ Value%d.ERROR=0; }",i);
+   } 
+
+if (MasterCpu)
+{
+   if(PicturePointId->sig_type < MinimumDigitalType)     //for Analog PID
+   {
+      if(PicturePointId->pipbitmap&bCHGPROT)  // Change Protected
+      {
+         ChangeProtected.visibility = 1 ;
+         ERROR |= 0x00000010 ;
+      }
+      else
+      { 
+         if(IsInScan())        //for In-Scan
+         {
+            OOS_Msg.visibility = 1;
+            WaitMsg.visibility = 0;
+            ERROR |= 0x00000004 ;
+         }
+         else                  //for Out-Of-Scan
+         {
+//--------------------------------------------------------------------------------------------------
+            strcpy(Interface->LSF_Info_Data.PID,PicturePointId->pid) ;   // Request CountLimits
+            execute("{sendMessageToHost(REQUEST_LSF_SCOUNT);}");
+//--------------------------------------------------------------------------------------------------
+            OOS_Msg.visibility = 0;
+            WaitMsg.visibility = 1 ;
+      
+            for(i=1;i<=16;i++)
+            {
+//             Init item number
+               execute("{ ItemNum%d.theText=\\"%d.\\"; }",i,i);
+
+// ************CORENET 0705**************************************************
+/*
+//             Init count entry fields
+               execute("{ Counts%d.TheOriginalNumber=-9999; }",i);
+               execute("{ sprintf(Counts%d.TheOriginalText,Counts%d.TheNumberFormat,-9999); }",i,i);
+               execute("{ Counts%d.TheNewNumber=-9999; }",i);
+               execute("{ sprintf(Counts%d.TheNewText,Counts%d.TheNumberFormat,-9999); }",i,i);
+ 
+//             Init value entry fields
+               execute("{ Value%d.TheOriginalNumber=-9999; }",i);
+               execute("{ sprintf(Value%d.TheOriginalText,Value%d.TheNumberFormat,-9999); }",i,i);
+               execute("{ Value%d.TheNewNumber=-9999; }",i);
+               execute("{ sprintf(Value%d.TheNewText,Value%d.TheNumberFormat,-9999); }",i,i);
+*/
+// ************CORENET 0705************************************************
+//             Init count entry fields
+               execute("{ Counts%d.TheOriginalNumber= 0; }",i);
+               execute("{ sprintf(Counts%d.TheOriginalText,Counts%d.TheNumberFormat, 0); }",i,i);
+               execute("{ Counts%d.TheNewNumber= 0; }",i);
+               execute("{ sprintf(Counts%d.TheNewText,Counts%d.TheNumberFormat, 0); }",i,i);
+ 
+//             Init value entry fields
+               execute("{ Value%d.TheOriginalNumber= 0; }",i);
+               execute("{ sprintf(Value%d.TheOriginalText,Value%d.TheNumberFormat, 0); }",i,i);
+               execute("{ Value%d.TheNewNumber= 0; }",i);
+               execute("{ sprintf(Value%d.TheNewText,Value%d.TheNumberFormat, 0); }",i,i);
+            }
+         }
+      }
+   }
+   else              //for Digital PID
+   {
+      PointIDErrorMsg.visibility = 1;
+      ERROR |= 0x00000008 ;
+   }
+}
+else 
+{
+   ERROR |= 0x00000080 ;
+}
+
+
+// For variable alarm limits
+
+   if(IsAnalog(PicturePointId))
+   {
+      if(0 != PicturePointId->lIPN)
+      {
+         execute ("{PictureLowAlarmPID = \`&::YGN3and4.InterfaceToGUI.%s\`;}",PicturePointId->message1);
+      }
+      else
+      {
+         PictureLowAlarmPID = 0;
+      }
+
+      if(0 != PicturePointId->hIPN)
+      {
+         execute ("{PictureHighAlarmPID = \`&::YGN3and4.InterfaceToGUI.%s\`;}",PicturePointId->message2);
+      }
+      else
+      {
+         PictureHighAlarmPID = 0;
+      }
+   }
+
+   update();
+}`
+
+
+// ***CORENET 20170601 by Philkyu Kwon ************
+  function `void DummyProcess()
+  {
+    //printf("Button Select OR Button Unselected");
+  }`
+// ***************************************************
+
+
+  function `void Process1()
+{
+     int pair = 0;
+  
+  if (ERROR ==0)
+  {
+     //printf("Sending LSF Pairs\\n");
+     ProcessingErrorMsg.visibility = 0;
+     ProcessingMsg.visibility=1;
+     strcpy(pDBC_DATA->PID,PicturePointId->pid);
+     //printf("PID = %s",pDBC_DATA->PID);
+     for(pair=0;pair<16;pair++)
+     {
+     /*
+        execute("{ pDBC_DATA->X[%d]=(Interface->System.displayedUnits) ? Counts%d.TheNewNumber
+		 : Counts%d.TheNewNumber * PicturePointId->mfactor + PicturePointId->moffset; }",pair,pair+1,pair+1);
+        execute("{ pDBC_DATA->Y[%d]=(Interface->System.displayedUnits) ? Value%d.TheNewNumber
+                 : Value%d.TheNewNumber * PicturePointId->mfactor + PicturePointId->moffset; }",pair,pair+1,pair+1);
+	*/
+        execute("{ pDBC_DATA->X[%d]=(Interface->System.displayedUnits) ? Counts%d.TheNewNumber : Counts%d.TheNewNumber * PicturePointId->mfactor + PicturePointId->moffset; }", pair, pair+1, pair+1);
+        execute("{ pDBC_DATA->Y[%d]=(Interface->System.displayedUnits) ? Value%d.TheNewNumber : value%d.TheNewNumber * PicturesPointId->mfactor + PicturePointId->moffset; }", pair, pair+1, pair+1);
+
+//        printf("X[%d] = %-8.2f",pair,pDBC_DATA->X[pair]);
+//        printf("Y[%d] = %-8.2f",pair,pDBC_DATA->Y[pair]);
+     }
+     execute("{sendMessageToHost(PROCESS_LSF_DATA);}");
+   }
+   else
+   {
+       ProcessingErrorMsg.visibility = 1;
+   }   
+}`
+
+
+
+  function `void ProcessingConfirmed()
+{
+   ProcessingMsg.visibility = 0;
+
+   if(Interface->LSF_Info_Data.Rtn_Status == 21)
+      DegreeErrorMessage.visibility = 1 ;
+   else 
+      DegreeErrorMessage.visibility = 0 ;
+
+   if(Interface->LSF_Info_Data.Rtn_Status == 22)
+   {
+      MinPairsMessage.visibility = 1 ;
+      MinPairsNumber.visibility = 1 ;
+   }
+   else 
+   {
+      MinPairsMessage.visibility = 0 ;
+      MinPairsNumber.visibility = 0 ;
+   }
+
+   //printf("Return Status = %d",Interface->LSF_Info_Data.Rtn_Status) ;
+   update();
+}`
+
+
+
+  function `int IsInScan()
+{
+  int retval;
+
+  if(PicturePointId->pisabitmap & bOOSCAN)
+    retval = 0;
+  else
+    retval = 1;
+  
+  return(retval);
+}`
+
+
+
+  function `void VerifyLimits()
+{
+   int i;
+
+   MinPairsMessage.visibility = 0 ;
+   MinPairsNumber.visibility = 0 ;
+   DegreeErrorMessage.visibility = 0 ;
+
+   ERROR &= 0xFFFFFFFC ;
+
+   for(i=1;i<=16;i++)
+   {
+      execute("{ TempCnt=Counts%d.TheNewNumber; }",i);
+      execute("{ TempVal=Value%d.TheNewNumber; }",i);
+
+      if((TempCnt!=-9999) && (TempVal!=-9999))
+      {
+         if((TempCnt < LoCountLimit) || (HiCountLimit < TempCnt))
+         {
+            ERROR |= 0x00000001 ;
+         }
+
+         if((TempVal < Range_lo) || (Range_hi < TempVal))
+         {
+            ERROR |= 0x00000002 ;
+         }
+      }
+   }
+
+   if (ERROR & 0x00000003) DataPairErrorMsg.visibility = 1 ;
+   else DataPairErrorMsg.visibility = 0 ;
+}
+`
+
+
+
+  function `void SCountConfirmed()
+{
+   int i ;
+
+//---------------------------------------------------------------------------------------------
+
+   HiCountLimit = Interface->LSF_Info_Data.HiSLim ;
+   LoCountLimit = Interface->LSF_Info_Data.LoSLim ;
+   //printf("HiSLim : %10d      LoSLim : %10d",HiCountLimit, LoCountLimit) ;
+
+//---------------------------------------------------------------------------------------------
+   WaitMsg.visibility = 0 ;
+
+
+  if ((Interface->LSF_Info_Data.PolyOrder<1)||(Interface->LSF_Info_Data.PolyOrder>5))
+  {
+     DegreeErrorMessage.visibility = 1 ;
+     ERROR |= 0x00000020 ;
+  }
+  else
+  {
+      CountsLabel1.visibility = 1 ;
+      CountsLabel2.visibility = 1 ;
+      ValueLabel1.visibility = 1 ;
+      ValueLabel2.visibility = 1 ;
+
+      for(i=1;i<=16;i++)
+      {
+          execute("{ Counts%d.visibility=1; }",i);
+          execute("{ Value%d.visibility=1; }",i);
+          execute("{ ItemNum%d.visibility=1; }",i);
+          execute("{ Value%d.TheNumber.visibility=1; }",i);
+      }   
+
+      Counts1.TheNumber.visibility=\`!Counts1.Selected&&!Counts1.ERROR\`;Value1.TheNumber.visibility=\`!Value1.Selected&&!Value1.ERROR\`;
+      Counts2.TheNumber.visibility=\`!Counts2.Selected&&!Counts2.ERROR\`;Value2.TheNumber.visibility=\`!Value2.Selected&&!Value2.ERROR\`;
+      Counts3.TheNumber.visibility=\`!Counts3.Selected&&!Counts3.ERROR\`;Value3.TheNumber.visibility=\`!Value3.Selected&&!Value3.ERROR\`;
+      Counts4.TheNumber.visibility=\`!Counts4.Selected&&!Counts4.ERROR\`;Value4.TheNumber.visibility=\`!Value4.Selected&&!Value4.ERROR\`;
+      Counts5.TheNumber.visibility=\`!Counts5.Selected&&!Counts5.ERROR\`;Value5.TheNumber.visibility=\`!Value5.Selected&&!Value5.ERROR\`;
+      Counts6.TheNumber.visibility=\`!Counts6.Selected&&!Counts6.ERROR\`;Value6.TheNumber.visibility=\`!Value6.Selected&&!Value6.ERROR\`;
+      Counts7.TheNumber.visibility=\`!Counts7.Selected&&!Counts7.ERROR\`;Value7.TheNumber.visibility=\`!Value7.Selected&&!Value7.ERROR\`;
+      Counts8.TheNumber.visibility=\`!Counts8.Selected&&!Counts8.ERROR\`;Value8.TheNumber.visibility=\`!Value8.Selected&&!Value8.ERROR\`;
+      Counts9.TheNumber.visibility=\`!Counts9.Selected&&!Counts9.ERROR\`;Value9.TheNumber.visibility=\`!Value9.Selected&&!Value9.ERROR\`;
+      Counts10.TheNumber.visibility=\`!Counts10.Selected&&!Counts10.ERROR\`;Value10.TheNumber.visibility=\`!Value10.Selected&&!Value10.ERROR\`;
+      Counts11.TheNumber.visibility=\`!Counts11.Selected&&!Counts11.ERROR\`;Value11.TheNumber.visibility=\`!Value11.Selected&&!Value11.ERROR\`;
+      Counts12.TheNumber.visibility=\`!Counts12.Selected&&!Counts12.ERROR\`;Value12.TheNumber.visibility=\`!Value12.Selected&&!Value12.ERROR\`;
+      Counts13.TheNumber.visibility=\`!Counts13.Selected&&!Counts13.ERROR\`;Value13.TheNumber.visibility=\`!Value13.Selected&&!Value13.ERROR\`;
+      Counts14.TheNumber.visibility=\`!Counts14.Selected&&!Counts14.ERROR\`;Value14.TheNumber.visibility=\`!Value14.Selected&&!Value14.ERROR\`;
+      Counts15.TheNumber.visibility=\`!Counts15.Selected&&!Counts15.ERROR\`;Value15.TheNumber.visibility=\`!Value15.Selected&&!Value15.ERROR\`;
+      Counts16.TheNumber.visibility=\`!Counts16.Selected&&!Counts16.ERROR\`;Value16.TheNumber.visibility=\`!Value16.Selected&&!Value16.ERROR\`;
+
+//      Counts1.InputArea.visibility= \`Counts1.Selected || Counts1.ERROR\`;
+//      Value1.InputArea.visibility=   \`Value1.Selected || Value1.ERROR\`;
+
+      VerifyLimits() ;
+   }
+}`
+
+
+
+  dialogue
+  {
+    event = `buttonPressed(2)`;
+    action = statement `{
+   Initialize();
+}`;
+  }
+
+  instance DialogueSymbols.PushButton ProcessBtn
+  {
+    attribute Scope = "PicYGN_LSFDisplay";
+    attribute TextFontDynamic = `font2`;
+    attribute TextFontStatic = `font4`;
+    attribute StaticLabel = "PROCESS";
+    attribute DynamicLabel = "PROCESSING";
+    attribute TextYDynamic = 21;
+    attribute TextYStatic = 22;
+    attribute TextXDynamic = 5;
+    attribute TextXStatic = 7;
+    attribute TextFont = 4;
+    attribute TextColour = `COLOR_PICTURE_BACKGROUND`;
+    attribute Label = "PROCESS";
+    attribute TextY = 22;
+    attribute TextX = 7;
+    attribute TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    attribute BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    attribute BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    attribute SelectColour = `COLOR_BUTTON_SELECTED`;
+    attribute ButtonState = 0;
+    attribute Width = 110;
+    attribute Height = 30;
+    attribute isDown = 0;
+    attribute isInside = 1;
+    attribute ExecuteString = "{Process1();}";
+    x = 103;
+    y = 718;
+    visibility = 1;
+    xReference = 103;
+    yReference = 718;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance ProcessBtn
+
+
+
+  instance DialogueSymbols.PushButton 
+  {
+    attribute Scope = "PicYGN_LSFDisplay";
+    attribute TextFontDynamic = `font2`;
+    attribute TextFontStatic = `font4`;
+    attribute StaticLabel = "SELECT";
+    attribute DynamicLabel = "SELECTING";
+    attribute TextYDynamic = 21;
+    attribute TextYStatic = 22;
+    attribute TextXDynamic = 15;
+    attribute TextXStatic = 18;
+    attribute TextFont = 4;
+    attribute TextColour = `COLOR_PICTURE_BACKGROUND`;
+    attribute Label = "SELECT";
+    attribute TextY = 22;
+    attribute TextX = 18;
+    attribute TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    attribute BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    attribute BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    attribute SelectColour = `COLOR_BUTTON_SELECTED`;
+    attribute ButtonState = 0;
+    attribute Width = 110;
+    attribute Height = 30;
+    attribute isDown = 0;
+    attribute isInside = 1;
+    attribute ExecuteString = "{CascadeEnterActive=1;DisplayCascadeEnter(\"PicYGN_LSFCascade.ppic\",550,400,200,220);}";
+    x = 652;
+    y = 718;
+    visibility = 1;
+    xReference = 862;
+    yReference = 718;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  text CurPointInfo
+  {
+    x = 228;
+    y = 740;
+    format = "%s";
+    theText = "CURRENT POINT INFORMATION";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 228;
+    yReference = 740;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 777;
+    y = 740;
+    format = "%s";
+    theText = "A NEW POINT ID";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 197;
+    yReference = 740;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  instance DialogueSymbols.InputDialogueNumber Counts1
+  {
+    attribute isInside = 1;
+    attribute isDown = 0;
+    attribute Height = 30;
+    attribute Width = 150;
+    attribute SelectColour = `COLOR_BUTTON_SELECTED`;
+    attribute BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    attribute BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    attribute TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    attribute TextX = 10;
+    attribute TextY = 21;
+    attribute TextColour = `COLOR_PICTURE_BACKGROUND`;
+    attribute TextFont = 4;
+    attribute ExecuteSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    attribute ExecuteUnSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    attribute TheNewText = "-?.00   ";
+    attribute TheOriginalText = "-?.00   ";
+    attribute ERROR = 0;
+    attribute TheNumberFormat = "%-8.2f";
+    attribute Selected = 0;
+    attribute ReturnAction = "{PicYGN_LSFDisplay.VerifyLimits();}";
+    attribute TheOriginalNumber = -9999;
+    attribute MaxDigits = 8;
+    attribute TheNewNumber = -9999;
+    attribute Scope = "::YGN3and4.PicYGN_LSFDisplay";
+    attribute Active = 1;
+    attribute vis = `visibility`;
+    x = 212;
+    y = 364;
+    visibility = 0;
+    xReference = 212;
+    yReference = 364;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance Counts1
+
+
+
+  instance DialogueSymbols.InputDialogueNumber Value1
+  {
+    attribute isInside = 1;
+    attribute isDown = 0;
+    attribute Height = 30;
+    attribute Width = 150;
+    attribute SelectColour = `COLOR_BUTTON_SELECTED`;
+    attribute BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    attribute BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    attribute TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    attribute TextX = 10;
+    attribute TextY = 21;
+    attribute TextColour = `COLOR_PICTURE_BACKGROUND`;
+    attribute TextFont = 4;
+    attribute ExecuteSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    attribute ExecuteUnSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    attribute TheNewText = "-?.00   ";
+    attribute TheOriginalText = "-?.00   ";
+    attribute ERROR = 0;
+    attribute TheNumberFormat = "%-8.2f";
+    attribute Selected = 0;
+    attribute ReturnAction = "{PicYGN_LSFDisplay.VerifyLimits();}";
+    attribute TheOriginalNumber = -9999;
+    attribute MaxDigits = 8;
+    attribute TheNewNumber = -9999;
+    attribute Scope = "::YGN3and4.PicYGN_LSFDisplay";
+    attribute Active = 1;
+    attribute vis = `visibility`;
+    x = 395;
+    y = 364;
+    visibility = 0;
+    xReference = 395;
+    yReference = 364;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance Value1
+
+
+
+  text ItemNum1
+  {
+    x = 153;
+    y = 385;
+    format = "%s";
+    theText = "1.";
+
+    visibility = 0;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 153;
+    yReference = 385;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  instance DialogueSymbols.InputDialogueNumber Counts2
+  {
+    attribute isInside = 1;
+    attribute isDown = 0;
+    attribute Height = 30;
+    attribute Width = 150;
+    attribute SelectColour = `COLOR_BUTTON_SELECTED`;
+    attribute BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    attribute BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    attribute TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    attribute TextX = 10;
+    attribute TextY = 21;
+    attribute TextColour = `COLOR_PICTURE_BACKGROUND`;
+    attribute TextFont = 4;
+    attribute ExecuteSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    attribute ExecuteUnSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    attribute TheNewText = "-?.00   ";
+    attribute TheOriginalText = "-?.00   ";
+    attribute ERROR = 0;
+    attribute TheNumberFormat = "%-8.2f";
+    attribute Selected = 0;
+    attribute ReturnAction = "{PicYGN_LSFDisplay.VerifyLimits();}";
+    attribute TheOriginalNumber = -9999;
+    attribute MaxDigits = 8;
+    attribute TheNewNumber = -9999;
+    attribute Scope = "::YGN3and4.PicYGN_LSFDisplay";
+    attribute Active = 1;
+    attribute vis = `visibility`;
+    x = 212;
+    y = 403;
+    visibility = 0;
+    xReference = 212;
+    yReference = 403;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance Counts2
+
+
+
+  instance DialogueSymbols.InputDialogueNumber Value2
+  {
+    attribute isInside = 1;
+    attribute isDown = 0;
+    attribute Height = 30;
+    attribute Width = 150;
+    attribute SelectColour = `COLOR_BUTTON_SELECTED`;
+    attribute BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    attribute BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    attribute TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    attribute TextX = 10;
+    attribute TextY = 21;
+    attribute TextColour = `COLOR_PICTURE_BACKGROUND`;
+    attribute TextFont = 4;
+    attribute ExecuteSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    attribute ExecuteUnSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    attribute TheNewText = "-?.00   ";
+    attribute TheOriginalText = "-?.00   ";
+    attribute ERROR = 0;
+    attribute TheNumberFormat = "%-8.2f";
+    attribute Selected = 0;
+    attribute ReturnAction = "{PicYGN_LSFDisplay.VerifyLimits();}";
+    attribute TheOriginalNumber = -9999;
+    attribute MaxDigits = 8;
+    attribute TheNewNumber = -9999;
+    attribute Scope = "::YGN3and4.PicYGN_LSFDisplay";
+    attribute Active = 1;
+    attribute vis = `visibility`;
+    x = 395;
+    y = 403;
+    visibility = 0;
+    xReference = 395;
+    yReference = 403;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance Value2
+
+
+
+  text ItemNum2
+  {
+    x = 153;
+    y = 424;
+    format = "%s";
+    theText = "2.";
+
+    visibility = 0;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 153;
+    yReference = 424;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  instance DialogueSymbols.InputDialogueNumber Counts3
+  {
+    attribute isInside = 1;
+    attribute isDown = 0;
+    attribute Height = 30;
+    attribute Width = 150;
+    attribute SelectColour = `COLOR_BUTTON_SELECTED`;
+    attribute BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    attribute BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    attribute TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    attribute TextX = 10;
+    attribute TextY = 21;
+    attribute TextColour = `COLOR_PICTURE_BACKGROUND`;
+    attribute TextFont = 4;
+    attribute ExecuteSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    attribute ExecuteUnSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    attribute TheNewText = "-?.00   ";
+    attribute TheOriginalText = "-?.00   ";
+    attribute ERROR = 0;
+    attribute TheNumberFormat = "%-8.2f";
+    attribute Selected = 0;
+    attribute ReturnAction = "{PicYGN_LSFDisplay.VerifyLimits();}";
+    attribute TheOriginalNumber = -9999;
+    attribute MaxDigits = 8;
+    attribute TheNewNumber = -9999;
+    attribute Scope = "::YGN3and4.PicYGN_LSFDisplay";
+    attribute Active = 1;
+    attribute vis = `visibility`;
+    x = 212;
+    y = 442;
+    visibility = 0;
+    xReference = 212;
+    yReference = 442;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance Counts3
+
+
+
+  instance DialogueSymbols.InputDialogueNumber Value3
+  {
+    attribute isInside = 1;
+    attribute isDown = 0;
+    attribute Height = 30;
+    attribute Width = 150;
+    attribute SelectColour = `COLOR_BUTTON_SELECTED`;
+    attribute BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    attribute BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    attribute TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    attribute TextX = 10;
+    attribute TextY = 21;
+    attribute TextColour = `COLOR_PICTURE_BACKGROUND`;
+    attribute TextFont = 4;
+    attribute ExecuteSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    attribute ExecuteUnSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    attribute TheNewText = "-?.00   ";
+    attribute TheOriginalText = "-?.00   ";
+    attribute ERROR = 0;
+    attribute TheNumberFormat = "%-8.2f";
+    attribute Selected = 0;
+    attribute ReturnAction = "{PicYGN_LSFDisplay.VerifyLimits();}";
+    attribute TheOriginalNumber = -9999;
+    attribute MaxDigits = 8;
+    attribute TheNewNumber = -9999;
+    attribute Scope = "::YGN3and4.PicYGN_LSFDisplay";
+    attribute Active = 1;
+    attribute vis = `visibility`;
+    x = 395;
+    y = 442;
+    visibility = 0;
+    xReference = 395;
+    yReference = 442;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance Value3
+
+
+
+  text ItemNum3
+  {
+    x = 153;
+    y = 463;
+    format = "%s";
+    theText = "3.";
+
+    visibility = 0;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 153;
+    yReference = 463;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  instance DialogueSymbols.InputDialogueNumber Counts4
+  {
+    attribute isInside = 1;
+    attribute isDown = 0;
+    attribute Height = 30;
+    attribute Width = 150;
+    attribute SelectColour = `COLOR_BUTTON_SELECTED`;
+    attribute BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    attribute BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    attribute TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    attribute TextX = 10;
+    attribute TextY = 21;
+    attribute TextColour = `COLOR_PICTURE_BACKGROUND`;
+    attribute TextFont = 4;
+    attribute ExecuteSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    attribute ExecuteUnSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    attribute TheNewText = "-?.00   ";
+    attribute TheOriginalText = "-?.00   ";
+    attribute ERROR = 0;
+    attribute TheNumberFormat = "%-8.2f";
+    attribute Selected = 0;
+    attribute ReturnAction = "{PicYGN_LSFDisplay.VerifyLimits();}";
+    attribute TheOriginalNumber = -9999;
+    attribute MaxDigits = 8;
+    attribute TheNewNumber = -9999;
+    attribute Scope = "::YGN3and4.PicYGN_LSFDisplay";
+    attribute Active = 1;
+    attribute vis = `visibility`;
+    x = 212;
+    y = 482;
+    visibility = 0;
+    xReference = 212;
+    yReference = 482;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance Counts4
+
+
+
+  instance DialogueSymbols.InputDialogueNumber Value4
+  {
+    attribute isInside = 1;
+    attribute isDown = 0;
+    attribute Height = 30;
+    attribute Width = 150;
+    attribute SelectColour = `COLOR_BUTTON_SELECTED`;
+    attribute BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    attribute BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    attribute TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    attribute TextX = 10;
+    attribute TextY = 21;
+    attribute TextColour = `COLOR_PICTURE_BACKGROUND`;
+    attribute TextFont = 4;
+    attribute ExecuteSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    attribute ExecuteUnSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    attribute TheNewText = "-?.00   ";
+    attribute TheOriginalText = "-?.00   ";
+    attribute ERROR = 0;
+    attribute TheNumberFormat = "%-8.2f";
+    attribute Selected = 0;
+    attribute ReturnAction = "{PicYGN_LSFDisplay.VerifyLimits();}";
+    attribute TheOriginalNumber = -9999;
+    attribute MaxDigits = 8;
+    attribute TheNewNumber = -9999;
+    attribute Scope = "::YGN3and4.PicYGN_LSFDisplay";
+    attribute Active = 1;
+    attribute vis = `visibility`;
+    x = 395;
+    y = 482;
+    visibility = 0;
+    xReference = 395;
+    yReference = 482;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance Value4
+
+
+
+  text ItemNum4
+  {
+    x = 153;
+    y = 503;
+    format = "%s";
+    theText = "4.";
+
+    visibility = 0;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 153;
+    yReference = 503;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  instance DialogueSymbols.InputDialogueNumber Counts5
+  {
+    attribute isInside = 1;
+    attribute isDown = 0;
+    attribute Height = 30;
+    attribute Width = 150;
+    attribute SelectColour = `COLOR_BUTTON_SELECTED`;
+    attribute BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    attribute BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    attribute TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    attribute TextX = 10;
+    attribute TextY = 21;
+    attribute TextColour = `COLOR_PICTURE_BACKGROUND`;
+    attribute TextFont = 4;
+    attribute ExecuteSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    attribute ExecuteUnSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    attribute TheNewText = "-?.00   ";
+    attribute TheOriginalText = "-?.00   ";
+    attribute ERROR = 0;
+    attribute TheNumberFormat = "%-8.2f";
+    attribute Selected = 0;
+    attribute ReturnAction = "{PicYGN_LSFDisplay.VerifyLimits();}";
+    attribute TheOriginalNumber = -9999;
+    attribute MaxDigits = 8;
+    attribute TheNewNumber = -9999;
+    attribute Scope = "::YGN3and4.PicYGN_LSFDisplay";
+    attribute Active = 1;
+    attribute vis = `visibility`;
+    x = 212;
+    y = 522;
+    visibility = 0;
+    xReference = 212;
+    yReference = 522;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance Counts5
+
+
+
+  instance DialogueSymbols.InputDialogueNumber Value5
+  {
+    attribute isInside = 1;
+    attribute isDown = 0;
+    attribute Height = 30;
+    attribute Width = 150;
+    attribute SelectColour = `COLOR_BUTTON_SELECTED`;
+    attribute BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    attribute BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    attribute TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    attribute TextX = 10;
+    attribute TextY = 21;
+    attribute TextColour = `COLOR_PICTURE_BACKGROUND`;
+    attribute TextFont = 4;
+    attribute ExecuteSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    attribute ExecuteUnSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    attribute TheNewText = "-?.00   ";
+    attribute TheOriginalText = "-?.00   ";
+    attribute ERROR = 0;
+    attribute TheNumberFormat = "%-8.2f";
+    attribute Selected = 0;
+    attribute ReturnAction = "{PicYGN_LSFDisplay.VerifyLimits();}";
+    attribute TheOriginalNumber = -9999;
+    attribute MaxDigits = 8;
+    attribute TheNewNumber = -9999;
+    attribute Scope = "::YGN3and4.PicYGN_LSFDisplay";
+    attribute Active = 1;
+    attribute vis = `visibility`;
+    x = 395;
+    y = 522;
+    visibility = 0;
+    xReference = 395;
+    yReference = 522;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance Value5
+
+
+
+  text ItemNum5
+  {
+    x = 153;
+    y = 543;
+    format = "%s";
+    theText = "5.";
+
+    visibility = 0;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 153;
+    yReference = 543;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  instance DialogueSymbols.InputDialogueNumber Counts6
+  {
+    attribute isInside = 1;
+    attribute isDown = 0;
+    attribute Height = 30;
+    attribute Width = 150;
+    attribute SelectColour = `COLOR_BUTTON_SELECTED`;
+    attribute BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    attribute BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    attribute TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    attribute TextX = 10;
+    attribute TextY = 21;
+    attribute TextColour = `COLOR_PICTURE_BACKGROUND`;
+    attribute TextFont = 4;
+    attribute ExecuteSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    attribute ExecuteUnSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    attribute TheNewText = "-?.00   ";
+    attribute TheOriginalText = "-?.00   ";
+    attribute ERROR = 0;
+    attribute TheNumberFormat = "%-8.2f";
+    attribute Selected = 0;
+    attribute ReturnAction = "{PicYGN_LSFDisplay.VerifyLimits();}";
+    attribute TheOriginalNumber = -9999;
+    attribute MaxDigits = 8;
+    attribute TheNewNumber = -9999;
+    attribute Scope = "::YGN3and4.PicYGN_LSFDisplay";
+    attribute Active = 1;
+    attribute vis = `visibility`;
+    x = 212;
+    y = 562;
+    visibility = 0;
+    xReference = 212;
+    yReference = 562;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance Counts6
+
+
+
+  instance DialogueSymbols.InputDialogueNumber Value6
+  {
+    attribute isInside = 1;
+    attribute isDown = 0;
+    attribute Height = 30;
+    attribute Width = 150;
+    attribute SelectColour = `COLOR_BUTTON_SELECTED`;
+    attribute BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    attribute BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    attribute TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    attribute TextX = 10;
+    attribute TextY = 21;
+    attribute TextColour = `COLOR_PICTURE_BACKGROUND`;
+    attribute TextFont = 4;
+    attribute ExecuteSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    attribute ExecuteUnSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    attribute TheNewText = "-?.00   ";
+    attribute TheOriginalText = "-?.00   ";
+    attribute ERROR = 0;
+    attribute TheNumberFormat = "%-8.2f";
+    attribute Selected = 0;
+    attribute ReturnAction = "{PicYGN_LSFDisplay.VerifyLimits();}";
+    attribute TheOriginalNumber = -9999;
+    attribute MaxDigits = 8;
+    attribute TheNewNumber = -9999;
+    attribute Scope = "::YGN3and4.PicYGN_LSFDisplay";
+    attribute Active = 1;
+    attribute vis = `visibility`;
+    x = 395;
+    y = 562;
+    visibility = 0;
+    xReference = 395;
+    yReference = 562;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance Value6
+
+
+
+  text ItemNum6
+  {
+    x = 153;
+    y = 583;
+    format = "%s";
+    theText = "6.";
+
+    visibility = 0;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 153;
+    yReference = 583;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  instance DialogueSymbols.InputDialogueNumber Counts7
+  {
+    attribute isInside = 1;
+    attribute isDown = 0;
+    attribute Height = 30;
+    attribute Width = 150;
+    attribute SelectColour = `COLOR_BUTTON_SELECTED`;
+    attribute BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    attribute BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    attribute TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    attribute TextX = 10;
+    attribute TextY = 21;
+    attribute TextColour = `COLOR_PICTURE_BACKGROUND`;
+    attribute TextFont = 4;
+    attribute ExecuteSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    attribute ExecuteUnSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    attribute TheNewText = "-?.00   ";
+    attribute TheOriginalText = "-?.00   ";
+    attribute ERROR = 0;
+    attribute TheNumberFormat = "%-8.2f";
+    attribute Selected = 0;
+    attribute ReturnAction = "{PicYGN_LSFDisplay.VerifyLimits();}";
+    attribute TheOriginalNumber = -9999;
+    attribute MaxDigits = 8;
+    attribute TheNewNumber = -9999;
+    attribute Scope = "::YGN3and4.PicYGN_LSFDisplay";
+    attribute Active = 1;
+    attribute vis = `visibility`;
+    x = 212;
+    y = 602;
+    visibility = 0;
+    xReference = 212;
+    yReference = 602;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance Counts7
+
+
+
+  instance DialogueSymbols.InputDialogueNumber Value7
+  {
+    attribute isInside = 1;
+    attribute isDown = 0;
+    attribute Height = 30;
+    attribute Width = 150;
+    attribute SelectColour = `COLOR_BUTTON_SELECTED`;
+    attribute BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    attribute BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    attribute TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    attribute TextX = 10;
+    attribute TextY = 21;
+    attribute TextColour = `COLOR_PICTURE_BACKGROUND`;
+    attribute TextFont = 4;
+    attribute ExecuteSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    attribute ExecuteUnSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    attribute TheNewText = "-?.00   ";
+    attribute TheOriginalText = "-?.00   ";
+    attribute ERROR = 0;
+    attribute TheNumberFormat = "%-8.2f";
+    attribute Selected = 0;
+    attribute ReturnAction = "{PicYGN_LSFDisplay.VerifyLimits();}";
+    attribute TheOriginalNumber = -9999;
+    attribute MaxDigits = 8;
+    attribute TheNewNumber = -9999;
+    attribute Scope = "::YGN3and4.PicYGN_LSFDisplay";
+    attribute Active = 1;
+    attribute vis = `visibility`;
+    x = 395;
+    y = 602;
+    visibility = 0;
+    xReference = 395;
+    yReference = 602;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance Value7
+
+
+
+  text ItemNum7
+  {
+    x = 153;
+    y = 623;
+    format = "%s";
+    theText = "7.";
+
+    visibility = 0;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 153;
+    yReference = 623;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  instance DialogueSymbols.InputDialogueNumber Counts8
+  {
+    attribute isInside = 1;
+    attribute isDown = 0;
+    attribute Height = 30;
+    attribute Width = 150;
+    attribute SelectColour = `COLOR_BUTTON_SELECTED`;
+    attribute BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    attribute BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    attribute TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    attribute TextX = 10;
+    attribute TextY = 21;
+    attribute TextColour = `COLOR_PICTURE_BACKGROUND`;
+    attribute TextFont = 4;
+    attribute ExecuteSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    attribute ExecuteUnSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    attribute TheNewText = "-?.00   ";
+    attribute TheOriginalText = "-?.00   ";
+    attribute ERROR = 0;
+    attribute TheNumberFormat = "%-8.2f";
+    attribute Selected = 0;
+    attribute ReturnAction = "{PicYGN_LSFDisplay.VerifyLimits();}";
+    attribute TheOriginalNumber = -9999;
+    attribute MaxDigits = 8;
+    attribute TheNewNumber = -9999;
+    attribute Scope = "::YGN3and4.PicYGN_LSFDisplay";
+    attribute Active = 1;
+    attribute vis = `visibility`;
+    x = 212;
+    y = 642;
+    visibility = 0;
+    xReference = 212;
+    yReference = 642;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance Counts8
+
+
+
+  instance DialogueSymbols.InputDialogueNumber Value8
+  {
+    attribute isInside = 1;
+    attribute isDown = 0;
+    attribute Height = 30;
+    attribute Width = 150;
+    attribute SelectColour = `COLOR_BUTTON_SELECTED`;
+    attribute BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    attribute BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    attribute TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    attribute TextX = 10;
+    attribute TextY = 21;
+    attribute TextColour = `COLOR_PICTURE_BACKGROUND`;
+    attribute TextFont = 4;
+    attribute ExecuteSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    attribute ExecuteUnSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    attribute TheNewText = "-?.00   ";
+    attribute TheOriginalText = "-?.00   ";
+    attribute ERROR = 0;
+    attribute TheNumberFormat = "%-8.2f";
+    attribute Selected = 0;
+    attribute ReturnAction = "{PicYGN_LSFDisplay.VerifyLimits();}";
+    attribute TheOriginalNumber = -9999;
+    attribute MaxDigits = 8;
+    attribute TheNewNumber = -9999;
+    attribute Scope = "::YGN3and4.PicYGN_LSFDisplay";
+    attribute Active = 1;
+    attribute vis = `visibility`;
+    x = 395;
+    y = 642;
+    visibility = 0;
+    xReference = 395;
+    yReference = 642;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance Value8
+
+
+
+  text ItemNum8
+  {
+    x = 153;
+    y = 663;
+    format = "%s";
+    theText = "8.";
+
+    visibility = 0;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 153;
+    yReference = 663;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  instance DialogueSymbols.InputDialogueNumber Counts9
+  {
+    attribute isInside = 1;
+    attribute isDown = 0;
+    attribute Height = 30;
+    attribute Width = 150;
+    attribute SelectColour = `COLOR_BUTTON_SELECTED`;
+    attribute BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    attribute BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    attribute TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    attribute TextX = 10;
+    attribute TextY = 21;
+    attribute TextColour = `COLOR_PICTURE_BACKGROUND`;
+    attribute TextFont = 4;
+    attribute ExecuteSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    attribute ExecuteUnSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    attribute TheNewText = "-?.00   ";
+    attribute TheOriginalText = "-?.00   ";
+    attribute ERROR = 0;
+    attribute TheNumberFormat = "%-8.2f";
+    attribute Selected = 0;
+    attribute ReturnAction = "{PicYGN_LSFDisplay.VerifyLimits();}";
+    attribute TheOriginalNumber = -9999;
+    attribute MaxDigits = 8;
+    attribute TheNewNumber = -9999;
+    attribute Scope = "::YGN3and4.PicYGN_LSFDisplay";
+    attribute Active = 1;
+    attribute vis = `visibility`;
+    x = 703;
+    y = 364;
+    visibility = 0;
+    xReference = 703;
+    yReference = 364;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance Counts9
+
+
+
+  instance DialogueSymbols.InputDialogueNumber Value9
+  {
+    attribute isInside = 1;
+    attribute isDown = 0;
+    attribute Height = 30;
+    attribute Width = 150;
+    attribute SelectColour = `COLOR_BUTTON_SELECTED`;
+    attribute BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    attribute BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    attribute TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    attribute TextX = 10;
+    attribute TextY = 21;
+    attribute TextColour = `COLOR_PICTURE_BACKGROUND`;
+    attribute TextFont = 4;
+    attribute ExecuteSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    attribute ExecuteUnSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    attribute TheNewText = "-?.00   ";
+    attribute TheOriginalText = "-?.00   ";
+    attribute ERROR = 0;
+    attribute TheNumberFormat = "%-8.2f";
+    attribute Selected = 0;
+    attribute ReturnAction = "{PicYGN_LSFDisplay.VerifyLimits();}";
+    attribute TheOriginalNumber = -9999;
+    attribute MaxDigits = 8;
+    attribute TheNewNumber = -9999;
+    attribute Scope = "::YGN3and4.PicYGN_LSFDisplay";
+    attribute Active = 1;
+    attribute vis = `visibility`;
+    x = 886;
+    y = 364;
+    visibility = 0;
+    xReference = 886;
+    yReference = 364;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance Value9
+
+
+
+  text ItemNum9
+  {
+    x = 654;
+    y = 385;
+    format = "%s";
+    theText = "9.";
+
+    visibility = 0;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 654;
+    yReference = 385;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  instance DialogueSymbols.InputDialogueNumber Counts10
+  {
+    attribute isInside = 1;
+    attribute isDown = 0;
+    attribute Height = 30;
+    attribute Width = 150;
+    attribute SelectColour = `COLOR_BUTTON_SELECTED`;
+    attribute BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    attribute BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    attribute TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    attribute TextX = 10;
+    attribute TextY = 21;
+    attribute TextColour = `COLOR_PICTURE_BACKGROUND`;
+    attribute TextFont = 4;
+    attribute ExecuteSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    attribute ExecuteUnSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    attribute TheNewText = "-?.00   ";
+    attribute TheOriginalText = "-?.00   ";
+    attribute ERROR = 0;
+    attribute TheNumberFormat = "%-8.2f";
+    attribute Selected = 0;
+    attribute ReturnAction = "{PicYGN_LSFDisplay.VerifyLimits();}";
+    attribute TheOriginalNumber = -9999;
+    attribute MaxDigits = 8;
+    attribute TheNewNumber = -9999;
+    attribute Scope = "::YGN3and4.PicYGN_LSFDisplay";
+    attribute Active = 1;
+    attribute vis = `visibility`;
+    x = 703;
+    y = 403;
+    visibility = 0;
+    xReference = 703;
+    yReference = 403;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance Counts10
+
+
+
+  instance DialogueSymbols.InputDialogueNumber Value10
+  {
+    attribute isInside = 1;
+    attribute isDown = 0;
+    attribute Height = 30;
+    attribute Width = 150;
+    attribute SelectColour = `COLOR_BUTTON_SELECTED`;
+    attribute BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    attribute BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    attribute TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    attribute TextX = 10;
+    attribute TextY = 21;
+    attribute TextColour = `COLOR_PICTURE_BACKGROUND`;
+    attribute TextFont = 4;
+    attribute ExecuteSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    attribute ExecuteUnSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    attribute TheNewText = "-?.00   ";
+    attribute TheOriginalText = "-?.00   ";
+    attribute ERROR = 0;
+    attribute TheNumberFormat = "%-8.2f";
+    attribute Selected = 0;
+    attribute ReturnAction = "{PicYGN_LSFDisplay.VerifyLimits();}";
+    attribute TheOriginalNumber = -9999;
+    attribute MaxDigits = 8;
+    attribute TheNewNumber = -9999;
+    attribute Scope = "::YGN3and4.PicYGN_LSFDisplay";
+    attribute Active = 1;
+    attribute vis = `visibility`;
+    x = 886;
+    y = 403;
+    visibility = 0;
+    xReference = 886;
+    yReference = 403;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance Value10
+
+
+
+  text ItemNum10
+  {
+    x = 644;
+    y = 424;
+    format = "%s";
+    theText = "10.";
+
+    visibility = 0;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 644;
+    yReference = 424;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  instance DialogueSymbols.InputDialogueNumber Counts11
+  {
+    attribute isInside = 1;
+    attribute isDown = 0;
+    attribute Height = 30;
+    attribute Width = 150;
+    attribute SelectColour = `COLOR_BUTTON_SELECTED`;
+    attribute BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    attribute BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    attribute TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    attribute TextX = 10;
+    attribute TextY = 21;
+    attribute TextColour = `COLOR_PICTURE_BACKGROUND`;
+    attribute TextFont = 4;
+    attribute ExecuteSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    attribute ExecuteUnSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    attribute TheNewText = "-?.00   ";
+    attribute TheOriginalText = "-?.00   ";
+    attribute ERROR = 0;
+    attribute TheNumberFormat = "%-8.2f";
+    attribute Selected = 0;
+    attribute ReturnAction = "{PicYGN_LSFDisplay.VerifyLimits();}";
+    attribute TheOriginalNumber = -9999;
+    attribute MaxDigits = 8;
+    attribute TheNewNumber = -9999;
+    attribute Scope = "::YGN3and4.PicYGN_LSFDisplay";
+    attribute Active = 1;
+    attribute vis = `visibility`;
+    x = 703;
+    y = 442;
+    visibility = 0;
+    xReference = 703;
+    yReference = 442;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance Counts11
+
+
+
+  instance DialogueSymbols.InputDialogueNumber Value11
+  {
+    attribute isInside = 1;
+    attribute isDown = 0;
+    attribute Height = 30;
+    attribute Width = 150;
+    attribute SelectColour = `COLOR_BUTTON_SELECTED`;
+    attribute BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    attribute BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    attribute TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    attribute TextX = 10;
+    attribute TextY = 21;
+    attribute TextColour = `COLOR_PICTURE_BACKGROUND`;
+    attribute TextFont = 4;
+    attribute ExecuteSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    attribute ExecuteUnSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    attribute TheNewText = "-?.00   ";
+    attribute TheOriginalText = "-?.00   ";
+    attribute ERROR = 0;
+    attribute TheNumberFormat = "%-8.2f";
+    attribute Selected = 0;
+    attribute ReturnAction = "{PicYGN_LSFDisplay.VerifyLimits();}";
+    attribute TheOriginalNumber = -9999;
+    attribute MaxDigits = 8;
+    attribute TheNewNumber = -9999;
+    attribute Scope = "::YGN3and4.PicYGN_LSFDisplay";
+    attribute Active = 1;
+    attribute vis = `visibility`;
+    x = 886;
+    y = 442;
+    visibility = 0;
+    xReference = 886;
+    yReference = 442;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance Value11
+
+
+
+  text ItemNum11
+  {
+    x = 644;
+    y = 463;
+    format = "%s";
+    theText = "11.";
+
+    visibility = 0;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 644;
+    yReference = 463;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  instance DialogueSymbols.InputDialogueNumber Counts12
+  {
+    attribute isInside = 1;
+    attribute isDown = 0;
+    attribute Height = 30;
+    attribute Width = 150;
+    attribute SelectColour = `COLOR_BUTTON_SELECTED`;
+    attribute BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    attribute BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    attribute TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    attribute TextX = 10;
+    attribute TextY = 21;
+    attribute TextColour = `COLOR_PICTURE_BACKGROUND`;
+    attribute TextFont = 4;
+    attribute ExecuteSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    attribute ExecuteUnSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    attribute TheNewText = "-?.00   ";
+    attribute TheOriginalText = "-?.00   ";
+    attribute ERROR = 0;
+    attribute TheNumberFormat = "%-8.2f";
+    attribute Selected = 0;
+    attribute ReturnAction = "{PicYGN_LSFDisplay.VerifyLimits();}";
+    attribute TheOriginalNumber = -9999;
+    attribute MaxDigits = 8;
+    attribute TheNewNumber = -9999;
+    attribute Scope = "";
+    attribute Active = 1;
+    attribute vis = `visibility`;
+    x = 703;
+    y = 482;
+    visibility = 0;
+    xReference = 703;
+    yReference = 482;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance Counts12
+
+
+
+  instance DialogueSymbols.InputDialogueNumber Value12
+  {
+    attribute isInside = 1;
+    attribute isDown = 0;
+    attribute Height = 30;
+    attribute Width = 150;
+    attribute SelectColour = `COLOR_BUTTON_SELECTED`;
+    attribute BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    attribute BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    attribute TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    attribute TextX = 10;
+    attribute TextY = 21;
+    attribute TextColour = `COLOR_PICTURE_BACKGROUND`;
+    attribute TextFont = 4;
+    attribute ExecuteSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    attribute ExecuteUnSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    attribute TheNewText = "-?.00   ";
+    attribute TheOriginalText = "-?.00   ";
+    attribute ERROR = 0;
+    attribute TheNumberFormat = "%-8.2f";
+    attribute Selected = 0;
+    attribute ReturnAction = "{PicYGN_LSFDisplay.VerifyLimits();}";
+    attribute TheOriginalNumber = -9999;
+    attribute MaxDigits = 8;
+    attribute TheNewNumber = -9999;
+    attribute Scope = "::YGN3and4.PicYGN_LSFDisplay";
+    attribute Active = 1;
+    attribute vis = `visibility`;
+    x = 886;
+    y = 482;
+    visibility = 0;
+    xReference = 886;
+    yReference = 482;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance Value12
+
+
+
+  text ItemNum12
+  {
+    x = 644;
+    y = 503;
+    format = "%s";
+    theText = "12.";
+
+    visibility = 0;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 644;
+    yReference = 503;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  instance DialogueSymbols.InputDialogueNumber Counts13
+  {
+    attribute isInside = 1;
+    attribute isDown = 0;
+    attribute Height = 30;
+    attribute Width = 150;
+    attribute SelectColour = `COLOR_BUTTON_SELECTED`;
+    attribute BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    attribute BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    attribute TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    attribute TextX = 10;
+    attribute TextY = 21;
+    attribute TextColour = `COLOR_PICTURE_BACKGROUND`;
+    attribute TextFont = 4;
+    attribute ExecuteSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    attribute ExecuteUnSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    attribute TheNewText = "-?.00   ";
+    attribute TheOriginalText = "-?.00   ";
+    attribute ERROR = 0;
+    attribute TheNumberFormat = "%-8.2f";
+    attribute Selected = 0;
+    attribute ReturnAction = "{PicYGN_LSFDisplay.VerifyLimits();}";
+    attribute TheOriginalNumber = -9999;
+    attribute MaxDigits = 8;
+    attribute TheNewNumber = -9999;
+    attribute Scope = "::YGN3and4.PicYGN_LSFDisplay";
+    attribute Active = 1;
+    attribute vis = `visibility`;
+    x = 703;
+    y = 522;
+    visibility = 0;
+    xReference = 703;
+    yReference = 522;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance Counts13
+
+
+
+  instance DialogueSymbols.InputDialogueNumber Value13
+  {
+    attribute isInside = 1;
+    attribute isDown = 0;
+    attribute Height = 30;
+    attribute Width = 150;
+    attribute SelectColour = `COLOR_BUTTON_SELECTED`;
+    attribute BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    attribute BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    attribute TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    attribute TextX = 10;
+    attribute TextY = 21;
+    attribute TextColour = `COLOR_PICTURE_BACKGROUND`;
+    attribute TextFont = 4;
+    attribute ExecuteSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    attribute ExecuteUnSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    attribute TheNewText = "-?.00   ";
+    attribute TheOriginalText = "-?.00   ";
+    attribute ERROR = 0;
+    attribute TheNumberFormat = "%-8.2f";
+    attribute Selected = 0;
+    attribute ReturnAction = "{PicYGN_LSFDisplay.VerifyLimits();}";
+    attribute TheOriginalNumber = -9999;
+    attribute MaxDigits = 8;
+    attribute TheNewNumber = -9999;
+    attribute Scope = "::YGN3and4.PicYGN_LSFDisplay";
+    attribute Active = 1;
+    attribute vis = `visibility`;
+    x = 886;
+    y = 522;
+    visibility = 0;
+    xReference = 886;
+    yReference = 522;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance Value13
+
+
+
+  text ItemNum13
+  {
+    x = 644;
+    y = 543;
+    format = "%s";
+    theText = "13.";
+
+    visibility = 0;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 644;
+    yReference = 543;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  instance DialogueSymbols.InputDialogueNumber Counts14
+  {
+    attribute isInside = 1;
+    attribute isDown = 0;
+    attribute Height = 30;
+    attribute Width = 150;
+    attribute SelectColour = `COLOR_BUTTON_SELECTED`;
+    attribute BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    attribute BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    attribute TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    attribute TextX = 10;
+    attribute TextY = 21;
+    attribute TextColour = `COLOR_PICTURE_BACKGROUND`;
+    attribute TextFont = 4;
+    attribute ExecuteSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    attribute ExecuteUnSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    attribute TheNewText = "-?.00   ";
+    attribute TheOriginalText = "-?.00   ";
+    attribute ERROR = 0;
+    attribute TheNumberFormat = "%-8.2f";
+    attribute Selected = 0;
+    attribute ReturnAction = "{PicYGN_LSFDisplay.VerifyLimits();}";
+    attribute TheOriginalNumber = -9999;
+    attribute MaxDigits = 8;
+    attribute TheNewNumber = -9999;
+    attribute Scope = "::YGN3and4.PicYGN_LSFDisplay";
+    attribute Active = 1;
+    attribute vis = `visibility`;
+    x = 703;
+    y = 562;
+    visibility = 0;
+    xReference = 703;
+    yReference = 562;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance Counts14
+
+
+
+  instance DialogueSymbols.InputDialogueNumber Value14
+  {
+    attribute isInside = 1;
+    attribute isDown = 0;
+    attribute Height = 30;
+    attribute Width = 150;
+    attribute SelectColour = `COLOR_BUTTON_SELECTED`;
+    attribute BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    attribute BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    attribute TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    attribute TextX = 10;
+    attribute TextY = 21;
+    attribute TextColour = `COLOR_PICTURE_BACKGROUND`;
+    attribute TextFont = 4;
+    attribute ExecuteSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    attribute ExecuteUnSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    attribute TheNewText = "-?.00   ";
+    attribute TheOriginalText = "-?.00   ";
+    attribute ERROR = 0;
+    attribute TheNumberFormat = "%-8.2f";
+    attribute Selected = 0;
+    attribute ReturnAction = "{PicYGN_LSFDisplay.VerifyLimits();}";
+    attribute TheOriginalNumber = -9999;
+    attribute MaxDigits = 8;
+    attribute TheNewNumber = -9999;
+    attribute Scope = "::YGN3and4.PicYGN_LSFDisplay";
+    attribute Active = 1;
+    attribute vis = `visibility`;
+    x = 886;
+    y = 562;
+    visibility = 0;
+    xReference = 886;
+    yReference = 562;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance Value14
+
+
+
+  text ItemNum14
+  {
+    x = 644;
+    y = 583;
+    format = "%s";
+    theText = "14.";
+
+    visibility = 0;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 644;
+    yReference = 583;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  instance DialogueSymbols.InputDialogueNumber Counts15
+  {
+    attribute isInside = 1;
+    attribute isDown = 0;
+    attribute Height = 30;
+    attribute Width = 150;
+    attribute SelectColour = `COLOR_BUTTON_SELECTED`;
+    attribute BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    attribute BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    attribute TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    attribute TextX = 10;
+    attribute TextY = 21;
+    attribute TextColour = `COLOR_PICTURE_BACKGROUND`;
+    attribute TextFont = 4;
+    attribute ExecuteSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    attribute ExecuteUnSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    attribute TheNewText = "-?.00   ";
+    attribute TheOriginalText = "-?.00   ";
+    attribute ERROR = 0;
+    attribute TheNumberFormat = "%-8.2f";
+    attribute Selected = 0;
+    attribute ReturnAction = "{PicYGN_LSFDisplay.VerifyLimits();}";
+    attribute TheOriginalNumber = -9999;
+    attribute MaxDigits = 8;
+    attribute TheNewNumber = -9999;
+    attribute Scope = "::YGN3and4.PicYGN_LSFDisplay";
+    attribute Active = 1;
+    attribute vis = `visibility`;
+    x = 703;
+    y = 602;
+    visibility = 0;
+    xReference = 703;
+    yReference = 602;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance Counts15
+
+
+
+  instance DialogueSymbols.InputDialogueNumber Value15
+  {
+    attribute isInside = 1;
+    attribute isDown = 0;
+    attribute Height = 30;
+    attribute Width = 150;
+    attribute SelectColour = `COLOR_BUTTON_SELECTED`;
+    attribute BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    attribute BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    attribute TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    attribute TextX = 10;
+    attribute TextY = 21;
+    attribute TextColour = `COLOR_PICTURE_BACKGROUND`;
+    attribute TextFont = 4;
+    attribute ExecuteSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    attribute ExecuteUnSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    attribute TheNewText = "-?.00   ";
+    attribute TheOriginalText = "-?.00   ";
+    attribute ERROR = 0;
+    attribute TheNumberFormat = "%-8.2f";
+    attribute Selected = 0;
+    attribute ReturnAction = "{PicYGN_LSFDisplay.VerifyLimits();}";
+    attribute TheOriginalNumber = -9999;
+    attribute MaxDigits = 8;
+    attribute TheNewNumber = -9999;
+    attribute Scope = "::YGN3and4.PicYGN_LSFDisplay";
+    attribute Active = 1;
+    attribute vis = `visibility`;
+    x = 886;
+    y = 602;
+    visibility = 0;
+    xReference = 886;
+    yReference = 602;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance Value15
+
+
+
+  text ItemNum15
+  {
+    x = 644;
+    y = 623;
+    format = "%s";
+    theText = "15.";
+
+    visibility = 0;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 644;
+    yReference = 623;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  instance DialogueSymbols.InputDialogueNumber Counts16
+  {
+    attribute isInside = 1;
+    attribute isDown = 0;
+    attribute Height = 30;
+    attribute Width = 150;
+    attribute SelectColour = `COLOR_BUTTON_SELECTED`;
+    attribute BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    attribute BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    attribute TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    attribute TextX = 10;
+    attribute TextY = 21;
+    attribute TextColour = `COLOR_PICTURE_BACKGROUND`;
+    attribute TextFont = 4;
+    attribute ExecuteSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    attribute ExecuteUnSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    attribute TheNewText = "-?.00   ";
+    attribute TheOriginalText = "-?.00   ";
+    attribute ERROR = 0;
+    attribute TheNumberFormat = "%-8.2f";
+    attribute Selected = 0;
+    attribute ReturnAction = "{PicYGN_LSFDisplay.VerifyLimits();}";
+    attribute TheOriginalNumber = -9999;
+    attribute MaxDigits = 8;
+    attribute TheNewNumber = -9999;
+    attribute Scope = "::YGN3and4.PicYGN_LSFDisplay";
+    attribute Active = 1;
+    attribute vis = `visibility`;
+    x = 703;
+    y = 642;
+    visibility = 0;
+    xReference = 703;
+    yReference = 642;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance Counts16
+
+
+
+  instance DialogueSymbols.InputDialogueNumber Value16
+  {
+    attribute isInside = 1;
+    attribute isDown = 0;
+    attribute Height = 30;
+    attribute Width = 150;
+    attribute SelectColour = `COLOR_BUTTON_SELECTED`;
+    attribute BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    attribute BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    attribute TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    attribute TextX = 10;
+    attribute TextY = 21;
+    attribute TextColour = `COLOR_PICTURE_BACKGROUND`;
+    attribute TextFont = 4;
+    attribute ExecuteSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    attribute ExecuteUnSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    attribute TheNewText = "-?.00   ";
+    attribute TheOriginalText = "-?.00   ";
+    attribute ERROR = 0;
+    attribute TheNumberFormat = "%-8.2f";
+    attribute Selected = 0;
+    attribute ReturnAction = "{PicYGN_LSFDisplay.VerifyLimits();}";
+    attribute TheOriginalNumber = -9999;
+    attribute MaxDigits = 8;
+    attribute TheNewNumber = -9999;
+    attribute Scope = "::YGN3and4.PicYGN_LSFDisplay";
+    attribute Active = 1;
+    attribute vis = `visibility`;
+    x = 886;
+    y = 642;
+    visibility = 0;
+    xReference = 886;
+    yReference = 642;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance Value16
+
+
+
+  text ItemNum16
+  {
+    x = 644;
+    y = 663;
+    format = "%s";
+    theText = "16.";
+
+    visibility = 0;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 644;
+    yReference = 663;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text ProcessingMsg
+  {
+    x = 443;
+    y = 706;
+    format = "%s";
+    theText = "PROCESSING...  WAIT";
+
+    visibility = 0;
+    foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 443;
+    yReference = 706;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text ProcessingErrorMsg
+  {
+    x = 108;
+    y = 706;
+    format = "%s";
+    theText = "CORRECT ALL ERRORS BEFORE PROCESSING";
+
+    visibility = 0;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 108;
+    yReference = 706;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text DataPairErrorMsg
+  {
+    x = 651;
+    y = 706;
+    format = "%s";
+    theText = "INVALID DATA PAIR(S)";
+
+    visibility = 0;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 651;
+    yReference = 706;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text OOS_Msg
+  {
+    x = 104;
+    y = 467;
+    format = "%s";
+    theText = "POINT MUST BE REMOVED FROM SCAN FIRST";
+
+    visibility = 0;
+    foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 104;
+    yReference = 467;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text WaitMsg
+  {
+    x = 104;
+    y = 424;
+    format = "%s";
+    theText = "PREPARING LSF DATABASE CHANGE MODE...  WAIT";
+
+    visibility = 0;
+    foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 104;
+    yReference = 424;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text PointIDErrorMsg
+  {
+    x = 104;
+    y = 487;
+    format = "%s";
+    theText = "SELECT A NEW POINT ID THAT IS OF ANALOG INPUT OR CONSTANT TYPE";
+
+    visibility = 0;
+    foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 104;
+    yReference = 487;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text MinPairsMessage
+  {
+    x = 651;
+    y = 706;
+    format = "%s";
+    theText = "MINIMUM NUMBER OF PAIRS REQUIRED = ";
+
+    visibility = 0;
+    foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 651;
+    yReference = 706;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  instance DialogueSymbols.DatabaseDisplayInfo_LSF DBCinfo
+  {
+    attribute pLoAlmPID = `PictureLowAlarmPID`;
+    attribute pHiAlmPID = `PictureHighAlarmPID`;
+    attribute pPID = `PicturePointId`;
+    //attribute pPID = `&::YGN3and4.InterfaceToGUI.RCT111X`;	//CORENET 20170602 by Philkyu Kwon
+    x = -6;
+    y = -34;
+    visibility = 1;
+    xReference = -6;
+    yReference = -34;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance DBCinfo
+
+
+
+  text MinPairsNumber
+  {
+    x = 1044;
+    y = 706;
+    format = "%2d";
+    theText = `Interface->LSF_Info_Data.PolyOrder + 1`;
+
+    visibility = 0;
+    foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 1044;
+    yReference = 706;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text DegreeErrorMessage
+  {
+    x = 104;
+    y = 508;
+    format = "%s";
+    theText = "POLYNOMIAL DEGREE (1-5) REQUIRED";
+
+    visibility = 1;
+    foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 104;
+    yReference = 508;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text CountsLabel1
+  {
+    x = 213;
+    y = 349;
+    format = "%s";
+    theText = "COUNTS VALUE";
+
+    visibility = 0;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 213;
+    yReference = 349;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text CountsLabel2
+  {
+    x = 702;
+    y = 349;
+    format = "%s";
+    theText = "COUNTS VALUE";
+
+    visibility = 0;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 702;
+    yReference = 349;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text ValueLabel1
+  {
+    x = 396;
+    y = 349;
+    format = "%s";
+    theText = "ENGIN'G VALUE";
+
+    visibility = 0;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 396;
+    yReference = 349;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text ValueLabel2
+  {
+    x = 886;
+    y = 349;
+    format = "%s";
+    theText = "ENGIN'G VALUE";
+
+    visibility = 0;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 886;
+    yReference = 349;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text ChangeProtected
+  {
+    x = 104;
+    y = 446;
+    format = "%s";
+    theText = "DATABASE CHANGES NOT ALLOWED";
+
+    visibility = 0;
+    foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 104;
+    yReference = 446;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text MasterCpuMsg
+  {
+    x = 104;
+    y = 528;
+    format = "%s";
+    theText = "CHANGE FROM MASTER CPU ONLY";
+
+    visibility = `ERROR&0x0080`;
+    foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 104;
+    yReference = 528;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+// The picture's other attributes:
+
+  backgroundColour    = 0;
+  xSnap               = 5;
+  ySnap               = 5;
+  angleSnap           = 0;
+  radiusSnap          = 0;
+  worldX              = 0;
+  worldY              = 0;
+  worldWidth          = 1280;
+  worldHeight         = 824;
+  oneToOne            = 1;
+  resizeMode          = 0;
+  updateMode          = 2;
+  crosshairStyle      = 1;
+  crosshairLength     = 0;
+  crosshairFollowSnap = `isInEditMode()`;
+  crosshairVisibility = `isInEditMode()`;
+  xReference = 500;
+  yReference = 500;
+  xScaleFactor = 1;
+  yScaleFactor = 1;
+  rotationAngle = 0;
+
+
+}  // end of picture PicYGN_LSFDisplay

@@ -1,0 +1,168 @@
+/*
+ * PICASSO-3 CONFIGURATION LANGUAGE FILE
+ *
+ *
+ * Picture name: PicYGN_XRBPSelection
+ *
+ *
+ * Documented by  : ygn56
+ * Host           : ucn5
+ * Date           : 24/02-99 at 17:07:16
+ *
+ *
+ * Generate with:
+ *    pcc PicYGN_XRBPSelection.Tdoc
+ *
+ */
+
+
+picture PicYGN_XRBPSelection
+{
+
+  char PictureNumber[50] = "620";
+  char PictureTitle[50] = "XENON REACTIVITY MENU";
+
+  function `void Initialize()
+{
+   Current_Page = 620;
+   CFMLevel = 0;
+   ClearAdvisoryMessage();
+}`
+
+
+
+  function `void Escape()
+{
+    executeAsync( "::YGN3and4", "{ displayPicture( \\"Main\\", \\"./PicYGN_NSSSBOPApplication.ppic\\" ); }");
+}`
+
+
+
+  function `void ProcessOpt1()
+{
+displayPicture("Main","PicYGN_XRBP_Off.ppic");
+}`
+
+
+
+  function `void ProcessOpt2()
+{
+displayPicture("Main","PicYGN_XRBP_On.ppic");
+}`
+
+
+
+  dialogue
+  {
+    event = `keyReleased(0x31) || keyReleased(0xFFB1)`;
+    action = statement `{
+m1.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+m1.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+
+m1.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+m1.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+m1.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+m1.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+
+m1.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+m1.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+m1.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+m1.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+
+   if ( strlen(m1.ExecuteString) > 0)
+       execute(m1.ExecuteString);
+}`;
+  }
+
+  dialogue
+  {
+    event = `keyReleased(0x32) || keyReleased(0xFFB2)`;
+    action = statement `{
+m2.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+m2.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+
+m2.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+m2.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+m2.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+m2.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+
+m2.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+m2.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+m2.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+m2.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+
+   if ( strlen(m2.ExecuteString) > 0)
+       execute(m2.ExecuteString);
+}`;
+  }
+
+  instance DialogueSymbols.LargeMenuSelect m2
+  {
+    attribute TheOption = "2.";
+    attribute TheFontColor = 2;
+    attribute TheTitle = "XRBP ON-LINE MODE";
+    attribute TheTextFont = `font6`;
+    attribute Cascade = 0;
+    attribute CascadeX = 400;
+    attribute CascadeY = 400;
+    attribute ExecuteString = "ProcessOpt2()";
+    x = 425;
+    y = 330;
+    visibility = 1;
+    xReference = 425;
+    yReference = 330;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance m2
+
+
+
+  instance DialogueSymbols.LargeMenuSelect m1
+  {
+    attribute TheOption = "1.";
+    attribute TheFontColor = 2;
+    attribute TheTitle = "XRBP OFF-LINE MODE";
+    attribute TheTextFont = `font6`;
+    attribute Cascade = 0;
+    attribute CascadeX = 400;
+    attribute CascadeY = 400;
+    attribute ExecuteString = "ProcessOpt1()";
+    x = 425;
+    y = 293;
+    visibility = 1;
+    xReference = 425;
+    yReference = 293;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance m1
+
+
+
+// The picture's other attributes:
+
+  backgroundColour    = 0;
+  xSnap               = 1;
+  ySnap               = 1;
+  angleSnap           = 0;
+  radiusSnap          = 0;
+  worldX              = 0;
+  worldY              = 0;
+  worldWidth          = 1280;
+  worldHeight         = 824;
+  oneToOne            = 1;
+  resizeMode          = 0;
+  updateMode          = 2;
+  crosshairStyle      = 1;
+  crosshairLength     = 0;
+  crosshairFollowSnap = `isInEditMode()`;
+  crosshairVisibility = `isInEditMode()`;
+  xReference = 500;
+  yReference = 500;
+  xScaleFactor = 1;
+  yScaleFactor = 1;
+  rotationAngle = 0;
+
+
+}  // end of picture PicYGN_XRBPSelection

@@ -1,0 +1,176 @@
+// ***************************************************************************
+// *									     *
+// *	Copyright (C) 1996, ABB-CE Inc., All rights reserved.		     *
+// *	Proprietary information, ABB-CE Incorporated			     *
+// *									     *
+// ***************************************************************************
+//
+// ***** HIGH LEVEL DESCRIPTION **********************************************
+//
+// This pdat file contains the variables only used by Picasso
+//
+// **** REVISION HISTORY *****************************************************
+//
+// $Header: /PMSArchive/ucn56/workstation/pictures/pdat/justPicasso.pdat 1.9 1999/05/25 15:07:16 leo Exp $
+// $Log: justPicasso.pdat,v $
+// Revision 1.9  1999/05/25 15:07:16  leo
+// Author: leo@y6maint1 (Leo Olbrych)
+// Gave sig_type a value of 0 instead of assuming it would default
+// to that value.
+//
+// Revision 1.8  1999/02/19 21:30:34  gcs
+// Author: gcs@y6maint1 (Gail Sibley)
+// Added code for accessing Link Status Page.
+//
+// Revision 1.7  1998/10/21 16:43:21  kn1
+// Author: kn1@y6maint1 (Kopec NSSS 1)
+// KOPEC NSSS FAT Delivery 3.
+//
+// Revision 1.6  1998/05/29 21:18:08  leo
+// Author: leo@y6maint1 (Leo Olbrych)
+// Removed LastPage. Not used.
+//
+// Revision 1.5  1998/05/28 19:35:16  jws
+// Author: jws@y6maint1 (John Soisson)
+// TER 101 fixed.  Added disabling of default behavior of
+// uppercase 'Q' by adding dialogue to override it.
+//
+// Revision 1.4  1998/02/10 20:26:24  kn1
+// Author: kn1@y6maint1.usnus.abb.com (Kopec NSSS 1)
+// Kopec NSSS Phase 2 Status 1.  Modified to support delivery.
+//
+// Revision 1.3  1998/02/10 16:19:38  kn1
+// Author: kn1@y6maint1.usnus.abb.com (Kopec NSSS 1)
+// Kopec NSSS Phase 2 Status 1.  Moved function key definitions
+// from UCN5and6.Tdoc
+//
+// Revision 1.2  1998/01/07 15:36:29  leo
+// Author: leo@y6maint1.usnus.abb.com (Leo Olbrych)
+// Removed LastPageActuve variable. No longer used. It was used in UCN5and6.Tdoc
+// to indicate that a picture had been displayed so the the prevpage function
+// could save the name of the previous page. This is accomplished by looking at
+// the pointer to the current picture before the requested picture is displayed in
+// displayPicture().  If no pointer, then no previous picture.
+//
+// Revision 1.1  1996/11/23 12:15:52  asn
+// Author: asn@y6maint1.usnus.abb.com (Arthur Nowell)
+// Initial revision
+//
+//
+// ***************************************************************************
+// System Include Files: NONE
+//
+//
+// User Defined Include Files: NONE
+//
+//
+// External Variables: NONE
+//
+//
+// Local Constant Definitions: NONE
+//
+//
+// Function Prototypes: NONE
+//
+//
+// ***************************************************************************
+//
+// Define the interface structure here.  You cannot include this in the interfaceStructure.pdat
+// file.  If this is included, the C/C++ code will not compile due to multiple defines.
+INTERFACE	Interface;
+//
+// Parameters used in the Picasso code.  These should be pretty standard, but verify
+// in the systemParameters.h file for the C/C++ code.
+//
+int VISIBLE	= 1;		// Voila!
+int INVISIBLE	= 0;		// Ou est vous?
+int ON		= 1;	 
+int OFF		= 0;	 
+int TRUE	= 1;		// c'est vrai 
+int FALSE	= 0;		// j'accuse
+int ENGLISH 	= 0;		// English units
+int METRIC 	= 1;		// Metric units
+//
+// Local GUI "Database" Points:
+//
+// Define structure for the "Blank" line.  This is used for the Current Alarm List
+// The communications program will insert the pid BLANK for an IPN of 0
+RECORD BLANK;
+BLANK.pid   		= "BLANK";
+BLANK.desc 		= " ";
+BLANK.tagid 		= " ";
+BLANK.eng_units 	= " ";
+BLANK.met_units 	= " ";
+BLANK.message1 		= " ";
+BLANK.message2 		= " ";
+BLANK.pisabitmap 	= 0x0020;
+BLANK.sig_type		= 0;		// Undefined 
+BLANK.disfmt		= "%8.1f";
+BLANK.value		= 8888.88;
+//
+// Define a structure for an ERROR point id.  Objects default to this point id.
+// This is intended to insure that the display builder properly instantiates 
+// a point id for each object.
+RECORD ERRORPID;
+ERRORPID.pid   		= "ERRORPID";
+ERRORPID.desc  		= "Instantiate this Symbol!";
+ERRORPID.tagid 		= "ERROR";
+ERRORPID.eng_units 	= "ENGLISH";
+ERRORPID.met_units 	= "METRIC";
+ERRORPID.message1 	= "STATE  0";
+ERRORPID.message2 	= "STATE  1";
+ERRORPID.pisabitmap 	= 0x0020;
+ERRORPID.disfmt		= "%8.2f";
+ERRORPID.sig_type	= 0;		// Undefined 
+ERRORPID.value		= 7777.77;
+//
+// FOR TEST PUPOSES ONLY ***** REMOVE ****
+RECORD TESTPID;
+TESTPID.pid   		= "TESTPID";
+TESTPID.desc  		= "This is a test Point Id";
+TESTPID.tagid 		= "MY TEST TAG";
+TESTPID.eng_units 	= "ENGLISH";
+TESTPID.met_units 	= "METRIC";
+TESTPID.message1 	= "STATE  0";
+TESTPID.message2 	= "STATE  1";
+TESTPID.pisabitmap 	= 0x0020;
+TESTPID.sig_type	= 6;
+TESTPID.disfmt		= "%8.2f";
+TESTPID.value		= 7777.77;
+
+//Kopec and ABB common function keys
+
+  int F1 = 0xFFBE;
+  int F4 = 0xFFC1;
+  int F7 = 0xFFC4;
+  int F10 = 0xFFC7;
+  int F11 = 0xFFC8;
+  int F12 = 0xFFC9;
+  int INSERT = 0xFF63;
+  int PAGEUP = 0xFF55;
+  int PAGEDOWN = 0xFF56;
+  int ESC = 0xFF1B;
+  int DEL = 0xFFFF;
+  int F2 = 0xFFBF;
+  int F6 = 0xFFC3;
+  int POKE = 0xFF0B;
+  int RETURN = 0xFF0D;
+  int CAPITALQ = 0x51;
+  int GCS = 0x7E;
+
+
+// The ifndef is included here so that the C files do not declare these
+//variables.  The Picasso application UCN5and6.Tdoc needs these variables
+//declared here.
+// The following was moved from VideoTrendStructure.pdat because this pdat 
+//file is included in messages.h and caused multiply defined variable for the 
+//C files.
+
+VT_DateTime videoSet1;
+VT_DateTime videoSet2;
+VT_DateTime videoSet3;
+VT_DateTime videoSet4;
+VT_DateTime videoSet5;
+//
+
+

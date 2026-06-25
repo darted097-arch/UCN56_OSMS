@@ -1,0 +1,1860 @@
+/*
+ * ProcSee CONFIGURATION LANGUAGE FILE
+ *
+ *
+ * User : ucn56
+ * Host : y6cr02
+ * Date : 2017-05-25
+ * Time : 15:42:57
+ *
+ * ProcSee version : ProcSee 3.10.1 (June 2016)
+ * File version    : 1.26
+ *
+ *
+ */
+
+
+picture PicUCN_MajorDbChange
+{
+  worldX = 0;
+  worldY = 0;
+  worldWidth = 1280;
+  worldHeight = 824;
+  oneToOne = 1;
+  backgroundColour = 0;
+  updateMode = 2;
+  resizeMode = 0;
+  xSnap = 5;
+  ySnap = 5;
+  radiusSnap = 0;
+  angleSnap = 0;
+  crosshairStyle = 1;
+  crosshairLength = 0;
+  crosshairFollowSnap = `isInEditMode()`;
+  crosshairVisibility = `isInEditMode()`;
+  xReference = 500;
+  yReference = 500;
+  xScaleFactor = 1;
+  yScaleFactor = 1;
+  rotationAngle = 0;
+
+  int Analog = `(PicturePointId->sig_type<MinimumDigitalType)`;
+
+  int AnalogAlarm = `Analog && (PicturePointId->pipbitmap&0x0F00)`;
+
+  int ChangeAlarmState = `ChangeSelected_Alarm`;
+
+  int ChangeLimitState = 0;
+
+  int ChangeScanState = `ChangeSelected_Scan`;
+
+  int ChangeSelected_Alarm = 0;
+
+  int ChangeSelected_Scan = 0;
+
+  int Composed = `(PicturePointId->sig_type==QA)||(PicturePointId->sig_type==QD)
+||(PicturePointId->sig_type==XA)||(PicturePointId->sig_type==XD)`;
+
+  int DEBUG = 0;
+
+  int Digital = `(PicturePointId->sig_type>=MinimumDigitalType)`;
+
+  int DigitalAlarm = `Digital && (PicturePointId->pipbitmap&bALMTYP)`;
+
+  int ERROR = `ValueEntry.ERROR || HiHiLimitEntry.ERROR || HiLimitEntry.ERROR || LoLimitEntry.ERROR || LoLoLimitEntry.ERROR`;
+
+  int InsertValid = `(PicturePointId->sig_type==AI)||(PicturePointId->sig_type==CI)
+||(PicturePointId->sig_type==DI)||(PicturePointId->sig_type==AL)
+||(PicturePointId->sig_type==DL)||(PicturePointId->sig_type==KO)`;
+
+  int InsertValueState = 0;
+
+  int NoAlarm = `!Protected && !(AnalogAlarm||DigitalAlarm)`;
+
+  int NoOfChanges = 0;
+
+  int NotInputPoint = `(PicturePointId->sig_type==QA)||(PicturePointId->sig_type==QD)
+||(PicturePointId->sig_type==XA)||(PicturePointId->sig_type==XD)||(PicturePointId->sig_type==KO)`;
+
+  char* PageBack = "";
+
+  char* PageForward = "";
+
+  DB_CHANGE_DATA* pDBC_DATA = `&Interface->DatabaseDisplaysData`;
+
+  RECORD* PictureHighAlarmPID = 0;
+
+  RECORD* PictureLowAlarmPID = 0;
+
+  char* PictureNumber = "511";
+
+  RECORD* PicturePointId = `&CXYKMETD`;		
+
+  char PictureScope[80] = "::UCN5and6.PicUCN_MajorDbChange.PID.InputArea";
+
+  char* PictureTitle = "DATABASE CHANGE";
+
+  int Protected = `(PicturePointId->pipbitmap&bCHGPROT)||(PicturePointId->sig_type==SOE)`;
+
+  float Range_hi = `(PicturePointId->sig_type < MinimumDigitalType)?EngRangeHi(PicturePointId):1`;
+
+  float Range_lo = `(PicturePointId->sig_type < MinimumDigitalType)?EngRangeLo(PicturePointId):0`;
+
+  char ThePictureScope[80] = "::UCN5and6.PicUCN_MajorDbChange";
+
+  function `void escapeToMenu()
+  {
+        displayPicture("Main","PicUCN_DBChangeMenu.ppic");
+  }`
+
+  function `void Initialize()
+  {
+    //CORENET 201705 by Philkyu Kwon
+    Current_Page = 511;
+    CFMLevel = 0;
+  
+  // DBCinfo.pPID = PicturePointId;
+  // strcpy(pDBC_DATA->PID,PicturePointId->pid);
+  
+    NoChange.visibility = 0;
+    NoOfChanges = 0;
+  
+    ProcessingMsg.visibility = 0;
+    execute ("{ manageTempShopList(TEMP_SHOP_INIT_ADD,PID.TheOriginalText); }");
+  
+    InitPid();
+  
+     InsertValueState = 0;
+     ChangeScanState = \`ChangeSelected_Scan\`;
+     ChangeAlarmState = \`ChangeSelected_Alarm\`;
+     ChangeLimitState = 0;
+  
+  // CHGSCN
+  
+    ChangeSelected_Scan = 0;
+    CheckButton_Scan.UnSelect();
+  
+  
+  // CHGALM
+  
+     ChangeSelected_Alarm = 0;
+     CheckButton_Alarm.UnSelect();
+  
+  //INSVAL
+  
+     ProcessingErrorMsg.visibility = 0;
+     ValueEntry.ERROR = 0;
+  
+  
+  // CHGLIM
+  
+     HiHiLimitEntry.ERROR = 0 ;
+     HiLimitEntry.ERROR = 0 ;
+     ChangeLimitState = 0;
+     LoLimitEntry.ERROR = 0 ;
+     LoLoLimitEntry.ERROR = 0 ;
+  
+  /*
+    if(PicturePointId->sig_type==KO)
+     {
+        Text1.visibility = 0 ;
+        CheckButton_Alarm.visibility = 0 ;
+        AlarmStatus.visibility = 0 ;
+  
+  //      ProcessBtn.visibility = 0 ;
+  //      CurPointInfo.visibility = 0 ;
+  
+  //      ChangeProtected.visibility = 0 ;
+  //      NoAlarm.visibility = 0 ;
+  //      NotApplyMsg.visibility = 1 ;
+     }
+     else if((PicturePointId->pipbitmap&bCHGPROT)||(PicturePointId->sig_type==SOE))
+     {
+        Text1.visibility = 0 ;
+        CheckButton.visibility = 0 ;
+        Text2.visibility = 0 ;
+        AlarmStatus.visibility = 0 ;
+  
+        ProcessBtn.visibility = 0 ;
+        CurPointInfo.visibility = 0 ;
+  
+        ChangeProtected.visibility = 1 ;
+        NoAlarm.visibility = 0 ;
+        NotApplyMsg.visibility = 0 ;
+     }
+     else if(!((PicturePointId->pipbitmap&bALMTYP)||(PicturePointId->pipbitmap&(bLLE|bLE|bHE|bHHE))))
+     {
+        Text1.visibility = 0 ;
+        CheckButton.visibility = 0 ;
+        Text2.visibility = 0 ;
+        AlarmStatus.visibility = 0 ;
+  
+        ProcessBtn.visibility = 0 ;
+        CurPointInfo.visibility = 0 ;
+  
+        ChangeProtected.visibility = 0 ;
+        NoAlarm.visibility = 1 ;
+        NotApplyMsg.visibility = 0 ;
+     }
+     else
+     {
+        Text1.visibility = 1 ;
+        CheckButton.visibility = 1 ;
+        Text2.visibility = 1 ;
+        AlarmStatus.visibility = 1 ;
+  
+        ProcessBtn.visibility = 1 ;
+        CurPointInfo.visibility = 1 ;
+  
+        ChangeProtected.visibility = 0 ;
+        NoAlarm.visibility = 0 ;
+        NotApplyMsg.visibility = 0 ;
+     }
+  */
+  
+     if(IsAnalog(PicturePointId))
+     {
+        if(0 != PicturePointId->lIPN)
+        {
+           execute ("{PictureLowAlarmPID = \`&::UCN5and6.InterfaceToGUI.%s\`;}",PicturePointId->message1);
+        }
+        else
+        {
+           PictureLowAlarmPID = 0;
+        }
+  
+        if(0 != PicturePointId->hIPN)
+        {
+           execute ("{PictureHighAlarmPID = \`&::UCN5and6.InterfaceToGUI.%s\`;}",PicturePointId->message2);
+        }
+        else
+        {
+           PictureHighAlarmPID = 0;
+        }
+     }
+  
+    update();
+  }`
+
+// ***CORENET 20170601 by Philkyu Kwon ************
+  function `void DummyProcess()
+  {
+      //printf("Button Select OR Button Unselected");
+  }`
+// ***************************************************
+
+  function `void InitPid()
+  {
+  
+  // CHGLIM
+  
+    execute ("{PicturePointId = \\\`&%s\\\`;}",PID.TheOriginalText);
+  
+    DBCinfo.pPID = PicturePointId;
+    strcpy(pDBC_DATA->PID,PicturePointId->pid);
+    execute ("{ manageTempShopList(TEMP_SHOP_INIT_ADD,PID.TheOriginalText); }");
+  
+    HiHiLimitEntry.TheNewNumber =\`(Interface->System.displayedUnits)?PicturePointId->hhmet:PicturePointId->hhval\`;
+    HiLimitEntry.TheNewNumber =\`(Interface->System.displayedUnits)?PicturePointId->hmet:PicturePointId->hval\`;
+    LoLimitEntry.TheNewNumber =\`(Interface->System.displayedUnits)?PicturePointId->lmet:PicturePointId->lval\`;
+    LoLoLimitEntry.TheNewNumber =\`(Interface->System.displayedUnits)?PicturePointId->llmet:PicturePointId->llval\`;
+  
+  
+  // INSVAL
+  
+    ProcessingErrorMsg.visibility = 0;
+    // **********CORENET 2017 by Philkyu Kwon *********************
+    //ValueEntry.TheNewNumber = \`ValueEntry.TheOriginalNumber\`;
+    ValueEntry.TheNewNumber = 0;
+    ValueEntry.TheOriginalNumber = 0;
+    strcpy(ValueEntry.TheNewText, "0");
+    strcpy(ValueEntry.TheOriginalText , "0");
+    // ***********************************************************
+  
+  
+  // CHGALM
+    ChangeSelected_Alarm = 0;
+    CheckButton_Alarm.UnSelect();
+  
+  // CHGSCN
+  
+    ChangeSelected_Scan = 0;
+    CheckButton_Scan.UnSelect();
+  
+    update();
+  }`
+
+  function `int isValidPointType()
+  {
+    int retval = 0;
+  
+    switch(PicturePointId->sig_type)
+    {
+      case AI:
+      case KO:
+      case AL:
+      case CI:
+      case DI:
+      case DL:
+        retval = 1;
+        break;
+      default: // everything else
+        retval = 0;
+        break;
+    } // endswitch
+    return(retval);
+  }
+  `
+
+  function `void Process1()
+  {
+  
+    if (ERROR==0)
+    {
+  
+  //     NoOfChanges = ChangeLimitState + ChangeScanState + ChangeAlarmState + InsertValueState ;
+  //     if((PicturePointId->sig_type!=KO)&&(!(PicturePointId->pisabitmap&bOOSCAN)) && InsertValueState) NoOfChanges ++;
+  
+       NoOfChanges = 0;
+       ProcessingMsg.visibility = 1;
+  
+       if (ChangeScanState)      // CHGSCN
+       {
+          // If the point is in scan indicate in message to take it out,
+          // else indicate to put it into scan.
+          if((PicturePointId->pisabitmap&bOOSCAN)>0)
+             pDBC_DATA->ChgScnStatus = 0;
+          else
+             pDBC_DATA->ChgScnStatus = 1;
+          execute("{sendMessageToHost(PROCESS_CHGSCN_DATA);}");
+          NoOfChanges ++;	//CORENET 170718
+          printf("pDBC_DATA->ChgScnStatus = %d",pDBC_DATA->ChgScnStatus);
+       }
+  
+       if (ChangeAlarmState)      // CHGALM
+       {
+          // If the alarm state is being checked, indicate
+          // to take it out of alarm checking
+          // else indicate to put it into alarm checking.
+          if((PicturePointId->pisabitmap&bOCHEK)>0)
+             pDBC_DATA->ChgAlmStatus = 0;
+          else
+             pDBC_DATA->ChgAlmStatus = 1;
+          execute("{sendMessageToHost(PROCESS_CHGALM_DATA);}");
+          NoOfChanges ++;	//CORENET 170718
+          printf("pDBC_DATA->ChgAlmStatus = %d",pDBC_DATA->ChgAlmStatus);
+       }
+  
+       if(ChangeLimitState)      // CHGLIM
+       {
+          if(PicturePointId->sig_type >= MinimumDigitalType)      // FOR DIGITAL
+          {
+             if(PicturePointId->pipbitmap & bALMTYP)
+                pDBC_DATA->LoLoLim = LoLoLimitEntry.TheNewNumber;
+             else
+                pDBC_DATA->LoLoLim = 0.0;
+          }
+          else                                                    // FOR ALALOG
+          {
+             if((PicturePointId->sig_type < MinimumDigitalType) && (PicturePointId->pipbitmap & bLLE) )
+             {
+  //              pDBC_DATA->LoLoLim = (Interface->System.displayedUnits)? LoLoLimitEntry.TheNewNumber :
+  //                                   LoLoLimitEntry.TheNewNumber * PicturePointId->mfactor + PicturePointId->moffset ;
+  
+                if ( (Interface->System.displayedUnits) && (!(PicturePointId->pipbitmap & bMETUNIT)) )
+                   pDBC_DATA->LoLoLim = (LoLoLimitEntry.TheNewNumber - PicturePointId->moffset) / PicturePointId->mfactor ;
+                else if ( (!Interface->System.displayedUnits) && (PicturePointId->pipbitmap & bMETUNIT) )
+                   pDBC_DATA->LoLoLim = LoLoLimitEntry.TheNewNumber * PicturePointId->mfactor + PicturePointId->moffset ;
+                else
+                   pDBC_DATA->LoLoLim = LoLoLimitEntry.TheNewNumber ;
+             }
+             else
+               pDBC_DATA->LoLoLim = 0.0;
+  
+             if((PicturePointId->sig_type < MinimumDigitalType) && (PicturePointId->pipbitmap & bLE) )
+             {
+  
+  //              pDBC_DATA->LoLim = (Interface->System.displayedUnits)? LoLimitEntry.TheNewNumber :
+  //                                 LoLimitEntry.TheNewNumber * PicturePointId->mfactor + PicturePointId->moffset ;
+  
+                if ( (Interface->System.displayedUnits) && (!(PicturePointId->pipbitmap & bMETUNIT)) )
+                   pDBC_DATA->LoLim = (LoLimitEntry.TheNewNumber - PicturePointId->moffset) / PicturePointId->mfactor ;
+                else if ( (!Interface->System.displayedUnits) && (PicturePointId->pipbitmap & bMETUNIT) )
+                   pDBC_DATA->LoLim = LoLimitEntry.TheNewNumber * PicturePointId->mfactor + PicturePointId->moffset ;
+                else
+                   pDBC_DATA->LoLim = LoLimitEntry.TheNewNumber ;
+             }
+             else
+               pDBC_DATA->LoLim   = 0.0;
+  
+             if((PicturePointId->sig_type < MinimumDigitalType) && (PicturePointId->pipbitmap & bHE) )
+             {
+  //              pDBC_DATA->HiLim = (Interface->System.displayedUnits)? HiLimitEntry.TheNewNumber :
+  //                                 HiLimitEntry.TheNewNumber * PicturePointId->mfactor + PicturePointId->moffset ;
+  
+                if ( (Interface->System.displayedUnits) && (!(PicturePointId->pipbitmap & bMETUNIT)) )
+                   pDBC_DATA->HiLim = (HiLimitEntry.TheNewNumber - PicturePointId->moffset) / PicturePointId->mfactor ;
+                else if ( (!Interface->System.displayedUnits) && (PicturePointId->pipbitmap & bMETUNIT) )
+                   pDBC_DATA->HiLim = HiLimitEntry.TheNewNumber * PicturePointId->mfactor + PicturePointId->moffset ;
+                else
+                   pDBC_DATA->HiLim = HiLimitEntry.TheNewNumber ;
+             }
+             else
+               pDBC_DATA->HiLim   = 0.0;
+  
+             if((PicturePointId->sig_type < MinimumDigitalType) && (PicturePointId->pipbitmap & bHHE) )
+             {
+  //              pDBC_DATA->HiHiLim = (Interface->System.displayedUnits)? HiHiLimitEntry.TheNewNumber :
+  //                                   HiHiLimitEntry.TheNewNumber * PicturePointId->mfactor + PicturePointId->moffset ;
+  
+                if ( (Interface->System.displayedUnits) && (!(PicturePointId->pipbitmap & bMETUNIT)) )
+                   pDBC_DATA->HiHiLim = (HiHiLimitEntry.TheNewNumber - PicturePointId->moffset) / PicturePointId->mfactor ;
+                else if ( (!Interface->System.displayedUnits) && (PicturePointId->pipbitmap & bMETUNIT) )
+                   pDBC_DATA->HiHiLim = HiHiLimitEntry.TheNewNumber * PicturePointId->mfactor + PicturePointId->moffset ;
+                else
+                   pDBC_DATA->HiHiLim = HiHiLimitEntry.TheNewNumber ;
+             }
+             else
+               pDBC_DATA->HiHiLim = 0.0;
+          }
+          execute("{sendMessageToHost(PROCESS_CHGLIM_DATA);}");
+          NoOfChanges ++;	//CORENET 170718
+       }
+  
+       if (InsertValueState)      // INSVAL
+       {
+           ProcessingErrorMsg.visibility = 0;
+  
+           // If PID status is in-scan, set the status to out-of-scan first.
+           if((!NotInputPoint) &&(!(PicturePointId->pisabitmap&bOOSCAN)))                     // yrlee 981112
+           {
+              pDBC_DATA->ChgScnStatus = 1;
+              execute("{sendMessageToHost(PROCESS_CHGSCN_DATA);}");
+              NoOfChanges ++;		//CORENET 170718
+           }
+  
+           if(PicturePointId->sig_type >= MinimumDigitalType)      // FOR DIGITAL
+           {
+              pDBC_DATA->InsValue = ValueEntry.TheNewNumber ;
+           }
+           else                                                    // FOR ANALOG
+           {
+              //if(!strcmp(PicturePointId->pid,"CXYKMETD"))
+              if(!strcmp(PicturePointId->pid,"METDISP"))	// for Y34 (CORENET 2013.10.30)
+                 pDBC_DATA->InsValue = ValueEntry.TheNewNumber ;
+              else
+              {
+  //               pDBC_DATA->InsValue = (Interface->System.displayedUnits)? ValueEntry.TheNewNumber :
+  //               ValueEntry.TheNewNumber * PicturePointId->mfactor + PicturePointId->moffset ;
+  
+                if ( (Interface->System.displayedUnits) && (!(PicturePointId->pipbitmap & bMETUNIT)) )
+                   pDBC_DATA->InsValue = (ValueEntry.TheNewNumber - PicturePointId->moffset) / PicturePointId->mfactor ;
+                else if ( (!Interface->System.displayedUnits) && (PicturePointId->pipbitmap & bMETUNIT) )
+                   pDBC_DATA->InsValue = ValueEntry.TheNewNumber * PicturePointId->mfactor + PicturePointId->moffset ;
+                else
+                   pDBC_DATA->InsValue = ValueEntry.TheNewNumber ;
+  
+                 printf("************* INSVAL : %f\\n", pDBC_DATA->InsValue);
+  
+              }
+           }
+           execute("{sendMessageToHost(PROCESS_INSVAL_DATA);}");
+           NoOfChanges ++;	//CORENET 170718
+       }
+  
+       NoChange.visibility = !(ChangeScanState||ChangeAlarmState||InsertValueState||ChangeLimitState) ;
+       if(NoChange.visibility) ProcessingMsg.visibility = 0;
+    }
+    else
+    {
+      ProcessingErrorMsg.visibility = 1;
+    }
+  
+    printf("************* INSVAL : %f\\n, ********InserValueState = %d", pDBC_DATA->InsValue,InsertValueState );	//CORENET 2017 by Philkyu Kwon
+    update();
+  
+  }`
+
+  function `void ProcessingConfirmed()
+    {
+  
+    printf("PrecessingConfirmed() Call!!!!!!!!!!!!!!!##############");
+
+    //CORENET 20170629
+    printf("========NoOfChanges = %d", NoOfChanges);
+
+    //NoOfChanges = NoOfChanges - 1;
+  
+    if(--NoOfChanges <= 0)	//CORENET 170718
+    {
+  //     ProcessingMsg.visibility = 0;
+  //     NoOfChanges=0;
+         Initialize();
+    }
+  
+    update();
+  
+  }`
+
+  function `void ProcessingConfirmed1(int opcode)
+  {
+    printf("PrecessingConfirmed111111111() Call#########################");
+  
+    //CORENET 20170629
+    printf("Confirmed1========NoOfChanges = %d", NoOfChanges);
+
+    {
+       switch(opcode)
+       {
+  	case CHGSCN_PROCESSING_CONFIRMED:
+  //                ChangeSelected_Scan = 0;
+                  CheckButton_Scan.UnSelect();
+  		printf("*** CHGSCN completed....");
+    		//NoOfChanges = NoOfChanges - 1;
+  		break;
+          case CHGALM_PROCESSING_CONFIRMED:
+  //                ChangeSelected_Alarm = 0;
+                  CheckButton_Alarm.UnSelect();
+  		printf("*** CHGALM completed....");
+    		//NoOfChanges = NoOfChanges - 1;
+  		break;
+          case CHGLIM_PROCESSING_CONFIRMED:
+                  ChangeLimitState = 0;
+  		printf("*** CHGLIM completed....");
+    		//NoOfChanges = NoOfChanges - 1;
+  		break;
+          case INSVAL_PROCESSING_CONFIRMED:
+  		InsertValueState = 0;
+  		printf("*** INSVAL completed....");
+    		//NoOfChanges = NoOfChanges - 1;	//CORENET 170718
+  		break;
+       }
+    }
+  
+    if(--NoOfChanges <= 0)	//CORENET 170718
+    {
+  //     ProcessingMsg.visibility = 0;
+  //     NoOfChanges=0;
+         Initialize();
+    }
+  
+    update();
+  
+  }`
+
+  function `void VerifyLimits()
+  {
+     if(PicturePointId->sig_type < MinimumDigitalType)  //for Analog
+     {
+        if(PicturePointId->pipbitmap&bHHE)
+        {
+            if((HiHiLimitEntry.TheNewNumber >= Range_lo) && (HiHiLimitEntry.TheNewNumber <= Range_hi))
+                 HiHiLimitEntry.ERROR = 0;
+            else
+                 HiHiLimitEntry.ERROR = 1;
+        }
+  
+        if(PicturePointId->pipbitmap&bHE)
+        {
+            if((HiLimitEntry.TheNewNumber >= Range_lo) && (HiLimitEntry.TheNewNumber <= Range_hi))
+                 HiLimitEntry.ERROR = 0;
+            else
+                 HiLimitEntry.ERROR = 1;
+        }
+  
+        if(PicturePointId->pipbitmap&bLE)
+        {
+            if((LoLimitEntry.TheNewNumber >= Range_lo) && (LoLimitEntry.TheNewNumber <= Range_hi))
+                 LoLimitEntry.ERROR = 0;
+            else
+                 LoLimitEntry.ERROR = 1;
+        }
+  
+        if(PicturePointId->pipbitmap&bLLE)
+        {
+            if((LoLoLimitEntry.TheNewNumber >= Range_lo) && (LoLoLimitEntry.TheNewNumber <= Range_hi))
+                 LoLoLimitEntry.ERROR = 0;
+            else
+                 LoLoLimitEntry.ERROR = 1;
+        }
+  
+  //      ValueErrorMsg.visibility = HiHiLimitEntry.ERROR || HiLimitEntry.ERROR || LoLimitEntry.ERROR || LoLoLimitEntry.ERROR ;
+     }
+     else       // for Digital
+     {
+        if(((LoLoLimitEntry.TheNewNumber==0)||(LoLoLimitEntry.TheNewNumber==1)) && (PicturePointId->pipbitmap&bALMTYP))
+            LoLoLimitEntry.ERROR = 0;
+        else
+            LoLoLimitEntry.ERROR = 1;
+  
+  //      ValueErrorMsg.visibility = LoLoLimitEntry.ERROR ;
+     }
+  
+     ChangeLimitState = 1;
+  
+     ProcessingErrorMsg.visibility = 0 ;
+  }`
+
+  function `void VerifyLimits_INSVAL()
+  {
+  //   float erange_lo = EngRangeLo(PicturePointId) ;
+  //  float erange_hi = EngRangeHi(PicturePointId) ;
+  
+     ValueEntry.TheNewNumber = atof(ValueEntry.TheNewText);
+     printf("ValueEntry.TheNewNumber = %f",ValueEntry.TheNewNumber);	//CORENET 2017 by Philkyu Kwon
+  
+     printf("%f  %f", Range_lo, Range_hi);
+  
+     if(PicturePointId->sig_type < MinimumDigitalType)  //for Analog
+     {
+        if ((0 == Range_lo) && (0 == Range_hi))
+           ValueEntry.ERROR = 0;
+        else
+        {
+           if ((ValueEntry.TheNewNumber >= Range_lo) &&
+              (ValueEntry.TheNewNumber <= Range_hi) )
+              ValueEntry.ERROR = 0;
+           else
+              ValueEntry.ERROR = 1;
+        }
+     }
+     else       // for Digital
+     {
+        if((ValueEntry.TheNewNumber==0)||(ValueEntry.TheNewNumber==1))
+            ValueEntry.ERROR = 0;
+        else
+            ValueEntry.ERROR = 1;
+     }
+  
+  
+        InsertValueState = 1;
+        CheckButton_Scan.UnSelect();
+  }`
+
+  dialogue
+  {
+    event = `buttonPressed(Right)`;
+    action = `{
+      Initialize();
+    }`;
+  }
+
+  dialogue
+  {
+    event = `keyPressed(0xFF1B)`;
+    action = `{
+       escapeToMenu();
+    }`;
+  }
+
+  instance DialogueSymbols.DatabaseDisplayInfo_Ins DBCinfo
+  {
+    x = 15;
+    y = 13;
+    visibility = 1;
+    xReference = 15;
+    yReference = 13;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    pHiAlmPID = `PictureHighAlarmPID`;
+    pLoAlmPID = `PictureLowAlarmPID`;
+    //pPID = `&::UCN5and6.InterfaceToGUI.CIFKD31`;	//CORENET 20170602 by Philkyu Kwon
+    pPID = `PicturePointId`;	//CORENET 20170602 by Philkyu Kwon
+  }
+
+  instance DialogueSymbols.PushButton
+  {
+    x = 124;
+    y = 720;
+    visibility = `!Protected`;
+    xReference = 124;
+    yReference = 720;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ButtonState = 0;
+    DynamicLabel = "PROCESSING";
+    ExecuteString = "{Process1();}";
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    Label = "PROCESS";
+    Scope = `ThePictureScope`;
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    StaticLabel = "PROCESS";
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextFontDynamic = `font2`;
+    TextFontStatic = `font4`;
+    TextX = 7;
+    TextXDynamic = 5;
+    TextXStatic = 7;
+    TextY = 22;
+    TextYDynamic = 21;
+    TextYStatic = 22;
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    Width = 110;
+  }
+
+  text
+  {
+    x = 249;
+    y = 742;
+    format = "%s";
+    theText = "CURRENT POINT INFORMATION";
+    alignment = 0;
+    visibility = `!Protected`;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 249;
+    yReference = 742;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text ProcessingMsg
+  {
+    x = 124;
+    y = 704;
+    format = "%s";
+    theText = "PROCESSING";
+    alignment = 0;
+    visibility = 0;
+    foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 124;
+    yReference = 704;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text LoLimitLabel
+  {
+    x = 775;
+    y = 560;
+    format = "%s";
+    theText = "LO LIMIT:";
+    alignment = 0;
+    visibility = `!Protected && AnalogAlarm`;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 775;
+    yReference = 560;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text LoLoLimitLabel
+  {
+    x = 775;
+    y = 614;
+    format = "%s";
+    theText = "LOLO LIMIT:";
+    alignment = 0;
+    visibility = `!Protected && AnalogAlarm`;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 775;
+    yReference = 614;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text HiLimitLabel
+  {
+    x = 775;
+    y = 506;
+    format = "%s";
+    theText = "HI LIMIT:";
+    alignment = 0;
+    visibility = `!Protected && AnalogAlarm`;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 775;
+    yReference = 506;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text HiHiLimitLabel
+  {
+    x = 775;
+    y = 449;
+    format = "%s";
+    theText = "HIHI LIMIT:";
+    alignment = 0;
+    visibility = `!Protected && AnalogAlarm`;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 775;
+    yReference = 449;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  instance DialogueSymbols.InputDialogueNumber LoLoLimitEntry
+  {
+    x = 908;
+    y = 593;
+    visibility = `!Protected && ( (Analog && (PicturePointId->pipbitmap&bLLE)) || DigitalAlarm )`;
+    xReference = 908;
+    yReference = 593;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Active = 1;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    ExecuteUnSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxDigits = 8;
+    ReturnAction = "{VerifyLimits();}";
+    Scope = `PictureScope`;
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewNumber = `(Interface->System.displayedUnits)?PicturePointId->llmet:PicturePointId->llval`;
+    TheNewText = "45";
+    TheNumberFormat = `(DigitalAlarm)?"%d":PicturePointId->disfmt`;
+    TheOriginalNumber = 34.5;
+    TheOriginalText = "45";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 150;
+  }
+
+  instance DialogueSymbols.InputDialogueNumber LoLimitEntry
+  {
+    x = 908;
+    y = 538;
+    visibility = `!Protected && (Analog && (PicturePointId->pipbitmap&bLE))`;
+    xReference = 908;
+    yReference = 538;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Active = 1;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    ExecuteUnSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxDigits = 8;
+    ReturnAction = "{VerifyLimits();}";
+    Scope = `PictureScope`;
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewNumber = `(Interface->System.displayedUnits)?PicturePointId->lmet:PicturePointId->lval`;
+    TheNewText = "9.4";
+    TheNumberFormat = `PicturePointId->disfmt`;
+    TheOriginalNumber = 34.5;
+    TheOriginalText = "9.4";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 150;
+  }
+
+  instance DialogueSymbols.InputDialogueNumber HiLimitEntry
+  {
+    x = 908;
+    y = 484;
+    visibility = `!Protected &&(Analog && (PicturePointId->pipbitmap&bHE))`;
+    xReference = 908;
+    yReference = 484;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Active = 1;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    ExecuteUnSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxDigits = 8;
+    ReturnAction = "{VerifyLimits();}";
+    Scope = `PictureScope`;
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewNumber = `(Interface->System.displayedUnits)?PicturePointId->hmet:PicturePointId->hval`;
+    TheNewText = "500";
+    TheNumberFormat = `PicturePointId->disfmt`;
+    TheOriginalNumber = 34.5;
+    TheOriginalText = "500";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 150;
+  }
+
+  instance DialogueSymbols.InputDialogueNumber HiHiLimitEntry
+  {
+    x = 908;
+    y = 429;
+    visibility = `!Protected &&(Analog && (PicturePointId->pipbitmap&bHHE))`;
+    xReference = 908;
+    yReference = 429;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Active = 1;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    ExecuteUnSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxDigits = 8;
+    ReturnAction = "{PicUCN_MajorDbChange.VerifyLimits();}";
+    Scope = `PictureScope`;
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewNumber = `(Interface->System.displayedUnits)?PicturePointId->hhmet:PicturePointId->hhval`;
+    TheNewText = "123.4";
+    TheNumberFormat = `PicturePointId->disfmt`;
+    TheOriginalNumber = 34.5;
+    TheOriginalText = "123.4";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 150;
+  }
+
+  text LoLoLimitNone
+  {
+    x = 918;
+    y = 614;
+    format = "%s";
+    theText = "NONE";
+    alignment = 0;
+    visibility = `!Protected && (Analog && !(PicturePointId->pipbitmap&bLLE)) && !NoAlarm`;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 918;
+    yReference = 614;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text LoLimitNone
+  {
+    x = 918;
+    y = 561;
+    format = "%s";
+    theText = "NONE";
+    alignment = 0;
+    visibility = `!Protected && (Analog && !(PicturePointId->pipbitmap&bLE)) && !NoAlarm`;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 918;
+    yReference = 561;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text HiLimitNone
+  {
+    x = 918;
+    y = 504;
+    format = "%s";
+    theText = "NONE";
+    alignment = 0;
+    visibility = `!Protected && (Analog && !(PicturePointId->pipbitmap&bHE)) && !NoAlarm`;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 918;
+    yReference = 504;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text HiHiLimitNone
+  {
+    x = 917;
+    y = 449;
+    format = "%s";
+    theText = "NONE";
+    alignment = 0;
+    visibility = `!Protected && (Analog && !(PicturePointId->pipbitmap&bHHE)) && !NoAlarm`;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 917;
+    yReference = 449;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  instance DialogueSymbols.PidInputButton PID
+  {
+    x = 117;
+    y = 97;
+    visibility = 1;
+    xReference = 117;
+    yReference = 97;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    ExecuteUnSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    FindPidScope = `PictureScope`;
+    Found = "{PID.ERROR = 0; Initialize();}";
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxCharacters = 8;
+    NotFound = "{PID.ERROR = 1;}";
+    ReturnAction = "";
+    Scope = `ThePictureScope`;
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewText = "CIFKD31";		
+    TheOriginalText = "CIFKD31";	
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 200;
+  }
+
+  text invalidPID
+  {
+    x = 123;
+    y = 142;
+    format = "%s";
+    theText = "INVALID PID";
+    alignment = 0;
+    visibility = `PID.ERROR`;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 123;
+    yReference = 142;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 777;
+    y = 459;
+    format = "%s";
+    theText = "0 = ALARM WHEN CONTACT OPEN";
+    alignment = 0;
+    visibility = `!Protected && (PicturePointId->sig_type >= MinimumDigitalType) && DigitalAlarm`;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 777;
+    yReference = 459;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 777;
+    y = 489;
+    format = "%s";
+    theText = "1 = ALARM WHEN CONTACT CLOSED";
+    alignment = 0;
+    visibility = `!Protected && (PicturePointId->sig_type >= MinimumDigitalType) && DigitalAlarm`;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 777;
+    yReference = 489;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text ProcessingErrorMsg
+  {
+    x = 123;
+    y = 705;
+    format = "%s";
+    theText = "CORRECT ALL ERRORS BEFORE PROCESSING";
+    alignment = 0;
+    visibility = 0;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 123;
+    yReference = 705;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text ValueError1Msg
+  {
+    x = 913;
+    y = 476;
+    format = "%s";
+    theText = "INVALID VALUE";
+    alignment = 0;
+    visibility = `HiHiLimitEntry.ERROR`;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 913;
+    yReference = 476;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text ValueError2Msg
+  {
+    x = 913;
+    y = 532;
+    format = "%s";
+    theText = "INVALID VALUE";
+    alignment = 0;
+    visibility = `HiLimitEntry.ERROR`;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 913;
+    yReference = 532;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text ValueError3Msg
+  {
+    x = 913;
+    y = 585;
+    format = "%s";
+    theText = "INVALID VALUE";
+    alignment = 0;
+    visibility = `LoLimitEntry.ERROR`;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 913;
+    yReference = 585;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text ValueError4Msg
+  {
+    x = 913;
+    y = 641;
+    format = "%s";
+    theText = "INVALID VALUE";
+    alignment = 0;
+    visibility = `LoLoLimitEntry.ERROR`;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 913;
+    yReference = 641;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text NewState
+  {
+    x = 775;
+    y = 615;
+    format = "%s";
+    theText = "NEW STATE:";
+    alignment = 0;
+    visibility = `!Protected && DigitalAlarm`;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 775;
+    yReference = 615;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 819;
+    y = 368;
+    format = "%s";
+    theText = "CHANGE ALARM LIMITS";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 819;
+    yReference = 368;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 185;
+    y = 530;
+    format = "%s";
+    theText = "SET SCAN STATUS TO:";
+    alignment = 0;
+    visibility = `CheckButton_Scan.visibility`;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 585;
+    yReference = -58;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 415;
+    y = 530;
+    format = "%s";
+    theText = `((PicturePointId->pisabitmap&bOOSCAN)>0)?"IN SCAN":"OUT OF SCAN"`;
+    alignment = 0;
+    visibility = `CheckButton_Scan.visibility`;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 479;
+    yReference = -258;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  instance DialogueSymbols.CheckButton CheckButton_Scan
+  {
+    x = 140;
+    y = 506;
+    visibility = `(!InsertValueState) && (!Protected) && (!NotInputPoint)`;
+    xReference = 140;
+    yReference = 506;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ButtonState = 0;
+    DisplayText = 1;
+    DynamicLabel = "X";
+    ExecuteSelect = "{ChangeSelected_Scan = 1;}";
+    ExecuteUnSelect = "{ChangeSelected_Scan = 0;}";
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    Label = " ";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    StaticLabel = " ";
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextFontDynamic = `font4`;
+    TextFontStatic = `font4`;
+    TextX = 10;
+    TextXDynamic = 10;
+    TextXStatic = 10;
+    TextY = 22;
+    TextYDynamic = `TextY`;
+    TextYStatic = `TextY`;
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    Width = 30;
+  }
+
+  text PressMsg_Scan
+  {
+    x = 140;
+    y = 555;
+    format = "%s";
+    theText = "PRESS BUTTON TO CHANGE SCAN STATUS";
+    alignment = 0;
+    visibility = `!ChangeScanState&&CheckButton_Scan.visibility`;
+    foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = `font2`;
+    xReference = 140;
+    yReference = 555;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text Text1
+  {
+    x = 185;
+    y = 644;
+    format = "%s";
+    theText = "SET ALARM STATUS TO:";
+    alignment = 0;
+    visibility = `CheckButton_Alarm.visibility`;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 585;
+    yReference = 56;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text AlarmStatus
+  {
+    x = 415;
+    y = 644;
+    format = "%s";
+    theText = `(PicturePointId->pisabitmap&bOCHEK)?"ALARM CHECKING ON":"ALARM CHECKING OFF"`;
+    alignment = 0;
+    visibility = `CheckButton_Alarm.visibility`;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 479;
+    yReference = -144;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  instance DialogueSymbols.CheckButton CheckButton_Alarm
+  {
+    x = 140;
+    y = 621;
+    visibility = `!NoAlarm && !Protected`;
+    xReference = 140;
+    yReference = 621;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ButtonState = 0;
+    DisplayText = 1;
+    DynamicLabel = "X";
+    ExecuteSelect = "{ChangeSelected_Alarm = 1;}";
+    ExecuteUnSelect = "{ChangeSelected_Alarm = 0;}";
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    Label = " ";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    StaticLabel = " ";
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextFontDynamic = `font4`;
+    TextFontStatic = `font4`;
+    TextX = 10;
+    TextXDynamic = 10;
+    TextXStatic = 10;
+    TextY = 22;
+    TextYDynamic = `TextY`;
+    TextYStatic = `TextY`;
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    Width = 30;
+  }
+
+  text PressMsg_Alarm
+  {
+    x = 140;
+    y = 670;
+    format = "%s";
+    theText = "PRESS BUTTON TO CHANGE ALARM STATUS";
+    alignment = 0;
+    visibility = `CheckButton_Alarm.visibility && !ChangeSelected_Alarm`;
+    foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = `font2`;
+    xReference = 140;
+    yReference = 670;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text ValueLabel
+  {
+    x = 139;
+    y = 415;
+    format = "%s";
+    theText = "ENTER NEW VALUE";
+    alignment = 0;
+    visibility = `InsertValid && !Protected`;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 139;
+    yReference = 415;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text BadPointTypeMsg
+  {
+    x = 182;
+    y = 414;
+    format = "%s";
+    theText = "SELECT ANALOG INPUT OR CONSTANT POINT";
+    alignment = 0;
+    visibility = `!InsertValid`;
+    foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 182;
+    yReference = 414;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text ValueErrorMsg
+  {
+    x = 521;
+    y = 416;
+    format = "%s";
+    theText = "INVALID VALUE";
+    alignment = 0;
+    visibility = `ValueEntry.ERROR`;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 521;
+    yReference = 416;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  instance DialogueSymbols.PushButton ResetButton
+  {
+    x = 1061;
+    y = 720;
+    visibility = `!Protected`;
+    xReference = 1061;
+    yReference = 720;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ButtonState = 0;
+    DynamicLabel = "      RESET";
+    ExecuteString = "{Initialize();}";
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    Label = "    RESET";
+    Scope = `ThePictureScope`;
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    StaticLabel = "    RESET";
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextFontDynamic = `font2`;
+    TextFontStatic = `font4`;
+    TextX = 7;
+    TextXDynamic = 5;
+    TextXStatic = 7;
+    TextY = 22;
+    TextYDynamic = 21;
+    TextYStatic = 22;
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    Width = 110;
+  }
+
+  rectangle
+  {
+    x = 692;
+    y = 377;
+    width = 479;
+    height = 296;
+    visibility = 1;
+    foregroundColour = `COLOR_LINE_BOUNDARY_6`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 0;
+    foregroundFillColour = -1;
+    backgroundFillColour = -1;
+    fillPattern = `NoPattern`;
+    xReference = 679;
+    yReference = 434;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle
+  {
+    x = 123;
+    y = 377;
+    width = 550;
+    height = 65;
+    visibility = 1;
+    foregroundColour = `COLOR_LINE_BOUNDARY_6`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 0;
+    foregroundFillColour = -1;
+    backgroundFillColour = -1;
+    fillPattern = `NoPattern`;
+    xReference = 123;
+    yReference = 379;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 348;
+    y = 368;
+    format = "%s";
+    theText = "INSERT VALUE";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 348;
+    yReference = 368;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 309;
+    y = 483;
+    format = "%s";
+    theText = "CHANGE SCAN STATUS";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 309;
+    yReference = 483;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text NoChange
+  {
+    x = 123;
+    y = 705;
+    format = "%s";
+    theText = "DATABASE CHANGE INPUT REQUIRED";
+    alignment = 0;
+    visibility = 0;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 123;
+    yReference = 705;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 149;
+    y = 530;
+    format = "%s";
+    theText = "CAN NOT CHANGE SCAN STATUS...VALUE INSERTED";
+    alignment = 0;
+    visibility = `InsertValueState && (!Protected) && (!NotInputPoint)`;
+    foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 149;
+    yReference = 530;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text NoAlarmMsg1
+  {
+    x = 185;
+    y = 650;
+    format = "%s";
+    theText = "CURRENT POINT HAS NO ALARM FUNCTION";
+    alignment = 0;
+    visibility = `NoAlarm`;
+    foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 185;
+    yReference = 650;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text NoAlarmMsg2
+  {
+    x = 735;
+    y = 535;
+    format = "%s";
+    theText = "CURRENT POINT HAS NO ALARM FUNCTION";
+    alignment = 0;
+    visibility = `NoAlarm`;
+    foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 735;
+    yReference = 535;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle
+  {
+    x = 123;
+    y = 492;
+    width = 550;
+    height = 65;
+    visibility = 1;
+    foregroundColour = `COLOR_LINE_BOUNDARY_6`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 0;
+    foregroundFillColour = -1;
+    backgroundFillColour = -1;
+    fillPattern = `NoPattern`;
+    xReference = 123;
+    yReference = 494;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle
+  {
+    x = 123;
+    y = 607;
+    width = 550;
+    height = 65;
+    visibility = 1;
+    foregroundColour = `COLOR_LINE_BOUNDARY_6`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 0;
+    foregroundFillColour = -1;
+    backgroundFillColour = -1;
+    fillPattern = `NoPattern`;
+    xReference = 123;
+    yReference = 609;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 305;
+    y = 598;
+    format = "%s";
+    theText = "CHANGE ALARM STATUS";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 305;
+    yReference = 598;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 312;
+    y = 530;
+    format = "%s";
+    theText = "CHANGE PROTECTED";
+    alignment = 0;
+    visibility = `Protected`;
+    foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 312;
+    yReference = 530;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 312;
+    y = 650;
+    format = "%s";
+    theText = "CHANGE PROTECTED";
+    alignment = 0;
+    visibility = `Protected`;
+    foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 312;
+    yReference = 650;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 845;
+    y = 535;
+    format = "%s";
+    theText = "CHANGE PROTECTED";
+    alignment = 0;
+    visibility = `Protected`;
+    foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 845;
+    yReference = 535;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  instance DialogueSymbols.InputDialogueNumberInsVal ValueEntry
+  {
+    x = 340;
+    y = 395;
+    visibility = `ValueLabel.visibility`;
+    xReference = 340;
+    yReference = 395;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Active = 1;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    ExecuteUnSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxDigits = 15;
+    ReturnAction = "VerifyLimits_INSVAL()";
+    Scope = `ThePictureScope`;
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewNumber = `ValueEntry.TheOriginalNumber`;
+    TheNewText = "1249190";
+    TheNumberFormat = "%s";
+    TheOriginalNumber = 34.5;
+    TheOriginalText = "1249190";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 170;
+  }
+
+  text
+  {
+    x = 312;
+    y = 415;
+    format = "%s";
+    theText = "CHANGE PROTECTED";
+    alignment = 0;
+    visibility = `Protected`;
+    foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 312;
+    yReference = 415;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 309;
+    y = 531;
+    format = "%s";
+    theText = "SELECT INPUT POINT";
+    alignment = 0;
+    visibility = `NotInputPoint && !Protected`;
+    foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 309;
+    yReference = 531;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+}

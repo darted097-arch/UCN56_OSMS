@@ -1,0 +1,70 @@
+// **************************************************************************************
+// *											*
+// *	      Copyright (C) 1997, KOPEC(N), All rights reserved.		        *
+// *          Proprietary information, KOPEC(N)          	                        *
+// *											*
+// **************************************************************************************
+//
+// ***** HIGH LEVEL DESCRIPTION **********************************************
+//
+// This pdat file contains the variables used by the Point Summary displays.
+//
+// **** REVISION HISTORY *****************************************************
+//
+// $Header: /PMSArchive/ucn56/workstation/pictures/pdat/BOPDMDStructure.pdat 1.2 1998/02/11 20:56:25 kn1 Exp $
+// $Log: BOPDMDStructure.pdat,v $
+// Revision 1.2  1998/02/11 20:56:25  kn1
+// Author: kn1@y6maint1.usnus.abb.com (Kopec NSSS 1)
+// Kopec NSSS Phase 2 Status 1
+//
+// Revision 1.1  1997/04/08 22:13:50  kn1
+// Author: kn1@y6maint1.usnus.abb.com (Kopec NSSS 1)
+// Initial revision
+//
+// Revision Initial  1997/03/27 jklee
+// Author: jklee
+// Initial revision
+//
+//
+// ***************************************************************************
+// System Include Files: NONE
+//
+//
+// User Defined Include Files: NONE
+//
+//
+// External Variables: NONE
+//
+//
+// Local Constant Definitions: NONE
+//
+//
+// Function Prototypes: NONE
+//
+//
+// ***************************************************************************
+//
+//  Message structure for BOP Performance Calculations 
+//
+struct WSBOPDMDRequestData {
+   int                  Option;
+   char                 theWorkstation[12];
+};
+
+struct WSBOPDMDRequestMessage {
+   WSmessageHeader      header;
+   WSBOPDMDRequestData  data;
+}; 
+
+struct WSBOPDMDConfirmData {
+   int                  Option;
+   char                 message1[40];
+   char                 message2[40];
+   char                 message3[40];
+};   
+
+struct WSBOPDMDConfirmMessage {
+   WSmessageHeader       header;
+   WSBOPDMDConfirmData   data;
+};
+

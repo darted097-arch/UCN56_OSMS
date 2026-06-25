@@ -1,0 +1,60 @@
+// ***************************************************************************
+// *									     *
+// *		2017, CORENET Corporation generated this page.		     *
+// *									     *
+// ***************************************************************************
+//
+// ***** HIGH LEVEL DESCRIPTION **********************************************
+//
+// This pdat file contains the variables used by the print pid for test displays.
+//
+// **** REVISION HISTORY *****************************************************
+// printPIDTestStructures.pdat
+// feel9zero@core-net.co.kr (Phil-kyu Kwon)
+//
+// ***************************************************************************
+// System Include Files: 
+//
+//
+// User Defined Include Files: 
+//
+//
+// External Variables: 
+//
+//
+// Local Constant Definitions: 
+//
+//
+// Function Prototypes: 
+//
+//
+//================= PRINT PID FOR TEST Structures ============================ 
+//
+//
+struct WS_PidTest_Data {
+  char          sysName[4];
+  char          sigType[4];
+  int           prnRate;
+  int           prnTime;
+  char          WSNAME[12];
+};
+//
+struct WS_PidTest_Message {
+  WSmessageHeader      header;                 // message information          (24-bit)
+  WS_PidTest_Data      wsPidTestData;          // PID FOR TEST ws information  (28-bit)
+};
+//
+struct CCUR_PidTest_Msg {
+  char  message1[40];
+  char  message2[40];
+  char  message3[40];
+};
+//
+struct CCUR_PidTest_Message {
+  WSmessageHeader       header;            // message information          (24-bit)
+  CCUR_PidTest_Msg     	hostPidTestMsg;   // PID FOR TEST host information (120-bit)( 
+};
+
+//======= END of PRINT PID FOR TEST Structures ========================
+
+

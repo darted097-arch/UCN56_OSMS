@@ -1,0 +1,171 @@
+#ifndef _WSPCSOBJECT_H
+#define _WSPCSOBJECT_H
+//
+// **********************************************
+// HBNPP 3&4 PMS DISPLAY SYSTEM
+// 
+// WSPCSObject.h        
+// ver 1.0 -- pms01 2016.06.30.
+// **********************************************
+//
+// ***************************************************************************
+//  This module contains constants and definitions for WSPCS.
+// ***************************************************************************
+//
+// ***************************************************************************
+//
+// System Include Files:
+//
+//
+// User Defined Include Files:
+//
+#include "systemParameters.h"
+#include "CommLinkObject.h"
+//
+// External Variables:
+//
+//
+// Local Constant Definitions:
+//
+//
+// Function Prototypes:
+//
+//
+// typedef statements:
+//
+//
+//
+// Configuration Constants - defaults
+//
+const int MAX_READ_TIME_FOR_GOOD_DATA = 5;	// after which data is set bad
+
+const int GOOD_STATUS_INTERVAL = 15;
+const int DET_PB_INTERVAL = 5;
+const int DET_BAD_INPUT_INTERVAL = 1;
+const int GOODSTATUS = 1;
+const int BADSTATUS  = 0;
+
+
+// Constants and structures for keyword options
+const int PRIMARY_OPTION_INDEX = 0;
+const int HOST1_OPTION_INDEX = 1;
+const int HOST2_OPTION_INDEX = 2;
+const int FDDI_OPTION_INDEX = 3;
+const int MODEM_OPTION_INDEX = 4;
+const int CFGFILE_OPTION_INDEX = 5;
+
+// Structure that holds the WSPCS configuration information
+struct WSPCSinfoStruct
+{
+   int  maxReadTimeForGoodData; 
+   char host[NUM_HOSTS + 1][MAX_HOSTNAME_LEN];//[0] primary,[1] host1,[2] host2
+   char FDDI[5];
+   char MODEM[MODEM_OPTION_LEN+1];
+};
+
+struct OPTION
+{
+   char *       str;
+   int          used;
+};
+
+static OPTION options[] =
+{
+   {"-PRIMARY", FALSE},
+   {"-HOST1", FALSE},
+   {"-HOST2", FALSE},
+   {"-FDDI", FALSE},
+   {"-MODEM", FALSE},
+   {"-CFGFILE", FALSE}
+};
+
+const static int NUM_OPTIONS = (sizeof(options) / sizeof(struct OPTION));
+
+
+class WSPCSObject
+{
+public:
+   			WSPCSObject();
+   		       ~WSPCSObject();
+
+   static	void	parseOptions(int, char * *);
+   static	void	mainLoop();
+   static  	void    startAll();
+   static  	void    stopAll();
+   static  	int     goodStatus();
+   static  	void    setConnected();
+   static  	void    determineIfBadInputs();
+   static  	int     readTimeTooLong();
+   static  	int     getPrimaryConnection();
+   static  	void    processWsStateChange(int, int);
+   static  	void    INSmessage(int);
+   static	void    USTmessage(int, int);
+   static	void	setWSPCSinfo(char *);
+   static	void	setMODEMOption(const char * s);
+
+   static	void	setPrimaryHostName(const char * s)
+			{
+			   strcpy(WSPCSinfo.host[0],s);
+			};
+
+   static	void	setHost1Name(const char * s)
+			{
+			   strcpy(WSPCSinfo.host[1],s);
+			};
+
+   static	void	setHost2Name(const char * s)
+			{
+			   strcpy(WSPCSinfo.host[2],s);
+			};
+
+   static	void	setFDDIOption(const char * s)
+			{
+			   strcpy(WSPCSinfo.FDDI,s);
+			};
+
+   static	char *	getMODEMOption(char * s)
+			{
+			   strcpy(s, WSPCSinfo.MODEM);
+			   return s;
+			};
+
+   static	char * 	getPrimaryHostName(char * s)
+			{
+			   strcpy(s,WSPCSinfo.host[0]);
+			   return s;
+			};
+
+   static	char * 	getHost1Name(char * s)
+			{
+			   strcpy(s,WSPCSinfo.host[1]);
+			   return s;
+			};
+
+   static	char * 	getHost2Name(char * s)
+			{
+			   strcpy(s,WSPCSinfo.host[2]);
+			   return s;
+			};
+
+   static	char * 	getFDDIOption(char * s)
+			{
+			   strcpy(s,WSPCSinfo.FDDI);
+			   return s;
+			};
+
+
+private:
+   static	void	UpdateWarmStartStatus();
+
+   // Structure to hold the WSPCS configuration parameters
+   static	WSPCSinfoStruct	WSPCSinfo;
+
+   static	unsigned int	PBcounter;
+   static	unsigned int	BADinputCounter;
+   static	unsigned int	goodStatusCounter;
+   static	int		procStatusGood;
+   static	int		oldWsState;
+
+};
+
+#endif

@@ -1,0 +1,106 @@
+
+// ***** HIGH LEVEL DESCRIPTION **********************************************
+//
+// This pdat file contains the variables used by the CEA TRACK MONITOR displays.
+//
+// ***************************************************************************
+// System Include Files: NONE
+//
+//
+// User Defined Include Files: NONE
+//
+//
+// External Variables: NONE
+//
+//
+// Local Constant Definitions:
+//
+// Function Prototypes: NONE
+//
+//
+// ***************************************************************************
+//
+//
+// CEA TRACK MONITOR variables data structures
+// 
+// All CEA TRACK MONIITOR:
+struct CEATrack_Monitor_Init
+{
+    	int	selected_option;	// selected      option 	( 4)
+    	float	value_initialized;	// value to be initialized	( 4)
+};
+struct Individual_Cea_Monitor1
+{
+       float                      max_pos_val[73];
+       float                      min_pos_val[73];
+//     float                      diff_pos_val[73];
+       float                      LPD;
+       float                      DNBR;     
+};
+struct Individual_Cea_Monitor2
+{
+       float                      max_pos_val[73];
+       float                      min_pos_val[73];
+//     float                      diff_pos_val[73];
+       float                      LPD;
+       float                      DNBR;
+};
+struct Sub_Deviation_Monitor_data 
+{
+       char                        max_date[10]; 	
+       char                        max_time[10];	
+       float                       max_value;
+};
+struct Sub_Deviation_Monitor
+{
+       Sub_Deviation_Monitor_data  Ceac1[18];
+       Sub_Deviation_Monitor_data  Ceac2[18];
+};	 
+struct CPCTarget_Cea_Monitor
+{
+       float                      cmax_pos_val[72];
+       float                      cmin_pos_val[72];
+       float                      max_each_LPD[4];
+       float                      max_each_DNBR[4];
+};
+struct CEATrack_Print_Reset
+{
+       float                        dummy;
+};
+struct CEA_Pos_Comparision
+{
+       float                      ceac1diff[18];	
+       float	                  cpc1diff[18]; 
+       float                      ceac2diff[18];	
+       float	                  cpc2diff[18]; 
+};
+struct WS_IndiCeaMonitor1_Message 
+{
+   WSmessageHeader          	header;	    // message information(  24)
+   Individual_Cea_Monitor1		IndiCeaMonitor1Data;
+};
+struct WS_IndiCeaMonitor2_Message 
+{
+   WSmessageHeader          	header;	    // message information(  24)
+   Individual_Cea_Monitor2		IndiCeaMonitor2Data;
+};
+struct WS_SubDeviMonitor_Message 
+{
+   WSmessageHeader          	header;	    // message information(  24)
+   Sub_Deviation_Monitor		SubDeviMonitorData;
+};
+struct WS_CPCTargetMonitor_Message 
+{
+   WSmessageHeader          	header;	    // message information(  24)
+   CPCTarget_Cea_Monitor	CPCTargetMonitorData;
+};
+struct WS_CEAPosComparision_Message 
+{
+   WSmessageHeader          	header;	    // message information(  24)
+   CEA_Pos_Comparision   	CEAPosComparisionData;
+};   
+struct WS_CEATrack_Prn_Rst_Message 
+{
+   WSmessageHeader          	header;	    // message information(  24)
+   CEATrack_Print_Reset         value;
+};   

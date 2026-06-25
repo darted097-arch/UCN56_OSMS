@@ -1,0 +1,2718 @@
+/*
+ * ProcSee CONFIGURATION LANGUAGE FILE
+ *
+ *
+ * User : ucn56
+ * Host : y6cr02
+ * Date : 2017-05-25
+ * Time : 14:51:45
+ *
+ * ProcSee version : ProcSee 3.10.1 (June 2016)
+ * File version    : 1.26
+ *
+ *
+ */
+
+
+picture PicUCN_GroupDisplayMenu
+{
+  worldX = 0;
+  worldY = 0;
+  worldWidth = 1280;
+  worldHeight = 824;
+  oneToOne = 1;
+  backgroundColour = 0;
+  updateMode = 2;
+  resizeMode = 0;
+  xSnap = 2.5;
+  ySnap = 2.5;
+  radiusSnap = 0;
+  angleSnap = 0;
+  crosshairStyle = 1;
+  crosshairLength = 0;
+  crosshairFollowSnap = `isInEditMode()`;
+  crosshairVisibility = `isInEditMode()`;
+  xReference = 500;
+  yReference = 500;
+  xScaleFactor = 1;
+  yScaleFactor = 1;
+  rotationAngle = 0;
+
+  int GROUPNUMBER = 2;
+
+  int OldOption = 2;
+
+  int OldPriority = 0;
+
+  int Option = 2;
+
+  char PictureNumber[50] = "830";
+
+  char PictureTitle[50] = "SETUP/VIEW GROUP DISPLAYS";
+
+  int Priority = `!Interface->FlagHandleMessage.data.flipflop2`;
+
+  int Protect = `procMsg.visibility`;
+
+  function `void escape()
+  {
+     if (Priority)
+        FlagReset(Option) ;
+  }`
+
+  function `void escapeToMenu()
+  {
+     if (Priority)
+        FlagReset(Option) ;
+  
+     //printf("%d -------------------------",Priority) ;
+  
+        displayPicture("Main","PicUCN_SetupViewMenu.ppic");
+  }`
+
+  function `void FlagReset(int Sel)
+  {
+  //   Set Flag for Using...
+  //   int k ;
+  
+  //   k = Interface->GroupDisplay.data.group.groupNumber;
+  
+     Interface->FlagHandleMessage.data.requestOption = Sel ;
+     Interface->FlagHandleMessage.data.flipflop1 = 0;   //for flag set
+     execute("{sendMessageToHost(GROUP_RESET_REQUEST);}");
+  
+     //printf("========================\\nGRDISP %d Flag = OFF\\n========================",Sel) ;
+  }`
+
+  function `void FlagResetAll()
+  {
+     int i ;
+  
+     for (i=1 ; i<=20 ; i++)
+        FlagReset(i) ;
+  }`
+
+  function `void FlagSet(int Sel)
+  {
+  //   Set Flag for Using...
+  //   int k ;
+  
+  //   k = Interface->GroupDisplay.data.group.groupNumber;
+  
+     Interface->FlagHandleMessage.data.requestOption = Sel;
+     Interface->FlagHandleMessage.data.flipflop1 = 1;   //for flag set
+     execute("{sendMessageToHost(GROUP_RESET_REQUEST);}");
+  
+     //printf("------------------------\\nGRDISP %d Flag = ON\\n------------------------",Sel) ;
+  }`
+
+  function `void GroupDisplayShift(int p, int i)
+  {
+   int j, Prev_i;
+   // i == group option no.  k = page no.
+  
+      int k = i+10 ;
+  
+      GROUPNUMBER = i;
+      Current_Page =k;
+  
+      Prev_i = p ;
+  
+       if(!Interface->FlagHandleMessage.data.flipflop2)
+       {
+          Interface->FlagHandleMessage.data.requestOption = Prev_i ;
+          Interface->FlagHandleMessage.data.flipflop1 = 0;   //for flag set
+          execute("{sendMessageToHost(GROUP_RESET_REQUEST);}");
+  	//printf("========================\\nGRDISP %d Flag = OFF\\n========================",Prev_i) ;
+       }
+  
+  
+       Interface->GenericRequestMessage.data.requestOption = i;
+       execute("{sendMessageToHost(GROUP_INFO_REQUEST);}");
+  
+       DelayedDisplayPicture("PicUCN_GroupDisplayView.ppic");
+  
+   update();
+  }
+  `
+
+  function `void InitButtons(int Sel)
+  {
+     int i;
+  
+  // Unselect them all
+  
+     for (i=1 ; i<=20 ; i++)
+        if(Sel!=i)
+           execute("{ Group%dButton.UnSelect(); }",i) ;
+  /*
+     if(Sel!=1) Group1Button.UnSelect();
+     Group2Button.UnSelect();
+     Group3Button.UnSelect();
+     Group4Button.UnSelect();
+     Group5Button.UnSelect();
+     Group6Button.UnSelect();
+     Group7Button.UnSelect();
+     Group8Button.UnSelect();
+     Group9Button.UnSelect();
+     Group10Button.UnSelect();
+     Group11Button.UnSelect();
+     Group12Button.UnSelect();
+     Group13Button.UnSelect();
+     Group14Button.UnSelect();
+     Group15Button.UnSelect();
+     Group16Button.UnSelect();
+     Group17Button.UnSelect();
+     Group18Button.UnSelect();
+     Group19Button.UnSelect();
+     Group20Button.UnSelect();
+  */
+     OldPriority = Priority ;
+     OldOption = Option;
+     Option = Sel;
+  
+     if(OldOption!=Option)
+     {
+  
+  // Select/UnSelect the proper button.
+  
+  //      execute("{Group%dButton.Select();}",Sel);
+        GROUPNUMBER=Sel;
+        Perror.visibility = 0;
+        procMsg.visibility = 1;
+        setuperror.visibility = 0;
+  
+  // Set the group number in shared memory
+  
+        Interface->GenericRequestMessage.data.requestOption = Sel;
+        execute("{sendMessageToHost(GROUP_INFO_REQUEST);}");
+  
+        if(OldPriority&&(OldOption))
+        {
+           FlagReset(OldOption) ;
+        }
+  
+        FlagSet(Option) ;
+     }
+  // CORENET 2017
+      printf("TIMES TO PRINT = %d",Interface->GroupDisplay.data.group.timesToPrint);
+  
+     update();
+  }`
+
+  function `void Initialize()
+  {
+     int i ;
+     CFMLevel = 0;
+     Current_Page = 830;
+  //
+  // load the setup display for quicker access
+  //   load ("PicUCN_GroupDisplaySetup.ppic");
+  //   load ("PicUCN_GroupDisplayView.ppic");
+  //   execute("{::UCN5and6.PicUCN_GroupDisplaySetup.GroupNumber = %d;}",Option);
+  //   execute("{::UCN5and6.PicUCN_GroupDisplayView.GroupNumber = %d;}",Option);
+  //
+  // Send data request message to the host
+  // printf("GroupDisplay Initialize: Sending GET_GROUPDISPLAYx_DATA message to host");
+  //   execute("{sendMessageToHost(GET_GROUPDISPLAY%d_DATA);}",Option);
+  //
+  // initialize the display
+  
+     DisplayAdvisoryMessage(" ");
+     DisplayAdvisoryMessage1(" ");
+     DisplayAdvisoryMessage2(" ");
+     DisplayAdvisoryMessage3(" ");
+  
+     Perror.visibility = 0;
+     procMsg.visibility = 1;
+     setuperror.visibility = 0;
+  
+     Option = Interface->GroupDisplay.data.group.groupNumber;
+  
+  
+     if( (1<=Option)&&(Option<=20) )
+     {
+        i = Option ;
+        Option = 0 ;
+        execute("{Group%dButton.Select();}",i);
+     }
+     else
+     {
+        Option = 0 ;
+        Group1Button.Select() ;
+     }
+  
+  //   Interface->GenericRequestMessage.data.requestOption = Option;
+  //   execute("{sendMessageToHost(GROUP_INFO_REQUEST);}");
+  
+     update();
+  }`
+
+  function `void ModifyDenied()
+  {
+     int Sel, i, step;
+  
+     Sel = GROUPNUMBER;
+  
+     execute("{titlebutton%d.theText=Interface->GroupDisplay.data.Titles.Title%d;}",Sel,Sel);
+     sub_title.theText = Interface->GroupDisplay.data.group.Title;
+  
+     for (i=1;i<=24;i++)        // Initialize Point Id fields
+     {
+         execute ("{Pid%d.theText = Interface->GroupDisplay.data.group.Point%d;}",i,i);
+     }
+  
+     procMsg.visibility = 0;
+     setuperror.visibility = 0;
+  
+  //   UsedMsg.visibility = 1;
+     procMsg.visibility = 0;
+  
+     update();
+  } `
+
+  function `void Process_setup()
+  {
+  // int i;
+  
+   GROUPNUMBER = Option ;
+  
+  //  i = Interface->FlagHandleMessage.data.flipflop2;
+  
+    if(Priority)
+    {
+         procMsg.visibility = 1 ;
+         Perror.visibility = 0;
+  
+  //       Interface->GenericRequestMessage.data.requestOption = Option;
+  //       execute("{sendMessageToHost(GROUP_INFO_REQUEST);}");
+  //       printf(" Option Number === %d ...", Option);
+         DelayedDisplayPicture("PicUCN_GroupDisplaySetup.ppic");
+  //         DisplayPage(Page831) ;
+    }
+  
+  }`
+
+  function `void Process_view()
+  {
+   int i,k,j,l;
+  // execute("{::UCN5and6.PicUCN_GroupDisplayView.groupNumber = %d;}",Option);
+   GROUPNUMBER = Option;
+  // --6.30-- i = Interface->FlagHandleMessage.data.flipflop2;
+  // k = procMsg.visibility;
+  // --6.30---  k = UsedMsg.visibility;
+   l = setuperror.visibility;
+  
+  // --6.30--- if((i == 0 && k != 1) && (l != 1))
+  
+     if(!setuperror.visibility)
+     {
+  
+        procMsg.visibility = 1 ;
+  
+        if(Group1Button.Selected || Group2Button.Selected || Group3Button.Selected ||
+           Group4Button.Selected || Group5Button.Selected || Group6Button.Selected ||
+           Group7Button.Selected || Group8Button.Selected  ||Group9Button.Selected ||
+           Group10Button.Selected || Group11Button.Selected || Group12Button.Selected ||
+           Group13Button.Selected || Group14Button.Selected || Group15Button.Selected ||
+           Group16Button.Selected || Group17Button.Selected || Group18Button.Selected ||
+           Group19Button.Selected || Group20Button.Selected == 1)
+  
+        {
+           Perror.visibility = 0;
+  
+           if(Priority)
+              FlagReset(Option) ;
+  
+           Interface->GenericRequestMessage.data.requestOption = Option;
+           execute("{sendMessageToHost(GROUP_INFO_REQUEST);}");
+           DelayedDisplayPicture("PicUCN_GroupDisplayView.ppic");
+        }
+        else
+           Perror.visibility = 1;
+     }
+     else
+       update();
+   }`
+
+  function `void SelectOption (int theOption)
+  {
+  //
+  // This routine will set the proper resolution for the data source
+  //
+  // Unselect them all
+     Group1Button.UnSelect();
+     Group2Button.UnSelect();
+     Group3Button.UnSelect();
+     Group4Button.UnSelect();
+     Group5Button.UnSelect();
+     Group6Button.UnSelect();
+     Group7Button.UnSelect();
+     Group8Button.UnSelect();
+     Group9Button.UnSelect();
+     Group10Button.UnSelect();
+     Group11Button.UnSelect();
+     Group12Button.UnSelect();
+     Group13Button.UnSelect();
+     Group14Button.UnSelect();
+     Group15Button.UnSelect();
+     Group16Button.UnSelect();
+     Group17Button.UnSelect();
+     Group18Button.UnSelect();
+     Group19Button.UnSelect();
+     Group20Button.UnSelect();
+  
+  //
+  // Expecting to receive a 0,1,2,3, or 4.  Based upon input,
+  // Select/UnSelect the proper button.
+  //     if (theOption > 0)
+  //   {
+  //      Interface->System.sentData = 1;
+  //      Interface->System.receivedData = 0;
+          execute("{Group%dButton.Select();}",theOption);
+  //      Option = theOption;
+  //      execute("{sendMessageToHost(GET_GROUPDISPLAY%d_DATA);}",Option);
+  //     }
+  //     else
+  //        printf("Error in SelectOption");
+     update();
+  }`
+
+  function `void UpdateLocalsFromInterface()
+  {
+   int button, i, step;
+  
+   button = GROUPNUMBER;
+  // Set the group number in shared memory
+  //      Interface->GenericRequestMessage.data.requestOption = button;
+  //      execute("{sendMessageToHost(GROUP_INFO_REQUEST);}");
+  
+     execute("{titlebutton%d.theText=Interface->GroupDisplay.data.Titles.Title%d;}",button,button);
+     sub_title.theText = Interface->GroupDisplay.data.group.Title;
+  
+       for (i=1;i<=24;i++) {
+                              // Initialize Point Id fields
+         execute ("{Pid%d.theText = Interface->GroupDisplay.data.group.Point%d;}",i,i);
+        }
+     procMsg.visibility = 0;
+     setuperror.visibility = 0;
+  
+   if(Interface->GroupDisplay.data.group.displayRate == 0)
+     setuperror.visibility = 1;
+    else
+     update();
+  }`
+
+  dialogue
+  {
+    event = `keyPressed(0xFF1B)`;
+    action = `{
+      displayPicture("Main","PicUCN_SetupViewMenu.ppic");
+    }`;
+  }
+
+  text
+  {
+    x = 173;
+    y = 79;
+    format = "%s";
+    theText = " NO.";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 173;
+    yReference = 79;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 231;
+    y = 80;
+    format = "%s";
+    theText = "TITLES";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 231;
+    yReference = 80;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 429;
+    y = 295;
+    format = "%d";
+    theText = `Option`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 429;
+    yReference = 293;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 250;
+    y = 364;
+    format = "%s";
+    theText = "NO.";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 250;
+    yReference = 364;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 306;
+    y = 364;
+    format = "%s";
+    theText = "POINT ID";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 306;
+    yReference = 364;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 460;
+    y = 364;
+    format = "%s";
+    theText = "NO.";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 460;
+    yReference = 364;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 517;
+    y = 364;
+    format = "%s";
+    theText = "POINT ID";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 517;
+    yReference = 364;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 670;
+    y = 364;
+    format = "%s";
+    theText = "NO.";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 670;
+    yReference = 364;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 727;
+    y = 364;
+    format = "%s";
+    theText = "POINT ID";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 727;
+    yReference = 364;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 880;
+    y = 364;
+    format = "%s";
+    theText = "NO.";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 880;
+    yReference = 364;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 936;
+    y = 364;
+    format = "%s";
+    theText = "POINT ID";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 936;
+    yReference = 364;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 264;
+    y = 400;
+    format = "%s";
+    theText = "1.";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 264;
+    yReference = 400;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 264;
+    y = 547;
+    format = "%s";
+    theText = "5.";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 264;
+    yReference = 547;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 264;
+    y = 510;
+    format = "%s";
+    theText = "4.";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 264;
+    yReference = 510;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 264;
+    y = 472;
+    format = "%s";
+    theText = "3.";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 264;
+    yReference = 472;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 264;
+    y = 434;
+    format = "%s";
+    theText = "2.";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 264;
+    yReference = 434;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 264;
+    y = 590;
+    format = "%s";
+    theText = "6.";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 264;
+    yReference = 590;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 474;
+    y = 400;
+    format = "%s";
+    theText = "7.";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 474;
+    yReference = 400;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 464;
+    y = 547;
+    format = "%s";
+    theText = "11.";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 464;
+    yReference = 547;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 464;
+    y = 510;
+    format = "%s";
+    theText = "10.";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 464;
+    yReference = 510;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 474;
+    y = 472;
+    format = "%s";
+    theText = "9.";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 474;
+    yReference = 472;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 474;
+    y = 434;
+    format = "%s";
+    theText = "8.";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 474;
+    yReference = 434;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 464;
+    y = 590;
+    format = "%s";
+    theText = "12.";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 464;
+    yReference = 590;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 674;
+    y = 400;
+    format = "%s";
+    theText = "13.";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 674;
+    yReference = 400;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 674;
+    y = 547;
+    format = "%s";
+    theText = "17.";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 674;
+    yReference = 547;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 674;
+    y = 510;
+    format = "%s";
+    theText = "16.";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 674;
+    yReference = 510;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 674;
+    y = 472;
+    format = "%s";
+    theText = "15.";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 674;
+    yReference = 472;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 674;
+    y = 434;
+    format = "%s";
+    theText = "14.";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 674;
+    yReference = 434;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 674;
+    y = 590;
+    format = "%s";
+    theText = "18.";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 674;
+    yReference = 590;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 884;
+    y = 400;
+    format = "%s";
+    theText = "19.";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 884;
+    yReference = 400;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 884;
+    y = 547;
+    format = "%s";
+    theText = "23.";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 884;
+    yReference = 547;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 884;
+    y = 510;
+    format = "%s";
+    theText = "22.";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 884;
+    yReference = 510;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 884;
+    y = 472;
+    format = "%s";
+    theText = "21.";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 884;
+    yReference = 472;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 884;
+    y = 434;
+    format = "%s";
+    theText = "20.";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 884;
+    yReference = 434;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 884;
+    y = 590;
+    format = "%s";
+    theText = "24.";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 884;
+    yReference = 590;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  instance DialogueSymbols.smallSelectButton Group1Button
+  {
+    x = 169;
+    y = 90;
+    visibility = 1;
+    xReference = 169;
+    yReference = 90;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Action = "{InitButtons(1);}";
+    DynamicLabel = " 1";
+    Label = " 1";
+    Scope = "::UCN5and6.PicUCN_GroupDisplayMenu";
+    Selected = 0;
+    StaticLabel = " 1";
+    UnSelectAction = "{printf(\"Hello World\");}";
+  }
+
+  instance DialogueSymbols.smallSelectButton Group5Button
+  {
+    x = 169;
+    y = 206;
+    visibility = 1;
+    xReference = 169;
+    yReference = 206;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Action = "{InitButtons(5);}";
+    DynamicLabel = " 5";
+    Label = " 5";
+    Scope = "::UCN5and6.PicUCN_GroupDisplayMenu";
+    Selected = 0;
+    StaticLabel = " 5";
+    UnSelectAction = "{printf(\"Hello World\");}";
+  }
+
+  instance DialogueSymbols.smallSelectButton Group4Button
+  {
+    x = 169;
+    y = 177;
+    visibility = 1;
+    xReference = 169;
+    yReference = 177;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Action = "{InitButtons(4);}";
+    DynamicLabel = " 4";
+    Label = " 4";
+    Scope = "::UCN5and6.PicUCN_GroupDisplayMenu";
+    Selected = 0;
+    StaticLabel = " 4";
+    UnSelectAction = "{printf(\"Hello World\");}";
+  }
+
+  instance DialogueSymbols.smallSelectButton Group3Button
+  {
+    x = 169;
+    y = 148;
+    visibility = 1;
+    xReference = 169;
+    yReference = 148;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Action = "{InitButtons(3);}";
+    DynamicLabel = " 3";
+    Label = " 3";
+    Scope = "::UCN5and6.PicUCN_GroupDisplayMenu";
+    Selected = 0;
+    StaticLabel = " 3";
+    UnSelectAction = "{printf(\"Hello World\");}";
+  }
+
+  instance DialogueSymbols.smallSelectButton Group2Button
+  {
+    x = 169;
+    y = 119;
+    visibility = 1;
+    xReference = 169;
+    yReference = 119;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Action = "{InitButtons(2);}";
+    DynamicLabel = " 2";
+    Label = " 2";
+    Scope = "::UCN5and6.PicUCN_GroupDisplayMenu";
+    Selected = 0;
+    StaticLabel = " 2";
+    UnSelectAction = "{printf(\"Hello World\");}";
+  }
+
+  text titlebutton2
+  {
+    x = 220;
+    y = 145;
+    format = "%s";
+    theText = `&::UCN5and6.InterfaceToGUI.Interface.GroupDisplay.data.Titles.Title2[0]`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = 2;
+    xReference = 230;
+    yReference = 145;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text titlebutton1
+  {
+    x = 220;
+    y = 115;
+    format = "%s";
+    theText = `&::UCN5and6.InterfaceToGUI.Interface.GroupDisplay.data.Titles.Title1[0]`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = 2;
+    xReference = 230;
+    yReference = 115;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text titlebutton3
+  {
+    x = 220;
+    y = 175;
+    format = "%s";
+    theText = `&::UCN5and6.InterfaceToGUI.Interface.GroupDisplay.data.Titles.Title3[0]`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = 2;
+    xReference = 230;
+    yReference = 175;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text titlebutton4
+  {
+    x = 220;
+    y = 204;
+    format = "%s";
+    theText = `&::UCN5and6.InterfaceToGUI.Interface.GroupDisplay.data.Titles.Title4[0]`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = 2;
+    xReference = 230;
+    yReference = 204;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text titlebutton5
+  {
+    x = 220;
+    y = 233;
+    format = "%s";
+    theText = `&::UCN5and6.InterfaceToGUI.Interface.GroupDisplay.data.Titles.Title5[0]`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = 2;
+    xReference = 230;
+    yReference = 233;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 427;
+    y = 79;
+    format = "%s";
+    theText = "NO.";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 427;
+    yReference = 79;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 482;
+    y = 80;
+    format = "%s";
+    theText = "TITLES";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 482;
+    yReference = 80;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  instance DialogueSymbols.smallSelectButton Group6Button
+  {
+    x = 419;
+    y = 90;
+    visibility = 1;
+    xReference = 419;
+    yReference = 90;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Action = "{InitButtons(6);}";
+    DynamicLabel = " 6";
+    Label = " 6";
+    Scope = "::UCN5and6.PicUCN_GroupDisplayMenu";
+    Selected = 0;
+    StaticLabel = " 6";
+    UnSelectAction = "{printf(\"Hello World\");}";
+  }
+
+  instance DialogueSymbols.smallSelectButton Group10Button
+  {
+    x = 419;
+    y = 206;
+    visibility = 1;
+    xReference = 419;
+    yReference = 206;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Action = "{InitButtons(10);}";
+    DynamicLabel = "10";
+    Label = "10";
+    Scope = "::UCN5and6.PicUCN_GroupDisplayMenu";
+    Selected = 0;
+    StaticLabel = "10";
+    UnSelectAction = "{printf(\"Hello World\");}";
+  }
+
+  instance DialogueSymbols.smallSelectButton Group9Button
+  {
+    x = 419;
+    y = 177;
+    visibility = 1;
+    xReference = 419;
+    yReference = 177;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Action = "{InitButtons(9);}";
+    DynamicLabel = " 9";
+    Label = " 9";
+    Scope = "::UCN5and6.PicUCN_GroupDisplayMenu";
+    Selected = 0;
+    StaticLabel = " 9";
+    UnSelectAction = "{printf(\"Hello World\");}";
+  }
+
+  instance DialogueSymbols.smallSelectButton Group8Button
+  {
+    x = 419;
+    y = 148;
+    visibility = 1;
+    xReference = 419;
+    yReference = 148;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Action = "{InitButtons(8);}";
+    DynamicLabel = " 8";
+    Label = " 8";
+    Scope = "::UCN5and6.PicUCN_GroupDisplayMenu";
+    Selected = 0;
+    StaticLabel = " 8";
+    UnSelectAction = "{printf(\"Hello World\");}";
+  }
+
+  instance DialogueSymbols.smallSelectButton Group7Button
+  {
+    x = 419;
+    y = 119;
+    visibility = 1;
+    xReference = 419;
+    yReference = 119;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Action = "{InitButtons(7);}";
+    DynamicLabel = " 7";
+    Label = " 7";
+    Scope = "::UCN5and6.PicUCN_GroupDisplayMenu";
+    Selected = 0;
+    StaticLabel = " 7";
+    UnSelectAction = "{printf(\"Hello World\");}";
+  }
+
+  text titlebutton7
+  {
+    x = 470;
+    y = 145;
+    format = "%s";
+    theText = `&::UCN5and6.InterfaceToGUI.Interface.GroupDisplay.data.Titles.Title7[0]`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = 2;
+    xReference = 480;
+    yReference = 145;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text titlebutton6
+  {
+    x = 470;
+    y = 115;
+    format = "%s";
+    theText = `&::UCN5and6.InterfaceToGUI.Interface.GroupDisplay.data.Titles.Title6[0]`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = 2;
+    xReference = 480;
+    yReference = 115;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text titlebutton8
+  {
+    x = 470;
+    y = 175;
+    format = "%s";
+    theText = `&::UCN5and6.InterfaceToGUI.Interface.GroupDisplay.data.Titles.Title8[0]`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = 2;
+    xReference = 480;
+    yReference = 175;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text titlebutton9
+  {
+    x = 470;
+    y = 204;
+    format = "%s";
+    theText = `&::UCN5and6.InterfaceToGUI.Interface.GroupDisplay.data.Titles.Title9[0]`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = 2;
+    xReference = 480;
+    yReference = 204;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text titlebutton10
+  {
+    x = 470;
+    y = 233;
+    format = "%s";
+    theText = `&::UCN5and6.InterfaceToGUI.Interface.GroupDisplay.data.Titles.Title10[0]`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = 2;
+    xReference = 480;
+    yReference = 233;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 672;
+    y = 79;
+    format = "%s";
+    theText = " NO.";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 672;
+    yReference = 79;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 732;
+    y = 80;
+    format = "%s";
+    theText = "TITLES";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 732;
+    yReference = 80;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  instance DialogueSymbols.smallSelectButton Group11Button
+  {
+    x = 669;
+    y = 90;
+    visibility = 1;
+    xReference = 669;
+    yReference = 90;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Action = "{InitButtons(11);}";
+    DynamicLabel = "11";
+    Label = "11";
+    Scope = "::UCN5and6.PicUCN_GroupDisplayMenu";
+    Selected = 0;
+    StaticLabel = "11";
+    UnSelectAction = "{printf(\"Hello World\");}";
+  }
+
+  instance DialogueSymbols.smallSelectButton Group15Button
+  {
+    x = 669;
+    y = 206;
+    visibility = 1;
+    xReference = 669;
+    yReference = 206;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Action = "{InitButtons(15);}";
+    DynamicLabel = "15";
+    Label = "15";
+    Scope = "::UCN5and6.PicUCN_GroupDisplayMenu";
+    Selected = 0;
+    StaticLabel = "15";
+    UnSelectAction = "{printf(\"Hello World\");}";
+  }
+
+  instance DialogueSymbols.smallSelectButton Group14Button
+  {
+    x = 669;
+    y = 177;
+    visibility = 1;
+    xReference = 669;
+    yReference = 177;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Action = "{InitButtons(14);}";
+    DynamicLabel = "14";
+    Label = "14";
+    Scope = "::UCN5and6.PicUCN_GroupDisplayMenu";
+    Selected = 0;
+    StaticLabel = "14";
+    UnSelectAction = "{printf(\"Hello World\");}";
+  }
+
+  instance DialogueSymbols.smallSelectButton Group13Button
+  {
+    x = 669;
+    y = 148;
+    visibility = 1;
+    xReference = 669;
+    yReference = 148;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Action = "{InitButtons(13);}";
+    DynamicLabel = "13";
+    Label = "13";
+    Scope = "::UCN5and6.PicUCN_GroupDisplayMenu";
+    Selected = 0;
+    StaticLabel = "13";
+    UnSelectAction = "{printf(\"Hello World\");}";
+  }
+
+  instance DialogueSymbols.smallSelectButton Group12Button
+  {
+    x = 669;
+    y = 119;
+    visibility = 1;
+    xReference = 669;
+    yReference = 119;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Action = "{InitButtons(12);}";
+    DynamicLabel = "12";
+    Label = "12";
+    Scope = "::UCN5and6.PicUCN_GroupDisplayMenu";
+    Selected = 0;
+    StaticLabel = "12";
+    UnSelectAction = "{printf(\"Hello World\");}";
+  }
+
+  text titlebutton12
+  {
+    x = 720;
+    y = 145;
+    format = "%s";
+    theText = `&::UCN5and6.InterfaceToGUI.Interface.GroupDisplay.data.Titles.Title12[0]`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = 2;
+    xReference = 730;
+    yReference = 145;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text titlebutton11
+  {
+    x = 720;
+    y = 115;
+    format = "%s";
+    theText = `&::UCN5and6.InterfaceToGUI.Interface.GroupDisplay.data.Titles.Title11[0]`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = 2;
+    xReference = 730;
+    yReference = 115;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text titlebutton13
+  {
+    x = 720;
+    y = 175;
+    format = "%s";
+    theText = `&::UCN5and6.InterfaceToGUI.Interface.GroupDisplay.data.Titles.Title13[0]`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = 2;
+    xReference = 730;
+    yReference = 175;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text titlebutton14
+  {
+    x = 720;
+    y = 204;
+    format = "%s";
+    theText = `&::UCN5and6.InterfaceToGUI.Interface.GroupDisplay.data.Titles.Title14[0]`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = 2;
+    xReference = 730;
+    yReference = 204;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text titlebutton15
+  {
+    x = 720;
+    y = 233;
+    format = "%s";
+    theText = `&::UCN5and6.InterfaceToGUI.Interface.GroupDisplay.data.Titles.Title15[0]`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = 2;
+    xReference = 730;
+    yReference = 233;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 922;
+    y = 79;
+    format = "%s";
+    theText = " NO.";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 922;
+    yReference = 79;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 984;
+    y = 80;
+    format = "%s";
+    theText = "TITLES";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 984;
+    yReference = 80;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  instance DialogueSymbols.smallSelectButton Group16Button
+  {
+    x = 919;
+    y = 90;
+    visibility = 1;
+    xReference = 919;
+    yReference = 90;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Action = "{InitButtons(16);}";
+    DynamicLabel = "16";
+    Label = "16";
+    Scope = "::UCN5and6.PicUCN_GroupDisplayMenu";
+    Selected = 0;
+    StaticLabel = "16";
+    UnSelectAction = "{printf(\"Hello World\");}";
+  }
+
+  instance DialogueSymbols.smallSelectButton Group20Button
+  {
+    x = 919;
+    y = 206;
+    visibility = 1;
+    xReference = 919;
+    yReference = 206;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Action = "{InitButtons(20);}";
+    DynamicLabel = "20";
+    Label = "20";
+    Scope = "::UCN5and6.PicUCN_GroupDisplayMenu";
+    Selected = 0;
+    StaticLabel = "20";
+    UnSelectAction = "{printf(\"Hello World\");}";
+  }
+
+  instance DialogueSymbols.smallSelectButton Group19Button
+  {
+    x = 919;
+    y = 177;
+    visibility = 1;
+    xReference = 919;
+    yReference = 177;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Action = "{InitButtons(19);}";
+    DynamicLabel = "19";
+    Label = "19";
+    Scope = "::UCN5and6.PicUCN_GroupDisplayMenu";
+    Selected = 0;
+    StaticLabel = "19";
+    UnSelectAction = "{printf(\"Hello World\");}";
+  }
+
+  instance DialogueSymbols.smallSelectButton Group18Button
+  {
+    x = 919;
+    y = 148;
+    visibility = 1;
+    xReference = 919;
+    yReference = 148;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Action = "{InitButtons(18);}";
+    DynamicLabel = "18";
+    Label = "18";
+    Scope = "::UCN5and6.PicUCN_GroupDisplayMenu";
+    Selected = 0;
+    StaticLabel = "18";
+    UnSelectAction = "{printf(\"Hello World\");}";
+  }
+
+  instance DialogueSymbols.smallSelectButton Group17Button
+  {
+    x = 919;
+    y = 119;
+    visibility = 1;
+    xReference = 919;
+    yReference = 119;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Action = "{InitButtons(17);}";
+    DynamicLabel = "17";
+    Label = "17";
+    Scope = "::UCN5and6.PicUCN_GroupDisplayMenu";
+    Selected = 0;
+    StaticLabel = "17";
+    UnSelectAction = "{printf(\"Hello World\");}";
+  }
+
+  text titlebutton17
+  {
+    x = 971;
+    y = 145;
+    format = "%s";
+    theText = `&::UCN5and6.InterfaceToGUI.Interface.GroupDisplay.data.Titles.Title17[0]`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = 2;
+    xReference = 981;
+    yReference = 145;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text titlebutton16
+  {
+    x = 971;
+    y = 115;
+    format = "%s";
+    theText = `&::UCN5and6.InterfaceToGUI.Interface.GroupDisplay.data.Titles.Title16[0]`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = 2;
+    xReference = 981;
+    yReference = 115;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text titlebutton18
+  {
+    x = 971;
+    y = 175;
+    format = "%s";
+    theText = `&::UCN5and6.InterfaceToGUI.Interface.GroupDisplay.data.Titles.Title18[0]`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = 2;
+    xReference = 981;
+    yReference = 175;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text titlebutton19
+  {
+    x = 971;
+    y = 204;
+    format = "%s";
+    theText = `&::UCN5and6.InterfaceToGUI.Interface.GroupDisplay.data.Titles.Title19[0]`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = 2;
+    xReference = 981;
+    yReference = 204;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text titlebutton20
+  {
+    x = 971;
+    y = 233;
+    format = "%s";
+    theText = `&::UCN5and6.InterfaceToGUI.Interface.GroupDisplay.data.Titles.Title20[0]`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = 2;
+    xReference = 981;
+    yReference = 233;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text Pid2
+  {
+    x = 306;
+    y = 435;
+    format = "%s";
+    theText = `&::UCN5and6.InterfaceToGUI.Interface.GroupDisplay.data.group.Point2[0]`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 3;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 306;
+    yReference = 435;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text Pid3
+  {
+    x = 306;
+    y = 472;
+    format = "%s";
+    theText = `&::UCN5and6.InterfaceToGUI.Interface.GroupDisplay.data.group.Point3[0]`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 3;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 306;
+    yReference = 472;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text Pid4
+  {
+    x = 306;
+    y = 510;
+    format = "%s";
+    theText = `&::UCN5and6.InterfaceToGUI.Interface.GroupDisplay.data.group.Point4[0]`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 3;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 306;
+    yReference = 510;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text Pid5
+  {
+    x = 306;
+    y = 547;
+    format = "%s";
+    theText = `&::UCN5and6.InterfaceToGUI.Interface.GroupDisplay.data.group.Point5[0]`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 3;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 306;
+    yReference = 547;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text Pid6
+  {
+    x = 306;
+    y = 590;
+    format = "%s";
+    theText = `&::UCN5and6.InterfaceToGUI.Interface.GroupDisplay.data.group.Point6[0]`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 3;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 306;
+    yReference = 590;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text Pid1
+  {
+    x = 306;
+    y = 400;
+    format = "%s";
+    theText = `&::UCN5and6.InterfaceToGUI.Interface.GroupDisplay.data.group.Point1[0]`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 3;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 306;
+    yReference = 400;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text Pid8
+  {
+    x = 517;
+    y = 435;
+    format = "%s";
+    theText = `&::UCN5and6.InterfaceToGUI.Interface.GroupDisplay.data.group.Point8[0]`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 3;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 517;
+    yReference = 435;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text Pid9
+  {
+    x = 517;
+    y = 472;
+    format = "%s";
+    theText = `&::UCN5and6.InterfaceToGUI.Interface.GroupDisplay.data.group.Point9[0]`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 3;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 517;
+    yReference = 472;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text Pid10
+  {
+    x = 517;
+    y = 510;
+    format = "%s";
+    theText = `&::UCN5and6.InterfaceToGUI.Interface.GroupDisplay.data.group.Point10[0]`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 3;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 517;
+    yReference = 510;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text Pid11
+  {
+    x = 517;
+    y = 547;
+    format = "%s";
+    theText = `&::UCN5and6.InterfaceToGUI.Interface.GroupDisplay.data.group.Point11[0]`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 3;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 517;
+    yReference = 547;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text Pid12
+  {
+    x = 517;
+    y = 590;
+    format = "%s";
+    theText = `&::UCN5and6.InterfaceToGUI.Interface.GroupDisplay.data.group.Point12[0]`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 3;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 517;
+    yReference = 590;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text Pid7
+  {
+    x = 517;
+    y = 400;
+    format = "%s";
+    theText = `&::UCN5and6.InterfaceToGUI.Interface.GroupDisplay.data.group.Point7[0]`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 3;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 517;
+    yReference = 400;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text Pid14
+  {
+    x = 727;
+    y = 435;
+    format = "%s";
+    theText = `&::UCN5and6.InterfaceToGUI.Interface.GroupDisplay.data.group.Point14[0]`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 3;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 727;
+    yReference = 435;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text Pid15
+  {
+    x = 727;
+    y = 472;
+    format = "%s";
+    theText = `&::UCN5and6.InterfaceToGUI.Interface.GroupDisplay.data.group.Point15[0]`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 3;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 727;
+    yReference = 472;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text Pid16
+  {
+    x = 727;
+    y = 510;
+    format = "%s";
+    theText = `&::UCN5and6.InterfaceToGUI.Interface.GroupDisplay.data.group.Point16[0]`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 3;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 727;
+    yReference = 510;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text Pid17
+  {
+    x = 727;
+    y = 547;
+    format = "%s";
+    theText = `&::UCN5and6.InterfaceToGUI.Interface.GroupDisplay.data.group.Point17[0]`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 3;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 727;
+    yReference = 547;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text Pid18
+  {
+    x = 727;
+    y = 590;
+    format = "%s";
+    theText = `&::UCN5and6.InterfaceToGUI.Interface.GroupDisplay.data.group.Point18[0]`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 3;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 727;
+    yReference = 590;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text Pid13
+  {
+    x = 727;
+    y = 400;
+    format = "%s";
+    theText = `&::UCN5and6.InterfaceToGUI.Interface.GroupDisplay.data.group.Point13[0]`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 3;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 727;
+    yReference = 400;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text Pid20
+  {
+    x = 936;
+    y = 435;
+    format = "%s";
+    theText = `&::UCN5and6.InterfaceToGUI.Interface.GroupDisplay.data.group.Point20[0]`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 3;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 936;
+    yReference = 435;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text Pid21
+  {
+    x = 936;
+    y = 472;
+    format = "%s";
+    theText = `&::UCN5and6.InterfaceToGUI.Interface.GroupDisplay.data.group.Point21[0]`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 3;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 936;
+    yReference = 472;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text Pid22
+  {
+    x = 936;
+    y = 510;
+    format = "%s";
+    theText = `&::UCN5and6.InterfaceToGUI.Interface.GroupDisplay.data.group.Point22[0]`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 3;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 936;
+    yReference = 510;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text Pid23
+  {
+    x = 936;
+    y = 547;
+    format = "%s";
+    theText = `&::UCN5and6.InterfaceToGUI.Interface.GroupDisplay.data.group.Point23[0]`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 3;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 936;
+    yReference = 547;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text Pid24
+  {
+    x = 936;
+    y = 590;
+    format = "%s";
+    theText = `&::UCN5and6.InterfaceToGUI.Interface.GroupDisplay.data.group.Point24[0]`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 3;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 936;
+    yReference = 590;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text Pid19
+  {
+    x = 936;
+    y = 400;
+    format = "%s";
+    theText = `&::UCN5and6.InterfaceToGUI.Interface.GroupDisplay.data.group.Point19[0]`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 3;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 936;
+    yReference = 400;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text sub_title
+  {
+    x = 642;
+    y = 295;
+    format = "%s";
+    theText = `&::UCN5and6.InterfaceToGUI.Interface.GroupDisplay.data.group.Title[0]`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 652;
+    yReference = 295;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text direction
+  {
+    x = 518;
+    y = 35;
+    format = "%s";
+    theText = "GROUP DISPLAY NUMBER";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 528;
+    yReference = 35;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text Perror
+  {
+    x = 474;
+    y = 702;
+    format = "%s";
+    theText = "CHOOSE GROUP NUMBER FRIST";
+    alignment = 0;
+    visibility = 0;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 474;
+    yReference = 702;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text UsedMsg
+  {
+    x = 439;
+    y = 751;
+    format = "%s";
+    theText = "CAN NOT MODIFY IT NOW(BEING USED)";
+    alignment = 0;
+    visibility = `Interface->FlagHandleMessage.data.flipflop2`;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 439;
+    yReference = 751;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text procMsg
+  {
+    x = 530;
+    y = 718;
+    format = "%s";
+    theText = "PROCESSING... WAIT";
+    alignment = 0;
+    visibility = 0;
+    foregroundColour = `COLOR_POPUP_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 530;
+    yReference = 718;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text setuperror
+  {
+    x = 485;
+    y = 733;
+    format = "%s";
+    theText = "SETUP DATA DOES NOT EXIST";
+    alignment = 0;
+    visibility = 0;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 485;
+    yReference = 733;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  instance DialogueSymbols.PushButton SetupButton
+  {
+    x = 960;
+    y = 701;
+    visibility = 1;
+    xReference = 960;
+    yReference = 701;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ButtonState = 0;
+    DynamicLabel = " SETUP";
+    ExecuteString = "{if(!Protect) Process_setup() ;}";
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    Label = " SETUP";
+    Scope = "::UCN5and6.PicUCN_GroupDisplayMenu";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    StaticLabel = " SETUP";
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextFontDynamic = `font2`;
+    TextFontStatic = `font4`;
+    TextX = 25;
+    TextXDynamic = 30;
+    TextXStatic = 25;
+    TextY = 22;
+    TextYDynamic = 21;
+    TextYStatic = 22;
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    Width = 125;
+  }
+
+  instance DialogueSymbols.PushButton ViewButton
+  {
+    x = 178;
+    y = 701;
+    visibility = 1;
+    xReference = 178;
+    yReference = 701;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ButtonState = 0;
+    DynamicLabel = "PROCESS";
+    ExecuteString = "{if(!Protect) Process_view() ;}";
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    Label = "PROCESS";
+    Scope = "::UCN5and6.PicUCN_GroupDisplayMenu";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    StaticLabel = "PROCESS";
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextFontDynamic = `font2`;
+    TextFontStatic = `font4`;
+    TextX = 17;
+    TextXDynamic = 26;
+    TextXStatic = 17;
+    TextY = 22;
+    TextYDynamic = 21;
+    TextYStatic = 22;
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    Width = 125;
+  }
+
+  text
+  {
+    x = 251;
+    y = 295;
+    format = "%s";
+    theText = "GROUP DISPLAY #";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 251;
+    yReference = 295;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle
+  {
+    x = 177;
+    y = 262;
+    width = 908;
+    height = 415;
+    visibility = 1;
+    foregroundColour = `COLOR_LINE_BOUNDARY_6`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = `2`;
+    foregroundFillColour = -1;
+    backgroundFillColour = -1;
+    fillPattern = `NoPattern`;
+    xReference = 226;
+    yReference = 278;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  line
+  {
+    numberOfPoints = 2;
+    point[0] = ( 175, 312 );
+    point[1] = ( 1085, 312 );
+    visibility = 1;
+    foregroundColour = `COLOR_LINE_BOUNDARY_6`;
+    backgroundColour = -1;
+    lineStyle = `SolidPattern`;
+    lineWidth = 2;
+    xReference = 226;
+    yReference = 314;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  line
+  {
+    numberOfPoints = 2;
+    point[0] = ( 585, 262 );
+    point[1] = ( 585, 310 );
+    visibility = 1;
+    foregroundColour = `COLOR_LINE_BOUNDARY_6`;
+    backgroundColour = -1;
+    lineStyle = `SolidPattern`;
+    lineWidth = 2;
+    xReference = 585;
+    yReference = 262;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  line
+  {
+    numberOfPoints = 2;
+    point[0] = ( 178, 627 );
+    point[1] = ( 1085, 627 );
+    visibility = 1;
+    foregroundColour = `COLOR_LINE_BOUNDARY_6`;
+    backgroundColour = -1;
+    lineStyle = `SolidPattern`;
+    lineWidth = 2;
+    xReference = 226;
+    yReference = 628;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 462;
+    y = 295;
+    format = "%s";
+    theText = "TITLE";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 462;
+    yReference = 295;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text P_Rate
+  {
+    x = 479;
+    y = 658;
+    format = "%d";
+    theText = `Interface->GroupDisplay.data.group.printRate`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 479;
+    yReference = 656;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text P_Number
+  {
+    x = 971;
+    y = 658;
+    format = "%d";
+    theText = `Interface->GroupDisplay.data.group.timesToPrint`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 971;
+    yReference = 656;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 278;
+    y = 658;
+    format = "%s";
+    theText = "PRINT RATE (SEC):";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 278;
+    yReference = 658;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 717;
+    y = 658;
+    format = "%s";
+    theText = "NO. OF TIMES TO PRINT :";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 717;
+    yReference = 658;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  line
+  {
+    numberOfPoints = 2;
+    point[0] = ( 619, 627 );
+    point[1] = ( 619, 677 );
+    visibility = 1;
+    foregroundColour = `COLOR_LINE_BOUNDARY_6`;
+    backgroundColour = -1;
+    lineStyle = `SolidPattern`;
+    lineWidth = 2;
+    xReference = 619;
+    yReference = 627;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 316;
+    y = 722;
+    format = "%s";
+    theText = "VIEW";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 316;
+    yReference = 722;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+}

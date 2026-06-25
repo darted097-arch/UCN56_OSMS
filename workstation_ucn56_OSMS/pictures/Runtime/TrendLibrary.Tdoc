@@ -1,0 +1,3938 @@
+/*
+ * PICASSO-3 CONFIGURATION LANGUAGE FILE
+ *
+ *
+ * Library name   : TrendLibrary 
+ *
+ *
+ * Documented by  : ucn56
+ * Host           : pcs2
+ * Date           : 03/06-03 at 11:09:25
+ *
+ *
+ * Generate with:
+ *    pcc TrendLibrary.Tdoc
+ *
+ */
+
+
+library TrendLibrary
+{
+
+
+
+
+  class VideoTrend
+  {
+    float Baseline = `(HighLimit+LowLimit)/2.0`;
+
+    char TheTrackTime[10] = "15:36:51";
+
+    char *DigitalOnePhrase = `TheVariable->message2`;
+
+    char *DigitalZeroPhrase = `TheVariable->message1`;
+
+    float LowLimit = 0;
+
+    float HighLimit = 400;
+
+    char *TheTrendVariable = "::UCN5and6.VideoSet1Tr1";
+
+    RECORD *TheVariable = `&ERRORPID`;
+
+    int TheFrequency = 1;
+
+    float BASE = 0;
+
+    function `void ComputeBaseline()
+{
+   float MinY, MaxY;     // The min and max Y coordinates
+   float TheY;           // The computed Y coordinate
+
+if(strcmp(TheVariable->pid,"ERRORPID"))
+{
+//
+// Compute the min and max Y coordinates
+   MinY = TheTrend.y+TheTrend.height;
+   MaxY = TheTrend.y;
+//
+ if (BASE == 0) {
+// Compute the Baseline line
+   TheY = MinY - ( ( (Baseline-LowLimit)/(HighLimit-LowLimit) ) * TheTrend.height);
+   printf("Baseline ......") ; }
+ else {
+   TheY = MinY - ( ( (BASE-LowLimit)/(HighLimit-LowLimit) ) * TheTrend.height);
+   printf("BASE......"); }
+//
+// Remember, the Y coordinates are reverse; they get larger as you go down
+   if (TheY > MinY)
+      TheY = MinY;
+   if (TheY < MaxY)
+      TheY = MaxY;
+//
+// Now set the line
+   TheBaseLine.setY(0,TheY);
+   TheBaseLine.setY(1,TheY);
+   BaseText.y = TheY+5.0;
+}
+}`
+
+    function `void TrendReset()
+{
+ TheTrend.reset();
+ update();
+}`
+
+
+
+  dialogue
+  {
+    event = `shapeLeft()`;
+    action = statement `{
+   TheTrend.TrendRuler1.visibility = INVISIBLE;
+   thePicture().theWindow().update();
+}`;
+  }
+
+  dialogue
+  {
+    event = `shapeEntered()`;
+    action = statement `{
+   TheTrend.TrendRuler1.visibility = VISIBLE;
+   thePicture().theWindow().update();
+}`;
+  }
+
+    trend TheTrend
+    {
+      trLog = "UCN5and6TrendLog";
+      x = 130;
+      y = 70;
+      width = 900;
+      height = 100;
+      visibility = 1;
+      timespan = `600*TheFrequency`;
+      orientation = 0;
+      scroll = 0;
+      foregroundFillColour = `COLOR_DARK_GRAY`;
+      backgroundFillColour = -1;
+      foregroundColour = `COLOR_STATIC_TEXT`;
+      backgroundColour = -1;
+      lineWidth = 0;
+      linePattern = `SolidPattern`;
+      fillPattern = 1;
+      updateMode = 0;
+
+        trendPlot TrendPres1
+        {
+          variable = `TheTrendVariable`;
+          presentation = 0;
+          upperLimit = `(TheVariable->sig_type<MinimumDigitalType)?HighLimit:2`;
+          lowerLimit = `(TheVariable->sig_type<MinimumDigitalType)?LowLimit:-1`;
+          visibility = 1;
+          logFrequency = `TheFrequency`;
+          foregroundFillColour = `COLOR_DATA_NORMAL`;
+          backgroundFillColour = -1;
+          foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+          backgroundColour = -1;
+          lineWidth = 2;
+          linePattern = `SolidPattern`;
+          fillPattern = `SolidPattern`;
+          autoScale = 0;
+          upperBand = 1;
+          lowerBand = 1;
+          presentationFunc = 0;
+          xReference = 0;
+          yReference = 0;
+          xScaleFactor = 1;
+          yScaleFactor = 1;
+          rotationAngle = 0;
+        }
+
+        trendLabels TrendLabel1
+        {
+          offset = -7;
+          alignment = 0;
+          interval = `60*TheFrequency`;
+          theFont = `font0`;
+          format = "%T";
+          visibility = 1;
+          foregroundColour = `COLOR_STATIC_TEXT`;
+          backgroundColour = -1;
+          xReference = 0;
+          yReference = 0;
+          xScaleFactor = 1;
+          yScaleFactor = 1;
+          rotationAngle = 0;
+        }  // end of trendLabel 
+
+        trendRuler TrendRuler1
+        {
+          visibility = 0;
+          foregroundColour = `COLOR_STATIC_TEXT`;
+          backgroundColour = -1;
+          lineWidth = 0;
+          linePattern = 0;
+          rulerIsSelected = 1;
+          xReference = 0;
+          yReference = 0;
+          xScaleFactor = 1;
+          yScaleFactor = 1;
+          rotationAngle = 0;
+        } // end of trendRuler
+
+        trendGrid TrendGrid1
+        {
+          depthPosition = 0;
+          noOfLines = 0;
+          timeInterval = `60*TheFrequency`;
+          timeOffset = 0;
+          autoStep = 0;
+          theTrendPres = "";
+          visibility = 1;
+          lineWidth = 1;
+          linePattern = 1;
+          foregroundColour = `COLOR_NON_ESSENTIAL`;
+          backgroundColour = -1;
+          xReference = 0;
+          yReference = 0;
+          xScaleFactor = 1;
+          yScaleFactor = 1;
+          rotationAngle = 0;
+        }  // end of trendGrid
+
+        dialogue
+        {
+          event = `cursorMoved()`;
+          action = statement `{
+   TrendRuler1.moveRuler();
+   thePicture().theWindow().update();
+}`;
+        }
+        xReference = 31;
+        yReference = 65;
+        xScaleFactor = 1;
+        yScaleFactor = 1;
+        rotationAngle = 0;
+      }  // end of trend TheTrend
+
+
+
+    line AnalogHigh
+    {
+      numberOfPoints = 2;
+      point[0] = (115, 70);
+      point[1] = (130, 70);
+
+      visibility = `TheVariable->sig_type < MinimumDigitalType`;
+      foregroundColour = `COLOR_STATIC_TEXT`;
+      backgroundColour = -1;
+      lineWidth = 2;
+      lineStyle = `SolidPattern`;
+      xReference = 100;
+      yReference = 70;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    line DigitalOne
+    {
+      numberOfPoints = 2;
+      point[0] = (115, 105);
+      point[1] = (130, 104);
+
+      visibility = `TheVariable->sig_type >= MinimumDigitalType`;
+      foregroundColour = `COLOR_STATIC_TEXT`;
+      backgroundColour = -1;
+      lineWidth = 2;
+      lineStyle = `SolidPattern`;
+      xReference = 100;
+      yReference = 104;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    line DigitalOff
+    {
+      numberOfPoints = 2;
+      point[0] = (115, 135);
+      point[1] = (130, 136);
+
+      visibility = `TheVariable->sig_type >= MinimumDigitalType`;
+      foregroundColour = `COLOR_STATIC_TEXT`;
+      backgroundColour = -1;
+      lineWidth = 2;
+      lineStyle = `SolidPattern`;
+      xReference = 100;
+      yReference = 136;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    line AnalogLow
+    {
+      numberOfPoints = 2;
+      point[0] = (115, 170);
+      point[1] = (130, 170);
+
+      visibility = `TheVariable->sig_type < MinimumDigitalType`;
+      foregroundColour = `COLOR_STATIC_TEXT`;
+      backgroundColour = -1;
+      lineWidth = 2;
+      lineStyle = `SolidPattern`;
+      xReference = 100;
+      yReference = 170;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    text TrackTimeLabel
+    {
+      x = 735;
+      y = 185;
+      format = "%s";
+      theText = "Tracking Time:";
+      visibility = `TheTrend.TrendRuler1.visibility`;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font0`;
+      xReference = 735;
+      yReference = 186;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    text 
+    {
+      x = 945;
+      y = 185;
+      format = "%s";
+      theText = "Value:";
+      visibility = `TheTrend.TrendRuler1.visibility`;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font0`;
+      xReference = 915;
+      yReference = 205;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    text HighText
+    {
+      x = 55;
+      y = 75;
+      format = `(strcmp(TheVariable->disfmt,"")==0)?"%6.2f":TheVariable->disfmt`;
+      theText = `HighLimit`;
+      visibility = `TheVariable->sig_type < MinimumDigitalType`;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font0`;
+      xReference = 80;
+      yReference = 75;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    text LowText
+    {
+      x = 55;
+      y = 172;
+      format = `(strcmp(TheVariable->disfmt,"")==0)?"%6.2f":TheVariable->disfmt`;
+      theText = `LowLimit`;
+      visibility = `TheVariable->sig_type < MinimumDigitalType`;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font0`;
+      xReference = 86;
+      yReference = 167;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    text Dig1Text
+    {
+      x = 49;
+      y = 108;
+      format = "%s";
+      theText = `DigitalZeroPhrase`;
+      visibility = `TheVariable->sig_type >= MinimumDigitalType`;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font0`;
+      xReference = 49;
+      yReference = 108;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    text Dig0Text
+    {
+      x = 49;
+      y = 140;
+      format = "%s";
+      theText = `DigitalOnePhrase`;
+      visibility = `TheVariable->sig_type >= MinimumDigitalType`;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font0`;
+      xReference = 49;
+      yReference = 110;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    text TrackTime
+    {
+      x = 830;
+      y = 185;
+      format = "%s";
+      theText = `cftime(TheTrackTime,"%T",TheTrend.TrendPres1.getRulerTime("TrendRuler1")),TheTrackTime`;
+      visibility = `TheTrend.TrendRuler1.visibility`;
+      foregroundColour = `COLOR_DATA_NORMAL`;
+      backgroundColour = -1;
+      theFont = `font0`;
+      xReference = 845;
+      yReference = 205;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    text AnalogValue
+    {
+      x = 985;
+      y = 185;
+      format = `(strcmp(TheVariable->disfmt,"")==0)?"%6.2f":TheVariable->disfmt`;
+      theText = `TheTrend.TrendPres1.getRulerValue("TrendRuler1")`;
+      visibility = `(TheTrend.TrendPres1.getRulerValue("TrendRuler1") != BAD_VALUE)&&TheTrend.TrendRuler1.visibility&&TheVariable->sig_type<MinimumDigitalType`;
+      foregroundColour = `COLOR_DATA_NORMAL`;
+      backgroundColour = -1;
+      theFont = `font0`;
+      xReference = 945;
+      yReference = 205;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    text DigitalPhrase
+    {
+      x = 985;
+      y = 185;
+      format = "%s";
+      theText = `(TheTrend.TrendPres1.getRulerValue("TrendRuler1") == BAD_VALUE) ? "BAD DATA" : ((TheTrend.TrendPres1.getRulerValue("TrendRuler1") >= 1.0)? TheVariable->message1:TheVariable->message2)`;
+      visibility = `TheTrend.TrendRuler1.visibility&&TheVariable->sig_type>=MinimumDigitalType`;
+      foregroundColour = `COLOR_DATA_NORMAL`;
+      backgroundColour = -1;
+      theFont = `font0`;
+      xReference = 1020;
+      yReference = 205;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    line TheBaseLine
+    {
+      numberOfPoints = 2;
+      point[0] = (1030, 120);
+      point[1] = (1045, 120);
+
+      visibility = `TheVariable->sig_type < MinimumDigitalType`;
+      foregroundColour = `COLOR_STATIC_TEXT`;
+      backgroundColour = -1;
+      lineWidth = 2;
+      lineStyle = `SolidStyle`;
+      xReference = 1030;
+      yReference = 95;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    text BaseText
+    {
+      x = 1050;
+      y = 125;
+      format = `(strcmp(TheVariable->disfmt,"")==0)?"%6.2f":TheVariable->disfmt`;
+      theText = `Baseline`;
+      visibility = `TheVariable->sig_type < MinimumDigitalType`;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font0`;
+      xReference = 1075;
+      yReference = 100;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    text AnalogBad
+    {
+      x = 985;
+      y = 185;
+      format = "%s";
+      theText = "BAD DATA";
+      visibility = `(TheTrend.TrendPres1.getRulerValue("TrendRuler1") == BAD_VALUE)&&TheTrend.TrendRuler1.visibility&&TheVariable->sig_type<MinimumDigitalType`;
+      foregroundColour = `COLOR_DATA_NORMAL`;
+      backgroundColour = -1;
+      theFont = `font0`;
+      xReference = 945;
+      yReference = 205;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+// The class' other attributes:
+
+  xSnap             = 5;
+  ySnap             = 5;
+  angleSnap         = 0;
+  radiusSnap        = 0;
+  worldX            = 0;
+  worldY            = 0;
+  worldWidth        = 1150;
+  worldHeight       = 190;
+  oneToOne          = 1;
+  backgroundColour  = 0;
+  xReference = 500;
+  yReference = 500;
+  xScaleFactor = 1;
+  yScaleFactor = 1;
+  rotationAngle = 0;
+
+  } // end of class VideoTrend
+
+
+
+  class PtPlot_Normal
+  {
+    float *Pressure = 0;
+
+    float *Temperature = 0;
+
+    function `void initialize()
+{
+   // Base3.setX(0,100) ;
+}
+`
+
+
+  dialogue
+  {
+    event = `buttonPressed(0)`;
+    action = statement `{
+   initialize() ;
+}`;
+  }
+
+    rectangle 
+    {
+      x = 0;
+      y = 513.6;
+      width = 318;
+      height = 86.4;
+      visibility = 1;
+      foregroundColour = `COLOR_ACTIVE_ON_OPEN`;
+      backgroundColour = -1;
+      lineWidth = 2;
+      linePattern = `SolidPattern`;
+      fillPattern = `NoPattern`;
+      foregroundFillColour = `COLOR_NON_ESSENTIAL`;
+      backgroundFillColour = -1;
+      xReference = 0;
+      yReference = 513.6;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    line Base12
+    {
+      numberOfPoints = 3;
+      point[0] = (37.8, 600);
+      point[1] = (37.8, 495);
+      point[2] = (192, 495);
+
+      visibility = 1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      lineWidth = 2;
+      lineStyle = `SolidPattern`;
+      xReference = 37;
+      yReference = 597;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    line Base4
+    {
+      numberOfPoints = 9;
+      point[0] = (140, 600);
+      point[1] = (140, 495);
+      point[2] = (192.2, 495);
+      point[3] = (202.3, 470);
+      point[4] = (222.4, 404.4);
+      point[5] = (242.4, 320.7);
+      point[6] = (262.4, 225.9);
+      point[7] = (282.4, 130.5);
+      point[8] = (335.0, 1.66667);        //not confirmed
+
+      visibility = 1;
+      foregroundColour = `COLOR_BUTTON_BACKGROUND`;
+      backgroundColour = -1;
+      lineWidth = 2;
+      lineStyle = `SolidPattern`;
+      xReference = 290;
+      yReference = 596;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    text 
+    {
+      x = 43;
+      y = 486;
+      format = "%s";
+      theText = "(2)";
+      visibility = 1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font0`;
+      xReference = 43;
+      yReference = 486;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    text Text6
+    {
+      x = 207;
+      y = 145;
+      format = "%s";
+      theText = "(6)";
+      visibility = `Base6.visibility`;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font0`;
+      xReference = 207;
+      yReference = 145;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    text Text5
+    {
+      x = 175;
+      y = 95;
+      format = "%s";
+      theText = "(5)";
+      visibility = `Base5.visibility`;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font0`;
+      xReference = 175;
+      yReference = 95;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    text Text4
+    {
+      x = 230;
+      y = 225;
+      format = "%s";
+      theText = "(4)";
+      visibility = `Base4.visibility`;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font0`;
+      xReference = 230;
+      yReference = 225;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    text 
+    {
+      x = 113;
+      y = 197;
+      format = "%s";
+      theText = "(3)";
+      visibility = 1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font0`;
+      xReference = 113;
+      yReference = 197;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    text 
+    {
+      x = 485;
+      y = 386;
+      format = "%s";
+      theText = "(7)";
+      visibility = 1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font0`;
+      xReference = 485;
+      yReference = 386;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    text 
+    {
+      x = 14;
+      y = 556;
+      format = "%s";
+      theText = "(1)";
+      visibility = 1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font0`;
+      xReference = 14;
+      yReference = 556;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    text Press
+    {
+      x = 506;
+      y = 590;
+      format = "%6.2f";
+      theText = `HiPZRPress[PT_DBpointer]`;
+      visibility = 0;
+      foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+      backgroundColour = -1;
+      theFont = `font2`;
+      xReference = 506;
+      yReference = 590;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    text Temp
+    {
+      x = 506;
+      y = 571;
+      format = "%6.2f";
+      theText = `LoColdLegTemp_Normal[PT_DBpointer]`;
+      visibility = 0;
+      foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+      backgroundColour = -1;
+      theFont = `font2`;
+      xReference = 506;
+      yReference = 571;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    text 
+    {
+      x = 401;
+      y = 590;
+      format = "%s";
+      theText = "PZR PRESS.:";
+      visibility = 0;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font2`;
+      xReference = 401;
+      yReference = 590;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    text 
+    {
+      x = 401;
+      y = 571;
+      format = "%s";
+      theText = "RCS TEMP.:";
+      visibility = 0;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font2`;
+      xReference = 401;
+      yReference = 571;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    text 
+    {
+      x = 560;
+      y = 590;
+      format = "%s";
+      theText = "KG/CM2";
+      visibility = 0;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font2`;
+      xReference = 560;
+      yReference = 590;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    text 
+    {
+      x = 560;
+      y = 571;
+      format = "%s";
+      theText = "DEG C";
+      visibility = 0;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font2`;
+      xReference = 560;
+      yReference = 571;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    polygon Region1
+    {
+      numberOfPoints = 17;
+      point[0] = (336, 1.66667);        //not confirmed
+      point[1] = (284.4, 128.5);
+      point[2] = (264.4, 223.9);
+      point[3] = (244.4, 318.7);
+      point[4] = (224.4, 402.4);
+      point[5] = (204.2, 468);
+      point[6] = (192.2, 495.5);
+      point[7] = (141, 495.5);
+      point[8] = (141, 512);
+      point[9] = (319, 512);
+      point[10] = (358.2, 499.4);
+      point[11] = (408, 464.4);
+      point[12] = (458, 412.2);
+      point[13] = (508, 338);
+      point[14] = (558, 236.3);
+      point[15] = (628.5, 85);        //not confirmed
+      point[16] = (628.5, 1.5);     //not confirmed 
+
+      visibility = `Base4.visibility`;
+      foregroundFillColour = `COLOR_DARK_GREEN`;
+      backgroundFillColour = -1;
+      foregroundColour = `COLOR_DARK_GREEN`;
+      backgroundColour = -1;
+      lineWidth = 0;
+      linePattern = `NoPattern`;
+      fillPattern = `SolidPattern`;
+      xReference = 381;
+      yReference = 5;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    polygon Region2
+    {
+      numberOfPoints = 17;
+      point[0] = (312.5, 1.5);  //not confirmed
+      point[1] = (300, 10.5);
+      point[2] = (262.4, 47.7);
+      point[3] = (240.6, 142.5); 
+      point[4] = (191.3, 384.3);
+      point[5] = (172.4, 439.8);
+      point[6] = (152.4, 494.7);
+      point[7] = (38.75, 495.5);
+      point[8] = (38.75, 512);
+      point[9] = (318.5, 513.25);
+      point[10] = (358.2, 499.4);
+      point[11] = (408, 464.4);
+      point[12] = (458, 412.2);
+      point[13] = (508, 338);
+      point[14] = (558, 236.3);
+      point[15] = (628.5, 85);        //not confirmed
+      point[16] = (628.5, 1.5);     //not confirmed 
+
+      visibility = `Base6.visibility`;
+      foregroundFillColour = `COLOR_DARK_GREEN`;
+      backgroundFillColour = -1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      lineWidth = 0;
+      linePattern = `NoPattern`;
+      fillPattern = `SolidPattern`;
+      xReference = 341;
+      yReference = 5;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    line Base6
+    {
+      numberOfPoints = 7;
+      point[0] = (152.4, 494.7);
+      point[1] = (172.4, 439.8);
+      point[2] = (191.3, 384.3);
+      point[3] = (240.6, 142.5);
+      point[4] = (262.4, 47.7);
+      point[5] = (300, 10.5);
+      point[6] = (312, 1.5);  //not confirmed
+
+      visibility = 0;
+      foregroundColour = `COLOR_DANGER_ACK`;
+      backgroundColour = -1;
+      lineWidth = 2;
+      lineStyle = `SolidPattern`;
+      xReference = 221;
+      yReference = 359;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    polygon Region3
+    {
+      numberOfPoints = 18;
+      point[0] = (216, 0);	    //not confirmed
+      point[1] = (208, 49);
+      point[2] = (198, 98);
+      point[3] = (188, 138);
+      point[4] = (168, 200);
+      point[5] = (148, 250.8);
+      point[6] = (138, 275.4);
+      point[7] = (137.8, 495);
+      point[8] = (38.75, 495.5);
+      point[9] = (38.75, 512);
+      point[10] = (318.5, 513.25);
+      point[11] = (358.2, 499.4);
+      point[12] = (408, 464.4);
+      point[13] = (458, 412.2);
+      point[14] = (508, 338);
+      point[15] = (558, 236.3);
+      point[16] = (628.5, 85);        //not confirmed
+      point[17] = (628.5, 1.5);     //not confirmed 
+      
+
+      visibility = `Base5.visibility`;
+      foregroundFillColour = `COLOR_DARK_GREEN`;
+      backgroundFillColour = -1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      lineWidth = 0;
+      linePattern = `NoPattern`;
+      fillPattern = `SolidPattern`;
+      xReference = 225;
+      yReference = 1;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    line Base5
+    {
+      numberOfPoints = 7;
+      point[0] = (138, 275.4);
+      point[1] = (148, 250.8);
+      point[2] = (168, 200);
+      point[3] = (188, 138);
+      point[4] = (198, 98);
+      point[5] = (208, 49);
+      point[6] = (215, 0);
+
+      visibility = 0;
+      foregroundColour = `COLOR_ACTIVE_OFF_CLOSED`;
+      backgroundColour = -1;
+      lineWidth = 2;
+      lineStyle = `SolidPattern`;
+      xReference = 106;
+      yReference = 339;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    line Base3
+    {
+      numberOfPoints = 4;
+      point[0] = (137.8, 495);
+      point[1] = (137.8, 75);
+      point[2] = (137.8, 75);
+      point[3] = (137.8, 0);
+
+      visibility = 1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      lineWidth = 2;
+      lineStyle = `SolidPattern`;
+      xReference = 93;
+      yReference = 456;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    line Pointer1
+    {
+      numberOfPoints = 2;
+      point[0] = (10, 5);
+      point[1] = (10, 21);
+
+      visibility = 0;
+      foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+      backgroundColour = -1;
+      lineWidth = 2;
+      lineStyle = `SolidPattern`;
+      xReference = 421;
+      yReference = 117;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    line Pointer2
+    {
+      numberOfPoints = 2;
+      point[0] = (2, 13);
+      point[1] = (18, 13);
+
+      visibility = 0;
+      foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+      backgroundColour = -1;
+      lineWidth = 2;
+      lineStyle = `SolidPattern`;
+      xReference = 430;
+      yReference = 108;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    line Tpoints
+    {
+      numberOfPoints = 2;
+      point[0] = (24, 10);
+      point[1] = (33, 10);
+
+      visibility = 0;
+      foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+      backgroundColour = -1;
+      lineWidth = 0;
+      lineStyle = `SolidPattern`;
+      xReference = 24;
+      yReference = 10;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    polygon EndTpoint
+    {
+      numberOfPoints = 3;
+      point[0] = (42.5, 7);
+      point[1] = (40, 12.25);
+      point[2] = (45, 12.25);
+
+      visibility = 0;
+      foregroundFillColour = `COLOR_DATA_NORMAL`;
+      backgroundFillColour = -1;
+      foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+      backgroundColour = -1;
+      lineWidth = 0;
+      linePattern = `SolidPattern`;
+      fillPattern = `SolidPattern`;
+      xReference = 42.5;
+      yReference = 7;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    polygon StartTpoint
+    {
+      numberOfPoints = 4;
+      point[0] = (52, 8);
+      point[1] = (61, 8);
+      point[2] = (61, 18);
+      point[3] = (52, 18);
+
+      visibility = 0;
+      foregroundFillColour = `COLOR_DARK_GRAY`;
+      backgroundFillColour = -1;
+      foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+      backgroundColour = -1;
+      lineWidth = 0;
+      linePattern = `SolidPattern`;
+      fillPattern = `SolidPattern`;
+      xReference = 52;
+      yReference = 8;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    line Base7
+    {
+      numberOfPoints = 14;
+      point[0] = (0, 528.1);   //not confirmed 
+      point[1] = (8.2, 528.1);
+      point[2] = (58, 528.3);
+      point[3] = (108, 528.6);
+      point[4] = (158, 529);
+      point[5] = (208, 529.2);
+      point[6] = (258, 529.6);
+      point[7] = (308, 519.3);
+      point[8] = (358.2, 499.4);
+      point[9] = (408, 464.4);
+      point[10] = (458, 412.2);
+      point[11] = (508, 338);
+      point[12] = (558, 236.3);
+      point[13] = (628, 85.5);        //not confirmed
+
+      visibility = 1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      lineWidth = 2;
+      lineStyle = `SolidPattern`;
+      xReference = 375;
+      yReference = 539;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    rectangle 
+    {
+      x = 0;
+      y = 0;
+      width = 630;
+      height = 600;
+      visibility = 1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      lineWidth = 3;
+      linePattern = `SolidPattern`;
+      fillPattern = `NoPattern`;
+      foregroundFillColour = `COLOR_NON_ESSENTIAL`;
+      backgroundFillColour = -1;
+      xReference = 0;
+      yReference = 0;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    text 
+    {
+      x = 322;
+      y = 538;
+      format = "%s";
+      theText = "(8)";
+      visibility = 1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font0`;
+      xReference = 322;
+      yReference = 538;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+// The class' other attributes:
+
+  xSnap             = 0;
+  ySnap             = 0;
+  angleSnap         = 0;
+  radiusSnap        = 0;
+  worldX            = 0;
+  worldY            = 0;
+  worldWidth        = 631;
+  worldHeight       = 601;
+  oneToOne          = 1;
+  backgroundColour  = 0;
+  xReference = 500;
+  yReference = 500;
+  xScaleFactor = 1;
+  yScaleFactor = 1;
+  rotationAngle = 0;
+
+  } // end of class PtPlot_Normal
+
+
+
+  class PtPlot_Emergency
+  {
+    float *Pressure = 0;
+
+    float *Temperature = 0;
+
+    function `void initialize()
+{
+   // Base3.setX(0,100) ;
+}
+`
+
+
+  dialogue
+  {
+    event = `buttonPressed(0)`;
+    action = statement `{
+   initialize() ;
+}`;
+  }
+
+    polygon RegionC
+    {
+      numberOfPoints = 18;
+      point[0] = (560, 225);
+      point[1] = (510, 328);
+      point[2] = (460, 402);
+      point[3] = (410, 454);
+      point[4] = (360, 490);
+      point[5] = (318, 513);
+      point[6] = (318, 560);
+      point[7] = (324, 557);
+      point[8] = (360, 533);
+      point[9] = (396, 506);
+      point[10] = (432, 468);
+      point[11] = (450, 444);
+      point[12] = (468, 418);
+      point[13] = (486, 388);
+      point[14] = (504, 355);
+      point[15] = (522, 318);
+      point[16] = (540, 277);
+      point[17] = (558, 231);
+
+      visibility = 1;
+      foregroundFillColour = `COLOR_DARK_GRAY`;
+      backgroundFillColour = -1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      lineWidth = 2;
+      linePattern = `NoPattern`;
+      fillPattern = `SolidPattern`;
+      xReference = 220;
+      yReference = 229;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    polygon RegionA
+    {
+      numberOfPoints = 19;
+      point[0] = (216, 0);     //not confirmed
+      point[1] = (208, 49);
+      point[2] = (198, 98);
+      point[3] = (188, 138);
+      point[4] = (168, 200);
+      point[5] = (148, 250);
+      point[6] = (138, 275.4);
+      point[7] = (138, 496);
+      point[8] = (38.5, 496);
+      point[9] = (38.5, 514);
+      point[10] = (217, 514);
+      point[11] = (253, 477);
+      point[12] = (289, 430);
+      point[13] = (325, 370);
+      point[14] = (361, 294);
+      point[15] = (397, 202);
+      point[16] = (433, 88);
+      point[17] = (451, 22);
+      point[18] = (457, 1);
+
+      visibility = 1;
+      foregroundFillColour = `COLOR_DARK_BROWN`;
+      backgroundFillColour = -1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      lineWidth = 2;
+      linePattern = `NoPattern`;
+      fillPattern = `SolidPattern`;
+      xReference = 221;
+      yReference = 230;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    polygon Base8
+    {
+      numberOfPoints = 4;
+      point[0] = (0, 514);
+      point[1] = (318, 514);
+      point[2] = (318, 600);
+      point[3] = (0, 600);
+
+      visibility = 1;
+      foregroundFillColour = `COLOR_NON_ESSENTIAL`;
+      backgroundFillColour = -1;
+      foregroundColour = `COLOR_ACTIVE_ON_OPEN`;
+      backgroundColour = -1;
+      lineWidth = 2;
+      linePattern = `SolidPattern`;
+      fillPattern = `NoPattern`;
+      xReference = 220;
+      yReference = 229;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    polygon RegionB
+    {
+      numberOfPoints = 19;
+      point[0] = (216, 512.5);
+      point[1] = (252, 476);
+      point[2] = (288, 429);
+      point[3] = (324, 369);
+      point[4] = (360, 293);
+      point[5] = (396, 201);
+      point[6] = (432, 87);
+      point[7] = (450, 21);
+      point[8] = (456, 0);
+      point[9] = (628, 0);
+      point[10] = (612, 62);
+      point[11] = (594, 122);
+      point[12] = (576, 181);
+      point[13] = (560, 225);
+      point[14] = (508, 338);
+      point[15] = (458, 412.2);
+      point[16] = (408, 464.4);
+      point[17] = (358, 500);
+      point[18] = (318, 512.5);
+
+      visibility = 1;
+      foregroundFillColour = `COLOR_DARK_GREEN`;
+      backgroundFillColour = -1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      lineWidth = 2;
+      linePattern = `NoPattern`;
+      fillPattern = `SolidPattern`;
+      xReference = 220;
+      yReference = 229;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    text 
+    {
+      x = 43;
+      y = 486;
+      format = "%s";
+      theText = "(2)";
+      visibility = 1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font0`;
+      xReference = 43;
+      yReference = 486;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    text 
+    {
+      x = 169;
+      y = 498;
+      format = "%s";
+      theText = "(8)";
+      visibility = 1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font0`;
+      xReference = 169;
+      yReference = 498;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    text 
+    {
+      x = 384;
+      y = 159;
+      format = "%s";
+      theText = "(5)";
+      visibility = 1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font0`;
+      xReference = 384;
+      yReference = 159;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    text 
+    {
+      x = 172;
+      y = 113;
+      format = "%s";
+      theText = "(4)";
+      visibility = 1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font0`;
+      xReference = 172;
+      yReference = 113;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    text 
+    {
+      x = 111;
+      y = 159;
+      format = "%s";
+      theText = "(3)";
+      visibility = 1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font0`;
+      xReference = 111;
+      yReference = 159;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    text 
+    {
+      x = 451;
+      y = 463;
+      format = "%s";
+      theText = "(7)";
+      visibility = 1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font0`;
+      xReference = 451;
+      yReference = 463;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    text 
+    {
+      x = 14;
+      y = 556;
+      format = "%s";
+      theText = "(1)";
+      visibility = 1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font0`;
+      xReference = 14;
+      yReference = 556;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    text 
+    {
+      x = 375;
+      y = 461;
+      format = "%s";
+      theText = "(6)";
+      visibility = 1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font0`;
+      xReference = 375;
+      yReference = 461;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    line Base5
+    {
+      numberOfPoints = 9;
+      point[0] = (216, 512);
+      point[1] = (252, 476.3);
+      point[2] = (288, 428.6);
+      point[3] = (324, 368.5);
+      point[4] = (360, 293.4);
+      point[5] = (396, 200.8);
+      point[6] = (432, 87.24);
+      point[7] = (450, 21);
+      point[8] = (456, 0);
+      
+      visibility = 1;
+      foregroundColour = `COLOR_LIGHT_BLUE`;
+      backgroundColour = -1;
+      lineWidth = 2;
+      lineStyle = `DefaultStyle3`;
+      xReference = 106;
+      yReference = 339;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    line Base6
+    {
+      numberOfPoints = 14;
+      point[0] = (0, 528.1);
+      point[1] = (8.2, 528.1);
+      point[2] = (58, 528.3);
+      point[3] = (108, 528.6);
+      point[4] = (158, 529);
+      point[5] = (208, 529.2);
+      point[6] = (258, 529.6);
+      point[7] = (308, 519.3);
+      point[8] = (358.2, 499.4);
+      point[9] = (408, 464.4);
+      point[10] = (458, 412.2);
+      point[11] = (508, 338);
+      point[12] = (558, 236.3);
+      point[13] = (628, 89);
+
+      visibility = 1;
+      foregroundColour = `COLOR_LIGHT_BLUE`;
+      backgroundColour = -1;
+      lineWidth = 2;
+      lineStyle = `SolidPattern`;
+      xReference = 375;
+      yReference = 539;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    line Base7
+    {
+      numberOfPoints = 24;
+      point[0] = (0, 600);
+      point[1] = (36, 600);
+      point[2] = (72, 600);
+      point[3] = (108, 599);
+      point[4] = (144, 597);
+      point[5] = (180, 595);
+      point[6] = (216, 590);
+      point[7] = (252, 583);
+      point[8] = (288, 573);
+      point[9] = (324, 557);
+      point[10] = (360, 533);
+      point[11] = (396, 506);
+      point[12] = (432, 468);
+      point[13] = (450, 444);
+      point[14] = (468, 418);
+      point[15] = (486, 388);
+      point[16] = (504, 355);
+      point[17] = (522, 318);
+      point[18] = (540, 277);
+      point[19] = (558, 231);
+      point[20] = (576, 181);
+      point[21] = (594, 122);
+      point[22] = (612, 62);
+      point[23] = (628, 0);
+
+      visibility = 1;
+      foregroundColour = `COLOR_ACTIVE_ON_OPEN`;
+      backgroundColour = -1;
+      lineWidth = 2;
+      lineStyle = `SolidPattern`;
+      xReference = 375;
+      yReference = 539;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    line Base12
+    {
+      numberOfPoints = 3;
+      point[0] = (37.8, 600);
+      point[1] = (37.8, 495);
+      point[2] = (138, 495);
+
+      visibility = 1;
+      foregroundColour = `COLOR_LIGHT_BLUE`;
+      backgroundColour = -1;
+      lineWidth = 2;
+      lineStyle = `SolidPattern`;
+      xReference = 37;
+      yReference = 597;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    line Base3
+    {
+      numberOfPoints = 3;
+      point[0] = (137.8, 495);
+      point[1] = (137.8, 75);
+      point[2] = (137.8, 0);
+
+      visibility = 1;
+      foregroundColour = `COLOR_LIGHT_BLUE`;
+      backgroundColour = -1;
+      lineWidth = 2;
+      lineStyle = `SolidPattern`;
+      xReference = 93;
+      yReference = 456;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    line Base4
+    {
+      numberOfPoints = 7;
+      point[0] = (138, 275.4);
+      point[1] = (148, 250.8);
+      point[2] = (168, 200);
+      point[3] = (188, 138);
+      point[4] = (198, 98);
+      point[5] = (208, 49);
+      point[6] = (215, 0);
+
+      visibility = 1;
+      foregroundColour = `COLOR_LIGHT_BLUE`;
+      backgroundColour = -1;
+      lineWidth = 2;
+      lineStyle = `SolidPattern`;
+      xReference = 106;
+      yReference = 339;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    rectangle 
+    {
+      x = 0;
+      y = 0;
+      width = 630;
+      height = 600;
+      visibility = 1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      lineWidth = 3;
+      linePattern = `SolidPattern`;
+      fillPattern = `NoPattern`;
+      foregroundFillColour = `COLOR_NON_ESSENTIAL`;
+      backgroundFillColour = -1;
+      xReference = 0;
+      yReference = 0;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    line Tpoints1
+    {
+      numberOfPoints = 2;
+      point[0] = (24, 10);
+      point[1] = (33, 10);
+
+      visibility = 0;
+      foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+      backgroundColour = -1;
+      lineWidth = 0;
+      lineStyle = `SolidPattern`;
+      xReference = 24;
+      yReference = 10;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    polygon EndTpoint1
+    {
+      numberOfPoints = 3;
+      point[0] = (42.5, 7);
+      point[1] = (40, 12.25);
+      point[2] = (45, 12.25);
+
+      visibility = 0;
+      foregroundFillColour = `COLOR_DATA_NORMAL`;
+      backgroundFillColour = -1;
+      foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+      backgroundColour = -1;
+      lineWidth = 0;
+      linePattern = `SolidPattern`;
+      fillPattern = `SolidPattern`;
+      xReference = 42.5;
+      yReference = 7;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    polygon StartTpoint1
+    {
+      numberOfPoints = 4;
+      point[0] = (52, 8);
+      point[1] = (61, 8);
+      point[2] = (61, 18);
+      point[3] = (52, 18);
+
+      visibility = 0;
+      foregroundFillColour = `COLOR_DARK_GRAY`;
+      backgroundFillColour = -1;
+      foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+      backgroundColour = -1;
+      lineWidth = 0;
+      linePattern = `SolidPattern`;
+      fillPattern = `SolidPattern`;
+      xReference = 52;
+      yReference = 8;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    text Press1
+    {
+      x = 443;
+      y = 592;
+      format = "%6.2f";
+      theText = `HiPZRPress[PT_DBpointer]`;
+      visibility = 0;
+      foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+      backgroundColour = -1;
+      theFont = `font2`;
+      xReference = 443;
+      yReference = 592;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    text Temp1
+    {
+      x = 443;
+      y = 572;
+      format = "%6.2f";
+      theText = `LoColdLegTemp_Emergency[PT_DBpointer]`;
+      visibility = 0;
+      foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+      backgroundColour = -1;
+      theFont = `font2`;
+      xReference = 443;
+      yReference = 572;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    text 
+    {
+      x = 341;
+      y = 592;
+      format = "%s";
+      theText = "PZR PRES :";
+      visibility = 0;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font2`;
+      xReference = 341;
+      yReference = 592;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    text 
+    {
+      x = 341;
+      y = 572;
+      format = "%s";
+      theText = "RCS TEMP :";
+      visibility = 0;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font2`;
+      xReference = 341;
+      yReference = 572;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    text 
+    {
+      x = 560;
+      y = 592;
+      format = "%s";
+      theText = "KG/CM2";
+      visibility = 0;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font2`;
+      xReference = 560;
+      yReference = 592;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    text 
+    {
+      x = 441;
+      y = 552;
+      format = "%s";
+      theText = "TCOLD";
+      visibility = 0;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font2`;
+      xReference = 441;
+      yReference = 552;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    line Pointer1
+    {
+      numberOfPoints = 2;
+      point[0] = (21, 40);
+      point[1] = (21, 56);
+
+      visibility = 0;
+      foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+      backgroundColour = -1;
+      lineWidth = 2;
+      lineStyle = `SolidPattern`;
+      xReference = 432;
+      yReference = 152;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    line Pointer2
+    {
+      numberOfPoints = 2;
+      point[0] = (13, 48);
+      point[1] = (29, 48);
+
+      visibility = 0;
+      foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+      backgroundColour = -1;
+      lineWidth = 2;
+      lineStyle = `SolidPattern`;
+      xReference = 441;
+      yReference = 143;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    line Pointer3
+    {
+      numberOfPoints = 2;
+      point[0] = (57, 43);
+      point[1] = (57, 59);
+
+      visibility = 0;
+      foregroundColour = `::UCN5and6.COLOR_YELLOW`;
+      backgroundColour = -1;
+      lineWidth = 2;
+      lineStyle = `SolidPattern`;
+      xReference = 468;
+      yReference = 155;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    line Pointer4
+    {
+      numberOfPoints = 2;
+      point[0] = (49, 51);
+      point[1] = (65, 51);
+
+      visibility = 0;
+      foregroundColour = `::UCN5and6.COLOR_YELLOW`;
+      backgroundColour = -1;
+      lineWidth = 2;
+      lineStyle = `SolidPattern`;
+      xReference = 477;
+      yReference = 146;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    line Tpoints2
+    {
+      numberOfPoints = 2;
+      point[0] = (21, 22);
+      point[1] = (30, 22);
+
+      visibility = 0;
+      foregroundColour = `::UCN5and6.COLOR_YELLOW`;
+      backgroundColour = -1;
+      lineWidth = 0;
+      lineStyle = `SolidPattern`;
+      xReference = 21;
+      yReference = 22;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    polygon EndTpoint2
+    {
+      numberOfPoints = 3;
+      point[0] = (79.5, 9);
+      point[1] = (77, 14.5);
+      point[2] = (82, 14.5);
+
+      visibility = 0;
+      foregroundFillColour = `COLOR_DATA_NORMAL`;
+      backgroundFillColour = -1;
+      foregroundColour = `::UCN5and6.COLOR_YELLOW`;
+      backgroundColour = -1;
+      lineWidth = 0;
+      linePattern = `SolidPattern`;
+      fillPattern = `SolidPattern`;
+      xReference = 79.5;
+      yReference = 9;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    polygon StartTpoint2
+    {
+      numberOfPoints = 4;
+      point[0] = (90.5, 8.5);
+      point[1] = (99.5, 8.5);
+      point[2] = (99.5, 18.5);
+      point[3] = (90.5, 18.5);
+
+      visibility = 0;
+      foregroundFillColour = `COLOR_DARK_GRAY`;
+      backgroundFillColour = -1;
+      foregroundColour = `::UCN5and6.COLOR_YELLOW`;
+      backgroundColour = -1;
+      lineWidth = 0;
+      linePattern = `SolidPattern`;
+      fillPattern = `SolidPattern`;
+      xReference = 90.5;
+      yReference = 8.5;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    text Press2
+    {
+      x = 506;
+      y = 592;
+      format = "%6.2f";
+      theText = `LoPZRPress[PT_DBpointer]`;
+      visibility = 0;
+      foregroundColour = `COLOR_YELLOW`;
+      backgroundColour = -1;
+      theFont = `font2`;
+      xReference = 506;
+      yReference = 592;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    text Temp2
+    {
+      x = 506;
+      y = 572;
+      format = "%6.2f";
+      theText = `HiHotLegTemp_Emergency[PT_DBpointer]`;
+      visibility = 0;
+      foregroundColour = `COLOR_YELLOW`;
+      backgroundColour = -1;
+      theFont = `font2`;
+      xReference = 506;
+      yReference = 572;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    text 
+    {
+      x = 509;
+      y = 552;
+      format = "%s";
+      theText = "THOT";
+      visibility = 0;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font2`;
+      xReference = 509;
+      yReference = 552;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    text 
+    {
+      x = 560;
+      y = 572;
+      format = "%s";
+      theText = "DEG C";
+      visibility = 0;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font2`;
+      xReference = 560;
+      yReference = 572;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    text 
+    {
+      x = 296;
+      y = 50;
+      format = "%s";
+      theText = "Region (A)";
+      visibility = 1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font0`;
+      xReference = 296;
+      yReference = 50;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    text 
+    {
+      x = 496;
+      y = 50;
+      format = "%s";
+      theText = "Region (B)";
+      visibility = 1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font0`;
+      xReference = 496;
+      yReference = 50;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    text 
+    {
+      x = 323;
+      y = 523;
+      format = "%s";
+      theText = "Region";
+      visibility = 1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font0`;
+      xReference = 323;
+      yReference = 523;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    text 
+    {
+      x = 329;
+      y = 538;
+      format = "%s";
+      theText = "(C)";
+      visibility = 1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font0`;
+      xReference = 329;
+      yReference = 538;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+// The class' other attributes:
+
+  xSnap             = 0;
+  ySnap             = 0;
+  angleSnap         = 0;
+  radiusSnap        = 0;
+  worldX            = 0;
+  worldY            = 0;
+  worldWidth        = 631;
+  worldHeight       = 601;
+  oneToOne          = 1;
+  backgroundColour  = 0;
+  xReference = 500;
+  yReference = 500;
+  xScaleFactor = 1;
+  yScaleFactor = 1;
+  rotationAngle = 0;
+
+  } // end of class PtPlot_Emergency
+
+
+
+  class VideoTrend_Cfms
+  {
+    float BASE = 0;
+
+    int TheFrequency = 1;
+
+    RECORD *TheVariable = `&ERRORPID`;
+
+    char *TheTrendVariable = "::UCN5and6.VideoSet1Tr1";
+
+    float HighLimit = 400;
+
+    float LowLimit = 0;
+
+    char *DigitalZeroPhrase = `TheVariable->message1`;
+
+    char *DigitalOnePhrase = `TheVariable->message2`;
+
+    char TheTrackTime[10] = "11:50:22";
+
+    float Baseline = `(HighLimit+LowLimit)/2.0`;
+
+    function `void ComputeBaseline()
+{
+   float MinY, MaxY;     // The min and max Y coordinates
+   float TheY;           // The computed Y coordinate
+
+if(strcmp(TheVariable->pid,"ERRORPID"))
+{
+//
+// Compute the min and max Y coordinates
+   MinY = TheTrend.y+TheTrend.height;
+   MaxY = TheTrend.y;
+//
+ if (BASE == 0) {
+// Compute the Baseline line
+   TheY = MinY - ( ( (Baseline-LowLimit)/(HighLimit-LowLimit) ) * TheTrend.height);
+   printf("Baseline ......") ; }
+ else {
+   TheY = MinY - ( ( (BASE-LowLimit)/(HighLimit-LowLimit) ) * TheTrend.height);
+   printf("BASE......"); }
+//
+// Remember, the Y coordinates are reverse; they get larger as you go down
+   if (TheY > MinY)
+      TheY = MinY;
+   if (TheY < MaxY)
+      TheY = MaxY;
+//
+// Now set the line
+   TheBaseLine.setY(0,TheY);
+   TheBaseLine.setY(1,TheY);
+   BaseText.y = TheY+5.0;
+}
+}`
+
+    function `void TrendReset()
+{
+ TheTrend.reset();
+ update();
+}`
+
+
+
+  dialogue
+  {
+    event = `shapeLeft()`;
+    action = statement `{
+   TheTrend.TrendRuler1.visibility = INVISIBLE;
+   thePicture().theWindow().update();
+}`;
+  }
+
+  dialogue
+  {
+    event = `shapeEntered()`;
+    action = statement `{
+   TheTrend.TrendRuler1.visibility = VISIBLE;
+   thePicture().theWindow().update();
+}`;
+  }
+
+    trend TheTrend
+    {
+      trLog = "UCN5and6TrendLog";
+      x = 130;
+      y = 70;
+      width = 900;
+      height = 100;
+      visibility = 1;
+      timespan = `600*TheFrequency`;
+      orientation = 0;
+      scroll = 0;
+      foregroundFillColour = `COLOR_DARK_GRAY`;
+      backgroundFillColour = -1;
+      foregroundColour = `COLOR_STATIC_TEXT`;
+      backgroundColour = -1;
+      lineWidth = 0;
+      linePattern = `SolidPattern`;
+      fillPattern = 1;
+      updateMode = 0;
+
+        trendPlot TrendPres1
+        {
+          variable = `TheTrendVariable`;
+          presentation = 0;
+          upperLimit = `(TheVariable->sig_type<MinimumDigitalType)?HighLimit:2`;
+          lowerLimit = `(TheVariable->sig_type<MinimumDigitalType)?LowLimit:-1`;
+          visibility = 1;
+          logFrequency = `TheFrequency`;
+          foregroundFillColour = `COLOR_DATA_NORMAL`;
+          backgroundFillColour = -1;
+          foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+          backgroundColour = -1;
+          lineWidth = 2;
+          linePattern = `SolidPattern`;
+          fillPattern = `SolidPattern`;
+          autoScale = 0;
+          upperBand = 1;
+          lowerBand = 1;
+          presentationFunc = 0;
+          xReference = 0;
+          yReference = 0;
+          xScaleFactor = 1;
+          yScaleFactor = 1;
+          rotationAngle = 0;
+        }
+
+        trendLabels TrendLabel1
+        {
+          offset = -7;
+          alignment = 0;
+          interval = `60*TheFrequency`;
+          theFont = `font0`;
+          format = "%T";
+          visibility = 1;
+          foregroundColour = `COLOR_STATIC_TEXT`;
+          backgroundColour = -1;
+          xReference = 0;
+          yReference = 0;
+          xScaleFactor = 1;
+          yScaleFactor = 1;
+          rotationAngle = 0;
+        }  // end of trendLabel 
+
+        trendRuler TrendRuler1
+        {
+          visibility = 0;
+          foregroundColour = `COLOR_STATIC_TEXT`;
+          backgroundColour = -1;
+          lineWidth = 0;
+          linePattern = `SolidPattern`;
+          rulerIsSelected = 1;
+          xReference = 0;
+          yReference = 0;
+          xScaleFactor = 1;
+          yScaleFactor = 1;
+          rotationAngle = 0;
+        } // end of trendRuler
+
+        trendGrid TrendGrid1
+        {
+          depthPosition = 0;
+          noOfLines = 0;
+          timeInterval = `60*TheFrequency`;
+          timeOffset = 0;
+          autoStep = 0;
+          theTrendPres = "";
+          visibility = 1;
+          lineWidth = 1;
+          linePattern = 1;
+          foregroundColour = `COLOR_NON_ESSENTIAL`;
+          backgroundColour = -1;
+          xReference = 0;
+          yReference = 0;
+          xScaleFactor = 1;
+          yScaleFactor = 1;
+          rotationAngle = 0;
+        }  // end of trendGrid
+
+        dialogue
+        {
+          event = `cursorMoved()`;
+          action = statement `{
+   TrendRuler1.moveRuler();
+   thePicture().theWindow().update();
+}`;
+        }
+        xReference = 31;
+        yReference = 65;
+        xScaleFactor = 1;
+        yScaleFactor = 1;
+        rotationAngle = 0;
+      }  // end of trend TheTrend
+
+
+
+    line AnalogHigh
+    {
+      numberOfPoints = 2;
+      point[0] = (115, 70);
+      point[1] = (130, 70);
+
+      visibility = `TheVariable->sig_type < MinimumDigitalType`;
+      foregroundColour = `COLOR_STATIC_TEXT`;
+      backgroundColour = -1;
+      lineWidth = 2;
+      lineStyle = `SolidPattern`;
+      xReference = 100;
+      yReference = 70;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    line DigitalOne
+    {
+      numberOfPoints = 2;
+      point[0] = (115, 105);
+      point[1] = (130, 104);
+
+      visibility = `TheVariable->sig_type >= MinimumDigitalType`;
+      foregroundColour = `COLOR_STATIC_TEXT`;
+      backgroundColour = -1;
+      lineWidth = 2;
+      lineStyle = `SolidPattern`;
+      xReference = 100;
+      yReference = 104;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    line DigitalOff
+    {
+      numberOfPoints = 2;
+      point[0] = (115, 135);
+      point[1] = (130, 136);
+
+      visibility = `TheVariable->sig_type >= MinimumDigitalType`;
+      foregroundColour = `COLOR_STATIC_TEXT`;
+      backgroundColour = -1;
+      lineWidth = 2;
+      lineStyle = `SolidPattern`;
+      xReference = 100;
+      yReference = 136;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    line AnalogLow
+    {
+      numberOfPoints = 2;
+      point[0] = (115, 170);
+      point[1] = (130, 170);
+
+      visibility = `TheVariable->sig_type < MinimumDigitalType`;
+      foregroundColour = `COLOR_STATIC_TEXT`;
+      backgroundColour = -1;
+      lineWidth = 2;
+      lineStyle = `SolidPattern`;
+      xReference = 100;
+      yReference = 170;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    text TrackTimeLabel
+    {
+      x = 735;
+      y = 185;
+      format = "%s";
+      theText = "Tracking Time:";
+      visibility = `TheTrend.TrendRuler1.visibility`;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font0`;
+      xReference = 735;
+      yReference = 186;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    text 
+    {
+      x = 945;
+      y = 185;
+      format = "%s";
+      theText = "Value:";
+      visibility = `TheTrend.TrendRuler1.visibility`;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font0`;
+      xReference = 915;
+      yReference = 205;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    text HighText
+    {
+      x = 55;
+      y = 75;
+      format = "%6.2f";
+      theText = `HighLimit`;
+      visibility = `TheVariable->sig_type < MinimumDigitalType`;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font0`;
+      xReference = 80;
+      yReference = 75;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    text LowText
+    {
+      x = 55;
+      y = 172;
+      format = "%6.2f";
+      theText = `LowLimit`;
+      visibility = `TheVariable->sig_type < MinimumDigitalType`;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font0`;
+      xReference = 86;
+      yReference = 167;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    text Dig1Text
+    {
+      x = 49;
+      y = 108;
+      format = "%s";
+      theText = `DigitalZeroPhrase`;
+      visibility = `TheVariable->sig_type >= MinimumDigitalType`;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font0`;
+      xReference = 49;
+      yReference = 108;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    text Dig0Text
+    {
+      x = 49;
+      y = 140;
+      format = "%s";
+      theText = `DigitalOnePhrase`;
+      visibility = `TheVariable->sig_type >= MinimumDigitalType`;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font0`;
+      xReference = 49;
+      yReference = 110;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    text TrackTime
+    {
+      x = 830;
+      y = 185;
+      format = "%s";
+      theText = `cftime(TheTrackTime,"%T",TheTrend.TrendPres1.getRulerTime("TrendRuler1")),TheTrackTime`;
+      visibility = `TheTrend.TrendRuler1.visibility`;
+      foregroundColour = `COLOR_DATA_NORMAL`;
+      backgroundColour = -1;
+      theFont = `font0`;
+      xReference = 845;
+      yReference = 205;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    text AnalogValue
+    {
+      x = 985;
+      y = 185;
+      format = "%6.1f";
+      theText = `TheTrend.TrendPres1.getRulerValue("TrendRuler1")`;
+      visibility = `(TheTrend.TrendPres1.getRulerValue("TrendRuler1") != BAD_VALUE)&&TheTrend.TrendRuler1.visibility&&TheVariable->sig_type<MinimumDigitalType`;
+      foregroundColour = `COLOR_DATA_NORMAL`;
+      backgroundColour = -1;
+      theFont = `font0`;
+      xReference = 945;
+      yReference = 205;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    text DigitalPhrase
+    {
+      x = 985;
+      y = 185;
+      format = "%s";
+      theText = `(TheTrend.TrendPres1.getRulerValue("TrendRuler1") == BAD_VALUE) ? "BAD DATA" : ((TheTrend.TrendPres1.getRulerValue("TrendRuler1") >= 1.0)? TheVariable->message1:TheVariable->message2)`;
+      visibility = `TheTrend.TrendRuler1.visibility&&TheVariable->sig_type>=MinimumDigitalType`;
+      foregroundColour = `COLOR_DATA_NORMAL`;
+      backgroundColour = -1;
+      theFont = `font0`;
+      xReference = 1020;
+      yReference = 205;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    line TheBaseLine
+    {
+      numberOfPoints = 2;
+      point[0] = (1030, 120);
+      point[1] = (1045, 120);
+
+      visibility = `TheVariable->sig_type < MinimumDigitalType`;
+      foregroundColour = `COLOR_STATIC_TEXT`;
+      backgroundColour = -1;
+      lineWidth = 2;
+      lineStyle = `SolidStyle`;
+      xReference = 1030;
+      yReference = 95;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    text BaseText
+    {
+      x = 1050;
+      y = 125;
+      format = "%6.1f";
+      theText = `Baseline`;
+      visibility = `TheVariable->sig_type < MinimumDigitalType`;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font0`;
+      xReference = 1075;
+      yReference = 100;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    text AnalogBad
+    {
+      x = 985;
+      y = 185;
+      format = "%s";
+      theText = "BAD DATA";
+      visibility = `(TheTrend.TrendPres1.getRulerValue("TrendRuler1") == BAD_VALUE)&&TheTrend.TrendRuler1.visibility&&TheVariable->sig_type<MinimumDigitalType`;
+      foregroundColour = `COLOR_DATA_NORMAL`;
+      backgroundColour = -1;
+      theFont = `font0`;
+      xReference = 945;
+      yReference = 205;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+// The class' other attributes:
+
+  xSnap             = 5;
+  ySnap             = 5;
+  angleSnap         = 0;
+  radiusSnap        = 0;
+  worldX            = 0;
+  worldY            = 0;
+  worldWidth        = 1150;
+  worldHeight       = 190;
+  oneToOne          = 1;
+  backgroundColour  = 0;
+  xReference = 500;
+  yReference = 500;
+  xScaleFactor = 1;
+  yScaleFactor = 1;
+  rotationAngle = 0;
+
+  } // end of class VideoTrend_Cfms
+
+
+
+  class VideoTrend_Cfms1
+  {
+    float BASE = 0;
+
+    int TheFrequency = 1;
+
+    RECORD *TheVariable = `&ERRORPID`;
+
+    char *TheTrendVariable = "::UCN5and6.VideoSet1Tr1";
+
+    float HighLimit = 400;
+
+    float LowLimit = 0;
+
+    char TheTrackTime[10] = "11:51:17";
+
+    float Baseline = `(HighLimit+LowLimit)/2.0`;
+
+    function `void TrendReset()
+{
+ TheTrend.reset();
+ update();
+}`
+
+
+
+  dialogue
+  {
+    event = `shapeLeft()`;
+    action = statement `{
+   TheTrend.TrendRuler1.visibility = INVISIBLE;
+   thePicture().theWindow().update();
+}`;
+  }
+
+  dialogue
+  {
+    event = `shapeEntered()`;
+    action = statement `{
+   TheTrend.TrendRuler1.visibility = VISIBLE;
+   thePicture().theWindow().update();
+}`;
+  }
+
+    trend TheTrend
+    {
+      trLog = "UCN5and6TrendLog";
+      x = 130;
+      y = 28;
+      width = 900;
+      height = 50;
+      visibility = 1;
+      timespan = `600*TheFrequency`;
+      orientation = 0;
+      scroll = 0;
+      foregroundFillColour = `COLOR_DARK_GRAY`;
+      backgroundFillColour = -1;
+      foregroundColour = `COLOR_STATIC_TEXT`;
+      backgroundColour = -1;
+      lineWidth = 0;
+      linePattern = `SolidPattern`;
+      fillPattern = 1;
+      updateMode = 0;
+
+        trendPlot TrendPres1
+        {
+          variable = `TheTrendVariable`;
+          presentation = 0;
+          upperLimit = `(TheVariable->sig_type<MinimumDigitalType)?HighLimit:2`;
+          lowerLimit = `(TheVariable->sig_type<MinimumDigitalType)?LowLimit:-1`;
+          visibility = 1;
+          logFrequency = `TheFrequency`;
+          foregroundFillColour = `COLOR_DATA_NORMAL`;
+          backgroundFillColour = -1;
+          foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+          backgroundColour = -1;
+          lineWidth = 2;
+          linePattern = `SolidPattern`;
+          fillPattern = `SolidPattern`;
+          autoScale = 0;
+          upperBand = 1;
+          lowerBand = 1;
+          presentationFunc = 0;
+          xReference = 0;
+          yReference = 0;
+          xScaleFactor = 1;
+          yScaleFactor = 1;
+          rotationAngle = 0;
+        }
+
+        trendLabels TrendLabel1
+        {
+          offset = -7;
+          alignment = 0;
+          interval = `60*TheFrequency`;
+          theFont = `font0`;
+          format = "%T";
+          visibility = 1;
+          foregroundColour = `COLOR_STATIC_TEXT`;
+          backgroundColour = -1;
+          xReference = 0;
+          yReference = 0;
+          xScaleFactor = 1;
+          yScaleFactor = 1;
+          rotationAngle = 0;
+        }  // end of trendLabel 
+
+        trendRuler TrendRuler1
+        {
+          visibility = 0;
+          foregroundColour = `COLOR_STATIC_TEXT`;
+          backgroundColour = -1;
+          lineWidth = 0;
+          linePattern = `SolidStyle`;
+          rulerIsSelected = 1;
+          xReference = 0;
+          yReference = 0;
+          xScaleFactor = 1;
+          yScaleFactor = 1;
+          rotationAngle = 0;
+        } // end of trendRuler
+
+        trendGrid TrendGrid1
+        {
+          depthPosition = 0;
+          noOfLines = 0;
+          timeInterval = `60*TheFrequency`;
+          timeOffset = 0;
+          autoStep = 0;
+          theTrendPres = "";
+          visibility = 1;
+          lineWidth = 1;
+          linePattern = 1;
+          foregroundColour = `COLOR_NON_ESSENTIAL`;
+          backgroundColour = -1;
+          xReference = 0;
+          yReference = 0;
+          xScaleFactor = 1;
+          yScaleFactor = 1;
+          rotationAngle = 0;
+        }  // end of trendGrid
+
+        dialogue
+        {
+          event = `cursorMoved()`;
+          action = statement `{
+   TrendRuler1.moveRuler();
+   thePicture().theWindow().update();
+}`;
+        }
+        xReference = 31;
+        yReference = 23;
+        xScaleFactor = 1;
+        yScaleFactor = 1;
+        rotationAngle = 0;
+      }  // end of trend TheTrend
+
+
+
+    line AnalogHigh
+    {
+      numberOfPoints = 2;
+      point[0] = (115, 28);
+      point[1] = (130, 28);
+
+      visibility = `TheVariable->sig_type < MinimumDigitalType`;
+      foregroundColour = `COLOR_STATIC_TEXT`;
+      backgroundColour = -1;
+      lineWidth = 2;
+      lineStyle = `SolidPattern`;
+      xReference = 100;
+      yReference = 28;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    line AnalogLow
+    {
+      numberOfPoints = 2;
+      point[0] = (115, 78);
+      point[1] = (130, 78);
+
+      visibility = `TheVariable->sig_type < MinimumDigitalType`;
+      foregroundColour = `COLOR_STATIC_TEXT`;
+      backgroundColour = -1;
+      lineWidth = 2;
+      lineStyle = `SolidPattern`;
+      xReference = 100;
+      yReference = 78;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    text TrackTimeLabel
+    {
+      x = 735;
+      y = 146;
+      format = "%s";
+      theText = "Tracking Time:";
+      visibility = `TheTrend.TrendRuler1.visibility`;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font0`;
+      xReference = 735;
+      yReference = 147;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    text 
+    {
+      x = 945;
+      y = 146;
+      format = "%s";
+      theText = "Value:";
+      visibility = `TheTrend.TrendRuler1.visibility`;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font0`;
+      xReference = 915;
+      yReference = 166;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    text Top
+    {
+      x = 55;
+      y = 33;
+      format = "%s";
+      theText = "TOP";
+      visibility = `TheVariable->sig_type < MinimumDigitalType`;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font0`;
+      xReference = 80;
+      yReference = 33;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    text LowText
+    {
+      x = 55;
+      y = 83;
+      format = "%s";
+      theText = "UGSSP";
+      visibility = `TheVariable->sig_type < MinimumDigitalType`;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font0`;
+      xReference = 86;
+      yReference = 78;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    text TrackTime
+    {
+      x = 830;
+      y = 146;
+      format = "%s";
+      theText = `cftime(TheTrackTime,"%T",TheTrend.TrendPres1.getRulerTime("TrendRuler1")),TheTrackTime`;
+      visibility = `TheTrend.TrendRuler1.visibility`;
+      foregroundColour = `COLOR_DATA_NORMAL`;
+      backgroundColour = -1;
+      theFont = `font0`;
+      xReference = 845;
+      yReference = 166;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    text AnalogValue
+    {
+      x = 985;
+      y = 146;
+      format = "%6.1f";
+      theText = `TheTrend.TrendPres1.getRulerValue("TrendRuler1")`;
+      visibility = `(TheTrend.TrendPres1.getRulerValue("TrendRuler1") != BAD_VALUE)&&TheTrend.TrendRuler1.visibility&&TheVariable->sig_type<MinimumDigitalType`;
+      foregroundColour = `COLOR_DATA_NORMAL`;
+      backgroundColour = -1;
+      theFont = `font0`;
+      xReference = 945;
+      yReference = 166;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    text AnalogBad
+    {
+      x = 985;
+      y = 146;
+      format = "%s";
+      theText = "BAD DATA";
+      visibility = `(TheTrend.TrendPres1.getRulerValue("TrendRuler1") == BAD_VALUE)&&TheTrend.TrendRuler1.visibility&&TheVariable->sig_type<MinimumDigitalType`;
+      foregroundColour = `COLOR_DATA_NORMAL`;
+      backgroundColour = -1;
+      theFont = `font0`;
+      xReference = 945;
+      yReference = 166;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+// The class' other attributes:
+
+  xSnap             = 5;
+  ySnap             = 5;
+  angleSnap         = 0;
+  radiusSnap        = 0;
+  worldX            = 0;
+  worldY            = 0;
+  worldWidth        = 1150;
+  worldHeight       = 170;
+  oneToOne          = 1;
+  backgroundColour  = 0;
+  xReference = 500;
+  yReference = 500;
+  xScaleFactor = 1;
+  yScaleFactor = 1;
+  rotationAngle = 0;
+
+  } // end of class VideoTrend_Cfms1
+
+
+
+  class VideoTrend_Cfms2
+  {
+    float BASE = 0;
+
+    int TheFrequency = 1;
+
+    RECORD *TheVariable = `&ERRORPID`;
+
+    char *TheTrendVariable = "::UCN5and6.VideoSet1Tr1";
+
+    float HighLimit = 400;
+
+    float LowLimit = 0;
+
+    char TheTrackTime[10] = "11:52:08";
+
+    float Baseline = `(HighLimit+LowLimit)/2.0`;
+
+    function `void TrendReset()
+{
+ TheTrend.reset();
+ update();
+}`
+
+
+
+  dialogue
+  {
+    event = `shapeLeft()`;
+    action = statement `{
+   TheTrend.TrendRuler1.visibility = INVISIBLE;
+   thePicture().theWindow().update();
+}`;
+  }
+
+  dialogue
+  {
+    event = `shapeEntered()`;
+    action = statement `{
+   TheTrend.TrendRuler1.visibility = VISIBLE;
+   thePicture().theWindow().update();
+}`;
+  }
+
+    trend TheTrend
+    {
+      trLog = "UCN5and6TrendLog";
+      x = 130;
+      y = 1;
+      width = 900;
+      height = 50;
+      visibility = 1;
+      timespan = `600*TheFrequency`;
+      orientation = 0;
+      scroll = 0;
+      foregroundFillColour = `COLOR_DARK_GRAY`;
+      backgroundFillColour = -1;
+      foregroundColour = `COLOR_STATIC_TEXT`;
+      backgroundColour = -1;
+      lineWidth = 0;
+      linePattern = `SolidPattern`;
+      fillPattern = 1;
+      updateMode = 0;
+
+        trendPlot TrendPres1
+        {
+          variable = `TheTrendVariable`;
+          presentation = 0;
+          upperLimit = `(TheVariable->sig_type<MinimumDigitalType)?HighLimit:2`;
+          lowerLimit = `(TheVariable->sig_type<MinimumDigitalType)?LowLimit:-1`;
+          visibility = 1;
+          logFrequency = `TheFrequency`;
+          foregroundFillColour = `COLOR_DATA_NORMAL`;
+          backgroundFillColour = -1;
+          foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+          backgroundColour = -1;
+          lineWidth = 2;
+          linePattern = `SolidPattern`;
+          fillPattern = `SolidPattern`;
+          autoScale = 0;
+          upperBand = 1;
+          lowerBand = 1;
+          presentationFunc = 0;
+          xReference = 0;
+          yReference = 0;
+          xScaleFactor = 1;
+          yScaleFactor = 1;
+          rotationAngle = 0;
+        }
+
+        trendLabels TrendLabel1
+        {
+          offset = -7;
+          alignment = 0;
+          interval = `60*TheFrequency`;
+          theFont = `font0`;
+          format = "%T";
+          visibility = 0;
+          foregroundColour = `COLOR_STATIC_TEXT`;
+          backgroundColour = -1;
+          xReference = 0;
+          yReference = 0;
+          xScaleFactor = 1;
+          yScaleFactor = 1;
+          rotationAngle = 0;
+        }  // end of trendLabel 
+
+        trendRuler TrendRuler1
+        {
+          visibility = 0;
+          foregroundColour = `COLOR_STATIC_TEXT`;
+          backgroundColour = -1;
+          lineWidth = 0;
+          linePattern = `SolidPattern`;
+          rulerIsSelected = 1;
+          xReference = 0;
+          yReference = 0;
+          xScaleFactor = 1;
+          yScaleFactor = 1;
+          rotationAngle = 0;
+        } // end of trendRuler
+
+        trendGrid TrendGrid1
+        {
+          depthPosition = 0;
+          noOfLines = 0;
+          timeInterval = `60*TheFrequency`;
+          timeOffset = 0;
+          autoStep = 0;
+          theTrendPres = "";
+          visibility = 1;
+          lineWidth = 1;
+          linePattern = 1;
+          foregroundColour = `COLOR_NON_ESSENTIAL`;
+          backgroundColour = -1;
+          xReference = 0;
+          yReference = 0;
+          xScaleFactor = 1;
+          yScaleFactor = 1;
+          rotationAngle = 0;
+        }  // end of trendGrid
+
+        dialogue
+        {
+          event = `cursorMoved()`;
+          action = statement `{
+   TrendRuler1.moveRuler();
+   thePicture().theWindow().update();
+}`;
+        }
+        xReference = 31;
+        yReference = -4;
+        xScaleFactor = 1;
+        yScaleFactor = 1;
+        rotationAngle = 0;
+      }  // end of trend TheTrend
+
+
+
+    line AnalogLow
+    {
+      numberOfPoints = 2;
+      point[0] = (115, 51);
+      point[1] = (130, 51);
+
+      visibility = `TheVariable->sig_type < MinimumDigitalType`;
+      foregroundColour = `COLOR_STATIC_TEXT`;
+      backgroundColour = -1;
+      lineWidth = 2;
+      lineStyle = `SolidPattern`;
+      xReference = 100;
+      yReference = 51;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    text TrackTimeLabel
+    {
+      x = 735;
+      y = 68;
+      format = "%s";
+      theText = "Tracking Time:";
+      visibility = `TheTrend.TrendRuler1.visibility`;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font0`;
+      xReference = 735;
+      yReference = 69;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    text 
+    {
+      x = 945;
+      y = 68;
+      format = "%s";
+      theText = "Value:";
+      visibility = `TheTrend.TrendRuler1.visibility`;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font0`;
+      xReference = 915;
+      yReference = 88;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    text LowText
+    {
+      x = 55;
+      y = 55;
+      format = "%s";
+      theText = "CORE";
+      visibility = `TheVariable->sig_type < MinimumDigitalType`;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font0`;
+      xReference = 86;
+      yReference = 50;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    text TrackTime
+    {
+      x = 830;
+      y = 68;
+      format = "%s";
+      theText = `cftime(TheTrackTime,"%T",TheTrend.TrendPres1.getRulerTime("TrendRuler1")),TheTrackTime`;
+      visibility = `TheTrend.TrendRuler1.visibility`;
+      foregroundColour = `COLOR_DATA_NORMAL`;
+      backgroundColour = -1;
+      theFont = `font0`;
+      xReference = 845;
+      yReference = 88;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    text AnalogValue
+    {
+      x = 985;
+      y = 68;
+      format = "%6.1f";
+      theText = `TheTrend.TrendPres1.getRulerValue("TrendRuler1")`;
+      visibility = `(TheTrend.TrendPres1.getRulerValue("TrendRuler1") != BAD_VALUE)&&TheTrend.TrendRuler1.visibility&&TheVariable->sig_type<MinimumDigitalType`;
+      foregroundColour = `COLOR_DATA_NORMAL`;
+      backgroundColour = -1;
+      theFont = `font0`;
+      xReference = 945;
+      yReference = 88;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    text AnalogBad
+    {
+      x = 985;
+      y = 68;
+      format = "%s";
+      theText = "BAD DATA";
+      visibility = `(TheTrend.TrendPres1.getRulerValue("TrendRuler1") == BAD_VALUE)&&TheTrend.TrendRuler1.visibility&&TheVariable->sig_type<MinimumDigitalType`;
+      foregroundColour = `COLOR_DATA_NORMAL`;
+      backgroundColour = -1;
+      theFont = `font0`;
+      xReference = 945;
+      yReference = 88;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+// The class' other attributes:
+
+  xSnap             = 5;
+  ySnap             = 5;
+  angleSnap         = 0;
+  radiusSnap        = 0;
+  worldX            = 0;
+  worldY            = 0;
+  worldWidth        = 1150;
+  worldHeight       = 100;
+  oneToOne          = 1;
+  backgroundColour  = 0;
+  xReference = 500;
+  yReference = 500;
+  xScaleFactor = 1;
+  yScaleFactor = 1;
+  rotationAngle = 0;
+
+  } // end of class VideoTrend_Cfms2
+
+
+
+  class VideoTrend_Cfms3
+  {
+    float BASE = 0;
+
+    int TheFrequency = 1;
+
+    RECORD *TheVariable = `&ERRORPID`;
+
+    char *TheTrendVariable = "::UCN5and6.VideoSet1Tr1";
+
+    float HighLimit = 400;
+
+    float LowLimit = 0;
+
+    char TheTrackTime[10] = "09:00:00";
+
+    float Baseline = `(HighLimit+LowLimit)/2.0`;
+
+    function `void ComputeBaseline()
+{
+   float MinY, MaxY;     // The min and max Y coordinates
+   float TheY;           // The computed Y coordinate
+
+if(strcmp(TheVariable->pid,"ERRORPID"))
+{
+//
+// Compute the min and max Y coordinates
+   MinY = TheTrend.y+TheTrend.height;
+   MaxY = TheTrend.y;
+//
+ if (BASE == 0) {
+// Compute the Baseline line
+   TheY = MinY - ( ( (Baseline-LowLimit)/(HighLimit-LowLimit) ) * TheTrend.height);
+   printf("Baseline ......") ; }
+ else {
+   TheY = MinY - ( ( (BASE-LowLimit)/(HighLimit-LowLimit) ) * TheTrend.height);
+   printf("BASE......"); }
+//
+// Remember, the Y coordinates are reverse; they get larger as you go down
+   if (TheY > MinY)
+      TheY = MinY;
+   if (TheY < MaxY)
+      TheY = MaxY;
+//
+// Now set the line
+   TheBaseLine.setY(0,TheY);
+   TheBaseLine.setY(1,TheY);
+   BaseText.y = TheY+5.0;
+}
+}`
+
+    function `void TrendReset()
+{
+ TheTrend.reset();
+ update();
+}`
+
+
+
+  dialogue
+  {
+    event = `shapeLeft()`;
+    action = statement `{
+   TheTrend.TrendRuler1.visibility = INVISIBLE;
+   thePicture().theWindow().update();
+}`;
+  }
+
+  dialogue
+  {
+    event = `shapeEntered()`;
+    action = statement `{
+   TheTrend.TrendRuler1.visibility = VISIBLE;
+   thePicture().theWindow().update();
+}`;
+  }
+
+    trend TheTrend
+    {
+      trLog = "UCN5and6TrendLog";
+      x = 130;
+      y = 24;
+      width = 900;
+      height = 270;
+      visibility = 1;
+      timespan = `600*TheFrequency`;
+      orientation = 0;
+      scroll = 0;
+      foregroundFillColour = `COLOR_DARK_GRAY`;
+      backgroundFillColour = -1;
+      foregroundColour = `COLOR_STATIC_TEXT`;
+      backgroundColour = -1;
+      lineWidth = 0;
+      linePattern = `SolidPattern`;
+      fillPattern = 1;
+      updateMode = 0;
+
+        trendPlot TrendPres1
+        {
+          variable = `TheTrendVariable`;
+          presentation = 0;
+          upperLimit = `(TheVariable->sig_type<MinimumDigitalType)?HighLimit:2`;
+          lowerLimit = `(TheVariable->sig_type<MinimumDigitalType)?LowLimit:-1`;
+          visibility = 1;
+          logFrequency = `TheFrequency`;
+          foregroundFillColour = `COLOR_DATA_NORMAL`;
+          backgroundFillColour = -1;
+          foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+          backgroundColour = -1;
+          lineWidth = 2;
+          linePattern = `SolidPattern`;
+          fillPattern = `SolidPattern`;
+          autoScale = 0;
+          upperBand = 1;
+          lowerBand = 1;
+          presentationFunc = 0;
+          xReference = 0;
+          yReference = 0;
+          xScaleFactor = 1;
+          yScaleFactor = 1;
+          rotationAngle = 0;
+        }
+
+        trendLabels TrendLabel1
+        {
+          offset = -7;
+          alignment = 0;
+          interval = `60*TheFrequency`;
+          theFont = `font0`;
+          format = "%T";
+          visibility = 1;
+          foregroundColour = `COLOR_STATIC_TEXT`;
+          backgroundColour = -1;
+          xReference = 0;
+          yReference = 0;
+          xScaleFactor = 1;
+          yScaleFactor = 1;
+          rotationAngle = 0;
+        }  // end of trendLabel 
+
+        trendRuler TrendRuler1
+        {
+          visibility = 0;
+          foregroundColour = `COLOR_STATIC_TEXT`;
+          backgroundColour = -1;
+          lineWidth = 0;
+          linePattern = `SolidStyle`;
+          rulerIsSelected = 1;
+          xReference = 0;
+          yReference = 0;
+          xScaleFactor = 1;
+          yScaleFactor = 1;
+          rotationAngle = 0;
+        } // end of trendRuler
+
+        trendGrid TrendGrid1
+        {
+          depthPosition = 0;
+          noOfLines = 0;
+          timeInterval = `60*TheFrequency`;
+          timeOffset = 0;
+          autoStep = 0;
+          theTrendPres = "";
+          visibility = 1;
+          lineWidth = 1;
+          linePattern = 1;
+          foregroundColour = `COLOR_NON_ESSENTIAL`;
+          backgroundColour = -1;
+          xReference = 0;
+          yReference = 0;
+          xScaleFactor = 1;
+          yScaleFactor = 1;
+          rotationAngle = 0;
+        }  // end of trendGrid
+
+        dialogue
+        {
+          event = `cursorMoved()`;
+          action = statement `{
+   TrendRuler1.moveRuler();
+   thePicture().theWindow().update();
+}`;
+        }
+        xReference = 31;
+        yReference = 19;
+        xScaleFactor = 1;
+        yScaleFactor = 1;
+        rotationAngle = 0;
+      }  // end of trend TheTrend
+
+
+
+    line AnalogHigh
+    {
+      numberOfPoints = 2;
+      point[0] = (115, 24);
+      point[1] = (130, 24);
+
+      visibility = `TheVariable->sig_type < MinimumDigitalType`;
+      foregroundColour = `COLOR_STATIC_TEXT`;
+      backgroundColour = -1;
+      lineWidth = 2;
+      lineStyle = `SolidPattern`;
+      xReference = 100;
+      yReference = 24;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    line AnalogLow
+    {
+      numberOfPoints = 2;
+      point[0] = (115, 294);
+      point[1] = (130, 294);
+
+      visibility = `TheVariable->sig_type < MinimumDigitalType`;
+      foregroundColour = `COLOR_STATIC_TEXT`;
+      backgroundColour = -1;
+      lineWidth = 2;
+      lineStyle = `SolidPattern`;
+      xReference = 100;
+      yReference = 294;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    text TrackTimeLabel
+    {
+      x = 735;
+      y = 313;
+      format = "%s";
+      theText = "Tracking Time:";
+      visibility = `TheTrend.TrendRuler1.visibility`;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font0`;
+      xReference = 735;
+      yReference = 314;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    text 
+    {
+      x = 945;
+      y = 313;
+      format = "%s";
+      theText = "Value:";
+      visibility = `TheTrend.TrendRuler1.visibility`;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font0`;
+      xReference = 915;
+      yReference = 333;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    text HighText
+    {
+      x = 55;
+      y = 29;
+      format = "%6.1f";
+      theText = `HighLimit`;
+      visibility = `TheVariable->sig_type < MinimumDigitalType`;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font0`;
+      xReference = 80;
+      yReference = 29;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    text LowText
+    {
+      x = 55;
+      y = 296;
+      format = "%6.2f";
+      theText = `LowLimit`;
+      visibility = `TheVariable->sig_type < MinimumDigitalType`;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font0`;
+      xReference = 86;
+      yReference = 291;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    text TrackTime
+    {
+      x = 830;
+      y = 313;
+      format = "%s";
+      theText = `cftime(TheTrackTime,"%T",TheTrend.TrendPres1.getRulerTime("TrendRuler1")),TheTrackTime`;
+      visibility = `TheTrend.TrendRuler1.visibility`;
+      foregroundColour = `COLOR_DATA_NORMAL`;
+      backgroundColour = -1;
+      theFont = `font0`;
+      xReference = 845;
+      yReference = 333;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    text AnalogValue
+    {
+      x = 985;
+      y = 313;
+      format = "%6.1f";
+      theText = `TheTrend.TrendPres1.getRulerValue("TrendRuler1")`;
+      visibility = `(TheTrend.TrendPres1.getRulerValue("TrendRuler1") != BAD_VALUE)&&TheTrend.TrendRuler1.visibility&&TheVariable->sig_type<MinimumDigitalType`;
+      foregroundColour = `COLOR_DATA_NORMAL`;
+      backgroundColour = -1;
+      theFont = `font0`;
+      xReference = 945;
+      yReference = 333;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    text DigitalPhrase
+    {
+      x = 985;
+      y = 313;
+      format = "%s";
+      theText = `(TheTrend.TrendPres1.getRulerValue("TrendRuler1") == BAD_VALUE) ? "BAD DATA" : ((TheTrend.TrendPres1.getRulerValue("TrendRuler1") >= 1.0)? TheVariable->message1:TheVariable->message2)`;
+      visibility = `TheTrend.TrendRuler1.visibility&&TheVariable->sig_type>=MinimumDigitalType`;
+      foregroundColour = `COLOR_DATA_NORMAL`;
+      backgroundColour = -1;
+      theFont = `font0`;
+      xReference = 1020;
+      yReference = 333;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    line TheBaseLine
+    {
+      numberOfPoints = 2;
+      point[0] = (1030, 159);
+      point[1] = (1045, 159);
+
+      visibility = `TheVariable->sig_type < MinimumDigitalType`;
+      foregroundColour = `COLOR_STATIC_TEXT`;
+      backgroundColour = -1;
+      lineWidth = 2;
+      lineStyle = `SolidStyle`;
+      xReference = 1030;
+      yReference = 134;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    text BaseText
+    {
+      x = 1050;
+      y = 164;
+      format = "%6.1f";
+      theText = `Baseline`;
+      visibility = `TheVariable->sig_type < MinimumDigitalType`;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font0`;
+      xReference = 1075;
+      yReference = 139;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+    text AnalogBad
+    {
+      x = 985;
+      y = 313;
+      format = "%s";
+      theText = "BAD DATA";
+      visibility = `(TheTrend.TrendPres1.getRulerValue("TrendRuler1") == BAD_VALUE)&&TheTrend.TrendRuler1.visibility&&TheVariable->sig_type<MinimumDigitalType`;
+      foregroundColour = `COLOR_DATA_NORMAL`;
+      backgroundColour = -1;
+      theFont = `font0`;
+      xReference = 945;
+      yReference = 333;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+
+
+// The class' other attributes:
+
+  xSnap             = 5;
+  ySnap             = 5;
+  angleSnap         = 0;
+  radiusSnap        = 0;
+  worldX            = 0;
+  worldY            = 0;
+  worldWidth        = 1150;
+  worldHeight       = 350;
+  oneToOne          = 1;
+  backgroundColour  = 0;
+  xReference = 500;
+  yReference = 500;
+  xScaleFactor = 1;
+  yScaleFactor = 1;
+  rotationAngle = 0;
+
+  } // end of class VideoTrend_Cfms3
+
+
+}  // end of library TrendLibrary

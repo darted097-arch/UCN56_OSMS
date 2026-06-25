@@ -1,0 +1,654 @@
+/*
+ * PICASSO-3 CONFIGURATION LANGUAGE FILE
+ *
+ *
+ * Picture name: PicUCN_ORL
+ *
+ *
+ * Documented by  : runtime
+ * Host           : y6tsc2
+ * Date           : 03/12-97 at 14:31:19
+ *
+ *
+ * Generate with:
+ *    pcc PicUCN_ORL.Tdoc
+ *
+ */
+
+
+picture PicUCN_ORL
+{
+
+  char *PictureTitle = "OUT OF RANGE LIST";
+  char PictureNumber[50] = "156";
+  char *dummy_arg = " ";
+
+  function `void Initialize()
+{
+   CFMLevel = 0;
+   Current_Page = 156;
+   OrlPageOn = TRUE;
+   execute("{sendMessageToHost(REQUEST_ORL_DATA);}");
+}`
+
+
+
+  function `int SetpRECORDs()
+{
+// If the string compare is not equal to 8 blanks and the string length is 8 characters long
+// then set pRECORD equal to the PID sent from the CCUR
+   if ( (0 != strcmp (Interface->ORL_Data.ORLine1.AlarmProb,"    ")) && 
+        (4 == strlen(Interface->ORL_Data.ORLine1.AlarmProb)) )
+   {
+        execute ("{OLine1.pRECORD = \\\`&%s\\\`;}", Interface->ORL_Data.ORLine1.AlarmPid);
+   }
+   else
+        {OLine1.pRECORD = 0;}
+
+   if ( (0 != strcmp (Interface->ORL_Data.ORLine2.AlarmProb,"    ")) && 
+        (4 == strlen(Interface->ORL_Data.ORLine2.AlarmProb)) )
+      {
+      execute ("{OLine2.pRECORD = \\\`&%s\\\`;}", Interface->ORL_Data.ORLine2.AlarmPid);
+    
+      }
+   else
+        {OLine2.pRECORD = 0;}
+
+   if ( (0 != strcmp (Interface->ORL_Data.ORLine3.AlarmProb,"    ")) && 
+        (4 == strlen(Interface->ORL_Data.ORLine3.AlarmProb)) )
+      {
+      execute ("{OLine3.pRECORD = \\\`&%s\\\`;}", Interface->ORL_Data.ORLine3.AlarmPid);
+      }
+   else
+        {OLine3.pRECORD = 0;}
+
+   if ( (0 != strcmp (Interface->ORL_Data.ORLine4.AlarmProb,"    ")) && 
+        (4 == strlen(Interface->ORL_Data.ORLine4.AlarmProb)) )
+      {
+      execute ("{OLine4.pRECORD = \\\`&%s\\\`;}", Interface->ORL_Data.ORLine4.AlarmPid);
+      }
+   else
+       {OLine4.pRECORD = 0;}
+
+   if ( (0 != strcmp (Interface->ORL_Data.ORLine5.AlarmProb,"    ")) && 
+        (4 == strlen(Interface->ORL_Data.ORLine5.AlarmProb)) )
+      {
+      execute ("{OLine5.pRECORD = \\\`&%s\\\`;}", Interface->ORL_Data.ORLine5.AlarmPid);
+      }
+   else
+       {OLine5.pRECORD = 0;}
+
+   if ( (0 != strcmp (Interface->ORL_Data.ORLine6.AlarmProb,"    ")) && 
+        (4 == strlen(Interface->ORL_Data.ORLine6.AlarmProb)) )
+      {
+      execute ("{OLine6.pRECORD = \\\`&%s\\\`;}", Interface->ORL_Data.ORLine6.AlarmPid);
+      }
+   else
+       {OLine6.pRECORD = 0;}
+
+   if ( (0 != strcmp (Interface->ORL_Data.ORLine7.AlarmProb,"    ")) && 
+        (4 == strlen(Interface->ORL_Data.ORLine7.AlarmProb)) )
+      {
+      execute ("{OLine7.pRECORD = \\\`&%s\\\`;}", Interface->ORL_Data.ORLine7.AlarmPid);
+      }
+   else
+       {OLine7.pRECORD = 0;}
+
+   if ( (0 != strcmp (Interface->ORL_Data.ORLine8.AlarmProb,"    ")) && 
+        (4 == strlen(Interface->ORL_Data.ORLine8.AlarmProb)) )
+      {
+      execute ("{OLine8.pRECORD = \\\`&%s\\\`;}", Interface->ORL_Data.ORLine8.AlarmPid);
+      }
+   else
+       {OLine8.pRECORD = 0;}
+
+   if ( (0 != strcmp (Interface->ORL_Data.ORLine9.AlarmProb,"    ")) && 
+        (4 == strlen(Interface->ORL_Data.ORLine9.AlarmProb)) )
+      {
+      execute ("{OLine9.pRECORD = \\\`&%s\\\`;}", Interface->ORL_Data.ORLine9.AlarmPid);
+      }
+   else
+       {OLine9.pRECORD = 0;}
+
+   if ( (0 != strcmp (Interface->ORL_Data.ORLine10.AlarmProb,"    ")) && 
+        (4 == strlen(Interface->ORL_Data.ORLine10.AlarmProb)) )
+      {
+      execute ("{OLine10.pRECORD = \\\`&%s\\\`;}", Interface->ORL_Data.ORLine10.AlarmPid);
+      }
+   else
+       {OLine10.pRECORD = 0;}
+
+   if ( (0 != strcmp (Interface->ORL_Data.ORLine11.AlarmProb,"    ")) && 
+        (4 == strlen(Interface->ORL_Data.ORLine11.AlarmProb)) )
+      {
+      execute ("{OLine11.pRECORD = \\\`&%s\\\`;}", Interface->ORL_Data.ORLine11.AlarmPid);
+      }
+   else
+       {OLine11.pRECORD = 0;}
+
+   if ( (0 != strcmp (Interface->ORL_Data.ORLine12.AlarmProb,"    ")) && 
+        (4 == strlen(Interface->ORL_Data.ORLine12.AlarmProb)) )
+      {
+      execute ("{OLine12.pRECORD = \\\`&%s\\\`;}", Interface->ORL_Data.ORLine12.AlarmPid);
+      }
+   else
+       {OLine12.pRECORD = 0;}
+
+   if ( (0 != strcmp (Interface->ORL_Data.ORLine13.AlarmProb,"    ")) && 
+        (4 == strlen(Interface->ORL_Data.ORLine13.AlarmProb)) )
+      {
+      execute ("{OLine13.pRECORD = \\\`&%s\\\`;}", Interface->ORL_Data.ORLine13.AlarmPid);
+      }
+   else
+       {OLine13.pRECORD = 0;}
+
+   if ( (0 != strcmp (Interface->ORL_Data.ORLine14.AlarmProb,"    ")) && 
+        (4 == strlen(Interface->ORL_Data.ORLine14.AlarmProb)) )
+      {
+      execute ("{OLine14.pRECORD = \\\`&%s\\\`;}", Interface->ORL_Data.ORLine14.AlarmPid);
+      }
+   else
+       {OLine14.pRECORD = 0;}
+
+   if ( (0 != strcmp (Interface->ORL_Data.ORLine15.AlarmProb,"    ")) && 
+        (4 == strlen(Interface->ORL_Data.ORLine15.AlarmProb)) )
+      {
+      execute ("{OLine15.pRECORD = \\\`&%s\\\`;}", Interface->ORL_Data.ORLine15.AlarmPid);
+      }
+   else
+       {OLine15.pRECORD = 0;}
+}
+`
+
+
+/*----------------------- CORENET ---------------
+  line 
+  {
+    numberOfPoints = 2;
+
+    point[0] = (85, 266);
+    point[1] = (85, 266);
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineWidth = 0;
+    lineStyle = `SolidPattern`;
+    xReference = 85;
+    yReference = 266;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  line 
+  {
+    numberOfPoints = 2;
+
+    point[0] = (74, 451);
+    point[1] = (74, 451);
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineWidth = 0;
+    lineStyle = `SolidPattern`;
+    xReference = 74;
+    yReference = 451;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+--------------------------------------------------*/
+
+
+  rectangle 
+  {
+    x = 485;
+    y = 51;
+    width = 0;
+    height = 0;
+
+    visibility = 1;
+    foregroundFillColour = `COLOR_NON_ESSENTIAL`;
+    backgroundFillColour = -1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineWidth = 0;
+    linePattern = `SolidPattern`;
+    fillPattern = `SolidPattern`;
+    xReference = 485;
+    yReference = 51;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 662;
+    y = 26;
+    format = "%d";
+    //theText = `&Interface->ORL_Data.OrlPage`;
+    theText = `Interface->ORL_Data.OrlPage`;	// CORENET
+
+    visibility =  `SetpRECORDs()`;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font15`;
+    xReference = 662;
+    yReference = 26;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 564;
+    y = 26;
+    format = "%s";
+    theText = "PAGE";
+
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = `font15`;
+    xReference = 564;
+    yReference = 26;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  instance DialogueSymbols.OrlLine OLine2
+  {
+    attribute Format = `pRECORD == 0 ? "%s" : pRECORD->disfmt`;
+    attribute ProblemText = `pRECORD == 0 ? " " : 
+                              Interface->ORL_Data.ORLine2.AlarmProb`;
+    attribute LineNumber = 2;
+    attribute pRECORD = 0;
+    attribute value.PointId = `pRECORD`;
+    attribute value.DisplayUnits = 1;
+    x = 10;
+    y = 120;
+    visibility = 1;
+    xReference = 89;
+    yReference = 123;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance OLine2
+
+
+
+  instance DialogueSymbols.OrlLine OLine3
+  {
+    attribute Format = `pRECORD == 0 ? "%s" : pRECORD->disfmt`;
+    attribute ProblemText = `pRECORD == 0 ? " " :
+                             Interface->ORL_Data.ORLine3.AlarmProb`;
+    attribute LineNumber = 3;
+    attribute pRECORD = 0;
+    attribute value.PointId = `pRECORD`;
+    attribute value.DisplayUnits = 1;
+    x = 10;
+    y = 160;
+    visibility = 1;
+    xReference = 84;
+    yReference = 160;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance OLine3
+
+
+
+  instance DialogueSymbols.OrlLine OLine4
+  {
+    attribute Format = `pRECORD == 0 ? "%s" : pRECORD->disfmt`;
+    attribute ProblemText = `pRECORD == 0 ? " " : 
+                             Interface->ORL_Data.ORLine4.AlarmProb`;
+    attribute LineNumber = 4;
+    attribute pRECORD = 0;
+    attribute value.PointId = `pRECORD`;
+    attribute value.DisplayUnits = 1;
+    x = 10;
+    y = 200;
+    visibility = 1;
+    xReference = 30;
+    yReference = 200;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance OLine4
+
+
+
+  instance DialogueSymbols.OrlLine OLine5
+  {
+    attribute Format = `pRECORD == 0 ? "%s" : pRECORD->disfmt`;
+    attribute ProblemText = `pRECORD == 0 ? " " : 
+                              Interface->ORL_Data.ORLine5.AlarmProb`;
+    attribute LineNumber = 5;
+    attribute pRECORD = 0;
+    attribute value.PointId = `pRECORD`;
+    attribute value.DisplayUnits = 1;
+    x = 10;
+    y = 240;
+    visibility = 1;
+    xReference = 124;
+    yReference = 246;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance OLine5
+
+
+
+  instance DialogueSymbols.OrlLine OLine1
+  {
+    attribute Format = `pRECORD == 0 ? "%s" : pRECORD->disfmt`;
+    attribute ProblemText = `pRECORD == 0 ? " " : 
+                            Interface->ORL_Data.ORLine1.AlarmProb`;
+    attribute LineNumber = 1;
+    attribute pRECORD = 0;
+    attribute value.PointId = `pRECORD`;
+    attribute value.DisplayUnits = 1;
+    x = 10;
+    y = 80;
+    visibility = 1;
+    xReference = 106;
+    yReference = 88;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance OLine1
+
+
+
+  instance DialogueSymbols.OrlLine OLine6
+  {
+    attribute Format = `pRECORD == 0 ? "%s" : pRECORD->disfmt`;
+    attribute ProblemText = `pRECORD == 0 ? " " : 
+                              Interface->ORL_Data.ORLine6.AlarmProb`;
+    attribute LineNumber = 6;
+    attribute pRECORD = 0;
+    attribute value.PointId = `pRECORD`;
+    attribute value.DisplayUnits = 1;
+    x = 10;
+    y = 300;
+    visibility = 1;
+    xReference = 61;
+    yReference = 313;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance OLine6
+
+
+
+  instance DialogueSymbols.OrlLine OLine7
+  {
+    attribute Format = `pRECORD == 0 ? "%s" : pRECORD->disfmt`;
+    attribute ProblemText = `pRECORD == 0 ? " " : 
+                              Interface->ORL_Data.ORLine7.AlarmProb`;
+    attribute LineNumber = 7;
+    attribute pRECORD = 0;
+    attribute value.PointId = `pRECORD`;
+    attribute value.DisplayUnits = 1;
+    x = 10;
+    y = 340;
+    visibility = 1;
+    xReference = 53;
+    yReference = 354;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance OLine7
+
+
+
+  instance DialogueSymbols.OrlLine OLine8
+  {
+    attribute Format = `pRECORD == 0 ? "%s" : pRECORD->disfmt`;
+    attribute ProblemText = `pRECORD == 0 ? " " : 
+                             Interface->ORL_Data.ORLine8.AlarmProb`;
+    attribute LineNumber = 8;
+    attribute pRECORD = 0;
+    attribute value.PointId = `pRECORD`;
+    attribute value.DisplayUnits = 1;
+    x = 10;
+    y = 380;
+    visibility = 1;
+    xReference = 57;
+    yReference = 399;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance OLine8
+
+
+
+  instance DialogueSymbols.OrlLine OLine9
+  {
+    attribute Format = `pRECORD == 0 ? "%s" : pRECORD->disfmt`;
+    attribute ProblemText = `pRECORD == 0 ? " " : 
+                             Interface->ORL_Data.ORLine9.AlarmProb`;
+    attribute LineNumber = 9;
+    attribute pRECORD = 0;
+    attribute value.PointId = `pRECORD`;
+    attribute value.DisplayUnits = 1;
+    x = 10;
+    y = 420;
+    visibility = 1;
+    xReference = 99;
+    yReference = 459;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance OLine9
+
+
+
+  instance DialogueSymbols.OrlLine OLine10
+  {
+    attribute Format = `pRECORD == 0 ? "%s" : pRECORD->disfmt`;
+    attribute ProblemText = `pRECORD == 0 ? " " : 
+                             Interface->ORL_Data.ORLine10.AlarmProb`;
+    attribute LineNumber = 10;
+    attribute pRECORD = 0;
+    attribute value.PointId = `pRECORD`;
+    attribute value.DisplayUnits = 1;
+    x = 10;
+    y = 460;
+    visibility = 1;
+    xReference = 133;
+    yReference = 514;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance OLine10
+
+
+
+  line 
+  {
+    numberOfPoints = 2;
+
+    point[0] = (58, 281);
+    point[1] = (1125, 281);
+
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    lineWidth = 5;
+    lineStyle = `SolidPattern`;
+    xReference = 41;
+    yReference = 285;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  line bar2
+  {
+    numberOfPoints = 2;
+
+    point[0] = (53, 502);
+    point[1] = (1120, 502);
+
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    lineWidth = 5;
+    lineStyle = `SolidPattern`;
+    xReference = 53;
+    yReference = 479;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  instance DialogueSymbols.OrlLine OLine11
+  {
+    attribute Format = `pRECORD == 0 ? "%s" : pRECORD->disfmt`;
+    attribute ProblemText = `pRECORD == 0 ? " " : 
+                             Interface->ORL_Data.ORLine11.AlarmProb`;
+    attribute LineNumber = 11;
+    attribute pRECORD = 0;
+    attribute value.PointId = `pRECORD`;
+    attribute value.DisplayUnits = 1;
+    x = 10;
+    y = 520;
+    visibility = 1;
+    xReference = 52;
+    yReference = 555;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance OLine11
+
+
+
+  instance DialogueSymbols.OrlLine OLine12
+  {
+    attribute Format = `pRECORD == 0 ? "%s" : pRECORD->disfmt`;
+    attribute ProblemText = `pRECORD == 0 ? " " : 
+                             Interface->ORL_Data.ORLine12.AlarmProb`;
+    attribute LineNumber = 13;
+    attribute pRECORD = 0;
+    attribute value.PointId = `pRECORD`;
+    attribute value.DisplayUnits = 1;
+    x = 10;
+    y = 560;
+    visibility = 1;
+    xReference = 61;
+    yReference = 592;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance OLine12
+
+
+
+  instance DialogueSymbols.OrlLine OLine13
+  {
+    attribute Format = `pRECORD == 0 ? "%s" : pRECORD->disfmt`;
+    attribute ProblemText = `pRECORD == 0 ? " " : 
+                              Interface->ORL_Data.ORLine13.AlarmProb`;
+    attribute LineNumber = 13;
+    attribute pRECORD = 0;
+    attribute value.PointId = `pRECORD`;
+    attribute value.DisplayUnits = 1;
+    x = 10;
+    y = 600;
+    visibility = 1;
+    xReference = 67;
+    yReference = 633;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance OLine13
+
+
+
+  instance DialogueSymbols.OrlLine OLine15
+  {
+    attribute Format = `pRECORD == 0 ? "%s" : pRECORD->disfmt`;
+    attribute ProblemText = `pRECORD == 0 ? " " : 
+                              Interface->ORL_Data.ORLine15.AlarmProb`;
+    attribute LineNumber = 15;
+    attribute pRECORD = 0;
+    attribute value.PointId = `pRECORD`;
+    attribute value.DisplayUnits = 1;
+    x = 10;
+    y = 680;
+    visibility = 1;
+    xReference = 127;
+    yReference = 712;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance OLine15
+
+
+
+  instance DialogueSymbols.OrlLine OLine14
+  {
+    attribute Format = `pRECORD == 0 ? "%s" : pRECORD->disfmt`;
+    attribute ProblemText = `pRECORD == 0 ? " " :  
+                             Interface->ORL_Data.ORLine14.AlarmProb`;
+    attribute LineNumber = 14;
+    attribute pRECORD = 0;
+    attribute value.PointId = `pRECORD`;
+    attribute value.DisplayUnits = 1;
+    x = 10;
+    y = 640;
+    visibility = 1;
+    xReference = 118;
+    yReference = 683;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance OLine14
+
+
+
+// The picture's other attributes:
+
+  backgroundColour    = 0;
+  xSnap               = 0;
+  ySnap               = 0;
+  angleSnap           = 0;
+  radiusSnap          = 0;
+  worldX              = 0;
+  worldY              = 0;
+  worldWidth          = 1280;
+  worldHeight         = 1024;
+  oneToOne            = 1;
+  resizeMode          = 0;
+  updateMode          = 2;
+  crosshairStyle      = 1;
+  crosshairLength     = 0;
+  crosshairFollowSnap = `isInEditMode()`;
+  crosshairVisibility = `isInEditMode()`;
+  xReference = 500;
+  yReference = 500;
+  xScaleFactor = 1;
+  yScaleFactor = 1;
+  rotationAngle = 0;
+
+
+}  // end of picture PicUCN_ORL

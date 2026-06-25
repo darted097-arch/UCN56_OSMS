@@ -1,0 +1,539 @@
+// ***************************************************************************
+// *									     *
+// *	Copyright (C) 1996, ABB-CE Inc., All rights reserved.		     *
+// *	Proprietary information, ABB-CE Incorporated			     *
+// *									     *
+// ***************************************************************************
+//
+// File = messageParameters.pdat
+//
+// ***** HIGH LEVEL DESCRIPTION **********************************************
+//
+// Variables Contained in messageParameters.h
+// Any changes here should be coordinated in messageParameters.h
+//
+// Messages starting with 0x1--- indicate messages originating from the client
+// Messages starting with 0x0--- indicate messages originating from the server
+//
+// **** REVISION HISTORY *****************************************************
+//
+// Revision 1.29  CORENET 2017.02.16 added.
+// Author: feel9zero@core-net.co.kr (Phil-kyu Kwon)
+// Added New Picture's opcode.
+// (EQUIPStructure.pdat, printPIDTestStructure.pdat, portion of RCSLeakStructures.pdat)
+//
+// $Header: /PMSArchive/ucn56/workstation/pictures/pdat/messageParameters.pdat 1.28 1999/04/14 18:28:10 leo Exp $
+// $Log: messageParameters.pdat,v $
+// Revision 1.28  1999/04/14 18:28:10  leo
+// Author: leo@y6maint1 (Leo Olbrych)
+// Added system opcodes.
+// Added comments indicating that most COLSS opcodes are contained
+// in colssParameters.pdat
+//
+// Revision 1.27  1999/04/02 00:25:50  leo
+// Author: leo@y6maint1 (Leo Olbrych)
+// Added new constant to notify Picasso when a Failover that has occurred on the
+// host CPUs.
+//
+// Revision 1.26  1999/02/19 21:30:56  gcs
+// Author: gcs@y6maint1 (Gail Sibley)
+// Added parameters for the Link Status Page.
+//
+// Revision 1.25  1999/02/04 17:48:20  gcs
+// Author: gcs@y6maint1 (Gail Sibley)
+// Added parameter for link indicating link status page is off.
+//
+// Revision 1.24  1998/09/16 20:32:04  gcs
+// Author: gcs@y6maint1 (Gail Sibley)
+// Added IOCPCS messages.
+//
+// Revision 1.23  1998/06/10 21:02:00  gcs
+// Author: gcs@y6maint1 (Gail Sibley)
+// Added variables for Link Status page.
+//
+// Revision 1.22  1998/05/05 18:28:25  kn2
+// Author: kn2@y6maint1 (Kopec NSSS 2)
+// Kopec NSSS Phase 3 Status 1.
+//
+// Revision 1.21  1998/02/10 20:26:35  kn1
+// Author: kn1@y6maint1.usnus.abb.com (Kopec NSSS 1)
+// Kopec NSSS Phase 2 Status 1.  Modified to support delivery.
+//
+// Revision 1.20  1997/12/16 20:24:45  gcs
+// Author: gcs@y6maint1.usnus.abb.com (Gail Sibley)
+// Added new parameter WSINIT_TEMP_SHOP_LIST for TempShopList object.
+//
+// Revision 1.19  1997/11/03 21:32:37  jws
+// Author: jws@y6maint1.usnus.abb.com (John Soisson)
+// Kopec NSSS Phase1 Status1. Modified to support delivery.
+//
+// Revision 1.18  1997/10/10 18:11:07  gcs
+// Author: gcs@y6maint1.usnus.abb.com (Gail Sibley)
+// Added parameters for Bad Data List and Out of Range List
+//
+// Revision 1.17  1997/09/24 18:22:00  kn1
+// Author: kn1@y6maint1.usnus.abb.com (Kopec NSSS 1)
+// Kopec NSSS Phase 3 Status 2. Modified to support delivery.
+//
+// Revision 1.16  1997/09/10 15:13:18  jnl
+// Author: jnl@y6maint1.usnus.abb.com (Jim Lanzalotta)
+// Modified message opcodes to support
+// Alarm Acknowledge Reset functions.
+//
+// Revision 1.15  1997/08/21 19:10:00  gcs
+// Author: gcs@y6maint1.usnus.abb.com (Gail Sibley)
+// Added parameter CAL_PAGE_OFF to let CCUR know that CAL page is not being displayed
+//
+// Revision 1.14  1997/08/07 14:43:13  jnl
+// Author: jnl@y6maint1.usnus.abb.com (Jim Lanzalotta)
+// Added message opcodes for Acknowledge Reset functions.
+//
+// Revision 1.13  1997/07/31 19:18:54  gcs
+// Author: gcs@y6maint1.usnus.abb.com (Gail Sibley)
+// Added more messaage parameters for Current Alarm List
+//
+// Revision 1.12  1997/07/25 10:37:50  gcs
+// Author: gcs@y6maint1 (Gail Sibley)
+// Added Parameters for Current Alarm List Page
+//
+// Revision 1.11  1997/06/12 18:37:12  leo
+// Author: leo@y6maint1.usnus.abb.com (Leo Olbrych)
+// Added DISPLAY_SECURITY_PAGE 0x1208.
+//
+// Revision 1.10  1997/05/13 16:49:48  kn1
+// Author: kn1@y6maint1.usnus.abb.com (Kopec NSSS 1)
+// Kopec Nsss Phase 2 Status 2 delivery.
+//
+// Revision 1.9  1997/04/08 21:08:59  kn1
+// Author: kn1@y6maint1.usnus.abb.com (Kopec NSSS 1)
+// KN Phase 1 Status 2 Delivery.  Added message opcodes to support delivery.
+//
+// Revision 1.8  1997/01/30 18:42:28  js
+// Author: js@y6maint1.usnus.abb.com (John Soisson)
+// Added message types for SENCAL and LSF.
+//
+// Revision 1.7  1997/01/28 19:56:02  leo
+// Author: leo@y6maint1.usnus.abb.com (Leo Olbrych)
+// Added opcodes for database change functions CHGSCN, CHGALM, CHGLIM, INSVAL.
+//
+// Revision 1.6  1997/01/28 02:20:51  jl
+// Author: jl@y6maint1.usnus.abb.com (Jim Lanzalotta)
+// Added TEMP_SHOP_INIT_ADD for use to initialize temporary shopping list and
+// add a single point to temporary shopping list.
+//
+// Revision 1.5  1997/01/24 21:22:24  jl
+// Author: jl@y6maint1.usnus.abb.com (Jim Lanzalotta)
+// Added messages used for temporary shopping lists.
+//
+// Revision 1.4  1997/01/23 21:34:46  leo
+// Author: leo@y6maint1.usnus.abb.com (Leo Olbrych)
+// Added PEN_PROCESSING_CONFIRMED message parameter.
+//
+// Revision 1.3  1997/01/23 19:10:18  leo
+// Author: leo@y6maint1.usnus.abb.com (Leo Olbrych)
+// Added DISPLAY_PEN_DATA, which is a message from CommLink to tell the
+// PenRecorderMenu to display the data received from the host.
+//
+// Revision 1.2  1996/12/16 12:26:10  asn
+// Author: asn@y6maint1.usnus.abb.com (Arthur Nowell)
+// added pen recorder and database messages
+//
+//
+// ***************************************************************************
+// System Include Files: NONE
+//
+//
+// User Defined Include Files: NONE
+//
+//
+// External Variables: NONE
+//
+//
+// Local Constant Definitions: NONE
+//
+//
+// Function Prototypes: NONE
+//
+//
+// ***************************************************************************
+// Messages 0x-000 to 0x-00F and
+// Messages 0x-010 to 0x-01F are RESERVED for Database and System messages
+//
+int32 UPDATE_DB_DIGI  		=	0x0001; // CCUR update digital PID
+int32 UPDATE_DB_ANAL  		=	0x0002; // CCUR update analog PID
+int32 DEFINE_DIGITAL  		=	0x0003; // CCUR defines digital PIDs
+int32 DEFINE_ANALOG   		=	0x0004; // CCUR defines analog PIDs
+int32 UPDATE_DATABASE 		=	0x0005; // CCUR updates PIDs
+int32 PERM_SHOP_LIST  		=	0x1006; // WS sends perm shopping list to host
+int32 REVISION_REQUEST 		=	0x0007; // CCUR requests DB revision
+int32 REVISION_DATA   		=	0x1008; // Workstation sends current DB rev
+int32 REVISION_DEFINED 		=	0x0009; // CCUR defines DB revision
+int32 HEARTBEAT       		=	0x000A; // CCUR keeps link alive
+int32 SET_TIME        		=	0x000B; // CCUR sets current time
+int32 PB_STATUS_CHANGE_ON 	=	0x000C; // WS detects PB status change often
+                                        	//indicating a FAILOVER occurred on
+                                        	//the host.
+//
+// Messages 0x-00F to 0x-012: for temporary shopping lists
+int32 WSINIT_TEMP_SHOP_LIST             =       0x000F;         // W/S Zeros out number of shop list items
+int32 INIT_TEMP_SHOP_LIST		=	0x100F;		// W/S sends temporary shopping list initialize 
+int32 TEMP_SHOP_LIST_ADD		=	0x1010;		// adds point-id to temp shop list message on W/S
+int32 TEMP_SHOP_LIST_SEND		=	0x1011;		// W/S sends temporary shopping list  
+int32 TEMP_SHOP_INIT_ADD		=	0x1012;		// W/S sends init, adds one point-id,
+
+// Common shopping list messages
+int32 REQ_SHOPPING_LISTS    		=       0x0013;         // CCUR requests permanent and temporary shopping lists
+
+// Failover messages
+int32 SEND_MASTER_SLAVE_STATUS 		=       0x0016;         // CCUR sends its Master/Slave status to W/S
+int32 SEND_PRIMARY_BACKUP_STATUS	=       0x1017;         // W/S sends Primary/Backup status for each CCUR connection
+
+//
+// ***********************************
+//
+// Messages 0x-100 to 0x-13F: Video Trend Messages
+int32	REQUEST_VTREND_DATA		=	0x1100;		// VTREND setup message
+int32   RECIEVE_VTREND_DATA		=	0x0100;         // VTREND Data from CCUR
+int32   PROCESS_VTREND_DATA		=	0x1101;		// Send new data to CCUR
+int32   CONFIRM_VTREND_PROCESS		=	0x0101;		// Confirmation of changes from CCUR
+int32	VTREND_PROCESS_CONFIRMED	=	0x0105;		// Tell picture that host confirmed processing
+int32	DISPLAY_VTREND_DATA		=	0x0106;		// Tell picture to display data
+int32   VTREND_RESET_REQUEST            =       0x1102;         // VT: request group reset
+int32   CONFIRM_VTREND_FLAG             =       0x0102;         // VT: confirm flag data
+int32   DISPLAY_VTREND_RESET            =       0x0103;         // Tell the flag no. to the picture      
+//
+// Messages 0x-140 to 0x-17F: Digital Trend Messages 
+int32	REQUEST_DTREND_DATA		=	0x1140;		// Digital Trend setup message
+int32   SEND_DTREND_DATA		=	0x0140;         // Digital Trend data from CCUR
+int32	DISPLAY_DTREND_DATA		=	0x014C;		// Tell picture to display data
+int32   PROCESS_DTREND_DATA		=	0x1150;		// Send new data to CCUR
+int32   CONFIRM_DTREND_PROCESSING	=	0x0150;		// Send confirmation of changes to w/s
+int32	DTREND_PROCESSING_CONFIRMED	=	0x015C;		// Tell picture that host confirmed processing
+int32   DTREND_PRT_PROCESS_CONFIRMED    =	0x015F;	        // Tell picture that host print confirmed processing
+int32   RESET_DTREND_REQUEST            =       0x1160;         // Digital Trend reset request
+int32   INUSE_DTREND_RESPONSE           =       0x0160;         // send message that the DTrend is in use  
+int32   INUSE_DTRD_RESPONSE_CONFIRM     =       0x016A;         // Tell picture that the DTrend is in use  
+int32   COMPLETED_DTREND_PRINT          =       0x0161;         // send message that the print is completed
+int32   COMPLETED_DTRD_PRT_CONFIRM      =       0x016B;         // Tell picture that the print is completed
+int32   INTERRUPTED_DTREND_PRINT        =       0x0162;         // send message that the print in intrrupted
+int32   INTERRUPT_DTRD_PRT_CONFIRM      =       0x016C;         // Tell picture that the print in intrrupted
+// ***********************************
+//
+// Messages 0x-180 to 0x-18F: Group Display Messages 
+int32	GROUP_INFO_REQUEST		 = 	0x1180;		// GROUP: request group information
+int32	GROUP_INFO_DATA	 		 = 	0x0180;		// GROUP: receive group information
+int32	GROUP_UPDATE			 = 	0x1185;		// GROUP: update group x data
+int32	GROUP_CONFIRM			 = 	0x0185;		// GROUP: confirm group x data
+int32   GROUP_PROCESS_CONFIRMED          =      0x0186;         // Tell the picture that host processed data
+int32   DISPLAY_GROUP_DATA               =      0x0187;         // Tell the picture to display data
+int32   GROUP_RESET_REQUEST              =      0x1181;         // GROUP: request group reset
+int32   DISPLAY_GROUP_FLAG               =      0x0181;         // GROUP: confirm flag data
+int32   DISPLAY_FLAG_RESET               =      0x0182;         // Tell the flag no. to the picture      
+
+// Messages 0x-200 to 0x-207: Single Point Display Messages
+int32 DISPLAY_SINGLE_POINT		=	0x1200;		// Add point to temp shopping list
+int32 PRINT_SINGLE_POINT		= 	0x1201; 	// Print single point
+int32 CONFIRM_PRINT_SINGLE_POINT	= 	0x0201; 	// Response to print single point
+int32 PRINT_SINGLE_POINT_CONFIRMED      =       0x020C;         // Tell the picture to display data
+
+// Messages -x-208 to 0x-20f: Security Page Messages
+int32   DISPLAY_SECURITY_PAGE           =       0x1208;
+
+int32   PROCESS_SECURE_DATA             =       0x120f;
+int32   CONFIRM_SECURE_PROCESSING       =       0x020f;
+int32   REQUEST_SECURE_SIGNOFF          =       0x020e;
+
+// Messages 0x-210 to 0x-21F: Change Scan Status Opcodes
+int32 PROCESS_CHGSCN_DATA		=	0x1210;	//
+int32 CONFIRM_CHGSCN_PROCESSING		=	0x0210;
+int32 CHGSCN_PROCESSING_CONFIRMED	=	0x1211;	// From CommLink to InterfaceToGUI
+
+// Messages 0x-220 to 0x-22F: Change Alarm Status Opcodes
+int32 PROCESS_CHGALM_DATA		=	0x1220;	//
+int32 CONFIRM_CHGALM_PROCESSING		=	0x0220;
+int32 CHGALM_PROCESSING_CONFIRMED	=	0x1221;	// From CommLink to InterfaceToGUI
+   
+// Messages 0x-230 to 0x-23F: Change Alarm Limits Opcodes
+int32 PROCESS_CHGLIM_DATA		=	0x1230;	//
+int32 CONFIRM_CHGLIM_PROCESSING		=	0x0230;
+int32 CHGLIM_PROCESSING_CONFIRMED	=	0x1231;	// From CommLink to InterfaceToGUI
+
+// Messages 0x-240 to 0x-24F: Insert Value Opcodes
+int32 PROCESS_INSVAL_DATA		=	0x1240;	//
+int32 CONFIRM_INSVAL_PROCESSING		=	0x0240;
+int32 INSVAL_PROCESSING_CONFIRMED	=	0x1241;	// From CommLink to InterfaceToGUI
+
+// Messages 0x-250 to 0x-25F: Sensor Calibration Opcodes
+int32 PROCESS_SENCAL_DATA		=	0x1250;	//
+int32 CONFIRM_SENCAL_PROCESSING		=	0x0250;
+int32 SENCAL_PROCESSING_CONFIRMED	=	0x1251;	// From CommLink to InterfaceToGUI
+
+// Messages 0x-260 to 0x-26F: Least Squares Fit Opcodes
+int32 PROCESS_LSF_DATA			=	0x1260;	//
+int32 CONFIRM_LSF_PROCESSING		=	0x0260;
+int32 LSF_PROCESSING_CONFIRMED		=	0x1261;	// From CommLink to InterfaceToGUI
+
+int32 REQUEST_LSF_SCOUNT                =       0x1590;  
+int32 RETURN_LSF_SCOUNT                 =       0x0590; 
+int32 LSF_SCOUNT_CONFIRMED              =       0x1591;
+
+// Messages 0x-270 to 0x-27F: Print Reports Messages
+int32   REQUEST_PRREPT                  =       0x1270;
+int32   DEMANDLOG_PRINT_CONFIRMED       =       0x0274;
+int32   SEND_POSTRIP_DATA               =       0x0275;
+int32   DISPLAY_POSTRIP_DATA            =       0x1271;
+int32   REQUEST_POSTRIP_PRINT           =       0x1272;
+int32   POSTRIP_PRINT_CONFIRMED         =       0x0276;
+int32   SEND_SOE_DATA                   =       0x0278;
+int32   DISPLAY_SOE_DATA                =       0x1273;
+int32   REQUEST_SOE_PRINT               =       0x1274;
+int32   SOE_PRINT_CONFIRMED             =       0x0279;
+int32   LASTPOSTRIP_PRINT_CONFIRMED     =       0x027B;
+int32   LASTSOE_PRINT_CONFIRMED         =       0x027C;
+
+// Messages 0x-280 to 0x-28F: Print Summary Messages 
+int32   PRINT_SUMMARY_MESSAGE  		=       0x1280;         // Print Summary request ===ywjung===
+int32   PRINT_SUMMARY_CONFIRM  		=       0x0281;         // Print Summary confirm ===ywjung===         
+
+// Messages 0x-300 to 0x-30F: Acknowledge Reset Messages
+int32   REQUEST_ALARM_ACK               =       0x1300;         // send Request Alarm Acknowledge to CCUR
+int32   CONFIRM_ACK_PROCESSING          =       0x0300;         // Alarm Ack. confirmation from CCUR
+int32   ACK_PROCESSING_CONFIRMED        =       0x1301;         // From CommLink to InterfaceToGUI
+
+int32   REQUEST_ALARM_RESET             =       0x1305;         // send Request Alarm Reset to CCUR
+int32   CONFIRM_RESET_PROCESSING        =       0x0305;         // Alarm Reset confirmation from CCUR
+int32   RESET_PROCESSING_CONFIRMED      =       0x1306;         // From CommLink to InterfaceToGUI
+//
+// Messages 0x-310 to 0x-31F: Pen Recorder Messages
+int32	REQUEST_PEN_DATA		=	0x1310;		// Pen Recorder setup message
+int32   SEND_PEN_DATA			=	0x0310;         // Pen Data from CCUR
+int32   PROCESS_PEN_DATA		=	0x1315;		// Send new data to CCUR
+int32   CONFIRM_PEN_PROCESSING		=	0x0315;		// Send confirmation of changes to w/s
+int32	PEN_PROCESSING_CONFIRMED	=	0x1316;		// Tell picture that host confirmed processing
+int32	DISPLAY_PEN_DATA		=	0x1320;		// Tell picture to display data
+//
+// Messages 0x-330 to 0x-33F: Current Alarm List
+int32   REQUEST_CAL_DATA                =       0x1330; // Current Alarm List first
+int32   REQUEST_CAL_NEXT_DATA           =       0x1331; // Current Alarm List next page
+int32   REQUEST_CAL_PREV_DATA           =       0x1332; // Current Alarm List previous page
+int32   CAL_PAGE_OFF                    =       0x1333; // Leaving CAL Page
+int32   SEND_CAL_DATA                   =       0x0330; // Current Alarm List from CCUR
+
+// Messages 0x-340 to 0x-37F: Bar Chart Messages
+int32	REQUEST_BAR_DATA		=	0x1340;		// BarChart setup message
+int32   SEND_BAR_DATA			=	0x0340;         // Bar Data from CCUR
+int32   PROCESS_BAR_DATA		=	0x1350;		// Send new data to CCUR
+int32   CONFIRM_BAR_PROCESSING		=	0x0350;		// Send confirmation of changes to w/s
+int32	BAR_PROCESSING_CONFIRMED	=	0x1360;		// Tell picture that host confirmed processing
+int32	DISPLAY_BAR_DATA		=	0x1370;		// Tell picture to display data
+//
+// Messages 0x-380 to 0x-38F: Bad data List
+int32   REQUEST_BDL_DATA                =       0x1380; // Bad Data List first
+int32   REQUEST_BDL_NEXT_DATA           =       0x1381; // Bad Data List next page
+int32   REQUEST_BDL_PREV_DATA           =       0x1382; // Bad Data List previous page
+int32   BDL_PAGE_OFF                  =       0x1383; // Leaving BDL Page
+int32   SEND_BDL_DATA                   =       0x0380; // Bad Data List from CCUR
+//
+// Messages 0x-390 to 0x-39F: Out of Range List and Link Status
+int32   REQUEST_ORL_DATA                =       0x1390; // Out of Range List first
+int32   REQUEST_ORL_NEXT_DATA           =       0x1391; // Out of Range List next page
+int32   REQUEST_ORL_PREV_DATA           =       0x1392; // Out of Range List previous page
+int32   ORL_PAGE_OFF                    =       0x1393; // Leaving ORL Page
+int32   SEND_ORL_DATA                   =       0x0390; // Out of Range List from CCUR
+int32   REQUEST_LINK_STATUS             =       0x1339; // request for link status from CCUR
+int32   SEND_LINK_STATUS                =       0x0339; // Link statuses from CCUR
+int32   LINK_PAGE_OFF			=	0x133A; // Leaving Link Page
+//
+// ***********************************
+// Messages 0x-400 to 0x-40F: HDSR Messages
+int32	GET_HDSR_TREND1_DATA		=	0x1401;		// HDSR: request the current data for trend 1
+int32	GET_HDSR_TREND2_DATA		=	0x1402;		// HDSR: request the current data for trend 2
+int32	GET_HDSR_TREND3_DATA		=	0x1403;		// HDSR: request the current data for trend 3
+int32	GET_HDSR_TREND4_DATA		=	0x1404;		// HDSR: request the current data for trend 4
+
+int32	HDSR_TREND1_DATA 		=	0x0401;		// HDSR: current trend 1 data from host
+int32	HDSR_TREND2_DATA		=	0x0402;		// HDSR: current trend 2 data from host
+int32	HDSR_TREND3_DATA		=	0x0403;		// HDSR: current trend 3 data from host
+int32	HDSR_TREND4_DATA		=	0x0404;		// HDSR: current trend 4 data from host
+
+int32	PROCESS_HDSR_TREND1_DATA 	=	0x140A;		// HDSR: process the current data for trend 1
+int32	PROCESS_HDSR_TREND2_DATA 	=	0x140B;		// HDSR: process the current data for trend 2
+int32	PROCESS_HDSR_TREND3_DATA 	=	0x140C;		// HDSR: process the current data for trend 3
+int32	PROCESS_HDSR_TREND4_DATA 	=	0x140D;		// HDSR: process the current data for trend 4
+// **********************************
+// Messages 0x-410 to 0x-41F: IOCPCS Messages
+int32    CONFIRM_CECOR_REQUEST		=	0x0410;
+int32	 CONFIRM_CPCEAC_REQUEST		=	0x0411;
+int32    CONFIRM_CPCS_REQUEST		=	0x0412;
+int32	 CONFIRM_CEAC_REQUEST		=	0x0413;
+int32    REJECT_CPCS_REQUEST		=	0x0414;
+//
+// Messages 0x-500 to 0x-502 : RCSLeak Messages
+int32    SEND_RCS_LEAK_DATA		=	0x0500;         //RCSLeak: send online leak data to ws
+int32	 SEND_LEAK_OFF_DATA		=	0x0501;         //LeakOff: send offline leak data to ws
+int32    CONFIRM_LEAKPRN		=	0x0502;         //LeakPrn: send print status to ws
+
+int32    REQUEST_RCS_LEAK_DATA		=	0x1500;         //RCSLeak: request online leak data to ccur
+int32	 REQUEST_LEAK_OFF_DATA		=	0x1501;         //LeakOff: request offline leak data to ccur
+int32    REQUEST_LEAKPRN		=	0x1502;         //LeakPrn: request print work to ccur
+//
+//  Define: Message Variable Name and Number for RPCCEA Selection
+int32	RPCCEA_MODE_REQUEST   		=	0x1680;		// RPCCEA: Request of Current Mode
+int32   RPCCEA_PROCESS_REQUEST		=	0x1681; 	// RPCCEA: Request of Print Report or Mode Selection
+int32	RPCCEA_CURRENT_MODE		=	0x0680;		// RPCCEA: Current Mode
+int32	RPCCEA_PROCESS_CONFIRM		=	0x0681;		// RPCCEA: Confirm of Process Request
+int32	GENERIC_PROCESSING_CONFIRMED	=       0x068C;	        // Generic: Confirm of Process Request
+
+//  Define: Message Variable Name and Number for CEA Application Program
+int32   CEA_ALM_LIMIT_REQUEST           =       0x1690;         // request cea alarm limit and display
+int32   ONE_CEA_POSITION_REPT           =       0x1691;         // one cea position report
+int32   ONE_CEA_GROUP_POSITION_REPT     =       0x1692;         // one cea group position report
+int32   ALL_CEAGROUP_POSITION_REPT      =       0x1693;         // all cea group position report
+int32   CEA_DROPNO_REQUEST              =       0x1694;         // cea drop testing
+int32   CEDMCS_DATAXFER_MODE            =       0x1695;         // cedmcs data transfer mode selection
+int32   CEA_ALM_LIMIT_PROCESS           =       0x0690;         // processing cea alarm limit display 
+int32   CEA_MESSAGE_IN_BODY             =       0x0691;         // comfirm for every cea function 
+int32	CEA_GENERIC_PROCESS_CONFIRMED	=       0x069C;	        // Generic CEA process confirm message
+
+// 20061116 for CEATRACK
+int32   REQUEST_CEA_TRACK_MONITOR1      =       0x1C11;         // request cea track monitor display1
+int32   CONFIRM_CEA_TRACK_MONITOR1      =       0x0C11;         // processing cea track monitor display1
+int32   REQUEST_CEA_TRACK_MONITOR2      =       0x1C12;         // request cea track monitor display2
+int32   CONFIRM_CEA_TRACK_MONITOR2      =       0x0C12;         // processing cea track monitor display2
+int32   REQUEST_CEA_TRACK_MONITOR3      =       0x1C13;         // request cea track monitor display3
+int32   CONFIRM_CEA_TRACK_MONITOR3      =       0x0C13;         // processing cea track monitor display3
+int32   REQUEST_CEA_TRACK_MONITOR4      =       0x1C14;         // request cea track monitor display4
+int32   CONFIRM_CEA_TRACK_MONITOR4      =       0x0C14;         // processing cea track monitor display4
+int32   REQUEST_CEA_TRACK_MONITOR5      =       0x1C15;         // request cea track monitor display5
+int32   CONFIRM_CEA_TRACK_MONITOR5      =       0x0C15;         // processing cea track monitor display5
+
+                                                                // For Print
+int32   REQUEST_CEA_TRACK_MONITOR6      =       0x1C16;         // request cea track monitor display5
+int32   CONFIRM_CEA_TRACK_MONITOR6      =       0x0C16;         // processing cea track monitor display5
+
+                                                                // For Reset
+int32   REQUEST_CEA_TRACK_MONITOR9      =       0x1C19;         // request cea track monitor display5
+int32   CONFIRM_CEA_TRACK_MONITOR9      =       0x0C19;         // processing cea track monitor display5
+
+// Messages 0x-780 to 0x-78BF: COLSS Messages  
+int32 	REQUEST_COLSS_PROCESSING        =       0X1781 ;        // COLSS request message
+int32	CONFIRM_COLSS_PROCESSING	=       0X0781 ;  	// COLSS confirm message      		
+
+//  Define: Message Variable Name and Number for Incore processing
+int32	INCORE_PROCESS_REQUEST 		=	0x1700;		// INCORE: Request of Processing
+int32	INCORE_CHARGE_REQUEST 		=	0x1705;		// INCORE: Request of Current Charge
+int32	INCORE_CHARGE_UPDATE		=	0x1710;         // INCORE: Update Charging
+int32   INCORE_PROCESS_CONFIRM		=	0x0700; 	// INCORE: Confirm of Process Request
+int32	INCORE_CHARGE_RESPONSE 		=	0x0705;		// INCORE: Request of Current Charge
+//
+// Messages 0x-280 to 0x-28F: BOP Report Print Messages
+int32   REQUEST_BOP_PRINT     =       0x1880;         // BOP Report Print request ===jklee===
+int32   CONFIRM_BOP_PRINT     =       0x0880;         // BOP Report Print confirm ===jklee===         
+int32   BOP_PRINT_CONFIRMED   =       0x088C;         // picture that host confirmed processing ===jklee===
+int32   PROCESS_UTDV_SEND               =       0x1800;
+int32   PROCESS_UTDV_RECEIVE            =       0x0800;
+int32   PROCESS_UTDV_RECEIVE_DATA       =       0x0801;
+//***********************************************************
+// Messages 0x-840 to 0x-84F; XRBP Messages
+int32   XRBP_REQUEST                    =       0x1840;         // XRBP: process the input 
+int32   XRBP_DATA                       =       0x0840;         // XRBP: result from host
+int32   XRBP_INIT                       =       0x1841;         // XRBP: initialize 
+int32   XRBP_READY                      =       0x0841;         // XRBP: init completed
+int32   XRBPA_UP_START                  =       0x184A;         // XRBPAUTO: Display Update Start Request from HP
+int32   XRBPA_UP_STOP                   =       0x184B;         // XRBPAUTO: Display Stop Request from HP
+int32   XRBPA_DISPLAY                   =       0x084A;         // XRBPAUTO: Display Update Request from CCUR
+int32   XRBP_MSG                        =       0x084B;         // XRBP: Message from CCUR
+//
+// Messages 0x-900 to 0x-90F: CECOR Messages
+int32   REQUEST_CECOR_SNAPSHOT         =       0x1900;
+int32   CONFIRM_CECOR_DISKFILE         =       0x0900;
+int32   CONFIRM_CECOR_TAPE             =       0x0901;
+int32   ERROR_QUEUE_IOCPCS             =       0x0902;
+int32   ERROR_CECOR_FILEOPEN           =       0x0903;
+int32   ERROR_CECOR_MAG1OPEN           =       0x0904;
+int32   ERROR_CECOR_DISKREAD           =       0x0905;
+int32   ERROR_TAPE_NOT_MOUNT           =       0x0906;
+int32   ERROR_CECOR_MAG1WRITE          =       0x0907;
+//
+// Messages 0x-940 to 0x-94F: DSPM Messages
+int32   REQUEST_DSPM_REPORT            =       0x1940;
+int32   ERROR_QUEUE_TASK               =       0x0940;
+int32   CONFIRM_CPC_REPORT             =       0x0941;
+int32   CONFIRM_CEAC_REPORT            =       0x0942;
+int32   CONFIRM_PPS_REPORT             =       0x0943;
+int32   CONFIRM_CPC_TRP_RPT            =       0x0944;
+int32   CONFIRM_CEAC_TRP_RPT           =       0x0945;
+int32   ERROR_OPEN_PRINTER             =       0x0946;
+int32   CONFIRM_QUEUE_DSPMRPT          =       0x0947;
+//
+// Messages 0x-A40 to 0x-A7F: CSL Messages
+int32   REQUEST_CSL_DISPLAY            =       0x1A40;
+int32   EXIT_CSL_DISPLAY               =       0x1A41;
+int32   SEND_CSL_DISPLAY               =       0x0A40;
+
+
+// Message 0x-B10 to 0x-B0F 	Bidrect Message
+
+int32   HDSR_PAGE_710  =		0x1B10;		// Request HDSR page 710
+int32	HDSR_DISK_PROTECT =		0x1B11;		// Send Disk protection
+int32   HDSR_PAGE_720 =                 0x1B12;         // Reguest HDSR page 720
+int32   HDSR_BACKUP =             	0x1B13;         // High/Low resolution for backup
+
+int32	HDSR_PAGE_730 = 		0x1B14;		// Request HDSR page 730
+int32	HDSR_CANCEL_LOG = 		0x1B15;		// Cancel HDSR log
+int32	HDSR_TAPE_HEADER = 		0x1B16;		// Request tape Header information
+int32	HDSR_LOG = 			0x1B17;		// Request HDSR log
+int32	HDSR_SECTOR = 			0x1B18;		// Request graph sector
+
+int32	HDSR_SYSTEM_ERROR = 		0x1B1E;		// 
+int32	HDSR_PAGE_750 = 		0x1B1F;		// Request HDSR page 750
+
+int32	HDSR_PAGE_740 = 		0x1B20;		// Request HDSR page 740
+int32	HDSR_GRAPH_SETUP = 		0x1B21;		// Request graph setup
+int32	HDSR_GRAPH_VIEW = 		0x1B22;		// Request graph view
+
+int32	GRAPH_SETUP_74X = 		0x1B23;
+int32	GRAPH_VIEW_74X = 		0x1B24;
+int32	TAPE_HEADER_74X = 		0x1B25;
+
+int32	TAPE_HEADER_750 = 		0x1B26;
+
+int32	GRAPH_VIEW_LEFT = 		0x1B27;
+int32	GRAPH_VIEW_RIGHT = 		0x1B28;
+int32	GRAPH_VIEW_UP = 		0x1B29;
+int32	GRAPH_VIEW_DOWN = 		0x1B2A;
+int32	GRAPH_VIEW_DONE = 		0x1B2B;
+
+int32	HDSR_VIEW_745 = 		0x1B2C;
+int32	HDSR_SETUP_746 = 		0x1B2D;
+
+//  Recieve ONLY messages from CC
+//  Not use Picasso
+int32	HDSR_FOOTER_MESSAGE = 		0x1B2E;		
+int32	DYN_MESSAGE = 			0x1B2F;
+
+// CORENET 2017.02.16 added by Philkyu Kwon. ================================================
+//
+int32	REQUEST_MASS_CALC =		0x1503;		// Request Calculation value
+int32   CONFIRM_MASS_CALC =             0x0503;         // Confirm Calculation value
+int32	REQUEST_MASS_PRN =		0x1504;		// Request Calculation value
+int32   CONFIRM_MASS_PRN =             0x0504;         // Confirm Calculation value
+int32   CONFIRM_MASS_MSG =             0x0505;         // Confirm Calculation value
+int32	REQUEST_MASS_INIT =		0x1506;		// Request Calculation Init
+//int32   CONFIRM_MASS_STOP =             0x0505;         // Confirm Calculation Stop
+
+int32   REQUEST_EQUIPVALCHG =           0x1551;         // Request Value Change
+int32   CONFIRM_EQUIPVALCHG =           0x0551;         // Confirm Value Change
+int32   REQUEST_EQUIPSTATUS =           0x1552;         // Request Status to CRT
+int32   CONFIRM_EQUIPSTATUS =           0x0552;         // Confirm Status to CRT
+int32   REQUEST_EQUIPPRN =              0x1553;         // Request Status to Printer
+int32   CONFIRM_EQUIPPRN =              0x0553;         // Confirm Status to Printer
+
+int32   REQUEST_PIDTEST =               0x1130;         // Request Print PID Test
+int32   CONFIRM_PIDTEST =               0x0130;         // Confirm Print PID Test
+
+
+int32   HDSR_GRAPH_VIEWr =             0x0B22;
+
+
+// >>END>>>>>>>>>>>>>>>>>>>> Variables Contained in messageParameters.h

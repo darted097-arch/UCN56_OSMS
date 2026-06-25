@@ -1,0 +1,536 @@
+/*
+ * ProcSee CONFIGURATION LANGUAGE FILE
+ *
+ *
+ * User : ucn56
+ * Host : y6cr02
+ * Date : 2017-02-09
+ * Time : 16:31:50
+ *
+ * ProcSee version : ProcSee 3.10.1 (June 2016)
+ * File version    : 1.26
+ *
+ *
+ */
+
+
+picture PicUCN_NSSSBOPApplication
+{
+  worldX = 0;
+  worldY = 0;
+  worldWidth = 1280;
+  worldHeight = 824;
+  oneToOne = 1;
+  backgroundColour = 0;
+  updateMode = 2;
+  resizeMode = 0;
+  xSnap = 5;
+  ySnap = 5;
+  radiusSnap = 0;
+  angleSnap = 0;
+  crosshairStyle = 1;
+  crosshairLength = 0;
+  crosshairFollowSnap = `isInEditMode()`;
+  crosshairVisibility = `isInEditMode()`;
+  xReference = 500;
+  yReference = 500;
+  xScaleFactor = 1;
+  yScaleFactor = 1;
+  rotationAngle = 0;
+
+  int ChangeAlarmLimits = 4;
+
+  int ChangeAlarmStatus = 2;
+
+  int ChangeScanStatus = 1;
+
+  int InsertValue = 3;
+
+  int LeastSquaresFit = 6;
+
+  char Option[4] = "1";
+
+  char PictureNumber[50] = "160";
+
+  char PictureTitle[50] = "NSSS & BOP  APPLICATIONS  MENU";
+
+  RECORD* pTripRecord = `&CXYQTRIP`;
+
+  int SensorCalibration = 5;
+
+  function `void Initialize()
+  {
+     CFMLevel = 0;
+     Current_Page = 160;
+  //  Option[0] = '\\0';
+  //  strcat (Option,"_");
+  //  selectShape(1,"MenuInput");
+  //  MenuInput.edit(ON);
+  //  MenuInput.theText = \`Option\`;
+  //  MenuInput.edit(OFF);
+  //  MenuInput.edit(ON);
+  //  MenuInput.moveToHome();
+  //  update();
+  }`
+
+  function `//CORENET 2017 for DISCONNECT XENON FUNCTION by Philkyu Kwon
+  void Option3()
+  {
+  m3.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+  m3.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+  
+  m3.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+  m3.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+  m3.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+  m3.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+  
+  m3.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+  m3.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+  m3.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+  m3.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+  
+     DisplayAdvisoryMessage("ILLEGAL SECTOR NUMBER / MENU CHOICE");
+  }`
+
+  dialogue
+  {
+    event = `keyReleased(0x35) || keyReleased(0xFFB5)`;
+    action = `{
+    //   displayPicture("header","PicUCN_header.ppic");
+    //   displayPicture("footer","PicUCN_footer.ppic");
+    //   displayPicture("Main","PicUCN_CurrentParamsMenu.ppic");
+    m5.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+    m5.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+    
+    m5.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+    m5.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+    m5.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+    m5.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+    
+    m5.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    m5.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    m5.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    m5.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    
+       execute("{DisplayPage(\\"%s\\");}",m5.TheDisplayPage);
+    
+    }
+    
+    `;
+  }
+
+  dialogue
+  {
+    event = `keyReleased(0x36) || keyReleased(0xFFB6)`;
+    action = `{
+    //   displayPicture("header","PicUCN_header.ppic");
+    //   displayPicture("footer","PicUCN_footer.ppic");
+    //   displayPicture("Main","PicUCN_NSSSBOPApplication.ppic");
+    m6.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+    m6.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+    
+    m6.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+    m6.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+    m6.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+    m6.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+    
+    m6.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    m6.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    m6.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    m6.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    
+       execute("{DisplayPage(\\"%s\\");}",m6.TheDisplayPage);
+    
+    }`;
+  }
+
+  dialogue
+  {
+    event = `keyReleased(0x31) || keyReleased(0xFFB1)`;
+    action = `{
+    //   displayPicture("header","PicUCN_header.ppic");
+    //   displayPicture("footer","PicUCN_footer.ppic");
+    //   displayPicture("Main","Pic111_CFM_Directory.ppic");
+    m1.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+    m1.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+    
+    m1.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+    m1.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+    m1.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+    m1.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+    
+    m1.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    m1.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    m1.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    m1.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    
+       execute("{DisplayPage(\\"%s\\");}",m1.TheDisplayPage);
+    }`;
+  }
+
+  dialogue
+  {
+    event = `keyReleased(0x32) || keyReleased(0xFFB2)`;
+    action = `{
+    m2.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+    m2.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+    
+    m2.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+    m2.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+    m2.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+    m2.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+    
+    m2.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    m2.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    m2.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    m2.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    
+       execute("{DisplayPage(\\"%s\\");}",m2.TheDisplayPage);
+    }`;
+  }
+
+  dialogue
+  {
+    event = `keyReleased(0x33) || keyReleased(0xFFB3)`;
+    action = `{
+    m3.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+    m3.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+    
+    m3.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+    m3.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+    m3.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+    m3.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+    
+    m3.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    m3.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    m3.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    m3.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    
+       DisplayAdvisoryMessage("ILLEGAL SECTOR NUMBER / MENU CHOICE");  //CORENET 2017 by Philkyu Kwon
+       //execute("{DisplayPage(\\"%s\\");}",m3.TheDisplayPage);  //CORENET 2017 by Philkyu Kwon
+    }`;
+  }
+
+  dialogue
+  {
+    event = `keyReleased(0x34) || keyReleased(0xFFB4)`;
+    action = `{
+    m4.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+    m4.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+    
+    m4.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+    m4.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+    m4.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+    m4.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+    
+    m4.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    m4.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    m4.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    m4.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    
+       execute("{DisplayPage(\\"%s\\");}",m4.TheDisplayPage);
+    
+    }
+    `;
+  }
+
+  dialogue
+  {
+    event = `keyReleased(0x37) || keyReleased(0xFFB7)`;
+    action = `{
+    m7.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+    m7.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+    
+    m7.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+    m7.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+    m7.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+    m7.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+    
+    m7.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    m7.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    m7.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    
+       execute("{DisplayPage(\\"%s\\");}",m7.TheDisplayPage);
+    }`;
+  }
+
+  dialogue
+  {
+    event = `keyReleased(0x38) || keyReleased(0xFFB8)`;
+    action = `{
+    m8.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+    m8.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+    
+    m8.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+    m8.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+    m8.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+    m8.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+    
+    m8.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    m8.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    m8.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    m8.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    
+       execute("{DisplayPage(\\"%s\\");}",m8.TheDisplayPage);
+    }`;
+  }
+
+  dialogue
+  {
+    event = `keyReleased(0x39) || keyReleased(0xFFB9)`;
+    action = `{
+    m9.mbox.foregroundColour = COLOR_BUTTON_BACKGROUND;
+    m9.mbox.foregroundFillColour = COLOR_BUTTON_BACKGROUND;
+    
+    m9.upleft.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+    m9.upleft.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+    m9.up.foregroundColour = COLOR_BUTTON_TOP_SHADOW;
+    m9.up.foregroundFillColour = COLOR_BUTTON_TOP_SHADOW;
+    
+    m9.downright.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    m9.downright.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    m9.down.foregroundColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    m9.down.foregroundFillColour = COLOR_BUTTON_BOTTOM_SHADOW;
+    
+       execute("{DisplayPage(\\"%s\\");}",m9.TheDisplayPage);
+    
+    }
+    
+    `;
+  }
+
+  text
+  {
+    x = 803;
+    y = 180;
+    format = "%s";
+    theText = "UPDATE  TASKS";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 803;
+    yReference = 180;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 803;
+    y = 269;
+    format = "%s";
+    theText = "REACTIVITY  TASK";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 803;
+    yReference = 269;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 803;
+    y = 428;
+    format = "%s";
+    theText = "REPORTS";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 803;
+    yReference = 428;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  instance DialogueSymbols.LargeMenuSelection m1
+  {
+    x = 293;
+    y = 129;
+    visibility = 1;
+    xReference = 293;
+    yReference = 129;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Cascade = 0;
+    CascadeX = 400;
+    CascadeY = 400;
+    TheDisplayPage = "PicUCN_INCOREMenu.ppic";
+    TheFontColor = 2;
+    TheOption = "1.";
+    TheTextFont = `font6`;
+    TheTitle = "INCORE  DETECTORS  MENU";
+  }
+
+  instance DialogueSymbols.LargeMenuSelection m2
+  {
+    x = 293;
+    y = 166;
+    visibility = 1;
+    xReference = 293;
+    yReference = 166;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Cascade = 0;
+    CascadeX = 400;
+    CascadeY = 400;
+    TheDisplayPage = "PicUCN_UTDVMain.ppic";
+    TheFontColor = 2;
+    TheOption = "2.";
+    TheTextFont = `font6`;
+    TheTitle = "UPDATE  TIME  DEPENDENT  VARIABLES";
+  }
+
+  instance DialogueSymbols.LargeMenuSelection m4
+  {
+    x = 293;
+    y = 309;
+    visibility = 1;
+    xReference = 293;
+    yReference = 309;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Cascade = 0;
+    CascadeX = 400;
+    CascadeY = 400;
+    TheDisplayPage = "PicUCN_DSPM.ppic";
+    TheFontColor = 2;
+    TheOption = "4.";
+    TheTextFont = `font6`;
+    TheTitle = "DEVIATION / SETPOINT  MONITOR";
+  }
+
+  instance DialogueSymbols.LargeMenuSelection m5
+  {
+    x = 293;
+    y = 347;
+    visibility = 1;
+    xReference = 293;
+    yReference = 347;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Cascade = 0;
+    CascadeX = 400;
+    CascadeY = 400;
+    TheDisplayPage = "PicUCN_BOPCalculation.ppic";
+    TheFontColor = 2;
+    TheOption = "5.";
+    TheTextFont = `font6`;
+    TheTitle = "BOP  PERFORMANCE  CALCULATIONS";
+  }
+
+  instance DialogueSymbols.LargeMenuSelection m6
+  {
+    x = 293;
+    y = 385;
+    visibility = 1;
+    xReference = 293;
+    yReference = 385;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Cascade = 0;
+    CascadeX = 400;
+    CascadeY = 400;
+    TheDisplayPage = "PicUCN_Cecor.ppic";
+    TheFontColor = 2;
+    TheOption = "6.";
+    TheTextFont = `font6`;
+    TheTitle = "CECORE  SNAPSHOT";
+  }
+
+  instance DialogueSymbols.LargeMenuSelection m9
+  {
+    x = 293;
+    y = 499;
+    visibility = 1;
+    xReference = 293;
+    yReference = 499;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Cascade = 0;
+    CascadeX = 400;
+    CascadeY = 400;
+    TheDisplayPage = "PicUCN_MIDLOOP.ppic";
+    TheFontColor = 2;
+    TheOption = "9.";
+    TheTextFont = `font6`;
+    TheTitle = "MID LOOP OPERATION";
+  }
+
+  instance DialogueSymbols.LargeMenuSelection m8
+  {
+    x = 293;
+    y = 461;
+    visibility = 1;
+    xReference = 293;
+    yReference = 461;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Cascade = 0;
+    CascadeX = 400;
+    CascadeY = 400;
+    TheDisplayPage = "PicUCN_EQUIP_RUNTIME_MENU.ppic";
+    TheFontColor = 2;
+    TheOption = "8.";
+    TheTextFont = `font6`;
+    TheTitle = "EQUIPMENT RUN TIME CALCULATIONS";
+  }
+
+  instance DialogueSymbols.LargeMenuSelection m7
+  {
+    x = 293;
+    y = 423;
+    visibility = 1;
+    xReference = 293;
+    yReference = 423;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Cascade = 0;
+    CascadeX = 400;
+    CascadeY = 400;
+    TheDisplayPage = "PicUCN_RCSLeak.ppic";
+    TheFontColor = 2;
+    TheOption = "7.";
+    TheTextFont = `font6`;
+    TheTitle = "RCS LEAK RATE / MASS FLOW";
+  }
+
+  instance DialogueSymbols.LargeMenuSelect2 m3
+  {
+    x = 293;
+    y = 238;
+    visibility = 1;
+    xReference = 303;
+    yReference = 610;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Cascade = 0;
+    CascadeX = 400;
+    CascadeY = 400;
+    ExecuteString = "Option3()";
+    TheDisplayPage = "";
+    TheFontColor = 2;
+    TheOption = "3.";
+    TheTextFont = `font6`;
+    TheTitle = "XENON REACTIVITY FUNCTIONS";
+  }
+}

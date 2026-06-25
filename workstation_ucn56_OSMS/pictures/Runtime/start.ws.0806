@@ -1,0 +1,195 @@
+#! /usr/bin/ksh
+# ***************************************************************************
+# *                                                                         *
+# * Copyright(C) 1999 Korea Power Engineering Company, Inc. ,               *
+# *                   ABB Automation, Inc. ,                                *
+# *               and ABB Combustion Engineering Nuclear Power, Inc.        *
+# * All rights reserved.                                                    *
+# * This copyright applies to the PMS software in its entirety.             *
+# *                                                                         *
+# ***************************************************************************
+#
+# ***** HIGH LEVEL DESCRIPTION **********************************************
+#
+# This command file starts the workstation software for the PCS.
+#
+# **** REVISION HISTORY *****************************************************
+#
+# $Header: /PMSArchive/ygn56/workstation/pictures/cmds/start.ws 1.17 1999/07/12 20:26:44 jws Exp $
+# $Log: start.ws,v $
+# Revision 1.17  1999/07/12 20:26:44  jws
+# Author: jws@y6maint1 (John Soisson)
+# Corrected joint work copyright statement.
+#
+# Revision 1.16  1999/06/11 20:10:26  leo
+# Author: leo@y6maint1 (Leo Olbrych)
+# Commented out modem option stuff.  This is now done in CommLink.
+#
+# Revision 1.15  1999/06/04 18:34:26  leo
+# Author: leo@y6maint1 (Leo Olbrych)
+# Call stop.ws at the start and at the end.
+#
+# Revision 1.14  1999/06/03 17:06:07  leo
+# Author: leo@y6maint1 (Leo Olbrych)
+# Remove shared memory segments at the start
+# and at the end of this file.
+#
+# Revision 1.13  1999/04/28 14:54:14  jnl
+# Author: jnl@y6maint1 (Jim Lanzalotta)
+# Kopec FAT Support April 1999.  Added UTDV pictures
+# to file list for shopping list generation.
+#
+# Revision 1.12  1998/10/21 16:42:50  kn1
+# Author: kn1@y6maint1 (Kopec NSSS 1)
+# KOPEC NSSS FAT Delivery 3.
+#
+# Revision 1.11  1998/08/25 16:20:19  jws
+# Author: jws@y6maint1 (John Soisson)
+# Moved command to change directory to pictures to the top
+# of start.ws.  Fixes problem with autostart workstations.
+#
+# Revision 1.10  1998/08/14 22:12:07  jws
+# Author: jws@y6maint1 (John Soisson)
+# Added checking for blank option to MODEM option processing.
+#
+# Revision 1.9  1998/08/14 01:11:29  jws
+# Author: jws@y6maint1 (John Soisson)
+# Added reading of FDDI and MODEM options from WSPCS.cfg.
+# Cleaned up FDDI initialization section so that the previous
+# version of fddi.out is saved and FDDI initialization is
+# performed only if the option is set.  Added automatic dialing
+# of modem if the MODEM option is set.
+#
+# Revision 1.8  1998/07/31 15:31:19  jws
+# Author: jws@y6maint1 (John Soisson)
+# Added commands to build the shopping list files only if the
+# shopping list file is older than the corresponding Tdoc file.
+#
+# Revision 1.7  1998/07/23 18:35:45  jws
+# Author: jws@y6maint1 (John Soisson)
+# Added statements to support automatic workstation restart.
+#
+# Revision 1.6  1998/06/23 18:16:34  jws
+# Author: jws@y6maint1 (John Soisson)
+# added initialization of FDDI input file "fddi.in".
+#
+# Revision 1.5  1998/06/17 18:28:58  jws
+# Author: jws@y6maint1 (John Soisson)
+# Changed to use sysLog instead of tee to log
+# WSPCS output to circular log.
+#
+# Revision 1.4  1997/12/03 18:22:05  leo
+# Author: leo@y6maint1.usnus.abb.com (Leo Olbrych)
+# No command line options for default startup.
+#
+# Revision 1.3  1997/11/25 21:19:45  leo
+# Author: leo@y6maint1.usnus.abb.com (Leo Olbrych)
+# Use default settings for WSPCS startup, i.e., no options. -CPU1, -CPU2, -PRIMARY
+# options are available to override CommLink1 connection, CommLink2 connection, and
+# to lock the primary CommLink to a particular host.
+#
+# Revision 1.2  1997/10/30 00:02:03  jnl
+# Author: jnl@y6maint1.usnus.abb.com (Jim Lanzalotta)
+# Modified log file name.
+#
+# Revision 1.1  1997/10/15 20:00:37  leo
+# Author: leo@y6maint1.usnus.abb.com (Leo Olbrych)
+# Initial revision
+#
+
+cd $HOME/pictures
+
+stop.ws
+
+#
+# Get options from WSPCS.cfg
+#
+FDDIOPT=`awk 'match($1,"-FDDI") == 1 {print tolower($2)}' WSPCS.cfg`
+# MODEMOPT=`awk 'match($1,"-MODEM") == 1 {print tolower($2)}' WSPCS.cfg`
+
+#
+# Build Tdoc file list
+#
+echo "Building List of Tdoc Files"
+echo
+echo "Adding the CFM Matrix Page to the file list"
+ls -1 PicYGN_CFMmatrix.Tdoc > $HOME/lst/FileList
+echo "Adding the CFM 100 Series pages to the file list";
+ls -1 Pic1*.Tdoc >> $HOME/lst/FileList
+echo "Adding the CFM 200 Series pages to the file list"
+ls -1 Pic2*.Tdoc >> $HOME/lst/FileList
+echo "Adding the CFM 300 Series pages to the file list"
+ls -1 Pic3*.Tdoc >> $HOME/lst/FileList
+echo "Adding the Display Header Page to the file list"
+ls -1 PicYGN_header.Tdoc >> $HOME/lst/FileList
+echo "Adding the Display Footer Page to the file list"
+ls -1 PicYGN_footer.Tdoc >> $HOME/lst/FileList
+echo "Adding the CEA Alarm Limit Display Page to the file list"
+ls -1 PicYGN_CEAAlmLimitDisp.Tdoc >> $HOME/lst/FileList
+echo "Adding the COLSS Display Pages to the file list"
+ls -1 PicYGN_COLSS*.Tdoc >> $HOME/lst/FileList
+echo "Adding the Mid-Loop Display Page to the file list"
+ls -1 PicYGN_Midloop.Tdoc >> $HOME/lst/FileList
+echo "Adding the PT-Plot Normal Page to the file list"
+ls -1 PicYGN_PtPlotNormal.Tdoc >> $HOME/lst/FileList
+echo "Adding the PT-Plot Emergenct Page to the file list"
+ls -1 PicYGN_PtPlotEmergency.Tdoc >> $HOME/lst/FileList
+echo "Adding the UTDV Pages that Display Point-IDs to the file list"
+ls -1 PicYGN_UTDVEnterEFPH1.Tdoc >> $HOME/lst/FileList
+ls -1 PicYGN_UTDVEnterEFPH2.Tdoc >> $HOME/lst/FileList
+ls -1 PicYGN_UTDVEnterEFPH3.Tdoc >> $HOME/lst/FileList
+ls -1 PicYGN_UTDVConfirmEFPH2.Tdoc >> $HOME/lst/FileList
+ls -1 PicYGN_UTDVConfirmEFPH3.Tdoc >> $HOME/lst/FileList
+
+
+echo
+
+#
+# For each Tdoc in the file list build a shopping list only if necessary
+#
+for file in `cat $HOME/lst/FileList`
+do
+if [ $HOME/pictures/$file -nt $HOME/lst/$file.ShoppingList ]
+then
+   echo "Building PID list for" $file
+   grep "&" $file | grep -Ev -e"&=" -e"&&" -e\" | /usr/bin/awk -F\& '{print $2}' | /usr/bin/awk -F\` '{print $1}' | /usr/bin/awk '$1 == toupper($1) {print $1}' | sort -u > $HOME/lst/$file.ShoppingList
+else
+   echo "Skipping PID list for" $file
+fi
+done
+
+#
+# Perform initializations for FDDI
+#
+if [ "$FDDIOPT" = "on" ]
+then
+   if [ -a fddi.in ]
+   then
+      /usr/bin/rm -f fddi.in
+   fi
+   echo >fddi.in
+   if [ -a fddi.out ]
+   then
+      /usr/bin/mv -f fddi.out fddi.out.old
+   fi
+fi
+
+#
+# Perform initializations for modem
+#
+# if [ "$MODEMOPT" != "" ] && [ "$MODEMOPT" != "off" ]
+# then
+#    ppl -o $MODEMOPT
+# fi
+
+#
+# Start WPSCS task
+#
+xhost +`hostname`
+WSPCS 2>&1 | sysLog -l WSPCS.log
+
+echo "Return from WSPCS in start.ws"
+
+stop.ws
+
+echo "EXITING start.ws"

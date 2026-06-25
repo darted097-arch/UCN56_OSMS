@@ -1,0 +1,412 @@
+/*
+ * PICASSO-3 CONFIGURATION LANGUAGE FILE
+ *
+ *
+ * Picture name: Pic220_CoreHeatRemoval
+ *
+ *
+ * Documented by  : ucn56
+ * Host           : ice2
+ * Date           : 10/07-01 at 11:29:58
+ *
+ *
+ * Generate with:
+ *    pcc Pic220_CoreHeatRemoval.Tdoc
+ *
+ */
+
+
+picture Pic220_CoreHeatRemoval
+{
+
+  int ThePictureFrequency = 1;
+  char *PageBack = "";
+  char *PageForward = "";
+  char *PictureNumber = "220";
+  char *PictureTitle = "CORE HEAT REMOVAL";
+
+  function `void Initialize()
+{
+CFMLevel = 2;
+SectoringPage = 2;
+Current_Page = 220;
+}`
+
+
+
+  dialogue
+  {
+    event = `keyPressed(0x1000FF72)`;
+    action = statement `{
+   DisplayPage(Page230);
+}`;
+  }
+
+  dialogue
+  {
+    event = `keyPressed(0x1000FF70)`;
+    action = statement `{
+   DisplayPage(Page210);
+}`;
+  }
+
+  dialogue
+  {
+    event = `keyPressed(0x1000FF71)`;
+    action = statement `{ 
+DisplaySectorPopUpMenu(); 
+update();
+//printf("Display: DisplayPagePopUp");
+}`;
+  }
+
+  dialogue
+  {
+    event = `keyPressed(0x1000FF73)`;
+    action = statement `{ 
+DisplayPopUpMenu(); 
+update();
+//printf("Display: DisplayPagePopUp");
+}`;
+  }
+
+  instance TrendLibrary.VideoTrend_Cfms Trend1
+  {
+    attribute Baseline = `(HighLimit+LowLimit)/2.0`;
+    attribute TheTrackTime = "11:17:56";
+    attribute DigitalOnePhrase = `TheVariable->message2`;
+    attribute DigitalZeroPhrase = `TheVariable->message1`;
+    attribute LowLimit = `TheVariable->erange_lo`;
+    attribute HighLimit = `TheVariable->erange_hi`;
+    attribute TheTrendVariable = "::UCN5and6.Page220Tr1";
+    attribute TheVariable = `&IMTSM`;
+    attribute TheFrequency = `ThePictureFrequency`;
+    attribute BASE = 0;
+    x = 92;
+    y = 35;
+    visibility = 1;
+    xReference = 92;
+    yReference = 33;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance Trend1
+
+
+
+  instance DialogueSymbols.StatusLine_Cfms 
+  {
+    attribute ThePointId = `&IMTSM`;
+    x = 11;
+    y = 45;
+    visibility = 1;
+    xReference = 21;
+    yReference = 70;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance DialogueSymbols.StatusLine_Cfms1 
+  {
+    attribute ThePointId = `&IMLVH`;
+    x = 11;
+    y = 229;
+    visibility = 1;
+    xReference = 76;
+    yReference = 239;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance TrendLibrary.VideoTrend_Cfms3 
+  {
+    attribute Baseline = `(HighLimit+LowLimit)/2.0`;
+    attribute TheTrackTime = "11:17:56";
+    attribute LowLimit = `TheVariable->erange_lo`;
+    attribute HighLimit = `TheVariable->erange_hi`;
+    attribute TheTrendVariable = "::UCN5and6.Page220Tr4";
+    attribute TheVariable = `&IMTRC`;
+    attribute TheFrequency = `ThePictureFrequency`;
+    attribute BASE = 0;
+    x = 92;
+    y = 445;
+    visibility = 1;
+    xReference = 92;
+    yReference = -157;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance DialogueSymbols.StatusLine_Cfms 
+  {
+    attribute ThePointId = `&IMTRC`;
+    x = 11;
+    y = 412;
+    visibility = 1;
+    xReference = 46;
+    yReference = 432;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.DynamicTextPhrase 
+  {
+    attribute TheText = "CAUTION: PUMP ON";
+    attribute PointId = `&RCYQVALD`;
+    x = 545;
+    y = 7;
+    visibility = 1;
+    xReference = 577;
+    yReference = 7;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  text 
+  {
+    x = 900;
+    y = 29;
+    format = "%s";
+    theText = "TIMEBASE:";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 932;
+    yReference = 26;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 1030;
+    y = 33;
+    format = "%s";
+    theText = "SECONDS";
+
+    visibility = `(ThePictureFrequency > 1)`;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 932;
+    yReference = 30;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 1030;
+    y = 28;
+    format = "%s";
+    theText = "SECOND";
+
+    visibility = `(ThePictureFrequency <= 1)`;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 932;
+    yReference = 25;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 1010;
+    y = 28;
+    format = "%d";
+    theText = `ThePictureFrequency`;
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 927;
+    yReference = 25;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  instance cfmsSymbols.CSFBarSize1 
+  {
+    attribute PointId = `&DSL2201`;
+    attribute SectorNumber = " 1";
+    attribute SectoringPage = "321";
+    x = 777;
+    y = 33;
+    visibility = 1;
+    xReference = 777;
+    yReference = 33;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.CSFBarSize1 
+  {
+    attribute PointId = `&DSL2202`;
+    attribute SectorNumber = " 2";
+    attribute SectoringPage = "322";
+    x = 503;
+    y = 219;
+    visibility = 1;
+    xReference = 503;
+    yReference = 219;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.CSFBarSize1 
+  {
+    attribute PointId = `&DSL2203`;
+    attribute SectorNumber = " 3";
+    attribute SectoringPage = "323";
+    x = 776;
+    y = 402;
+    visibility = 1;
+    xReference = 776;
+    yReference = 402;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance DialogueSymbols.StatusLine_Cfms1 
+  {
+    attribute ThePointId = `&IMLVP`;
+    x = 585;
+    y = 229;
+    visibility = 1;
+    xReference = 695;
+    yReference = 544;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance cfmsSymbols.CSFBarSize1 
+  {
+    attribute PointId = `&DSL2202`;
+    attribute SectorNumber = " 2";
+    attribute SectoringPage = "322";
+    x = 1074;
+    y = 220;
+    visibility = 1;
+    xReference = 1074;
+    yReference = 220;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  instance TrendLibrary.VideoTrend_Cfms1 Trend3
+  {
+    attribute Baseline = `(HighLimit+LowLimit)/2.0`;
+    attribute TheTrackTime = "11:19:39";
+    attribute LowLimit = `TheVariable->erange_lo`;
+    attribute HighLimit = `TheVariable->erange_hi`;
+    attribute TheTrendVariable = "::UCN5and6.Page220Tr3";
+    attribute TheVariable = `&IMLVH`;
+    attribute TheFrequency = `ThePictureFrequency`;
+    attribute BASE = 0;
+    x = 92;
+    y = 258;
+    visibility = 1;
+    xReference = 92;
+    yReference = -144;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance Trend3
+
+
+
+  instance TrendLibrary.VideoTrend_Cfms2 Trend2
+  {
+    attribute Baseline = `(HighLimit+LowLimit)/2.0`;
+    attribute TheTrackTime = "11:17:56";
+    attribute LowLimit = `TheVariable->erange_lo`;
+    attribute HighLimit = `TheVariable->erange_hi`;
+    attribute TheTrendVariable = "::UCN5and6.Page220Tr2";
+    attribute TheVariable = `&IMLVP`;
+    attribute TheFrequency = `ThePictureFrequency`;
+    attribute BASE = 0;
+    x = 92;
+    y = 335;
+    visibility = 1;
+    xReference = 92;
+    yReference = 133;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance Trend2
+
+
+
+// The picture's other attributes:
+
+  backgroundColour    = 0;
+  xSnap               = 5;
+  ySnap               = 5;
+  angleSnap           = 0;
+  radiusSnap          = 0;
+  worldX              = 0;
+  worldY              = 0;
+  worldWidth          = 1280;
+  worldHeight         = 824;
+  oneToOne            = 1;
+  resizeMode          = 0;
+  updateMode          = 1;
+  crosshairStyle      = 1;
+  crosshairLength     = 0;
+  crosshairFollowSnap = `isInEditMode()`;
+  crosshairVisibility = `isInEditMode()`;
+  xReference = 500;
+  yReference = 500;
+  xScaleFactor = 1;
+  yScaleFactor = 1;
+  rotationAngle = 0;
+
+
+}  // end of picture Pic220_CoreHeatRemoval

@@ -1,0 +1,332 @@
+/*
+ * PICASSO-3 CONFIGURATION LANGUAGE FILE
+ *
+ *
+ * Picture name: PicUCN_InsertValueCascade
+ *
+ *
+ * Documented by  : ucn56
+ * Host           : ucn5
+ * Date           : 25/01-00 at 13:29:07
+ *
+ *
+ * Generate with:
+ *    pcc PicUCN_InsertValueCascade.Tdoc
+ *
+ */
+
+
+picture PicUCN_InsertValueCascade
+{
+
+  char *PictureTitle = "SINGLE POINT DISPLAY";
+  char *PictureNumber = "MENU";
+  char *PageForward = "PicUCN_InsertValueDisplay";
+  char *PageBack = "";
+  char *ThePointId = "ERRORPID";
+  int ERROR = 0;
+
+  function `void GoToDisplay()
+{
+// Add point to temporary shopping list
+   execute ("{ manageTempShopList(TEMP_SHOP_INIT_ADD,InputArea.TheOriginalText); }");
+
+   execute ("{load(\\"%s.ppic\\");}",PageForward);
+   execute ("{%s.PicturePointId = \`&%s\`;}",PageForward,InputArea.TheOriginalText);
+
+   execute ("{displayPicture(\\"Main\\",\\"%s.ppic\\");}",PageForward);
+}`
+
+
+
+  function `void Initialize()
+{
+   ERROR = 0;
+   CascadeEnterActive = 1 ;
+   strcpy(InputArea.TheNewText,InputArea.TheOriginalText);
+}`
+
+
+
+  rectangle 
+  {
+    x = 3;
+    y = 2;
+    width = 410;
+    height = 300;
+
+    visibility = 1;
+    foregroundFillColour = `COLOR_PICTURE_BACKGROUND`;
+    backgroundFillColour = -1;
+    foregroundColour = `(CascadeEnterActive)?COLOR_DATA_NORMAL:COLOR_STATIC_TEXT`;
+    backgroundColour = -1;
+    lineWidth = 7;
+    linePattern = `SolidPattern`;
+    fillPattern = `SolidPattern`;
+    xReference = 10;
+    yReference = 9;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 135;
+    y = 29;
+    format = "%s";
+    theText = "INSERT VALUE";
+
+    visibility = 1;
+    foregroundColour = `(CascadeEnterActive)?COLOR_DATA_NORMAL:COLOR_STATIC_TEXT`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 135;
+    yReference = 29;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  line 
+  {
+    dialogue
+    {
+      event = `buttonPressed(Right) || keyPressed(ESC)`;
+      action = statement `{
+   CascadeEnterActive = 0;
+   CascadeEnter.unmap();
+   update();
+}`;
+    }
+    numberOfPoints = 2;
+
+    point[0] = (10, 46);
+    point[1] = (408, 46);
+
+    visibility = 1;
+    foregroundColour = `(CascadeEnterActive)?COLOR_DATA_NORMAL:COLOR_STATIC_TEXT`;
+    backgroundColour = -1;
+    lineWidth = 4;
+    lineStyle = `SolidPattern`;
+    xReference = 10;
+    yReference = 46;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 25;
+    y = 81;
+    format = "%s";
+    theText = "The Insert Value Display provides ability to declare";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font2`;
+    xReference = 30;
+    yReference = 86;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 25;
+    y = 101;
+    format = "%s";
+    theText = "a new value for the chosen Point Id.  ";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font2`;
+    xReference = 25;
+    yReference = 111;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 25;
+    y = 131;
+    format = "%s";
+    theText = "Once a new value is manually inserted, the Point Id's";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font2`;
+    xReference = 25;
+    yReference = 141;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 25;
+    y = 156;
+    format = "%s";
+    theText = "scan status will automatiaclly be changed to";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font2`;
+    xReference = 20;
+    yReference = 166;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 25;
+    y = 261;
+    format = "%s";
+    theText = "ENTER THE POINT ID:";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font2`;
+    xReference = 20;
+    yReference = 231;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text ErrorText
+  {
+    x = 195;
+    y = 286;
+    format = "%s";
+    theText = "INVALID PID";
+
+    visibility = `ERROR`;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font2`;
+    xReference = 195;
+    yReference = 281;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  instance DialogueSymbols.EnterSmallPointId InputArea
+  {
+    attribute FindPidScope = "::UCN5and6.PicUCN_InsertValueCascade.InputArea";
+    attribute ERROR = 0;
+    attribute Scope = "PicUCN_InsertValueCascade";
+    attribute NotFoundAction = "{ERROR=1;}";
+    attribute FoundAction = "{GoToDisplay();}";
+    attribute TheNewText = "SIP308";
+    attribute TheOriginalText = "SIP308";
+    attribute Selected = 1;
+    x = 190;
+    y = 237;
+    visibility = 1;
+    xReference = 190;
+    yReference = 204;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance InputArea
+
+
+
+  text 
+  {
+    x = 25;
+    y = 181;
+    format = "%s";
+    theText = "\"Out of Scan\".";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font2`;
+    xReference = 20;
+    yReference = 166;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 25;
+    y = 216;
+    format = "%s";
+    theText = "Note: Proper Security Level is Required.";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font2`;
+    xReference = 20;
+    yReference = 166;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+// The picture's other attributes:
+
+  backgroundColour    = 0;
+  xSnap               = 5;
+  ySnap               = 5;
+  angleSnap           = 0;
+  radiusSnap          = 0;
+  worldX              = 0;
+  worldY              = 0;
+  worldWidth          = 417;
+  worldHeight         = 305;
+  oneToOne            = 1;
+  resizeMode          = 0;
+  updateMode          = 2;
+  crosshairStyle      = 1;
+  crosshairLength     = 0;
+  crosshairFollowSnap = `isInEditMode()`;
+  crosshairVisibility = `isInEditMode()`;
+  xReference = 500;
+  yReference = 500;
+  xScaleFactor = 1;
+  yScaleFactor = 1;
+  rotationAngle = 0;
+
+
+}  // end of picture PicUCN_InsertValueCascade

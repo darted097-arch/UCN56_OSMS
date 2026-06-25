@@ -1,0 +1,171 @@
+/*
+ * PICASSO-3 CONFIGURATION LANGUAGE FILE
+ *
+ *
+ * Picture name: Pic503_Secondarymenu
+ *
+ *
+ * Documented by  : runtime
+ * Host           : y5maint1
+ * Date           : 14/05-01 at 15:23:06
+ *
+ *
+ * Generate with:
+ *    pcc Pic503_Secondarymenu.Tdoc
+ *
+ */
+
+
+picture Pic503_Secondarymenu
+{
+
+  char PictureNumber[50] = "503";
+  char PictureTitle[50] = "SECONDARY";
+  int ChangeScanStatus = 1;
+  int ChangeAlarmStatus = 2;
+  int InsertValue = 3;
+  int ChangeAlarmLimits = 4;
+  int SensorCalibration = 5;
+  int LeastSquaresFit = 6;
+  char Option[4] = "1";
+
+  function `void Initialize()
+{ 
+   CFMLevel = 0;
+   Current_Page = 503;
+   Last_Page = Current_Page;
+//  Option[0] = '\\0';
+//  strcat (Option,"_");
+//  selectShape(1,"MenuInput");
+//  MenuInput.edit(ON);
+//  MenuInput.theText = \`Option\`;
+//  MenuInput.edit(OFF);
+//  MenuInput.edit(ON);   
+//  MenuInput.moveToHome();
+//  update();
+}`
+
+
+
+  dialogue
+  {
+    event = `buttonPressed(3)`;
+    action = statement `{
+   DisplayPage(Page500);
+}`;
+  }
+
+  instance DialogueSymbols.LargeMenuSelection m1
+  {
+    attribute CascadeY = 400;
+    attribute CascadeX = 400;
+    attribute Cascade = 0;
+    attribute TheTextFont = `font6`;
+    attribute TheDisplayPage = "Pic504_Secondary.ppic";
+    attribute TheTitle = "SECONDARY";
+    attribute TheFontColor = 2;
+    attribute TheOption = "1.";
+    x = 255;
+    y = 174;
+    visibility = 1;
+    xReference = 255;
+    yReference = 174;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance m1
+
+
+
+  instance DialogueSymbols.LargeMenuSelection m3
+  {
+    attribute CascadeY = 400;
+    attribute CascadeX = 400;
+    attribute Cascade = 0;
+    attribute TheTextFont = `font6`;
+    attribute TheDisplayPage = "Pic505_MainSteamSystem.ppic";
+    attribute TheTitle = "MAIN STEAM SYSTEM";
+    attribute TheFontColor = 2;
+    attribute TheOption = "2.";
+    x = 255;
+    y = 246;
+    visibility = 1;
+    xReference = 255;
+    yReference = 246;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance m3
+
+
+
+  instance DialogueSymbols.LargeMenuSelection m4
+  {
+    attribute CascadeY = 400;
+    attribute CascadeX = 400;
+    attribute Cascade = 0;
+    attribute TheTextFont = `font6`;
+    attribute TheDisplayPage = "Pic506_MainFeedwaterSystem.ppic";
+    attribute TheTitle = "MAIN FEEDWATER SYSTEM";
+    attribute TheFontColor = 2;
+    attribute TheOption = "3.";
+    x = 255;
+    y = 317;
+    visibility = 1;
+    xReference = 255;
+    yReference = 317;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance m4
+
+
+
+  instance DialogueSymbols.LargeMenuSelection m5
+  {
+    attribute CascadeY = 400;
+    attribute CascadeX = 400;
+    attribute Cascade = 0;
+    attribute TheTextFont = `font6`;
+    attribute TheDisplayPage = "Pic507_AuxiliaryFeedwater.ppic";
+    attribute TheTitle = "AUXILIARY FEEDWATER SYSTEM";
+    attribute TheFontColor = 2;
+    attribute TheOption = "4.";
+    x = 255;
+    y = 388;
+    visibility = 1;
+    xReference = 255;
+    yReference = 388;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance m5
+
+
+
+// The picture's other attributes:
+
+  backgroundColour    = 0;
+  xSnap               = 5;
+  ySnap               = 5;
+  angleSnap           = 0;
+  radiusSnap          = 0;
+  worldX              = 0;
+  worldY              = 0;
+  worldWidth          = 1280;
+  worldHeight         = 824;
+  oneToOne            = 1;
+  resizeMode          = 0;
+  updateMode          = 2;
+  crosshairStyle      = 1;
+  crosshairLength     = 0;
+  crosshairFollowSnap = `isInEditMode()`;
+  crosshairVisibility = `isInEditMode()`;
+  xReference = 500;
+  yReference = 500;
+  xScaleFactor = 1;
+  yScaleFactor = 1;
+  rotationAngle = 0;
+
+
+}  // end of picture Pic503_Secondarymenu

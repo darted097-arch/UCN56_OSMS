@@ -1,0 +1,3007 @@
+/*
+ * ProcSee CONFIGURATION LANGUAGE FILE
+ *
+ *
+ * User : ygn34
+ * Host : y6cr02
+ * Date : 2017-05-25
+ * Time : 15:43:58
+ *
+ * ProcSee version : ProcSee 3.10.1 (June 2016)
+ * File version    : 1.26
+ *
+ *
+ */
+
+
+picture PicYGN_PenRecorderMenu
+{
+  worldX = 0;
+  worldY = 0;
+  worldWidth = 1280;
+  worldHeight = 824;
+  oneToOne = 1;
+  backgroundColour = 0;
+  updateMode = 2;
+  resizeMode = 0;
+  xSnap = 5;
+  ySnap = 5;
+  radiusSnap = 0;
+  angleSnap = 0;
+  crosshairStyle = 1;
+  crosshairLength = 0;
+  crosshairFollowSnap = `isInEditMode()`;
+  crosshairVisibility = `isInEditMode()`;
+  xReference = 500;
+  yReference = 500;
+  xScaleFactor = 1;
+  yScaleFactor = 1;
+  rotationAngle = 0;
+
+  float DB_HiER = 0;
+
+  float DB_LoER = 0;
+
+  char* FindPidScope = "::YGN3and4.PicYGN_PenRecorderMenu";
+
+  int FULL_TYPE_CHECK = 1;
+
+  int NO_RANGE_TYPE_CHECK = 3;
+
+  int NUM_PEN_SETS = 5;
+
+  int NUM_PENS_PER_SET = 2;
+
+  char* PageBack = "";
+
+  char* PageForward = "";
+
+  char* PictureNumber = "860";
+
+  char* PictureTitle = "SETUP PEN RECORDERS";
+
+  DialogueSymbols.InputDialogueNumber* poMaxValue = `&::YGN3and4.PicYGN_PenRecorderMenu.Set1Pen1MaxValue`;
+
+  DialogueSymbols.InputDialogueNumber* poMinValue = `&::YGN3and4.PicYGN_PenRecorderMenu.Set3Pen1MinValue`;
+
+  DialogueSymbols.InputDialogueText* poPID = `&::YGN3and4.PicYGN_PenRecorderMenu.Set3Pen1PID`;
+
+  PEN_DATA* pPenRecorderData = `Interface.PenRecorderData`;
+
+  char* pPidStr = `&::YGN3and4.PicYGN_PenRecorderMenu.Set1Pen1PID.TheNewText[0]`;
+
+  RECORD* pRECORD = `&::YGN3and4.YGN3and4.BLANK`;
+
+  int ProcessERROR = 1;
+
+  RECORD* pSet1Pen1Rec = `&BLANK`;
+
+  RECORD* pSet1Pen2Rec = `&BLANK`;
+
+  RECORD* pSet2Pen1Rec = `&BLANK`;
+
+  RECORD* pSet2Pen2Rec = `&BLANK`;
+
+  RECORD* pSet3Pen1Rec = `&BLANK`;
+
+  RECORD* pSet3Pen2Rec = `&BLANK`;
+
+  RECORD* pSet4Pen1Rec = `&BLANK`;
+
+  RECORD* pSet4Pen2Rec = `&BLANK`;
+
+  RECORD* pSet5Pen1Rec = `&BLANK`;
+
+  RECORD* pSet5Pen2Rec = `&BLANK`;
+
+  int setPenErr = 0;
+
+  char setPenErrStr[12] = "        ";
+
+  char StrHiER[40] = "`&CIJXPP`.erange_hi";
+
+  char StrLoER[40] = "`&CIJXPP`.erange_lo";
+
+  float temp_range_hi = 0;
+
+  float temp_range_lo = 0;
+
+  int TEMPINT = 0;
+
+  char tempPidStr[12] = "BLANK";
+
+  char TEMPSTR[40] = "`&CIJXPP`.sig_type";
+
+  int ZERO_OR_ONE_TYPE_CHECK = 2;
+
+
+// ***CORENET 20170601 by Philkyu Kwon ************
+  function `void DummyProcess()
+  {
+  
+    //printf("Button Select OR Button Unselected");
+  }`
+// ***************************************************
+
+  function `void ExecuteFailure(int Set, int Pen)
+  {
+    InputDialogueText *Input = 0;
+  
+    //  Get pointer to PID
+  
+    //printf (" executing failure " );
+  
+    Input = GetpoPID(Set,Pen);
+    Input->ERROR = 1;
+  
+    pPidStr = "ERRORPID";
+    execute("{pSet%dPen%dRec = &%s;}",Set,Pen,pPidStr);
+  
+    update();
+  }`
+
+  function `void ExecuteSuccess(int Set, int Pen)
+  {
+    InputDialogueText * Input = 0;
+  
+    //  Get pointer to PID
+  
+   // printf(" executing success ");
+  
+    Input = GetpoPID(Set,Pen);
+    Input->ERROR = 0;
+  
+    SetMinMaxFromPID(Set,Pen);
+  
+    pPidStr = GetstrPID(Set, Pen);
+    execute("{pSet%dPen%dRec = &%s;}",Set,Pen,pPidStr);
+  
+    update();
+  }`
+
+  function `float GetDB_HiER(int Set, int Pen)
+  {
+  // Returns the database High Engineering Range for the PID in Set #, Pen #
+  
+    execute("{DB_HiER = %s;}",GetstrDB_HiER(Set, Pen));
+    return(DB_HiER);
+  }`
+
+  function `float GetDB_LoER(int Set, int Pen)
+  {
+  // Returns the Low Engineering Range for the PID in Set #, Pen #
+  
+    execute("{DB_LoER = %s;}",GetstrDB_LoER(Set, Pen));
+    return(DB_LoER);
+  }`
+
+  function `int GetPID_CheckType(char * PID)
+  {
+    int point_type;
+    int retval = FULL_TYPE_CHECK;
+  
+    strcpy(TEMPSTR, PID);
+    strcat(TEMPSTR, ".sig_type");
+    execute("{TEMPINT = %s;}",TEMPSTR);
+    point_type = TEMPINT;
+  
+    switch (point_type)
+    {
+      case AI:
+      case PI:
+      case FI:
+      case ROD:
+        retval = FULL_TYPE_CHECK;
+        break;
+  
+      case CI:
+      case DI:
+      case SOE:
+      case BCI:
+      case DL:
+      case QD:
+      case XD:
+      case CO:
+      case BCO:
+        retval = ZERO_OR_ONE_TYPE_CHECK;
+        break;
+  
+      case XA:
+      case QA:
+        retval = NO_RANGE_TYPE_CHECK;
+        break;
+  
+      case AO:
+      case KO:
+        strcpy(TEMPSTR, PID);
+        strcat(TEMPSTR, ".erange_lo");
+        execute("{DB_LoER = %s;}",TEMPSTR);
+        strcpy(TEMPSTR, PID);
+        strcat(TEMPSTR, ".erange_hi");
+        execute("{DB_HiER = %s;}",TEMPSTR);
+        if ((0.0 == DB_LoER)  &&  (0.0 == DB_HiER))
+          retval = NO_RANGE_TYPE_CHECK;
+        else
+          retval = FULL_TYPE_CHECK;
+        break;
+  
+      default:
+        printf("%s GetPID_CheckType() ERROR: Point type not found", PictureTitle);
+        retval = FULL_TYPE_CHECK;
+        break;
+    }
+    return(retval);
+  }`
+
+  function `InputDialogueNumber * GetpoMaxValue(int Set, int Pen)
+  {
+  // Returns a pointer to the MaxValue object for Set #, Pen #
+  
+    execute("{poMaxValue = &Set%dPen%dMaxValue;}", Set, Pen);
+    return(poMaxValue);
+  }`
+
+  function `InputDialogueNumber * GetpoMinValue(int Set, int Pen)
+  {
+    // Returns a pointer to the MinValue object for Set #, Pen #
+  
+    execute("{poMinValue = &Set%dPen%dMinValue;}",Set, Pen);
+    return(poMinValue);
+  }`
+
+  function `InputDialogueText * GetpoPID(int Set, int Pen)
+  {
+    // Returns a pointer to the object that holds the PID
+    // for Set #, Pen #
+  
+   // printf ( " in getpo pid  ");
+    execute("{poPID = &Set%dPen%dPID;}", Set, Pen);
+    return(poPID);
+  
+  }`
+
+  function `char * GetstrDB_HiER(int Set, int Pen)
+  {
+  // Returns pointer to char string that contains
+  // the name of the variable that contains the
+  // database High Engineering Value
+    strcpy(StrHiER,GetstrPID(Set, Pen));
+    strcat(StrHiER,".erange_hi");
+    return(StrHiER);
+  }`
+
+  function `char * GetstrDB_LoER(int Set, int Pen)
+  {
+  // Returns pointer to string that contains the variable
+  // name that contains the database Low Engineering Value
+    strcpy(StrLoER, GetstrPID(Set, Pen));
+    strcat(StrLoER, ".erange_lo");
+    return(StrLoER);
+  }`
+
+  function `char * GetstrMaxNumberFormat(int Set, int Pen)
+  {
+    execute("{poMaxValue = &Set%dPen%dMaxValue;}",Set, Pen);
+    return(poMaxValue->TheNumberFormat);
+  }`
+
+  function `char * GetstrMinNumberFormat(int Set, int Pen)
+  {
+    execute("{poMinValue = &Set%dPen%dMinValue;}",Set, Pen);
+    return(poMinValue->TheNumberFormat);
+  }`
+
+  function `char * GetstrPID(int Set, int Pen)
+  {
+  // Returns the string of the PID for Set #, Pen #
+    InputDialogueText * idt = 0;
+  
+    idt = GetpoPID(Set, Pen);
+    return(idt->TheNewText);
+  }`
+
+  function `void Initialize()
+  {
+    CFMLevel = 0;
+    Current_Page = 860;
+  //  printf("%s Initialize()",PictureTitle);
+  
+  
+    // Request pen data from host
+    execute("{sendMessageToHost(REQUEST_PEN_DATA);}");
+  
+    // Set visibility for request message
+    RequestPenDataMsg.visibility = 1;
+  
+    update();
+  }`
+
+
+
+//CORENET 20170629
+  function `void ConfirmProcess()
+  {
+  	DisplayAdvisoryMessage1("CHANGE(S) ACCEPTED");
+  }`
+
+
+  function `int IsAllBlank(char * cptr)
+  {
+    // Return 0 if one non-blank character is found, 1 otherwise
+    int blank = 1;
+    int i;
+  
+    for (i=0; i<strlen(cptr); i++, cptr++)
+    {
+      if (*cptr != ' ')
+      {
+        blank = 0;
+        break;
+      }//endif
+    }//endfor
+    return (blank);
+  }`
+
+  function `int IsDigital(char * PID)
+  {
+    int retval, sigtype;
+  
+    // get a pointer to the record for the PID
+    execute("{pRECORD = &%s;}",PID);
+  
+    sigtype = pRECORD->sig_type;
+    switch(sigtype)
+    {
+      case CI:
+      case DI:
+      case SOE:
+      case BCI:
+      case DL:
+      case QD:
+      case XD:
+      case CO:
+      case BCO:
+        retval = 1;
+        break;
+      default:
+        retval = 0;
+        break;
+    }//endswitch
+    return(retval);
+  }`
+
+  function `void Process1()
+  {
+    int i,j;
+    InputDialogueNumber * poMinValue;
+    InputDialogueNumber * poMaxValue;
+    InputDialogueText   * poPID;
+  
+    //if (1 == Interface->System.slaveUpdating) return;	//CORENET 20170620
+    if (0 == Interface->System.connected) return;
+  
+  //  printf("\\n%s Process(): Processing", PictureTitle);
+  
+    for (i=1; i<=NUM_PEN_SETS; i++)
+    {
+      for (j=1; j<=NUM_PENS_PER_SET; j++)
+      {
+        execute("{ProcessERROR = Set%dPen%dPID.ERROR;}",i,j);
+        if (1 == ProcessERROR) break;
+        execute("{ProcessERROR = Set%dPen%dMinValue.ERROR;}",i,j);
+        if (1 == ProcessERROR) break;
+        execute("{ProcessERROR = Set%dPen%dMaxValue.ERROR;}",i,j);
+        if (1 == ProcessERROR) break;
+        poMinValue = GetpoMinValue(i,j);
+        poMaxValue = GetpoMaxValue(i,j);
+        poPID = GetpoPID(i,j);
+  
+        if ( ((poMaxValue->TheNewNumber <= poMinValue->TheNewNumber) ||
+             (poMinValue->TheNewNumber >= poMaxValue->TheNewNumber))
+          && (0 == IsAllBlank(poPID->TheNewText)))
+        {
+  //        printf("  the error point id is :  %s ",poPID->TheNewText);
+          ProcessERROR = 1;
+          poMinValue.ERROR = 1;
+          poMaxValue.ERROR = 1;
+          break;
+        } //endif
+      } //endfor
+      if (1 == ProcessERROR) break;
+    }//endfor
+  
+    if (1 != ProcessERROR)
+    {
+      for (i=1;i<=NUM_PEN_SETS;i++)
+        for (j=1;j<=NUM_PENS_PER_SET;j++)
+        {
+  //      execute("{printf(\\"Updating PEN_DATA with %%s\\", Set%dPen%dPID.TheNewText);}",i,j);
+          execute("{strcpy(pPenRecorderData->trend%dPen%d.Pid,Set%dPen%dPID.TheNewText);}",i,j,i,j);
+          execute("{pPenRecorderData->trend%dPen%d.Minimum = Set%dPen%dMinValue.TheNewNumber;}",i,j,i,j);
+          execute("{pPenRecorderData->trend%dPen%d.Maximum = Set%dPen%dMaxValue.TheNewNumber;}",i,j,i,j);
+  //      execute("{printf(\\"Reading from PEN_DATA for Set%dPen%dPID = %%s\\",pPenRecorderData->trend%dPen%d.Pid);}",i,j,i,j);
+        }
+      execute("{sendMessageToHost(PROCESS_PEN_DATA);}");
+      RequestPenDataMsg.visibility = 1;
+  //    Interface->System.sentData = 1;
+  //    Interface->System.receivedData = 0;
+  //    Interface->GenericResponseMessage.data.returnStatus = -1;
+      ProcessErrorMsg.visibility = 0;
+  //    printf("PenRec.Process(): DONE WITHOUT ERRORS\\n");
+    } // endif (1 != error)
+    else
+    {
+      ProcessErrorMsg.visibility = 1;
+  //    printf("PenRec.Process(): ERRORS FOUND\\n");
+    }
+  }`
+
+  function `void Reset()
+  {
+    printf("%s Resetting", PictureTitle);
+    UpdateLocalsFromInterface();
+  }`
+
+  function `void SetMinMaxFromPID(int Set, int Pen)
+  {
+  
+  // Sets Min and Max values from the database for VALID PIDs.
+  // Action for INVALID PIDs is not defined
+  
+      // Set the Numbers in the Min and Max fields.
+    if (1 == IsAllBlank(GetstrPID(Set,Pen)))
+    {
+      execute("{Set%dPen%dMinValue.TheNewNumber = 0.0;}",Set,Pen);
+      execute("{Set%dPen%dMinValue.TheOriginalNumber = 0.0;}",Set,Pen);
+  
+      execute("{Set%dPen%dMaxValue.TheNewNumber = 0.0;}",Set,Pen);
+      execute("{Set%dPen%dMaxValue.TheOriginalNumber = 0.0;}",Set,Pen);
+    }//endif PID is all blanks
+    else
+    {
+      if (IsDigital(GetstrPID(Set, Pen)))
+      {
+        execute("{Set%dPen%dMinValue.TheNewNumber = 0.0;}",Set,Pen);
+        execute("{Set%dPen%dMinValue.TheOriginalNumber = 0.0;}",Set,Pen);
+        execute("{Set%dPen%dMaxValue.TheNewNumber = 1.0;}",Set,Pen);
+        execute("{Set%dPen%dMaxValue.TheOriginalNumber = 1.0;}",Set,Pen);
+      }//endif is digital point
+      else // analog
+      {
+         execute("{pRECORD = \`&%s\`;}",GetstrPID(Set,Pen));
+  //       printf("PIP bit map is: %04X",pRECORD->pipbitmap);
+  //       printf("Hi engineer range is: %f", pRECORD->erange_hi);
+         if ( (Interface->System.displayedUnits) && (!(pRECORD->pipbitmap & bMETUNIT) ))
+  
+         {
+  	  temp_range_lo = pRECORD->erange_lo * pRECORD->mfactor + pRECORD->moffset;
+  	  temp_range_hi = pRECORD->erange_hi * pRECORD->mfactor + pRECORD->moffset;
+         }
+         else  if ( (!Interface->System.displayedUnits) && (pRECORD->pipbitmap & bMETUNIT) )
+         {
+  	  temp_range_lo =  (pRECORD->erange_lo -pRECORD->moffset) / pRECORD->mfactor;
+  	  temp_range_hi =  (pRECORD->erange_hi -pRECORD->moffset) / pRECORD->mfactor;
+         }
+         else
+         {
+            temp_range_lo = pRECORD->erange_lo;
+            temp_range_hi = pRECORD->erange_hi;
+         }
+         execute("{Set%dPen%dMinValue.TheNewNumber = temp_range_lo;}",Set,Pen);
+         execute("{Set%dPen%dMinValue.TheOriginalNumber = temp_range_lo;}",Set,Pen);
+  
+         execute("{Set%dPen%dMaxValue.TheNewNumber = temp_range_hi;}",Set,Pen);
+         execute("{Set%dPen%dMaxValue.TheOriginalNumber = temp_range_hi;}",Set,Pen);
+      }//endelse not a digital point
+    }//endelse not all blank
+  
+    execute("{sprintf(Set%dPen%dMinValue.TheNewText, \\"%s\\", Set%dPen%dMinValue.TheNewNumber);}",Set,Pen,GetstrMinNumberFormat(Set, Pen),Set,Pen);
+    execute("{sprintf(Set%dPen%dMinValue.TheOriginalText, \\"%s\\", Set%dPen%dMinValue.TheOriginalNumber);}",Set,Pen,GetstrMinNumberFormat(Set, Pen),Set,Pen);
+    execute("{Set%dPen%dMinValue.ERROR = 0;}",Set,Pen);
+  
+    execute("{sprintf(Set%dPen%dMaxValue.TheNewText, \\"%s\\", Set%dPen%dMaxValue.TheNewNumber);}",Set,Pen,GetstrMinNumberFormat(Set, Pen),Set,Pen);
+    execute("{sprintf(Set%dPen%dMaxValue.TheOriginalText, \\"%s\\", Set%dPen%dMaxValue.TheOriginalNumber);}",Set,Pen,GetstrMinNumberFormat(Set, Pen),Set,Pen);
+    execute("{Set%dPen%dMaxValue.ERROR = 0;}",Set,Pen);
+  }//end routine`
+
+  function `void UpdateLocalsFromInterface()
+  {
+    int i,j;
+  
+    for (i=1; i<=NUM_PEN_SETS; i++)
+      for (j=1; j<=NUM_PENS_PER_SET; j++)
+      {
+  //    Get the PID stuff
+        execute("{strcpy(Set%dPen%dPID.TheOriginalText,pPenRecorderData->trend%dPen%d.Pid);}",i,j,i,j);
+        execute("{strcpy(Set%dPen%dPID.TheNewText,Set%dPen%dPID.TheOriginalText);}",i,j,i,j);
+        execute("{Set%dPen%dPID.ERROR = 0;}",i,j);
+  
+        execute("{pPidStr = pPenRecorderData->trend%dPen%d.Pid;}",i,j);
+        if (IsAllBlank(pPidStr))
+        {
+  	 pPidStr = "BLANK";
+        }
+        execute("{pSet%dPen%dRec = &%s;}",i,j,pPidStr);
+  
+  //    Get the MinValue stuff
+        execute("{Set%dPen%dMinValue.TheNewNumber = pPenRecorderData->trend%dPen%d.Minimum;}",i,j,i,j);
+        execute("{Set%dPen%dMinValue.TheOriginalNumber = Set%dPen%dMinValue.TheNewNumber;}",i,j,i,j);
+        execute("{sprintf(Set%dPen%dMinValue.TheNewText, \\"%s\\", Set%dPen%dMinValue.TheNewNumber);}",i,j,GetstrMinNumberFormat(i,j),i,j);
+        execute("{sprintf(Set%dPen%dMinValue.TheOriginalText, \\"%s\\", Set%dPen%dMinValue.TheOriginalNumber);}",i,j,GetstrMinNumberFormat(i,j),i,j);
+        execute("{Set%dPen%dMinValue.ERROR = 0;}",i,j);
+  
+  //    Get the MaxValue stuff
+        execute("{Set%dPen%dMaxValue.TheNewNumber = pPenRecorderData->trend%dPen%d.Maximum;}",i,j,i,j);
+        execute("{Set%dPen%dMaxValue.TheOriginalNumber = Set%dPen%dMaxValue.TheNewNumber;}",i,j,i,j);
+        execute("{sprintf(Set%dPen%dMaxValue.TheNewText, \\"%s\\", Set%dPen%dMaxValue.TheNewNumber);}",i,j,GetstrMaxNumberFormat(i,j),i,j);
+        execute("{sprintf(Set%dPen%dMaxValue.TheOriginalText, \\"%s\\", Set%dPen%dMaxValue.TheOriginalNumber);}",i,j,GetstrMaxNumberFormat(i,j),i,j);
+        execute("{Set%dPen%dMaxValue.ERROR = 0;}",i,j);
+      }
+  
+    ProcessErrorMsg.visibility = 0;
+    RequestPenDataMsg.visibility = 0;
+    update();
+  }`
+
+  function `void VerifyMaxValue(int Set, int Pen)
+  {
+  // Verify valid input for the Max Value entered for Set #, Pen #
+    InputDialogueNumber * poMax = 0;
+    InputDialogueNumber * poMin = 0;
+    float x,y,z;
+    int error = 0;
+    int check_type;
+  
+    poMax = GetpoMaxValue(Set, Pen);
+    poMin = GetpoMinValue(Set, Pen);
+  
+    // Determine the type of checking that is needed and do it.
+    check_type = GetPID_CheckType(GetstrPID(Set, Pen));
+    switch(check_type)
+    {
+      case NO_RANGE_TYPE_CHECK:
+        error = 0;
+        break;
+  
+      case ZERO_OR_ONE_TYPE_CHECK:
+        if (1.0 != poMax->TheNewNumber) error = 1;
+        break;
+  
+      case FULL_TYPE_CHECK:
+      default:
+        x = GetDB_LoER(Set, Pen);
+        y = poMax->TheNewNumber;
+        z = GetDB_HiER(Set, Pen);
+  
+        // if the entered value is not between the hi and lo engineering range,
+        // we have an error
+        if ( !((x <= y) && (y <= z)) ) error = 1;
+  
+        if (poMax->TheNewNumber <= poMin->TheNewNumber) error = 1;
+        break;
+    }//endswitch
+  
+    if (0 == error)
+      execute("{Set%dPen%dMaxValue.ERROR = 0;}", Set, Pen);
+    else
+      execute("{Set%dPen%dMaxValue.ERROR = 1;}", Set, Pen);
+  }`
+
+  function `void VerifyMinMaxValues(int Set, int Pen)
+  {
+    InputDialogueText * Input;
+  
+    Input = GetpoPID(Set,Pen);
+  
+  
+    if ( (!IsAllBlank(GetstrPID(Set, Pen)))  ||
+         (0 == Input->ERROR) )
+    {
+      VerifyMinValue(Set, Pen);
+      VerifyMaxValue(Set, Pen);
+    }//endif
+  }`
+
+  function `void VerifyMinValue(int Set, int Pen)
+  {
+  // Verify valid input for the Min Value entered for Set #, Pen #
+  //  printf("***** Verifying Min value for %s", GetstrPID(Set, Pen));
+    InputDialogueNumber * poMin = 0;
+    InputDialogueNumber * poMax = 0;
+    float x,y,z;
+    int error = 0;
+    int check_type;
+  
+    poMin = GetpoMinValue(Set, Pen);
+    poMax = GetpoMaxValue(Set, Pen);
+  
+    // Determine the type of checking that is needed and do it.
+    check_type = GetPID_CheckType(GetstrPID(Set, Pen));
+    switch(check_type)
+    {
+      case NO_RANGE_TYPE_CHECK:
+        error = 0;
+        break;
+  
+      case ZERO_OR_ONE_TYPE_CHECK:
+        if (0.0 != poMin->TheNewNumber) error = 1;
+        break;
+  
+      case FULL_TYPE_CHECK:
+      default:
+        x = GetDB_LoER(Set, Pen);
+        y = poMin->TheNewNumber;
+        z = GetDB_HiER(Set, Pen);
+  
+        // if the entered value is not between the hi and lo engineering values,
+        // we have an error.
+        if ( !((x <= y) &&  (y <= z)) ) error = 1;
+  
+        if (poMin->TheNewNumber >= poMax->TheNewNumber) error = 1;
+        break;
+    }//endswitch
+  
+    if (0 == error)
+      execute("{Set%dPen%dMinValue.ERROR = 0;}", Set, Pen);
+    else
+      execute("{Set%dPen%dMinValue.ERROR = 1;}", Set, Pen);
+  }`
+
+  function `void VerifyPID(int Set,int Pen)
+  {
+    int blanks = 1;
+    int j;
+    char * cptr;
+    InputDialogueText * Input = 0;
+  
+    // Get pointers to the PID, Min, and Max objects
+  
+    Input = GetpoPID(Set, Pen);
+  
+    cptr = Input->TheNewText;
+  
+    blanks = IsAllBlank(cptr);
+  
+    if (1 == blanks)
+    {
+      SetMinMaxFromPID(Set,Pen);
+      Input->ERROR = 0;
+    } //endif
+    else
+    {
+         for ( j=0; j<8; j++)
+         {
+            if ( (Input->TheNewText[j] < '\\060' ||  (Input->TheNewText[j] > '\\72'
+  	       && Input->TheNewText[j] < '\\101') ) ||  Input->TheNewText[j] > '\\132' )
+  	      {
+  	       Input->TheNewText[j] = '\\0';
+  	       break;
+  	       }
+         }//endfor
+
+         execute("{findPidForGUI(\\"%s\\",\\"%s\\",\\"ExecuteSuccess(%d,%d)\\", \\"ExecuteFailure(%d,%d)\\");}",Input->TheNewText,FindPidScope,Set,Pen,Set,Pen);
+
+     }
+  
+  }`
+
+  function `int VisibilityMinMaxValues(int Set, int Pen)
+  {
+    int visibility = 1;
+  
+    execute("{strncpy(setPenErrStr,Set%dPen%dPID.TheOriginalText,8);}",Set,Pen);
+    execute("{setPenErr = Set%dPen%dPID.ERROR;}",Set,Pen);
+    execute("{strcpy(tempPidStr,pSet%dPen%dRec->pid);}",Set,Pen);
+    setPenErrStr[8] = '\\0';
+  
+    if (!strlen(setPenErrStr)) visibility=0;
+    else if (IsAllBlank(GetstrPID(Set, Pen))) visibility=0;
+    else if (setPenErr) visibility=0;
+    else if (IsDigital(tempPidStr)) visibility=0;
+    else visibility=1;
+  
+    return(visibility);
+  
+  }`
+
+  text PenSet2Title
+  {
+    x = 133;
+    y = 234;
+    format = "%s";
+    theText = "#2";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 133;
+    yReference = 234;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text PenSet4Title
+  {
+    x = 133;
+    y = 604;
+    format = "%s";
+    theText = "#4";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 133;
+    yReference = 604;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text PenSet1Title
+  {
+    x = 133;
+    y = 99;
+    format = "%s";
+    theText = "#1";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 133;
+    yReference = 99;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text PenSet3Title
+  {
+    x = 133;
+    y = 404;
+    format = "%s";
+    theText = "#3";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 133;
+    yReference = 404;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 205;
+    y = 604;
+    format = "%s";
+    theText = "PEN #2";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 205;
+    yReference = 604;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 205;
+    y = 674;
+    format = "%s";
+    theText = "PEN #3";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 205;
+    yReference = 674;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 205;
+    y = 474;
+    format = "%s";
+    theText = "PEN #3";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 205;
+    yReference = 474;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 205;
+    y = 539;
+    format = "%s";
+    theText = "PEN #1";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 205;
+    yReference = 539;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 205;
+    y = 69;
+    format = "%s";
+    theText = "PEN #1";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 205;
+    yReference = 69;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 205;
+    y = 134;
+    format = "%s";
+    theText = "PEN #2";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 205;
+    yReference = 134;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 205;
+    y = 204;
+    format = "%s";
+    theText = "PEN #1";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 205;
+    yReference = 204;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 205;
+    y = 269;
+    format = "%s";
+    theText = "PEN #2";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 205;
+    yReference = 269;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 205;
+    y = 334;
+    format = "%s";
+    theText = "PEN #1";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 205;
+    yReference = 334;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 205;
+    y = 404;
+    format = "%s";
+    theText = "PEN #2";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 205;
+    yReference = 404;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 50;
+    y = 23;
+    format = "%s";
+    theText = "PMS TREND RECORDER";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 50;
+    yReference = 23;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text PID_Title
+  {
+    x = 300;
+    y = 23;
+    format = "%s";
+    theText = "POINT ID";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 300;
+    yReference = 23;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text MINVAL_Title
+  {
+    x = 555;
+    y = 23;
+    format = "%s";
+    theText = "MIN VALUE";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 555;
+    yReference = 23;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text MAXVAL_Title
+  {
+    x = 800;
+    y = 23;
+    format = "%s";
+    theText = "MAX VALUE";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 800;
+    yReference = 23;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text Set1Pen1NotFoundMsg
+  {
+    x = 300;
+    y = 99;
+    format = "%s";
+    theText = "ENTER A VALID PID";
+    alignment = 0;
+    visibility = `Set1Pen1PID.ERROR`;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 300;
+    yReference = 99;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text Set1Pen2NotFoundMsg
+  {
+    x = 300;
+    y = 161;
+    format = "%s";
+    theText = "ENTER A VALID PID";
+    alignment = 0;
+    visibility = `Set1Pen2PID.ERROR`;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 300;
+    yReference = 161;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text Set2Pen1NotFoundMsg
+  {
+    x = 300;
+    y = 234;
+    format = "%s";
+    theText = "ENTER A VALID PID";
+    alignment = 0;
+    visibility = `Set2Pen1PID.ERROR`;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 300;
+    yReference = 234;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text Set2Pen2NotFoundMsg
+  {
+    x = 300;
+    y = 300;
+    format = "%s";
+    theText = "ENTER A VALID PID";
+    alignment = 0;
+    visibility = `Set2Pen2PID.ERROR`;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 300;
+    yReference = 300;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text Set3Pen1NotFoundMsg
+  {
+    x = 300;
+    y = 367;
+    format = "%s";
+    theText = "ENTER A VALID PID";
+    alignment = 0;
+    visibility = `Set3Pen1PID.ERROR`;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 300;
+    yReference = 367;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text Set3Pen2NotFoundMsg
+  {
+    x = 300;
+    y = 434;
+    format = "%s";
+    theText = "ENTER A VALID PID";
+    alignment = 0;
+    visibility = `Set3Pen2PID.ERROR`;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 300;
+    yReference = 434;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text Set4Pen1NotFoundMsg
+  {
+    x = 300;
+    y = 501;
+    format = "%s";
+    theText = "ENTER A VALID PID";
+    alignment = 0;
+    visibility = `Set4Pen1PID.ERROR`;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 300;
+    yReference = 501;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text Set4Pen2NotFoundMsg
+  {
+    x = 305;
+    y = 568;
+    format = "%s";
+    theText = "ENTER A VALID PID";
+    alignment = 0;
+    visibility = `Set4Pen2PID.ERROR`;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 305;
+    yReference = 568;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text Set5Pen1NotFoundMsg
+  {
+    x = 300;
+    y = 635;
+    format = "%s";
+    theText = "ENTER A VALID PID";
+    alignment = 0;
+    visibility = `Set5Pen1PID.ERROR`;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 300;
+    yReference = 635;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text Set5Pen2NotFoundMsg
+  {
+    x = 300;
+    y = 707;
+    format = "%s";
+    theText = "ENTER A VALID PID";
+    alignment = 0;
+    visibility = `Set5Pen2PID.ERROR`;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 300;
+    yReference = 707;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  instance DialogueSymbols.InputDialogueText Set1Pen1PID
+  {
+    x = 300;
+    y = 49;
+    visibility = 1;
+    xReference = 300;
+    yReference = 49;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "{printf(\"\");}";   //CORENET 20170601 by Philkyu Kwon
+    ExecuteUnSelect = "{printf(\"\");}";   //CORENET 20170601 by Philkyu Kwon
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxCharacters = 8;
+    ReturnAction = "{PicYGN_PenRecorderMenu.VerifyPID(1,1);}";
+    Scope = "";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewText = "   ";
+    TheOriginalText = "   ";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 125;
+  }
+
+  instance DialogueSymbols.InputDialogueNumber Set1Pen1MinValue
+  {
+    x = 550;
+    y = 49;
+    visibility = `VisibilityMinMaxValues(1,1)`;
+    xReference = 550;
+    yReference = 49;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Active = 1;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "{printf(\"\");}";   //CORENET 20170601 by Philkyu Kwon
+    ExecuteUnSelect = "{printf(\"\");}";   //CORENET 20170601 by Philkyu Kwon
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxDigits = 10;
+    ReturnAction = "{PicYGN_PenRecorderMenu.VerifyMinMaxValues(1,1);}";
+    Scope = "";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewNumber = 0;
+    TheNewText = "     0.0";
+    TheNumberFormat = `pSet1Pen1Rec->disfmt`;
+    TheOriginalNumber = 0;
+    TheOriginalText = "     0.0";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 125;
+  }
+
+  instance DialogueSymbols.InputDialogueNumber Set1Pen1MaxValue
+  {
+    x = 800;
+    y = 49;
+    visibility = `VisibilityMinMaxValues(1,1)`;
+    xReference = 800;
+    yReference = 49;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Active = 1;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "{printf(\"\");}";   //CORENET 20170601 by Philkyu Kwon
+    ExecuteUnSelect = "{printf(\"\");}";   //CORENET 20170601 by Philkyu Kwon
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxDigits = 10;
+    ReturnAction = "{PicYGN_PenRecorderMenu.VerifyMinMaxValues(1,1);}";
+    Scope = "";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewNumber = 0;
+    TheNewText = "     0.0";
+    TheNumberFormat = `pSet1Pen1Rec->disfmt`;
+    TheOriginalNumber = 0;
+    TheOriginalText = "     0.0";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 125;
+  }
+
+  rectangle
+  {
+    x = 280;
+    y = 29;
+    width = 725;
+    height = 685;
+    visibility = 1;
+    foregroundColour = `COLOR_LINE_BOUNDARY_6`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 0;
+    foregroundFillColour = `COLOR_PICTURE_BACKGROUND`;
+    backgroundFillColour = -1;
+    fillPattern = `NoPattern`;
+    xReference = 280;
+    yReference = 29;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  instance DialogueSymbols.InputDialogueText Set1Pen2PID
+  {
+    x = 300;
+    y = 114;
+    visibility = 1;
+    xReference = 300;
+    yReference = 114;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "{printf(\"\");}";   //CORENET 20170601 by Philkyu Kwon
+    ExecuteUnSelect = "{printf(\"\");}";   //CORENET 20170601 by Philkyu Kwon
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxCharacters = 8;
+    ReturnAction = "{PicYGN_PenRecorderMenu.VerifyPID(1,2);}";
+    Scope = "";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewText = "        ";
+    TheOriginalText = "        ";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 125;
+  }
+
+  instance DialogueSymbols.InputDialogueText Set2Pen1PID
+  {
+    x = 300;
+    y = 184;
+    visibility = 1;
+    xReference = 300;
+    yReference = 184;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "{printf(\"\");}";   //CORENET 20170601 by Philkyu Kwon
+    ExecuteUnSelect = "{printf(\"\");}";   //CORENET 20170601 by Philkyu Kwon
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxCharacters = 8;
+    ReturnAction = "{PicYGN_PenRecorderMenu.VerifyPID(2,1);}";
+    Scope = "";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewText = "        ";
+    TheOriginalText = "        ";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 125;
+  }
+
+  instance DialogueSymbols.InputDialogueText Set2Pen2PID
+  {
+    x = 300;
+    y = 247;
+    visibility = 1;
+    xReference = 300;
+    yReference = 247;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "{printf(\"\");}";   //CORENET 20170601 by Philkyu Kwon
+    ExecuteUnSelect = "{printf(\"\");}";   //CORENET 20170601 by Philkyu Kwon
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxCharacters = 8;
+    ReturnAction = "{PicYGN_PenRecorderMenu.VerifyPID(2,2);}";
+    Scope = "";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewText = "        ";
+    TheOriginalText = "        ";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 125;
+  }
+
+  instance DialogueSymbols.InputDialogueText Set3Pen1PID
+  {
+    x = 300;
+    y = 314;
+    visibility = 1;
+    xReference = 300;
+    yReference = 314;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "{printf(\"\");}";   //CORENET 20170601 by Philkyu Kwon
+    ExecuteUnSelect = "{printf(\"\");}";   //CORENET 20170601 by Philkyu Kwon
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxCharacters = 8;
+    ReturnAction = "{PicYGN_PenRecorderMenu.VerifyPID(3,1);}";
+    Scope = "";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewText = "        ";
+    TheOriginalText = "        ";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 125;
+  }
+
+  instance DialogueSymbols.InputDialogueText Set3Pen2PID
+  {
+    x = 300;
+    y = 384;
+    visibility = 1;
+    xReference = 300;
+    yReference = 384;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "{printf(\"\");}";   //CORENET 20170601 by Philkyu Kwon
+    ExecuteUnSelect = "{printf(\"\");}";   //CORENET 20170601 by Philkyu Kwon
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxCharacters = 8;
+    ReturnAction = "{PicYGN_PenRecorderMenu.VerifyPID(3,2);}";
+    Scope = "";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewText = "        ";
+    TheOriginalText = "        ";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 125;
+  }
+
+  instance DialogueSymbols.InputDialogueText Set4Pen1PID
+  {
+    x = 300;
+    y = 454;
+    visibility = 1;
+    xReference = 300;
+    yReference = 454;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "{printf(\"\");}";   //CORENET 20170601 by Philkyu Kwon
+    ExecuteUnSelect = "{printf(\"\");}";   //CORENET 20170601 by Philkyu Kwon
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxCharacters = 8;
+    ReturnAction = "{PicYGN_PenRecorderMenu.VerifyPID(4,1);}";
+    Scope = "";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewText = "        ";
+    TheOriginalText = "        ";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 125;
+  }
+
+  instance DialogueSymbols.InputDialogueText Set4Pen2PID
+  {
+    x = 300;
+    y = 518;
+    visibility = 1;
+    xReference = 300;
+    yReference = 518;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "{printf(\"\");}";   //CORENET 20170601 by Philkyu Kwon
+    ExecuteUnSelect = "{printf(\"\");}";   //CORENET 20170601 by Philkyu Kwon
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxCharacters = 8;
+    ReturnAction = "{PicYGN_PenRecorderMenu.VerifyPID(4,2);}";
+    Scope = "";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewText = "        ";
+    TheOriginalText = "        ";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 125;
+  }
+
+  instance DialogueSymbols.InputDialogueText Set5Pen1PID
+  {
+    x = 300;
+    y = 585;
+    visibility = 1;
+    xReference = 300;
+    yReference = 585;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "{printf(\"\");}";   //CORENET 20170601 by Philkyu Kwon
+    ExecuteUnSelect = "{printf(\"\");}";   //CORENET 20170601 by Philkyu Kwon
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxCharacters = 8;
+    ReturnAction = "{PicYGN_PenRecorderMenu.VerifyPID(5,1);}";
+    Scope = "";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewText = "        ";
+    TheOriginalText = "        ";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 125;
+  }
+
+  instance DialogueSymbols.InputDialogueText Set5Pen2PID
+  {
+    x = 300;
+    y = 654;
+    visibility = 1;
+    xReference = 300;
+    yReference = 654;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "{printf(\"\");}";   //CORENET 20170601 by Philkyu Kwon
+    ExecuteUnSelect = "{printf(\"\");}";   //CORENET 20170601 by Philkyu Kwon
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxCharacters = 8;
+    ReturnAction = "{PicYGN_PenRecorderMenu.VerifyPID(5,2);}";
+    Scope = "";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewText = "        ";
+    TheOriginalText = "        ";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 125;
+  }
+
+  instance DialogueSymbols.PushButton ProcessButton
+  {
+    x = 55;
+    y = 718;
+    visibility = 1;
+    xReference = 55;
+    yReference = 718;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ButtonState = 0;
+    DynamicLabel = "PROCESS";
+    ExecuteString = "{Process1();}";
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    Label = "PROCESS";
+    Scope = "PicYGN_PenRecorderMenu";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    StaticLabel = "PROCESS";
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextFontDynamic = `font2`;
+    TextFontStatic = `font4`;
+    TextX = 17;
+    TextXDynamic = 15;
+    TextXStatic = 17;
+    TextY = 22;
+    TextYDynamic = 21;
+    TextYStatic = 22;
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    Width = 125;
+  }
+
+  text ProcessErrorMsg
+  {
+    x = 195;
+    y = 743;
+    format = "%s";
+    theText = "FIX ALL ERRORS BEFORE PROCESSING";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 195;
+    yReference = 743;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  instance DialogueSymbols.InputDialogueNumber Set1Pen2MinValue
+  {
+    x = 550;
+    y = 114;
+    visibility = `VisibilityMinMaxValues(1,2)`;
+    xReference = 550;
+    yReference = 114;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Active = 1;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "{printf(\"\");}";   //CORENET 20170601 by Philkyu Kwon
+    ExecuteUnSelect = "{printf(\"\");}";   //CORENET 20170601 by Philkyu Kwon
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxDigits = 10;
+    ReturnAction = "{PicYGN_PenRecorderMenu.VerifyMinMaxValues(1,2);}";
+    Scope = "";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewNumber = 0;
+    TheNewText = "0.00    ";
+    TheNumberFormat = `pSet1Pen2Rec->disfmt`;
+    TheOriginalNumber = 0;
+    TheOriginalText = "0.00    ";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 125;
+  }
+
+  instance DialogueSymbols.InputDialogueNumber Set2Pen1MinValue
+  {
+    x = 550;
+    y = 184;
+    visibility = `VisibilityMinMaxValues(2,1)`;
+    xReference = 550;
+    yReference = 184;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Active = 1;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "{printf(\"\");}";   //CORENET 20170601 by Philkyu Kwon
+    ExecuteUnSelect = "{printf(\"\");}";   //CORENET 20170601 by Philkyu Kwon
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxDigits = 10;
+    ReturnAction = "{PicYGN_PenRecorderMenu.VerifyMinMaxValues(2,1);}";
+    Scope = "";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewNumber = 0;
+    TheNewText = "0.00    ";
+    TheNumberFormat = `pSet2Pen1Rec->disfmt`;
+    TheOriginalNumber = 0;
+    TheOriginalText = "0.00    ";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 125;
+  }
+
+  instance DialogueSymbols.InputDialogueNumber Set2Pen2MinValue
+  {
+    x = 550;
+    y = 247;
+    visibility = `VisibilityMinMaxValues(2,2)`;
+    xReference = 550;
+    yReference = 247;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Active = 1;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "{printf(\"\");}";   //CORENET 20170601 by Philkyu Kwon
+    ExecuteUnSelect = "{printf(\"\");}";   //CORENET 20170601 by Philkyu Kwon
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxDigits = 10;
+    ReturnAction = "{PicYGN_PenRecorderMenu.VerifyMinMaxValues(2,2);}";
+    Scope = "";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewNumber = 0;
+    TheNewText = "0.00    ";
+    TheNumberFormat = `pSet2Pen2Rec->disfmt`;
+    TheOriginalNumber = 0;
+    TheOriginalText = "0.00    ";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 125;
+  }
+
+  instance DialogueSymbols.InputDialogueNumber Set3Pen1MinValue
+  {
+    x = 550;
+    y = 314;
+    visibility = `VisibilityMinMaxValues(3,1)`;
+    xReference = 550;
+    yReference = 314;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Active = 1;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "{printf(\"\");}";   //CORENET 20170601 by Philkyu Kwon
+    ExecuteUnSelect = "{printf(\"\");}";   //CORENET 20170601 by Philkyu Kwon
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxDigits = 10;
+    ReturnAction = "{PicYGN_PenRecorderMenu.VerifyMinMaxValues(3,1);}";
+    Scope = "";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewNumber = 0;
+    TheNewText = "     0.0";
+    TheNumberFormat = `pSet3Pen1Rec->disfmt`;
+    TheOriginalNumber = 0;
+    TheOriginalText = "     0.0";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 125;
+  }
+
+  instance DialogueSymbols.InputDialogueNumber Set3Pen2MinValue
+  {
+    x = 550;
+    y = 384;
+    visibility = `VisibilityMinMaxValues(3,2)`;
+    xReference = 550;
+    yReference = 384;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Active = 1;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "{printf(\"\");}";   //CORENET 20170601 by Philkyu Kwon
+    ExecuteUnSelect = "{printf(\"\");}";   //CORENET 20170601 by Philkyu Kwon
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxDigits = 10;
+    ReturnAction = "{PicYGN_PenRecorderMenu.VerifyMinMaxValues(3,2);}";
+    Scope = "";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewNumber = 0;
+    TheNewText = "0.00    ";
+    TheNumberFormat = `pSet3Pen2Rec->disfmt`;
+    TheOriginalNumber = 0;
+    TheOriginalText = "0.00    ";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 125;
+  }
+
+  instance DialogueSymbols.InputDialogueNumber Set4Pen1MinValue
+  {
+    x = 550;
+    y = 454;
+    visibility = `VisibilityMinMaxValues(4,1)`;
+    xReference = 550;
+    yReference = 454;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Active = 1;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "{printf(\"\");}";   //CORENET 20170601 by Philkyu Kwon
+    ExecuteUnSelect = "{printf(\"\");}";   //CORENET 20170601 by Philkyu Kwon
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxDigits = 10;
+    ReturnAction = "{PicYGN_PenRecorderMenu.VerifyMinMaxValues(4,1);}";
+    Scope = "";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewNumber = 0;
+    TheNewText = "0.00    ";
+    TheNumberFormat = `pSet4Pen1Rec->disfmt`;
+    TheOriginalNumber = 0;
+    TheOriginalText = "0.00    ";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 125;
+  }
+
+  instance DialogueSymbols.InputDialogueNumber Set4Pen2MinValue
+  {
+    x = 550;
+    y = 519;
+    visibility = `VisibilityMinMaxValues(4,2)`;
+    xReference = 550;
+    yReference = 519;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Active = 1;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "{printf(\"\");}";   //CORENET 20170601 by Philkyu Kwon
+    ExecuteUnSelect = "{printf(\"\");}";   //CORENET 20170601 by Philkyu Kwon
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxDigits = 10;
+    ReturnAction = "{PicYGN_PenRecorderMenu.VerifyMinMaxValues(4,2);}";
+    Scope = "";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewNumber = 0;
+    TheNewText = "0.00    ";
+    TheNumberFormat = `pSet4Pen2Rec->disfmt`;
+    TheOriginalNumber = 0;
+    TheOriginalText = "0.00    ";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 125;
+  }
+
+  instance DialogueSymbols.InputDialogueNumber Set5Pen1MinValue
+  {
+    x = 550;
+    y = 584;
+    visibility = `VisibilityMinMaxValues(5,1)`;
+    xReference = 550;
+    yReference = 584;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Active = 1;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "{printf(\"\");}";   //CORENET 20170601 by Philkyu Kwon
+    ExecuteUnSelect = "{printf(\"\");}";   //CORENET 20170601 by Philkyu Kwon
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxDigits = 10;
+    ReturnAction = "{PicYGN_PenRecorderMenu.VerifyMinMaxValues(5,1);}";
+    Scope = "";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewNumber = 0;
+    TheNewText = "0.00    ";
+    TheNumberFormat = `pSet5Pen1Rec->disfmt`;
+    TheOriginalNumber = 0;
+    TheOriginalText = "0.00    ";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 125;
+  }
+
+  instance DialogueSymbols.InputDialogueNumber Set5Pen2MinValue
+  {
+    x = 550;
+    y = 654;
+    visibility = `VisibilityMinMaxValues(5,2)`;
+    xReference = 550;
+    yReference = 654;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Active = 1;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "{printf(\"\");}";   //CORENET 20170601 by Philkyu Kwon
+    ExecuteUnSelect = "{printf(\"\");}";   //CORENET 20170601 by Philkyu Kwon
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxDigits = 10;
+    ReturnAction = "{PicYGN_PenRecorderMenu.VerifyMinMaxValues(5,2);}";
+    Scope = "";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewNumber = 0;
+    TheNewText = "0.00    ";
+    TheNumberFormat = `pSet5Pen2Rec->disfmt`;
+    TheOriginalNumber = 0;
+    TheOriginalText = "0.00    ";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 125;
+  }
+
+  instance DialogueSymbols.InputDialogueNumber Set1Pen2MaxValue
+  {
+    x = 800;
+    y = 114;
+    visibility = `VisibilityMinMaxValues(1,2)`;
+    xReference = 800;
+    yReference = 114;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Active = 1;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "{printf(\"\");}";   //CORENET 20170601 by Philkyu Kwon
+    ExecuteUnSelect = "{printf(\"\");}";   //CORENET 20170601 by Philkyu Kwon
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxDigits = 10;
+    ReturnAction = "{PicYGN_PenRecorderMenu.VerifyMinMaxValues(1,2);}";
+    Scope = "";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewNumber = 0;
+    TheNewText = "0.00    ";
+    TheNumberFormat = `pSet1Pen2Rec->disfmt`;
+    TheOriginalNumber = 0;
+    TheOriginalText = "0.00    ";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 125;
+  }
+
+  instance DialogueSymbols.InputDialogueNumber Set2Pen1MaxValue
+  {
+    x = 800;
+    y = 184;
+    visibility = `VisibilityMinMaxValues(2,1)`;
+    xReference = 800;
+    yReference = 184;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Active = 1;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "{printf(\"\");}";   	//CORENET 20170601 by Philkyu Kwon
+    ExecuteUnSelect = "{printf(\"\");}";	//CORENET 20170601 by Philkyu Kwon
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxDigits = 10;
+    ReturnAction = "{PicYGN_PenRecorderMenu.VerifyMinMaxValues(2,1);}";
+    Scope = "";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewNumber = 0;
+    TheNewText = "0.00    ";
+    TheNumberFormat = `pSet2Pen1Rec->disfmt`;
+    TheOriginalNumber = 0;
+    TheOriginalText = "0.00    ";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 125;
+  }
+
+  instance DialogueSymbols.InputDialogueNumber Set2Pen2MaxValue
+  {
+    x = 800;
+    y = 247;
+    visibility = `VisibilityMinMaxValues(2,2)`;
+    xReference = 800;
+    yReference = 247;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Active = 1;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "{printf(\"\");}";   //CORENET 20170601 by Philkyu Kwon
+    ExecuteUnSelect = "{printf(\"\");}";   //CORENET 20170601 by Philkyu Kwon
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxDigits = 10;
+    ReturnAction = "{PicYGN_PenRecorderMenu.VerifyMinMaxValues(2,2);}";
+    Scope = "";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewNumber = 0;
+    TheNewText = "0.00    ";
+    TheNumberFormat = `pSet2Pen2Rec->disfmt`;
+    TheOriginalNumber = 0;
+    TheOriginalText = "0.00    ";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 125;
+  }
+
+  instance DialogueSymbols.InputDialogueNumber Set3Pen1MaxValue
+  {
+    x = 800;
+    y = 314;
+    visibility = `VisibilityMinMaxValues(3,1)`;
+    xReference = 800;
+    yReference = 314;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Active = 1;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "{printf(\"\");}";   //CORENET 20170601 by Philkyu Kwon
+    ExecuteUnSelect = "{printf(\"\");}";   //CORENET 20170601 by Philkyu Kwon
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxDigits = 10;
+    ReturnAction = "{PicYGN_PenRecorderMenu.VerifyMinMaxValues(3,1);}";
+    Scope = "";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewNumber = 0;
+    TheNewText = "     0.0";
+    TheNumberFormat = `pSet3Pen1Rec->disfmt`;
+    TheOriginalNumber = 0;
+    TheOriginalText = "     0.0";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 125;
+  }
+
+  instance DialogueSymbols.InputDialogueNumber Set3Pen2MaxValue
+  {
+    x = 800;
+    y = 384;
+    visibility = `VisibilityMinMaxValues(3,2)`;
+    xReference = 800;
+    yReference = 384;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Active = 1;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "{printf(\"\");}";   //CORENET 20170601 by Philkyu Kwon
+    ExecuteUnSelect = "{printf(\"\");}";   //CORENET 20170601 by Philkyu Kwon
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxDigits = 10;
+    ReturnAction = "{PicYGN_PenRecorderMenu.VerifyMinMaxValues(3,2);}";
+    Scope = "";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewNumber = 0;
+    TheNewText = "0.00    ";
+    TheNumberFormat = `pSet3Pen2Rec->disfmt`;
+    TheOriginalNumber = 0;
+    TheOriginalText = "0.00    ";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 125;
+  }
+
+  instance DialogueSymbols.InputDialogueNumber Set4Pen1MaxValue
+  {
+    x = 800;
+    y = 454;
+    visibility = `VisibilityMinMaxValues(4,1)`;
+    xReference = 800;
+    yReference = 454;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Active = 1;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "{printf(\"\");}";   //CORENET 20170601 by Philkyu Kwon
+    ExecuteUnSelect = "{printf(\"\");}";   //CORENET 20170601 by Philkyu Kwon
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxDigits = 10;
+    ReturnAction = "{PicYGN_PenRecorderMenu.VerifyMinMaxValues(4,1);}";
+    Scope = "";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewNumber = 0;
+    TheNewText = "0.00    ";
+    TheNumberFormat = `pSet4Pen1Rec->disfmt`;
+    TheOriginalNumber = 0;
+    TheOriginalText = "0.00    ";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 125;
+  }
+
+  instance DialogueSymbols.InputDialogueNumber Set4Pen2MaxValue
+  {
+    x = 800;
+    y = 519;
+    visibility = `VisibilityMinMaxValues(4,2)`;
+    xReference = 800;
+    yReference = 519;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Active = 1;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "{printf(\"\");}";   //CORENET 20170601 by Philkyu Kwon
+    ExecuteUnSelect = "{printf(\"\");}";   //CORENET 20170601 by Philkyu Kwon
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxDigits = 10;
+    ReturnAction = "{PicYGN_PenRecorderMenu.VerifyMinMaxValues(4,2);}";
+    Scope = "";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewNumber = 0;
+    TheNewText = "0.00    ";
+    TheNumberFormat = `pSet4Pen2Rec->disfmt`;
+    TheOriginalNumber = 0;
+    TheOriginalText = "0.00    ";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 125;
+  }
+
+  instance DialogueSymbols.InputDialogueNumber Set5Pen1MaxValue
+  {
+    x = 800;
+    y = 584;
+    visibility = `VisibilityMinMaxValues(5,1)`;
+    xReference = 800;
+    yReference = 584;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Active = 1;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "{printf(\"\");}";   //CORENET 20170601 by Philkyu Kwon
+    ExecuteUnSelect = "{printf(\"\");}";   //CORENET 20170601 by Philkyu Kwon
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxDigits = 10;
+    ReturnAction = "{PicYGN_PenRecorderMenu.VerifyMinMaxValues(5,1);}";
+    Scope = "";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewNumber = 0;
+    TheNewText = "0.00    ";
+    TheNumberFormat = `pSet5Pen1Rec->disfmt`;
+    TheOriginalNumber = 0;
+    TheOriginalText = "0.00    ";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 125;
+  }
+
+  instance DialogueSymbols.InputDialogueNumber Set5Pen2MaxValue
+  {
+    x = 800;
+    y = 654;
+    visibility = `VisibilityMinMaxValues(5,2)`;
+    xReference = 800;
+    yReference = 654;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Active = 1;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "{printf(\"\");}";   //CORENET 20170601 by Philkyu Kwon
+    ExecuteUnSelect = "{printf(\"\");}";   //CORENET 20170601 by Philkyu Kwon
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxDigits = 10;
+    ReturnAction = "{PicYGN_PenRecorderMenu.VerifyMinMaxValues(5,2);}";
+    Scope = "";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewNumber = 0;
+    TheNewText = "0.00    ";
+    TheNumberFormat = `pSet5Pen2Rec->disfmt`;
+    TheOriginalNumber = 0;
+    TheOriginalText = "0.00    ";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 125;
+  }
+
+  text Set1Pen1BadMinMsg
+  {
+    x = 550;
+    y = 99;
+    format = "%s";
+    theText = "INVALID";
+    alignment = 0;
+    visibility = `Set1Pen1MinValue.ERROR`;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 550;
+    yReference = 99;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text Set1Pen1BadMaxMsg
+  {
+    x = 800;
+    y = 99;
+    format = "%s";
+    theText = "INVALID";
+    alignment = 0;
+    visibility = `Set1Pen1MaxValue.ERROR`;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 800;
+    yReference = 99;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text Set1Pen2BadMinMsg
+  {
+    x = 550;
+    y = 164;
+    format = "%s";
+    theText = "INVALID";
+    alignment = 0;
+    visibility = `Set1Pen2MinValue.ERROR`;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 550;
+    yReference = 164;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text Set1Pen2BadMaxMsg
+  {
+    x = 800;
+    y = 166;
+    format = "%s";
+    theText = "INVALID";
+    alignment = 0;
+    visibility = `Set1Pen2MaxValue.ERROR`;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 800;
+    yReference = 166;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text Set2Pen1BadMinMsg
+  {
+    x = 550;
+    y = 234;
+    format = "%s";
+    theText = "INVALID";
+    alignment = 0;
+    visibility = `Set2Pen1MinValue.ERROR`;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 550;
+    yReference = 234;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text Set2Pen2BadMinMsg
+  {
+    x = 550;
+    y = 294;
+    format = "%s";
+    theText = "INVALID";
+    alignment = 0;
+    visibility = `Set2Pen2MinValue.ERROR`;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 550;
+    yReference = 294;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text Set3Pen1BadMinMsg
+  {
+    x = 550;
+    y = 364;
+    format = "%s";
+    theText = "INVALID";
+    alignment = 0;
+    visibility = `Set3Pen1MinValue.ERROR`;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 550;
+    yReference = 364;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text Set3Pen2BadMinMsg
+  {
+    x = 550;
+    y = 434;
+    format = "%s";
+    theText = "INVALID";
+    alignment = 0;
+    visibility = `Set3Pen2MinValue.ERROR`;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 550;
+    yReference = 434;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text Set4Pen1BadMinMsg
+  {
+    x = 550;
+    y = 504;
+    format = "%s";
+    theText = "INVALID";
+    alignment = 0;
+    visibility = `Set4Pen1MinValue.ERROR`;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 550;
+    yReference = 504;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text Set4Pen2BadMinMsg
+  {
+    x = 550;
+    y = 569;
+    format = "%s";
+    theText = "INVALID";
+    alignment = 0;
+    visibility = `Set4Pen2MinValue.ERROR`;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 550;
+    yReference = 569;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text Set5Pen1BadMinMsg
+  {
+    x = 550;
+    y = 634;
+    format = "%s";
+    theText = "INVALID";
+    alignment = 0;
+    visibility = `Set5Pen1MinValue.ERROR`;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 550;
+    yReference = 634;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text Set5Pen2BadMinMsg
+  {
+    x = 550;
+    y = 704;
+    format = "%s";
+    theText = "INVALID";
+    alignment = 0;
+    visibility = `Set5Pen2MinValue.ERROR`;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 550;
+    yReference = 704;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text Set2Pen1BadMaxMsg
+  {
+    x = 800;
+    y = 234;
+    format = "%s";
+    theText = "INVALID";
+    alignment = 0;
+    visibility = `Set2Pen1MaxValue.ERROR`;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 800;
+    yReference = 234;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text Set2Pen2BadMaxMsg
+  {
+    x = 800;
+    y = 296;
+    format = "%s";
+    theText = "INVALID";
+    alignment = 0;
+    visibility = `Set2Pen2MaxValue.ERROR`;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 800;
+    yReference = 296;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text Set3Pen1BadMaxMsg
+  {
+    x = 800;
+    y = 364;
+    format = "%s";
+    theText = "INVALID";
+    alignment = 0;
+    visibility = `Set3Pen1MaxValue.ERROR`;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 800;
+    yReference = 364;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text Set3Pen2BadMaxMsg
+  {
+    x = 800;
+    y = 435;
+    format = "%s";
+    theText = "INVALID";
+    alignment = 0;
+    visibility = `Set3Pen2MaxValue.ERROR`;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 800;
+    yReference = 435;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text Set4Pen1BadMaxMsg
+  {
+    x = 800;
+    y = 504;
+    format = "%s";
+    theText = "INVALID";
+    alignment = 0;
+    visibility = `Set4Pen1MaxValue.ERROR`;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 800;
+    yReference = 504;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text Set4Pen2BadMaxMsg
+  {
+    x = 800;
+    y = 568;
+    format = "%s";
+    theText = "INVALID";
+    alignment = 0;
+    visibility = `Set4Pen2MaxValue.ERROR`;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 800;
+    yReference = 568;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text Set5Pen1BadMaxMsg
+  {
+    x = 800;
+    y = 634;
+    format = "%s";
+    theText = "INVALID";
+    alignment = 0;
+    visibility = `Set5Pen1MaxValue.ERROR`;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 800;
+    yReference = 634;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text Set5Pen2BadMaxMsg
+  {
+    x = 800;
+    y = 703;
+    format = "%s";
+    theText = "INVALID";
+    alignment = 0;
+    visibility = `Set5Pen2MaxValue.ERROR`;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 800;
+    yReference = 703;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  instance DialogueSymbols.PushButton ResetButton
+  {
+    x = 595;
+    y = 718;
+    visibility = 1;
+    xReference = 595;
+    yReference = 718;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ButtonState = 0;
+    DynamicLabel = "RESET";
+    ExecuteString = "{Reset();}";
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    Label = "RESET";
+    Scope = "PicYGN_PenRecorderMenu";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    StaticLabel = "RESET";
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextFontDynamic = `font2`;
+    TextFontStatic = `font4`;
+    TextX = 17;
+    TextXDynamic = 15;
+    TextXStatic = 17;
+    TextY = 22;
+    TextYDynamic = 21;
+    TextYStatic = 22;
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    Width = 100;
+  }
+
+  text RequestPenDataMsg
+  {
+    x = 745;
+    y = 738;
+    format = "%s";
+    theText = "PROCESSING";
+    alignment = 0;
+    visibility = 0;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 745;
+    yReference = 738;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+
+    dialogue
+    {
+      event = `buttonPressed(Left)`;
+      action = `{
+        if (0 == visibility) visibility = 1;
+        else                 visibility = 0;
+      }`;
+    }
+  }
+
+  text MasterProcMsg
+  {
+    x = 195;
+    y = 775;
+    format = "%s";
+    theText = "PROCESSING ALLOWED FROM MASTER ONLY";
+    alignment = 0;
+    //visibility = `Interface->System.slaveUpdating == 1 ? 1 : 0`;	//CORENET 20170620
+    visibility = 0;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 195;
+    yReference = 775;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 1051;
+    y = 69;
+    format = "%s";
+    theText = "#1";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 1051;
+    yReference = 69;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 1051;
+    y = 134;
+    format = "%s";
+    theText = "#2";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 1051;
+    yReference = 128;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 1051;
+    y = 204;
+    format = "%s";
+    theText = "#3";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 1051;
+    yReference = 200;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 1051;
+    y = 269;
+    format = "%s";
+    theText = "#4";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 1051;
+    yReference = 267;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 1051;
+    y = 404;
+    format = "%s";
+    theText = "#6";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 1051;
+    yReference = 409;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 1051;
+    y = 334;
+    format = "%s";
+    theText = "#5";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 1051;
+    yReference = 340;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 1051;
+    y = 474;
+    format = "%s";
+    theText = "#7";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 1051;
+    yReference = 478;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 1051;
+    y = 674;
+    format = "%s";
+    theText = "#10";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 1051;
+    yReference = 676;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 1051;
+    y = 604;
+    format = "%s";
+    theText = "#9";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 1051;
+    yReference = 605;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 1051;
+    y = 539;
+    format = "%s";
+    theText = "#8";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 1051;
+    yReference = 537;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+}

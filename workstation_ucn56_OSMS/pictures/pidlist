@@ -1,0 +1,81 @@
+ 
+SAVEDIR=`pwd`
+ 
+# Default is to run in current directory which should be the "pictures" directory
+# in your local account (/home/uid/ygn34/workstation/pictures), or the latest revision
+# account (/home/ygn34/workstation/pictures).  For any other situation the following
+# environment varibles must be changed.  TDOCDIR is the location of the source pictures
+# to be searched for point ids.  PDATCDIR is the directory where theDatabase.pdat will
+# be created.
+ 
+TDOCDIR=$SAVEDIR/Tdoc
+PDATDIR=$SAVEDIR/pdat
+ 
+# The following variables will not normally need to be changed unless a local copy of
+# the IO point database is being used for generation of theDatabase.pdat.  In this case
+# change HOME to be your home directory and DBDIR to be the location of the database
+# sections within your account.
+ 
+export HOME=/home/dev/workstation_ucn56EOF_UDP
+DBDIR=$HOME/database/pmsdb
+
+# Search Tdocs for pids
+unalias cd
+rm $SAVEDIR/*\.temp
+cd $TDOCDIR
+echo "searching Tdoc files for pids"
+echo
+for file in *Tdoc
+do
+echo "searching $file"
+grep "&" $file | grep -Ev -e"&=" -e"&&" -e\" | awk -F\& '{print $2}' | awk -F\` '{print $1}' | awk '$1 == toupper($1) {print $1}' | grep -Eiv -e"^errorpid" -e"^testpid" -e"^blank" -e"^$" >> $SAVEDIR/srch1.temp
+done
+echo
+cd $SAVEDIR
+sort -u $SAVEDIR/srch1.temp >$SAVEDIR/srch2.temp
+
+# Create a complete copy of the database
+echo "Creating IO Point DB"
+cd $DBDIR
+#/usr/local/bin/co_dir
+cat $DBDIR/apdb* | sort -u >$SAVEDIR/apdbap.temp
+#/bin/cat $DBDIR/* | /bin/sort -u >$SAVEDIR/apdbap.temp
+cd $SAVEDIR
+
+# Get pids from database
+echo "Getting pids from database"
+awk 'BEGIN {FS = " "} {printf("%8.8s\n",substr($1,1,8))}' $SAVEDIR/apdbap.temp | awk '{print $1}' >$SAVEDIR/apdbpids.temp
+
+# Create a combined list of all pids
+echo "Creating undefined pids list"
+
+# Create a list of pids with are in the pictures but not the database
+sort -u $SAVEDIR/apdbpids.temp $SAVEDIR/srch2.temp >$SAVEDIR/undef1.temp
+#diff -e $SAVEDIR/apdbpids.temp $SAVEDIR/undef1.temp | grep -Ev -e"^\.$" -e"a$" >$SAVEDIR/undef2.temp
+diff -e $SAVEDIR/apdbpids.temp $SAVEDIR/undef1.temp | grep -Ev -e"^\.$" -e"a$" | grep -Ev -e"^\.$" -e"c$" >$SAVEDIR/undef2.temp
+pidcount=`wc -l $SAVEDIR/undef2.temp | awk '{print $1}'`
+echo "Found $pidcount pids which are not in the database"
+echo
+
+# Generate list of which pictures contain these pids
+if [ $pidcount -gt 0 ]
+then
+echo "Locating undefined pids in Tdocs"
+echo
+cd $TDOCDIR
+for pid in `cat $SAVEDIR/undef2.temp`
+do
+echo "Locating $pid"
+grep -in $pid *Tdoc >>$SAVEDIR/undef3.temp
+done
+sort -u $SAVEDIR/undef3.temp >$SAVEDIR/undefpids.out
+echo
+cd $SAVEDIR
+fi
+
+# Create a new theDatabase.pdat for Picasso
+echo "Generating theDatabase.pdat"
+awk 'BEGIN {FS = " "} {printf("RECORD %-8s;          // %32.32s\n",substr($1,1,8),substr($1,10,32))}' $SAVEDIR/apdbap.temp >$SAVEDIR/TheDB.temp
+awk 'BEGIN {FS = " "} {printf("RECORD %-8s;\n",substr($1,1,8))}' $SAVEDIR/undef2.temp >>$SAVEDIR/TheDB.temp
+sort -u $SAVEDIR/TheDB.temp >$PDATDIR/theDatabase.pdat
+#/bin/rm $SAVEDIR/*\.temp

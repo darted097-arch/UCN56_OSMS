@@ -1,0 +1,86 @@
+// **************************************************************************************
+// *											*
+// *	      Copyright (C) 1997, KOPEC(N), All rights reserved.		        *
+// *          Proprietary information, KOPEC(N)          	                        *
+// *											*
+// **************************************************************************************
+//
+// ***** HIGH LEVEL DESCRIPTION **********************************************
+//
+// This pdat file contains the variables used by the COLSS displays.
+//
+// **** REVISION HISTORY *****************************************************
+//
+// $Header: /PMSArchive/ygn56/workstation/pictures/pdat/colssParameters.pdat 1.4 1999/04/27 14:31:12 leo Exp $
+// $Log: colssParameters.pdat,v $
+// Revision 1.4  1999/04/27 14:31:12  leo
+// Author: leo@y6maint1 (Leo Olbrych)
+// Kopec FAT Support April 1999.  Change COLSS mode constants to 0, 1, 2, 3.
+// These are not opcodes and do no need to be unique vis-a-vis the other opcodes.
+//
+// Revision 1.3  1999/04/14 18:28:45  leo
+// Author: leo@y6maint1 (Leo Olbrych)
+// Change COLSS opcodes so they would not conflict with system and database opcodes.
+//
+// Revision 1.2  1998/02/11 15:45:39  kn1
+// Author: kn1@y6maint1.usnus.abb.com (Kopec NSSS 1)
+// Koped NSSS Phase 2 Status 1
+//
+// Revision 1.1  1997/05/13 15:24:44  kn1
+// Author: kn1@y6maint1.usnus.abb.com (Kopec NSSS 1)
+// Initial revision
+//
+//
+//
+// ***************************************************************************
+// System Include Files: NONE
+//
+//
+// User Defined Include Files: NONE
+//
+//
+// External Variables: NONE
+//
+//
+// Local Constant Definitions:
+//
+// Function Prototypes: NONE
+//
+//
+//
+// ***************************************************************************     		
+int32	  REQUEST_COLSS_CURRENT_MODE		 =   0x0782  ;      	      
+int32	  CONFIRM_COLSS_CURRENT_MODE		 =   0x0783  ;      	      
+int32	  REQUEST_COLSS_MODE_CHANGE		 =   0x0784  ;      		      
+int32	  CONFIRM_COLSS_MODE_CHANGE		 =   0x0785  ;      		      
+int32	  REQUEST_COLSS_INITIALIZATION		 =   0x0786  ;      		      
+int32	  CONFIRM_COLSS_INITIALIZATION		 =   0x0787  ;      		      
+int32	  REQUEST_COLSS_REPORTS			 =   0x0788  ;      		      
+int32	  CONFIRM_COLSS_REPORTS			 =   0x0789  ;      		      
+int32	  REQUEST_COLSS_SURV_TEST		 =   0x078A  ;      		      
+int32	  CONFIRM_COLSS_SURV_TEST		 =   0x078B  ;      		            		      
+int32	  REQUEST_COLSS_POWER_DP		 =   0x078C  ;      		      
+int32	  CONFIRM_COLSS_POWER_DP		 =   0x078D  ;      		      
+int32	  REQUEST_COLSS_CPU_COMPARISON		 =   0x078E  ;       		      
+int32	  CONFIRM_COLSS_CPU_COMPARISON		 =   0x078F  ;      	      
+int32	  REQUEST_COLSS_FAILED_SENSOR 		 =   0x0790  ;      	      
+int32	  CONFIRM_COLSS_FAILED_SENSOR 		 =   0x0791  ;      	      
+int32	  REQUEST_COLSS_DETAILED_PRINT		 =   0x0792  ;       	      
+int32	  CONFIRM_COLSS_DETAILED_PRINT  	 =   0x0793  ;
+int32	  REQUEST_COLSS_TEST_CASE		 =   0x0794  ;       	      
+int32	  CONFIRM_COLSS_TEST_CASE		 =   0x0795  ;    
+int32	  REQUEST_COLSS_DISP_CHANGE		 =   0x0796  ;       	      
+int32	  CONFIRM_COLSS_DISP_CHANGE		 =   0x0797  ;    
+int32	  REQUEST_COLSS_CPUC_PRINT		 =   0x0798  ;       	      
+int32	  CONFIRM_COLSS_CPUC_PRINT		 =   0x0799  ; 
+//
+// ***************************************************************************
+//	
+//  The following are not opcodes and therefore do not need to be unique
+//vis-a-vis the opcodes.
+int32   COLSS_INIT_MODE				=       0x0000;
+int32 	COLSS_SCHEDULED_MODE			=	0x0001;
+int32 	COLSS_UNSCHEDULED_MODE			=	0x0002;
+int32 	COLSS_TEST_MODE				=	0x0003;
+
+// >>END>>>

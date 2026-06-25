@@ -1,0 +1,2921 @@
+/*
+ * ProcSee CONFIGURATION LANGUAGE FILE
+ *
+ *
+ * User : ucn56
+ * Host : y6cr02
+ * Date : 2017-05-25
+ * Time : 14:52:37
+ *
+ * ProcSee version : ProcSee 3.10.1 (June 2016)
+ * File version    : 1.26
+ *
+ *
+ */
+
+
+picture PicUCN_GroupDisplaySetup
+{
+  worldX = 0;
+  worldY = 0;
+  worldWidth = 1280;
+  worldHeight = 824;
+  oneToOne = 1;
+  backgroundColour = 0;
+  updateMode = 2;
+  resizeMode = 0;
+  xSnap = 5;
+  ySnap = 5;
+  radiusSnap = 0;
+  angleSnap = 0;
+  crosshairStyle = 1;
+  crosshairLength = 0;
+  crosshairFollowSnap = `isInEditMode()`;
+  crosshairVisibility = `isInEditMode()`;
+  xReference = 500;
+  yReference = 500;
+  xScaleFactor = 1;
+  yScaleFactor = 1;
+  rotationAngle = 0;
+
+  int GROUPNUMBER = 1;
+
+  int Option = 2;
+
+  char PictureNumber[50] = "831";
+
+  char PictureTitle[50] = "                       ";	//CORENET 201705 by Philkyu Kwon
+
+  int PrintDuration = 1;
+
+  int PrintNo = 60;
+
+  int PrintRate = 1;
+
+  int Priority = 1;
+
+  char TempTitle[50] = "";
+
+  function `void escape()
+  {
+  //   int k;
+  
+     procMsg.visibility = 1 ;
+  
+     if(Priority)
+        FlagReset(Interface->GroupDisplay.data.group.groupNumber) ;
+  
+  //   k = Interface->GroupDisplay.data.group.groupNumber;
+  //   Interface->FlagHandleMessage.data.requestOption = k;
+  //   Interface->FlagHandleMessage.data.flipflop1 = 0; //for flag reset
+  //   execute("{sendMessageToHost(GROUP_RESET_REQUEST);}");
+  
+  //   DelayedDisplayPicture("PicUCN_Mainmenu.ppic");
+  
+  }`
+
+  function `void escapeToMenu()
+  {
+  //   int k;
+  
+     procMsg.visibility = 1 ;
+  
+     if(Priority)
+        FlagReset(Interface->GroupDisplay.data.group.groupNumber) ;
+  
+  // Reset Flag for using...
+  //   k = Interface->GroupDisplay.data.group.groupNumber;
+  //   Interface->FlagHandleMessage.data.requestOption = k;
+  //   Interface->FlagHandleMessage.data.flipflop1 = 0; //for flag reset
+  //   execute("{sendMessageToHost(GROUP_RESET_REQUEST);}");
+  
+     DelayedDisplayPicture("PicUCN_GroupDisplayMenu.ppic");
+  }`
+
+  function `void FlagReset(int Sel)
+  {
+  //   Set Flag for Using...
+  //   int k ;
+  
+  //   k = Interface->GroupDisplay.data.group.groupNumber;
+  
+     Interface->FlagHandleMessage.data.requestOption = Sel ;
+     Interface->FlagHandleMessage.data.flipflop1 = 0;   //for flag set
+     execute("{sendMessageToHost(GROUP_RESET_REQUEST);}");
+  
+     printf("========================\\nGRDISP %d Flag = OFF\\n========================",Sel) ;
+  }`
+
+  function `void Initialize()
+  {
+     int i,k;
+  
+     CFMLevel = 0;
+     Current_Page = 831;
+  
+     DisplayAdvisoryMessage(" ");
+     DisplayAdvisoryMessage1(" ");
+     DisplayAdvisoryMessage2(" ");
+     DisplayAdvisoryMessage3(" ");
+  
+     Priority = !Interface->FlagHandleMessage.data.flipflop2 ;
+  
+     k = Interface->GroupDisplay.data.group.groupNumber;
+  
+  // ************* CORENET 201705 by Philkyu Kwon *******************************
+     sprintf(TempTitle,"SETUP GROUP DISPLAY %d",k);
+     strcpy(::UCN5and6.PicUCN_header.PictureTitle.theText, TempTitle);
+  
+     //execute("{strcpy(PictureTitle,\\"SETUP GROUP DISPLAY %d\\");}",k);
+  // ******************************************************************************
+  
+  // printf("Group Number = %d", k);
+  
+  // Error messages are initialized.
+  //   execute("{war1.visibility = 0;}");
+     PERROR.visibility  = 0 ;
+     procMsg.visibility = 0 ;
+  
+     for (i=1;i<=24;i++)
+     {
+       execute("{pid%d.ERROR = 0;}",i);
+  //   execute("{errpid%d.visibility = 0;}",i);
+     }
+  
+  // Initialize Title, PIDs, ...
+   strcpy(GR_NAME.TheNewText,Interface->GroupDisplay.data.group.Title);
+   strcpy(GR_NAME.TheOriginalText,Interface->GroupDisplay.data.group.Title);
+  
+  //>>>>>>>>>>>>>>>>>>>>. CORENET
+  printf("--[%s]--", GR_NAME.TheNewText);
+  printf("--[%s]--", GR_NAME.TheOriginalText);
+  GR_NAME.SelectButton();
+  GR_NAME.UnSelectButton();
+  //<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+  
+   for (i=1;i<=24;i++)
+   {
+     execute("{strcpy(pid%d.TheNewText,Interface->GroupDisplay.data.group.Point%d);}",i,i);
+     execute("{strcpy(pid%d.TheOriginalText,Interface->GroupDisplay.data.group.Point%d);}",i,i);
+   }
+  
+   PrintNo   = Interface->GroupDisplay.data.group.timesToPrint;
+  
+   PrintRate = Interface->GroupDisplay.data.group.printRate;
+   PrintRate_btn.TheNewNumber = PrintRate;
+   PrintRate_btn.TheOriginalNumber = PrintRate;
+   //execute("{strcpy(PrintRate.TheNewText, PrintRate);}");
+   //execute("{strcpy(PrintRate.TheOriginalText, PrintRate);}");
+  
+   //PrintDuration = PrintNo * PrintRate / 60;
+   PrintDuration = 1;				//CORENET 20170620 by Philkyu Kwon
+   PrintDuration_btn.TheNewNumber = PrintDuration;
+   PrintDuration_btn.TheOriginalNumber = PrintDuration;
+  
+   //execute("{strcpy(PrintDuration.TheNewText, PrintDuration);}");
+   //execute("{strcpy(PrintDuration.TheOriginalText, PrintDuration);}");
+  
+   update();
+  }`
+
+// ***CORENET 20170601 by Philkyu Kwon ************
+  function `void DummyProcess()
+  {
+      //printf("Button Select OR Button Unselected");
+  }`
+// ***************************************************
+
+  function `void Process1()
+  {
+    int i,k,m ;
+    int pError ;
+  //CORENET 20170421 by Philkyu Kwon
+    if(PrintDuration == 0){
+    	PrintDuration_btn.ERROR = 1;
+   	PrintDuration_btn.TheNewNumber = PrintDuration;
+   	PrintDuration_btn.TheOriginalNumber = PrintDuration;
+      	strcpy(PrintDuration_btn.TheOriginalText , "0");
+      	strcpy(PrintDuration_btn.TheNewText , "0");
+  }
+  
+             // the display should already be loaded in the Initialize()
+             // load ("PicUCN_GroupDisplayView.ppic");
+             // Set the graph number and go
+             // execute("{::UCN5and6.PicUCN_GroupDisplaySetup.GroupNumber = %d;}",Option);
+             // displayPicture("Main","PicUCN_GroupDisplaySetup.ppic");
+  
+     pError = pid1.ERROR || pid2.ERROR || pid3.ERROR || pid4.ERROR || pid5.ERROR || pid6.ERROR ||
+        pid7.ERROR || pid8.ERROR || pid9.ERROR || pid10.ERROR || pid11.ERROR || pid12.ERROR ||
+        pid13.ERROR || pid14.ERROR || pid15.ERROR || pid16.ERROR || pid17.ERROR || pid18.ERROR ||
+        pid19.ERROR || pid20.ERROR || pid21.ERROR || pid22.ERROR || pid23.ERROR || pid24.ERROR ;
+  
+     pError |= PrintRate_btn.ERROR ;
+     pError |= PrintDuration_btn.ERROR ;
+  
+     if(pError)
+        PERROR.visibility = 1;
+     else
+     {
+        procMsg.visibility = 1 ;
+        PERROR.visibility = 0;
+  
+        k = Interface->GroupDisplay.data.group.groupNumber;
+        Interface->GroupMember.data.groupNumber = k;
+  
+  //      initialize first, copy later
+        strcpy(Interface->GroupMember.data.Title,"                     ");
+        strcpy(Interface->GroupMember.data.Title,GR_NAME.TheOriginalText);
+  
+  //      Interface->GroupMember.data.displayRate = DisplayRate;	//CORENET 0704
+  //      Interface->GroupMember.data.displayRate = 1;
+  
+  //    Interface->GroupMember.data.printRate    = PR_RATE.TheNewNumber;
+        Interface->GroupMember.data.printRate    = PrintRate;
+        Interface->GroupMember.data.displayRate = PrintRate;	//CORENET 0704
+  
+        Interface->GroupMember.data.timesToPrint = PrintNo;
+        printf("PROCESS BTN Clicked After PrintNo = %d", Interface->GroupMember.data.timesToPrint);	//CORENET 2017
+  
+  //      GroupDisplay_CurrentTime = atoi(DIS_RATE.TheNewText);
+  //    GroupDisplay_CurrentTime = DisplayRate;
+  
+  //    GR_DisplayRate = DisplayRate;
+  //      GR_DisplayRate = atoi(DIS_RATE.TheNewText);
+  
+  //      printf("group no. : %d\\n",Interface->GroupMember.data.groupNumber);
+  //      printf("display rate : %d\\n",Interface->GroupMember.data.displayRate);
+  //      printf("print rate : %d\\n",Interface->GroupMember.data.printRate);
+  //      printf("times to print : %d\\n",Interface->GroupMember.data.timesToPrint);
+  
+                     //initialize first, copy later
+        for(i=1;i<=24;i++)
+        {
+           execute("{strcpy(Interface->GroupMember.data.Point%d,\\"          *\\");}",i);
+           execute("{strcpy(Interface->GroupMember.data.Point%d,pid%d.TheOriginalText);}",i,i);
+  //         execute("{manageTempShopList(TEMP_SHOP_INIT_ADD,pid%d.TheOriginalText);}",i);
+        }
+  
+  //      Interface->GenericRequestMessage.data.requestOption = Option;
+  
+        execute("{sendMessageToHost(GROUP_UPDATE);}");
+  //      execute("{::UCN5and6.PicUCN_GroupDisplayView.groupNumber = %d;}",k);
+  //      displayPicture("Main","PicUCN_GroupDisplayView.ppic");
+  
+        DelayedDisplayPicture("PicUCN_GroupDisplayMenu.ppic");
+     }
+  }`
+
+  function `void ResetPrintDuration()
+  {
+     PrintDuration = PrintDuration_btn.TheNewNumber;
+  
+     //if ((PrintDuration<1) || (PrintDuration>14400))	//CORENET 201705 by Philkyu Kwon
+     if ((PrintDuration<1) || (PrintDuration>1440))
+     {
+        PrintDuration_btn.ERROR = 1;
+     }
+     else
+     {
+        PrintDuration_btn.ERROR = 0;
+        if (PrintRate == 0)
+           PrintNo = 0;
+        else
+           PrintNo = PrintDuration * 60 / PrintRate;
+     }
+  
+     update();
+  }`
+
+  function `void ResetPrintRate()
+  {
+     PrintRate = PrintRate_btn.TheNewNumber;
+  
+     if ((PrintRate<0) || (PrintRate>600))
+     {
+        PrintRate_btn.ERROR = 1;
+     }
+     else
+     {
+        PrintRate_btn.ERROR = 0;
+  
+        if (PrintRate == 0)
+           PrintNo = 0;
+        else
+           PrintNo = PrintDuration * 60 / PrintRate;
+     }
+  
+     update();
+  }`
+
+  function `void SelectOption (int theOption)
+  {
+  //
+  // This routine will set the proper resolution for the data source
+  //
+  // Unselect them all
+  /*   Group1Button.UnSelect();
+     Group2Button.UnSelect();
+     Group3Button.UnSelect();
+     Group4Button.UnSelect();
+     Group5Button.UnSelect();
+     Group6Button.UnSelect();
+     Group7Button.UnSelect();
+     Group8Button.UnSelect();
+     Group9Button.UnSelect();
+     Group10Button.UnSelect();
+     Group11Button.UnSelect();
+     Group12Button.UnSelect();
+     Group13Button.UnSelect();
+     Group14Button.UnSelect();
+     Group15Button.UnSelect();
+     Group16Button.UnSelect();
+     Group17Button.UnSelect();
+     Group18Button.UnSelect();
+     Group19Button.UnSelect();
+     Group20Button.UnSelect();    */
+  
+  //
+  // Expecting to receive a 0,1,2,3, or 4.  Based upon input,
+  // Select/UnSelect the proper button.
+  //   if (theOption > 0)
+  //   {
+  //      Interface->System.sentData = 1;
+  //      Interface->System.receivedData = 0;
+  //      execute("{Group%dButton.Select();}",theOption);
+  //      Option = theOption;
+  //      execute("{sendMessageToHost(GET_GROUPDISPLAY%d_DATA);}",Option);
+  //   }
+  //   else
+  //      printf("Error in SelectOption");
+  //   update();
+  }`
+
+  function `void SendTempShop(int i, char *PidName)
+  {
+  // printf("PID NO == %d",i);
+  // printf("PidName == %s",PidName);
+  // execute("{manageTempShopList(TEMP_SHOP_LIST_ADD,pid%d.TheOriginalText);}",i);
+  // execute("{manageTempShopList(TEMP_SHOP_LIST_SEND,pid%d.TheOriginalText);}",i);
+  }`
+
+  text
+  {
+    x = 236;
+    y = 158;
+    format = "%s";
+    theText = "NO.";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 236;
+    yReference = 158;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 301;
+    y = 158;
+    format = "%s";
+    theText = "POINT ID";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 301;
+    yReference = 158;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 423;
+    y = 158;
+    format = "%s";
+    theText = "NO.";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 423;
+    yReference = 158;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 487;
+    y = 158;
+    format = "%s";
+    theText = "POINT ID";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 487;
+    yReference = 158;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 609;
+    y = 158;
+    format = "%s";
+    theText = "NO.";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 609;
+    yReference = 158;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 674;
+    y = 158;
+    format = "%s";
+    theText = "POINT ID";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 674;
+    yReference = 158;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 795;
+    y = 158;
+    format = "%s";
+    theText = "NO.";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 795;
+    yReference = 158;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 859;
+    y = 158;
+    format = "%s";
+    theText = "POINT ID";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 859;
+    yReference = 158;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 256;
+    y = 194;
+    format = "%s";
+    theText = "1.";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 256;
+    yReference = 194;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 256;
+    y = 395;
+    format = "%s";
+    theText = "5.";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 256;
+    yReference = 395;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 256;
+    y = 345;
+    format = "%s";
+    theText = "4.";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 256;
+    yReference = 345;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 256;
+    y = 295;
+    format = "%s";
+    theText = "3.";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 256;
+    yReference = 295;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 256;
+    y = 245;
+    format = "%s";
+    theText = "2.";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 256;
+    yReference = 245;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 256;
+    y = 446;
+    format = "%s";
+    theText = "6.";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 256;
+    yReference = 446;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 443;
+    y = 194;
+    format = "%s";
+    theText = "7.";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 443;
+    yReference = 194;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 433;
+    y = 395;
+    format = "%s";
+    theText = "11.";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 433;
+    yReference = 395;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 433;
+    y = 345;
+    format = "%s";
+    theText = "10.";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 433;
+    yReference = 345;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 443;
+    y = 293;
+    format = "%s";
+    theText = "9.";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 443;
+    yReference = 293;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 443;
+    y = 245;
+    format = "%s";
+    theText = "8.";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 443;
+    yReference = 245;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 433;
+    y = 446;
+    format = "%s";
+    theText = "12.";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 433;
+    yReference = 446;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 619;
+    y = 194;
+    format = "%s";
+    theText = "13.";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 619;
+    yReference = 194;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 619;
+    y = 395;
+    format = "%s";
+    theText = "17.";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 619;
+    yReference = 395;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 619;
+    y = 345;
+    format = "%s";
+    theText = "16.";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 619;
+    yReference = 345;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 619;
+    y = 293;
+    format = "%s";
+    theText = "15.";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 619;
+    yReference = 293;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 619;
+    y = 245;
+    format = "%s";
+    theText = "14.";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 619;
+    yReference = 245;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 619;
+    y = 446;
+    format = "%s";
+    theText = "18.";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 619;
+    yReference = 446;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 805;
+    y = 194;
+    format = "%s";
+    theText = "19.";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 805;
+    yReference = 194;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 805;
+    y = 395;
+    format = "%s";
+    theText = "23.";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 805;
+    yReference = 395;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 805;
+    y = 345;
+    format = "%s";
+    theText = "22.";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 805;
+    yReference = 345;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 805;
+    y = 293;
+    format = "%s";
+    theText = "21.";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 805;
+    yReference = 293;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 805;
+    y = 245;
+    format = "%s";
+    theText = "20.";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 805;
+    yReference = 245;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 805;
+    y = 446;
+    format = "%s";
+    theText = "24.";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 805;
+    yReference = 446;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 240;
+    y = 644;
+    format = "%s";
+    theText = "NUMBER OF TIMES TO PRINT";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 240;
+    yReference = 644;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 240;
+    y = 533;
+    format = "%s";
+    theText = "PRINT RATE";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 240;
+    yReference = 533;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 450;
+    y = 85;
+    format = "%s";
+    theText = "TITLE";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 450;
+    yReference = 85;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text errpid1
+  {
+    x = 288;
+    y = 219;
+    format = "%s";
+    theText = "INVALID PID";
+    alignment = 0;
+    visibility = `pid1.ERROR`;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 288;
+    yReference = 219;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text errpid2
+  {
+    x = 288;
+    y = 269;
+    format = "%s";
+    theText = "INVALID PID";
+    alignment = 0;
+    visibility = `pid2.ERROR`;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 288;
+    yReference = 269;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text errpid3
+  {
+    x = 288;
+    y = 319;
+    format = "%s";
+    theText = "INVALID PID";
+    alignment = 0;
+    visibility = `pid3.ERROR`;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 288;
+    yReference = 319;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text errpid4
+  {
+    x = 288;
+    y = 369;
+    format = "%s";
+    theText = "INVALID PID";
+    alignment = 0;
+    visibility = `pid4.ERROR`;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 288;
+    yReference = 369;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text errpid5
+  {
+    x = 287;
+    y = 419;
+    format = "%s";
+    theText = "INVALID PID";
+    alignment = 0;
+    visibility = `pid5.ERROR`;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 287;
+    yReference = 419;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text errpid6
+  {
+    x = 287;
+    y = 469;
+    format = "%s";
+    theText = "INVALID PID";
+    alignment = 0;
+    visibility = `pid6.ERROR`;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 287;
+    yReference = 469;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text errpid7
+  {
+    x = 472;
+    y = 219;
+    format = "%s";
+    theText = "INVALID PID";
+    alignment = 0;
+    visibility = `pid7.ERROR`;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 472;
+    yReference = 219;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text errpid8
+  {
+    x = 472;
+    y = 269;
+    format = "%s";
+    theText = "INVALID PID";
+    alignment = 0;
+    visibility = `pid8.ERROR`;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 472;
+    yReference = 269;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text errpid9
+  {
+    x = 472;
+    y = 319;
+    format = "%s";
+    theText = "INVALID PID";
+    alignment = 0;
+    visibility = `pid9.ERROR`;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 472;
+    yReference = 319;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text errpid10
+  {
+    x = 472;
+    y = 369;
+    format = "%s";
+    theText = "INVALID PID";
+    alignment = 0;
+    visibility = `pid10.ERROR`;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 472;
+    yReference = 369;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text errpid11
+  {
+    x = 471;
+    y = 419;
+    format = "%s";
+    theText = "INVALID PID";
+    alignment = 0;
+    visibility = `pid11.ERROR`;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 471;
+    yReference = 419;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text errpid12
+  {
+    x = 471;
+    y = 469;
+    format = "%s";
+    theText = "INVALID PID";
+    alignment = 0;
+    visibility = `pid12.ERROR`;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 471;
+    yReference = 469;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text errpid13
+  {
+    x = 659;
+    y = 219;
+    format = "%s";
+    theText = "INVALID PID";
+    alignment = 0;
+    visibility = `pid13.ERROR`;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 659;
+    yReference = 219;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text errpid14
+  {
+    x = 659;
+    y = 269;
+    format = "%s";
+    theText = "INVALID PID";
+    alignment = 0;
+    visibility = `pid14.ERROR`;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 659;
+    yReference = 269;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text errpid15
+  {
+    x = 659;
+    y = 319;
+    format = "%s";
+    theText = "INVALID PID";
+    alignment = 0;
+    visibility = `pid15.ERROR`;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 659;
+    yReference = 319;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text errpid16
+  {
+    x = 659;
+    y = 369;
+    format = "%s";
+    theText = "INVALID PID";
+    alignment = 0;
+    visibility = `pid16.ERROR`;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 659;
+    yReference = 369;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text errpid17
+  {
+    x = 658;
+    y = 419;
+    format = "%s";
+    theText = "INVALID PID";
+    alignment = 0;
+    visibility = `pid17.ERROR`;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 658;
+    yReference = 419;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text errpid18
+  {
+    x = 658;
+    y = 469;
+    format = "%s";
+    theText = "INVALID PID";
+    alignment = 0;
+    visibility = `pid18.ERROR`;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 658;
+    yReference = 469;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text errpid19
+  {
+    x = 845;
+    y = 219;
+    format = "%s";
+    theText = "INVALID PID";
+    alignment = 0;
+    visibility = `pid19.ERROR`;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 845;
+    yReference = 219;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text errpid20
+  {
+    x = 845;
+    y = 269;
+    format = "%s";
+    theText = "INVALID PID";
+    alignment = 0;
+    visibility = `pid20.ERROR`;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 845;
+    yReference = 269;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text errpid21
+  {
+    x = 845;
+    y = 319;
+    format = "%s";
+    theText = "INVALID PID";
+    alignment = 0;
+    visibility = `pid21.ERROR`;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 845;
+    yReference = 319;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text errpid22
+  {
+    x = 845;
+    y = 369;
+    format = "%s";
+    theText = "INVALID PID";
+    alignment = 0;
+    visibility = `pid22.ERROR`;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 845;
+    yReference = 369;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text errpid23
+  {
+    x = 844;
+    y = 419;
+    format = "%s";
+    theText = "INVALID PID";
+    alignment = 0;
+    visibility = `pid23.ERROR`;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 844;
+    yReference = 419;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text errpid24
+  {
+    x = 844;
+    y = 469;
+    format = "%s";
+    theText = "INVALID PID";
+    alignment = 0;
+    visibility = `pid24.ERROR`;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 844;
+    yReference = 469;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  instance DialogueSymbols.InputDialogueText_GrDs GR_NAME
+  {
+    x = 570;
+    y = 62;
+    visibility = 1;
+    xReference = 570;
+    yReference = 62;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    ExecuteUnSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxCharacters = 21;
+    ReturnAction = "";
+    Scope = "::PicUCN_GroupDisplaySetup";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewText = "";
+    TheOriginalText = "";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 230;
+  }
+
+  instance DialogueSymbols.PidInputButton pid1
+  {
+    x = 280;
+    y = 176;
+    visibility = 1;
+    xReference = 280;
+    yReference = 176;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    ExecuteUnSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    FindPidScope = "::UCN5and6.PicUCN_GroupDisplaySetup.pid1.InputArea";
+    Found = "{pid1.ERROR=0; PERROR.visibility=0;}";
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxCharacters = 10;
+    NotFound = "{pid1.ERROR = 1;}";
+    ReturnAction = "";
+    Scope = "::UCN5and6.PicUCN_GroupDisplaySetup";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewText = "";
+    TheOriginalText = "";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 200;
+  }
+
+  instance DialogueSymbols.PidInputButton pid2
+  {
+    x = 280;
+    y = 226;
+    visibility = 1;
+    xReference = 280;
+    yReference = 226;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    ExecuteUnSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    FindPidScope = "::UCN5and6.PicUCN_GroupDisplaySetup.pid2.InputArea";
+    Found = "{pid2.ERROR = 0; PERROR.visibility=0;}";
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxCharacters = 10;
+    NotFound = "{pid2.ERROR = 1;}";
+    ReturnAction = "";
+    Scope = "::UCN5and6.PicUCN_GroupDisplaySetup";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewText = "";
+    TheOriginalText = "";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 200;
+  }
+
+  instance DialogueSymbols.PidInputButton pid3
+  {
+    x = 280;
+    y = 276;
+    visibility = 1;
+    xReference = 280;
+    yReference = 276;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    ExecuteUnSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    FindPidScope = "::UCN5and6.PicUCN_GroupDisplaySetup.pid3.InputArea";
+    Found = "{pid3.ERROR = 0; PERROR.visibility=0;}";
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxCharacters = 10;
+    NotFound = "{pid3.ERROR = 1;}";
+    ReturnAction = "";
+    Scope = "::UCN5and6.PicUCN_GroupDisplaySetup";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewText = "";
+    TheOriginalText = "";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 200;
+  }
+
+  instance DialogueSymbols.PidInputButton pid4
+  {
+    x = 280;
+    y = 326;
+    visibility = 1;
+    xReference = 280;
+    yReference = 326;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    ExecuteUnSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    FindPidScope = "::UCN5and6.PicUCN_GroupDisplaySetup.pid4.InputArea";
+    Found = "{pid4.ERROR = 0; PERROR.visibility=0;}";
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxCharacters = 10;
+    NotFound = "{pid4.ERROR = 1;}";
+    ReturnAction = "";
+    Scope = "::UCN5and6.PicUCN_GroupDisplaySetup";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewText = "";
+    TheOriginalText = "";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 200;
+  }
+
+  instance DialogueSymbols.PidInputButton pid5
+  {
+    x = 280;
+    y = 376;
+    visibility = 1;
+    xReference = 280;
+    yReference = 376;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    ExecuteUnSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    FindPidScope = "::UCN5and6.PicUCN_GroupDisplaySetup.pid5.InputArea";
+    Found = "{pid5.ERROR = 0; PERROR.visibility=0;}";
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxCharacters = 10;
+    NotFound = "{pid5.ERROR = 1;}";
+    ReturnAction = "";
+    Scope = "::UCN5and6.PicUCN_GroupDisplaySetup";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewText = "";
+    TheOriginalText = "";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 200;
+  }
+
+  instance DialogueSymbols.PidInputButton pid6
+  {
+    x = 280;
+    y = 426;
+    visibility = 1;
+    xReference = 280;
+    yReference = 426;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    ExecuteUnSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    FindPidScope = "::UCN5and6.PicUCN_GroupDisplaySetup.pid6.InputArea";
+    Found = "{pid6.ERROR = 0; PERROR.visibility=0;}";
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxCharacters = 10;
+    NotFound = "{pid6.ERROR = 1;}";
+    ReturnAction = "";
+    Scope = "::UCN5and6.PicUCN_GroupDisplaySetup";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewText = "";
+    TheOriginalText = "";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 200;
+  }
+
+  instance DialogueSymbols.PidInputButton pid7
+  {
+    x = 467;
+    y = 176;
+    visibility = 1;
+    xReference = 467;
+    yReference = 176;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    ExecuteUnSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    FindPidScope = "::UCN5and6.PicUCN_GroupDisplaySetup.pid7.InputArea";
+    Found = "{pid7.ERROR = 0; PERROR.visibility=0;}";
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxCharacters = 10;
+    NotFound = "{pid7.ERROR = 1;}";
+    ReturnAction = "";
+    Scope = "::UCN5and6.PicUCN_GroupDisplaySetup";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewText = "";
+    TheOriginalText = "";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 200;
+  }
+
+  instance DialogueSymbols.PidInputButton pid8
+  {
+    x = 467;
+    y = 226;
+    visibility = 1;
+    xReference = 467;
+    yReference = 226;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    ExecuteUnSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    FindPidScope = "::UCN5and6.PicUCN_GroupDisplaySetup.pid8.InputArea";
+    Found = "{pid8.ERROR = 0; PERROR.visibility=0;}";
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxCharacters = 10;
+    NotFound = "{pid8.ERROR = 1;}";
+    ReturnAction = "";
+    Scope = "::UCN5and6.PicUCN_GroupDisplaySetup";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewText = "";
+    TheOriginalText = "";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 200;
+  }
+
+  instance DialogueSymbols.PidInputButton pid9
+  {
+    x = 467;
+    y = 276;
+    visibility = 1;
+    xReference = 467;
+    yReference = 276;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    ExecuteUnSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    FindPidScope = "::UCN5and6.PicUCN_GroupDisplaySetup.pid9.InputArea";
+    Found = "{pid9.ERROR = 0; PERROR.visibility=0;}";
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxCharacters = 10;
+    NotFound = "{pid9.ERROR = 1;}";
+    ReturnAction = "";
+    Scope = "::UCN5and6.PicUCN_GroupDisplaySetup";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewText = "";
+    TheOriginalText = "";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 200;
+  }
+
+  instance DialogueSymbols.PidInputButton pid10
+  {
+    x = 467;
+    y = 326;
+    visibility = 1;
+    xReference = 467;
+    yReference = 326;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    ExecuteUnSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    FindPidScope = "::UCN5and6.PicUCN_GroupDisplaySetup.pid10.InputArea";
+    Found = "{pid10.ERROR = 0; PERROR.visibility=0;}";
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxCharacters = 10;
+    NotFound = "{pid10.ERROR = 1;}";
+    ReturnAction = "";
+    Scope = "::UCN5and6.PicUCN_GroupDisplaySetup";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewText = "";
+    TheOriginalText = "";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 200;
+  }
+
+  instance DialogueSymbols.PidInputButton pid11
+  {
+    x = 467;
+    y = 376;
+    visibility = 1;
+    xReference = 467;
+    yReference = 376;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    ExecuteUnSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    FindPidScope = "::UCN5and6.PicUCN_GroupDisplaySetup.pid11.InputArea";
+    Found = "{pid11.ERROR = 0; PERROR.visibility=0;}";
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxCharacters = 10;
+    NotFound = "{pid11.ERROR = 1;}";
+    ReturnAction = "";
+    Scope = "::UCN5and6.PicUCN_GroupDisplaySetup";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewText = "";
+    TheOriginalText = "";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 200;
+  }
+
+  instance DialogueSymbols.PidInputButton pid12
+  {
+    x = 467;
+    y = 426;
+    visibility = 1;
+    xReference = 467;
+    yReference = 426;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    ExecuteUnSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    FindPidScope = "::UCN5and6.PicUCN_GroupDisplaySetup.pid12.InputArea";
+    Found = "{pid12.ERROR = 0; PERROR.visibility=0;}";
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxCharacters = 10;
+    NotFound = "{pid12.ERROR = 1;}";
+    ReturnAction = "";
+    Scope = "::UCN5and6.PicUCN_GroupDisplaySetup";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewText = "";
+    TheOriginalText = "";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 200;
+  }
+
+  instance DialogueSymbols.PidInputButton pid13
+  {
+    x = 653;
+    y = 176;
+    visibility = 1;
+    xReference = 653;
+    yReference = 176;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    ExecuteUnSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    FindPidScope = "::UCN5and6.PicUCN_GroupDisplaySetup.pid13.InputArea";
+    Found = "{pid13.ERROR = 0; PERROR.visibility=0;}";
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxCharacters = 10;
+    NotFound = "{pid13.ERROR = 1;}";
+    ReturnAction = "";
+    Scope = "::UCN5and6.PicUCN_GroupDisplaySetup";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewText = "";
+    TheOriginalText = "";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 200;
+  }
+
+  instance DialogueSymbols.PidInputButton pid14
+  {
+    x = 653;
+    y = 226;
+    visibility = 1;
+    xReference = 653;
+    yReference = 226;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    ExecuteUnSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    FindPidScope = "::UCN5and6.PicUCN_GroupDisplaySetup.pid14.InputArea";
+    Found = "{pid14.ERROR = 0; PERROR.visibility=0;}";
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxCharacters = 10;
+    NotFound = "{pid14.ERROR = 1;}";
+    ReturnAction = "";
+    Scope = "::UCN5and6.PicUCN_GroupDisplaySetup";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewText = "";
+    TheOriginalText = "";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 200;
+  }
+
+  instance DialogueSymbols.PidInputButton pid15
+  {
+    x = 653;
+    y = 276;
+    visibility = 1;
+    xReference = 653;
+    yReference = 276;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    ExecuteUnSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    FindPidScope = "::UCN5and6.PicUCN_GroupDisplaySetup.pid15.InputArea";
+    Found = "{pid15.ERROR = 0; PERROR.visibility=0;}";
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxCharacters = 10;
+    NotFound = "{pid15.ERROR = 1;}";
+    ReturnAction = "";
+    Scope = "::UCN5and6.PicUCN_GroupDisplaySetup";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewText = "";
+    TheOriginalText = "";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 200;
+  }
+
+  instance DialogueSymbols.PidInputButton pid16
+  {
+    x = 653;
+    y = 326;
+    visibility = 1;
+    xReference = 653;
+    yReference = 326;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    ExecuteUnSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    FindPidScope = "::UCN5and6.PicUCN_GroupDisplaySetup.pid16.InputArea";
+    Found = "{pid16.ERROR = 0; PERROR.visibility=0;}";
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxCharacters = 10;
+    NotFound = "{pid16.ERROR = 1;}";
+    ReturnAction = "";
+    Scope = "::UCN5and6.PicUCN_GroupDisplaySetup";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewText = "";
+    TheOriginalText = "";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 200;
+  }
+
+  instance DialogueSymbols.PidInputButton pid17
+  {
+    x = 653;
+    y = 376;
+    visibility = 1;
+    xReference = 653;
+    yReference = 376;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    ExecuteUnSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    FindPidScope = "::UCN5and6.PicUCN_GroupDisplaySetup.pid17.InputArea";
+    Found = "{pid17.ERROR = 0; PERROR.visibility=0;}";
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxCharacters = 10;
+    NotFound = "{pid17.ERROR = 1;}";
+    ReturnAction = "";
+    Scope = "::UCN5and6.PicUCN_GroupDisplaySetup";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewText = "";
+    TheOriginalText = "";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 200;
+  }
+
+  instance DialogueSymbols.PidInputButton pid18
+  {
+    x = 653;
+    y = 426;
+    visibility = 1;
+    xReference = 653;
+    yReference = 426;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    ExecuteUnSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    FindPidScope = "::UCN5and6.PicUCN_GroupDisplaySetup.pid18.InputArea";
+    Found = "{pid18.ERROR = 0; PERROR.visibility=0;}";
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxCharacters = 10;
+    NotFound = "{pid18.ERROR = 1;}";
+    ReturnAction = "";
+    Scope = "::UCN5and6.PicUCN_GroupDisplaySetup";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewText = "";
+    TheOriginalText = "";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 200;
+  }
+
+  instance DialogueSymbols.PidInputButton pid19
+  {
+    x = 839;
+    y = 176;
+    visibility = 1;
+    xReference = 839;
+    yReference = 176;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    ExecuteUnSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    FindPidScope = "::UCN5and6.PicUCN_GroupDisplaySetup.pid19.InputArea";
+    Found = "{pid19.ERROR = 0; PERROR.visibility=0;}";
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxCharacters = 10;
+    NotFound = "{pid19.ERROR = 1;}";
+    ReturnAction = "";
+    Scope = "::UCN5and6.PicUCN_GroupDisplaySetup";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewText = "";
+    TheOriginalText = "";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 200;
+  }
+
+  instance DialogueSymbols.PidInputButton pid20
+  {
+    x = 839;
+    y = 226;
+    visibility = 1;
+    xReference = 839;
+    yReference = 226;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    ExecuteUnSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    FindPidScope = "::UCN5and6.PicUCN_GroupDisplaySetup.pid20.InputArea";
+    Found = "{pid20.ERROR = 0; PERROR.visibility=0;}";
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxCharacters = 10;
+    NotFound = "{pid20.ERROR = 1;}";
+    ReturnAction = "";
+    Scope = "::UCN5and6.PicUCN_GroupDisplaySetup";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewText = "";
+    TheOriginalText = "";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 200;
+  }
+
+  instance DialogueSymbols.PidInputButton pid21
+  {
+    x = 839;
+    y = 276;
+    visibility = 1;
+    xReference = 839;
+    yReference = 276;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    ExecuteUnSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    FindPidScope = "::UCN5and6.PicUCN_GroupDisplaySetup.pid21.InputArea";
+    Found = "{pid21.ERROR = 0; PERROR.visibility=0;}";
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxCharacters = 10;
+    NotFound = "{pid21.ERROR = 1;}";
+    ReturnAction = "";
+    Scope = "::UCN5and6.PicUCN_GroupDisplaySetup";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewText = "";
+    TheOriginalText = "";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 200;
+  }
+
+  instance DialogueSymbols.PidInputButton pid22
+  {
+    x = 839;
+    y = 326;
+    visibility = 1;
+    xReference = 839;
+    yReference = 326;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    ExecuteUnSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    FindPidScope = "::UCN5and6.PicUCN_GroupDisplaySetup.pid22.InputArea";
+    Found = "{pid22.ERROR = 0; PERROR.visibility=0;}";
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxCharacters = 10;
+    NotFound = "{pid22.ERROR = 1;}";
+    ReturnAction = "";
+    Scope = "::UCN5and6.PicUCN_GroupDisplaySetup";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewText = "";
+    TheOriginalText = "";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 200;
+  }
+
+  instance DialogueSymbols.PidInputButton pid23
+  {
+    x = 839;
+    y = 376;
+    visibility = 1;
+    xReference = 839;
+    yReference = 376;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    ExecuteUnSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    FindPidScope = "::UCN5and6.PicUCN_GroupDisplaySetup.pid23.InputArea";
+    Found = "{pid23.ERROR = 0; PERROR.visibility=0;}";
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxCharacters = 10;
+    NotFound = "{pid23.ERROR = 1;}";
+    ReturnAction = "";
+    Scope = "::UCN5and6.PicUCN_GroupDisplaySetup";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewText = "";
+    TheOriginalText = "";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 200;
+  }
+
+  instance DialogueSymbols.PidInputButton pid24
+  {
+    x = 839;
+    y = 426;
+    visibility = 1;
+    xReference = 839;
+    yReference = 426;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    ExecuteUnSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    FindPidScope = "::UCN5and6.PicUCN_GroupDisplaySetup.pid24.InputArea";
+    Found = "{pid24.ERROR = 0; PERROR.visibility=0;}";
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxCharacters = 10;
+    NotFound = "{pid24.ERROR = 1;}";
+    ReturnAction = "";
+    Scope = "::UCN5and6.PicUCN_GroupDisplaySetup";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewText = "";
+    TheOriginalText = "";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    vis = `visibility`;
+    Width = 200;
+  }
+
+  text PERROR
+  {
+    x = 454;
+    y = 740;
+    format = "%s";
+    theText = "FIX ALL ERRORS BEFORE PROCESSING";
+    alignment = 0;
+    visibility = 0;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 454;
+    yReference = 740;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  instance DialogueSymbols.PushButton Group2Select
+  {
+    x = 201;
+    y = 719;
+    visibility = 1;
+    xReference = 201;
+    yReference = 719;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ButtonState = 0;
+    DynamicLabel = "PROCESS";
+    ExecuteString = "{Process1();}";
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    Label = "PROCESS";
+    Scope = "::UCN5and6.PicUCN_GroupDisplaySetup";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    StaticLabel = "PROCESS";
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextFontDynamic = `font2`;
+    TextFontStatic = `font4`;
+    TextX = 17;
+    TextXDynamic = 15;
+    TextXStatic = 17;
+    TextY = 22;
+    TextYDynamic = 21;
+    TextYStatic = 22;
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    Width = 125;
+  }
+
+  rectangle
+  {
+    x = 200;
+    y = 50;
+    width = 817;
+    height = 612;
+    visibility = 1;
+    foregroundColour = `COLOR_LINE_BOUNDARY_6`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 2;
+    foregroundFillColour = -1;
+    backgroundFillColour = -1;
+    fillPattern = `NoPattern`;
+    xReference = 200;
+    yReference = 125;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 234;
+    y = 85;
+    format = "%s";
+    theText = "GROUP DISPLAY #";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 234;
+    yReference = 85;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  line
+  {
+    numberOfPoints = 2;
+    point[0] = ( 200, 105 );
+    point[1] = ( 1015, 105 );
+    visibility = 1;
+    foregroundColour = `COLOR_LINE_BOUNDARY_6`;
+    backgroundColour = -1;
+    lineStyle = `SolidPattern`;
+    lineWidth = 2;
+    xReference = 200;
+    yReference = 105;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  line
+  {
+    numberOfPoints = 3;
+    point[0] = ( 200, 555 );
+    point[1] = ( 200, 555 );
+    point[2] = ( 1015, 555 );
+    visibility = 1;
+    foregroundColour = `COLOR_LINE_BOUNDARY_6`;
+    backgroundColour = -1;
+    lineStyle = `SolidPattern`;
+    lineWidth = 2;
+    xReference = 200;
+    yReference = 555;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  line
+  {
+    numberOfPoints = 2;
+    point[0] = ( 200, 500 );
+    point[1] = ( 1015, 500 );
+    visibility = 1;
+    foregroundColour = `COLOR_LINE_BOUNDARY_6`;
+    backgroundColour = -1;
+    lineStyle = `SolidPattern`;
+    lineWidth = 2;
+    xReference = 200;
+    yReference = 500;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  line
+  {
+    numberOfPoints = 2;
+    point[0] = ( 532, 50 );
+    point[1] = ( 532, 105 );
+    visibility = 1;
+    foregroundColour = `COLOR_LINE_BOUNDARY_6`;
+    backgroundColour = -1;
+    lineStyle = `SolidPattern`;
+    lineWidth = 2;
+    xReference = 532;
+    yReference = 50;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  line
+  {
+    numberOfPoints = 3;
+    point[0] = ( 200, 610 );
+    point[1] = ( 200, 610 );
+    point[2] = ( 1015, 610 );
+    visibility = 1;
+    foregroundColour = `COLOR_LINE_BOUNDARY_6`;
+    backgroundColour = -1;
+    lineStyle = `SolidPattern`;
+    lineWidth = 2;
+    xReference = 200;
+    yReference = 610;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  line
+  {
+    numberOfPoints = 2;
+    point[0] = ( 725, 500 );
+    point[1] = ( 725, 665 );
+    visibility = 1;
+    foregroundColour = `COLOR_LINE_BOUNDARY_6`;
+    backgroundColour = -1;
+    lineStyle = `SolidPattern`;
+    lineWidth = 2;
+    xReference = 725;
+    yReference = 500;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 422;
+    y = 85;
+    format = "%d";
+    theText = `Interface->GroupDisplay.data.group.groupNumber`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 3;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 422;
+    yReference = 85;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 338;
+    y = 740;
+    format = "%s";
+    theText = "SETUP";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 338;
+    yReference = 740;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  instance DialogueSymbols.PushButton CancelButton
+  {
+    x = 891;
+    y = 719;
+    visibility = 1;
+    xReference = 891;
+    yReference = 719;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ButtonState = 0;
+    DynamicLabel = "CANCEL";
+    ExecuteString = "{escapeToMenu();}";
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    Label = "CANCEL";
+    Scope = "::UCN5and6.PicUCN_GroupDisplaySetup";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    StaticLabel = "CANCEL";
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextFontDynamic = `font2`;
+    TextFontStatic = `font4`;
+    TextX = 22;
+    TextXDynamic = 20;
+    TextXStatic = 22;
+    TextY = 22;
+    TextYDynamic = 21;
+    TextYStatic = 22;
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    Width = 125;
+  }
+
+  text
+  {
+    x = 1028;
+    y = 740;
+    format = "%s";
+    theText = "SETUP";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 1028;
+    yReference = 740;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text procMsg
+  {
+    x = 529;
+    y = 710;
+    format = "%s";
+    theText = "PROCESSING... WAIT";
+    alignment = 0;
+    visibility = 0;
+    foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 529;
+    yReference = 710;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 875;
+    y = 88;
+    format = "%s";
+    theText = "(MAX. 20 CHARS)";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    theFont = 2;
+    xReference = 875;
+    yReference = 88;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 240;
+    y = 588;
+    format = "%s";
+    theText = "DURATION FOR PRINT";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 240;
+    yReference = 588;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 580;
+    y = 644;
+    format = "%s";
+    theText = "(TIMES)";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 580;
+    yReference = 644;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 580;
+    y = 533;
+    format = "%s";
+    theText = "(0 - 600 SEC)";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 580;
+    yReference = 533;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 580;
+    y = 588;
+    format = "%s";
+    theText = "(1 - 1440 MIN)";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 580;
+    yReference = 588;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  instance DialogueSymbols.DTrendInputDiaNo PrintRate_btn
+  {
+    x = 755;
+    y = 512;
+    visibility = 1;
+    xReference = 755;
+    yReference = 512;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Active = 1;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    ExecuteUnSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxDigits = 4;
+    ReturnAction = "{ResetPrintRate();}";
+    Scope = "::UCN5and6.PicUCN_GroupDisplaySetup";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewNumber = 1;
+    TheNewText = "1";
+    TheNumberFormat = "%4d";
+    TheOriginalNumber = 600;
+    TheOriginalText = "1";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    Width = 150;
+  }
+
+  instance DialogueSymbols.DTrendInputDiaNo PrintDuration_btn
+  {
+    x = 755;
+    y = 567;
+    visibility = 1;
+    xReference = 755;
+    yReference = 567;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    Active = 1;
+    BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    ERROR = 0;
+    ExecuteSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    ExecuteUnSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    Height = 30;
+    isDown = 0;
+    isInside = 1;
+    MaxDigits = 4;
+    ReturnAction = "{ResetPrintDuration();}";
+    Scope = "::UCN5and6.PicUCN_GroupDisplaySetup";
+    SelectColour = `COLOR_BUTTON_SELECTED`;
+    Selected = 0;
+    TextColour = `COLOR_PICTURE_BACKGROUND`;
+    TextFont = 4;
+    TextX = 10;
+    TextY = 21;
+    TheNewNumber = 1;
+    TheNewText = "1";
+    TheNumberFormat = "%4d";
+    TheOriginalNumber = 600;
+    TheOriginalText = "1";
+    TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    Width = 150;
+  }
+
+  text
+  {
+    x = 915;
+    y = 644;
+    format = "%s";
+    theText = "TIMES";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 915;
+    yReference = 644;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 915;
+    y = 533;
+    format = "%s";
+    theText = "SEC";
+    alignment = 0;
+    visibility = `!PrintRateErrorMsg.visibility`;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 915;
+    yReference = 533;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 915;
+    y = 588;
+    format = "%s";
+    theText = "MIN";
+    alignment = 0;
+    visibility = `!PrintDurationErrorMsg.visibility`;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 915;
+    yReference = 588;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 770;
+    y = 643;
+    format = "%-8d";
+    theText = `PrintNo`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_NORMAL`;
+    backgroundColour = -1;
+    theFont = 4;
+    xReference = 770;
+    yReference = 643;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text PrintRateErrorMsg
+  {
+    x = 863;
+    y = 534;
+    format = "%s";
+    theText = "INVALID VALUE";
+    alignment = 0;
+    visibility = `PrintRate_btn.ERROR`;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 863;
+    yReference = 534;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text PrintDurationErrorMsg
+  {
+    x = 863;
+    y = 589;
+    format = "%s";
+    theText = "INVALID VALUE";
+    alignment = 0;
+    visibility = `PrintDuration_btn.ERROR`;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 863;
+    yReference = 589;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+}

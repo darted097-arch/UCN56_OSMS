@@ -1,0 +1,281 @@
+// **************************************************************************************
+// *											*
+// *	      Copyright (C) 1997, KOPEC(N), All rights reserved.		        *
+// *          Proprietary information, KOPEC(N)          	                        *
+// *											*
+// **************************************************************************************
+//
+// ***** HIGH LEVEL DESCRIPTION **********************************************
+//
+// This structure contains system attributes for HDSR.
+//
+// **** REVISION HISTORY *****************************************************
+//
+// $Header: /PMSArchive/ygn56/workstation/pictures/pdat/HDSRStructure.pdat 1.4 1999/04/13 19:10:12 kn1 Exp $
+// $Log: HDSRStructure.pdat,v $
+// Revision 1.4  1999/04/13 19:10:12  kn1
+// Author: kn1@y6maint1 (Kopec NSSS 1)
+// KOPEC FAT Support April 99
+//
+// Revision 1.3  1998/02/11 20:56:35  kn1
+// Author: kn1@y6maint1.usnus.abb.com (Kopec NSSS 1)
+// Kopec NSSS Phase 2 Status 1
+//
+// Revision 1.2  1997/09/24 18:18:15  kn1
+// Author: kn1@y6maint1.usnus.abb.com (Kopec NSSS 1)
+// Kopec NSSS Phase 3 Status 2.  Modified to support HDSR delivery.
+//
+// Revision 1.1  1997/05/13 15:24:38  kn1
+// Author: kn1@y6maint1.usnus.abb.com (Kopec NSSS 1)
+// Initial revision
+//
+//
+// ***************************************************************************
+// System Include Files: NONE
+//
+//
+// User Defined Include Files: NONE
+//
+//
+// External Variables: NONE
+//
+//
+// Local Constant Definitions: NONE
+//
+//
+// Function Prototypes: NONE
+//
+//
+// ***************************************************************************
+//
+//
+//struct HDSR_FOOTER {
+//	int	diskProtect;
+//	int	backupRequest;
+//	char	backupRequestText[50];
+//};
+
+//HDSR_FOOTER	gFooter;
+
+struct PAGE_710 {
+	char	currentDiskProtect[5];
+	char	newDiskProtect[5];
+	char	fromProtectDate[15];
+	char 	fromProtectTime[15];
+	char	toProtectDate[15];
+	char 	toProtectTime[15];
+	int32 	enablePage;
+};
+
+PAGE_710	gPage710;
+
+//struct NOTICE_MESSAGE {
+//	char 	message_1[50];
+//	char	message_2[50];
+//};
+
+//NOTICE_MESSAGE 	gNoticeMessage;
+
+struct PAGE_720 {
+	char    resolution[5];
+	char	hiBackupDate[15];
+	char 	hiBackupTime[15];
+	char	lowBackupDate[15];
+	char 	lowBackupTime[15];
+	int32   enablePage;
+};
+
+PAGE_720	gPage720;
+
+struct PAGE_730 {
+	char	dataSource[5];
+	char	resolution[5];
+	char 	timeStep[10];
+	char 	startDate[15];
+	char 	startTime[15];
+	char 	endDate[15];
+	char 	endTime[15];
+	char 	validStartDate[15];
+	char 	validStartTime[15];
+	char 	validEndDate[15];
+	char 	validEndTime[15];
+	char	point_1[10];
+	char	point_2[10];
+	char	point_3[10];
+	char	point_4[10];
+	char	point_5[10];
+	char	point_6[10];
+	char	point_7[10];
+	char	point_8[10];
+	
+	char	highDiskDate_1[15];
+	char	highDiskDate_2[15];
+	char	lowDiskDate_1[15];
+	char	lowDiskDate_2[15];
+	char	highDiskTime_1[15];
+	char	highDiskTime_2[15];
+	char	lowDiskTime_1[15];
+	char	lowDiskTime_2[15];
+	
+	int32	diskRetrival;
+	int32	tapeRetrival;
+	int32	tapeUse;
+	int32	enablePage;
+};	
+
+PAGE_730	gPage730;
+
+struct PAGE_740 {
+	char 	graphSet[5];
+	char 	option[5];
+	int32	useView[8];
+	int32	setupDone[8];
+};
+
+PAGE_740	gPage740;
+
+struct PAGE_74X {
+	int32	graphSet;
+	char	dataSource[5];
+	char	resolution[5];
+	char 	startDate[15];
+	char 	startTime[15];
+	char 	endDate[15];
+	char 	endTime[15];
+	char 	validStartDate[15];
+	char 	validStartTime[15];
+	char 	validEndDate[15];
+	char 	validEndTime[15];
+	char	point_1[10];
+	char	point_2[10];
+	char	point_3[10];
+	char	point_4[10];
+	char	minValue_1[10];
+	char	minValue_2[10];
+	char	minValue_3[10];
+	char	minValue_4[10];
+	char	baseline_1[10];
+	char	baseline_2[10];
+	char	baseline_3[10];
+	char	baseline_4[10];
+	char	maxValue_1[10];
+	char	maxValue_2[10];
+	char	maxValue_3[10];
+	char	maxValue_4[10];
+	int32	enablePage;
+	int32	tapeUse;
+
+	char	highDiskDate_1[15];
+	char	highDiskDate_2[15];
+	char	lowDiskDate_1[15];
+	char	lowDiskDate_2[15];
+	char	highDiskTime_1[15];
+	char	highDiskTime_2[15];
+	char	lowDiskTime_1[15];
+	char	lowDiskTime_2[15];
+};	
+
+PAGE_74X	gPage74x;
+PAGE_74X	gPage741;
+PAGE_74X	gPage742;
+PAGE_74X	gPage743;
+PAGE_74X	gPage744;
+PAGE_74X	gPage745;
+PAGE_74X	gPage746;
+PAGE_74X	gPage747;
+PAGE_74X	gPage748;
+
+struct PAGE_750 {
+	int32	iResolution;
+	char	resolution[5];
+	char 	startDate[15];
+	char 	startTime[15];
+	char 	endDate[15];
+	char 	endTime[15];
+	char	informationText[50];
+	char 	wDate_1[15];
+	char 	wDate_2[15];
+	char 	wDate_3[15];
+	char 	wDate_4[15];
+	char 	wDate_5[15];
+	char 	wDate_6[15];
+	char 	wDate_7[15];
+	int32	tapeUse;
+	int32	enablePage;
+};	
+
+PAGE_750 	gPage750;
+
+struct HDSR_VIEW {
+	int32   useView;
+	int32	whichView;
+	int32	level;
+	int32	sector;
+	int32	actNo;		// 0-initialize, 1-left, 2-right
+	int32	actMask;	// 3-up, 4-down
+	
+	char	resolution[10];
+	char 	resource[10];
+	char 	startDate[20];
+	char 	endDate[20];
+
+	char 	time_1[10];
+	char 	time_2[10];
+	char 	time_3[10];
+	char	time_4[10];
+	char 	time_5[10];
+	
+	int32	pointType_1;
+	char	pointID_1[10];
+	char    description_1[40];
+	float	maximum_1;
+	float	minimum_1;
+	float	baseline_1;
+	char 	onScale_1[10];
+	char	offScale_1[10];
+	float	values_1[256];
+	int     iValue_1[256];
+
+	int32	pointType_2;
+	char    description_2[40];
+	char	pointID_2[10];
+	float	maximum_2;
+	float	minimum_2;
+	float	baseline_2;
+	char 	onScale_2[10];
+	char	offScale_2[10];
+	float	values_2[256];
+	int     iValue_2[256];
+
+	int32	pointType_3;
+	char	pointID_3[10];
+	char    description_3[40];
+	float	maximum_3;
+	float	minimum_3;
+	float	baseline_3;
+	char 	onScale_3[10];
+	char	offScale_3[10];
+	float	values_3[256];
+	int     iValue_3[256];
+
+	int32	pointType_4;
+	char	pointID_4[10];
+	char    description_4[40];
+	float	maximum_4;
+	float	minimum_4;
+	float	baseline_4;
+	char 	onScale_4[10];
+	char	offScale_4[10];
+	float	values_4[256];
+	int     iValue_4[256];
+};
+
+HDSR_VIEW	gView_x;
+HDSR_VIEW	gView_1;
+HDSR_VIEW	gView_2;
+HDSR_VIEW	gView_3;
+HDSR_VIEW	gView_4;
+HDSR_VIEW	gView_5;
+HDSR_VIEW	gView_6;
+HDSR_VIEW	gView_7;
+HDSR_VIEW	gView_8;

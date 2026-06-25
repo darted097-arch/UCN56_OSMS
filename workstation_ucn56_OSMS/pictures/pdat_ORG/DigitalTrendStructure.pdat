@@ -1,0 +1,95 @@
+// ***************************************************************************
+// *									     *
+// *	Copyright (C) 1997, KOPEC(N), All rights reserved.		     *
+// *	Proprietary information, KOPEC(N)        			     *
+// *									     *
+// ***************************************************************************
+//
+// ***** HIGH LEVEL DESCRIPTION **********************************************
+//
+// This pdat file contains the variables used by the Digital Trend displays.
+//
+// **** REVISION HISTORY *****************************************************
+// DigitalTrendStructure.pdat
+// jklee@ns.kopec.co.kr(j.k.lee)
+//
+// $Header: /PMSArchive/ygn56/workstation/pictures/pdat/DigitalTrendStructure.pdat 1.4 1999/04/27 14:24:15 kn2 Exp $
+// $Log: DigitalTrendStructure.pdat,v $
+// Revision 1.4  1999/04/27 14:24:15  kn2
+// Author: kn2@y6maint1 (Kopec NSSS 2)
+// Kopec FAT Support April 1999.
+//
+// Revision 1.3  1999/04/13 19:09:56  kn1
+// Author: kn1@y6maint1 (Kopec NSSS 1)
+// KOPEC FAT Support April 99
+//
+// Revision 1.2  1997/11/03 21:32:22  jws
+// Author: jws@y6maint1.usnus.abb.com (John Soisson)
+// Kopec NSSS Phase1 Status1. Modified to support delivery.
+//
+// Revision 1.1  1997/05/13 15:24:37  kn1
+// Author: kn1@y6maint1.usnus.abb.com (Kopec NSSS 1)
+// Initial revision
+//
+//
+// ***************************************************************************
+// System Include Files: NONE
+//
+//
+// User Defined Include Files: NONE
+//
+//
+// External Variables: NONE
+//
+//
+// Local Constant Definitions: NONE
+//
+//
+// Function Prototypes: NONE
+//
+//
+// ******************* DTREND VARIABLES 	 ****************************************
+//
+// attributes for each displayed point
+//
+//
+struct DTREND_DATA {
+
+  char        Set1Point1[12];            // Set-1, DTrend pointID-1   (12-byte)
+  char        Set1Point2[12];            // Set-1, DTrend pointID-2   (12-byte)
+  char        Set1Point3[12];            // Set-1, DTrend pointID-3   (12-byte)
+  char        Set1Point4[12];            // Set-1, DTrend pointID-4   (12-byte)
+  char        Set1Point5[12];            // Set-1, DTrend pointID-5   (12-byte)
+  char        Set2Point1[12];            // Set-2, DTrend pointID-1   (12-byte)
+  char        Set2Point2[12];            // Set-2, DTrend pointID-2   (12-byte)
+  char        Set2Point3[12];            // Set-2, DTrend pointID-3   (12-byte)
+  char        Set2Point4[12];            // Set-2, DTrend pointID-4   (12-byte)
+  char        Set2Point5[12];            // Set-2, DTrend pointID-5   (12-byte)
+  int         displayRate;               // ScanTime between 1 & 600 Sec.(4-byte) 
+  int         nosToPrint;                // Print Number between 0 & 200 (4-byte) 
+  char        theWorkstation[12];        // Workstation Name           (12-byte) 
+  int         prtQueue;                  // Print Queue                (4-byte)  //yrlee980112
+};
+//
+struct WSDigitalTrendMessage {
+  WSmessageHeader	header;			// message information	(  24-byte)
+  DTREND_DATA		data;			// data portion		( 144-byte)
+//char			spareData[856];		//			( 856-byte)
+};
+// Generic workstation flag reset request data
+// This data is for messages from the client to the host.
+struct WSResetMessageData {
+   int				requestOption;		// requested option	 (   4)
+   char                         theWorkstation[12];     // Workstation Name      (  12) 
+   char				requestMessage[984];	// data portion		 ( 984)
+};
+//
+// Generic workstation flag reset request message
+// This message is for messages from the client to the host / server
+ struct   DTREND_RESET {
+   WSmessageHeader		header;			// message information	(  24)
+   WSResetMessageData		data;			// requested data	(1000)
+};
+// ******************* END DTREND DEFINITION *************************************
+//
+//

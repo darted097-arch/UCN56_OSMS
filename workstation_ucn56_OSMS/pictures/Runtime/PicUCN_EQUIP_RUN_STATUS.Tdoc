@@ -1,0 +1,1953 @@
+/*
+ * ProcSee CONFIGURATION LANGUAGE FILE
+ *
+ *
+ * User : ucn56
+ * Host : y4cr01
+ * Date : 2017-05-31
+ * Time : 14:54:25
+ *
+ * ProcSee version : ProcSee 3.10.1 (June 2016)
+ * File version    : 1.26
+ *
+ *
+ */
+
+
+picture PicUCN_EQUIP_RUN_STATUS
+{
+  worldX = 0;
+  worldY = 0;
+  worldWidth = 1280;
+  worldHeight = 824;
+  oneToOne = 1;
+  backgroundColour = 0;
+  updateMode = 2;
+  resizeMode = 0;
+  xSnap = 5;
+  ySnap = 5;
+  radiusSnap = 0;
+  angleSnap = 0;
+  crosshairStyle = 1;
+  crosshairLength = 0;
+  crosshairFollowSnap = `isInEditMode()`;
+  crosshairVisibility = `isInEditMode()`;
+  xReference = 500;
+  yReference = 500;
+  xScaleFactor = 1;
+  yScaleFactor = 1;
+  rotationAngle = 0;
+
+  CCUR_EquipStatus_Data_BUF* pHostEquipStatusDataBuf = `&Interface->hostEquipStatusDataBuf`;
+
+  char PictureNumber[50] = "637";
+
+  char PictureTitle[50] = "EQUIPMENT   RUNNING   STATUS";
+
+  char TheDisplayPage[50] = "PicUCN_EQUIP_RUNTIME_MENU.ppic";
+
+  int TheFontColor = 4;
+
+  int TheTextFont = `font4`;
+
+  function `void escape()
+  {
+     execute("{DisplayPage(\\"%s\\");}",TheDisplayPage);
+     update();
+  }`
+
+  function `void Initialize()
+  {
+     CFMLevel = 0;
+     Current_Page = 637;
+  
+     procMsg.visibility = 1;
+     InitilizeText();
+  
+     execute("{sendMessageToHost(REQUEST_EQUIPSTATUS);}");
+  
+     DisplayAdvisoryMessage("DATA REQUESTED");
+  
+     //UpdateLocalsFromInterface();
+  
+     update();
+  
+  }`
+
+  function `void InitilizeText()
+  {
+  	printf("InitilizeText started----");
+  
+  	DisplayAdvisoryMessage("    ");
+  	DisplayAdvisoryMessage1("    ");
+  	DisplayAdvisoryMessage2("    ");
+  	DisplayAdvisoryMessage3("    ");
+  
+  	strcpy(pHostEquipStatusDataBuf->hostEquipMsg->message1,"");
+  	strcpy(pHostEquipStatusDataBuf->hostEquipMsg->message2,"");
+  	strcpy(pHostEquipStatusDataBuf->hostEquipMsg->message3,"");
+  
+  	strcpy(pHostEquipStatusDataBuf->hostCurStatusData->reactorCurStatus,"");
+  	strcpy(pHostEquipStatusDataBuf->hostCurStatusData->turGenCurStatus,"    ");
+  	strcpy(pHostEquipStatusDataBuf->hostCurStatusData->rcp1aCurStatus,"");
+  	strcpy(pHostEquipStatusDataBuf->hostCurStatusData->rcp1bCurStatus,"");
+  	strcpy(pHostEquipStatusDataBuf->hostCurStatusData->rcp2aCurStatus,"");
+  	strcpy(pHostEquipStatusDataBuf->hostCurStatusData->rcp2bCurStatus,"");
+  	strcpy(pHostEquipStatusDataBuf->hostCurStatusData->mfwp01pCurStatus,"");
+  	strcpy(pHostEquipStatusDataBuf->hostCurStatusData->mfwp02pCurStatus,"");
+  	strcpy(pHostEquipStatusDataBuf->hostCurStatusData->mfwp03pCurStatus,"");
+  	strcpy(pHostEquipStatusDataBuf->hostCurStatusData->mfwbp04pCurStatus,"");
+  	strcpy(pHostEquipStatusDataBuf->hostCurStatusData->mfwbp05pCurStatus,"");
+  	strcpy(pHostEquipStatusDataBuf->hostCurStatusData->mfwbp06pCurStatus,"");
+  
+  	strcpy(pHostEquipStatusDataBuf->hostStartDateData->reactorStartDate,"");
+  	strcpy(pHostEquipStatusDataBuf->hostStartDateData->turGenStartDate,"");
+  	strcpy(pHostEquipStatusDataBuf->hostStartDateData->rcp1aStartDate,"");
+  	strcpy(pHostEquipStatusDataBuf->hostStartDateData->rcp1bStartDate,"");
+  	strcpy(pHostEquipStatusDataBuf->hostStartDateData->rcp2aStartDate,"");
+  	strcpy(pHostEquipStatusDataBuf->hostStartDateData->rcp2bStartDate,"");
+  	strcpy(pHostEquipStatusDataBuf->hostStartDateData->mfwp01pStartDate,"");
+  	strcpy(pHostEquipStatusDataBuf->hostStartDateData->mfwp02pStartDate,"");
+  	strcpy(pHostEquipStatusDataBuf->hostStartDateData->mfwp03pStartDate,"");
+  	strcpy(pHostEquipStatusDataBuf->hostStartDateData->mfwbp04pStartDate,"");
+  	strcpy(pHostEquipStatusDataBuf->hostStartDateData->mfwbp05pStartDate,"");
+  	strcpy(pHostEquipStatusDataBuf->hostStartDateData->mfwbp06pStartDate,"");
+  
+  	strcpy(pHostEquipStatusDataBuf->hostStartTimeData->reactorStartTime,"");
+  	strcpy(pHostEquipStatusDataBuf->hostStartTimeData->turGenStartTime,"");
+  	strcpy(pHostEquipStatusDataBuf->hostStartTimeData->rcp1aStartTime,"");
+  	strcpy(pHostEquipStatusDataBuf->hostStartTimeData->rcp1bStartTime,"");
+  	strcpy(pHostEquipStatusDataBuf->hostStartTimeData->rcp2aStartTime,"");
+  	strcpy(pHostEquipStatusDataBuf->hostStartTimeData->rcp2bStartTime,"");
+  	strcpy(pHostEquipStatusDataBuf->hostStartTimeData->mfwp01pStartTime,"");
+  	strcpy(pHostEquipStatusDataBuf->hostStartTimeData->mfwp02pStartTime,"");
+  	strcpy(pHostEquipStatusDataBuf->hostStartTimeData->mfwp03pStartTime,"");
+  	strcpy(pHostEquipStatusDataBuf->hostStartTimeData->mfwbp04pStartTime,"");
+  	strcpy(pHostEquipStatusDataBuf->hostStartTimeData->mfwbp05pStartTime,"");
+  	strcpy(pHostEquipStatusDataBuf->hostStartTimeData->mfwbp06pStartTime,"");
+  
+  	pHostEquipStatusDataBuf->hostRunningTimeData->reactorRunningTime=0;
+  	pHostEquipStatusDataBuf->hostRunningTimeData->turGenRunningTime=0;
+  	pHostEquipStatusDataBuf->hostRunningTimeData->rcp1aRunningTime=0;
+  	pHostEquipStatusDataBuf->hostRunningTimeData->rcp1bRunningTime=0;
+  	pHostEquipStatusDataBuf->hostRunningTimeData->rcp2aRunningTime=0;
+  	pHostEquipStatusDataBuf->hostRunningTimeData->rcp2bRunningTime=0;
+  	pHostEquipStatusDataBuf->hostRunningTimeData->mfwp01pRunningTime=0;
+  	pHostEquipStatusDataBuf->hostRunningTimeData->mfwp02pRunningTime=0;
+  	pHostEquipStatusDataBuf->hostRunningTimeData->mfwp03pRunningTime=0;
+  	pHostEquipStatusDataBuf->hostRunningTimeData->mfwbp04pRunningTime=0;
+  	pHostEquipStatusDataBuf->hostRunningTimeData->mfwbp05pRunningTime=0;
+  	pHostEquipStatusDataBuf->hostRunningTimeData->mfwbp06pRunningTime=0;
+  
+  	Reactor_CurStat.theText = "";
+  	Reactor_StartDate.theText = "";
+  	Reactor_StartTime.theText = "";
+  	Reactor_RunningTime.theText = 0;
+  
+  	TurGen_CurStat.theText = "";
+  	TurGen_StartDate.theText = "";
+  	TurGen_StartTime.theText = "";
+  	TurGen_RunningTime.theText = 0;
+  
+  	RCP1A_CurStat.theText = "";
+  	RCP1A_StartDate.theText = "";
+  	RCP1A_StartTime.theText = "";
+  	RCP1A_RunningTime.theText = 0;
+  
+  	RCP1B_CurStat.theText = "";
+  	RCP1B_StartDate.theText = "";
+  	RCP1B_StartTime.theText = "";
+  	RCP1B_RunningTime.theText = 0;
+  
+  	RCP2A_CurStat.theText = "";
+  	RCP2A_StartDate.theText = "";
+  	RCP2A_StartTime.theText = "";
+  	RCP2A_RunningTime.theText = 0;
+  
+  	RCP2B_CurStat.theText = "";
+  	RCP2B_StartDate.theText = "";
+  	RCP2B_StartTime.theText = "";
+  	RCP2B_RunningTime.theText = 0;
+  
+  	MFWP01P_CurStat.theText = "";
+  	MFWP01P_StartDate.theText = "";
+  	MFWP01P_StartTime.theText = "";
+  	MFWP01P_RunningTime.theText = 0;
+  
+  	MFWP02P_CurStat.theText = "";
+  	MFWP02P_StartDate.theText = "";
+  	MFWP02P_StartTime.theText = "";
+  	MFWP02P_RunningTime.theText = 0;
+  
+  	MFWP03P_CurStat.theText = "";
+  	MFWP03P_StartDate.theText = "";
+  	MFWP03P_StartTime.theText = "";
+  	MFWP03P_RunningTime.theText = 0;
+  
+  	MFWBP04P_CurStat.theText = "";
+  	MFWBP04P_StartDate.theText = "";
+  	MFWBP04P_StartTime.theText = "";
+  	MFWBP04P_RunningTime.theText = 0;
+  
+  	MFWBP05P_CurStat.theText = "";
+  	MFWBP05P_StartDate.theText = "";
+  	MFWBP05P_StartTime.theText = "";
+  	MFWBP05P_RunningTime.theText = 0;
+  
+  	MFWBP06P_CurStat.theText = "";
+  	MFWBP06P_StartDate.theText = "";
+  	MFWBP06P_StartTime.theText = "";
+  	MFWBP06P_RunningTime.theText = 0;
+  
+  /*
+  	printf("============INIT Current Status=============================================");
+  	printf("Reactor_CurStat = %s", pHostEquipStatusDataBuf->hostCurStatusData->reactorCurStatus);
+  	printf("TurGen_CurStat = %s", pHostEquipStatusDataBuf->hostCurStatusData->turGenCurStatus);
+  	printf("RCP1A_CurStat = %s", pHostEquipStatusDataBuf->hostCurStatusData->rcp1aCurStatus);
+  	printf("RCP1B_CurStat = %s", pHostEquipStatusDataBuf->hostCurStatusData->rcp1bCurStatus);
+  	printf("RCP2A_CurStat = %s", pHostEquipStatusDataBuf->hostCurStatusData->rcp2aCurStatus);
+  	printf("RCP2B_CurStat = %s", pHostEquipStatusDataBuf->hostCurStatusData->rcp2bCurStatus);
+  	printf("MFWP01P_CurStat = %s",pHostEquipStatusDataBuf->hostCurStatusData->mfwp01pCurStatus);
+  	printf("MFWP02P_CurStat = %s",pHostEquipStatusDataBuf->hostCurStatusData->mfwp02pCurStatus);
+  	printf("MFWP03P_CurStat = %s",pHostEquipStatusDataBuf->hostCurStatusData->mfwp03pCurStatus);
+  	printf("MFWBP04P_CurStat = %s",pHostEquipStatusDataBuf->hostCurStatusData->mfwbp04pCurStatus);
+  	printf("MFWBP05P_CurStat = %s",pHostEquipStatusDataBuf->hostCurStatusData->mfwbp05pCurStatus);
+  	printf("MFWBP06P_CurStat = %s",pHostEquipStatusDataBuf->hostCurStatusData->mfwbp06pCurStatus);
+  
+  	printf("============INIT Start Date=============================================");
+  	printf("Reactor_StartDate = %s", pHostEquipStatusDataBuf->hostStartDateData->reactorStartDate);
+  	printf("TurGen_StartDate = %s", pHostEquipStatusDataBuf->hostStartDateData->turGenStartDate);
+  	printf("RCP1A_StartDate = %s", pHostEquipStatusDataBuf->hostStartDateData->rcp1aStartDate);
+  	printf("RCP1B_StartDate = %s", pHostEquipStatusDataBuf->hostStartDateData->rcp1bStartDate);
+  	printf("RCP2A_StartDate = %s", pHostEquipStatusDataBuf->hostStartDateData->rcp2aStartDate);
+  	printf("RCP2B_StartDate = %s", pHostEquipStatusDataBuf->hostStartDateData->rcp2bStartDate);
+  	printf("MFWP01P_StartDate = %s",pHostEquipStatusDataBuf->hostStartDateData->mfwp01pStartDate);
+  	printf("MFWP02P_StartDate = %s",pHostEquipStatusDataBuf->hostStartDateData->mfwp02pStartDate);
+  	printf("MFWP03P_StartDate = %s",pHostEquipStatusDataBuf->hostStartDateData->mfwp03pStartDate);
+  	printf("MFWBP04P_StartDate = %s",pHostEquipStatusDataBuf->hostStartDateData->mfwbp04pStartDate);
+  	printf("MFWBP05P_StartDate = %s",pHostEquipStatusDataBuf->hostStartDateData->mfwbp05pStartDate);
+  	printf("MFWBP06P_StartDate = %s",pHostEquipStatusDataBuf->hostStartDateData->mfwbp06pStartDate);
+  
+  	printf("===========INIT Start Time=============================================");
+  	printf("Reactor_StartTime = %s", pHostEquipStatusDataBuf->hostStartTimeData->reactorStartTime);
+  	printf("TurGen_StartTime = %s", pHostEquipStatusDataBuf->hostStartTimeData->turGenStartTime);
+  	printf("RCP1A_StartTime = %s", pHostEquipStatusDataBuf->hostStartTimeData->rcp1aStartTime);
+  	printf("RCP1B_StartTime = %s", pHostEquipStatusDataBuf->hostStartTimeData->rcp1bStartTime);
+  	printf("RCP2A_StartTime = %s", pHostEquipStatusDataBuf->hostStartTimeData->rcp2aStartTime);
+  	printf("RCP2B_StartTime = %s", pHostEquipStatusDataBuf->hostStartTimeData->rcp2bStartTime);
+  	printf("MFWP01P_StartTime = %s",pHostEquipStatusDataBuf->hostStartTimeData->mfwp01pStartTime);
+  	printf("MFWP02P_StartTime = %s",pHostEquipStatusDataBuf->hostStartTimeData->mfwp02pStartTime);
+  	printf("MFWP03P_StartTime = %s",pHostEquipStatusDataBuf->hostStartTimeData->mfwp03pStartTime);
+  	printf("MFWBP04P_StartTime = %s",pHostEquipStatusDataBuf->hostStartTimeData->mfwbp04pStartTime);
+  	printf("MFWBP05P_StartTime = %s",pHostEquipStatusDataBuf->hostStartTimeData->mfwbp05pStartTime);
+  	printf("MFWBP06P_StartTime = %s",pHostEquipStatusDataBuf->hostStartTimeData->mfwbp06pStartTime);
+  
+  	printf("============INIT Running Time=============================================");
+  	printf("Reactor_RunningTime = %f", pHostEquipStatusDataBuf->hostRunningTimeData->reactorRunningTime);
+  	printf("TurGen_RunningTime = %f", pHostEquipStatusDataBuf->hostRunningTimeData->turGenRunningTime);
+  	printf("RCP1A_RunningTime = %f", pHostEquipStatusDataBuf->hostRunningTimeData->rcp1aRunningTime);
+  	printf("RCP1B_RunningTime = %f", pHostEquipStatusDataBuf->hostRunningTimeData->rcp1bRunningTime);
+  	printf("RCP2A_RunningTime = %f", pHostEquipStatusDataBuf->hostRunningTimeData->rcp2aRunningTime);
+  	printf("RCP2B_RunningTime = %f", pHostEquipStatusDataBuf->hostRunningTimeData->rcp2bRunningTime);
+  	printf("MFWP01P_RunningTime = %f",pHostEquipStatusDataBuf->hostRunningTimeData->mfwp01pRunningTime);
+  	printf("MFWP02P_RunningTime = %f",pHostEquipStatusDataBuf->hostRunningTimeData->mfwp02pRunningTime);
+  	printf("MFWP03P_RunningTime = %f",pHostEquipStatusDataBuf->hostRunningTimeData->mfwp03pRunningTime);
+  	printf("MFWBP04P_RunningTime = %f",pHostEquipStatusDataBuf->hostRunningTimeData->mfwbp04pRunningTime);
+  	printf("MFWBP05P_RunningTime = %f",pHostEquipStatusDataBuf->hostRunningTimeData->mfwbp05pRunningTime);
+  	printf("MFWBP06P_RunningTime = %f",pHostEquipStatusDataBuf->hostRunningTimeData->mfwbp06pRunningTime);
+  */
+  
+     update();
+  }`
+
+  function `int KludgeConfirm()
+  {
+  
+    	//printf("sent: %d, received: %d", Interface->System.sentData, Interface->System.receivedData);
+  
+   	if(Interface->System.sentData && Interface->System.receivedData)
+    	{
+     		execute("{sendMessageToHost(REQUEST_EQUIPSTATUS);}");
+  
+    		//Interface->System.sentData = 0;
+    		Interface->System.receivedData = 0;
+    	}
+  
+  
+  	//printf("KludgeConfirm() Call");
+     	//execute("{sendMessageToHost(REQUEST_EQUIPSTATUS);}");
+  
+    	return (1);
+  }`
+
+  function `void ProcessingConfirmed()
+  {
+  	procMsg.visibility = 0;
+  
+  	DisplayAdvisoryMessage("              ");
+  	DisplayAdvisoryMessage1("              ");
+  	DisplayAdvisoryMessage2("              ");
+  
+  	DisplayAdvisoryMessage(pHostEquipStatusDataBuf->hostEquipMsg->message1);
+  	DisplayAdvisoryMessage1(pHostEquipStatusDataBuf->hostEquipMsg->message2);
+  	DisplayAdvisoryMessage2(pHostEquipStatusDataBuf->hostEquipMsg->message3);
+  
+  	UpdateLocalsFromInterface();
+  }`
+
+  function `void UpdateLocalsFromInterface()
+    {
+    	Reactor_CurStat.theText= pHostEquipStatusDataBuf->hostCurStatusData->reactorCurStatus;
+    	TurGen_CurStat.theText = pHostEquipStatusDataBuf->hostCurStatusData->turGenCurStatus;
+    	RCP1A_CurStat.theText = pHostEquipStatusDataBuf->hostCurStatusData->rcp1aCurStatus;
+    	RCP1B_CurStat.theText = pHostEquipStatusDataBuf->hostCurStatusData->rcp1bCurStatus;
+    	RCP2A_CurStat.theText = pHostEquipStatusDataBuf->hostCurStatusData->rcp2aCurStatus;
+    	RCP2B_CurStat.theText = pHostEquipStatusDataBuf->hostCurStatusData->rcp2bCurStatus;
+    	MFWP01P_CurStat.theText = pHostEquipStatusDataBuf->hostCurStatusData->mfwp01pCurStatus;
+    	MFWP02P_CurStat.theText = pHostEquipStatusDataBuf->hostCurStatusData->mfwp02pCurStatus;
+    	MFWP03P_CurStat.theText = pHostEquipStatusDataBuf->hostCurStatusData->mfwp03pCurStatus;
+    	MFWBP04P_CurStat.theText = pHostEquipStatusDataBuf->hostCurStatusData->mfwbp04pCurStatus;
+    	MFWBP05P_CurStat.theText = pHostEquipStatusDataBuf->hostCurStatusData->mfwbp05pCurStatus;
+    	MFWBP06P_CurStat.theText = pHostEquipStatusDataBuf->hostCurStatusData->mfwbp06pCurStatus;
+  
+    	Reactor_StartDate.theText = pHostEquipStatusDataBuf->hostStartDateData->reactorStartDate;
+    	TurGen_StartDate.theText = pHostEquipStatusDataBuf->hostStartDateData->turGenStartDate;
+    	RCP1A_StartDate.theText = pHostEquipStatusDataBuf->hostStartDateData->rcp1aStartDate;
+    	RCP1B_StartDate.theText = pHostEquipStatusDataBuf->hostStartDateData->rcp1bStartDate;
+    	RCP2A_StartDate.theText = pHostEquipStatusDataBuf->hostStartDateData->rcp2aStartDate;
+    	RCP2B_StartDate.theText = pHostEquipStatusDataBuf->hostStartDateData->rcp2bStartDate;
+    	MFWP01P_StartDate.theText = pHostEquipStatusDataBuf->hostStartDateData->mfwp01pStartDate;
+    	MFWP02P_StartDate.theText = pHostEquipStatusDataBuf->hostStartDateData->mfwp02pStartDate;
+    	MFWP03P_StartDate.theText = pHostEquipStatusDataBuf->hostStartDateData->mfwp03pStartDate;
+    	MFWBP04P_StartDate.theText = pHostEquipStatusDataBuf->hostStartDateData->mfwbp04pStartDate;
+    	MFWBP05P_StartDate.theText = pHostEquipStatusDataBuf->hostStartDateData->mfwbp05pStartDate;
+    	MFWBP06P_StartDate.theText = pHostEquipStatusDataBuf->hostStartDateData->mfwbp06pStartDate;
+  
+    	Reactor_StartTime.theText = pHostEquipStatusDataBuf->hostStartTimeData->reactorStartTime;
+    	TurGen_StartTime.theText = pHostEquipStatusDataBuf->hostStartTimeData->turGenStartTime;
+    	RCP1A_StartTime.theText = pHostEquipStatusDataBuf->hostStartTimeData->rcp1aStartTime;
+    	RCP1B_StartTime.theText = pHostEquipStatusDataBuf->hostStartTimeData->rcp1bStartTime;
+    	RCP2A_StartTime.theText = pHostEquipStatusDataBuf->hostStartTimeData->rcp2aStartTime;
+    	RCP2B_StartTime.theText = pHostEquipStatusDataBuf->hostStartTimeData->rcp2bStartTime;
+    	MFWP01P_StartTime.theText = pHostEquipStatusDataBuf->hostStartTimeData->mfwp01pStartTime;
+    	MFWP02P_StartTime.theText = pHostEquipStatusDataBuf->hostStartTimeData->mfwp02pStartTime;
+    	MFWP03P_StartTime.theText = pHostEquipStatusDataBuf->hostStartTimeData->mfwp03pStartTime;
+    	MFWBP04P_StartTime.theText = pHostEquipStatusDataBuf->hostStartTimeData->mfwbp04pStartTime;
+    	MFWBP05P_StartTime.theText = pHostEquipStatusDataBuf->hostStartTimeData->mfwbp05pStartTime;
+    	MFWBP06P_StartTime.theText = pHostEquipStatusDataBuf->hostStartTimeData->mfwbp06pStartTime;
+  
+    	Reactor_RunningTime.theText = pHostEquipStatusDataBuf->hostRunningTimeData->reactorRunningTime;
+    	TurGen_RunningTime.theText = pHostEquipStatusDataBuf->hostRunningTimeData->turGenRunningTime;
+    	RCP1A_RunningTime.theText = pHostEquipStatusDataBuf->hostRunningTimeData->rcp1aRunningTime;
+    	RCP1B_RunningTime.theText = pHostEquipStatusDataBuf->hostRunningTimeData->rcp1bRunningTime;
+    	RCP2A_RunningTime.theText = pHostEquipStatusDataBuf->hostRunningTimeData->rcp2aRunningTime;
+    	RCP2B_RunningTime.theText = pHostEquipStatusDataBuf->hostRunningTimeData->rcp2bRunningTime;
+    	MFWP01P_RunningTime.theText = pHostEquipStatusDataBuf->hostRunningTimeData->mfwp01pRunningTime;
+    	MFWP02P_RunningTime.theText = pHostEquipStatusDataBuf->hostRunningTimeData->mfwp02pRunningTime;
+    	MFWP03P_RunningTime.theText = pHostEquipStatusDataBuf->hostRunningTimeData->mfwp03pRunningTime;
+    	MFWBP04P_RunningTime.theText = pHostEquipStatusDataBuf->hostRunningTimeData->mfwbp04pRunningTime;
+    	MFWBP05P_RunningTime.theText = pHostEquipStatusDataBuf->hostRunningTimeData->mfwbp05pRunningTime;
+    	MFWBP06P_RunningTime.theText = pHostEquipStatusDataBuf->hostRunningTimeData->mfwbp06pRunningTime;
+  
+  /*
+  	printf("============Current Status=============================================");
+    	printf("Reactor_CurStat = %s", pHostEquipStatusDataBuf->hostCurStatusData->reactorCurStatus);
+    	printf("TurGen_CurStat = %s", pHostEquipStatusDataBuf->hostCurStatusData->turGenCurStatus);
+    	printf("RCP1A_CurStat = %s", pHostEquipStatusDataBuf->hostCurStatusData->rcp1aCurStatus);
+    	printf("RCP1B_CurStat = %s", pHostEquipStatusDataBuf->hostCurStatusData->rcp1bCurStatus);
+    	printf("RCP2A_CurStat = %s", pHostEquipStatusDataBuf->hostCurStatusData->rcp2aCurStatus);
+    	printf("RCP2B_CurStat = %s", pHostEquipStatusDataBuf->hostCurStatusData->rcp2bCurStatus);
+    	printf("MFWP01P_CurStat = %s",pHostEquipStatusDataBuf->hostCurStatusData->mfwp01pCurStatus);
+    	printf("MFWP02P_CurStat = %s",pHostEquipStatusDataBuf->hostCurStatusData->mfwp02pCurStatus);
+    	printf("MFWP03P_CurStat = %s",pHostEquipStatusDataBuf->hostCurStatusData->mfwp03pCurStatus);
+    	printf("MFWBP04P_CurStat = %s",pHostEquipStatusDataBuf->hostCurStatusData->mfwbp04pCurStatus);
+    	printf("MFWBP05P_CurStat = %s",pHostEquipStatusDataBuf->hostCurStatusData->mfwbp05pCurStatus);
+    	printf("MFWBP06P_CurStat = %s",pHostEquipStatusDataBuf->hostCurStatusData->mfwbp06pCurStatus);
+  
+  	printf("============Start Date=============================================");
+    	printf("Reactor_StartDate = %s", pHostEquipStatusDataBuf->hostStartDateData->reactorStartDate);
+    	printf("TurGen_StartDate = %s", pHostEquipStatusDataBuf->hostStartDateData->turGenStartDate);
+    	printf("RCP1A_StartDate = %s", pHostEquipStatusDataBuf->hostStartDateData->rcp1aStartDate);
+    	printf("RCP1B_StartDate = %s", pHostEquipStatusDataBuf->hostStartDateData->rcp1bStartDate);
+    	printf("RCP2A_StartDate = %s", pHostEquipStatusDataBuf->hostStartDateData->rcp2aStartDate);
+    	printf("RCP2B_StartDate = %s", pHostEquipStatusDataBuf->hostStartDateData->rcp2bStartDate);
+    	printf("MFWP01P_StartDate = %s",pHostEquipStatusDataBuf->hostStartDateData->mfwp01pStartDate);
+    	printf("MFWP02P_StartDate = %s",pHostEquipStatusDataBuf->hostStartDateData->mfwp02pStartDate);
+    	printf("MFWP03P_StartDate = %s",pHostEquipStatusDataBuf->hostStartDateData->mfwp03pStartDate);
+    	printf("MFWBP04P_StartDate = %s",pHostEquipStatusDataBuf->hostStartDateData->mfwbp04pStartDate);
+    	printf("MFWBP05P_StartDate = %s",pHostEquipStatusDataBuf->hostStartDateData->mfwbp05pStartDate);
+    	printf("MFWBP06P_StartDate = %s",pHostEquipStatusDataBuf->hostStartDateData->mfwbp06pStartDate);
+  
+  	printf("============Start Time=============================================");
+    	printf("Reactor_StartTime = %s", pHostEquipStatusDataBuf->hostStartTimeData->reactorStartTime);
+    	printf("TurGen_StartTime = %s", pHostEquipStatusDataBuf->hostStartTimeData->turGenStartTime);
+    	printf("RCP1A_StartTime = %s", pHostEquipStatusDataBuf->hostStartTimeData->rcp1aStartTime);
+    	printf("RCP1B_StartTime = %s", pHostEquipStatusDataBuf->hostStartTimeData->rcp1bStartTime);
+    	printf("RCP2A_StartTime = %s", pHostEquipStatusDataBuf->hostStartTimeData->rcp2aStartTime);
+    	printf("RCP2B_StartTime = %s", pHostEquipStatusDataBuf->hostStartTimeData->rcp2bStartTime);
+    	printf("MFWP01P_StartTime = %s",pHostEquipStatusDataBuf->hostStartTimeData->mfwp01pStartTime);
+    	printf("MFWP02P_StartTime = %s",pHostEquipStatusDataBuf->hostStartTimeData->mfwp02pStartTime);
+    	printf("MFWP03P_StartTime = %s",pHostEquipStatusDataBuf->hostStartTimeData->mfwp03pStartTime);
+    	printf("MFWBP04P_StartTime = %s",pHostEquipStatusDataBuf->hostStartTimeData->mfwbp04pStartTime);
+    	printf("MFWBP05P_StartTime = %s",pHostEquipStatusDataBuf->hostStartTimeData->mfwbp05pStartTime);
+    	printf("MFWBP06P_StartTime = %s",pHostEquipStatusDataBuf->hostStartTimeData->mfwbp06pStartTime);
+  
+  	printf("============Running Time=============================================");
+    	printf("Reactor_RunningTime = %f", pHostEquipStatusDataBuf->hostRunningTimeData->reactorRunningTime);
+    	printf("TurGen_RunningTime = %f", pHostEquipStatusDataBuf->hostRunningTimeData->turGenRunningTime);
+    	printf("RCP1A_RunningTime = %f", pHostEquipStatusDataBuf->hostRunningTimeData->rcp1aRunningTime);
+    	printf("RCP1B_RunningTime = %f", pHostEquipStatusDataBuf->hostRunningTimeData->rcp1bRunningTime);
+    	printf("RCP2A_RunningTime = %f", pHostEquipStatusDataBuf->hostRunningTimeData->rcp2aRunningTime);
+    	printf("RCP2B_RunningTime = %f", pHostEquipStatusDataBuf->hostRunningTimeData->rcp2bRunningTime);
+    	printf("MFWP01P_RunningTime = %f",pHostEquipStatusDataBuf->hostRunningTimeData->mfwp01pRunningTime);
+    	printf("MFWP02P_RunningTime = %f",pHostEquipStatusDataBuf->hostRunningTimeData->mfwp02pRunningTime);
+    	printf("MFWP03P_RunningTime = %f",pHostEquipStatusDataBuf->hostRunningTimeData->mfwp03pRunningTime);
+    	printf("MFWBP04P_RunningTime = %f",pHostEquipStatusDataBuf->hostRunningTimeData->mfwbp04pRunningTime);
+    	printf("MFWBP05P_RunningTime = %f",pHostEquipStatusDataBuf->hostRunningTimeData->mfwbp05pRunningTime);
+    	printf("MFWBP06P_RunningTime = %f",pHostEquipStatusDataBuf->hostRunningTimeData->mfwbp06pRunningTime);
+  */
+       update();
+    }`
+
+  dialogue
+  {
+    event = `keyPressed(0xFF1B)`;
+    action = `{
+    escape();
+    }`;
+  }
+
+  rectangle
+  {
+    x = 130;
+    y = 0;
+    width = 0;
+    height = 0;
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = 0;
+    linePattern = `SolidPattern`;
+    lineWidth = 0;
+    foregroundFillColour = 0;
+    backgroundFillColour = -1;
+    fillPattern = `NoPattern`;
+    xReference = 130;
+    yReference = 0;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle
+  {
+    x = 51;
+    y = 33.4444;
+    width = 1188;
+    height = 672;
+    visibility = 1;
+    foregroundColour = `COLOR_LINE_BOUNDARY_6`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 0;
+    foregroundFillColour = `COLOR_PICTURE_BACKGROUND`;
+    backgroundFillColour = -1;
+    fillPattern = `NoPattern`;
+    xReference = 115.556;
+    yReference = 47.7778;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  line
+  {
+    numberOfPoints = 2;
+    point[0] = ( 51, 89.8889 );
+    point[1] = ( 1239, 89.8889 );
+    visibility = 1;
+    foregroundColour = `COLOR_LINE_BOUNDARY_6`;
+    backgroundColour = -1;
+    lineStyle = `SolidStyle`;
+    lineWidth = 0;
+    xReference = 135.556;
+    yReference = 90;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 94.6666;
+    y = 59.2222;
+    format = "%s";
+    theText = "EQUIPMENT";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 94.4444;
+    yReference = 58.8889;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 85.8888;
+    y = 81.5556;
+    format = "%s";
+    theText = "DESCRIPTION";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 85.5556;
+    yReference = 81.1111;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 321.445;
+    y = 59.3333;
+    format = "%s";
+    theText = "CURRENT";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 321.111;
+    yReference = 58.8889;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 329.334;
+    y = 81.6667;
+    format = "%s";
+    theText = "STATUS";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 328.889;
+    yReference = 81.1111;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 490.112;
+    y = 70.6666;
+    format = "%s";
+    theText = "UNIT";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 490;
+    yReference = 70;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 675.219;
+    y = 58.4445;
+    format = "%s";
+    theText = "LATEST  START";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 674.444;
+    yReference = 57.7778;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 633.998;
+    y = 80.7777;
+    format = "%s";
+    theText = "DATE";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 633.333;
+    yReference = 80;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 1016.21;
+    y = 58.5556;
+    format = "%s";
+    theText = "RUNNING TIME";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 1015.56;
+    yReference = 57.7778;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 960.768;
+    y = 80.8888;
+    format = "%s";
+    theText = "SINCE LAST START (HOURS)";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 960;
+    yReference = 80;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 63.7776;
+    y = 130;
+    format = "%s";
+    theText = "REACTOR";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 63.3333;
+    yReference = 126.667;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 63.8887;
+    y = 180;
+    format = "%s";
+    theText = "TURB/GENERATOR";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 63.3333;
+    yReference = 166.667;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 62.8887;
+    y = 230;
+    format = "%s";
+    theText = "RCP  1A";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 62.2222;
+    yReference = 203.333;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 62.9998;
+    y = 280;
+    format = "%s";
+    theText = "RCP  1B";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 62.2222;
+    yReference = 241.111;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 63.1109;
+    y = 330;
+    format = "%s";
+    theText = "RCP  2A";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 62.2222;
+    yReference = 420;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 63.2219;
+    y = 380;
+    format = "%s";
+    theText = "RCP  2B";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 62.2222;
+    yReference = 457.778;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 63.333;
+    y = 430;
+    format = "%s";
+    theText = "MFWP  01P  (TURB)";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 62.2222;
+    yReference = 497.778;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 63.4441;
+    y = 480;
+    format = "%s";
+    theText = "MFWP  02P  (TURB)";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 62.2222;
+    yReference = 541.111;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 63.5552;
+    y = 530;
+    format = "%s";
+    theText = "MFWP  03P  (MTR)";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 62.2222;
+    yReference = 583.333;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 63.6663;
+    y = 580;
+    format = "%s";
+    theText = "MFWBP  04P";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 62.2222;
+    yReference = 627.778;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 63.7774;
+    y = 630;
+    format = "%s";
+    theText = "MFWBP  05P";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 62.2222;
+    yReference = 665.556;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 63.8884;
+    y = 680;
+    format = "%s";
+    theText = "MFWBP  06P";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 62.2222;
+    yReference = 703.333;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  line
+  {
+    numberOfPoints = 2;
+    point[0] = ( 51.1111, 93.3333 );
+    point[1] = ( 1239.11, 93.3333 );
+    visibility = 1;
+    foregroundColour = `COLOR_LINE_BOUNDARY_6`;
+    backgroundColour = -1;
+    lineStyle = `SolidStyle`;
+    lineWidth = 0;
+    xReference = 135.556;
+    yReference = 93.3333;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text MFWBP04P_CurStat
+  {
+    x = 347.112;
+    y = 580;
+    format = "%s";
+    theText = "START";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 345.556;
+    yReference = 652.222;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text MFWBP05P_CurStat
+  {
+    x = 346.112;
+    y = 630;
+    format = "%s";
+    theText = "START";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 344.444;
+    yReference = 672.222;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text MFWBP06P_CurStat
+  {
+    x = 346.223;
+    y = 680;
+    format = "%s";
+    theText = "START";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 344.444;
+    yReference = 725.556;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text Reactor_Unit
+  {
+    x = 493.556;
+    y = 130;
+    format = "%s";
+    theText = "PCT";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 493.333;
+    yReference = 125.556;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text TurGen_Unit
+  {
+    x = 493.556;
+    y = 175.667;
+    format = "%s";
+    theText = "MW";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 493.333;
+    yReference = 171.111;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text RCP1A_Unit
+  {
+    x = 493.556;
+    y = 230;
+    format = "%s";
+    theText = "RPM";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 492.222;
+    yReference = 220;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text RCP2A_Unit
+  {
+    x = 493.556;
+    y = 330;
+    format = "%s";
+    theText = "RPM";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 481.111;
+    yReference = 348.889;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text MFWP01P_Unit
+  {
+    x = 493.556;
+    y = 430;
+    format = "%s";
+    theText = "RPM";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 481.111;
+    yReference = 397.778;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text RCP2B_Unit
+  {
+    x = 493.556;
+    y = 380;
+    format = "%s";
+    theText = "RPM";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 483.333;
+    yReference = 436.667;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text MFWP02P_Unit
+  {
+    x = 493.556;
+    y = 480;
+    format = "%s";
+    theText = "RPM";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 483.333;
+    yReference = 511.111;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text RCP1B_Unit
+  {
+    x = 493.556;
+    y = 280;
+    format = "%s";
+    theText = "RPM";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 492.222;
+    yReference = 278.889;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text MFWP03P_Unit
+  {
+    x = 493.556;
+    y = 530;
+    format = "%s";
+    theText = "RPM";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 491.111;
+    yReference = 543.333;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text Reactor_StartDate
+  {
+    x = 605.545;
+    y = 129.956;
+    format = "%s";
+    theText = "DATE";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 3;
+    backgroundColour = -1;
+    theFont = 14;
+    xReference = 614.444;
+    yReference = 135.556;
+    xScaleFactor = 1.11111;
+    yScaleFactor = 1.11111;
+    rotationAngle = 0;
+  }
+
+  text Reactor_StartTime
+  {
+    x = 805.556;
+    y = 130;
+    format = "%s";
+    theText = "TIME";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 3;
+    backgroundColour = -1;
+    theFont = 14;
+    xReference = 805.556;
+    yReference = 131.111;
+    xScaleFactor = 1.11111;
+    yScaleFactor = 1.11111;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 810.216;
+    y = 80.8888;
+    format = "%s";
+    theText = "TIME";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 810;
+    yReference = 80;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text TurGen_StartDate
+  {
+    x = 605.545;
+    y = 180.044;
+    format = "%s";
+    theText = "DATE";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 3;
+    backgroundColour = -1;
+    theFont = 14;
+    xReference = 614.444;
+    yReference = 174.444;
+    xScaleFactor = 1.11111;
+    yScaleFactor = 1.11111;
+    rotationAngle = 0;
+  }
+
+  text RCP1B_StartDate
+  {
+    x = 605.556;
+    y = 280;
+    format = "%s";
+    theText = "DATE";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 3;
+    backgroundColour = -1;
+    theFont = 14;
+    xReference = 617.778;
+    yReference = 283.333;
+    xScaleFactor = 1.11111;
+    yScaleFactor = 1.11111;
+    rotationAngle = 0;
+  }
+
+  text RCP2A_StartDate
+  {
+    x = 605.556;
+    y = 330;
+    format = "%s";
+    theText = "DATE";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 3;
+    backgroundColour = -1;
+    theFont = 14;
+    xReference = 616.667;
+    yReference = 332.222;
+    xScaleFactor = 1.11111;
+    yScaleFactor = 1.11111;
+    rotationAngle = 0;
+  }
+
+  text RCP2B_StartDate
+  {
+    x = 605.556;
+    y = 380;
+    format = "%s";
+    theText = "DATE";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 3;
+    backgroundColour = -1;
+    theFont = 14;
+    xReference = 616.667;
+    yReference = 385.556;
+    xScaleFactor = 1.11111;
+    yScaleFactor = 1.11111;
+    rotationAngle = 0;
+  }
+
+  text MFWP01P_StartDate
+  {
+    x = 605.556;
+    y = 430;
+    format = "%s";
+    theText = "DATE";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 3;
+    backgroundColour = -1;
+    theFont = 14;
+    xReference = 614.444;
+    yReference = 440;
+    xScaleFactor = 1.11111;
+    yScaleFactor = 1.11111;
+    rotationAngle = 0;
+  }
+
+  text MFWP02P_StartDate
+  {
+    x = 605.556;
+    y = 480;
+    format = "%s";
+    theText = "DATE";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 3;
+    backgroundColour = -1;
+    theFont = 14;
+    xReference = 618.889;
+    yReference = 488.889;
+    xScaleFactor = 1.11111;
+    yScaleFactor = 1.11111;
+    rotationAngle = 0;
+  }
+
+  text MFWP03P_StartDate
+  {
+    x = 605.556;
+    y = 530;
+    format = "%s";
+    theText = "DATE";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 3;
+    backgroundColour = -1;
+    theFont = 14;
+    xReference = 617.778;
+    yReference = 533.333;
+    xScaleFactor = 1.11111;
+    yScaleFactor = 1.11111;
+    rotationAngle = 0;
+  }
+
+  text MFWBP04P_StartDate
+  {
+    x = 605.556;
+    y = 580;
+    format = "%s";
+    theText = "DATE";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 3;
+    backgroundColour = -1;
+    theFont = 14;
+    xReference = 616.667;
+    yReference = 581.111;
+    xScaleFactor = 1.11111;
+    yScaleFactor = 1.11111;
+    rotationAngle = 0;
+  }
+
+  text MFWBP05P_StartDate
+  {
+    x = 605.556;
+    y = 630;
+    format = "%s";
+    theText = "DATE";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 3;
+    backgroundColour = -1;
+    theFont = 14;
+    xReference = 615.556;
+    yReference = 631.111;
+    xScaleFactor = 1.11111;
+    yScaleFactor = 1.11111;
+    rotationAngle = 0;
+  }
+
+  text MFWBP06P_StartDate
+  {
+    x = 605.556;
+    y = 680;
+    format = "%s";
+    theText = "DATE";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 3;
+    backgroundColour = -1;
+    theFont = 14;
+    xReference = 614.444;
+    yReference = 684.444;
+    xScaleFactor = 1.11111;
+    yScaleFactor = 1.11111;
+    rotationAngle = 0;
+  }
+
+  text RCP1A_StartDate
+  {
+    x = 605.556;
+    y = 230;
+    format = "%s";
+    theText = "DATE";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 3;
+    backgroundColour = -1;
+    theFont = 14;
+    xReference = 613.333;
+    yReference = 237.778;
+    xScaleFactor = 1.11111;
+    yScaleFactor = 1.11111;
+    rotationAngle = 0;
+  }
+
+  text TurGen_StartTime
+  {
+    x = 805.556;
+    y = 180;
+    format = "%s";
+    theText = "TIME";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 3;
+    backgroundColour = -1;
+    theFont = 14;
+    xReference = 804.444;
+    yReference = 180;
+    xScaleFactor = 1.11111;
+    yScaleFactor = 1.11111;
+    rotationAngle = 0;
+  }
+
+  text RCP1A_StartTime
+  {
+    x = 805.556;
+    y = 230;
+    format = "%s";
+    theText = "TIME";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 3;
+    backgroundColour = -1;
+    theFont = 14;
+    xReference = 807.778;
+    yReference = 228.889;
+    xScaleFactor = 1.11111;
+    yScaleFactor = 1.11111;
+    rotationAngle = 0;
+  }
+
+  text RCP1B_StartTime
+  {
+    x = 805.556;
+    y = 280;
+    format = "%s";
+    theText = "TIME";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 3;
+    backgroundColour = -1;
+    theFont = 14;
+    xReference = 807.778;
+    yReference = 283.333;
+    xScaleFactor = 1.11111;
+    yScaleFactor = 1.11111;
+    rotationAngle = 0;
+  }
+
+  text RCP2A_StartTime
+  {
+    x = 805.556;
+    y = 330;
+    format = "%s";
+    theText = "TIME";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 3;
+    backgroundColour = -1;
+    theFont = 14;
+    xReference = 805.556;
+    yReference = 326.667;
+    xScaleFactor = 1.11111;
+    yScaleFactor = 1.11111;
+    rotationAngle = 0;
+  }
+
+  text RCP2B_StartTime
+  {
+    x = 805.556;
+    y = 380;
+    format = "%s";
+    theText = "TIME";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 3;
+    backgroundColour = -1;
+    theFont = 14;
+    xReference = 810;
+    yReference = 381.111;
+    xScaleFactor = 1.11111;
+    yScaleFactor = 1.11111;
+    rotationAngle = 0;
+  }
+
+  text MFWP01P_StartTime
+  {
+    x = 805.556;
+    y = 430;
+    format = "%s";
+    theText = "TIME";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 3;
+    backgroundColour = -1;
+    theFont = 14;
+    xReference = 808.889;
+    yReference = 424.444;
+    xScaleFactor = 1.11111;
+    yScaleFactor = 1.11111;
+    rotationAngle = 0;
+  }
+
+  text MFWP02P_StartTime
+  {
+    x = 805.556;
+    y = 480;
+    format = "%s";
+    theText = "TIME";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 3;
+    backgroundColour = -1;
+    theFont = 14;
+    xReference = 807.778;
+    yReference = 478.889;
+    xScaleFactor = 1.11111;
+    yScaleFactor = 1.11111;
+    rotationAngle = 0;
+  }
+
+  text MFWP03P_StartTime
+  {
+    x = 805.556;
+    y = 530;
+    format = "%s";
+    theText = "TIME";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 3;
+    backgroundColour = -1;
+    theFont = 14;
+    xReference = 806.667;
+    yReference = 522.222;
+    xScaleFactor = 1.11111;
+    yScaleFactor = 1.11111;
+    rotationAngle = 0;
+  }
+
+  text MFWBP04P_StartTime
+  {
+    x = 805.556;
+    y = 580;
+    format = "%s";
+    theText = "TIME";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 3;
+    backgroundColour = -1;
+    theFont = 14;
+    xReference = 805.556;
+    yReference = 571.111;
+    xScaleFactor = 1.11111;
+    yScaleFactor = 1.11111;
+    rotationAngle = 0;
+  }
+
+  text MFWBP05P_StartTime
+  {
+    x = 805.556;
+    y = 630;
+    format = "%s";
+    theText = "TIME";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 3;
+    backgroundColour = -1;
+    theFont = 14;
+    xReference = 810;
+    yReference = 625.556;
+    xScaleFactor = 1.11111;
+    yScaleFactor = 1.11111;
+    rotationAngle = 0;
+  }
+
+  text MFWBP06P_StartTime
+  {
+    x = 805.556;
+    y = 680;
+    format = "%s";
+    theText = "TIME";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 3;
+    backgroundColour = -1;
+    theFont = 14;
+    xReference = 813.333;
+    yReference = 678.889;
+    xScaleFactor = 1.11111;
+    yScaleFactor = 1.11111;
+    rotationAngle = 0;
+  }
+
+  text Reactor_CurStat
+  {
+    x = 346.112;
+    y = 130;
+    format = "%s";
+    theText = "START";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 344.444;
+    yReference = 201.111;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text TurGen_CurStat
+  {
+    x = 345.112;
+    y = 180;
+    format = "%s";
+    theText = "START";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 343.333;
+    yReference = 221.111;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text RCP1A_CurStat
+  {
+    x = 345.223;
+    y = 230;
+    format = "%s";
+    theText = "START";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 343.333;
+    yReference = 274.444;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text RCP1B_CurStat
+  {
+    x = 346.223;
+    y = 280;
+    format = "%s";
+    theText = "START";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 344.444;
+    yReference = 353.333;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text RCP2A_CurStat
+  {
+    x = 345.223;
+    y = 330;
+    format = "%s";
+    theText = "START";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 343.333;
+    yReference = 373.333;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text RCP2B_CurStat
+  {
+    x = 345.334;
+    y = 380;
+    format = "%s";
+    theText = "START";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 343.333;
+    yReference = 426.667;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text MFWP01P_CurStat
+  {
+    x = 345.223;
+    y = 430;
+    format = "%s";
+    theText = "START";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 343.333;
+    yReference = 505.556;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text MFWP02P_CurStat
+  {
+    x = 344.223;
+    y = 480;
+    format = "%s";
+    theText = "START";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 342.222;
+    yReference = 525.556;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text MFWP03P_CurStat
+  {
+    x = 344.334;
+    y = 530;
+    format = "%s";
+    theText = "START";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 342.222;
+    yReference = 578.889;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text Reactor_RunningTime
+  {
+    x = 1061.21;
+    y = 130.1;
+    format = "%-8.2f";
+    theText = 0;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 3;
+    backgroundColour = -1;
+    theFont = 14;
+    xReference = 1061.11;
+    yReference = 131.111;
+    xScaleFactor = 1.11111;
+    yScaleFactor = 1.11111;
+    rotationAngle = 0;
+  }
+
+  text TurGen_RunningTime
+  {
+    x = 1061.21;
+    y = 180.1;
+    format = "%-8.2f";
+    theText = 0;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 3;
+    backgroundColour = -1;
+    theFont = 14;
+    xReference = 1060;
+    yReference = 180;
+    xScaleFactor = 1.11111;
+    yScaleFactor = 1.11111;
+    rotationAngle = 0;
+  }
+
+  text RCP1A_RunningTime
+  {
+    x = 1061.21;
+    y = 230.1;
+    format = "%-8.2f";
+    theText = 0;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 3;
+    backgroundColour = -1;
+    theFont = 14;
+    xReference = 1063.33;
+    yReference = 228.889;
+    xScaleFactor = 1.11111;
+    yScaleFactor = 1.11111;
+    rotationAngle = 0;
+  }
+
+  text RCP1B_RunningTime
+  {
+    x = 1061.21;
+    y = 280.1;
+    format = "%-8.2f";
+    theText = 0;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 3;
+    backgroundColour = -1;
+    theFont = 14;
+    xReference = 1063.33;
+    yReference = 283.333;
+    xScaleFactor = 1.11111;
+    yScaleFactor = 1.11111;
+    rotationAngle = 0;
+  }
+
+  text RCP2A_RunningTime
+  {
+    x = 1061.21;
+    y = 330.1;
+    format = "%-8.2f";
+    theText = 0;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 3;
+    backgroundColour = -1;
+    theFont = 14;
+    xReference = 1061.11;
+    yReference = 326.667;
+    xScaleFactor = 1.11111;
+    yScaleFactor = 1.11111;
+    rotationAngle = 0;
+  }
+
+  text RCP2B_RunningTime
+  {
+    x = 1061.21;
+    y = 380.1;
+    format = "%-8.2f";
+    theText = 0;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 3;
+    backgroundColour = -1;
+    theFont = 14;
+    xReference = 1065.56;
+    yReference = 381.111;
+    xScaleFactor = 1.11111;
+    yScaleFactor = 1.11111;
+    rotationAngle = 0;
+  }
+
+  text MFWP01P_RunningTime
+  {
+    x = 1061.21;
+    y = 430.1;
+    format = "%-8.2f";
+    theText = 0;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 3;
+    backgroundColour = -1;
+    theFont = 14;
+    xReference = 1064.44;
+    yReference = 424.444;
+    xScaleFactor = 1.11111;
+    yScaleFactor = 1.11111;
+    rotationAngle = 0;
+  }
+
+  text MFWP02P_RunningTime
+  {
+    x = 1061.21;
+    y = 480.1;
+    format = "%-8.2f";
+    theText = 0;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 3;
+    backgroundColour = -1;
+    theFont = 14;
+    xReference = 1063.33;
+    yReference = 478.889;
+    xScaleFactor = 1.11111;
+    yScaleFactor = 1.11111;
+    rotationAngle = 0;
+  }
+
+  text MFWP03P_RunningTime
+  {
+    x = 1061.21;
+    y = 530.1;
+    format = "%-8.2f";
+    theText = 0;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 3;
+    backgroundColour = -1;
+    theFont = 14;
+    xReference = 1062.22;
+    yReference = 522.222;
+    xScaleFactor = 1.11111;
+    yScaleFactor = 1.11111;
+    rotationAngle = 0;
+  }
+
+  text MFWBP04P_RunningTime
+  {
+    x = 1061.21;
+    y = 580.1;
+    format = "%-8.2f";
+    theText = 0;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 3;
+    backgroundColour = -1;
+    theFont = 14;
+    xReference = 1061.11;
+    yReference = 571.111;
+    xScaleFactor = 1.11111;
+    yScaleFactor = 1.11111;
+    rotationAngle = 0;
+  }
+
+  text MFWBP05P_RunningTime
+  {
+    x = 1061.21;
+    y = 630.1;
+    format = "%-8.2f";
+    theText = 0;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 3;
+    backgroundColour = -1;
+    theFont = 14;
+    xReference = 1065.56;
+    yReference = 625.556;
+    xScaleFactor = 1.11111;
+    yScaleFactor = 1.11111;
+    rotationAngle = 0;
+  }
+
+  text MFWBP06P_RunningTime
+  {
+    x = 1061.21;
+    y = 680.1;
+    format = "%-8.2f";
+    theText = 0;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 3;
+    backgroundColour = -1;
+    theFont = 14;
+    xReference = 1068.89;
+    yReference = 678.889;
+    xScaleFactor = 1.11111;
+    yScaleFactor = 1.11111;
+    rotationAngle = 0;
+  }
+
+  text procMsg
+  {
+    x = 494;
+    y = 731.889;
+    format = "%s";
+    theText = "PROCESSING... WAIT";
+    alignment = 0;
+    visibility = 0;
+    foregroundColour = `COLOR_POPUP_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 494;
+    yReference = 731;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text message1
+  {
+    x = 55;
+    y = 690;
+    format = "%s";
+    theText = "";
+    alignment = 0;
+    visibility = `KludgeConfirm()`;
+    foregroundColour = `COLOR_BAD_OOR_UNACK`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 55;
+    yReference = 690;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+}

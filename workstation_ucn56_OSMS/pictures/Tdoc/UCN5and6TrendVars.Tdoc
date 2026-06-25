@@ -1,0 +1,205 @@
+trendVarConfig UCN5and6TrendVars
+{
+   // Video Trend Set 1 Variables
+   // Trend 1
+   trendVar ::UCN5and6.VideoSet1Tr1 {lCycle=1;   hist=600;    type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet1Tr1 {lCycle=2;   hist=1200;   type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet1Tr1 {lCycle=5;   hist=3000;   type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet1Tr1 {lCycle=10;  hist=6000;   type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet1Tr1 {lCycle=30;  hist=18000;  type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet1Tr1 {lCycle=60;  hist=36000;  type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet1Tr1 {lCycle=600; hist=360000; type=5; lo=-999999; hi=999999;}
+   // Trend 2
+   trendVar ::UCN5and6.VideoSet1Tr2 {lCycle=1;   hist=600;    type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet1Tr2 {lCycle=2;   hist=1200;   type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet1Tr2 {lCycle=5;   hist=3000;   type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet1Tr2 {lCycle=10;  hist=6000;   type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet1Tr2 {lCycle=30;  hist=18000;  type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet1Tr2 {lCycle=60;  hist=36000;  type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet1Tr2 {lCycle=600; hist=360000; type=5; lo=-999999; hi=999999;}
+   // Trend 3
+   trendVar ::UCN5and6.VideoSet1Tr3 {lCycle=1;   hist=600;    type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet1Tr3 {lCycle=2;   hist=1200;   type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet1Tr3 {lCycle=5;   hist=3000;   type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet1Tr3 {lCycle=10;  hist=6000;   type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet1Tr3 {lCycle=30;  hist=18000;  type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet1Tr3 {lCycle=60;  hist=36000;  type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet1Tr3 {lCycle=600; hist=360000; type=5; lo=-999999; hi=999999;}
+   // Trend 4
+   trendVar ::UCN5and6.VideoSet1Tr4 {lCycle=1;   hist=600;    type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet1Tr4 {lCycle=2;   hist=1200;   type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet1Tr4 {lCycle=5;   hist=3000;   type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet1Tr4 {lCycle=10;  hist=6000;   type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet1Tr4 {lCycle=30;  hist=18000;  type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet1Tr4 {lCycle=60;  hist=36000;  type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet1Tr4 {lCycle=600; hist=360000; type=5; lo=-999999; hi=999999;}
+   //
+   // Video Trend Set 2 Variables
+   // Trend 1
+   trendVar ::UCN5and6.VideoSet2Tr1 {lCycle=1;   hist=600;    type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet2Tr1 {lCycle=2;   hist=1200;   type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet2Tr1 {lCycle=5;   hist=3000;   type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet2Tr1 {lCycle=10;  hist=6000;   type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet2Tr1 {lCycle=30;  hist=18000;  type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet2Tr1 {lCycle=60;  hist=36000;  type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet2Tr1 {lCycle=600; hist=360000; type=5; lo=-999999; hi=999999;}
+   // Trend 2
+   trendVar ::UCN5and6.VideoSet2Tr2 {lCycle=1;   hist=600;    type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet2Tr2 {lCycle=2;   hist=1200;   type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet2Tr2 {lCycle=5;   hist=3000;   type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet2Tr2 {lCycle=10;  hist=6000;   type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet2Tr2 {lCycle=30;  hist=18000;  type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet2Tr2 {lCycle=60;  hist=36000;  type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet2Tr2 {lCycle=600; hist=360000; type=5; lo=-999999; hi=999999;}
+   // Trend 3
+   trendVar ::UCN5and6.VideoSet2Tr3 {lCycle=1;   hist=600;    type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet2Tr3 {lCycle=2;   hist=1200;   type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet2Tr3 {lCycle=5;   hist=3000;   type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet2Tr3 {lCycle=10;  hist=6000;   type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet2Tr3 {lCycle=30;  hist=18000;  type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet2Tr3 {lCycle=60;  hist=36000;  type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet2Tr3 {lCycle=600; hist=360000; type=5; lo=-999999; hi=999999;}
+   // Trend 4
+   trendVar ::UCN5and6.VideoSet2Tr4 {lCycle=1;   hist=600;    type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet2Tr4 {lCycle=2;   hist=1200;   type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet2Tr4 {lCycle=5;   hist=3000;   type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet2Tr4 {lCycle=10;  hist=6000;   type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet2Tr4 {lCycle=30;  hist=18000;  type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet2Tr4 {lCycle=60;  hist=36000;  type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet2Tr4 {lCycle=600; hist=360000; type=5; lo=-999999; hi=999999;}
+   //
+   // Video Trend Set 3 Variables
+   // Trend 1
+   trendVar ::UCN5and6.VideoSet3Tr1 {lCycle=1;   hist=600;    type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet3Tr1 {lCycle=2;   hist=1200;   type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet3Tr1 {lCycle=5;   hist=3000;   type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet3Tr1 {lCycle=10;  hist=6000;   type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet3Tr1 {lCycle=30;  hist=18000;  type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet3Tr1 {lCycle=60;  hist=36000;  type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet3Tr1 {lCycle=600; hist=360000; type=5; lo=-999999; hi=999999;}
+   // Trend 2
+   trendVar ::UCN5and6.VideoSet3Tr2 {lCycle=1;   hist=600;    type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet3Tr2 {lCycle=2;   hist=1200;   type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet3Tr2 {lCycle=5;   hist=3000;   type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet3Tr2 {lCycle=10;  hist=6000;   type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet3Tr2 {lCycle=30;  hist=18000;  type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet3Tr2 {lCycle=60;  hist=36000;  type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet3Tr2 {lCycle=600; hist=360000; type=5; lo=-999999; hi=999999;}
+   // Trend 3
+   trendVar ::UCN5and6.VideoSet3Tr3 {lCycle=1;   hist=600;    type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet3Tr3 {lCycle=2;   hist=1200;   type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet3Tr3 {lCycle=5;   hist=3000;   type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet3Tr3 {lCycle=10;  hist=6000;   type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet3Tr3 {lCycle=30;  hist=18000;  type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet3Tr3 {lCycle=60;  hist=36000;  type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet3Tr3 {lCycle=600; hist=360000; type=5; lo=-999999; hi=999999;}
+   // Trend 4
+   trendVar ::UCN5and6.VideoSet3Tr4 {lCycle=1;   hist=600;    type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet3Tr4 {lCycle=2;   hist=1200;   type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet3Tr4 {lCycle=5;   hist=3000;   type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet3Tr4 {lCycle=10;  hist=6000;   type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet3Tr4 {lCycle=30;  hist=18000;  type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet3Tr4 {lCycle=60;  hist=36000;  type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet3Tr4 {lCycle=600; hist=360000; type=5; lo=-999999; hi=999999;}
+   //
+   // Video Trend Set 4 Variables
+   // Trend 1
+   trendVar ::UCN5and6.VideoSet4Tr1 {lCycle=1;   hist=600;    type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet4Tr1 {lCycle=2;   hist=1200;   type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet4Tr1 {lCycle=5;   hist=3000;   type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet4Tr1 {lCycle=10;  hist=6000;   type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet4Tr1 {lCycle=30;  hist=18000;  type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet4Tr1 {lCycle=60;  hist=36000;  type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet4Tr1 {lCycle=600; hist=360000; type=5; lo=-999999; hi=999999;}
+   // Trend 2
+   trendVar ::UCN5and6.VideoSet4Tr2 {lCycle=1;   hist=600;    type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet4Tr2 {lCycle=2;   hist=1200;   type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet4Tr2 {lCycle=5;   hist=3000;   type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet4Tr2 {lCycle=10;  hist=6000;   type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet4Tr2 {lCycle=30;  hist=18000;  type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet4Tr2 {lCycle=60;  hist=36000;  type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet4Tr2 {lCycle=600; hist=360000; type=5; lo=-999999; hi=999999;}
+   // Trend 3
+   trendVar ::UCN5and6.VideoSet4Tr3 {lCycle=1;   hist=600;    type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet4Tr3 {lCycle=2;   hist=1200;   type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet4Tr3 {lCycle=5;   hist=3000;   type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet4Tr3 {lCycle=10;  hist=6000;   type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet4Tr3 {lCycle=30;  hist=18000;  type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet4Tr3 {lCycle=60;  hist=36000;  type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet4Tr3 {lCycle=600; hist=360000; type=5; lo=-999999; hi=999999;}
+   // Trend 4
+   trendVar ::UCN5and6.VideoSet4Tr4 {lCycle=1;   hist=600;    type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet4Tr4 {lCycle=2;   hist=1200;   type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet4Tr4 {lCycle=5;   hist=3000;   type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet4Tr4 {lCycle=10;  hist=6000;   type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet4Tr4 {lCycle=30;  hist=18000;  type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet4Tr4 {lCycle=60;  hist=36000;  type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet4Tr4 {lCycle=600; hist=360000; type=5; lo=-999999; hi=999999;}
+   //
+   // Video Trend Set 5 Variables
+   // Trend 1
+   trendVar ::UCN5and6.VideoSet5Tr1 {lCycle=1;   hist=600;    type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet5Tr1 {lCycle=2;   hist=1200;   type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet5Tr1 {lCycle=5;   hist=3000;   type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet5Tr1 {lCycle=10;  hist=6000;   type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet5Tr1 {lCycle=30;  hist=18000;  type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet5Tr1 {lCycle=60;  hist=36000;  type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet5Tr1 {lCycle=600; hist=360000; type=5; lo=-999999; hi=999999;}
+   // Trend 2
+   trendVar ::UCN5and6.VideoSet5Tr2 {lCycle=1;   hist=600;    type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet5Tr2 {lCycle=2;   hist=1200;   type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet5Tr2 {lCycle=5;   hist=3000;   type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet5Tr2 {lCycle=10;  hist=6000;   type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet5Tr2 {lCycle=30;  hist=18000;  type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet5Tr2 {lCycle=60;  hist=36000;  type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet5Tr2 {lCycle=600; hist=360000; type=5; lo=-999999; hi=999999;}
+   // Trend 3
+   trendVar ::UCN5and6.VideoSet5Tr3 {lCycle=1;   hist=600;    type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet5Tr3 {lCycle=2;   hist=1200;   type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet5Tr3 {lCycle=5;   hist=3000;   type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet5Tr3 {lCycle=10;  hist=6000;   type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet5Tr3 {lCycle=30;  hist=18000;  type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet5Tr3 {lCycle=60;  hist=36000;  type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet5Tr3 {lCycle=600; hist=360000; type=5; lo=-999999; hi=999999;}
+   // Trend 4
+   trendVar ::UCN5and6.VideoSet5Tr4 {lCycle=1;   hist=600;    type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet5Tr4 {lCycle=2;   hist=1200;   type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet5Tr4 {lCycle=5;   hist=3000;   type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet5Tr4 {lCycle=10;  hist=6000;   type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet5Tr4 {lCycle=30;  hist=18000;  type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet5Tr4 {lCycle=60;  hist=36000;  type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.VideoSet5Tr4 {lCycle=600; hist=360000; type=5; lo=-999999; hi=999999;}
+   //
+   //
+   // Page 220 Core Heat Removal (Always at 1 second)
+   // Trend 1
+   trendVar ::UCN5and6.Page220Tr1 {lCycle=1;   hist=600;    type=5; lo=-999999; hi=999999;}
+   // Trend 2
+   trendVar ::UCN5and6.Page220Tr2 {lCycle=1;   hist=600;    type=5; lo=-999999; hi=999999;}
+   // Trend 3
+   trendVar ::UCN5and6.Page220Tr3 {lCycle=1;   hist=600;    type=5; lo=-999999; hi=999999;}
+   // Trend 4
+   trendVar ::UCN5and6.Page220Tr4 {lCycle=1;   hist=600;    type=5; lo=-999999; hi=999999;}
+   //Single Point Display Trend
+   trendVar ::UCN5and6.SinglePointTrend {lCycle=1;   hist=600;    type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.SinglePointTrend {lCycle=2;   hist=1200;   type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.SinglePointTrend {lCycle=5;   hist=3000;   type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.SinglePointTrend {lCycle=10;  hist=6000;   type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.SinglePointTrend {lCycle=30;  hist=18000;  type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.SinglePointTrend {lCycle=60;  hist=36000;  type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.SinglePointTrend {lCycle=600; hist=360000; type=5; lo=-999999; hi=999999;}
+   //
+   // RCSLeak Unidentified // yrlee 20070704
+   trendVar ::UCN5and6.RcsLeakUnid {lCycle=1;   hist=600;    type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.RcsLeakUnid {lCycle=5;   hist=3000;   type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.RcsLeakUnid {lCycle=10;  hist=6000;   type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.RcsLeakUnid {lCycle=30;  hist=18000;  type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.RcsLeakUnid {lCycle=60;  hist=36000;  type=5; lo=-999999; hi=999999;}
+   // RCSLeak Identified // yrlee 20070704
+   trendVar ::UCN5and6.RcsLeakIdnt {lCycle=1;   hist=600;    type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.RcsLeakIdnt {lCycle=5;   hist=3000;   type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.RcsLeakIdnt {lCycle=10;  hist=6000;   type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.RcsLeakIdnt {lCycle=30;  hist=18000;  type=5; lo=-999999; hi=999999;}
+   trendVar ::UCN5and6.RcsLeakIdnt {lCycle=60;  hist=36000;  type=5; lo=-999999; hi=999999;}
+   //
+}

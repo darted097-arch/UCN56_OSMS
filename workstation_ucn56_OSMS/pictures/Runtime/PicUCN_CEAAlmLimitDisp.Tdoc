@@ -1,0 +1,2532 @@
+/*
+ * ProcSee CONFIGURATION LANGUAGE FILE
+ *
+ *
+ * User : ucn56
+ * Host : y6cr02
+ * Date : 2017-05-25
+ * Time : 13:08:02
+ *
+ * ProcSee version : ProcSee 3.10.1 (June 2016)
+ * File version    : 1.26
+ *
+ *
+ */
+
+
+picture PicUCN_CEAAlmLimitDisp
+{
+  worldX = 0;
+  worldY = 0;
+  worldWidth = 1280;
+  worldHeight = 824;
+  oneToOne = 1;
+  backgroundColour = 0;
+  updateMode = 2;
+  resizeMode = 0;
+  xSnap = 5;
+  ySnap = 5;
+  radiusSnap = 0;
+  angleSnap = 0;
+  crosshairStyle = 1;
+  crosshairLength = 0;
+  crosshairFollowSnap = `isInEditMode()`;
+  crosshairVisibility = `isInEditMode()`;
+  xReference = 500;
+  yReference = 500;
+  xScaleFactor = 1;
+  yScaleFactor = 1;
+  rotationAngle = 0;
+
+  int Option = 1;
+
+  CEAAlarmLimitMsg* pCEAAlarmData = `Interface.CEAAlarmLimitData`;
+
+  char PictureNumber[50] = "131";
+
+  char PictureTitle[50] = "CEA ALARM AND LIMIT DISPLAY";
+
+  function `void escape()
+  {
+     DisplayPage("PicUCN_CEAMenu.ppic");
+     update();
+  }`
+
+  function `void Initialize()
+  {
+     CFMLevel =0;
+     CEA_ALARM_RESET = 1;
+     Current_Page = 131;
+  //   GetAlarmData();
+  //   EscapeButton.UnSelect();
+  }`
+
+  function `void selectedShape(int selectedNo)
+  {
+     switch(selectedNo){
+        case 1: {
+         text1_box.foregroundFillColour=1;
+         text1.foregroundColour=0;
+         text2_box.foregroundFillColour=0;
+         text2.foregroundColour=1;
+         text3_box.foregroundFillColour=0;
+         text3.foregroundColour=1;
+         update();
+         break;
+       }
+        case 2: {
+         text1_box.foregroundFillColour=0;
+         text1.foregroundColour=1;
+         text2_box.foregroundFillColour=1;
+         text2.foregroundColour=0;
+         text3_box.foregroundFillColour=0;
+         text3.foregroundColour=1;
+         update();
+         break;
+        }
+        case 3: {
+         text1_box.foregroundFillColour=0;
+         text1.foregroundColour=1;
+         text2_box.foregroundFillColour=0;
+         text2.foregroundColour=1;
+         text3_box.foregroundFillColour=1;
+         text3.foregroundColour=0;
+         update();
+         break;
+        }
+        default: {
+         text1_box.foregroundFillColour=0;
+         text1.foregroundColour=1;
+         text2_box.foregroundFillColour=0;
+         text2.foregroundColour=1;
+         text3_box.foregroundFillColour=0;
+         text3.foregroundColour=1;
+         update();
+         break;
+        }
+  
+  
+     }
+  }`
+
+  dialogue
+  {
+    event = `keyPressed(0xFF0D)`;
+    action = `{
+    //   initConfirmMessages();
+       // ClearFeedbackMessage();
+       //set option number to Option
+    //   execute("{Interface->GenericRequestMessage.data.requestOption = %d;}",Option);
+       // Send data request message to the host
+    //   execute("{sendMessageToHost(RPCCEA_PROCESS_REQUEST);}");
+    }`;
+  }
+
+  dialogue
+  {
+    event = `keyPressed(0xFF09)`;
+    action = `{
+      // ClearFeedbackMessage();               // clear any previous feedback messages
+    //  MenuInput.edit(ON);			// put into edit mode
+    //  CurrentOption[0] = '\\0';		// reset the input field
+    //  strcat (CurrentOption,"_");		// copy something to the field
+    //  MenuInput.theText = \`CurrentOption\`;	// display something into the field
+     // MenuInput.edit(OFF);
+    //  update();
+    //  MenuInput.edit(ON);
+    //  MenuInput.moveToHome();		// move to the leftmost position in the entry area
+    //  update(); 				// update and go
+    }`;
+  }
+
+  dialogue
+  {
+    event = `buttonPressed(3)`;
+    action = `{
+    //   DisplayPage(Page130);
+    }`;
+  }
+
+  rectangle
+  {
+    x = 215;
+    y = 124;
+    width = 1005;
+    height = 541;
+    visibility = 1;
+    foregroundColour = `COLOR_LINE_BOUNDARY_6`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 3;
+    foregroundFillColour = `COLOR_PICTURE_BACKGROUND`;
+    backgroundFillColour = -1;
+    fillPattern = `SolidPattern`;
+    xReference = 215;
+    yReference = 130;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  group
+  {
+    visibility = 1;
+    xReference = 268;
+    yReference = 38;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+
+    text
+    {
+      x = 269;
+      y = 55;
+      format = "%s";
+      theText = "UPPER";
+      alignment = 0;
+      visibility = 1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font4`;
+      xReference = 269;
+      yReference = 55;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+    text
+    {
+      x = 269;
+      y = 75;
+      format = "%s";
+      theText = "GROUP";
+      alignment = 0;
+      visibility = 1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font4`;
+      xReference = 269;
+      yReference = 75;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+    text
+    {
+      x = 269;
+      y = 95;
+      format = "%s";
+      theText = "STOP";
+      alignment = 0;
+      visibility = 1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font4`;
+      xReference = 269;
+      yReference = 95;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+    text
+    {
+      x = 269;
+      y = 115;
+      format = "%s";
+      theText = "LIMIT";
+      alignment = 0;
+      visibility = 1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font4`;
+      xReference = 269;
+      yReference = 115;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+  }
+
+  group
+  {
+    visibility = 1;
+    xReference = 351;
+    yReference = 38;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+
+    text
+    {
+      x = 352;
+      y = 55;
+      format = "%s";
+      theText = "LOWER";
+      alignment = 0;
+      visibility = 1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font4`;
+      xReference = 352;
+      yReference = 55;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+    text
+    {
+      x = 352;
+      y = 75;
+      format = "%s";
+      theText = "GROUP";
+      alignment = 0;
+      visibility = 1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font4`;
+      xReference = 352;
+      yReference = 75;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+    text
+    {
+      x = 352;
+      y = 95;
+      format = "%s";
+      theText = "STOP";
+      alignment = 0;
+      visibility = 1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font4`;
+      xReference = 352;
+      yReference = 95;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+    text
+    {
+      x = 352;
+      y = 115;
+      format = "%s";
+      theText = "LIMIT";
+      alignment = 0;
+      visibility = 1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font4`;
+      xReference = 352;
+      yReference = 115;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+  }
+
+  group
+  {
+    visibility = 1;
+    xReference = 473;
+    yReference = 58;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+
+    text
+    {
+      x = 474;
+      y = 95;
+      format = "%s";
+      theText = "LIMIT";
+      alignment = 0;
+      visibility = 1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font4`;
+      xReference = 474;
+      yReference = 95;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+    text
+    {
+      x = 474;
+      y = 75;
+      format = "%s";
+      theText = "EXER";
+      alignment = 0;
+      visibility = 1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font4`;
+      xReference = 474;
+      yReference = 75;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+    text
+    {
+      x = 474;
+      y = 115;
+      format = "%s";
+      theText = "ALARM";
+      alignment = 0;
+      visibility = 1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font4`;
+      xReference = 474;
+      yReference = 115;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+  }
+
+  group
+  {
+    visibility = 1;
+    xReference = 693;
+    yReference = 58;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+
+    text
+    {
+      x = 694;
+      y = 95;
+      format = "%s";
+      theText = "SEQ.";
+      alignment = 0;
+      visibility = 1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font4`;
+      xReference = 694;
+      yReference = 95;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+    text
+    {
+      x = 694;
+      y = 75;
+      format = "%s";
+      theText = "LOWER";
+      alignment = 0;
+      visibility = 1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font4`;
+      xReference = 694;
+      yReference = 75;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+    text
+    {
+      x = 694;
+      y = 115;
+      format = "%s";
+      theText = "LIMIT";
+      alignment = 0;
+      visibility = 1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font4`;
+      xReference = 694;
+      yReference = 115;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+  }
+
+  group
+  {
+    visibility = 1;
+    xReference = 598;
+    yReference = 58;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+
+    text
+    {
+      x = 599;
+      y = 95;
+      format = "%s";
+      theText = "SEQ.";
+      alignment = 0;
+      visibility = 1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font4`;
+      xReference = 599;
+      yReference = 95;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+    text
+    {
+      x = 599;
+      y = 75;
+      format = "%s";
+      theText = "UPPER";
+      alignment = 0;
+      visibility = 1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font4`;
+      xReference = 599;
+      yReference = 75;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+    text
+    {
+      x = 599;
+      y = 115;
+      format = "%s";
+      theText = "LIMIT";
+      alignment = 0;
+      visibility = 1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font4`;
+      xReference = 599;
+      yReference = 115;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+  }
+
+  group
+  {
+    visibility = 1;
+    xReference = 818;
+    yReference = 78;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+
+    text
+    {
+      x = 819;
+      y = 95;
+      format = "%s";
+      theText = "PPDIL";
+      alignment = 0;
+      visibility = 1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font4`;
+      xReference = 819;
+      yReference = 95;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+    text
+    {
+      x = 819;
+      y = 115;
+      format = "%s";
+      theText = "ALARM";
+      alignment = 0;
+      visibility = 1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font4`;
+      xReference = 819;
+      yReference = 115;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+  }
+
+  group
+  {
+    visibility = 1;
+    xReference = 918;
+    yReference = 78;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+
+    text
+    {
+      x = 919;
+      y = 95;
+      format = "%s";
+      theText = "PDIL";
+      alignment = 0;
+      visibility = 1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font4`;
+      xReference = 919;
+      yReference = 95;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+    text
+    {
+      x = 919;
+      y = 115;
+      format = "%s";
+      theText = "ALARM";
+      alignment = 0;
+      visibility = 1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font4`;
+      xReference = 919;
+      yReference = 115;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+  }
+
+  group
+  {
+    visibility = 1;
+    xReference = 1050;
+    yReference = 38;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+
+    text
+    {
+      x = 1051;
+      y = 55;
+      format = "%s";
+      theText = "GROUP";
+      alignment = 0;
+      visibility = 1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font4`;
+      xReference = 1051;
+      yReference = 55;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+    text
+    {
+      x = 1051;
+      y = 75;
+      format = "%s";
+      theText = "DEVI.";
+      alignment = 0;
+      visibility = 1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font4`;
+      xReference = 1051;
+      yReference = 75;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+    text
+    {
+      x = 1051;
+      y = 95;
+      format = "%s";
+      theText = "MINOR";
+      alignment = 0;
+      visibility = 1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font4`;
+      xReference = 1051;
+      yReference = 95;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+    text
+    {
+      x = 1051;
+      y = 115;
+      format = "%s";
+      theText = "ALARM";
+      alignment = 0;
+      visibility = 1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font4`;
+      xReference = 1051;
+      yReference = 115;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+  }
+
+  group
+  {
+    visibility = 1;
+    xReference = 1137;
+    yReference = 38;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+
+    text
+    {
+      x = 1138;
+      y = 55;
+      format = "%s";
+      theText = "GROUP";
+      alignment = 0;
+      visibility = 1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font4`;
+      xReference = 1138;
+      yReference = 55;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+    text
+    {
+      x = 1138;
+      y = 75;
+      format = "%s";
+      theText = "DEVI.";
+      alignment = 0;
+      visibility = 1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font4`;
+      xReference = 1138;
+      yReference = 75;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+    text
+    {
+      x = 1139;
+      y = 95;
+      format = "%s";
+      theText = "MAJOR";
+      alignment = 0;
+      visibility = 1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font4`;
+      xReference = 1139;
+      yReference = 95;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+    text
+    {
+      x = 1138;
+      y = 115;
+      format = "%s";
+      theText = "ALARM";
+      alignment = 0;
+      visibility = 1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font4`;
+      xReference = 1138;
+      yReference = 115;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+  }
+
+  rectangle
+  {
+    x = 439;
+    y = 124;
+    width = 0;
+    height = 540;
+    visibility = 1;
+    foregroundColour = `COLOR_LINE_BOUNDARY_6`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 3;
+    foregroundFillColour = `COLOR_NON_ESSENTIAL`;
+    backgroundFillColour = -1;
+    fillPattern = `SolidPattern`;
+    xReference = 439;
+    yReference = 124;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle
+  {
+    x = 998;
+    y = 124;
+    width = 0;
+    height = 540;
+    visibility = 1;
+    foregroundColour = `COLOR_LINE_BOUNDARY_6`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 3;
+    foregroundFillColour = `COLOR_NON_ESSENTIAL`;
+    backgroundFillColour = -1;
+    fillPattern = `SolidPattern`;
+    xReference = 998;
+    yReference = 124;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle
+  {
+    x = 775;
+    y = 124;
+    width = 0;
+    height = 540;
+    visibility = 1;
+    foregroundColour = `COLOR_LINE_BOUNDARY_6`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 3;
+    foregroundFillColour = `COLOR_NON_ESSENTIAL`;
+    backgroundFillColour = -1;
+    fillPattern = `SolidPattern`;
+    xReference = 775;
+    yReference = 124;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle
+  {
+    x = 555;
+    y = 124;
+    width = 0;
+    height = 540;
+    visibility = 1;
+    foregroundColour = `COLOR_LINE_BOUNDARY_6`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 3;
+    foregroundFillColour = `COLOR_NON_ESSENTIAL`;
+    backgroundFillColour = -1;
+    fillPattern = `SolidPattern`;
+    xReference = 555;
+    yReference = 124;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle
+  {
+    x = 218;
+    y = 189;
+    width = 1000;
+    height = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_LINE_BOUNDARY_6`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 3;
+    foregroundFillColour = `COLOR_NON_ESSENTIAL`;
+    backgroundFillColour = -1;
+    fillPattern = `SolidPattern`;
+    xReference = 233;
+    yReference = 189;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  rectangle
+  {
+    x = 218;
+    y = 549;
+    width = 1000;
+    height = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_LINE_BOUNDARY_6`;
+    backgroundColour = -1;
+    linePattern = `SolidPattern`;
+    lineWidth = 3;
+    foregroundFillColour = `COLOR_NON_ESSENTIAL`;
+    backgroundFillColour = -1;
+    fillPattern = `SolidPattern`;
+    xReference = 233;
+    yReference = 549;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 481;
+    y = 162;
+    format = "%s";
+    theText = "---";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 481;
+    yReference = 162;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 481;
+    y = 507;
+    format = "%s";
+    theText = "---";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 481;
+    yReference = 507;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 481;
+    y = 440;
+    format = "%s";
+    theText = "---";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 481;
+    yReference = 440;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 481;
+    y = 373;
+    format = "%s";
+    theText = "---";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 481;
+    yReference = 373;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 481;
+    y = 306;
+    format = "%s";
+    theText = "---";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 481;
+    yReference = 306;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 481;
+    y = 239;
+    format = "%s";
+    theText = "---";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 481;
+    yReference = 239;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 602;
+    y = 162;
+    format = "%s";
+    theText = "---";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 602;
+    yReference = 162;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 602;
+    y = 622;
+    format = "%s";
+    theText = "---";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 602;
+    yReference = 622;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 602;
+    y = 583;
+    format = "%s";
+    theText = "---";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 602;
+    yReference = 583;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 697;
+    y = 162;
+    format = "%s";
+    theText = "---";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 697;
+    yReference = 162;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 691;
+    y = 622;
+    format = "%s";
+    theText = "---";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 691;
+    yReference = 622;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 691;
+    y = 583;
+    format = "%s";
+    theText = "---";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 691;
+    yReference = 583;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 822;
+    y = 162;
+    format = "%s";
+    theText = "---";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 822;
+    yReference = 162;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 824;
+    y = 622;
+    format = "%s";
+    theText = "---";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 824;
+    yReference = 622;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 824;
+    y = 583;
+    format = "%s";
+    theText = "---";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 824;
+    yReference = 583;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 914;
+    y = 162;
+    format = "%s";
+    theText = "---";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 914;
+    yReference = 162;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 924;
+    y = 622;
+    format = "%s";
+    theText = "---";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 924;
+    yReference = 622;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 924;
+    y = 583;
+    format = "%s";
+    theText = "---";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 924;
+    yReference = 583;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  group
+  {
+    visibility = 1;
+    xReference = 43;
+    yReference = 147;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+
+    text
+    {
+      x = 44;
+      y = 164;
+      format = "%s";
+      theText = "PART STRENGTH";
+      alignment = 0;
+      visibility = 1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font4`;
+      xReference = 44;
+      yReference = 164;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+    text
+    {
+      x = 44;
+      y = 182;
+      format = "%s";
+      theText = "GROUP";
+      alignment = 0;
+      visibility = 1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font4`;
+      xReference = 44;
+      yReference = 182;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+  }
+
+  group
+  {
+    visibility = 1;
+    xReference = 43;
+    yReference = 489;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+
+    text
+    {
+      x = 44;
+      y = 506;
+      format = "%s";
+      theText = "REGULATING";
+      alignment = 0;
+      visibility = 1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font4`;
+      xReference = 44;
+      yReference = 506;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+    text
+    {
+      x = 44;
+      y = 524;
+      format = "%s";
+      theText = "GROUP #5";
+      alignment = 0;
+      visibility = 1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font4`;
+      xReference = 44;
+      yReference = 524;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+  }
+
+  group
+  {
+    visibility = 1;
+    xReference = 43;
+    yReference = 423;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+
+    text
+    {
+      x = 44;
+      y = 440;
+      format = "%s";
+      theText = "REGULATING";
+      alignment = 0;
+      visibility = 1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font4`;
+      xReference = 44;
+      yReference = 440;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+    text
+    {
+      x = 44;
+      y = 458;
+      format = "%s";
+      theText = "GROUP #4";
+      alignment = 0;
+      visibility = 1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font4`;
+      xReference = 44;
+      yReference = 458;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+  }
+
+  group
+  {
+    visibility = 1;
+    xReference = 43;
+    yReference = 357;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+
+    text
+    {
+      x = 44;
+      y = 374;
+      format = "%s";
+      theText = "REGULATING";
+      alignment = 0;
+      visibility = 1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font4`;
+      xReference = 44;
+      yReference = 374;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+    text
+    {
+      x = 44;
+      y = 392;
+      format = "%s";
+      theText = "GROUP #3";
+      alignment = 0;
+      visibility = 1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font4`;
+      xReference = 44;
+      yReference = 392;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+  }
+
+  group
+  {
+    visibility = 1;
+    xReference = 43;
+    yReference = 291;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+
+    text
+    {
+      x = 44;
+      y = 308;
+      format = "%s";
+      theText = "REGULATING";
+      alignment = 0;
+      visibility = 1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font4`;
+      xReference = 44;
+      yReference = 308;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+    text
+    {
+      x = 44;
+      y = 326;
+      format = "%s";
+      theText = "GROUP #2";
+      alignment = 0;
+      visibility = 1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font4`;
+      xReference = 44;
+      yReference = 326;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+  }
+
+  group
+  {
+    visibility = 1;
+    xReference = 43;
+    yReference = 225;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+
+    text
+    {
+      x = 44;
+      y = 242;
+      format = "%s";
+      theText = "REGULATING";
+      alignment = 0;
+      visibility = 1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font4`;
+      xReference = 44;
+      yReference = 242;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+    text
+    {
+      x = 44;
+      y = 260;
+      format = "%s";
+      theText = "GROUP #1";
+      alignment = 0;
+      visibility = 1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font4`;
+      xReference = 44;
+      yReference = 260;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+  }
+
+  group
+  {
+    visibility = 1;
+    xReference = 43;
+    yReference = 568;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+
+    text
+    {
+      x = 44;
+      y = 585;
+      format = "%s";
+      theText = "SHUT-DOWN";
+      alignment = 0;
+      visibility = 1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font4`;
+      xReference = 44;
+      yReference = 585;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+    text
+    {
+      x = 44;
+      y = 603;
+      format = "%s";
+      theText = "GROUP A";
+      alignment = 0;
+      visibility = 1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font4`;
+      xReference = 44;
+      yReference = 603;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+  }
+
+  group
+  {
+    visibility = 1;
+    xReference = 43;
+    yReference = 617;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+
+    text
+    {
+      x = 44;
+      y = 634;
+      format = "%s";
+      theText = "SHUT-DOWN";
+      alignment = 0;
+      visibility = 1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font4`;
+      xReference = 44;
+      yReference = 634;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+
+    text
+    {
+      x = 44;
+      y = 652;
+      format = "%s";
+      theText = "GROUP B";
+      alignment = 0;
+      visibility = 1;
+      foregroundColour = `COLOR_NON_ESSENTIAL`;
+      backgroundColour = -1;
+      theFont = `font4`;
+      xReference = 44;
+      yReference = 652;
+      xScaleFactor = 1;
+      yScaleFactor = 1;
+      rotationAngle = 0;
+    }
+  }
+
+  text
+  {
+    x = 219;
+    y = 705;
+    format = "%s";
+    theText = "CEA GROUP OUT OF SEQUENCE ALARM : ";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 219;
+    yReference = 705;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text
+  {
+    x = 420;
+    y = 730;
+    format = "%s";
+    theText = "CEA DROP ALARM : ";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 420;
+    yReference = 730;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  instance cfmsSymbols.CEAStatePhrase1
+  {
+    x = 457;
+    y = 566;
+    visibility = 1;
+    xReference = 457;
+    yReference = 566;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    ChangedText = "BD -";
+    curval = 9;
+    newsta = 4;
+    PointId = `&CNYXAEXA`;
+  }
+
+  instance cfmsSymbols.CEAStatePhrase1
+  {
+    x = 457;
+    y = 605;
+    visibility = 1;
+    xReference = 457;
+    yReference = 605;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    ChangedText = "BD -";
+    curval = 9;
+    newsta = 4;
+    PointId = `&CNYXAEXB`;
+  }
+
+  instance cfmsSymbols.CEAStatePhrase1
+  {
+    x = 800;
+    y = 222;
+    visibility = 1;
+    xReference = 800;
+    yReference = 222;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    ChangedText = "BD -";
+    curval = 9;
+    newsta = 4;
+    PointId = `&CNZXL61`;
+  }
+
+  instance cfmsSymbols.CEAStatePhrase1
+  {
+    x = 800;
+    y = 289;
+    visibility = 1;
+    xReference = 800;
+    yReference = 289;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    ChangedText = "BD -";
+    curval = 9;
+    newsta = 4;
+    PointId = `&CNZXL62`;
+  }
+
+  instance cfmsSymbols.CEAStatePhrase1
+  {
+    x = 800;
+    y = 356;
+    visibility = 1;
+    xReference = 800;
+    yReference = 356;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    ChangedText = "BD -";
+    curval = 9;
+    newsta = 4;
+    PointId = `&CNZXL63`;
+  }
+
+  instance cfmsSymbols.CEAStatePhrase1
+  {
+    x = 800;
+    y = 423;
+    visibility = 1;
+    xReference = 800;
+    yReference = 423;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    ChangedText = "BD -";
+    curval = 9;
+    newsta = 4;
+    PointId = `&CNZXL64`;
+  }
+
+  instance cfmsSymbols.CEAStatePhrase1
+  {
+    x = 800;
+    y = 490;
+    visibility = 1;
+    xReference = 800;
+    yReference = 490;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    ChangedText = "BD -";
+    curval = 9;
+    newsta = 4;
+    PointId = `&CNZXL65`;
+  }
+
+  instance cfmsSymbols.CEAStatePhrase1
+  {
+    x = 892;
+    y = 222;
+    visibility = 1;
+    xReference = 892;
+    yReference = 222;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    ChangedText = "BD -";
+    curval = 9;
+    newsta = 4;
+    PointId = `&CNZXL71`;
+  }
+
+  instance cfmsSymbols.CEAStatePhrase1
+  {
+    x = 892;
+    y = 289;
+    visibility = 1;
+    xReference = 892;
+    yReference = 289;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    ChangedText = "BD -";
+    curval = 9;
+    newsta = 4;
+    PointId = `&CNZXL72`;
+  }
+
+  instance cfmsSymbols.CEAStatePhrase1
+  {
+    x = 892;
+    y = 356;
+    visibility = 1;
+    xReference = 892;
+    yReference = 356;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    ChangedText = "BD -";
+    curval = 9;
+    newsta = 4;
+    PointId = `&CNZXL73`;
+  }
+
+  instance cfmsSymbols.CEAStatePhrase1
+  {
+    x = 892;
+    y = 423;
+    visibility = 1;
+    xReference = 892;
+    yReference = 423;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    ChangedText = "BD -";
+    curval = 9;
+    newsta = 4;
+    PointId = `&CNZXL74`;
+  }
+
+  instance cfmsSymbols.CEAStatePhrase1
+  {
+    x = 892;
+    y = 490;
+    visibility = 1;
+    xReference = 892;
+    yReference = 490;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    ChangedText = "BD -";
+    curval = 9;
+    newsta = 4;
+    PointId = `&CNZXL75`;
+  }
+
+  instance cfmsSymbols.CEAStatePhrase1
+  {
+    x = 1026;
+    y = 222;
+    visibility = 1;
+    xReference = 1026;
+    yReference = 222;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    ChangedText = "BD -";
+    curval = 9;
+    newsta = 4;
+    PointId = `&CNZXLI2`;
+  }
+
+  instance cfmsSymbols.CEAStatePhrase1
+  {
+    x = 1026;
+    y = 289;
+    visibility = 1;
+    xReference = 1026;
+    yReference = 289;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    ChangedText = "BD -";
+    curval = 9;
+    newsta = 4;
+    PointId = `&CNZXLI3`;
+  }
+
+  instance cfmsSymbols.CEAStatePhrase1
+  {
+    x = 1026;
+    y = 356;
+    visibility = 1;
+    xReference = 1026;
+    yReference = 356;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    ChangedText = "BD -";
+    curval = 9;
+    newsta = 4;
+    PointId = `&CNZXLI4`;
+  }
+
+  instance cfmsSymbols.CEAStatePhrase1
+  {
+    x = 1026;
+    y = 423;
+    visibility = 1;
+    xReference = 1026;
+    yReference = 423;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    ChangedText = "BD -";
+    curval = 9;
+    newsta = 4;
+    PointId = `&CNZXLI5`;
+  }
+
+  instance cfmsSymbols.CEAStatePhrase1
+  {
+    x = 1026;
+    y = 490;
+    visibility = 1;
+    xReference = 1026;
+    yReference = 490;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    ChangedText = "BD -";
+    curval = 9;
+    newsta = 4;
+    PointId = `&CNZXLI6`;
+  }
+
+  instance cfmsSymbols.CEAStatePhrase1
+  {
+    x = 1108;
+    y = 222;
+    visibility = 1;
+    xReference = 1108;
+    yReference = 222;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    ChangedText = "BD -";
+    curval = 9;
+    newsta = 4;
+    PointId = `&CNZXLJ2`;
+  }
+
+  instance cfmsSymbols.CEAStatePhrase1
+  {
+    x = 1108;
+    y = 289;
+    visibility = 1;
+    xReference = 1108;
+    yReference = 289;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    ChangedText = "BD -";
+    curval = 9;
+    newsta = 4;
+    PointId = `&CNZXLJ3`;
+  }
+
+  instance cfmsSymbols.CEAStatePhrase1
+  {
+    x = 1108;
+    y = 356;
+    visibility = 1;
+    xReference = 1108;
+    yReference = 356;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    ChangedText = "BD -";
+    curval = 9;
+    newsta = 4;
+    PointId = `&CNZXLJ4`;
+  }
+
+  instance cfmsSymbols.CEAStatePhrase1
+  {
+    x = 1108;
+    y = 423;
+    visibility = 1;
+    xReference = 1108;
+    yReference = 423;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    ChangedText = "BD -";
+    curval = 9;
+    newsta = 4;
+    PointId = `&CNZXLJ5`;
+  }
+
+  instance cfmsSymbols.CEAStatePhrase1
+  {
+    x = 1108;
+    y = 490;
+    visibility = 1;
+    xReference = 1108;
+    yReference = 490;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    ChangedText = "BD -";
+    curval = 9;
+    newsta = 4;
+    PointId = `&CNZXLJ6`;
+  }
+
+  instance cfmsSymbols.CEAStatePhrase1
+  {
+    x = 1026;
+    y = 566;
+    visibility = 1;
+    xReference = 1026;
+    yReference = 566;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    ChangedText = "BD -";
+    curval = 9;
+    newsta = 4;
+    PointId = `&CNZXLI7`;
+  }
+
+  instance cfmsSymbols.CEAStatePhrase1
+  {
+    x = 1107;
+    y = 566;
+    visibility = 1;
+    xReference = 1107;
+    yReference = 566;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    ChangedText = "BD -";
+    curval = 9;
+    newsta = 4;
+    PointId = `&CNZXLJ7`;
+  }
+
+  instance cfmsSymbols.CEAStatePhrase1
+  {
+    x = 1026;
+    y = 605;
+    visibility = 1;
+    xReference = 1026;
+    yReference = 605;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    ChangedText = "BD -";
+    curval = 9;
+    newsta = 4;
+    PointId = `&CNZXLI8`;
+  }
+
+  instance cfmsSymbols.CEAStatePhrase1
+  {
+    x = 1107;
+    y = 605;
+    visibility = 1;
+    xReference = 1107;
+    yReference = 605;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    ChangedText = "BD -";
+    curval = 9;
+    newsta = 4;
+    PointId = `&CNZXLJ8`;
+  }
+
+  instance cfmsSymbols.CEAStatePhrase2
+  {
+    x = 239;
+    y = 222;
+    visibility = 1;
+    xReference = 239;
+    yReference = 222;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    ChangedText = "BD -";
+    newsta = 4;
+    PointId = `&CNZXUGS2`;
+    value = 0;
+  }
+
+  instance cfmsSymbols.CEAStatePhrase2
+  {
+    x = 239;
+    y = 289;
+    visibility = 1;
+    xReference = 239;
+    yReference = 289;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    ChangedText = "BD -";
+    newsta = 4;
+    PointId = `&CNZXUGS3`;
+    value = 0;
+  }
+
+  instance cfmsSymbols.CEAStatePhrase2
+  {
+    x = 239;
+    y = 356;
+    visibility = 1;
+    xReference = 239;
+    yReference = 356;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    ChangedText = "BD -";
+    newsta = 4;
+    PointId = `&CNZXUGS4`;
+    value = 0;
+  }
+
+  instance cfmsSymbols.CEAStatePhrase2
+  {
+    x = 239;
+    y = 423;
+    visibility = 1;
+    xReference = 239;
+    yReference = 423;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    ChangedText = "BD -";
+    newsta = 4;
+    PointId = `&CNZXUGS5`;
+    value = 0;
+  }
+
+  instance cfmsSymbols.CEAStatePhrase2
+  {
+    x = 239;
+    y = 490;
+    visibility = 1;
+    xReference = 239;
+    yReference = 490;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    ChangedText = "BD -";
+    newsta = 4;
+    PointId = `&CNZXUGS6`;
+    value = 0;
+  }
+
+  instance cfmsSymbols.CEAStatePhrase2
+  {
+    x = 239;
+    y = 566;
+    visibility = 1;
+    xReference = 239;
+    yReference = 566;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    ChangedText = "BD -";
+    newsta = 4;
+    PointId = `&CNZXUGS7`;
+    value = 0;
+  }
+
+  instance cfmsSymbols.CEAStatePhrase2
+  {
+    x = 239;
+    y = 605;
+    visibility = 1;
+    xReference = 239;
+    yReference = 605;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    ChangedText = "BD -";
+    newsta = 4;
+    PointId = `&CNZXUGS8`;
+    value = 0;
+  }
+
+  instance cfmsSymbols.CEAStatePhrase2
+  {
+    x = 321;
+    y = 222;
+    visibility = 1;
+    xReference = 321;
+    yReference = 222;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    ChangedText = "BD -";
+    newsta = 4;
+    PointId = `&CNZXLGS2`;
+    value = 0;
+  }
+
+  instance cfmsSymbols.CEAStatePhrase2
+  {
+    x = 321;
+    y = 289;
+    visibility = 1;
+    xReference = 321;
+    yReference = 289;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    ChangedText = "BD -";
+    newsta = 4;
+    PointId = `&CNZXLGS3`;
+    value = 0;
+  }
+
+  instance cfmsSymbols.CEAStatePhrase2
+  {
+    x = 321;
+    y = 356;
+    visibility = 1;
+    xReference = 321;
+    yReference = 356;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    ChangedText = "BD -";
+    newsta = 4;
+    PointId = `&CNZXLGS4`;
+    value = 0;
+  }
+
+  instance cfmsSymbols.CEAStatePhrase2
+  {
+    x = 321;
+    y = 423;
+    visibility = 1;
+    xReference = 321;
+    yReference = 423;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    ChangedText = "BD -";
+    newsta = 4;
+    PointId = `&CNZXLGS5`;
+    value = 0;
+  }
+
+  instance cfmsSymbols.CEAStatePhrase2
+  {
+    x = 321;
+    y = 490;
+    visibility = 1;
+    xReference = 321;
+    yReference = 490;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    ChangedText = "BD -";
+    newsta = 4;
+    PointId = `&CNZXLGS6`;
+    value = 0;
+  }
+
+  instance cfmsSymbols.CEAStatePhrase2
+  {
+    x = 321;
+    y = 566;
+    visibility = 1;
+    xReference = 321;
+    yReference = 566;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    ChangedText = "BD -";
+    newsta = 4;
+    PointId = `&CNZXLGS7`;
+    value = 0;
+  }
+
+  instance cfmsSymbols.CEAStatePhrase2
+  {
+    x = 321;
+    y = 605;
+    visibility = 1;
+    xReference = 321;
+    yReference = 605;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    ChangedText = "BD -";
+    newsta = 4;
+    PointId = `&CNZXLGS8`;
+    value = 0;
+  }
+
+  instance cfmsSymbols.CEAStatePhrase2
+  {
+    x = 577;
+    y = 222;
+    visibility = 1;
+    xReference = 577;
+    yReference = 222;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    ChangedText = "BD -";
+    newsta = 4;
+    PointId = `&CNZXUSL1`;
+    value = 0;
+  }
+
+  instance cfmsSymbols.CEAStatePhrase2
+  {
+    x = 577;
+    y = 289;
+    visibility = 1;
+    xReference = 577;
+    yReference = 289;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    ChangedText = "BD -";
+    newsta = 4;
+    PointId = `&CNZXUSL2`;
+    value = 0;
+  }
+
+  instance cfmsSymbols.CEAStatePhrase2
+  {
+    x = 577;
+    y = 356;
+    visibility = 1;
+    xReference = 577;
+    yReference = 356;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    ChangedText = "BD -";
+    newsta = 4;
+    PointId = `&CNZXUSL3`;
+    value = 0;
+  }
+
+  instance cfmsSymbols.CEAStatePhrase2
+  {
+    x = 577;
+    y = 423;
+    visibility = 1;
+    xReference = 577;
+    yReference = 423;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    ChangedText = "BD -";
+    newsta = 4;
+    PointId = `&CNZXUSL4`;
+    value = 0;
+  }
+
+  instance cfmsSymbols.CEAStatePhrase2
+  {
+    x = 577;
+    y = 490;
+    visibility = 1;
+    xReference = 577;
+    yReference = 490;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    ChangedText = "BD -";
+    newsta = 4;
+    PointId = `&CNZXUSL5`;
+    value = 0;
+  }
+
+  instance cfmsSymbols.CEAStatePhrase2
+  {
+    x = 676;
+    y = 222;
+    visibility = 1;
+    xReference = 676;
+    yReference = 222;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    ChangedText = "BD -";
+    newsta = 4;
+    PointId = `&CNZXLSL1`;
+    value = 0;
+  }
+
+  instance cfmsSymbols.CEAStatePhrase2
+  {
+    x = 676;
+    y = 289;
+    visibility = 1;
+    xReference = 676;
+    yReference = 289;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    ChangedText = "BD -";
+    newsta = 4;
+    PointId = `&CNZXLSL2`;
+    value = 0;
+  }
+
+  instance cfmsSymbols.CEAStatePhrase2
+  {
+    x = 676;
+    y = 356;
+    visibility = 1;
+    xReference = 676;
+    yReference = 356;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    ChangedText = "BD -";
+    newsta = 4;
+    PointId = `&CNZXLSL3`;
+    value = 0;
+  }
+
+  instance cfmsSymbols.CEAStatePhrase2
+  {
+    x = 676;
+    y = 423;
+    visibility = 1;
+    xReference = 676;
+    yReference = 423;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    ChangedText = "BD -";
+    newsta = 4;
+    PointId = `&CNZXLSL4`;
+    value = 0;
+  }
+
+  instance cfmsSymbols.CEAStatePhrase2
+  {
+    x = 676;
+    y = 490;
+    visibility = 1;
+    xReference = 676;
+    yReference = 490;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    ChangedText = "BD -";
+    newsta = 4;
+    PointId = `&CNZXLSL5`;
+    value = 0;
+  }
+
+  instance cfmsSymbols.CEAStatePhrase1
+  {
+    x = 609;
+    y = 683;
+    visibility = 1;
+    xReference = 609;
+    yReference = 683;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    ChangedText = "BD -";
+    curval = 9;
+    newsta = 4;
+    PointId = `&CNYXAOOS`;
+  }
+
+  instance cfmsSymbols.CEAStatePhrase1
+  {
+    x = 610;
+    y = 707;
+    visibility = 1;
+    xReference = 610;
+    yReference = 707;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    ChangedText = "BD -";
+    curval = 9;
+    newsta = 4;
+    PointId = `&CNYXADRP`;
+  }
+
+  instance cfmsSymbols.CEAStatePhrase2
+  {
+    x = 239;
+    y = 145;
+    visibility = 1;
+    xReference = 239;
+    yReference = 145;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    ChangedText = "BD -";
+    newsta = 4;
+    PointId = `&CNZXUGS1`;
+    value = 0;
+  }
+
+  instance cfmsSymbols.CEAStatePhrase2
+  {
+    x = 321;
+    y = 145;
+    visibility = 1;
+    xReference = 321;
+    yReference = 145;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    ChangedText = "BD -";
+    newsta = 4;
+    PointId = `&CNZXLGS1`;
+    value = 0;
+  }
+
+  instance cfmsSymbols.CEAStatePhrase1
+  {
+    x = 1026;
+    y = 145;
+    visibility = 1;
+    xReference = 1026;
+    yReference = 145;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    ChangedText = "BD -";
+    curval = 9;
+    newsta = 4;
+    PointId = `&CNZXLI1`;
+  }
+
+  instance cfmsSymbols.CEAStatePhrase1
+  {
+    x = 1107;
+    y = 145;
+    visibility = 1;
+    xReference = 1107;
+    yReference = 145;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    ChangedText = "BD -";
+    curval = 9;
+    newsta = 4;
+    PointId = `&CNZXLJ1`;
+  }
+}

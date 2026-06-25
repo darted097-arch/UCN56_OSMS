@@ -1,0 +1,632 @@
+/*
+ * ProcSee CONFIGURATION LANGUAGE FILE
+ *
+ *
+ * User : ucn56
+ * Host : y4cr01
+ * Date : 2017-06-20
+ * Time : 16:28:28
+ *
+ * ProcSee version : ProcSee 3.10.1 (June 2016)
+ * File version    : 1.26
+ *
+ *
+ */
+
+
+picture PicUCN_header
+{
+  worldX = 0;
+  worldY = 0;
+  worldWidth = 1280;
+  worldHeight = 100;
+  oneToOne = 1;
+  backgroundColour = 0;
+  updateMode = 2;
+  resizeMode = 0;
+  xSnap = 2;
+  ySnap = 2;
+  radiusSnap = 0;
+  angleSnap = 0;
+  crosshairStyle = 1;
+  crosshairLength = 0;
+  crosshairFollowSnap = `isInEditMode()`;
+  crosshairVisibility = `isInEditMode()`;
+  xReference = 500;
+  yReference = 500;
+  xScaleFactor = 1;
+  yScaleFactor = 1;
+  rotationAngle = 0;
+
+  RECORD* pExceptRecord = `&CXYKPBYX`;
+
+  float PictureNumber_x = 622.9;
+
+  float PictureTitle_x = 584;
+
+  RECORD* pTripRecord = `&CXYQTRIP`;
+
+  char tripTimeString[12] = "000:00:00";
+
+  float tripTimeValue = 0;
+
+  function `char * tripTime()
+  {
+     int t;
+  
+     tripTimeValue = pTripRecord->value;
+  
+     // get the floating value into an integer, carefull not to overflow array
+     sprintf(tripTimeString, "%.2f", tripTimeValue);
+     t = atoi(tripTimeString);
+  
+     // limit time to 999:59:59
+     if (t > (999*3600 + 59*60 + 59)) t = (999*3600 + 59*60 + 59);
+  
+     sprintf(tripTimeString, "%03d:%02d:%02d", t/3600, (t/60)%60, t%60);
+     return (tripTimeString);
+  }`
+
+  dialogue
+  {
+    event = `keyPressed(0x31)||keyPressed(0x32)||keyPressed(0x33)||keyPressed(0x34)||keyPressed(0x35)||keyPressed(0x36)||keyPressed(0x37)||keyPressed(0x38)||keyPressed(0x39)`;
+    action = `{
+       win0.moveCursor(640,512) ;
+    }`;
+  }
+
+  dialogue
+  {
+    event = `keyPressed(0xFFB1)||keyPressed(0xFFB2)||keyPressed(0xFFB3)||keyPressed(0xFFB4)||keyPressed(0xFFB5)||keyPressed(0xFFB6)||keyPressed(0xFFB7)||keyPressed(0xFFB8)||keyPressed(0xFFB9)`;
+    action = `{
+       win0.moveCursor(640,512) ;
+    }`;
+  }
+
+  text PictureTitle
+  {
+    x = `PictureTitle_x`;
+    y = 34;
+    format = "%s";
+    theText = `&::UCN5and6.PicUCN_Security.PictureTitle[0]`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 3;
+    backgroundColour = -1;
+    theFont = 15;
+    xReference = 545;
+    yReference = 34;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  instance cfmsSymbols.CFM_Box
+  {
+    x = 49;
+    y = 4;
+    visibility = 1;
+    xReference = 49;
+    yReference = 1;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    PointId = `&CFAX2TOP`;
+  }
+
+  instance cfmsSymbols.CFM_Box
+  {
+    x = 49;
+    y = 34;
+    visibility = 1;
+    xReference = 49;
+    yReference = 32;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    PointId = `&CFAX5TOP`;
+  }
+
+  instance cfmsSymbols.CFM_Box
+  {
+    x = 49;
+    y = 64;
+    visibility = 1;
+    xReference = 49;
+    yReference = 67;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    PointId = `&CFAX8TOP`;
+  }
+
+  instance cfmsSymbols.CFM_Box
+  {
+    x = 79.5;
+    y = 4;
+    visibility = 1;
+    xReference = 79.5;
+    yReference = 1;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    PointId = `&CFAX3TOP`;
+  }
+
+  instance cfmsSymbols.CFM_Box
+  {
+    x = 79.5;
+    y = 34;
+    visibility = 1;
+    xReference = 79.5;
+    yReference = 32;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    PointId = `&CFAX6TOP`;
+  }
+
+  instance cfmsSymbols.CFM_Box
+  {
+    x = 79.5;
+    y = 64;
+    visibility = 1;
+    xReference = 79.5;
+    yReference = 67;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    PointId = `&CFAX9TOP`;
+  }
+
+  instance cfmsSymbols.CFM_Box
+  {
+    x = 17.5;
+    y = 4;
+    visibility = 1;
+    xReference = 17.5;
+    yReference = 1;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    PointId = `&CFAX1TOP`;
+  }
+
+  instance cfmsSymbols.CFM_Box
+  {
+    x = 17.5;
+    y = 34;
+    visibility = 1;
+    xReference = 17.5;
+    yReference = 32;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    PointId = `&CFAX4TOP`;
+  }
+
+  instance cfmsSymbols.CFM_Box
+  {
+    x = 17.5;
+    y = 64;
+    visibility = 1;
+    xReference = 17.5;
+    yReference = 67;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    PointId = `&CFAX7TOP`;
+  }
+
+  line
+  {
+    numberOfPoints = 2;
+    point[0] = ( 2, 96 );
+    point[1] = ( 346, 96 );
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    lineStyle = 1;
+    lineWidth = 3;
+    xReference = 2;
+    yReference = 96;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  line
+  {
+    numberOfPoints = 2;
+    point[0] = ( 120, 96 );
+    point[1] = ( 120, 0 );
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    lineStyle = 1;
+    lineWidth = 3;
+    xReference = 120;
+    yReference = 96;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text PictureNumber
+  {
+    x = `PictureNumber_x`;
+    y = 72;
+    format = "%s";
+    theText = `&::UCN5and6.PicUCN_Security.PictureNumber[0]`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 3;
+    backgroundColour = -1;
+    theFont = 14;
+    xReference = 569;
+    yReference = 72;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text LabelDate
+  {
+    x = 1093;
+    y = 20;
+    format = "%s";
+    theText = "DATE:";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 2;
+    backgroundColour = -1;
+    theFont = 14;
+    xReference = 1154;
+    yReference = 23;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text LabelTime
+  {
+    x = 1099;
+    y = 45;
+    format = "%s";
+    theText = "TIME:";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 2;
+    backgroundColour = -1;
+    theFont = 14;
+    xReference = 1099;
+    yReference = 45;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text LabelCPU
+  {
+    x = 1093;
+    y = 70;
+    format = "%s";
+    theText = "HOST:";
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 2;
+    backgroundColour = -1;
+    theFont = 14;
+    xReference = 1093;
+    yReference = 73;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text FieldDate
+  {
+    x = 1171;
+    y = 20;
+    format = "%s";
+    theText = `Interface->System.dateString`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 3;
+    backgroundColour = -1;
+    theFont = 14;
+    xReference = 1171;
+    yReference = 26;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text FieldTime
+  {
+    x = 1171;
+    y = 45;
+    format = "%s";
+    theText = `Interface->System.timeString`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 3;
+    backgroundColour = -1;
+    theFont = 14;
+    xReference = 1171;
+    yReference = 45;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text FieldCPU
+  {
+    x = 1167;
+    y = 68;
+    format = "%s";
+    theText = `(Interface->System.connected == 0)?"NONE":((Interface->System.cpuNum==1)?"host1":((Interface->System.cpuNum==2)?"host2":"NONE"))`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = 3;
+    backgroundColour = -1;
+    theFont = 14;
+    xReference = 1367;
+    yReference = 73;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  line
+  {
+    numberOfPoints = 2;
+    point[0] = ( 418, 0 );
+    point[1] = ( 418, 0 );
+    visibility = 1;
+    foregroundColour = 1;
+    backgroundColour = -1;
+    lineStyle = 1;
+    lineWidth = 0;
+    xReference = 418;
+    yReference = 0;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  instance cfmsSymbols.HeaderSystemMessage
+  {
+    x = 355;
+    y = 42;
+    visibility = 1;
+    xReference = 355;
+    yReference = 39;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    TheText = `(Interface->System.displayedUnits==0)?"ENGLISH":"       "`;
+  }
+
+  instance cfmsSymbols.HeaderSystemMessage SlaveUpdating
+  {
+    x = 355;
+    y = 62;
+    visibility = 1;
+    xReference = 355;
+    yReference = 38;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    TheText = `(Interface->System.slaveUpdating==0)?"     ":"SLAVE"`;
+  }
+
+  instance cfmsSymbols.HeaderSystemMessage ByException
+  {
+    x = 355;
+    y = 82;
+    visibility = 1;
+    xReference = 355;
+    yReference = 38;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    TheText = `(pExceptRecord->value==0)?"            ": "BY EXCEPTION"`;
+  }
+
+  instance cfmsSymbols.HeaderESFASMessage CIAS
+  {
+    x = 130;
+    y = 6;
+    visibility = 1;
+    xReference = 138;
+    yReference = 10;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    PointId = `&EFYQCIAS`;
+    TheText = "  CIAS";
+  }
+
+  instance cfmsSymbols.HeaderESFASMessage CSAS
+  {
+    x = 130;
+    y = 27;
+    visibility = 1;
+    xReference = 138;
+    yReference = 29;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    PointId = `&EFYQCSAS`;
+    TheText = "  CSAS";
+  }
+
+  instance cfmsSymbols.HeaderESFASMessage MSIS
+  {
+    x = 130;
+    y = 48;
+    visibility = 1;
+    xReference = 138;
+    yReference = 30;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    PointId = `&EFYQMSIS`;
+    TheText = "  MSIS";
+  }
+
+  instance cfmsSymbols.HeaderESFASMessage SIAS
+  {
+    x = 130;
+    y = 69;
+    visibility = 1;
+    xReference = 138;
+    yReference = 31;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    PointId = `&EFYQSIAS`;
+    TheText = "  SIAS";
+  }
+
+  instance cfmsSymbols.HeaderESFASMessage RAS
+  {
+    x = 274;
+    y = 27;
+    visibility = 1;
+    xReference = 140;
+    yReference = 10;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    PointId = `&EFYQRAS`;
+    TheText = "   RAS";
+  }
+
+  instance cfmsSymbols.HeaderESFASMessage AFAS
+  {
+    x = 202;
+    y = 27;
+    visibility = 1;
+    xReference = 140;
+    yReference = 10;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    PointId = `&EFYQAFA2`;
+    TheText = "  AFAS2";
+  }
+
+  instance cfmsSymbols.HeaderESFASMessage FBEVAS
+  {
+    x = 202;
+    y = 69;
+    visibility = 1;
+    xReference = 140;
+    yReference = 10;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    PointId = `&EFYQFBEV`;
+    TheText = " FBEVAS";
+  }
+
+  instance cfmsSymbols.HeaderESFASMessage CPIAS
+  {
+    x = 274;
+    y = 6;
+    visibility = 1;
+    xReference = 210;
+    yReference = -52;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    PointId = `&EFYQCPIA`;
+    TheText = "  CPIAS";
+  }
+
+  instance cfmsSymbols.HeaderESFASMessage CREVAS
+  {
+    x = 202;
+    y = 48;
+    visibility = 1;
+    xReference = 72;
+    yReference = 52;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    PointId = `&EFYQCREV`;
+    TheText = " CREVAS";
+  }
+
+  text LabelTrip
+  {
+    x = 1053;
+    y = 95;
+    format = "%s";
+    theText = "TRIP TIME:";
+    alignment = 0;
+    visibility = `(pTripRecord->value==0)?0:1`;
+    foregroundColour = 2;	//CORENET 20170622
+    //foregroundColour = `COLOR_DANGER_ACK`;
+    backgroundColour = -1;
+    theFont = 14;
+    xReference = 1053;
+    yReference = 46;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  instance cfmsSymbols.HeaderESFASMessage
+  {
+    x = 202;
+    y = 6;
+    visibility = 1;
+    xReference = 140;
+    yReference = 10;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+    PointId = `&EFYQAFA1`;
+    TheText = "  AFAS1";
+  }
+
+  text TripTime
+  {
+    x = 1167;
+    y = 95;
+    format = "%s";
+    theText = `tripTime()`;
+    alignment = 0;
+    visibility = `(pTripRecord->value==0)?0:1`;
+    foregroundColour = 3;	//CORENET 20170622
+    // foregroundColour = `COLOR_DANGER_ACK`;
+    backgroundColour = -1;
+    theFont = 14;
+    xReference = 1167;
+    yReference = 91;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+  text Connect
+  {
+    x = 554;
+    y = 54;
+    format = "%s";
+    theText = `(Interface->System.connected == 0)?"NOT CONNECTED TO HOST":"        "`;
+    alignment = 0;
+    visibility = 1;
+    foregroundColour = `COLOR_DATA_ENTRY`;
+    backgroundColour = -1;
+    theFont = `font2`;
+    xReference = 584;
+    yReference = 70;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+}

@@ -1,0 +1,1197 @@
+/*
+ * PICASSO-3 CONFIGURATION LANGUAGE FILE
+ *
+ *
+ * Picture name: PicYGN_XRBP_Off2
+ *
+ *
+ * Documented by  : ygn56
+ * Host           : pcs3
+ * Date           : 21/01-00 at 11:32:11
+ *
+ *
+ * Generate with:
+ *    pcc PicYGN_XRBP_Off2.Tdoc
+ *
+ */
+
+
+picture PicYGN_XRBP_Off2
+{
+
+  char *PictureNumber = "623";
+  char *PictureTitle = "XENON REACTIVITY RESULTS(OFF-LINE)";
+
+  function `void Result_Mapping()
+{
+
+      int i;	// loop counter
+   //
+   // execute ("{strcpy(Interface->HDSR.GraphParams.Trend%d.PointId,T%dPid.InputField);}",i,i);
+   // Save Initial Incremental Depletion Value
+      for (i=0;i<13;i++){
+          execute("{XR_OFF_RESULT%d.TheNewNumber=Interface->XRBP.data.output_val[%d];}",i,i);   
+      }
+      update();
+}
+     `
+
+
+
+  function `void Escape()
+{
+//This function is used for footer keys except EASCAPE, PREV and NEXT keys.
+//
+        XRBP_FLAG=0;
+
+//executeAsync( "::YGN3and4", "{ displayPicture( \\"Main\\", \\"./PicYGN_XRBP_Off.ppic\\" ); }");
+}`
+
+
+
+  function `void Initialize()
+{
+   ClearAdvisoryMessage();
+   Current_Page = 623;
+   CFMLevel = 0;
+//   Result_Mapping();
+
+   if(XRBP_FLAG!=621){
+      DisplayAdvisoryMessage("THIS PAGE SHOULD BE FROM PAGE 621 USING PREV OR NEXT KEY"); 
+      DisplayAdvisoryMessage1("THE XRBP WILL BE RESTARTED"); 
+     return;
+       }    
+   XRBP_FLAG=623;
+
+   if(Interface->XRBP.data.last_case==1)
+      DisplayAdvisoryMessage("THIS RESULT WILL BE UPDATED");        
+}`
+
+
+
+  text 
+  {
+    x = 176;
+    y = 73;
+    format = "%s";
+    theText = "CORE AVERAGE AXIAL SHAPE INDEX";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 176;
+    yReference = 69;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 176;
+    y = 124;
+    format = "%s";
+    theText = "BORON CONCENTRATION";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 177;
+    yReference = 123;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 176;
+    y = 328;
+    format = "%s";
+    theText = "AVERAGE XENON REACTIVITY";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 178;
+    yReference = 327;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 176;
+    y = 175;
+    format = "%s";
+    theText = "AVERAGE COOLANT TEMPERATURE";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 177;
+    yReference = 170;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 176;
+    y = 226;
+    format = "%s";
+    theText = "CORE POWER LEVEL";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 179;
+    yReference = 220;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 176;
+    y = 277;
+    format = "%s";
+    theText = "NODAL PEAK POWER";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 178;
+    yReference = 271;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 176;
+    y = 481;
+    format = "%s";
+    theText = "CORE AVERAGE EXPOSURE";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 176;
+    yReference = 480;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 176;
+    y = 379;
+    format = "%s";
+    theText = "TOTAL XENON CONCENTRATION";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 178;
+    yReference = 376;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 176;
+    y = 532;
+    format = "%s";
+    theText = "REGULATING GROUP 5 POSITION";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 177;
+    yReference = 531;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 176;
+    y = 583;
+    format = "%s";
+    theText = "REGULATING GROUP 4 POSITION";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 176;
+    yReference = 584;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 176;
+    y = 634;
+    format = "%s";
+    theText = "REGULATING GROUP 3 POSITION";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 176;
+    yReference = 633;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 176;
+    y = 685;
+    format = "%s";
+    theText = "PART-STRENGTH GROUP POSITION";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 177;
+    yReference = 683;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  rectangle 
+  {
+    x = 97;
+    y = 37;
+    width = 1085;
+    height = 663;
+
+    visibility = 1;
+    foregroundFillColour = `COLOR_NON_ESSENTIAL`;
+    backgroundFillColour = -1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = `COLOR_NON_ESSENTIAL`;
+    lineWidth = 3;
+    linePattern = `SolidPattern`;
+    fillPattern = `NoPattern`;
+    xReference = 97;
+    yReference = 39;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  line 
+  {
+    numberOfPoints = 2;
+
+    point[0] = (97, 89);
+    point[1] = (1183, 89);
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineWidth = 3;
+    lineStyle = `SolidPattern`;
+    xReference = 97;
+    yReference = 88;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  line 
+  {
+    numberOfPoints = 2;
+
+    point[0] = (96, 140);
+    point[1] = (1182, 140);
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineWidth = 3;
+    lineStyle = `SolidPattern`;
+    xReference = 96;
+    yReference = 141;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  line 
+  {
+    numberOfPoints = 2;
+
+    point[0] = (96, 190);
+    point[1] = (1182, 190);
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineWidth = 3;
+    lineStyle = `SolidPattern`;
+    xReference = 96;
+    yReference = 190;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  line 
+  {
+    numberOfPoints = 2;
+
+    point[0] = (96, 242);
+    point[1] = (1182, 242);
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineWidth = 3;
+    lineStyle = `SolidPattern`;
+    xReference = 96;
+    yReference = 241;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  line 
+  {
+    numberOfPoints = 2;
+
+    point[0] = (96, 293);
+    point[1] = (1182, 293);
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineWidth = 3;
+    lineStyle = `SolidPattern`;
+    xReference = 96;
+    yReference = 292;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  line 
+  {
+    numberOfPoints = 2;
+
+    point[0] = (96, 343);
+    point[1] = (1182, 343);
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineWidth = 3;
+    lineStyle = `SolidPattern`;
+    xReference = 96;
+    yReference = 343;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  line 
+  {
+    numberOfPoints = 2;
+
+    point[0] = (97, 448);
+    point[1] = (1183, 448);
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineWidth = 3;
+    lineStyle = `SolidPattern`;
+    xReference = 97;
+    yReference = 447;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  line 
+  {
+    numberOfPoints = 2;
+
+    point[0] = (98, 497);
+    point[1] = (1184, 497);
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineWidth = 3;
+    lineStyle = `SolidPattern`;
+    xReference = 98;
+    yReference = 494;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  line 
+  {
+    numberOfPoints = 2;
+
+    point[0] = (97, 548);
+    point[1] = (1183, 548);
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineWidth = 3;
+    lineStyle = `SolidPattern`;
+    xReference = 97;
+    yReference = 545;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  line 
+  {
+    numberOfPoints = 2;
+
+    point[0] = (96, 599);
+    point[1] = (1182, 599);
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineWidth = 3;
+    lineStyle = `SolidPattern`;
+    xReference = 96;
+    yReference = 596;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  line 
+  {
+    numberOfPoints = 2;
+
+    point[0] = (97, 649);
+    point[1] = (1183, 649);
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineWidth = 3;
+    lineStyle = `SolidPattern`;
+    xReference = 97;
+    yReference = 649;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  line 
+  {
+    numberOfPoints = 2;
+
+    point[0] = (1000, 40);
+    point[1] = (1000, 40);
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineWidth = 0;
+    lineStyle = `SolidPattern`;
+    xReference = 1000;
+    yReference = 40;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  line 
+  {
+    numberOfPoints = 2;
+
+    point[0] = (963, 40);
+    point[1] = (963, 701);
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineWidth = 3;
+    lineStyle = `SolidPattern`;
+    xReference = 963;
+    yReference = 40;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  line 
+  {
+    numberOfPoints = 2;
+
+    point[0] = (694, 40);
+    point[1] = (694, 700);
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineWidth = 3;
+    lineStyle = `SolidPattern`;
+    xReference = 694;
+    yReference = 40;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 1000;
+    y = 73;
+    format = "%s";
+    theText = "ASI UNITS";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 1000;
+    yReference = 73;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 1000;
+    y = 124;
+    format = "%s";
+    theText = "PPM";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 1000;
+    yReference = 123;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 1000;
+    y = 175;
+    format = "%s";
+    theText = "DEGREES C";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 1000;
+    yReference = 172;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 1000;
+    y = 328;
+    format = "%s";
+    theText = "PERCENT";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 1000;
+    yReference = 325;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 1000;
+    y = 277;
+    format = "%s";
+    theText = "W/CM";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 1000;
+    yReference = 275;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 1000;
+    y = 430;
+    format = "%s";
+    theText = "HOURS";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 1000;
+    yReference = 427;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 1000;
+    y = 379;
+    format = "%s";
+    theText = "CM";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 1000;
+    yReference = 379;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 1000;
+    y = 481;
+    format = "%s";
+    theText = "GWD/T";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 1000;
+    yReference = 480;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 1000;
+    y = 532;
+    format = "%s";
+    theText = "CM WITHDRAWN";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 1000;
+    yReference = 533;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 1000;
+    y = 583;
+    format = "%s";
+    theText = "CM WITHDRAWN";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 1000;
+    yReference = 581;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 1000;
+    y = 634;
+    format = "%s";
+    theText = "CM WITHDRAWN";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 1000;
+    yReference = 637;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 1000;
+    y = 685;
+    format = "%s";
+    theText = "CM WITHDRAWN";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 1000;
+    yReference = 680;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 1032;
+    y = 370;
+    format = "%s";
+    theText = "-3";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 1032;
+    yReference = 370;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  instance DialogueSymbols.TextNumber XR_OFF_RESULT1
+  {
+    attribute TheNewNumber = 767.049;
+    attribute NumberFormat = "%-18.4f";
+    attribute Scope = "::YGN3and4.PicYGN_XRBP_Off2";
+    x = 760;
+    y = 100;
+    visibility = 1;
+    xReference = 782;
+    yReference = 103;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance XR_OFF_RESULT1
+
+
+
+  instance DialogueSymbols.TextNumber XR_OFF_RESULT0
+  {
+    attribute TheNewNumber = 0.0671784;
+    attribute NumberFormat = "%-18.5f";
+    attribute Scope = "::YGN3and4.PicYGN_XRBP_Off2";
+    x = 760;
+    y = 49;
+    visibility = 1;
+    xReference = 782;
+    yReference = 50;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance XR_OFF_RESULT0
+
+
+
+  instance DialogueSymbols.TextNumber XR_OFF_RESULT2
+  {
+    attribute TheNewNumber = 312.222;
+    attribute NumberFormat = "%-18.4f";
+    attribute Scope = "::YGN3and4.PicYGN_XRBP_Off2";
+    x = 760;
+    y = 151;
+    visibility = 1;
+    xReference = 782;
+    yReference = 151;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance XR_OFF_RESULT2
+
+
+
+  instance DialogueSymbols.TextNumber XR_OFF_RESULT3
+  {
+    attribute TheNewNumber = 100;
+    attribute NumberFormat = "%-18.4f";
+    attribute Scope = "::YGN3and4.PicYGN_XRBP_Off2";
+    x = 760;
+    y = 202;
+    visibility = 1;
+    xReference = 782;
+    yReference = 202;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance XR_OFF_RESULT3
+
+
+
+  instance DialogueSymbols.TextNumber XR_OFF_RESULT4
+  {
+    attribute TheNewNumber = 1.70387;
+    attribute NumberFormat = "%-18.5f";
+    attribute Scope = "::YGN3and4.PicYGN_XRBP_Off2";
+    x = 760;
+    y = 253;
+    visibility = 1;
+    xReference = 782;
+    yReference = 254;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance XR_OFF_RESULT4
+
+
+
+  instance DialogueSymbols.TextNumber XR_OFF_RESULT5
+  {
+    attribute TheNewNumber = 2.7264;
+    attribute NumberFormat = "%-18.5f";
+    attribute Scope = "::YGN3and4.PicYGN_XRBP_Off2";
+    x = 760;
+    y = 304;
+    visibility = 1;
+    xReference = 782;
+    yReference = 307;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance XR_OFF_RESULT5
+
+
+
+  instance DialogueSymbols.TextNumber XR_OFF_RESULT6
+  {
+    attribute TheNewNumber = 1001.94;
+    attribute NumberFormat = "%-18.5f";
+    attribute Scope = "::YGN3and4.PicYGN_XRBP_Off2";
+    x = 760;
+    y = 355;
+    visibility = 1;
+    xReference = 777;
+    yReference = 355;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance XR_OFF_RESULT6
+
+
+
+  instance DialogueSymbols.TextNumber XR_OFF_RESULT7
+  {
+    attribute TheNewNumber = 0;
+    attribute NumberFormat = "%-18.2f";
+    attribute Scope = "::YGN3and4.PicYGN_XRBP_Off2";
+    x = 760;
+    y = 406;
+    visibility = 1;
+    xReference = 782;
+    yReference = 409;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance XR_OFF_RESULT7
+
+
+
+  instance DialogueSymbols.TextNumber XR_OFF_RESULT8
+  {
+    attribute TheNewNumber = 0;
+    attribute NumberFormat = "%-18.2f";
+    attribute Scope = "::YGN3and4.PicYGN_XRBP_Off2";
+    x = 760;
+    y = 457;
+    visibility = 1;
+    xReference = 792;
+    yReference = 459;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance XR_OFF_RESULT8
+
+
+
+  instance DialogueSymbols.TextNumber XR_OFF_RESULT9
+  {
+    attribute TheNewNumber = 381;
+    attribute NumberFormat = "%-18.2f";
+    attribute Scope = "::YGN3and4.PicYGN_XRBP_Off2";
+    x = 760;
+    y = 508;
+    visibility = 1;
+    xReference = 779;
+    yReference = 509;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance XR_OFF_RESULT9
+
+
+
+  instance DialogueSymbols.TextNumber XR_OFF_RESULT10
+  {
+    attribute TheNewNumber = 381;
+    attribute NumberFormat = "%-18.2f";
+    attribute Scope = "::YGN3and4.PicYGN_XRBP_Off2";
+    x = 760;
+    y = 559;
+    visibility = 1;
+    xReference = 782;
+    yReference = 562;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance XR_OFF_RESULT10
+
+
+
+  instance DialogueSymbols.TextNumber XR_OFF_RESULT11
+  {
+    attribute TheNewNumber = 381;
+    attribute NumberFormat = "%-18.2f";
+    attribute Scope = "::YGN3and4.PicYGN_XRBP_Off2";
+    x = 760;
+    y = 610;
+    visibility = 1;
+    xReference = 782;
+    yReference = 611;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance XR_OFF_RESULT11
+
+
+
+  instance DialogueSymbols.TextNumber XR_OFF_RESULT12
+  {
+    attribute TheNewNumber = 381;
+    attribute NumberFormat = "%-18.2f";
+    attribute Scope = "::YGN3and4.PicYGN_XRBP_Off2";
+    x = 760;
+    y = 661;
+    visibility = 1;
+    xReference = 782;
+    yReference = 659;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance XR_OFF_RESULT12
+
+
+
+  line 
+  {
+    numberOfPoints = 2;
+
+    point[0] = (98, 394);
+    point[1] = (1184, 394);
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    lineWidth = 3;
+    lineStyle = `SolidPattern`;
+    xReference = 98;
+    yReference = 394;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 176;
+    y = 430;
+    format = "%s";
+    theText = "TOTAL XENON TRANSIENT TIME";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 180;
+    yReference = 427;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text 
+  {
+    x = 1000;
+    y = 226;
+    format = "%s";
+    theText = "PERCENT";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 1000;
+    yReference = 224;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+// The picture's other attributes:
+
+  backgroundColour    = 0;
+  xSnap               = 0;
+  ySnap               = 0;
+  angleSnap           = 0;
+  radiusSnap          = 0;
+  worldX              = 0;
+  worldY              = 0;
+  worldWidth          = 1280;
+  worldHeight         = 824;
+  oneToOne            = 1;
+  resizeMode          = 0;
+  updateMode          = 2;
+  crosshairStyle      = 1;
+  crosshairLength     = 0;
+  crosshairFollowSnap = `isInEditMode()`;
+  crosshairVisibility = `isInEditMode()`;
+  xReference = 500;
+  yReference = 500;
+  xScaleFactor = 1;
+  yScaleFactor = 1;
+  rotationAngle = 0;
+
+
+}  // end of picture PicYGN_XRBP_Off2

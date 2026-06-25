@@ -1,0 +1,559 @@
+/*
+ * PICASSO-3 CONFIGURATION LANGUAGE FILE
+ *
+ *
+ * Picture name: PicUCN_SensorCalibDisplay
+ *
+ *
+ * Documented by  : ucn56
+ * Host           : ucn5
+ * Date           : 21/09-98 at 11:23:48
+ *
+ *
+ * Generate with:
+ *    pcc PicUCN_SensorCalibDisplay.Tdoc
+ *
+ */
+
+
+picture PicUCN_SensorCalibDisplay
+{
+
+  RECORD *PictureLowAlarmPID = 0;
+  RECORD *PictureHighAlarmPID = 0;
+  char TheDisplayPage[50] = "PicUCN_DBChangeMenu";
+  DB_CHANGE_DATA *pDBC_DATA = `&::UCN5and6.InterfaceToGUI.Interface.DatabaseDisplaysData`;
+  char *PictureTitle = "SENSOR CALIBRATION";
+  char *PictureNumber = "551";
+  char *PageForward = "";
+  char *PageBack = "";
+  RECORD *PicturePointId = `&RCT111X`;	
+  float Range_hi = `EngRangeHi(PicturePointId)`;
+  float Range_lo = `EngRangeLo(PicturePointId)`;
+
+  function `void Initialize()
+{
+   Current_Page = 551;
+   CFMLevel = 0;
+
+   //CORENET 20170516 by Philkyu Kwon
+   CascadeEnterActive = 0;
+   CascadeEnter.unmap();
+
+   // Shut off all the error messages
+   ProcessingMsg.visibility = 0;
+   ProcessingErrorMsg.visibility = 0;
+   BadPointTypeMsg.visibility = 0;
+   OOS_Msg.visibility = 0;
+   ValueEntry.ERROR = 0 ;
+  
+   DBCinfo.pPID = PicturePointId;
+   strcpy(pDBC_DATA->PID,PicturePointId->pid);
+
+   ValueEntry.TheNewNumber = PicturePointId.value;
+   sprintf(ValueEntry.TheNewText,"%-8.2f",ValueEntry.TheNewNumber) ;
+   ValueEntry.TheOriginalNumber = ValueEntry.TheNewNumber ;
+   strcpy(ValueEntry.TheOriginalText,ValueEntry.TheNewText) ;
+
+   if(0 == IsValidPoint())
+   {
+      BadPointTypeMsg.visibility = 1;
+
+      ValueLabel.visibility = 0;
+      ValueEntry.visibility = 0;
+      ProcessBtn.visibility = 0 ;
+      CurPointInfo.visibility = 0 ;      
+   }
+   else
+   {
+      if((PicturePointId->pipbitmap&bCHGPROT)>0)  // Change Protected
+      {
+         ChangeProtected.visibility = 1 ;
+
+         ValueEntry.visibility = 0 ;
+         ValueLabel.visibility = 0 ;
+  
+         ProcessBtn.visibility = 0 ;
+         CurPointInfo.visibility = 0 ;      
+      }
+      else 
+      {
+         ChangeProtected.visibility = 0 ;
+
+         if(IsInScan())
+         {
+            OOS_Msg.visibility = 1;
+
+            ValueLabel.visibility = 0;
+            ValueEntry.visibility = 0;
+            ProcessBtn.visibility = 0 ;
+            CurPointInfo.visibility = 0 ;      
+         }
+         else
+         {
+            ValueLabel.visibility = 1;
+            ValueEntry.visibility = 1;
+            ProcessBtn.visibility = 1 ;
+            CurPointInfo.visibility = 1 ;      
+         }
+      }
+   }
+
+   if(IsAnalog(PicturePointId))
+   {
+      if(0 != PicturePointId->lIPN)
+      {
+         execute ("{PictureLowAlarmPID = \`&::UCN5and6.InterfaceToGUI.%s\`;}",PicturePointId->message1);
+      }
+      else
+      {
+         PictureLowAlarmPID = 0;
+      }
+
+      if(0 != PicturePointId->hIPN)
+      {
+         execute ("{PictureHighAlarmPID = \`&::UCN5and6.InterfaceToGUI.%s\`;}",PicturePointId->message2);
+      }
+      else
+      {
+         PictureHighAlarmPID = 0;
+      }
+   }   
+  update();
+}`
+
+// ***CORENET 20170601 by Philkyu Kwon ************
+  function `void DummyProcess()
+  {
+    //printf("Button Select OR Button Unselected");
+  }`
+// ***************************************************
+
+
+
+  function `void Process1()
+{
+  if (0 == ValueEntry.ERROR)
+  {
+    ProcessingMsg.visibility = 1;
+    pDBC_DATA->SensorCalValue = (Interface->System.displayedUnits)? ValueEntry.TheNewNumber :
+                           ValueEntry.TheNewNumber * PicturePointId->mfactor + PicturePointId->moffset ;
+    execute("{sendMessageToHost(PROCESS_SENCAL_DATA);}");
+  }
+  else
+  {
+    ProcessingErrorMsg.visibility = 1;
+  }
+  update();
+}`
+
+
+
+  function `void ProcessingConfirmed()
+{
+  printf("SENCAL Processing Confirmed");
+  ProcessingMsg.visibility = 0;
+  update();
+}`
+
+
+
+  function `void VerifyLimits()
+{
+
+  if ((ValueEntry.TheNewNumber >= Range_lo) &&
+      (ValueEntry.TheNewNumber <= Range_hi) )
+     {
+        ValueEntry.ERROR = 0;
+     }
+  else
+     {
+        ValueEntry.ERROR = 1;
+     }
+
+  ProcessingErrorMsg.visibility = 0 ;
+}`
+
+
+
+  function `int IsValidPoint()
+{
+  int retval = 0;
+
+  switch(PicturePointId->sig_type)
+  {
+    case AI:
+      retval = 1;
+      break;
+    default: // everything else
+      retval = 0;
+      break; 
+  }//endswitch
+
+  return(retval);
+}`
+
+
+
+  function `int IsInScan()
+{
+  int retval;
+
+  if(PicturePointId->pisabitmap & bOOSCAN)
+    retval = 0;
+  else
+    retval = 1;
+  
+  return(retval);
+}`
+
+
+
+  dialogue
+  {
+    event = `buttonPressed(Right)`;
+    action = statement `{
+  Initialize();
+}`;
+  }
+
+  instance DialogueSymbols.PushButton ProcessBtn
+  {
+    attribute Scope = "PicUCN_SensorCalibDisplay";
+    attribute TextFontDynamic = `font2`;
+    attribute TextFontStatic = `font4`;
+    attribute StaticLabel = "PROCESS";
+    attribute DynamicLabel = "PROCESSING";
+    attribute TextYDynamic = 21;
+    attribute TextYStatic = 22;
+    attribute TextXDynamic = 5;
+    attribute TextXStatic = 7;
+    attribute TextFont = 4;
+    attribute TextColour = `COLOR_PICTURE_BACKGROUND`;
+    attribute Label = "PROCESS";
+    attribute TextY = 22;
+    attribute TextX = 7;
+    attribute TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    attribute BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    attribute BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    attribute SelectColour = `COLOR_BUTTON_SELECTED`;
+    attribute ButtonState = 0;
+    attribute Width = 110;
+    attribute Height = 30;
+    attribute isDown = 0;
+    attribute isInside = 1;
+    attribute ExecuteString = "{Process1();}";
+    x = 103;
+    y = 719;
+    visibility = 1;
+    xReference = 103;
+    yReference = 719;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance ProcessBtn
+
+
+
+  instance DialogueSymbols.PushButton 
+  {
+    attribute Scope = "PicUCN_SensorCalibDisplay";
+    attribute TextFontDynamic = `font2`;
+    attribute TextFontStatic = `font4`;
+    attribute StaticLabel = "SELECT";
+    attribute DynamicLabel = "SELECTING";
+    attribute TextYDynamic = 21;
+    attribute TextYStatic = 22;
+    attribute TextXDynamic = 15;
+    attribute TextXStatic = 18;
+    attribute TextFont = 4;
+    attribute TextColour = `COLOR_PICTURE_BACKGROUND`;
+    attribute Label = "SELECT";
+    attribute TextY = 22;
+    attribute TextX = 18;
+    attribute TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    attribute BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    attribute BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    attribute SelectColour = `COLOR_BUTTON_SELECTED`;
+    attribute ButtonState = 0;
+    attribute Width = 110;
+    attribute Height = 30;
+    attribute isDown = 0;
+    attribute isInside = 1;
+    attribute ExecuteString = "{CascadeEnterActive=1;DisplayCascadeEnter(\"PicUCN_SensorCalibCascade.ppic\",550,400,200,220);}";
+    x = 653;
+    y = 719;
+    visibility = 1;
+    xReference = 863;
+    yReference = 719;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance 
+
+
+
+  text 
+  {
+    x = 778;
+    y = 741;
+    format = "%s";
+    theText = "A NEW POINT ID";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 198;
+    yReference = 741;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  instance DialogueSymbols.DatabaseDisplayInfo DBCinfo
+  {
+    attribute pLoAlmPID = `PictureLowAlarmPID`;
+    attribute pHiAlmPID = `PictureHighAlarmPID`;
+    //attribute pPID = `&::UCN5and6.InterfaceToGUI.RCT111X`;	//CORENET 20170602 by Philkyu Kwon
+    attribute pPID = `PicturePointId`;
+    x = -5;
+    y = 0;
+    visibility = 1;
+    xReference = -5;
+    yReference = 0;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance DBCinfo
+
+
+
+  text ValueLabel
+  {
+    x = 107;
+    y = 400;
+    format = "%s";
+    theText = "ENTER A VALUE";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 107;
+    yReference = 400;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text ProcessingMsg
+  {
+    x = 383;
+    y = 674;
+    format = "%s";
+    theText = "PROCESSING...  WAIT APPROXIMATELY 30 SECONDS";
+
+    visibility = 0;
+    foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 383;
+    yReference = 674;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  instance DialogueSymbols.InputDialogueNumber ValueEntry
+  {
+    attribute isInside = 1;
+    attribute isDown = 0;
+    attribute Height = 30;
+    attribute Width = 150;
+    attribute SelectColour = `COLOR_BUTTON_SELECTED`;
+    attribute BackgroundColour = `COLOR_BUTTON_BACKGROUND`;
+    attribute BottomShadow = `COLOR_BUTTON_BOTTOM_SHADOW`;
+    attribute TopShadow = `COLOR_BUTTON_TOP_SHADOW`;
+    attribute TextX = 10;
+    attribute TextY = 21;
+    attribute TextColour = `COLOR_PICTURE_BACKGROUND`;
+    attribute TextFont = 4;
+    attribute ExecuteSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    attribute ExecuteUnSelect = "DummyProcess()";   //CORENET 20170601 by Philkyu Kwon
+    attribute TheNewText = "100";
+    attribute TheOriginalText = "100";
+    attribute ERROR = 0;
+    attribute TheNumberFormat = "%-8.2f";
+    attribute Selected = 0;
+    attribute ReturnAction = "{VerifyLimits();}";
+    attribute TheOriginalNumber = 321.1;
+    attribute MaxDigits = 8;
+    attribute TheNewNumber = 321.1;
+    attribute Scope = "PicUCN_SensorCalibDisplay";
+    attribute Active = 1;
+    attribute vis = `visibility`;
+    x = 312;
+    y = 380;
+    visibility = 1;
+    xReference = 312;
+    yReference = 380;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }  // end of instance ValueEntry
+
+
+
+  text BadPointTypeMsg
+  {
+    x = 97;
+    y = 471;
+    format = "%s";
+    theText = "POINT ID MUST BE AN ANALOG INPUT";
+
+    visibility = 0;
+    foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 97;
+    yReference = 471;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text ValueErrorMsg
+  {
+    x = 316;
+    y = 429;
+    format = "%s";
+    theText = "INVALID VALUE";
+
+    visibility = `ValueEntry.ERROR`;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 316;
+    yReference = 429;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text ProcessingErrorMsg
+  {
+    x = 103;
+    y = 709;
+    format = "%s";
+    theText = "CORRECT ALL ERRORS BEFORE PROSSING";
+
+    visibility = 0;
+    foregroundColour = `COLOR_CONFIG_ERROR`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 103;
+    yReference = 709;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text OOS_Msg
+  {
+    x = 97;
+    y = 506;
+    format = "%s";
+    theText = "POINT MUST BE REMOVED FROM SCAN FIRST";
+
+    visibility = 0;
+    foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 97;
+    yReference = 506;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text CurPointInfo
+  {
+    x = 230;
+    y = 741;
+    format = "%s";
+    theText = "CURRENT POINT INFORMATION";
+
+    visibility = 1;
+    foregroundColour = `COLOR_NON_ESSENTIAL`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 230;
+    yReference = 741;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+  text ChangeProtected
+  {
+    x = 97;
+    y = 487;
+    format = "%s";
+    theText = "DATABASE CHANGES NOT ALLOWED";
+
+    visibility = 0;
+    foregroundColour = `COLOR_FEEDBACK_MESSAGES`;
+    backgroundColour = -1;
+    theFont = `font4`;
+    xReference = 97;
+    yReference = 487;
+    xScaleFactor = 1;
+    yScaleFactor = 1;
+    rotationAngle = 0;
+  }
+
+
+
+// The picture's other attributes:
+
+  backgroundColour    = 0;
+  xSnap               = 5;
+  ySnap               = 5;
+  angleSnap           = 0;
+  radiusSnap          = 0;
+  worldX              = 0;
+  worldY              = 0;
+  worldWidth          = 1280;
+  worldHeight         = 824;
+  oneToOne            = 1;
+  resizeMode          = 0;
+  updateMode          = 2;
+  crosshairStyle      = 1;
+  crosshairLength     = 0;
+  crosshairFollowSnap = `isInEditMode()`;
+  crosshairVisibility = `isInEditMode()`;
+  xReference = 500;
+  yReference = 500;
+  xScaleFactor = 1;
+  yScaleFactor = 1;
+  rotationAngle = 0;
+
+
+}  // end of picture PicUCN_SensorCalibDisplay
